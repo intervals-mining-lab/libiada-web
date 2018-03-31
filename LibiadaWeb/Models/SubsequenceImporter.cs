@@ -231,14 +231,14 @@
 
         /// <summary>
         /// Create subsequences from features
-        /// and noncoding subsequences from gaps.
+        /// and non-coding subsequences from gaps.
         /// </summary>
         /// <returns>
         /// Returns tuple of coding and non-coding features count.
         /// </returns>
         private (int, int) CreateFeatureSubsequences()
         {
-            var newSubsequences = new List<Subsequence>();
+            var codingSubsequences = new List<Subsequence>(features.Count);
             var newPositions = new List<Position>();
             var newSequenceAttributes = new List<SequenceAttribute>();
 
@@ -294,24 +294,23 @@
                     RemoteId = location.Accession
                 };
 
-                newSubsequences.Add(subsequence);
+                codingSubsequences.Add(subsequence);
                 AddPositionToMap(start, end);
                 newPositions.AddRange(CreateAdditionalPositions(leafLocations, subsequence.Id));
                 var sequenceAttributes = sequenceAttributeRepository.Create(feature.Qualifiers, complement, complementJoin, subsequence);
                 newSequenceAttributes.AddRange(sequenceAttributes);
             }
 
-            int featuresCount = newSubsequences.Count;
-            newSubsequences.AddRange(CreateNonCodingSubsequences());
-            int nonCoudingCount = newSubsequences.Count - featuresCount;
+            var nonCodingSubsequences = CreateNonCodingSubsequences();
 
-            db.Subsequence.AddRange(newSubsequences);
+            db.Subsequence.AddRange(codingSubsequences);
+            db.Subsequence.AddRange(nonCodingSubsequences);
             db.Position.AddRange(newPositions);
             db.SequenceAttribute.AddRange(newSequenceAttributes);
 
             db.SaveChanges();
 
-            return (featuresCount, nonCoudingCount);
+            return (codingSubsequences.Count, nonCodingSubsequences.Count);
         }
 
         /// <summary>
@@ -328,7 +327,7 @@
         /// </returns>
         private List<Position> CreateAdditionalPositions(List<ILocation> leafLocations, long subsequenceId)
         {
-            var result = new List<Position>();
+            var result = new List<Position>(leafLocations.Count - 1);
 
             for (int k = 1; k < leafLocations.Count; k++)
             {
@@ -352,23 +351,16 @@
         /// </returns>
         private List<Subsequence> CreateNonCodingSubsequences()
         {
-            NonCodingPosition[] positions = ExtractNonCodingSubsequencesPositions();
-            var result = new List<Subsequence>();
-
-            for (int i = 0; i < positions.Length; i++)
-            {
-                result.Add(new Subsequence
-                {
-                    Id = DbHelper.GetNewElementId(db),
-                    Feature = Feature.NonCodingSequence,
-                    Partial = false,
-                    SequenceId = sequenceId,
-                    Start = positions[i].Start,
-                    Length = positions[i].Length
-                });
-            }
-
-            return result;
+            List<NonCodingPosition> positions = ExtractNonCodingSubsequencesPositions();
+            return positions.ConvertAll(p => new Subsequence
+                                                 {
+                                                     Id = DbHelper.GetNewElementId(db),
+                                                     Feature = Feature.NonCodingSequence,
+                                                     Partial = false,
+                                                     SequenceId = sequenceId,
+                                                     Start = p.Start,
+                                                     Length = p.Length
+                                                 });
         }
 
         /// <summary>
@@ -393,9 +385,9 @@
         /// from filled positions map.
         /// </summary>
         /// <returns>
-        /// The <see cref="T:List{Int32}[]"/>.
+        /// The <see cref="T:List{NonCodingPosition}"/>.
         /// </returns>
-        private NonCodingPosition[] ExtractNonCodingSubsequencesPositions()
+        private List<NonCodingPosition> ExtractNonCodingSubsequencesPositions()
         {
             var map = new List<NonCodingPosition>();
             var currentStart = 0;
@@ -424,7 +416,7 @@
                 map.Add(new NonCodingPosition(currentStart, currentLength));
             }
 
-            return map.ToArray();
+            return map;
         }
 
         /// <summary>
@@ -458,7 +450,7 @@
             public readonly int Length;
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="NonCodingPosition"/> struct.
+            /// Initializes a new instance of the <see cref="NonCodingPosition"/> structure.
             /// </summary>
             /// <param name="start">
             /// The start.

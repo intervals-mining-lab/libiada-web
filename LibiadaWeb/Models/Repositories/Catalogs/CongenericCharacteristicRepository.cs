@@ -156,7 +156,7 @@
                 characteristics = Aliases.UserAvailableCongenericCharacteristics.ToArray();
             }
 
-            var result = new List<CharacteristicTypeData>();
+            var result = new List<CharacteristicTypeData>(characteristics.Length);
 
             foreach (CongenericCharacteristic characteristic in characteristics)
             {

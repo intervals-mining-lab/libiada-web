@@ -8,7 +8,6 @@
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
-    using LibiadaCore.Extensions;
 
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
@@ -84,9 +83,11 @@
         /// </param>
         /// <param name="clustersCount">
         /// The clusters count.
+        /// Minimum clusters count for methods 
+        /// that use range of clusters.
         /// </param>
         /// <param name="clusterizationType">
-        /// Clusterization method param
+        /// Clusterization method.
         /// </param>
         /// <param name="equipotencyWeight">
         /// The power weight.
@@ -99,6 +100,10 @@
         /// </param>
         /// <param name="bandwidth">
         /// The bandwidth.
+        /// </param>
+        /// <param name="maximumClusters">
+        /// The maximum clusters count
+        /// for methods that use range of possible custers.
         /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
@@ -120,7 +125,7 @@
         {
             return CreateTask(() =>
             {
-                var characteristicNames = new List<string>();
+                var characteristicNames = new string[characteristicLinkIds.Length];
                 var mattersCharacteristics = new object[matterIds.Length];
                 var characteristics = new double[matterIds.Length][];
                 matterIds = matterIds.OrderBy(m => m).ToArray();
@@ -154,7 +159,7 @@
 
                 for (int k = 0; k < characteristicLinkIds.Length; k++)
                 {
-                    characteristicNames.Add(characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[k], notations[k]));
+                    characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[k], notations[k]);
                 }
 
                 var clusterizationParams = new Dictionary<string, double>
@@ -179,15 +184,15 @@
                     };
                 }
 
-                var characteristicsList = new List<SelectListItem>();
-                for (int i = 0; i < characteristicNames.Count; i++)
+                var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
+                for (int i = 0; i < characteristicNames.Length; i++)
                 {
-                    characteristicsList.Add(new SelectListItem
+                    characteristicsList[i] = new SelectListItem
                     {
                         Value = i.ToString(),
                         Text = characteristicNames[i],
                         Selected = false
-                    });
+                    };
                 }
 
                 var result = new Dictionary<string, object>
@@ -199,9 +204,9 @@
                 };
 
                 return new Dictionary<string, object>
-                           {
-                               { "data", JsonConvert.SerializeObject(result) }
-                           };
+                {
+                    { "data", JsonConvert.SerializeObject(result) }
+                };
             });
         }
     }

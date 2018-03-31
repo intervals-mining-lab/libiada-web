@@ -90,7 +90,7 @@
         /// </returns>
         public List<SequenceAttribute> Create(Dictionary<string, List<string>> qualifiers, bool complement, bool complementJoin, Subsequence subsequence)
         {
-            var result = new List<SequenceAttribute>();
+            var result = new List<SequenceAttribute>(qualifiers.Count);
 
             foreach ((string key, List<string> values) in qualifiers)
             {

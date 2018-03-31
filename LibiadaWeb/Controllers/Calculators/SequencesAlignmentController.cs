@@ -7,12 +7,10 @@
 
     using Bio.Extensions;
 
-    using LibiadaCore.Core;
-    using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models;
+    using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Tasks;
 
@@ -25,16 +23,6 @@
     public class SequencesAlignmentController : AbstractResultController
     {
         /// <summary>
-        /// The db.
-        /// </summary>
-        private readonly LibiadaWebEntities db;
-
-        /// <summary>
-        /// The subsequence extractor.
-        /// </summary>
-        private readonly SubsequenceExtractor subsequenceExtractor;
-
-        /// <summary>
         /// The characteristic type repository.
         /// </summary>
         private readonly FullCharacteristicRepository characteristicTypeLinkRepository;
@@ -44,8 +32,6 @@
         /// </summary>
         public SequencesAlignmentController() : base(TaskType.SequencesAlignment)
         {
-            db = new LibiadaWebEntities();
-            subsequenceExtractor = new SubsequenceExtractor(db);
             characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
         }
 
@@ -57,8 +43,12 @@
         /// </returns>
         public ActionResult Index()
         {
-            var viewDataHelper = new ViewDataHelper(db);
-            ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillSubsequencesViewData(2, 2, "Align"));
+            using (var db = new LibiadaWebEntities())
+            {
+                var viewDataHelper = new ViewDataHelper(db);
+                ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillSubsequencesViewData(2, 2, "Align"));
+            }
+           
             return View();
         }
 
@@ -108,38 +98,50 @@
             {
                 if (matterIds.Length != 2)
                 {
-                    throw new ArgumentException("Count of selected matters must be 2.", "matterIds");
+                    throw new ArgumentException("Count of selected matters must be 2.", nameof(matterIds));
                 }
 
-                long firstMatterId = matterIds[0];
-                long secondMatterId = matterIds[1];
+                string firstMatterName;
+                string secondMatterName;
+                double[] firstSequenceCharacteristics;
+                double[] secondSequenceCharacteristics;
+                using (var db = new LibiadaWebEntities())
+                {
+                    long firstMatterId = matterIds[0];
+                    firstMatterName = db.Matter.Single(m => m.Id == firstMatterId).Name;
+                    long firstParentId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
+                    firstSequenceCharacteristics = SubsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(firstParentId, characteristicLinkId, features);
 
-                var firstSequenceCharacteristics = CalculateCharacteristic(firstMatterId, characteristicLinkId, notation, features);
-                var secondSequenceCharacteristics = CalculateCharacteristic(secondMatterId, characteristicLinkId, notation, features);
+                    long secondMatterId = matterIds[1];
+                    secondMatterName = db.Matter.Single(m => m.Id == firstMatterId).Name;;
+                    long secondParentId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
+                    secondSequenceCharacteristics = SubsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(secondParentId, characteristicLinkId, features);
+                }
+                
 
                 if (sort)
                 {
-                    firstSequenceCharacteristics = firstSequenceCharacteristics.OrderByDescending(v => v).ToList();
-                    secondSequenceCharacteristics = secondSequenceCharacteristics.OrderByDescending(v => v).ToList();
+                    firstSequenceCharacteristics = firstSequenceCharacteristics.OrderByDescending(v => v).ToArray();
+                    secondSequenceCharacteristics = secondSequenceCharacteristics.OrderByDescending(v => v).ToArray();
                 }
 
                 List<double> longer;
                 List<double> shorter;
-                if (firstSequenceCharacteristics.Count >= secondSequenceCharacteristics.Count)
+                if (firstSequenceCharacteristics.Length >= secondSequenceCharacteristics.Length)
                 {
-                    longer = firstSequenceCharacteristics;
-                    shorter = secondSequenceCharacteristics;
+                    longer = firstSequenceCharacteristics.ToList();
+                    shorter = secondSequenceCharacteristics.ToList();
                 }
                 else
                 {
-                    longer = secondSequenceCharacteristics;
-                    shorter = firstSequenceCharacteristics;
+                    longer = secondSequenceCharacteristics.ToList();
+                    shorter = firstSequenceCharacteristics.ToList();
                 }
 
                 if (!cyclicShift)
                 {
-                    int length = longer.Count;
-                    for (int i = 0; i < length; i++)
+                    int count = longer.Count;
+                    for (int i = 0; i < count; i++)
                     {
                         longer.Add(0);
                     }
@@ -153,8 +155,8 @@
 
                 return new Dictionary<string, object>
                 {
-                    { "firstSequenceName", db.Matter.Single(m => m.Id == firstMatterId).Name },
-                    { "secondSequenceName", db.Matter.Single(m => m.Id == secondMatterId).Name },
+                    { "firstSequenceName", firstMatterName },
+                    { "secondSequenceName", secondMatterName },
                     { "characteristicName", characteristicName },
                     { "features", features.ConvertAll(p => p.GetDisplayValue()) },
                     { "optimalRotation", optimalRotation },
@@ -200,69 +202,6 @@
             }
 
             return distanceCalculator;
-        }
-
-        /// <summary>
-        /// The calculate characteristic.
-        /// </summary>
-        /// <param name="matterId">
-        /// The matter id.
-        /// </param>
-        /// <param name="characteristicLinkId">
-        /// The characteristic type and link id.
-        /// </param>
-        /// <param name="notation">
-        /// The notation id.
-        /// </param>
-        /// <param name="features">
-        /// The feature ids.
-        /// </param>
-        /// <returns>
-        /// The <see cref="List{Double}"/>.
-        /// </returns>
-        private List<double> CalculateCharacteristic(long matterId, short characteristicLinkId, Notation notation, Feature[] features)
-        {
-            var characteristics = new List<double>();
-            var newCharacteristics = new List<CharacteristicValue>();
-            long parentSequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
-
-            Subsequence[] subsequences = subsequenceExtractor.GetSubsequences(parentSequenceId, features);
-
-            Chain[] sequences = subsequenceExtractor.ExtractChains(parentSequenceId, subsequences);
-
-            FullCharacteristic fullCharacteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
-            IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(fullCharacteristic);
-            Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
-
-            for (int j = 0; j < sequences.Length; j++)
-            {
-                long subsequenceId = subsequences[j].Id;
-
-                if (!db.CharacteristicValue.Any(c => c.SequenceId == subsequenceId && c.CharacteristicLinkId == characteristicLinkId))
-                {
-                    double value = calculator.Calculate(sequences[j], link);
-                    var currentCharacteristic = new CharacteristicValue
-                    {
-                        SequenceId = subsequenceId,
-                        CharacteristicLinkId = characteristicLinkId,
-                        Value = value
-                    };
-                    newCharacteristics.Add(currentCharacteristic);
-                }
-            }
-
-            db.CharacteristicValue.AddRange(newCharacteristics);
-            db.SaveChanges();
-
-            for (int d = 0; d < sequences.Length; d++)
-            {
-                long subsequenceId = subsequences[d].Id;
-                double characteristic = db.CharacteristicValue.Single(c => c.SequenceId == subsequenceId && c.CharacteristicLinkId == characteristicLinkId).Value;
-
-                characteristics.Add(characteristic);
-            }
-
-            return characteristics;
         }
 
         /// <summary>

@@ -64,7 +64,7 @@
         {
             return CreateTask(() =>
             {
-                accessions = accessions.Distinct().ToArray();
+                accessions = accessions.Distinct().Select(a => a.Split('.')[0]).ToArray();
                 var importResults = new List<MatterImportResult>(accessions.Length);
 
                 using (var db = new LibiadaWebEntities())

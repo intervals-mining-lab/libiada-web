@@ -10,7 +10,6 @@
     using LibiadaCore.Misc.Iterators;
 
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models;
     using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Sequences;
     using LibiadaWeb.Tasks;
@@ -128,8 +127,8 @@
                 var chains = new Chain[matterIds.Length];
                 var mattersCharacteristics = new object[matterIds.Length];
 
-                var calculators = new List<IFullCalculator>();
-                var links = new List<Link>();
+                var calculators = new IFullCalculator[characteristicLinkIds.Length];
+                var links = new Link[characteristicLinkIds.Length];
                 matterIds = matterIds.OrderBy(m => m).ToArray();
                 Dictionary<long, Matter> matters = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id);
 
@@ -156,11 +155,12 @@
                     chains[k] = commonSequenceRepository.GetLibiadaChain(sequenceId);
                 }
 
-                foreach (int characteristicLinkId in characteristicLinkIds)
+                for (var i = 0; i < characteristicLinkIds.Length; i++)
                 {
+                    int characteristicLinkId = characteristicLinkIds[i];
                     FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
-                    calculators.Add(FullCalculatorsFactory.CreateCalculator(characteristic));
-                    links.Add(characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId));
+                    calculators[i] = FullCalculatorsFactory.CreateCalculator(characteristic);
+                    links[i] = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
                 }
 
                 for (int i = 0; i < chains.Length; i++)
@@ -169,33 +169,33 @@
                             ? (CutRule)new CutRuleWithFixedStart(chains[i].GetLength(), step)
                             : new SimpleCutRule(chains[i].GetLength(), step, length);
 
-                    CutRuleIterator iter = cutRule.GetIterator();
+                    CutRuleIterator iterator = cutRule.GetIterator();
 
                     var fragments = new List<Chain>();
                     partNames[i] = new List<string>();
                     starts[i] = new List<int>();
                     lengthes[i] = new List<int>();
 
-                    while (iter.Next())
+                    while (iterator.Next())
                     {
-                        var fragment = new Chain(iter.GetEndPosition() - iter.GetStartPosition());
+                        var fragment = new Chain(iterator.GetEndPosition() - iterator.GetStartPosition());
 
-                        for (int k = 0; iter.GetStartPosition() + k < iter.GetEndPosition(); k++)
+                        for (int k = 0; iterator.GetStartPosition() + k < iterator.GetEndPosition(); k++)
                         {
-                            fragment.Set(chains[i][iter.GetStartPosition() + k], k);
+                            fragment.Set(chains[i][iterator.GetStartPosition() + k], k);
                         }
 
                         fragments.Add(fragment);
                         partNames[i].Add(fragment.ToString());
-                        starts[i].Add(iter.GetStartPosition());
+                        starts[i].Add(iterator.GetStartPosition());
                         lengthes[i].Add(fragment.GetLength());
                     }
 
                     var fragmentsData = new FragmentData[fragments.Count];
                     for (int k = 0; k < fragments.Count; k++)
                     {
-                        var characteristics = new double[calculators.Count];
-                        for (int j = 0; j < calculators.Count; j++)
+                        var characteristics = new double[calculators.Length];
+                        for (int j = 0; j < calculators.Length; j++)
                         {
                             characteristics[j] = calculators[j].Calculate(fragments[k], links[j]);
                         }

@@ -157,11 +157,11 @@ namespace LibiadaWeb.Models.Repositories.Sequences
 
             bool staticNotation = Aliases.StaticNotations.Contains(notation);
 
-            List<string> stringElements = alphabet.Select(element => element.ToString()).ToList();
+            string[] stringElements = alphabet.Select(element => element.ToString()).ToArray();
 
-            List<Element> elements = staticNotation ?
-                            CachedElements.Where(e => e.Notation == notation && stringElements.Contains(e.Value)).ToList() :
-                            db.Element.Where(e => e.Notation == notation && stringElements.Contains(e.Value)).ToList();
+            Element[] elements = staticNotation ?
+                            CachedElements.Where(e => e.Notation == notation && stringElements.Contains(e.Value)).ToArray() :
+                            db.Element.Where(e => e.Notation == notation && stringElements.Contains(e.Value)).ToArray();
 
             return (from stringElement in stringElements
                     join element in elements
@@ -218,28 +218,22 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <returns>
         /// The <see cref="IEnumerable{SelectListItem}"/>.
         /// </returns>
-        public IEnumerable<SelectListItem> GetSelectListItems(IEnumerable<Element> allElements, IEnumerable<Element> selectedElements)
+        public List<SelectListItem> GetSelectListItems(List<Element> allElements, IEnumerable<Element> selectedElements)
         {
             HashSet<long> elementIds = selectedElements != null
                                      ? new HashSet<long>(selectedElements.Select(c => c.Id))
                                      : new HashSet<long>();
             if (allElements == null)
             {
-                allElements = db.Element;
+                allElements = db.Element.ToList();
             }
 
-            var elementsList = new List<SelectListItem>();
-            foreach (Element element in allElements)
-            {
-                elementsList.Add(new SelectListItem
-                    {
-                        Value = element.Id.ToString(),
-                        Text = element.Name,
-                        Selected = elementIds.Contains(element.Id)
-                    });
-            }
-
-            return elementsList;
+            return allElements.ConvertAll(e => new SelectListItem
+                                                   {
+                                                       Value = e.Id.ToString(),
+                                                       Text = e.Name,
+                                                       Selected = elementIds.Contains(e.Id)
+                                                   });
         }
 
         /// <summary>
@@ -290,7 +284,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         }
 
         /// <summary>
-        /// The create lacking elements.
+        /// Saves lacking elements to db.
         /// </summary>
         /// <param name="libiadaAlphabet">
         /// The libiada alphabet.
@@ -300,25 +294,20 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </param>
         private void CreateLackingElements(Alphabet libiadaAlphabet, Notation notation)
         {
-            var newElements = new List<Element>();
-            List<string> elements = (from IBaseObject element in libiadaAlphabet select element.ToString()).ToList();
+            
+            string[] elements = libiadaAlphabet.Select(e => e.ToString()).ToArray();
 
-            IQueryable<string> existingElements = db.Element.Where(e => elements.Contains(e.Value) && e.Notation == notation).Select(e => e.Value);
+            IQueryable<string> existingElements = db.Element
+                                                    .Where(e => elements.Contains(e.Value) && e.Notation == notation)
+                                                    .Select(e => e.Value);
 
-            List<string> notExistingElements = elements.Where(e => !existingElements.Contains(e)).ToList();
-
-            foreach (string element in notExistingElements)
-            {
-                var newElement = new Element
-                {
-                    Value = element,
-                    Name = element,
-                    Notation = notation
-                };
-                newElements.Add(newElement);
-            }
-
-            db.Element.AddRange(newElements);
+            List<string> newElements = elements.Where(e => !existingElements.Contains(e)).ToList();
+            db.Element.AddRange(newElements.ConvertAll(e => new Element
+                                                                {
+                                                                    Value = e,
+                                                                    Name = e,
+                                                                    Notation = notation
+                                                                }));
             db.SaveChanges();
         }
     }

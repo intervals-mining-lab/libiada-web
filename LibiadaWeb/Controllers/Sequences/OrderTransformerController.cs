@@ -55,7 +55,11 @@
             transformationLinks = transformationLinks.OrderBy(n => (int)n).ToArray();
             data.Add("transformationLinks", transformationLinks.ToSelectList());
 
-            var operations = new List<SelectListItem> { new SelectListItem { Text = "Dissimilar", Value = 1.ToString() }, new SelectListItem { Text = "Higher order", Value = 2.ToString() } };
+            var operations = new[]
+            {
+                new SelectListItem { Text = "Dissimilar", Value = 1.ToString() },
+                new SelectListItem { Text = "Higher order", Value = 2.ToString() }
+            };
             data.Add("operations", operations);
 
             ViewBag.data = JsonConvert.SerializeObject(data);

@@ -51,7 +51,7 @@
             transformationLinks = transformationLinks.OrderBy(n => (int)n).ToArray();
             data.Add("transformationLinks", transformationLinks.ToSelectList());
 
-            var operations = new List<SelectListItem>
+            var operations = new[]
             {
                 new SelectListItem { Text = "Dissimilar", Value = 1.ToString() },
                 new SelectListItem { Text = "Higher order", Value = 2.ToString() }

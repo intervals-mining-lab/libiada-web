@@ -43,11 +43,11 @@
 
             string[] text = stringSequence.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
 
-            List<string> cleanedSequence = text.Where(t => !t.Equals("\"volume\"") && !string.IsNullOrEmpty(t) && !string.IsNullOrWhiteSpace(t)).ToList();
+           string[] cleanedSequence = text.Where(t => !t.Equals("\"volume\"") && !string.IsNullOrEmpty(t) && !string.IsNullOrWhiteSpace(t)).ToArray();
 
-            var elements = new List<IBaseObject>();
+            var elements = new List<IBaseObject>(cleanedSequence.Length);
 
-            for (int i = 0; i < cleanedSequence.Count; i++)
+            for (int i = 0; i < cleanedSequence.Length; i++)
             {
                 string element = cleanedSequence[i];
                 if (element.Substring(element.Length - 2, 2).Equals(".0"))

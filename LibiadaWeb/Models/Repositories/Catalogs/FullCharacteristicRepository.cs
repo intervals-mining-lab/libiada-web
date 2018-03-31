@@ -157,7 +157,7 @@
                 characteristics = Aliases.UserAvailableFullCharacteristics.ToArray();
             }
 
-            var result = new List<CharacteristicTypeData>();
+            var result = new List<CharacteristicTypeData>(characteristics.Length);
 
             foreach (FullCharacteristic characteristic in characteristics)
             {

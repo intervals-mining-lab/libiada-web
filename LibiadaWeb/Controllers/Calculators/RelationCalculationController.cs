@@ -273,17 +273,17 @@
                 .ToArray();
 
             // calculating frequencies of elements in alphabet
-            var frequencies = new List<(IBaseObject, double)>();
             Alphabet alphabet = chain.Alphabet;
+            var frequencies = new (IBaseObject, double)[alphabet.Cardinality];
             for (int f = 0; f < alphabet.Cardinality; f++)
             {
                 var probabilityCalculator = new Probability();
                 double result = probabilityCalculator.Calculate(chain.CongenericChain(f), Link.NotApplied);
-                frequencies.Add((alphabet[f], result));
+                frequencies[f] = (alphabet[f], result);
             }
 
             // ordering alphabet by frequencies
-            SortKeyValuePairList(frequencies);
+            frequencies = SortKeyValuePairList(frequencies);
 
             // calculating relation characteristic only for elements with maximum frequency
             for (int i = 0; i < frequencyCount; i++)
@@ -313,11 +313,14 @@
         /// Sort list by second element of the tuple.
         /// </summary>
         /// <param name="arrayForSort">
-        /// The array for sort.
+        /// The array for sorting.
         /// </param>
-        private void SortKeyValuePairList(List<(IBaseObject, double)> arrayForSort)
+        /// <returns>
+        /// The <see cref="T:(IBaseObject, double)[]"/>.
+        /// </returns>
+        private (IBaseObject, double)[] SortKeyValuePairList((IBaseObject, double)[] arrayForSort)
         {
-            arrayForSort.Sort((firstPair, nextPair) => nextPair.Item2.CompareTo(firstPair.Item2));
+            return arrayForSort.OrderBy(pair => pair.Item2).ToArray();
         }
     }
 }

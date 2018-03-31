@@ -130,7 +130,6 @@
     <Compile Include="Controllers\Calculators\AccordanceCalculationController.cs" />
     <Compile Include="Controllers\Calculators\ChartsController.cs" />
     <Compile Include="Controllers\Calculators\CustomSequenceOrderTransformationCalculationController.cs" />
-    <Compile Include="Controllers\Calculators\FilteredSubsequenceCalculationController.cs" />
     <Compile Include="Controllers\Calculators\LocalCalculationWebApiController.cs" />
     <Compile Include="Controllers\Calculators\MusicFilesController.cs" />
     <Compile Include="Controllers\Calculators\OrderTransformationCalculationController.cs" />
@@ -273,7 +272,6 @@
     <Compile Include="Tasks\TasksManagerHub.cs" />
     <Compile Include="Tasks\TaskState.cs" />
     <Compile Include="Math\AutoCorelation.cs" />
-    <Compile Include="Math\DataTableFiller.cs" />
     <Compile Include="Math\FastFourierTransform.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account\AddPhoneNumberViewModel.cs" />
@@ -576,8 +574,6 @@
     <Content Include="Views\Partial\_CustomSequences.cshtml" />
     <Content Include="Views\Partial\_CharacteristicsWithoutNotation.cshtml" />
     <Content Include="Views\Calculators\SubsequencesComparer\Result.cshtml" />
-    <Content Include="Views\Calculators\FilteredSubsequenceCalculation\Index.cshtml" />
-    <Content Include="Views\Calculators\FilteredSubsequenceCalculation\Result.cshtml" />
     <Content Include="Views\Partial\_Filters.cshtml" />
     <Content Include="Views\Partial\_ModalLoadingWindow.cshtml" />
     <Content Include="Views\Sequences\SequenceCleaner\Index.cshtml" />

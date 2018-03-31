@@ -53,9 +53,9 @@
 
                 var subsequenceExtractor = new SubsequenceExtractor(context);
 
-                Subsequence dbSubsequence = context.Subsequence.Single(s => s.Id == subsequenceId);
+                Subsequence subsequence = context.Subsequence.Single(s => s.Id == subsequenceId);
 
-                chain = subsequenceExtractor.ExtractChains(dbSubsequence.SequenceId, new[] { dbSubsequence }).Single();
+                chain = subsequenceExtractor.ExtractChains(subsequence.SequenceId, new[] { subsequence }).Single();
             }
 
             CutRule cutRule = new SimpleCutRule(chain.GetLength(), step, windowSize);

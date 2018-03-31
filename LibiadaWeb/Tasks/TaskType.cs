@@ -54,11 +54,11 @@
         CustomSequenceOrderTransformationCalculation = 6,
 
         /// <summary>
-        /// The filtered subsequence calculation.
+        /// Matter creation and sequence import.
         /// </summary>
-        [Display(Name = "Subsequences characteristics calculation")]
-        [TaskClass(typeof(FilteredSubsequenceCalculationController))]
-        FilteredSubsequenceCalculation = 7,
+        [Display(Name = "Music files processing")]
+        [TaskClass(typeof(MusicFilesController))]
+        MusicFiles = 7,
 
         /// <summary>
         /// The local calculation.
@@ -180,17 +180,10 @@
         Matters = 24,
 
         /// <summary>
-        /// Matter creation and sequence import.
-        /// </summary>
-        [Display(Name = "Music files processing")]
-        [TaskClass(typeof(MusicFilesController))]
-        MusicFiles = 25,
-
-        /// <summary>
         /// The sequence prediction.
         /// </summary>
         [Display(Name = "Sequence prediction")]
         [TaskClass(typeof(SequencePredictionController))]
-        SequencePrediction = 26
+        SequencePrediction = 25
     }
 }

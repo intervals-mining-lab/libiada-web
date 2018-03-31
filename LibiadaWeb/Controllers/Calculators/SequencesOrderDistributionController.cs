@@ -70,6 +70,7 @@
                 {
                     result.Add(order, new List<BaseChain>());
                 }
+
                 foreach (var sequence in sequences)
                 {
                     result[sequence.Building].Add(sequence);

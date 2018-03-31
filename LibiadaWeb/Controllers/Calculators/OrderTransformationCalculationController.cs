@@ -45,7 +45,7 @@
             var transformationLinks = new[] { Link.Start, Link.End, Link.CycleStart, Link.CycleEnd };
             data.Add("transformationLinks", transformationLinks.ToSelectList());
 
-            var operations = new List<SelectListItem>
+            var operations = new[]
             {
                 new SelectListItem { Text = "Dissimilar", Value = 1.ToString() },
                 new SelectListItem { Text = "Higher order", Value = 2.ToString() }
@@ -110,8 +110,8 @@
                 for (int i = 0; i < matterIds.Length; i++)
                 {
                     long matterId = matterIds[i];
-                    var characteristics = new List<double>();
-                    for (int k = 0; k < notations.Length; k++)
+                    var characteristics = new double[characteristicLinkIds.Length];
+                    for (int k = 0; k < characteristicLinkIds.Length; k++)
                     {
                         Notation notation = notations[k];
                         long sequenceId;
@@ -145,7 +145,7 @@
                         FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
 
                         IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
-                        characteristics.Add(calculator.Calculate(sequence, link));
+                        characteristics[k] = calculator.Calculate(sequence, link);
                     }
 
                     mattersCharacteristics[i] = new { matterName = matters[matterId].Name, characteristics };

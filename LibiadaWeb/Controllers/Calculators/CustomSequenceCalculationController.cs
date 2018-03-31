@@ -57,7 +57,7 @@
             ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object>
                 {
                     { "characteristicTypes", fullCharacteristicRepository.GetCharacteristicTypes() },
-                    {"imageTransformators", imageTransformators }
+                    { "imageTransformators", imageTransformators }
                 });
 
             return View();

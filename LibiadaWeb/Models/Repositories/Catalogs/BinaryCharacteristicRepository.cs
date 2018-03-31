@@ -192,7 +192,7 @@
                 characteristics = Aliases.UserAvailableBinaryCharacteristics.ToArray();
             }
 
-            var result = new List<CharacteristicTypeData>();
+            var result = new List<CharacteristicTypeData>(characteristics.Length);
 
             foreach (BinaryCharacteristic characteristic in characteristics)
             {

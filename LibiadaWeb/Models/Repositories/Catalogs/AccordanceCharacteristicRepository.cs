@@ -158,7 +158,7 @@
                 characteristics = Aliases.UserAvailableAccordanceCharacteristics.ToArray();
             }
 
-            var result = new List<CharacteristicTypeData>();
+            var result = new List<CharacteristicTypeData>(characteristics.Length);
 
             foreach (AccordanceCharacteristic characteristic in characteristics)
             {
