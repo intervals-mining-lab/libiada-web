@@ -4,8 +4,6 @@
 
     using LibiadaCore.Images;
 
-    using SixLabors.ImageSharp;
-
     /// <summary>
     /// The image transformer type attribute.
     /// </summary>
