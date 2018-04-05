@@ -41,7 +41,11 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public (string[], string[]) SplitAccessionsIntoExistingAndNotImported(string[] accessions)
         {
-            string[] allExistingAccessions = Db.DnaSequence.Select(d => d.RemoteId.Split('.')[0]).Distinct().ToArray();
+            var allExistingAccessions = Db.DnaSequence
+                                               .Select(d => d.RemoteId)
+                                               .ToArray()
+                                               .Select(r => r.Split('.')[0])
+                                               .Distinct();
             var existing = accessions.Intersect(allExistingAccessions);
             var notExisting = accessions.Except(allExistingAccessions);
 
