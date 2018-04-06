@@ -2156,4 +2156,48 @@ ALTER TABLE sequence_group ADD CONSTRAINT fk_sequence_group_creator FOREIGN KEY 
 
 ALTER TABLE sequence_group ADD CONSTRAINT fk_sequence_group_modifier FOREIGN KEY (modifier_id) REFERENCES dbo."AspNetUsers" ("Id") MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION;
 
+-- 06.04.2018
+-- Add new congeneric characteristics.
+
+ALTER TABLE congeneric_characteristic_link DROP CONSTRAINT congeneric_characteristic_check;
+ALTER TABLE congeneric_characteristic_link ADD CONSTRAINT congeneric_characteristic_check CHECK (congeneric_characteristic::integer <@ int4range(1, 24, '[]'::text));
+
+
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (19,1);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (19,2);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (19,3);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (19,4);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (19,5);
+
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (20,1);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (20,2);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (20,3);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (20,4);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (20,5);
+
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (21,1);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (21,2);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (21,3);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (21,4);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (21,5);
+
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (22,1);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (22,2);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (22,3);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (22,4);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (22,5);
+
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (23,1);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (23,2);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (23,3);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (23,4);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (23,5);
+
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (24,1);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (24,2);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (24,3);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (24,4);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (24,5);
+
+
 COMMIT;
