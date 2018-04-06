@@ -158,6 +158,7 @@
     <Compile Include="Controllers\Sequences\SequenceCheckController.cs" />
     <Compile Include="Controllers\Sequences\SequenceCleanerController.cs" />
     <Compile Include="Controllers\Sequences\SequenceElementsController.cs" />
+    <Compile Include="Controllers\Sequences\SequenceGroupsController.cs" />
     <Compile Include="Controllers\Sequences\SequenceMixerController.cs" />
     <Compile Include="Controllers\Sequences\SequencesMattersController.cs" />
     <Compile Include="Controllers\Sequences\SequenceTransformerController.cs" />
@@ -584,6 +585,11 @@
     <Content Include="Views\Calculators\MusicFiles\Index.cshtml" />
     <Content Include="Views\Partial\_ImageTransformators.cshtml" />
     <Content Include="Views\Partial\_ScrollJumper.cshtml" />
+    <Content Include="Views\Sequences\SequenceGroups\Create.cshtml" />
+    <Content Include="Views\Sequences\SequenceGroups\Delete.cshtml" />
+    <Content Include="Views\Sequences\SequenceGroups\Details.cshtml" />
+    <Content Include="Views\Sequences\SequenceGroups\Edit.cshtml" />
+    <Content Include="Views\Sequences\SequenceGroups\Index.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -652,6 +652,18 @@
           </ReferentialConstraint>
         </Association>
 
+        <Association Name="fk_sequence_group_creator">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="sequence_group" Type="Self.sequence_group" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="sequence_group">
+              <PropertyRef Name="creator_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_sequence_group_matter">
           <End Role="matter" Type="Self.matter" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -663,6 +675,18 @@
             </Principal>
             <Dependent Role="sequence_group_matter">
               <PropertyRef Name="matter_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_sequence_group_modifier">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="sequence_group" Type="Self.sequence_group" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="sequence_group">
+              <PropertyRef Name="modifier_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -805,9 +829,17 @@
             <End Role="position" EntitySet="position" />
           </AssociationSet>
 
+          <AssociationSet Name="fk_sequence_group_creator" Association="Self.fk_sequence_group_creator">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="sequence_group" EntitySet="sequence_group" />
+          </AssociationSet>
           <AssociationSet Name="fk_sequence_group_matter" Association="Self.fk_sequence_group_matter">
             <End Role="matter" EntitySet="matter" />
             <End Role="sequence_group_matter" EntitySet="sequence_group_matter" />
+          </AssociationSet>
+          <AssociationSet Name="fk_sequence_group_modifier" Association="Self.fk_sequence_group_modifier">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="sequence_group" EntitySet="sequence_group" />
           </AssociationSet>
           <AssociationSet Name="fk_task_user" Association="Self.fk_task_user">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
@@ -815,8 +847,7 @@
           </AssociationSet>
 
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="LibiadaWebModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -1087,6 +1118,14 @@
           <AssociationSet Name="sequence_group_matter" Association="Self.sequence_group_matter">
             <End Role="SequenceGroup" EntitySet="SequenceGroup" />
             <End Role="Matter" EntitySet="Matter" />
+          </AssociationSet>
+          <AssociationSet Name="fk_sequence_group_creator" Association="LibiadaWebModel.fk_sequence_group_creator">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="SequenceGroup" EntitySet="SequenceGroup" />
+          </AssociationSet>
+          <AssociationSet Name="fk_sequence_group_modifier" Association="LibiadaWebModel.fk_sequence_group_modifier">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="SequenceGroup" EntitySet="SequenceGroup" />
           </AssociationSet>
 
         </EntityContainer>
@@ -1544,7 +1583,9 @@
           <Property Name="CreatorId" Type="Int32" Nullable="false" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="ModifierId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="matters" Relationship="Self.sequence_group_matter" FromRole="SequenceGroup" ToRole="Matter" />
+          <NavigationProperty Name="Matters" Relationship="Self.sequence_group_matter" FromRole="SequenceGroup" ToRole="Matter" />
+          <NavigationProperty Name="Creator" Relationship="LibiadaWebModel.fk_sequence_group_creator" FromRole="SequenceGroup" ToRole="AspNetUser" />
+          <NavigationProperty Name="Modifier" Relationship="LibiadaWebModel.fk_sequence_group_modifier" FromRole="SequenceGroup" ToRole="AspNetUser" />
         </EntityType>
 
         <Association Name="fk_binary_characteristic_chain">
@@ -2178,6 +2219,30 @@
         <Association Name="sequence_group_matter">
           <End Type="Self.SequenceGroup" Role="SequenceGroup" Multiplicity="*" />
           <End Type="Self.Matter" Role="Matter" Multiplicity="*" />
+        </Association>
+        <Association Name="fk_sequence_group_creator">
+          <End Type="LibiadaWebModel.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+          <End Type="LibiadaWebModel.SequenceGroup" Role="SequenceGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SequenceGroup">
+              <PropertyRef Name="CreatorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_sequence_group_modifier">
+          <End Type="LibiadaWebModel.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+          <End Type="LibiadaWebModel.SequenceGroup" Role="SequenceGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SequenceGroup">
+              <PropertyRef Name="ModifierId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
 
       </Schema>

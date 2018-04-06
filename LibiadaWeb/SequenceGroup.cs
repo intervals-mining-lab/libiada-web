@@ -16,7 +16,7 @@ namespace LibiadaWeb
     {
         public SequenceGroup()
         {
-            matters = new HashSet<Matter>();
+            Matters = new HashSet<Matter>();
         }
     
         public int Id { get; set; }
@@ -26,6 +26,8 @@ namespace LibiadaWeb
         public System.DateTimeOffset Modified { get; set; }
         public int ModifierId { get; set; }
     
-        public virtual ICollection<Matter> matters { get; set; }
+        public virtual ICollection<Matter> Matters { get; set; }
+        public virtual AspNetUser Creator { get; set; }
+        public virtual AspNetUser Modifier { get; set; }
     }
 }

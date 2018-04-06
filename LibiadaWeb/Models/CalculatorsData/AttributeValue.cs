@@ -16,7 +16,7 @@
         public readonly string Value;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AttributeValue"/> struct.
+        /// Initializes a new instance of the <see cref="AttributeValue"/> structure.
         /// </summary>
         /// <param name="attributeId">
         /// The attribute id.
