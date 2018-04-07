@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Sequences Order Distribution";
 }
-
+@Scripts.Render("~/bundles/loadingWindow")
 <h2>@ViewBag.Title</h2>
 
 @if (ViewBag.Error == null)
@@ -10,30 +10,29 @@
     @Html.Partial("_AngularControllerInitializer", "SequencesOrderDistributionResultController")
 
     <div ng-controller="SequencesOrderDistributionResultCtrl">
-        @Html.Partial("_ModalLoadingWindow")
+        <loading-window loading = "loading" loading-screen-header = "loadingScreenHeader"></loading-window>
         <div ng-disabled="loading">
-            <div ng-repeat="order in result" >
+            <div ng-repeat="order in result">
                 <table class="table table-bordered table-hover" ng-cloak>
                     <thead>
-                    <tr>
-                        <th>
-                            #
-                        </th>
-                        <th ng-bind="order.order">
-                        </th>
-                    </tr>
+                        <tr>
+                            <th>
+                                #
+                            </th>
+                            <th ng-bind="order.order">
+                            </th>
+                        </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="sequence in order.sequences">
-                        <td ng-bind="$index+1"></td>
-                        <td ng-bind="sequence">
-                        </td>
-                    </tr>
+                        <tr ng-repeat="sequence in order.sequences">
+                            <td ng-bind="$index+1"></td>
+                            <td ng-bind="sequence"></td>
+                        </tr>
                     </tbody>
                 </table>
-                <br/>
+                <br />
             </div>
-           
+
         </div>
     </div>
     <br />

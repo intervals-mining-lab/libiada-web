@@ -57,7 +57,7 @@
 	}
 
 	angular.module("libiada", []).component("scrollJumper", {
-		templateUrl: "Partial/_ScrollJumper",
+		templateUrl: window.location.origin + "/Partial/_ScrollJumper",
 		controller: [ScrollJumperController]
 	});
 }

@@ -23,5 +23,13 @@
         /// The <see cref="PartialViewResult"/>.
         /// </returns>
         public PartialViewResult _ScrollJumper() => PartialView();
+
+        /// <summary>
+        /// The loading Window partial view.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="PartialViewResult"/>.
+        /// </returns>
+        public PartialViewResult _ModalLoadingWindow() => PartialView();
     }
 }
