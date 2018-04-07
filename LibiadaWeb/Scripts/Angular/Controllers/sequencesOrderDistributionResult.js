@@ -3,7 +3,7 @@
 
     function sequencesOrderDistributionResult($scope, $http) {
 
-		$scope.loadingScreenHeader = { header: "Loading data" };
+		$scope.loadingScreenHeader = { header: "Loading Data" };
 		$scope.loading = true;
 
         var location = window.location.href.split("/");

@@ -5,6 +5,7 @@
 		var ctrl = this;
 
 		ctrl.loadingModalWindow = $("#loadingDialog");
+
 		ctrl.$onInit = function () {
 		}
 
@@ -16,10 +17,6 @@
 				else {
 					ctrl.loadingModalWindow.modal("hide");
 				}
-			}
-			if (changes.loadingScreenHeader) {
-				ctrl.loadingScreenHeader = changes.loadingScreenHeader.currentValue;
-				//console.log(ctrl.loadingScreenHeader);
 			}
 		}
 
