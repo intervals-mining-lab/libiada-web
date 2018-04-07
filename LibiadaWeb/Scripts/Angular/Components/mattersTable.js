@@ -53,7 +53,7 @@
     }
 
     angular.module("libiada").component("mattersTable", {
-        templateUrl: "Partial/_MattersTable",
+		templateUrl: window.location.origin + "/Partial/_MattersTable",
         controller: ["filterFilter", MattersTableController],
         bindings: {
             matters: "<",

@@ -2,7 +2,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 ng-bind="loadingScreenHeader"></h1>
+                <h1 ng-bind="$ctrl.loadingScreenHeader.header"></h1>
             </div>
             <div class="modal-body">
                 <div class="progress">
@@ -12,4 +12,7 @@
             </div>
         </div>
     </div>
+</div>
+<div>
+    <h1 ng-bind="$ctrl.loadingScreenHeader.header"></h1>
 </div>
