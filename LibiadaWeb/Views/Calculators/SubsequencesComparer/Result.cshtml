@@ -1,14 +1,14 @@
 ﻿@{
     ViewBag.Title = "Subsequences comparer";
 }
-
+@Scripts.Render("~/bundles/loadingWindow")
 @if (ViewBag.Error == null)
 {
     <h2>@ViewBag.Title</h2>
 
     @Html.Partial("_AngularControllerInitializer", "SubsequencesComparerResultController")
     <div class="form-horizontal" ng-controller="SubsequencesComparerResultCtrl">
-        @Html.Partial("_ModalLoadingWindow")
+        <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <div>
             Sequences characteristic: <b>{{sequenceCharacteristicName}}</b>
         </div>
@@ -19,23 +19,23 @@
 
         <table class="table table-bordered">
             <tbody>
-            <tr>
-                <td/>
-                <td ng-repeat="matterName in mattersNames" title="{{matterName}}">{{$index + 1}}</td>
-            </tr>
-            <tr ng-repeat="similarity in similarities">
-                <td title="{{mattersNames[$index]}}">{{$index + 1}}</td>
-                <td ng-repeat="value in similarity"
-                    ng-click="showEqualPairs($parent.$index, $index, value)"
-                    ng-style="getHighlightColor(value.formula1)"
-                    title="{{mattersNames[$parent.$index]}} &#13{{mattersNames[$index]}}">
-                    {{(value.formula1 * 100).toFixed(3)}}%
-                    <br />
-                    {{(value.formula2).toFixed(5)}}
-                    <br />
-                    {{(value.formula3 * 100).toFixed(3)}}%
-                </td>
-            </tr>
+                <tr>
+                    <td />
+                    <td ng-repeat="matterName in mattersNames" title="{{matterName}}">{{$index + 1}}</td>
+                </tr>
+                <tr ng-repeat="similarity in similarities">
+                    <td title="{{mattersNames[$index]}}">{{$index + 1}}</td>
+                    <td ng-repeat="value in similarity"
+                        ng-click="showEqualPairs($parent.$index, $index, value)"
+                        ng-style="getHighlightColor(value.formula1)"
+                        title="{{mattersNames[$parent.$index]}} &#13{{mattersNames[$index]}}">
+                        {{(value.formula1 * 100).toFixed(3)}}%
+                        <br />
+                        {{(value.formula2).toFixed(5)}}
+                        <br />
+                        {{(value.formula3 * 100).toFixed(3)}}%
+                    </td>
+                </tr>
             </tbody>
         </table>
 
@@ -72,85 +72,85 @@
 
         <table class="table table-bordered table-striped" ng-repeat="equalElement in equalElementsToShow" ng-show="elementVisible(equalElement)">
             <tbody>
-            <tr>
-                <td>
-                    <b> {{$index + 1}}. </b>
-                    <br />
-                    First sequence: <b> {{mattersNames[firstMatterIndex]}} </b>
-                    <br />
-                    Feature: {{features[characteristics[firstMatterIndex][equalElement.Item1].FeatureId]}}
-                    <br />
-                    Positions = {{characteristics[firstMatterIndex][equalElement.Item1].Starts.join(', ')}}
-                    <br />
-                    Lengths = {{characteristics[firstMatterIndex][equalElement.Item1].Lengths.join(', ')}}
-                    <br />
-                    <div ng-repeat="attributeId in characteristics[firstMatterIndex][equalElement.Item1].Attributes">
-                        {{attributes[attributeValues[attributeId].attribute]}} = {{attributeValues[attributeId].value}}
-                    </div>
-                    <i> Characteristic value = {{characteristics[firstMatterIndex][equalElement.Item1].CharacteristicsValues[0]}} </i>
-                    <br />
-                    <br />
-
-                    Second sequence: <b> {{mattersNames[secondMatterIndex]}} </b>
-                    <br />
-                    Feature: {{features[characteristics[secondMatterIndex][equalElement.Item2].FeatureId]}}
-                    <br />
-                    Positions = {{characteristics[secondMatterIndex][equalElement.Item2].Starts.join(', ')}}
-                    <br />
-                    Lengths = {{characteristics[secondMatterIndex][equalElement.Item2].Lengths.join(', ')}}
-                    <br />
-                    <div ng-repeat="attributeId in characteristics[secondMatterIndex][equalElement.Item2].Attributes">
-                        {{attributes[attributeValues[attributeId].attribute]}} = {{attributeValues[attributeId].value}}
-                    </div>
-                    <i> Characteristic value = {{characteristics[secondMatterIndex][equalElement.Item2].CharacteristicsValues[0]}} </i>
-                    <br />
-                    <br />
-                    <i> Absolute difference = {{characteristics[firstMatterIndex][equalElement.Item1].CharacteristicsValues[0] - characteristics[secondMatterIndex][equalElement.Item2].CharacteristicsValues[0] | makePositive}}</i>
-                    <br />
-                    <i> Percentage difference = {{equalElement.Item3 * 100}}%</i>
-
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <button type="button" class="btn btn-default btn-xs" data-toggle="collapse" data-target="#additionalActions{{$index + 1}}" aria-expanded="false" aria-controls="additionalActions{{$index + 1}}">+</button>
+                <tr>
+                    <td>
+                        <b> {{$index + 1}}. </b>
+                        <br />
+                        First sequence: <b> {{mattersNames[firstMatterIndex]}} </b>
+                        <br />
+                        Feature: {{features[characteristics[firstMatterIndex][equalElement.Item1].FeatureId]}}
+                        <br />
+                        Positions = {{characteristics[firstMatterIndex][equalElement.Item1].Starts.join(', ')}}
+                        <br />
+                        Lengths = {{characteristics[firstMatterIndex][equalElement.Item1].Lengths.join(', ')}}
+                        <br />
+                        <div ng-repeat="attributeId in characteristics[firstMatterIndex][equalElement.Item1].Attributes">
+                            {{attributes[attributeValues[attributeId].attribute]}} = {{attributeValues[attributeId].value}}
                         </div>
-                        <div class="panel-collapse collapse" id="additionalActions{{$index + 1}}">
-                            <div class="panel-body">
-                                <div class="form-group">
-                                    <label class="control-label col-md-2" for="characteristic">Characteristic:</label>
-                                    <div class="col-md-10">
-                                        <select class="form-control" title="Characteristic" ng-model="characteristic.characteristicType" ng-options="c.Text for c in characteristicTypes" ng-change="selectLink(characteristic)" id="characteristic"></select>
+                        <i> Characteristic value = {{characteristics[firstMatterIndex][equalElement.Item1].CharacteristicsValues[0]}} </i>
+                        <br />
+                        <br />
+
+                        Second sequence: <b> {{mattersNames[secondMatterIndex]}} </b>
+                        <br />
+                        Feature: {{features[characteristics[secondMatterIndex][equalElement.Item2].FeatureId]}}
+                        <br />
+                        Positions = {{characteristics[secondMatterIndex][equalElement.Item2].Starts.join(', ')}}
+                        <br />
+                        Lengths = {{characteristics[secondMatterIndex][equalElement.Item2].Lengths.join(', ')}}
+                        <br />
+                        <div ng-repeat="attributeId in characteristics[secondMatterIndex][equalElement.Item2].Attributes">
+                            {{attributes[attributeValues[attributeId].attribute]}} = {{attributeValues[attributeId].value}}
+                        </div>
+                        <i> Characteristic value = {{characteristics[secondMatterIndex][equalElement.Item2].CharacteristicsValues[0]}} </i>
+                        <br />
+                        <br />
+                        <i> Absolute difference = {{characteristics[firstMatterIndex][equalElement.Item1].CharacteristicsValues[0] - characteristics[secondMatterIndex][equalElement.Item2].CharacteristicsValues[0] | makePositive}}</i>
+                        <br />
+                        <i> Percentage difference = {{equalElement.Item3 * 100}}%</i>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <button type="button" class="btn btn-default btn-xs" data-toggle="collapse" data-target="#additionalActions{{$index + 1}}" aria-expanded="false" aria-controls="additionalActions{{$index + 1}}">+</button>
+                            </div>
+                            <div class="panel-collapse collapse" id="additionalActions{{$index + 1}}">
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2" for="characteristic">Characteristic:</label>
+                                        <div class="col-md-10">
+                                            <select class="form-control" title="Characteristic" ng-model="characteristic.characteristicType" ng-options="c.Text for c in characteristicTypes" ng-change="selectLink(characteristic)" id="characteristic"></select>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group" ng-show="isLinkable(characteristic)">
-                                    <label class="control-label col-md-2" for="link">Link:</label>
-                                    <div class="col-md-10">
-                                        <select class="form-control" title="Link" ng-model="characteristic.link" ng-options="l.Text for l in characteristic.characteristicType.CharacteristicLinks" id="link"></select>
+                                    <div class="form-group" ng-show="isLinkable(characteristic)">
+                                        <label class="control-label col-md-2" for="link">Link:</label>
+                                        <div class="col-md-10">
+                                            <select class="form-control" title="Link" ng-model="characteristic.link" ng-options="l.Text for l in characteristic.characteristicType.CharacteristicLinks" id="link"></select>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-md-2" for="windowSize">Window size:</label>
-                                    <div class="col-md-10">
-                                        <input class="form-control" ng-model="slidingWindowParams.windowSize" type="number" min="1" id="windowSize" />
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2" for="windowSize">Window size:</label>
+                                        <div class="col-md-10">
+                                            <input class="form-control" ng-model="slidingWindowParams.windowSize" type="number" min="1" id="windowSize" />
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-md-2" for="step">Step size:</label>
-                                    <div class="col-md-10">
-                                        <input class="form-control" ng-model="slidingWindowParams.step" type="number" min="1" id="step" />
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2" for="step">Step size:</label>
+                                        <div class="col-md-10">
+                                            <input class="form-control" ng-model="slidingWindowParams.step" type="number" min="1" id="step" />
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-md-offset-2 col-md-10">
-                                        <input type="button" class="btn btn-default" ng-click="calculateLocalCharacteristics(characteristics[firstMatterIndex][equalElement.Item1].Id, characteristics[secondMatterIndex][equalElement.Item2].Id, $index)" value="CalculateLocalCharacteristics" />
+                                    <div class="form-group">
+                                        <div class="col-md-offset-2 col-md-10">
+                                            <input type="button" class="btn btn-default" ng-click="calculateLocalCharacteristics(characteristics[firstMatterIndex][equalElement.Item1].Id, characteristics[secondMatterIndex][equalElement.Item2].Id, $index)" value="CalculateLocalCharacteristics" />
+                                        </div>
                                     </div>
-                                </div>
-                                <div id="chart{{$index}}">
+                                    <div id="chart{{$index}}">
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </td>
-            </tr>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>

@@ -9,7 +9,7 @@
     @Html.Partial("_AngularControllerInitializer", "BatchSequenceImportResultController")
 
     <div ng-controller="BatchSequenceImportResultCtrl">
-        @Html.Partial("_ModalLoadingWindow")
+        <loading-window loading = "loading" loading-screen-header = "loadingScreenHeader"></loading-window>
         <br />
         <div>
             Sequence <strong> @ViewBag.matterName </strong> imported successfully

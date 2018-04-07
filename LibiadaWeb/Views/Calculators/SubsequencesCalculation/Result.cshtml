@@ -1,14 +1,14 @@
 ﻿@{
     ViewBag.Title = "Subsequences characteristics";
 }
-
+@Scripts.Render("~/bundles/loadingWindow")
 <h2>@ViewBag.Title</h2>
 
 @if (ViewBag.Error == null)
 {
     @Html.Partial("_AngularControllerInitializer", "SubsequencesCalculationResultController")
     <div class="form-horizontal" ng-controller="SubsequencesCalculationResultCtrl">
-        @Html.Partial("_ModalLoadingWindow")
+        <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -48,37 +48,37 @@
         <div id="chart">
         </div>
 
-      @*  @Html.Partial("_Filters")
-        <div ng-repeat="sequenceData in sequencesData">
-            <h3 ng-bind="sequenceData.MatterName"></h3>
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>
-                            Feature
-                        </th>
-                        <th>
-                            Subsequence attributes
-                        </th>
-                        <th>
-                            Subsequence position
-                        </th>
-                        <th ng-repeat="characteristicName in subsequencesCharacteristicsNames" ng-bind="characteristicName" />
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="subsequenceData in sequenceData.SubsequencesData">
-                        <td ng-bind="features[subsequenceData.FeatureId]" />
-                        <td ng-bind-html="getAttributesText(subsequenceData.Attributes)" />
-                        <td>
-                            <div ng-repeat="start in subsequenceData.Starts">Start: {{start}} Length:{{subsequenceData.Lengths[$index]}}</div>
-                        </td>
-                        <td ng-repeat="characteristicValue in subsequenceData.CharacteristicsValues" ng-bind="characteristicValue" />
-                    </tr>
-                </tbody>
-            </table>
-            <br />
-        </div>*@
+        @*  @Html.Partial("_Filters")
+            <div ng-repeat="sequenceData in sequencesData">
+                <h3 ng-bind="sequenceData.MatterName"></h3>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                Feature
+                            </th>
+                            <th>
+                                Subsequence attributes
+                            </th>
+                            <th>
+                                Subsequence position
+                            </th>
+                            <th ng-repeat="characteristicName in subsequencesCharacteristicsNames" ng-bind="characteristicName" />
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="subsequenceData in sequenceData.SubsequencesData">
+                            <td ng-bind="features[subsequenceData.FeatureId]" />
+                            <td ng-bind-html="getAttributesText(subsequenceData.Attributes)" />
+                            <td>
+                                <div ng-repeat="start in subsequenceData.Starts">Start: {{start}} Length:{{subsequenceData.Lengths[$index]}}</div>
+                            </td>
+                            <td ng-repeat="characteristicValue in subsequenceData.CharacteristicsValues" ng-bind="characteristicValue" />
+                        </tr>
+                    </tbody>
+                </table>
+                <br />
+            </div>*@
     </div>
     @section Scripts {
         @Scripts.Render("~/bundles/d3js")

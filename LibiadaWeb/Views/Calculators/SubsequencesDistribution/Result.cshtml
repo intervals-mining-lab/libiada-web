@@ -1,14 +1,14 @@
 ﻿@{
     ViewBag.Title = "Subsequences characteristics distributions";
 }
-
+@Scripts.Render("~/bundles/loadingWindow")
 <h2>@ViewBag.Title</h2>
 
 @if (ViewBag.Error == null)
 {
     @Html.Partial("_AngularControllerInitializer", "SubsequencesDistributionResultController")
     <div class="form-horizontal" ng-controller="SubsequencesDistributionResultCtrl">
-        @Html.Partial("_ModalLoadingWindow")
+        <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <div ng-disabled="loading" ng-cloack>
             <div class="form-group">
                 <label class="control-label col-md-2" for="subsequenceCharacteristic">Second characteristic:</label>

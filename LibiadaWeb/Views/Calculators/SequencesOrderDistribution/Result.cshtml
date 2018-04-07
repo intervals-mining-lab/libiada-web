@@ -10,10 +10,7 @@
     @Html.Partial("_AngularControllerInitializer", "SequencesOrderDistributionResultController")
 
     <div ng-controller="SequencesOrderDistributionResultCtrl">
-        @*Html.Partial("_ModalLoadingWindow")*@
-        <loading-window loading = "loading"
-                        loading-screen-header = "loadingScreenHeader">            
-        </loading-window>
+        <loading-window loading = "loading" loading-screen-header = "loadingScreenHeader"></loading-window>
         <div ng-disabled="loading">
             <div ng-repeat="order in result">
                 <table class="table table-bordered table-hover" ng-cloak>
