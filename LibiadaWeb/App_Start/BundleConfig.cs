@@ -87,6 +87,10 @@
                         "~/Scripts/Angular/Controllers/orderTransformer.js",
                         "~/Scripts/Angular/Components/mattersTable.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/controllers/SequenceGroupsController").Include(
+                "~/Scripts/Angular/Controllers/sequenceGroups.js",
+                "~/Scripts/Angular/Components/mattersTable.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/controllers/SequencesAlignmentController").Include(
                         "~/Scripts/Angular/Controllers/sequencesAlignment.js",
                         "~/Scripts/Angular/Components/mattersTable.js"));

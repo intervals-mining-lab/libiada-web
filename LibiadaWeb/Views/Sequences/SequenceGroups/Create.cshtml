@@ -6,12 +6,13 @@
 
 <h2>Create</h2>
 
+@Html.Partial("_AngularControllerInitializer", "SequenceGroupsController")
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
+
+    <div class="form-horizontal" ng-controller="sequenceGroupsCtrl">
         <h4>SequenceGroup</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -22,6 +23,14 @@
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
         </div>
+        @Html.Partial("_NatureSelect")
+        <matters-table matters="matters"
+                       nature="nature"
+                       groups="groups"
+                       sequence-types="sequenceTypes"
+                       maximum-selected-matters="maximumSelectedMatters"
+                       selected-matters="selectedMatters">
+        </matters-table>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

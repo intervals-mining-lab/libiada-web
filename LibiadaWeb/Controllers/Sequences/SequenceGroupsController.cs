@@ -1,14 +1,19 @@
-﻿namespace LibiadaWeb.Controllers
+﻿namespace LibiadaWeb.Controllers.Sequences
 {
-    using LibiadaWeb.Helpers;
     using System.Data.Entity;
+    using System.Linq;
     using System.Net;
     using System.Threading.Tasks;
     using System.Web.Mvc;
 
+    using LibiadaWeb.Helpers;
+
+    using Newtonsoft.Json;
+
     /// <summary>
     /// The sequence groups controller.
     /// </summary>
+    [Authorize(Roles = "Admin")]
     public class SequenceGroupsController : Controller
     {
         /// <summary>
@@ -24,8 +29,8 @@
         /// </returns>
         public async Task<ActionResult> Index()
         {
-            var sequenceGroups = db.SequenceGroup.Include(s => s.Creator).Include(s => s.Modifier);
-            return View(await sequenceGroups.ToListAsync());
+            var sequenceGroups = this.db.SequenceGroup.Include(s => s.Creator).Include(s => s.Modifier);
+            return this.View(await sequenceGroups.ToListAsync());
         }
 
         /// <summary>
@@ -61,7 +66,13 @@
         /// </returns>
         public ActionResult Create()
         {
-            return View();
+            using (var db = new LibiadaWebEntities())
+            {
+                var viewDataHelper = new ViewDataHelper(db);
+                var viewData = viewDataHelper.FillViewData(1, int.MaxValue);
+                ViewBag.data = JsonConvert.SerializeObject(viewData);
+                return View();
+            }
         }
 
         /// <summary>
@@ -70,17 +81,26 @@
         /// <param name="sequenceGroup">
         /// The sequence group.
         /// </param>
+        /// <param name="matterIds">
+        /// The matters Ids.
+        /// </param>
         /// <returns>
         /// The <see cref="Task"/>.
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Name")] SequenceGroup sequenceGroup)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Name")] SequenceGroup sequenceGroup, long[] matterIds)
         {
             if (ModelState.IsValid)
             {
                 sequenceGroup.CreatorId = AccountHelper.GetUserId();
                 sequenceGroup.ModifierId = AccountHelper.GetUserId();
+                var matters = db.Matter.Where(m => matterIds.Contains(m.Id)).ToArray();
+                foreach (var matter in matters)
+                {
+                    sequenceGroup.Matters.Add(matter);
+                }
+
                 db.SequenceGroup.Add(sequenceGroup);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");

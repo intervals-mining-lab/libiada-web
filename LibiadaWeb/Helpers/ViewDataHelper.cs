@@ -103,7 +103,7 @@
         /// </returns>
         public Dictionary<string, object> FillViewData(int minSelectedMatters, int maxSelectedMatters, Func<Matter, bool> filter, string submitName)
         {
-            Dictionary<string, object> data = GetMattersData(minSelectedMatters, maxSelectedMatters, filter, submitName);
+            Dictionary<string, object> data = GetMattersData(minSelectedMatters, maxSelectedMatters, filter);
 
             IEnumerable<SelectListItem> natures;
             IEnumerable<Notation> notations;
@@ -125,10 +125,51 @@
                 groups = EnumExtensions.ToArray<Group>().Where(g => g.GetNature() == Nature.Genetic);
             }
 
+            data.Add("submitName", submitName);
             data.Add("natures", natures);
             data.Add("notations", notations.ToSelectListWithNature());
             data.Add("languages", EnumHelper.GetSelectList(typeof(Language)));
             data.Add("translators", EnumHelper.GetSelectList(typeof(Translator)));
+            data.Add("sequenceTypes", sequenceTypes.ToSelectListWithNature(true));
+            data.Add("groups", groups.ToSelectListWithNature(true));
+
+            return data;
+        }
+
+        /// <summary>
+        /// Fills view data.
+        /// </summary>
+        /// <param name="minSelectedMatters">
+        /// The minimum selected matters.
+        /// </param>
+        /// <param name="maxSelectedMatters">
+        /// The maximum selected matters.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Dictionary{String, Object}"/>.
+        /// </returns>
+        public Dictionary<string, object> FillViewData(int minSelectedMatters, int maxSelectedMatters)
+        {
+            Dictionary<string, object> data = GetMattersData(minSelectedMatters, maxSelectedMatters, m => true);
+
+            IEnumerable<SelectListItem> natures;
+            IEnumerable<SequenceType> sequenceTypes;
+            IEnumerable<Group> groups;
+
+            if (AccountHelper.IsAdmin())
+            {
+                natures = EnumHelper.GetSelectList(typeof(Nature));
+                sequenceTypes = EnumExtensions.ToArray<SequenceType>();
+                groups = EnumExtensions.ToArray<Group>();
+            }
+            else
+            {
+                natures = new[] { Nature.Genetic }.ToSelectList();
+                sequenceTypes = EnumExtensions.ToArray<SequenceType>().Where(st => st.GetNature() == Nature.Genetic);
+                groups = EnumExtensions.ToArray<Group>().Where(g => g.GetNature() == Nature.Genetic);
+            }
+            
+            data.Add("natures", natures);
             data.Add("sequenceTypes", sequenceTypes.ToSelectListWithNature(true));
             data.Add("groups", groups.ToSelectListWithNature(true));
 
@@ -222,7 +263,7 @@
             var sequenceIds = db.Subsequence.Select(s => s.SequenceId).Distinct();
             var matterIds = db.DnaSequence.Where(c => sequenceIds.Contains(c.Id)).Select(c => c.MatterId).ToList();
 
-            var data = GetMattersData(minSelectedMatters, maxSelectedMatters, m => matterIds.Contains(m.Id), submitName);
+            var data = GetMattersData(minSelectedMatters, maxSelectedMatters, m => matterIds.Contains(m.Id));
 
             var geneticNotations = EnumExtensions.ToArray<Notation>().Where(n => n.GetNature() == Nature.Genetic);
             var sequenceTypes = EnumExtensions.ToArray<SequenceType>().Where(st => st.GetNature() == Nature.Genetic);
@@ -231,6 +272,7 @@
             var selectedFeatures = features.Where(f => f != Feature.NonCodingSequence);
             var characteristicTypes = FullCharacteristicRepository.Instance.GetCharacteristicTypes();
 
+            data.Add("submitName", submitName);
             data.Add("characteristicTypes", characteristicTypes);
             data.Add("notations", geneticNotations.ToSelectListWithNature());
             data.Add("nature", (byte)Nature.Genetic);
@@ -253,20 +295,16 @@
         /// <param name="filter">
         /// Filter for matters.
         /// </param>
-        /// <param name="submitName">
-        /// The submit button name.
-        /// </param>
         /// <returns>
         /// The <see cref="Dictionary{String, Object}"/>.
         /// </returns>
-        private Dictionary<string, object> GetMattersData(int minSelectedMatters, int maxSelectedMatters, Func<Matter, bool> filter, string submitName)
+        private Dictionary<string, object> GetMattersData(int minSelectedMatters, int maxSelectedMatters, Func<Matter, bool> filter)
         {
             return new Dictionary<string, object>
                 {
                     { "minimumSelectedMatters", minSelectedMatters },
                     { "maximumSelectedMatters", maxSelectedMatters },
-                    { "matters", matterRepository.GetMatterSelectList(filter) },
-                    { "submitName", submitName }
+                    { "matters", matterRepository.GetMatterSelectList(filter) }
                 };
         }
     }
