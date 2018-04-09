@@ -29,6 +29,32 @@
     }
 
     /// <summary>
+    /// The sequence group.
+    /// </summary>
+    [MetadataType(typeof(SequenceGroupDataAnnotations))]
+    public partial class SequenceGroup
+    {
+    }
+
+    /// <summary>
+    /// The sequence group data annotations.
+    /// </summary>
+    public class SequenceGroupDataAnnotations
+    {
+        /// <summary>
+        /// Gets or sets the creator.
+        /// </summary>
+        [Display(Name = "Creator")]
+        public AspNetUser Creator { get; set; }
+
+        /// <summary>
+        /// Gets or sets the modifier.
+        /// </summary>
+        [Display(Name = "Modifier")]
+        public AspNetUser Modifier { get; set; }
+    }
+
+    /// <summary>
     /// The common sequence.
     /// </summary>
     [MetadataType(typeof(CommonSequenceDataAnnotations))]

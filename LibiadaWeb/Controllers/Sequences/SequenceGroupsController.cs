@@ -1,5 +1,6 @@
 ﻿namespace LibiadaWeb.Controllers
 {
+    using LibiadaWeb.Helpers;
     using System.Data.Entity;
     using System.Net;
     using System.Threading.Tasks;
@@ -78,6 +79,8 @@
         {
             if (ModelState.IsValid)
             {
+                sequenceGroup.CreatorId = AccountHelper.GetUserId();
+                sequenceGroup.ModifierId = AccountHelper.GetUserId();
                 db.SequenceGroup.Add(sequenceGroup);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -122,10 +125,11 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Name")] SequenceGroup sequenceGroup)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,CreatorId,Created")] SequenceGroup sequenceGroup)
         {
             if (ModelState.IsValid)
             {
+                sequenceGroup.ModifierId = AccountHelper.GetUserId();
                 db.Entry(sequenceGroup).State = EntityState.Modified;
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
