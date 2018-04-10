@@ -3,6 +3,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.ComponentModel;
     using System.Linq;
 
     using Bio.IO.GenBank;
@@ -88,15 +89,15 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                     }
                     else
                     {
-                        matter.Group = name.Contains("virus") ? Group.Virus : Group.Bacteria;
+                        matter.Group = name.Contains("virus") || name.Contains("viroid") || name.Contains("virophage") ?
+                                           Group.Virus : Group.Bacteria;
                         matter.SequenceType = SequenceType.CompleteGenome;
                     }
 
                     break;
                 default:
-                    throw new System.ComponentModel.InvalidEnumArgumentException(nameof(matter.Nature), (int)matter.Nature, typeof(Nature));
+                    throw new InvalidEnumArgumentException(nameof(matter.Nature), (int)matter.Nature, typeof(Nature));
             }
-
         }
 
         /// <summary>
