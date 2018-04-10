@@ -51,7 +51,7 @@
         NormalizedWords = 5,
 
         /// <summary>
-        /// Fmotives notation.
+        /// Fmotifs notation.
         /// </summary>
         [Display(Name = "Formal motifs")]
         [Description("Joined sequence of notes - result of segmentation of musical composition with Boroda algorithm")]

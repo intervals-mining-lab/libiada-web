@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Web;
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
 
@@ -188,9 +187,21 @@
                 });
         }
 
-        private short[] Amplitude(short[] shortArray, double percent)
+        /// <summary>
+        /// Cuts all amplitudes lower than given percent.
+        /// </summary>
+        /// <param name="shortArray">
+        /// The initial amplitudes array.
+        /// </param>
+        /// <param name="percent">
+        /// The percent.
+        /// </param>
+        /// <returns>
+        /// The <see cref="T:short[]"/>.
+        /// </returns>
+        private short[] CutAmplitude(short[] shortArray, double percent)
         {
-            short max = shortArray.Max( e => (short)Math.Max(e, -e));
+            short max = shortArray.Max(e => (short)Math.Max(e, -e));
             double threshold = max * percent / 100;
             return shortArray.Select(e => (e > threshold) || (e < -threshold) ? e : (short)0).ToArray();
         }

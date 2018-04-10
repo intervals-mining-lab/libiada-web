@@ -3,14 +3,12 @@
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
-    using LibiadaCore.Images;
-
     using LibiadaWeb.Attributes;
 
     /// <summary>
     /// The image transformer.
     /// </summary>
-    public enum ImageTransformer: byte
+    public enum ImageTransformer : byte
     {
         /// <summary>
         /// Resizes image to given width and height.
