@@ -2199,5 +2199,22 @@ INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VAL
 INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (24,4);
 INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (24,5);
 
+-- 11.04.2018
+-- Drop redundant constraints.
+
+ALTER TABLE congeneric_characteristic_link DROP CONSTRAINT congeneric_characteristic_check;
+ALTER TABLE public.full_characteristic_link DROP CONSTRAINT full_characteristic_check;
+
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (25,1);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (25,2);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (25,3);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (25,4);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (25,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (55,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (55,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (55,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (55,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (55,5);
 
 COMMIT;
