@@ -2217,4 +2217,12 @@ INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (55,3);
 INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (55,4);
 INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (55,5);
 
+-- 12.04.2018
+-- Add nature to sequence_group table.
+
+ALTER TABLE sequence_group ADD COLUMN nature smallint;
+ALTER TABLE sequence_group ALTER COLUMN nature SET NOT NULL;
+COMMENT ON COLUMN sequence_group.nature IS 'Nature of the objects in the group.';
+
+
 COMMIT;

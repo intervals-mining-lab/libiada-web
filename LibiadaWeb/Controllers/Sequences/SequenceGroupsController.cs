@@ -89,7 +89,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Name")] SequenceGroup sequenceGroup, long[] matterIds)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Name,Nature")] SequenceGroup sequenceGroup, long[] matterIds)
         {
             if (ModelState.IsValid)
             {
@@ -145,7 +145,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,CreatorId,Created")] SequenceGroup sequenceGroup)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Nature,CreatorId,Created")] SequenceGroup sequenceGroup)
         {
             if (ModelState.IsValid)
             {

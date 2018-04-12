@@ -25,6 +25,7 @@ namespace LibiadaWeb
         public int CreatorId { get; set; }
         public System.DateTimeOffset Modified { get; set; }
         public int ModifierId { get; set; }
+        public Nature Nature { get; set; }
     
         public virtual ICollection<Matter> Matters { get; set; }
         public virtual AspNetUser Creator { get; set; }

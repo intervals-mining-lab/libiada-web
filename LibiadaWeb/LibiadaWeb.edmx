@@ -5,7 +5,6 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
       <Schema Namespace="LibiadaWebModel.Store" Provider="Npgsql" ProviderManifestToken="9.5.0" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-
         <EntityType Name="AspNetRoles">
           <Key>
             <PropertyRef Name="Id" />
@@ -13,7 +12,6 @@
           <Property Name="Id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="256" Nullable="false" />
         </EntityType>
-
         <EntityType Name="AspNetUserClaims">
           <Key>
             <PropertyRef Name="Id" />
@@ -23,7 +21,6 @@
           <Property Name="ClaimType" Type="text" />
           <Property Name="ClaimValue" Type="text" />
         </EntityType>
-
         <EntityType Name="AspNetUserLogins">
           <Key>
             <PropertyRef Name="LoginProvider" />
@@ -34,7 +31,6 @@
           <Property Name="ProviderKey" Type="varchar" MaxLength="128" Nullable="false" />
           <Property Name="UserId" Type="int4" Nullable="false" />
         </EntityType>
-
         <EntityType Name="AspNetUserRoles">
           <Key>
             <PropertyRef Name="UserId" />
@@ -43,7 +39,6 @@
           <Property Name="UserId" Type="int4" Nullable="false" />
           <Property Name="RoleId" Type="int4" Nullable="false" />
         </EntityType>
-
         <EntityType Name="AspNetUsers">
           <Key>
             <PropertyRef Name="Id" />
@@ -61,7 +56,6 @@
           <Property Name="AccessFailedCount" Type="int4" Nullable="false" />
           <Property Name="UserName" Type="varchar" MaxLength="256" Nullable="false" />
         </EntityType>
-
         <EntityType Name="accordance_characteristic">
           <Key>
             <PropertyRef Name="id" />
@@ -74,7 +68,6 @@
           <Property Name="second_element_id" Type="int8" Nullable="false" />
           <Property Name="characteristic_link_id" Type="int2" Nullable="false" />
         </EntityType>
-
         <EntityType Name="accordance_characteristic_link">
           <Key>
             <PropertyRef Name="id" />
@@ -83,7 +76,6 @@
           <Property Name="accordance_characteristic" Type="int2" Nullable="false" />
           <Property Name="link" Type="int2" Nullable="false" />
         </EntityType>
-
         <EntityType Name="binary_characteristic">
           <Key>
             <PropertyRef Name="id" />
@@ -103,7 +95,6 @@
           <Property Name="binary_characteristic" Type="int2" Nullable="false" />
           <Property Name="link" Type="int2" Nullable="false" />
         </EntityType>
-
         <EntityType Name="chain">
           <Key>
             <PropertyRef Name="id" />
@@ -117,7 +108,6 @@
           <Property Name="modified" Type="timestamptz" Precision="7" Nullable="false" />
           <Property Name="description" Type="text" />
         </EntityType>
-
         <EntityType Name="chain_attribute">
           <Key>
             <PropertyRef Name="id" />
@@ -127,7 +117,6 @@
           <Property Name="attribute" Type="int2" Nullable="false" />
           <Property Name="value" Type="text" Nullable="false" />
         </EntityType>
-
         <EntityType Name="congeneric_characteristic">
           <Key>
             <PropertyRef Name="id" />
@@ -138,7 +127,6 @@
           <Property Name="element_id" Type="int8" Nullable="false" />
           <Property Name="characteristic_link_id" Type="int2" Nullable="false" />
         </EntityType>
-
         <EntityType Name="congeneric_characteristic_link">
           <Key>
             <PropertyRef Name="id" />
@@ -147,7 +135,6 @@
           <Property Name="congeneric_characteristic" Type="int2" Nullable="false" />
           <Property Name="link" Type="int2" Nullable="false" />
         </EntityType>
-
         <EntityType Name="data_chain">
           <Key>
             <PropertyRef Name="id" />
@@ -161,7 +148,6 @@
           <Property Name="modified" Type="timestamptz" Precision="7" Nullable="false" />
           <Property Name="description" Type="text" />
         </EntityType>
-
         <EntityType Name="dna_chain">
           <Key>
             <PropertyRef Name="id" />
@@ -176,7 +162,6 @@
           <Property Name="description" Type="text" />
           <Property Name="partial" Type="bool" Nullable="false" />
         </EntityType>
-
         <EntityType Name="element">
           <Key>
             <PropertyRef Name="id" />
@@ -189,7 +174,6 @@
           <Property Name="created" Type="timestamptz" Precision="7" Nullable="false" />
           <Property Name="modified" Type="timestamptz" Precision="7" Nullable="false" />
         </EntityType>
-
         <EntityType Name="fmotiv">
           <Key>
             <PropertyRef Name="id" />
@@ -206,7 +190,6 @@
           <Property Name="remote_db" Type="int2" />
           <Property Name="fmotiv_type" Type="int2" Nullable="false" />
         </EntityType>
-
         <EntityType Name="full_characteristic">
           <Key>
             <PropertyRef Name="id" />
@@ -216,7 +199,6 @@
           <Property Name="value" Type="float8" />
           <Property Name="characteristic_link_id" Type="int2" Nullable="false" />
         </EntityType>
-
         <EntityType Name="full_characteristic_link">
           <Key>
             <PropertyRef Name="id" />
@@ -225,7 +207,6 @@
           <Property Name="full_characteristic" Type="int2" Nullable="false" />
           <Property Name="link" Type="int2" Nullable="false" />
         </EntityType>
-
         <EntityType Name="literature_chain">
           <Key>
             <PropertyRef Name="id" />
@@ -242,7 +223,6 @@
           <Property Name="language" Type="int2" Nullable="false" />
           <Property Name="translator" Type="int2" Nullable="false" />
         </EntityType>
-
         <EntityType Name="matter">
           <Key>
             <PropertyRef Name="id" />
@@ -256,7 +236,6 @@
           <Property Name="sequence_type" Type="int2" Nullable="false" />
           <Property Name="group" Type="int2" Nullable="false" />
         </EntityType>
-
         <EntityType Name="measure">
           <Key>
             <PropertyRef Name="id" />
@@ -277,7 +256,6 @@
           <Property Name="fifths" Type="int4" Nullable="false" />
           <Property Name="major" Type="bool" Nullable="false" />
         </EntityType>
-
         <EntityType Name="music_chain">
           <Key>
             <PropertyRef Name="id" />
@@ -291,7 +269,6 @@
           <Property Name="modified" Type="timestamptz" Precision="7" Nullable="false" />
           <Property Name="description" Type="text" />
         </EntityType>
-
         <EntityType Name="note">
           <Key>
             <PropertyRef Name="id" />
@@ -311,7 +288,6 @@
           <Property Name="priority" Type="int4" />
           <Property Name="tie" Type="int2" Nullable="false" />
         </EntityType>
-
         <EntityType Name="note_pitch">
           <Key>
             <PropertyRef Name="note_id" />
@@ -331,7 +307,6 @@
           <Property Name="accidental" Type="int2" Nullable="false" />
           <Property Name="note_symbol" Type="int2" Nullable="false" />
         </EntityType>
-
         <EntityType Name="position">
           <Key>
             <PropertyRef Name="id" />
@@ -341,7 +316,6 @@
           <Property Name="start" Type="int4" Nullable="false" />
           <Property Name="length" Type="int4" Nullable="false" />
         </EntityType>
-
         <EntityType Name="sequence_group">
           <Key>
             <PropertyRef Name="id" />
@@ -352,6 +326,7 @@
           <Property Name="creator_id" Type="int4" Nullable="false" />
           <Property Name="modified" Type="timestamptz" Precision="7" Nullable="false" />
           <Property Name="modifier_id" Type="int4" Nullable="false" />
+          <Property Name="nature" Type="int2" Nullable="false" />
         </EntityType>
         <EntityType Name="sequence_group_matter">
           <Key>
@@ -375,7 +350,6 @@
           <Property Name="partial" Type="bool" Nullable="false" />
           <Property Name="remote_id" Type="varchar" MaxLength="255" />
         </EntityType>
-
         <EntityType Name="task">
           <Key>
             <PropertyRef Name="id" />
@@ -391,7 +365,6 @@
           <Property Name="started" Type="timestamptz" Precision="7" />
           <Property Name="completed" Type="timestamptz" Precision="7" />
         </EntityType>
-
         <Association Name="fk_accordance_characteristic_link">
           <End Role="accordance_characteristic_link" Type="Self.accordance_characteristic_link" Multiplicity="1" />
           <End Role="accordance_characteristic" Type="Self.accordance_characteristic" Multiplicity="*" />
@@ -404,7 +377,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-
         <Association Name="fk_binary_characteristic_link">
           <End Role="binary_characteristic_link" Type="Self.binary_characteristic_link" Multiplicity="1" />
           <End Role="binary_characteristic" Type="Self.binary_characteristic" Multiplicity="*" />
@@ -417,7 +389,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-
         <Association Name="fk_chain_matter">
           <End Role="matter" Type="Self.matter" Multiplicity="1" />
           <End Role="chain" Type="Self.chain" Multiplicity="*" />
@@ -430,7 +401,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-
         <Association Name="fk_congeneric_characteristic_link">
           <End Role="congeneric_characteristic_link" Type="Self.congeneric_characteristic_link" Multiplicity="1" />
           <End Role="congeneric_characteristic" Type="Self.congeneric_characteristic" Multiplicity="*" />
@@ -443,7 +413,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-
         <Association Name="fk_data_chain_matter">
           <End Role="matter" Type="Self.matter" Multiplicity="1" />
           <End Role="data_chain" Type="Self.data_chain" Multiplicity="*" />
@@ -456,7 +425,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -471,7 +439,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-
         <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -486,7 +453,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-
         <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
           <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -501,7 +467,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-
         <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -516,7 +481,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-
         <Association Name="fk_dna_chain_matter">
           <End Role="matter" Type="Self.matter" Multiplicity="1" />
           <End Role="dna_chain" Type="Self.dna_chain" Multiplicity="*" />
@@ -529,7 +493,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-
         <Association Name="fk_fmotiv_matter">
           <End Role="matter" Type="Self.matter" Multiplicity="1" />
           <End Role="fmotiv" Type="Self.fmotiv" Multiplicity="*" />
@@ -542,7 +505,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-
         <Association Name="fk_full_characteristic_link">
           <End Role="full_characteristic_link" Type="Self.full_characteristic_link" Multiplicity="1" />
           <End Role="full_characteristic" Type="Self.full_characteristic" Multiplicity="*" />
@@ -555,7 +517,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-
         <Association Name="fk_literature_chain_matter">
           <End Role="matter" Type="Self.matter" Multiplicity="1" />
           <End Role="literature_chain" Type="Self.literature_chain" Multiplicity="*" />
@@ -568,7 +529,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-
         <Association Name="fk_matter_sequence_group">
           <End Role="sequence_group" Type="Self.sequence_group" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -595,7 +555,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-
         <Association Name="fk_music_chain_matter">
           <End Role="matter" Type="Self.matter" Multiplicity="1" />
           <End Role="music_chain" Type="Self.music_chain" Multiplicity="*" />
@@ -608,7 +567,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-
         <Association Name="fk_note_pitch_note">
           <End Role="note" Type="Self.note" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -623,7 +581,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-
         <Association Name="fk_note_pitch_pitch">
           <End Role="pitch" Type="Self.pitch" Multiplicity="1" />
           <End Role="note_pitch" Type="Self.note_pitch" Multiplicity="*" />
@@ -636,7 +593,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-
         <Association Name="fk_position_subsequence">
           <End Role="subsequence" Type="Self.subsequence" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -651,7 +607,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-
         <Association Name="fk_sequence_group_creator">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
           <End Role="sequence_group" Type="Self.sequence_group" Multiplicity="*" />
@@ -702,7 +657,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-
         <EntityContainer Name="LibiadaWebModelStoreContainer">
           <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
@@ -735,72 +689,58 @@
           <EntitySet Name="sequence_group_matter" EntityType="Self.sequence_group_matter" Schema="public" store:Type="Tables" />
           <EntitySet Name="subsequence" EntityType="Self.subsequence" Schema="public" store:Type="Tables" />
           <EntitySet Name="task" EntityType="Self.task" Schema="public" store:Type="Tables" />
-
           <AssociationSet Name="fk_accordance_characteristic_link" Association="Self.fk_accordance_characteristic_link">
             <End Role="accordance_characteristic_link" EntitySet="accordance_characteristic_link" />
             <End Role="accordance_characteristic" EntitySet="accordance_characteristic" />
           </AssociationSet>
-
           <AssociationSet Name="fk_binary_characteristic_link" Association="Self.fk_binary_characteristic_link">
             <End Role="binary_characteristic_link" EntitySet="binary_characteristic_link" />
             <End Role="binary_characteristic" EntitySet="binary_characteristic" />
           </AssociationSet>
-
           <AssociationSet Name="fk_chain_matter" Association="Self.fk_chain_matter">
             <End Role="matter" EntitySet="matter" />
             <End Role="chain" EntitySet="chain" />
           </AssociationSet>
-
           <AssociationSet Name="fk_congeneric_characteristic_link" Association="Self.fk_congeneric_characteristic_link">
             <End Role="congeneric_characteristic_link" EntitySet="congeneric_characteristic_link" />
             <End Role="congeneric_characteristic" EntitySet="congeneric_characteristic" />
           </AssociationSet>
-
           <AssociationSet Name="fk_data_chain_matter" Association="Self.fk_data_chain_matter">
             <End Role="matter" EntitySet="matter" />
             <End Role="data_chain" EntitySet="data_chain" />
           </AssociationSet>
-
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
           </AssociationSet>
-
           <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
           </AssociationSet>
-
           <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
             <End Role="AspNetRoles" EntitySet="AspNetRoles" />
             <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
           </AssociationSet>
-
           <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
           </AssociationSet>
-
           <AssociationSet Name="fk_dna_chain_matter" Association="Self.fk_dna_chain_matter">
             <End Role="matter" EntitySet="matter" />
             <End Role="dna_chain" EntitySet="dna_chain" />
           </AssociationSet>
-
           <AssociationSet Name="fk_fmotiv_matter" Association="Self.fk_fmotiv_matter">
             <End Role="matter" EntitySet="matter" />
             <End Role="fmotiv" EntitySet="fmotiv" />
           </AssociationSet>
-
           <AssociationSet Name="fk_full_characteristic_link" Association="Self.fk_full_characteristic_link">
             <End Role="full_characteristic_link" EntitySet="full_characteristic_link" />
             <End Role="full_characteristic" EntitySet="full_characteristic" />
           </AssociationSet>
-
           <AssociationSet Name="fk_literature_chain_matter" Association="Self.fk_literature_chain_matter">
             <End Role="matter" EntitySet="matter" />
             <End Role="literature_chain" EntitySet="literature_chain" />
           </AssociationSet>
-
           <AssociationSet Name="fk_matter_sequence_group" Association="Self.fk_matter_sequence_group">
             <End Role="sequence_group" EntitySet="sequence_group" />
             <End Role="sequence_group_matter" EntitySet="sequence_group_matter" />
@@ -813,22 +753,18 @@
             <End Role="matter" EntitySet="matter" />
             <End Role="music_chain" EntitySet="music_chain" />
           </AssociationSet>
-
           <AssociationSet Name="fk_note_pitch_note" Association="Self.fk_note_pitch_note">
             <End Role="note" EntitySet="note" />
             <End Role="note_pitch" EntitySet="note_pitch" />
           </AssociationSet>
-
           <AssociationSet Name="fk_note_pitch_pitch" Association="Self.fk_note_pitch_pitch">
             <End Role="pitch" EntitySet="pitch" />
             <End Role="note_pitch" EntitySet="note_pitch" />
           </AssociationSet>
-
           <AssociationSet Name="fk_position_subsequence" Association="Self.fk_position_subsequence">
             <End Role="subsequence" EntitySet="subsequence" />
             <End Role="position" EntitySet="position" />
           </AssociationSet>
-
           <AssociationSet Name="fk_sequence_group_creator" Association="Self.fk_sequence_group_creator">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="sequence_group" EntitySet="sequence_group" />
@@ -845,7 +781,6 @@
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="task" EntitySet="task" />
           </AssociationSet>
-
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -1586,6 +1521,7 @@
           <NavigationProperty Name="Matters" Relationship="Self.sequence_group_matter" FromRole="SequenceGroup" ToRole="Matter" />
           <NavigationProperty Name="Creator" Relationship="LibiadaWebModel.fk_sequence_group_creator" FromRole="SequenceGroup" ToRole="AspNetUser" />
           <NavigationProperty Name="Modifier" Relationship="LibiadaWebModel.fk_sequence_group_modifier" FromRole="SequenceGroup" ToRole="AspNetUser" />
+          <Property Name="Nature" Type="LibiadaWebModel.Nature" Nullable="false" />
         </EntityType>
 
         <Association Name="fk_binary_characteristic_chain">
@@ -2631,6 +2567,7 @@
           <EntitySetMapping Name="SequenceGroup">
             <EntityTypeMapping TypeName="LibiadaWebModel.SequenceGroup">
               <MappingFragment StoreEntitySet="sequence_group">
+                <ScalarProperty Name="Nature" ColumnName="nature" />
                 <ScalarProperty Name="ModifierId" ColumnName="modifier_id" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
                 <ScalarProperty Name="CreatorId" ColumnName="creator_id" />

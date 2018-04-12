@@ -1,4 +1,5 @@
-﻿@model IEnumerable<SequenceGroup>
+﻿@using LibiadaCore.Extensions
+@model IEnumerable<SequenceGroup>
 
 @{
     ViewBag.Title = "Index";
@@ -9,10 +10,13 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
+<table class="table table-bordered table-hover">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Nature)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Creator)
@@ -33,6 +37,9 @@
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @item.Nature.GetDisplayValue()
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Creator.UserName)
