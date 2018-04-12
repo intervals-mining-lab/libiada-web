@@ -10,6 +10,8 @@ namespace LibiadaWeb.Models.Repositories.Sequences
 
     using LibiadaCore.Extensions;
 
+    using LibiadaWeb.Models.CalculatorsData;
+
     /// <summary>
     /// The matter repository.
     /// </summary>
@@ -143,6 +145,23 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         public IEnumerable<object> GetMatterSelectList(Func<Matter, bool> filter)
         {
             return GetMatterSelectList(db.Matter.Where(filter));
+        }
+
+        /// <summary>
+        /// Get matter select list.
+        /// </summary>
+        /// <param name="matters">
+        /// The matters.
+        /// </param>
+        /// <param name="selected">
+        /// The selected.
+        /// </param>
+        /// <returns>
+        /// The <see cref="T:IEnumerable{MattersTableRow}"/>.
+        /// </returns>
+        public IEnumerable<MattersTableRow> GetMatterSelectList(IEnumerable<Matter> matters, Func<Matter, bool> selected)
+        {
+            return matters.OrderBy(m => m.Created).Select(m => new MattersTableRow(m, selected(m)));
         }
 
         /// <summary>

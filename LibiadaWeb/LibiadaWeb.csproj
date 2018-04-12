@@ -223,6 +223,7 @@
     <Compile Include="Models\CalculatorsData\AttributeValue.cs" />
     <Compile Include="Models\CalculatorsData\CongenericSequencesCharacteristics.cs" />
     <Compile Include="Models\CalculatorsData\MattersImportResult.cs" />
+    <Compile Include="Models\CalculatorsData\MattersTableRow.cs" />
     <Compile Include="Models\CalculatorsData\SequenceCharacteristics.cs" />
     <Compile Include="Models\Calculators\CongenericSequencesCharacteristicsCalculator.cs" />
     <Compile Include="Models\Calculators\SequencesCharacteristicsCalculator.cs" />

@@ -7,6 +7,7 @@
     using System.Web.Mvc;
 
     using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models.Repositories.Sequences;
 
     using Newtonsoft.Json;
 
@@ -130,7 +131,17 @@
             {
                 return HttpNotFound();
             }
-            
+
+            using (var db = new LibiadaWebEntities())
+            {
+                var viewDataHelper = new ViewDataHelper(db);
+                var viewData = viewDataHelper.FillViewData(1, int.MaxValue);
+                var matterRepository = new MatterRepository(db);
+                bool Selected(Matter m) => sequenceGroup.Matters.Contains(m);
+                viewData["matters"] = matterRepository.GetMatterSelectList(db.Matter, Selected);
+                ViewBag.data = JsonConvert.SerializeObject(viewData);
+            }
+
             return View(sequenceGroup);
         }
 

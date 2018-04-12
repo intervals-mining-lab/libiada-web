@@ -1,10 +1,9 @@
 ﻿@using LibiadaWeb.Helpers
-@model Matter
 
 @if (AccountHelper.IsAdmin())
 {
     <div class="form-group">
-        @Html.LabelFor(model => model.Nature, new { @class = "control-label col-md-2" })
+        <label class="control-label col-md-2">Nature</label>
         <div class="col-md-10">
             <select class="form-control" ng-model="nature" ng-options="n.Value as n.Text for n in natures" ng-change="filterByNature()" ng-init="filterByNature()"></select>
             <input type="hidden" name="Nature" ng-value="nature" />
