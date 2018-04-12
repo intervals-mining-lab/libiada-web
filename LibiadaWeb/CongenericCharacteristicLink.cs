@@ -17,5 +17,6 @@ namespace LibiadaWeb
         public short Id { get; set; }
         public LibiadaCore.Core.Characteristics.Calculators.CongenericCalculators.CongenericCharacteristic CongenericCharacteristic { get; set; }
         public LibiadaCore.Core.Link Link { get; set; }
+        public LibiadaCore.Core.ArrangementManagers.ArrangementType ArrangementType { get; set; }
     }
 }

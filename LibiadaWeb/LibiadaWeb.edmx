@@ -134,6 +134,7 @@
           <Property Name="id" Type="int2" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="congeneric_characteristic" Type="int2" Nullable="false" />
           <Property Name="link" Type="int2" Nullable="false" />
+          <Property Name="arrangement_type" Type="int2" Nullable="false" />
         </EntityType>
         <EntityType Name="data_chain">
           <Key>
@@ -206,6 +207,7 @@
           <Property Name="id" Type="int2" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="full_characteristic" Type="int2" Nullable="false" />
           <Property Name="link" Type="int2" Nullable="false" />
+          <Property Name="arrangement_type" Type="int2" Nullable="false" />
         </EntityType>
         <EntityType Name="literature_chain">
           <Key>
@@ -1170,6 +1172,7 @@
           <Property Name="Id" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
           <Property Name="FullCharacteristic" Type="LibiadaWebModel.FullCharacteristic" Nullable="false" />
           <Property Name="Link" Type="LibiadaWebModel.Link" Nullable="false" />
+          <Property Name="ArrangementType" Type="LibiadaWebModel.ArrangementType" Nullable="false" />
         </EntityType>
 
         <EntityType Name="AccordanceCharacteristicLink">
@@ -1197,6 +1200,7 @@
           <Property Name="Id" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
           <Property Name="CongenericCharacteristic" Type="LibiadaWebModel.CongenericCharacteristic" Nullable="false" />
           <Property Name="Link" Type="LibiadaWebModel.Link" Nullable="false" />
+          <Property Name="ArrangementType" Type="LibiadaWebModel.ArrangementType" Nullable="false" />
         </EntityType>
 
         <EntityType Name="DnaSequence">
@@ -2180,6 +2184,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EnumType Name="ArrangementType" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.ArrangementManagers.ArrangementType" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
 
       </Schema>
     </edmx:ConceptualModels>
@@ -2211,6 +2216,7 @@
           <EntitySetMapping Name="FullCharacteristicLink">
             <EntityTypeMapping TypeName="LibiadaWebModel.FullCharacteristicLink">
               <MappingFragment StoreEntitySet="full_characteristic_link">
+                <ScalarProperty Name="ArrangementType" ColumnName="arrangement_type" />
                 <ScalarProperty Name="Id" ColumnName="id" />
                 <ScalarProperty Name="FullCharacteristic" ColumnName="full_characteristic" />
                 <ScalarProperty Name="Link" ColumnName="link" />
@@ -2221,6 +2227,7 @@
           <EntitySetMapping Name="CongenericCharacteristicLink">
             <EntityTypeMapping TypeName="LibiadaWebModel.CongenericCharacteristicLink">
               <MappingFragment StoreEntitySet="congeneric_characteristic_link">
+                <ScalarProperty Name="ArrangementType" ColumnName="arrangement_type" />
                 <ScalarProperty Name="Id" ColumnName="id" />
                 <ScalarProperty Name="CongenericCharacteristic" ColumnName="congeneric_characteristic" />
                 <ScalarProperty Name="Link" ColumnName="link" />

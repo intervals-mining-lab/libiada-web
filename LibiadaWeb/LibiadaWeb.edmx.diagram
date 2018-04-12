@@ -136,6 +136,8 @@
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.SequenceGroup" Width="1.5" PointX="11.875" PointY="25.375" />
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_sequence_group_creator" />
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_sequence_group_modifier" />
+        <edmx:EntityTypeShape EntityType="LibiadaWebModel.FullCharacteristicLink" Width="2" PointX="6.875" PointY="14.375" />
+        <edmx:AssociationConnector Association="LibiadaWebModel.fk_full_characteristic_link" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
