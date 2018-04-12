@@ -29,8 +29,8 @@
         /// </returns>
         public async Task<ActionResult> Index()
         {
-            var sequenceGroups = this.db.SequenceGroup.Include(s => s.Creator).Include(s => s.Modifier);
-            return this.View(await sequenceGroups.ToListAsync());
+            var sequenceGroups = db.SequenceGroup.Include(s => s.Creator).Include(s => s.Modifier);
+            return View(await sequenceGroups.ToListAsync());
         }
 
         /// <summary>

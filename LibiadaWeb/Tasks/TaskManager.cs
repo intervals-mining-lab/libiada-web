@@ -15,52 +15,71 @@
     /// <summary>
     /// The task manager.
     /// </summary>
-    public static class TaskManager
+    public class TaskManager
     {
+        /// <summary>
+        /// The sync root.
+        /// </summary>
+        private static readonly object SyncRoot = new object();
+
+        /// <summary>
+        /// The instance.
+        /// </summary>
+        private static TaskManager instance;
+
         /// <summary>
         /// Machine cores count.
         /// </summary>
-        private static readonly int CoresCount = Environment.ProcessorCount;
+        private readonly int coresCount = Environment.ProcessorCount;
 
         /// <summary>
         /// Gets the tasks.
         /// </summary>
-        private static readonly List<Task> Tasks = new List<Task>();
+        private readonly List<Task> tasks = new List<Task>();
 
         /// <summary>
         /// The signalr hub.
         /// </summary>
-        private static readonly TasksManagerHub SignalrHub = new TasksManagerHub();
+        private readonly TasksManagerHub signalrHub = new TasksManagerHub();
 
         /// <summary>
-        /// Initializes static members of the <see cref="TaskManager"/> class.
+        /// Prevents a default instance of the <see cref="TaskManager"/> class from being created.
         /// </summary>
-        static TaskManager()
+        private TaskManager()
         {
             RemoveGarbageFromDb();
             using (var db = new LibiadaWebEntities())
             {
                 CalculationTask[] databaseTasks = db.CalculationTask.OrderBy(t => t.Created).ToArray();
-                lock (Tasks)
+                lock (tasks)
                 {
                     foreach (CalculationTask task in databaseTasks)
                     {
-                        Tasks.Add(new Task(task));
+                        tasks.Add(new Task(task));
                     }
                 }
             }
         }
 
-        private static void RemoveGarbageFromDb()
+        /// <summary>
+        /// Gets the instance.
+        /// </summary>
+        public static TaskManager Instance
         {
-            using (var db = new LibiadaWebEntities())
+            get
             {
-                var tasksToDelete = db.CalculationTask
-                  .Where(t => (t.Status != TaskState.Completed && t.Status != TaskState.Error) || t.Result == null)
-                  .ToArray();
+                if (instance == null)
+                {
+                    lock (SyncRoot)
+                    {
+                        if (instance == null)
+                        {
+                            instance = new TaskManager();
+                        }
+                    }
+                }
 
-                db.CalculationTask.RemoveRange(tasksToDelete);
-                db.SaveChanges();
+                return instance;
             }
         }
 
@@ -73,7 +92,7 @@
         /// <param name="taskType">
         /// The task Type.
         /// </param>
-        public static void CreateTask(Func<Dictionary<string, object>> action, TaskType taskType)
+        public void CreateTask(Func<Dictionary<string, object>> action, TaskType taskType)
         {
             CalculationTask databaseTask;
             Task task;
@@ -93,34 +112,29 @@
                 db.SaveChanges();
             }
 
-            lock (Tasks)
+            lock (tasks)
             {
                 task = new Task(databaseTask.Id, action, databaseTask.UserId, taskType);
-                Tasks.Add(task);
+                lock (task)
+                {
+                    tasks.Add(task);
+                    signalrHub.Send(TaskEvent.AddTask, task.TaskData);
+                }
             }
-
-            SignalrHub.Send(TaskEvent.AddTask, task.TaskData);
+            
             ManageTasks();
         }
 
         /// <summary>
         /// Deletes all visible to user tasks.
         /// </summary>
-        public static void DeleteAllTasks()
+        public void DeleteAllTasks()
         {
-            lock (Tasks)
+            List<Task> tasksToDelete = GetUserTasks();
+
+            for (int i = tasksToDelete.Count - 1; i >= 0; i--)
             {
-                List<Task> tasks = Tasks;
-
-                if (!AccountHelper.IsAdmin())
-                {
-                    tasks = tasks.Where(t => t.TaskData.UserId == AccountHelper.GetUserId()).ToList();
-                }
-
-                for (int i = tasks.Count - 1; i >= 0; i--)
-                {
-                    DeleteTask(tasks[i].TaskData.Id);
-                }
+                DeleteTask(tasksToDelete[i].TaskData.Id);
             }
         }
 
@@ -130,11 +144,11 @@
         /// <param name="id">
         /// The task id.
         /// </param>
-        public static void DeleteTask(long id)
+        public void DeleteTask(long id)
         {
-            lock (Tasks)
+            lock (tasks)
             {
-                Task task = Tasks.Single(t => t.TaskData.Id == id);
+                Task task = tasks.Single(t => t.TaskData.Id == id);
                 if (task.TaskData.UserId == AccountHelper.GetUserId() || AccountHelper.IsAdmin())
                 {
                     lock (task)
@@ -144,7 +158,7 @@
                             task.Thread.Abort();
                         }
 
-                        Tasks.Remove(task);
+                        tasks.Remove(task);
 
                         using (var db = new LibiadaWebEntities())
                         {
@@ -153,7 +167,7 @@
                             db.SaveChanges();
                         }
 
-                        SignalrHub.Send(TaskEvent.DeleteTask, task.TaskData);
+                        signalrHub.Send(TaskEvent.DeleteTask, task.TaskData);
                     }
                 }
             }
@@ -165,19 +179,10 @@
         /// <returns>
         /// The <see cref="IEnumerable{TaskData}"/>.
         /// </returns>
-        public static IEnumerable<TaskData> GetTasksData()
+        public IEnumerable<TaskData> GetTasksData()
         {
-            lock (Tasks)
-            {
-                List<Task> tasks = Tasks;
-
-                if (!AccountHelper.IsAdmin())
-                {
-                    tasks = tasks.Where(t => t.TaskData.UserId == AccountHelper.GetUserId()).ToList();
-                }
-
-                return tasks.Select(t => t.TaskData.Clone());
-            }
+            List<Task> result = GetUserTasks();
+            return result.Select(t => t.TaskData.Clone());
         }
 
         /// <summary>
@@ -189,18 +194,18 @@
         /// <returns>
         /// The <see cref="Task"/>.
         /// </returns>
-        public static Task GetTask(int id)
+        public Task GetTask(int id)
         {
             Task result;
-            lock (Tasks)
+            lock (tasks)
             {
-                Task task = Tasks.Single(t => t.TaskData.Id == id);
+                Task task = tasks.Single(t => t.TaskData.Id == id);
 
                 lock (task)
                 {
                     if (!AccountHelper.IsAdmin() && task.TaskData.UserId != AccountHelper.GetUserId())
                     {
-                        throw new AccessViolationException("You do not have access to current task");
+                        throw new AccessViolationException("You do not have access to the current task");
                     }
 
                     result = task.Clone();
@@ -211,14 +216,53 @@
         }
 
         /// <summary>
+        /// Gets tasks available to user.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="T:List{Task}"/>.
+        /// </returns>
+        private List<Task> GetUserTasks()
+        {
+            lock (tasks)
+            {
+                List<Task> result = tasks;
+
+                if (!AccountHelper.IsAdmin())
+                {
+                    var userId = AccountHelper.GetUserId();
+                    result = result.Where(t => t.TaskData.UserId == userId).ToList();
+                }
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Removes not finished amd not started tasks from db
+        /// on task manager initialization.
+        /// </summary>
+        private void RemoveGarbageFromDb()
+        {
+            using (var db = new LibiadaWebEntities())
+            {
+                var tasksToDelete = db.CalculationTask
+                    .Where(t => (t.Status != TaskState.Completed && t.Status != TaskState.Error) || t.Result == null)
+                    .ToArray();
+
+                db.CalculationTask.RemoveRange(tasksToDelete);
+                db.SaveChanges();
+            }
+        }
+
+        /// <summary>
         /// The manage tasks.
         /// </summary>
-        private static void ManageTasks()
+        private void ManageTasks()
         {
-            lock (Tasks)
+            lock (tasks)
             {
                 int activeTasks = 0;
-                foreach (Task task in Tasks)
+                foreach (Task task in tasks)
                 {
                     lock (task)
                     {
@@ -229,10 +273,10 @@
                     }
                 }
 
-                while (activeTasks < CoresCount)
+                while (activeTasks < coresCount)
                 {
                     activeTasks++;
-                    Task taskToStart = Tasks.FirstOrDefault(t => t.TaskData.TaskState == TaskState.InQueue);
+                    Task taskToStart = tasks.FirstOrDefault(t => t.TaskData.TaskState == TaskState.InQueue);
                     if (taskToStart != null)
                     {
                         lock (taskToStart)
@@ -255,7 +299,7 @@
         /// <param name="task">
         /// The task.
         /// </param>
-        private static void ExecuteTaskAction(Task task)
+        private void ExecuteTaskAction(Task task)
         {
             try
             {
@@ -274,7 +318,7 @@
                         db.SaveChanges();
                     }
 
-                    SignalrHub.Send(TaskEvent.ChangeStatus, task.TaskData);
+                    signalrHub.Send(TaskEvent.ChangeStatus, task.TaskData);
                 }
 
                 // executing action
@@ -306,7 +350,7 @@
                         db.SaveChanges();
                     }
 
-                    SignalrHub.Send(TaskEvent.ChangeStatus, task.TaskData);
+                    signalrHub.Send(TaskEvent.ChangeStatus, task.TaskData);
                 }
             }
             catch (Exception e)
@@ -343,7 +387,7 @@
                         db.SaveChanges();
                     }
 
-                    SignalrHub.Send(TaskEvent.ChangeStatus, task.TaskData);
+                    signalrHub.Send(TaskEvent.ChangeStatus, task.TaskData);
                 }
             }
 
@@ -356,12 +400,12 @@
         /// <param name="id">
         /// The id.
         /// </param>
-        private static void StartTask(long id)
+        private void StartTask(long id)
         {
             Task taskToStart;
-            lock (Tasks)
+            lock (tasks)
             {
-                taskToStart = Tasks.Single(t => t.TaskData.Id == id);
+                taskToStart = tasks.Single(t => t.TaskData.Id == id);
             }
 
             var thread = new Thread(() => ExecuteTaskAction(taskToStart));

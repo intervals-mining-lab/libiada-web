@@ -37,7 +37,7 @@
         {
             try
             {
-                Task task = TaskManager.GetTask(id);
+                Task task = TaskManager.Instance.GetTask(id);
                 switch (task.TaskData.TaskState)
                 {
                     case TaskState.Completed:
@@ -82,7 +82,7 @@
         /// </returns>
         protected ActionResult CreateTask(Func<Dictionary<string, object>> action)
         {
-            TaskManager.CreateTask(action, taskType);
+            TaskManager.Instance.CreateTask(action, taskType);
             return RedirectToAction("Index", "TaskManager");
         }
     }

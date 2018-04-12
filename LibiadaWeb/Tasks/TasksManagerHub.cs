@@ -1,13 +1,12 @@
-﻿using LibiadaWeb.Helpers;
-
-namespace LibiadaWeb.Tasks
+﻿namespace LibiadaWeb.Tasks
 {
-    using System.Collections.Generic;
     using System.Linq;
-    using System.Web;
+
     using LibiadaCore.Extensions;
 
+    using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
+
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.SignalR;
 
@@ -54,6 +53,7 @@ namespace LibiadaWeb.Tasks
                 {
                     hubContext.Clients.Group(userId.ToString()).TaskEvent(taskEvent.ToString(), result);
                 }
+
                 hubContext.Clients.Group("admins").TaskEvent(taskEvent.ToString(), result);
             }
         }
@@ -69,7 +69,7 @@ namespace LibiadaWeb.Tasks
             int userId = AccountHelper.GetUserId();
             bool isAdmin = AccountHelper.IsAdmin();
 
-            var tasks = TaskManager.GetTasksData()
+            var tasks = TaskManager.Instance.GetTasksData()
                 .Where(t => t.UserId == userId || isAdmin)
                 .Select(task => new
                 {

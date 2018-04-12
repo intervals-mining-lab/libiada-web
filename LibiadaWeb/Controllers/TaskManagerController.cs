@@ -1,18 +1,8 @@
 ﻿namespace LibiadaWeb.Controllers
 {
     using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.Linq;
-    using System.Threading;
     using System.Web.Mvc;
-
-    using LibiadaCore.Extensions;
-
-    using LibiadaWeb.Models;
     using LibiadaWeb.Tasks;
-
-    using Newtonsoft.Json;
 
     /// <summary>
     /// The calculation controller.
@@ -28,14 +18,6 @@
         /// </returns>
         public ActionResult Index()
         {
-            //if (Request.UserLanguages != null && Request.UserLanguages.Any())
-            //{
-            //    var culture = new CultureInfo(Request.UserLanguages[0]);
-
-            //    Thread.CurrentThread.CurrentCulture = culture;
-            //    Thread.CurrentThread.CurrentUICulture = culture;
-            //}
-
             if (TempData["ErrorMessage"] != null)
             {
                 ViewBag.Error = true;
@@ -62,7 +44,7 @@
         {
             try
             {
-                TaskManager.DeleteTask(id);
+                TaskManager.Instance.DeleteTask(id);
             }
             catch (Exception e)
             {
@@ -84,7 +66,7 @@
         {
             try
             {
-                TaskManager.DeleteAllTasks();
+                TaskManager.Instance.DeleteAllTasks();
             }
             catch (Exception e)
             {

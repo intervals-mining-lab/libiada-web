@@ -2,10 +2,7 @@
 {
     using System.Web;
 
-    using LibiadaWeb.Models.Account;
-
     using Microsoft.AspNet.Identity;
-    using Microsoft.AspNet.Identity.Owin;
 
     /// <summary>
     /// Envelop for some user methods.
@@ -34,21 +31,7 @@
         /// </returns>
         public static string GetUserNameById(int id)
         {
-            return GetUserById(id).UserName;
-        }
-
-        /// <summary>
-        /// Finds user by it's id.
-        /// </summary>
-        /// <param name="id">
-        /// The user id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ApplicationUser"/>.
-        /// </returns>
-        public static ApplicationUser GetUserById(int id)
-        {
-            return HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(id);
+            return GetUserById(id)?.UserName;
         }
 
         /// <summary>
@@ -59,12 +42,24 @@
         /// </returns>
         public static bool IsAdmin()
         {
-            if (HttpContext.Current == null)
-            {
-                return false;
-            }
+            return HttpContext.Current != null && HttpContext.Current.User.IsInRole("Admin");
+        }
 
-            return HttpContext.Current.User.IsInRole("Admin");
+        /// <summary>
+        /// Finds user by it's id.
+        /// </summary>
+        /// <param name="id">
+        /// The user id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Models.Account.ApplicationUser"/>.
+        /// </returns>
+        private static AspNetUser GetUserById(int id)
+        {
+            using (var db = new LibiadaWebEntities())
+            {
+                return db.AspNetUsers.Find(id);
+            }
         }
     }
 }

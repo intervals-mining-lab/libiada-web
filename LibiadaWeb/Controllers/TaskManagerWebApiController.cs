@@ -28,7 +28,7 @@
         /// </exception>
         public string GetTaskData(int id)
         {
-            Task task = TaskManager.GetTask(id);
+            Task task = TaskManager.Instance.GetTask(id);
 
             if (task.TaskData.TaskState != TaskState.Completed)
             {
@@ -58,7 +58,7 @@
         /// </exception>
         public string GetSubsequencesComparerDataElement(int taskId, int firstIndex, int secondIndex)
         {
-            Task task = TaskManager.GetTask(taskId);
+            Task task = TaskManager.Instance.GetTask(taskId);
 
             if (task.TaskData.TaskState != TaskState.Completed)
             {
