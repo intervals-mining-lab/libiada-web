@@ -23,7 +23,7 @@
         /// <summary>
         /// The instance.
         /// </summary>
-        private static CongenericCharacteristicRepository instance;
+        private static volatile CongenericCharacteristicRepository instance;
 
         /// <summary>
         /// The congeneric characteristic links.

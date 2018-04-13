@@ -23,7 +23,7 @@
         /// <summary>
         /// The instance.
         /// </summary>
-        private static AccordanceCharacteristicRepository instance;
+        private static volatile AccordanceCharacteristicRepository instance;
 
         /// <summary>
         /// The accordance characteristics links.

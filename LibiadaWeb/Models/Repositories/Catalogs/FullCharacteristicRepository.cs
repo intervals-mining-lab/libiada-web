@@ -23,7 +23,7 @@
         /// <summary>
         /// The instance.
         /// </summary>
-        private static FullCharacteristicRepository instance;
+        private static volatile FullCharacteristicRepository instance;
 
         /// <summary>
         /// The characteristic type links.

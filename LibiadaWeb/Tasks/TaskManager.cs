@@ -25,7 +25,7 @@
         /// <summary>
         /// The instance.
         /// </summary>
-        private static TaskManager instance;
+        private static volatile TaskManager instance;
 
         /// <summary>
         /// Machine cores count.

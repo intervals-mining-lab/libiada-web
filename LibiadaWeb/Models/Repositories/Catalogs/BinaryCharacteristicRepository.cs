@@ -23,7 +23,7 @@
         /// <summary>
         /// The instance.
         /// </summary>
-        private static BinaryCharacteristicRepository instance;
+        private static volatile BinaryCharacteristicRepository instance;
 
         /// <summary>
         /// The binary characteristic links.
