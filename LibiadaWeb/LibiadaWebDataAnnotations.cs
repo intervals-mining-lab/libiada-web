@@ -84,6 +84,12 @@
         /// </summary>
         [Display(Name = "Id in remote database")]
         public string RemoteId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the remote db id.
+        /// </summary>
+        [Display(Name = "Remote database")]
+        public string RemoteDb { get; set; }
     }
 
     /// <summary>

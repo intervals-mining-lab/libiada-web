@@ -43,7 +43,7 @@
             <input type="hidden" name="Notation" ng-value="notationId" />
         }
         <div class="form-group">
-            @Html.LabelFor(model => model.MatterId, "MatterId", new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.MatterId, "Matter", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <select class="form-control" ng-model="matterId" ng-options="m.Value as m.Text for m in matters | filter:{ Nature: nature }"></select>
                 <input type="hidden" name="MatterId" ng-value="matterId" />

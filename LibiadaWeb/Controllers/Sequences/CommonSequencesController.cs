@@ -1,6 +1,7 @@
 ﻿namespace LibiadaWeb.Controllers.Sequences
 {
     using System.Data.Entity;
+    using System.Linq;
     using System.Net;
     using System.Threading.Tasks;
     using System.Web.Mvc;
@@ -54,7 +55,7 @@
 
             using (var db = new LibiadaWebEntities())
             {
-                CommonSequence commonSequence = await db.CommonSequence.FindAsync(id);
+                CommonSequence commonSequence = db.CommonSequence.Include(c => c.Matter).Single(c => c.Id == id);
                 if (commonSequence == null)
                 {
                     return HttpNotFound();
@@ -88,7 +89,7 @@
                     return HttpNotFound();
                 }
 
-                ViewBag.MatterId = new SelectList(db.Matter, "Id", "Name", commonSequence.MatterId);
+                ViewBag.MatterId = new SelectList(db.Matter.ToArray(), "Id", "Name", commonSequence.MatterId);
                 ViewBag.Notation = EnumHelper.GetSelectList(typeof(Notation), commonSequence.Notation);
                 ViewBag.RemoteDb = EnumHelper.GetSelectList(typeof(RemoteDb), commonSequence.RemoteDb);
                 return View(commonSequence);
@@ -117,7 +118,7 @@
                     return RedirectToAction("Index");
                 }
 
-                ViewBag.MatterId = new SelectList(db.Matter, "Id", "Name", commonSequence.MatterId);
+                ViewBag.MatterId = new SelectList(db.Matter.ToArray(), "Id", "Name", commonSequence.MatterId);
                 ViewBag.Notation = EnumHelper.GetSelectList(typeof(Notation), commonSequence.Notation);
                 ViewBag.RemoteDb = EnumHelper.GetSelectList(typeof(RemoteDb), commonSequence.RemoteDb);
                 return View(commonSequence);
@@ -142,7 +143,7 @@
 
             using (var db = new LibiadaWebEntities())
             {
-                CommonSequence commonSequence = await db.CommonSequence.FindAsync(id);
+                CommonSequence commonSequence = db.CommonSequence.Include(c => c.Matter).Single(c => c.Id == id);
                 if (commonSequence == null)
                 {
                     return HttpNotFound();

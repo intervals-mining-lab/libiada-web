@@ -1,5 +1,6 @@
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
 
@@ -48,12 +49,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         public void Create(CommonSequence commonSequence, Stream sequenceStream, Language language, bool original, Translator translator)
         {
             string stringSequence = FileHelper.ReadSequenceFromStream(sequenceStream);
-            string[] text = stringSequence.Split('\n');
-            for (int l = 0; l < text.Length - 1; l++)
-            {
-                // removing "\r"
-                text[l] = text[l].Substring(0, text[l].Length - 1);
-            }
+            string[] text = stringSequence.Split(new[] { '\n', '\r', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
 
             var chain = new BaseChain(text.Length - 1);
 
