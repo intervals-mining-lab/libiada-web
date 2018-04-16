@@ -2203,7 +2203,7 @@ INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VAL
 -- Drop redundant constraints.
 
 ALTER TABLE congeneric_characteristic_link DROP CONSTRAINT congeneric_characteristic_check;
-ALTER TABLE public.full_characteristic_link DROP CONSTRAINT full_characteristic_check;
+ALTER TABLE full_characteristic_link DROP CONSTRAINT full_characteristic_check;
 
 INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (25,1);
 INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (25,2);
@@ -2226,11 +2226,10 @@ COMMENT ON COLUMN sequence_group.nature IS 'Nature of the objects in the group.'
 
 ALTER TABLE full_characteristic_link ADD COLUMN arrangement_type smallint NOT NULL DEFAULT 0;
 ALTER TABLE full_characteristic_link DROP CONSTRAINT uk_full_characteristic_link;
-ALTER TABLE full_characteristic_link DROP CONSTRAINT full_characteristic_check;
 ALTER TABLE full_characteristic_link ADD CONSTRAINT uk_full_characteristic_link UNIQUE (full_characteristic, link, arrangement_type);
 
 ALTER TABLE congeneric_characteristic_link ADD COLUMN arrangement_type smallint NOT NULL DEFAULT 0;
-ALTER TABLE public.congeneric_characteristic_link DROP CONSTRAINT congeneric_characteristic_check;
+ALTER TABLE congeneric_characteristic_link DROP CONSTRAINT congeneric_characteristic_check;
 ALTER TABLE congeneric_characteristic_link DROP CONSTRAINT uk_congeneric_characteristic_link;
 ALTER TABLE congeneric_characteristic_link ADD CONSTRAINT uk_congeneric_characteristic_link UNIQUE (congeneric_characteristic, link, arrangement_type);
 
