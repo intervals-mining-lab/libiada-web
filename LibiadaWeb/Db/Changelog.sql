@@ -2229,7 +2229,6 @@ ALTER TABLE full_characteristic_link DROP CONSTRAINT uk_full_characteristic_link
 ALTER TABLE full_characteristic_link ADD CONSTRAINT uk_full_characteristic_link UNIQUE (full_characteristic, link, arrangement_type);
 
 ALTER TABLE congeneric_characteristic_link ADD COLUMN arrangement_type smallint NOT NULL DEFAULT 0;
-ALTER TABLE congeneric_characteristic_link DROP CONSTRAINT congeneric_characteristic_check;
 ALTER TABLE congeneric_characteristic_link DROP CONSTRAINT uk_congeneric_characteristic_link;
 ALTER TABLE congeneric_characteristic_link ADD CONSTRAINT uk_congeneric_characteristic_link UNIQUE (congeneric_characteristic, link, arrangement_type);
 
