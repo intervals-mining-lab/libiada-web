@@ -37,23 +37,6 @@
 				ctrl.scrolledUp = true;
 			}
 		}
-
-		ctrl.mouseover = function ($event) {
-			var timeDelay = 10;
-			var alphabet = ["f", "e", "c", "a", "8", "6", "4", "2", "0"];
-			var color;
-			var i = 0;
-			var DescriptorInterval = setInterval(function () {
-				color = "#" + "f" + alphabet[i] + "f" + alphabet[i] + "f" + alphabet[i];
-				$event.target.style.backgroundColor = color;
-				i++;
-				if (i === alphabet.length) clearInterval(DescriptorInterval);
-			}, timeDelay);
-		}
-
-		ctrl.mouseout = function ($event) {
-			$event.target.style.backgroundColor = "#fff";
-		}
 	}
 
 	angular.module("libiada", []).component("scrollJumper", {
