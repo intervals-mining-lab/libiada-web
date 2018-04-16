@@ -13,6 +13,7 @@
         ctrl.isRefSeq = function (matter) {
             return matter.Text.split("|").slice(-1)[0].indexOf("_") !== -1;
         }
+
         ctrl.matterSelectChange = function (matter) {
             if (matter.Selected) {
                 ctrl.selectedMatters++;
@@ -53,7 +54,7 @@
     }
 
     angular.module("libiada").component("mattersTable", {
-		templateUrl: window.location.origin + "/Partial/_MattersTable",
+        templateUrl: window.location.origin + "/Partial/_MattersTable",
         controller: ["filterFilter", MattersTableController],
         bindings: {
             matters: "<",
