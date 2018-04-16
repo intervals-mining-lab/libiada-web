@@ -294,12 +294,12 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </param>
         private void CreateLackingElements(Alphabet libiadaAlphabet, Notation notation)
         {
-            
             string[] elements = libiadaAlphabet.Select(e => e.ToString()).ToArray();
 
-            IQueryable<string> existingElements = db.Element
-                                                    .Where(e => elements.Contains(e.Value) && e.Notation == notation)
-                                                    .Select(e => e.Value);
+            List<string> existingElements = db.Element
+                                              .Where(e => elements.Contains(e.Value) && e.Notation == notation)
+                                              .Select(e => e.Value)
+                                              .ToList();
 
             List<string> newElements = elements.Where(e => !existingElements.Contains(e)).ToList();
             db.Element.AddRange(newElements.ConvertAll(e => new Element
