@@ -88,33 +88,16 @@
         {
             return CreateTask(() =>
             {
-                var sequencesCharacteristics = new SequenceCharacteristics[matterIds.Length];
-                var characteristicNames = new string[characteristicLinkIds.Length];
-                var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
                 Dictionary<long, string> mattersNames;
-                double[][] characteristics;
                 long[][] sequenceIds;
-
                 using (var db = new LibiadaWebEntities())
                 {
-                    mattersNames = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
-
                     var commonSequenceRepository = new CommonSequenceRepository(db);
                     sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds, notations, languages, translators);
-
-                    var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
-                    for (int k = 0; k < characteristicLinkIds.Length; k++)
-                    {
-                        characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[k], notations[k]);
-                        characteristicsList[k] = new SelectListItem
-                        {
-                            Value = k.ToString(),
-                            Text = characteristicNames[k],
-                            Selected = false
-                        };
-                    }
+                    mattersNames = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
                 }
 
+                double[][] characteristics;
                 if (!rotate && !complementary)
                 {
                     characteristics = SequencesCharacteristicsCalculator.Calculate(sequenceIds, characteristicLinkIds);
@@ -124,6 +107,7 @@
                     characteristics = SequencesCharacteristicsCalculator.Calculate(sequenceIds, characteristicLinkIds, rotate, complementary, rotationLength);
                 }
 
+                var sequencesCharacteristics = new SequenceCharacteristics[matterIds.Length];
                 for (int i = 0; i < matterIds.Length; i++)
                 {
                     sequencesCharacteristics[i] = new SequenceCharacteristics
@@ -131,6 +115,20 @@
                         MatterName = mattersNames[matterIds[i]],
                         Characteristics = characteristics[i]
                     };
+                }
+
+                var characteristicNames = new string[characteristicLinkIds.Length];
+                var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
+                var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
+                for (int k = 0; k < characteristicLinkIds.Length; k++)
+                {
+                    characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[k], notations[k]);
+                    characteristicsList[k] = new SelectListItem
+                                                 {
+                                                     Value = k.ToString(),
+                                                     Text = characteristicNames[k],
+                                                     Selected = false
+                                                 };
                 }
 
                 var result = new Dictionary<string, object>

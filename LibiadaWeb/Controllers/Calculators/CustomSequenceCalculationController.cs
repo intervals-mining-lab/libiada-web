@@ -16,6 +16,7 @@
     using LibiadaCore.Images;
 
     using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Tasks;
 
@@ -87,7 +88,7 @@
             return CreateTask(() =>
                 {
                     int sequencesCount = localFile ? Request.Files.Count : customSequences.Length;
-                    var names = new string[sequencesCount];
+                    var sequencesNames = new string[sequencesCount];
                     var sequences = new Chain[sequencesCount];
 
                     for (int i = 0; i < sequencesCount; i++)
@@ -108,13 +109,13 @@
                                     }
 
                                     sequences[i] = new Chain(sequence.Building, alphabet);
-                                    names[i] = Request.Files[i].FileName;
+                                    sequencesNames[i] = Request.Files[i].FileName;
                                     break;
                                 case "genetic":
                                     ISequence fastaSequence = NcbiHelper.GetFastaSequence(sequenceStream);
                                     var stringSequence = fastaSequence.ConvertToString();
                                     sequences[i] = new Chain(stringSequence);
-                                    names[i] = fastaSequence.ID;
+                                    sequencesNames[i] = fastaSequence.ID;
                                     break;
                                 case "wavFile":
                                     var reader = new BinaryReader(Request.Files[i].InputStream);
@@ -140,7 +141,7 @@
 
                                     int dataID = reader.ReadInt32();
                                     int dataSize = reader.ReadInt32();
-                                    names[i] = Request.Files[i].FileName;
+                                    sequencesNames[i] = Request.Files[i].FileName;
                                     byte[] byteArray = reader.ReadBytes(dataSize);
                                     var shortArray = new short[byteArray.Length / 2];
                                     Buffer.BlockCopy(byteArray, 0, shortArray, 0, byteArray.Length);
@@ -156,14 +157,15 @@
                         else
                         {
                             sequences[i] = new Chain(customSequences[i]);
-                            names[i] = $"Custom sequence {i + 1}. Length: {customSequences[i].Length}";
+                            sequencesNames[i] = $"Custom sequence {i + 1}. Length: {customSequences[i].Length}";
                         }
                     }
 
-                    var characteristics = new double[sequences.Length, characteristicLinkIds.Length];
-
+                    var characteristics = new double[sequences.Length][];
+                    var sequencesCharacteristics = new SequenceCharacteristics[sequences.Length];
                     for (int j = 0; j < sequences.Length; j++)
                     {
+                        characteristics[j] = new double[characteristicLinkIds.Length];
                         for (int k = 0; k < characteristicLinkIds.Length; k++)
                         {
                             sequences[j].FillIntervalManagers();
@@ -172,18 +174,40 @@
                             FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkIds[k]);
                             IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
 
-                            characteristics[j, k] = calculator.Calculate(sequences[j], link);
+                            characteristics[j][k] = calculator.Calculate(sequences[j], link);
                         }
+
+                        sequencesCharacteristics[j] = new SequenceCharacteristics
+                                                          {
+                                                              MatterName = sequencesNames[j],
+                                                              Characteristics = characteristics[j]
+                                                          };
                     }
 
-                    List<string> characteristicNames = characteristicLinkIds.ConvertAll(c => characteristicTypeLinkRepository.GetCharacteristicName(c));
+                    var characteristicNames = new string[characteristicLinkIds.Length];
+                    var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
+                    for (int k = 0; k < characteristicLinkIds.Length; k++)
+                    {
+                        characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[k]);
+                        characteristicsList[k] = new SelectListItem
+                                                     {
+                                                         Value = k.ToString(),
+                                                         Text = characteristicNames[k],
+                                                         Selected = false
+                                                     };
+                    }
+
+                    var result = new Dictionary<string, object>
+                                     {
+                                         { "characteristics", sequencesCharacteristics },
+                                         { "characteristicNames", characteristicNames },
+                                         { "characteristicsList", characteristicsList }
+                                     };
 
                     return new Dictionary<string, object>
-                    {
-                        { "names", names },
-                        { "characteristicNames", characteristicNames },
-                        { "characteristics", characteristics }
-                    };
+                               {
+                                   { "data", JsonConvert.SerializeObject(result) }
+                               };
                 });
         }
 
