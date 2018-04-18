@@ -1,48 +1,48 @@
 ﻿@{
     ViewBag.Title = "Subsequences import results";
 }
-
+@Scripts.Render("~/bundles/loadingWindow")
 @if (ViewBag.Error == null)
 {
     @Html.Partial("_AngularControllerInitializer", "BatchSequenceImportResultController")
 
     <div ng-controller="BatchSequenceImportResultCtrl">
-        <loading-window loading = "loading" loading-screen-header = "loadingScreenHeader"></loading-window>
+        <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <br />
         <h2>Subsequences import results for <strong>{{matterName}}</strong></h2>
 
         <table class="table table-bordered table-hover" ng-cloak>
             <thead>
-            <tr>
-                <th>
-                    #
-                </th>
-                <th>
-                    Feature
-                </th>
-                <th>
-                    Gene position
-                </th>
-                <th>
-                    Gene length
-                </th>
-                <th>
-                    Partial
-                </th>
-                <th>
-                    Additional positions count
-                </th>
-            </tr>
+                <tr>
+                    <th>
+                        #
+                    </th>
+                    <th>
+                        Feature
+                    </th>
+                    <th>
+                        Gene position
+                    </th>
+                    <th>
+                        Gene length
+                    </th>
+                    <th>
+                        Partial
+                    </th>
+                    <th>
+                        Additional positions count
+                    </th>
+                </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="gene in genes">
-                <td ng-bind="$index + 1"/>
-                <td ng-bind="features[gene.FeatureId]"/>
-                <td ng-bind="gene.Starts[0]"/>
-                <td ng-bind="gene.Lengths[0]"/>
-                <td ng-bind="gene.Partial"/>
-                <td ng-bind="gene.Starts.length - 1" />
-            </tr>
+                <tr ng-repeat="gene in genes">
+                    <td ng-bind="$index + 1" />
+                    <td ng-bind="features[gene.FeatureId]" />
+                    <td ng-bind="gene.Starts[0]" />
+                    <td ng-bind="gene.Lengths[0]" />
+                    <td ng-bind="gene.Partial" />
+                    <td ng-bind="gene.Starts.length - 1" />
+                </tr>
             </tbody>
         </table>
     </div>

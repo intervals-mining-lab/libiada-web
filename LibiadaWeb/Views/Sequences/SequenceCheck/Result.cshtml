@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "Sequence check result";
 }
-
+@Scripts.Render("~/bundles/loadingWindow")
 <h2>@ViewBag.Title</h2>
 
 @if (ViewBag.Error == null)
@@ -9,7 +9,7 @@
     @Html.Partial("_AngularControllerInitializer", "BatchSequenceImportResultController")
 
     <div ng-controller="BatchSequenceImportResultCtrl">
-        <loading-window loading = "loading" loading-screen-header = "loadingScreenHeader"></loading-window>
+        <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <br />
         <div ng-class="calculateStatusClass(status)">{{message}}</div>
         <div>
