@@ -10,7 +10,7 @@
         /// <summary>
         /// The group.
         /// </summary>
-        public readonly string Group;
+        public new readonly string Group;
 
         /// <summary>
         /// The sequence type.
