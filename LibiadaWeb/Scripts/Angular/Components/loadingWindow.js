@@ -23,7 +23,7 @@
 	}
 
 	angular.module("libiada").component("loadingWindow", {
-		templateUrl: window.location.origin + "/Partial/_ModalLoadingWindow",
+        templateUrl: window.location.origin + "/Partial/_LoadingWindow",
 		controller: [LoadingWindowController],
 		bindings: {
 			loading: "<",

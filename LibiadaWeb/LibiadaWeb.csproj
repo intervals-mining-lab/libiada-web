@@ -576,7 +576,7 @@
     <Content Include="Views\Partial\_CharacteristicsWithoutNotation.cshtml" />
     <Content Include="Views\Calculators\SubsequencesComparer\Result.cshtml" />
     <Content Include="Views\Partial\_Filters.cshtml" />
-    <Content Include="Views\Partial\_ModalLoadingWindow.cshtml" />
+    <Content Include="Views\Partial\_LoadingWindow.cshtml" />
     <Content Include="Views\Sequences\SequenceCleaner\Index.cshtml" />
     <Content Include="Views\Sequences\CommonSequences\Result.cshtml" />
     <Content Include="Views\Calculators\SequencesOrderDistribution\Index.cshtml" />

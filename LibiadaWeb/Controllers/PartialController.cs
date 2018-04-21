@@ -30,6 +30,6 @@
         /// <returns>
         /// The <see cref="PartialViewResult"/>.
         /// </returns>
-        public PartialViewResult _ModalLoadingWindow() => PartialView();
+        public PartialViewResult _LoadingWindow() => PartialView();
     }
 }

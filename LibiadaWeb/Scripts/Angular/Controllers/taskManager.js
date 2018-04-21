@@ -4,7 +4,6 @@
     function taskManager($scope) {
 
 		$scope.tasks = [];
-		$scope.loading = true;
         $scope.flags = { reconnecting: false };
         var tasksHub = $.connection.tasksManagerHub;
 
@@ -61,18 +60,16 @@
             }
         });
 
-
-        tasksHub.client.onConnected = function (data) {
-            alert(data);
-        };
-
         $.connection.hub.start().done(function (data) {
+            $scope.loadingScreenHeader = "Loading tasks";
+            $scope.loading = true;
+            $scope.$apply();
             tasksHub.server.getAllTasks().done(function (tasksJson) {
                 var tasks = JSON.parse(tasksJson);
                 for (var i = 0; i < tasks.length; i++) {
                     $scope.tasks.push(tasks[i]);
-				}
-				$scope.loading = false;
+                }
+                $scope.loading = false;
                 try {
                     $scope.$apply();
                 } catch (e) { }
@@ -99,4 +96,5 @@
     }
 
     angular.module("libiada").controller("TaskManagerCtrl", ["$scope", taskManager]);
+    loadingWindow();
 }
