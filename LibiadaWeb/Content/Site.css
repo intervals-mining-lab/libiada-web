@@ -83,13 +83,3 @@ input[type="checkbox"].input-validation-error {
 #chart, .monospace {
   font-family: monospace;
 }
-
-.arrow-button {
-    fill: #337ab7;
-    height: 50%;
-}
-
-.arrow-button:hover {
-    background: #eee;
-    transition: 0.4s;
-}
