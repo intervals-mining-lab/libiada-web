@@ -11,7 +11,7 @@
 
 <div ng-controller="TaskManagerCtrl">
     <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
-    <table st-table="tasks" class="table table-bordered table-hover">
+    <table ng-cloak st-table="tasks" class="table table-bordered table-hover">
         <thead>
             <tr>
                 <th>
@@ -73,36 +73,18 @@
                     <a ng-if="task.TaskState == 'Completed' || task.TaskState == 'Error'" ng-href="{{task.TaskType + '/Result/' + task.Id}}" target="_blank" rel="noopener">View result</a>
                 </td>
                 <td>
-                    @using (Html.BeginForm("Delete", "TaskManager", FormMethod.Post))
-                    {
-                        @Html.AntiForgeryToken()
-
-                        <input type="hidden" name="id" ng-value="task.Id" />
-                        <input type="submit" value="Delete task" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this task?')" />
-                    }
-                </td>
+                    <input type="hidden" name="id" ng-value="task.Id" />
+                    <button class="btn btn-danger" ng-click="deleteTask(task.Id)">Delete task</button>
             </tr>
         </tbody>
     </table>
 
     <br />
-
-    @using (Html.BeginForm("DeleteAll", "TaskManager", FormMethod.Post))
-    {
-        @Html.AntiForgeryToken()
-
-        <div class="form-horizontal">
-            <div class="form-group">
-                <div class="col-md-offset-0 col-md-10">
-                    <input type="submit" value="Delete all tasks" class="btn btn-danger" ng-hide="tasks.length == 0" ng-cloak onclick="return confirm('Are you sure you want to delete ALL tasks?')" />
-                </div>
+    <div class="form-horizontal">
+        <div class="form-group">
+            <div class="col-md-offset-0 col-md-10">
+                <button class="btn btn-danger" ng-hide="tasks.length <= 1" ng-cloak ng-click="deleteAllTasks()">Delete all tasks</button>
             </div>
-        </div>
-    }
-
-    <div class="form-group" ng-if="flags.reconnecting">
-        <div class="col-md-offset-10 col-md-2">
-            <p>Reconnecting...</p>
         </div>
     </div>
 </div>

@@ -1,5 +1,6 @@
 ﻿namespace LibiadaWeb.Tasks
 {
+    using System;
     using System.Linq;
 
     using LibiadaCore.Extensions;
@@ -113,6 +114,45 @@
                 Groups.Remove(Context.ConnectionId, Context.User.Identity.GetUserId<int>().ToString());
             }
             return base.OnDisconnected(stopCalled);
+        }
+
+        /// <summary>
+        /// The delete.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        public void DeleteTask(int id)
+        {
+            try
+            {
+                TaskManager.Instance.DeleteTask(id);
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Unable to delete task with id = {id}", e);
+            }
+        }
+
+        /// <summary>
+        /// The delete all.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        public void DeleteAllTasks()
+        {
+            try
+            {
+                TaskManager.Instance.DeleteAllTasks();
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Unable to delete tasks", e);
+            }
         }
     }
 }

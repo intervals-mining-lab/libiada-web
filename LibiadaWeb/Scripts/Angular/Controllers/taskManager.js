@@ -2,13 +2,7 @@
     "use strict";
 
     function taskManager($scope) {
-
-		$scope.tasks = [];
-        $scope.flags = { reconnecting: false };
-        var tasksHub = $.connection.tasksManagerHub;
-
-        tasksHub.client.TaskEvent = function (event, data) {
-
+        function taskEvent(event, data) {
             switch (event) {
                 case "AddTask":
                     $scope.tasks.push(data);
@@ -33,38 +27,22 @@
                     break;
                 default: console.log("Unknown task event");
                     break;
-			}
+            }
             try {
                 $scope.$apply();
-            } catch (e) {}
+            } catch (e) { }
         };
 
         $.connection.hub.stateChanged(function (change) {
-            if (change.newState === $.signalR.connectionState.connecting) {
-                $scope.flags.reconnecting = false;
-
-            }
-            if (change.newState === $.signalR.connectionState.reconnecting) {
-                $scope.flags.reconnecting = true;
-
-                setInterval(function () {
-                    if (change.newState === $.signalR.connectionState.reconnecting){
-                        if (confirm('Connection lost. Refresh page?')) {
-                            location.reload(true);
-                        }
-                    }
-                }, 30000);
-            }
-            else if (change.newState === $.signalR.connectionState.connected) {
-                $scope.flags.reconnecting = false;
-            }
+            if (change.newState === $.signalR.connectionState.disconnected)
+                if (confirm('Connection lost. Refresh page?')) {
+                    location.reload(true);
+                }
         });
 
         $.connection.hub.start().done(function (data) {
-            $scope.loadingScreenHeader = "Loading tasks";
-            $scope.loading = true;
             $scope.$apply();
-            tasksHub.server.getAllTasks().done(function (tasksJson) {
+            $scope.tasksHub.server.getAllTasks().done(function (tasksJson) {
                 var tasks = JSON.parse(tasksJson);
                 for (var i = 0; i < tasks.length; i++) {
                     $scope.tasks.push(tasks[i]);
@@ -78,21 +56,41 @@
 
         function calculateStatusClass(status) {
             return status === "InProgress" ? "info"
-                 : status === "Completed" ? "success"
-                 : status === "Error" ? "danger" : "";
+                : status === "Completed" ? "success"
+                    : status === "Error" ? "danger" : "";
         }
 
         function calculateStatusGlyphicon(status) {
             var icon = status === "InProgress" ? "glyphicon-tasks text-info"
-                     : status === "Completed" ? "glyphicon-ok-sign text-success"
-                     : status === "Error" ? "glyphicon-alert text-danger"
-                     : status === "InQueue" ? "glyphicon-hourglass text-muted" : "";
+                : status === "Completed" ? "glyphicon-ok-sign text-success"
+                    : status === "Error" ? "glyphicon-alert text-danger"
+                        : status === "InQueue" ? "glyphicon-hourglass text-muted" : "";
 
             return "glyphicon " + icon;
         }
 
+        function deleteAllTasks() {
+            if (confirm('Are you sure you want to delete all tasks?')) {
+                $scope.tasksHub.server.deleteAllTasks();
+            }
+        }
+        function deleteTask(id) {
+            if (confirm('Are you sure you want to delete this task?')) {
+                $scope.tasksHub.server.deleteTask(id);
+            }
+        }
+
         $scope.calculateStatusClass = calculateStatusClass;
         $scope.calculateStatusGlyphicon = calculateStatusGlyphicon;
+        $scope.deleteAllTasks = deleteAllTasks;
+        $scope.deleteTask = deleteTask;
+
+        $scope.loadingScreenHeader = "Loading tasks";
+        $scope.loading = true;
+        $scope.tasks = [];
+        $scope.flags = { reconnecting: false };
+        $scope.tasksHub = $.connection.tasksManagerHub;
+        $scope.tasksHub.client.TaskEvent = taskEvent;
     }
 
     angular.module("libiada").controller("TaskManagerCtrl", ["$scope", taskManager]);
