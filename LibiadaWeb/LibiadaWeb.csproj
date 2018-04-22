@@ -400,6 +400,7 @@
     <Content Include="Scripts\angular-mocks.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
+    <Content Include="Scripts\Angular\Components\characteristic.js" />
     <Content Include="Scripts\Angular\Components\mattersTable.js" />
     <Content Include="Scripts\Angular\Components\scrollJumper.js" />
     <Content Include="Scripts\Angular\Controllers\accordance.js" />

@@ -31,5 +31,13 @@
         /// The <see cref="PartialViewResult"/>.
         /// </returns>
         public PartialViewResult _LoadingWindow() => PartialView();
+
+        /// <summary>
+        /// The Characteristic partial view.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="PartialViewResult"/>.
+        /// </returns>
+        public PartialViewResult _Characteristic() => PartialView();
     }
 }

@@ -2,6 +2,7 @@
     ViewBag.Title = "Accordance calculation";
 }
 
+@Scripts.Render("~/bundles/Characteristic")
 @Html.Partial("_AngularControllerInitializer", "AccordanceController")
 
 <h2>@ViewBag.Title</h2>
@@ -21,7 +22,12 @@
                        maximum-selected-matters="maximumSelectedMatters"
                        selected-matters="selectedMatters">
         </matters-table>
-        @Html.Partial("_Characteristic")
+        <characteristic characteristic-types="characteristicTypes"
+                        nature="nature"
+                        notations="notations"
+                        languages="languages"
+                        translators="translators">
+        </characteristic>
         <label class="control-label col-md-2" for="calculationType">Calculation type:</label>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

@@ -129,6 +129,9 @@
             bundles.Add(new ScriptBundle("~/bundles/scrollJumper").Include(
                         "~/Scripts/Angular/Components/scrollJumper.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/Characteristic").Include(
+                        "~/Scripts/Angular/Components/characteristic.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/loadingWindow").Include(
                         "~/Scripts/Angular/Components/loadingWindow.js"));
 

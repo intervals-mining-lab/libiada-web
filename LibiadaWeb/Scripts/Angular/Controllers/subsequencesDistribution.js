@@ -19,19 +19,13 @@
         $scope.addCharacteristic = addCharacteristic;
         $scope.deleteCharacteristic = deleteCharacteristic;
 
-        $scope.isLinkable = IsLinkable;
-        $scope.selectLink = SelectLink;
         $scope.setCheckBoxesState = SetCheckBoxesState;
         $scope.filterByFeature = FakeFilterByFeature;
 
-        $scope.characteristic = {
-            characteristicType: $scope.characteristicTypes[0],
-            link: $scope.characteristicTypes[0].CharacteristicLinks[0],
-            notation: $scope.notations[0]
-        };
         $scope.characteristics = [];
     }
 
     angular.module("libiada").controller("SubsequencesDistributionCtrl", ["$scope", subsequencesDistribution]);
     mattersTable();
+    characteristic();
 }

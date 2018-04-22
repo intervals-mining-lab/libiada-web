@@ -4,6 +4,7 @@
     ViewBag.Title = "Subsequences comparer";
 }
 
+@Scripts.Render("~/bundles/Characteristic")
 @Html.Partial("_AngularControllerInitializer", "SequencesAlignmentController")
 
 <h2>@ViewBag.Title</h2>
@@ -24,7 +25,12 @@
         </matters-table>
         @Html.Partial("_FeaturesSelect")
         @Html.Partial("_Filters")
-        @Html.Partial("_Characteristic")
+        <characteristic characteristic-types="characteristicTypes"
+                        nature="nature"
+                        notations="notations"
+                        languages="languages"
+                        translators="translators">
+        </characteristic>
 
         <div class="form-group">
             <label class="control-label col-md-2" for="subsequencesCharacteristic">Subsequences characteristic:</label>

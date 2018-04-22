@@ -54,7 +54,7 @@
                 var second = ViewBag.secondSequenceSubsequences[similarSubsequence.Second];
                 <tr>
                     <td>
-                        @first.Feature.Name
+                        @first.Feature
                     </td>
                     <td>
                         @foreach (var attribute in ViewBag.firstSequenceAttributes[similarSubsequence.First])
@@ -84,7 +84,7 @@
                         }
                     </td>
                     <td>
-                        @second.Feature.Name
+                        @second.Feature
                     </td>
                     <td>
                         @foreach (var attribute in ViewBag.secondSequenceAttributes[similarSubsequence.Second])
