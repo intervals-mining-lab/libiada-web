@@ -20,7 +20,7 @@
     public class TasksManagerHub : Hub
     {
         /// <summary>
-        /// Send web socket message to all clients.
+        /// Send web socket message to target clients.
         /// </summary>
         /// <param name="taskEvent">
         /// Task event.
@@ -49,13 +49,11 @@
                     task.UserName
                 };
 
-                int userId = task.UserId;
+                hubContext.Clients.Group("admins").TaskEvent(taskEvent.ToString(), result);
                 if (!AccountHelper.IsAdmin())
                 {
-                    hubContext.Clients.Group(userId.ToString()).TaskEvent(taskEvent.ToString(), result);
+                    hubContext.Clients.Group(task.UserId.ToString()).TaskEvent(taskEvent.ToString(), result);
                 }
-
-                hubContext.Clients.Group("admins").TaskEvent(taskEvent.ToString(), result);
             }
         }
 
@@ -107,7 +105,7 @@
         {
             if (AccountHelper.IsAdmin())
             {
-                Groups.Remove(Context.ConnectionId, "admins"); // сомневаюсь что это правильно
+                Groups.Remove(Context.ConnectionId, "admins");
             }
             else
             {
@@ -117,7 +115,7 @@
         }
 
         /// <summary>
-        /// The delete.
+        /// Delete task by id.
         /// </summary>
         /// <param name="id">
         /// The id.
@@ -138,7 +136,7 @@
         }
 
         /// <summary>
-        /// The delete all.
+        /// Delete all tasks.
         /// </summary>
         /// <returns>
         /// The <see cref="ActionResult"/>.
@@ -151,7 +149,7 @@
             }
             catch (Exception e)
             {
-                throw new Exception($"Unable to delete tasks", e);
+                throw new Exception($"Unable to delete all tasks", e);
             }
         }
     }
