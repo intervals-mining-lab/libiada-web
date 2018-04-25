@@ -6,10 +6,13 @@
     using System.Threading.Tasks;
     using System.Web.Mvc;
 
+    using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Sequences;
 
     using Newtonsoft.Json;
+
+    using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
 
     /// <summary>
     /// The sequence groups controller.
@@ -71,6 +74,7 @@
             {
                 var viewDataHelper = new ViewDataHelper(db);
                 var viewData = viewDataHelper.FillViewData(1, int.MaxValue);
+                viewData["sequenceGroupTypes"] = EnumExtensions.ToArray<SequenceGroupType>().ToSelectListWithNature();
                 ViewBag.data = JsonConvert.SerializeObject(viewData);
                 return View();
             }
@@ -90,7 +94,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Name,Nature")] SequenceGroup sequenceGroup, long[] matterIds)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Name,Nature,SequenceGroupType")] SequenceGroup sequenceGroup, long[] matterIds)
         {
             if (ModelState.IsValid)
             {
@@ -139,6 +143,7 @@
                 var matterRepository = new MatterRepository(db);
                 bool Selected(Matter m) => sequenceGroup.Matters.Contains(m);
                 viewData["matters"] = matterRepository.GetMatterSelectList(db.Matter, Selected);
+                viewData["sequenceGroupTypes"] = EnumExtensions.ToArray<SequenceGroupType>().ToSelectListWithNature();
                 ViewBag.data = JsonConvert.SerializeObject(viewData);
             }
 
@@ -156,7 +161,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Nature,CreatorId,Created")] SequenceGroup sequenceGroup)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Nature,SequenceGroupType,CreatorId,Created")] SequenceGroup sequenceGroup)
         {
             if (ModelState.IsValid)
             {

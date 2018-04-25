@@ -19,6 +19,9 @@
             @Html.DisplayNameFor(model => model.Nature)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.SequenceGroupType)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.Creator)
         </th>
         <th>
@@ -40,6 +43,9 @@
         </td>
         <td>
             @item.Nature.GetDisplayValue()
+        </td>
+        <td>
+            @(item.SequenceGroupType == null ? "" : ((SequenceGroupType)item.SequenceGroupType).GetDisplayValue())
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Creator.UserName)
