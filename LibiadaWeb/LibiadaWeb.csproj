@@ -99,6 +99,7 @@
     </Compile>
     <Compile Include="Attribute.cs" />
     <Compile Include="Attributes\GenBankFeatureNameAttribute.cs" />
+    <Compile Include="Attributes\GroupTypeAttribute.cs" />
     <Compile Include="Attributes\ImageTransformerTypeAttribute.cs" />
     <Compile Include="Attributes\TaskClassAttribute.cs" />
     <Compile Include="BinaryCharacteristicLink.cs">
@@ -184,6 +185,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Group.cs" />
+    <Compile Include="GroupType.cs" />
     <Compile Include="ImageTransformer.cs" />
     <Compile Include="Language.cs" />
     <Compile Include="Helpers\AccountHelper.cs" />
