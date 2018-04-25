@@ -2232,4 +2232,9 @@ ALTER TABLE congeneric_characteristic_link ADD COLUMN arrangement_type smallint 
 ALTER TABLE congeneric_characteristic_link DROP CONSTRAINT uk_congeneric_characteristic_link;
 ALTER TABLE congeneric_characteristic_link ADD CONSTRAINT uk_congeneric_characteristic_link UNIQUE (congeneric_characteristic, link, arrangement_type);
 
+-- 25.04.2018
+-- Add sequence group column.
+
+ALTER TABLE sequence_group ADD COLUMN sequence_group_type SMALLINT;
+
 COMMIT;

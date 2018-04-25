@@ -5,7 +5,7 @@
 
     using LibiadaWeb.Attributes;
 
-    public enum GroupType : short
+    public enum SequenceGroupType : short
     {
         [Display(Name = "Prose")]
         [Description("")]
@@ -25,13 +25,13 @@
         [Display(Name = "Kingdom")]
         [Description("Kingdom")]
         [Nature(Nature.Genetic)]
-        [GroupType(Domain)]
+        [SequenceGroupType(Domain)]
         Kingdom = 4,
 
         [Display(Name = "Phylum")]
         [Description("Phylum")]
         [Nature(Nature.Genetic)]
-        [GroupType(Kingdom)]
+        [SequenceGroupType(Kingdom)]
         Phylum = 5
     }
 }

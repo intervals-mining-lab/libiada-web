@@ -329,6 +329,7 @@
           <Property Name="modified" Type="timestamptz" Precision="7" Nullable="false" />
           <Property Name="modifier_id" Type="int4" Nullable="false" />
           <Property Name="nature" Type="int2" Nullable="false" />
+          <Property Name="sequence_group_type" Type="int2" />
         </EntityType>
         <EntityType Name="sequence_group_matter">
           <Key>
@@ -1526,6 +1527,7 @@
           <NavigationProperty Name="Creator" Relationship="LibiadaWebModel.fk_sequence_group_creator" FromRole="SequenceGroup" ToRole="AspNetUser" />
           <NavigationProperty Name="Modifier" Relationship="LibiadaWebModel.fk_sequence_group_modifier" FromRole="SequenceGroup" ToRole="AspNetUser" />
           <Property Name="Nature" Type="LibiadaWebModel.Nature" Nullable="false" />
+          <Property Name="SequenceGroupType" Type="LibiadaWebModel.SequenceGroupType" />
         </EntityType>
 
         <Association Name="fk_binary_characteristic_chain">
@@ -2185,6 +2187,7 @@
           </ReferentialConstraint>
         </Association>
         <EnumType Name="ArrangementType" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.ArrangementManagers.ArrangementType" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="SequenceGroupType" UnderlyingType="Int16" a:ExternalTypeName="SequenceGroupType" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
 
       </Schema>
     </edmx:ConceptualModels>
@@ -2574,6 +2577,7 @@
           <EntitySetMapping Name="SequenceGroup">
             <EntityTypeMapping TypeName="LibiadaWebModel.SequenceGroup">
               <MappingFragment StoreEntitySet="sequence_group">
+                <ScalarProperty Name="SequenceGroupType" ColumnName="sequence_group_type" />
                 <ScalarProperty Name="Nature" ColumnName="nature" />
                 <ScalarProperty Name="ModifierId" ColumnName="modifier_id" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />

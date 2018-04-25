@@ -7,25 +7,25 @@
     /// Used to specify group types hierarchy.
     /// </summary>
     [AttributeUsage(AttributeTargets.Field)]
-    public class GroupTypeAttribute : System.Attribute
+    public class SequenceGroupTypeAttribute : System.Attribute
     {
         /// <summary>
         /// The group type value.
         /// </summary>
-        public readonly GroupType Value;
+        public readonly SequenceGroupType Value;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GroupTypeAttribute"/> class.
+        /// Initializes a new instance of the <see cref="SequenceGroupTypeAttribute"/> class.
         /// </summary>
         /// <param name="value">
         /// The group type.
         /// </param>
         /// <exception cref="ArgumentException">
-        /// Thrown if value is not a valid <see cref="GroupType"/>.
+        /// Thrown if value is not a valid <see cref="SequenceGroupType"/>.
         /// </exception>
-        public GroupTypeAttribute(GroupType value)
+        public SequenceGroupTypeAttribute(SequenceGroupType value)
         {
-            if (!Enum.IsDefined(typeof(GroupType), value))
+            if (!Enum.IsDefined(typeof(SequenceGroupType), value))
             {
                 throw new ArgumentException("GroupType attribute value is not valid group type", nameof(value));
             }

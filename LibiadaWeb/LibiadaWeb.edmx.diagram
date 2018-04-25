@@ -133,7 +133,7 @@
         <edmx:AssociationConnector Association="LibiadaWebModel.AspNetUserRoles" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.sequence_group" Width="1.5" PointX="0.75" PointY="25.625" />
         <edmx:AssociationConnector Association="LibiadaWebModel.sequence_group_matter" />
-        <edmx:EntityTypeShape EntityType="LibiadaWebModel.SequenceGroup" Width="1.5" PointX="11.875" PointY="25.375" />
+        <edmx:EntityTypeShape EntityType="LibiadaWebModel.SequenceGroup" Width="1.875" PointX="11.875" PointY="25.375" />
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_sequence_group_creator" />
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_sequence_group_modifier" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.FullCharacteristicLink" Width="2" PointX="6.875" PointY="14.375" />

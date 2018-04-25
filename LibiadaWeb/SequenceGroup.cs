@@ -26,6 +26,7 @@ namespace LibiadaWeb
         public System.DateTimeOffset Modified { get; set; }
         public int ModifierId { get; set; }
         public Nature Nature { get; set; }
+        public Nullable<SequenceGroupType> SequenceGroupType { get; set; }
     
         public virtual ICollection<Matter> Matters { get; set; }
         public virtual AspNetUser Creator { get; set; }
