@@ -1,0 +1,61 @@
+﻿@{
+    ViewBag.Title = "Characteristics";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Error == null)
+{
+    @Html.Partial("_AngularControllerInitializer", "CalculationResultController")
+
+    <div ng-app="libiada" ng-controller="CalculationResultCtrl">
+        @Html.Partial("_ModalLoadingWindow")
+        <div ng-disabled="loading">
+            <table class="table table-bordered table-hover" ng-cloak>
+                <thead>
+                <tr>
+                    <th>
+                        Characteristic value
+                    </th>
+                    <th>
+                        Fragment
+                    </th>
+                    <th>
+                        Predicted
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="characteristic in result">
+                    <td ng-bind="characteristic.Characteristic"/>
+                    <td ng-bind="characteristic.Fragment" />
+                    <td ng-bind="characteristic.Predicted" />
+                </tr>
+                </tbody>
+            </table>
+            <br/>
+            
+            <div class="form-group">
+                <label class="control-label col-md-2" for="height">Height:</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="height" id="height" type="number" min="{{500 + legendHeight}}" step="20" ng-model="height"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2" for="width">Width:</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="width" id="width" type="number" min="{{400}}" step="20" ng-model="width"/>
+                </div>
+            </div>
+            <br/>
+            <input type="button" class="btn btn-default" ng-click="draw()" value="Draw"/>
+            <div id="chart">
+            </div>
+        </div>
+    </div>
+    <br />
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/d3js")
+}

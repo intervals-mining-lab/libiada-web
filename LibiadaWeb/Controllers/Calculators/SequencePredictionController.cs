@@ -14,6 +14,8 @@
     using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
+    using System.Collections;
+    using LibiadaWeb.Models.CalculatorsData;
 
     /// <summary>
     /// The sequence prediction controller.
@@ -71,7 +73,9 @@
             long matterId,
             short characteristicLinkId,
             Notation notation,
-            int step)
+            int step,
+            int initialLength,
+            double accuracy)
         {
             return CreateTask(() =>
             {
@@ -101,11 +105,14 @@
 
                 CutRule cutRule = new CutRuleWithFixedStart(sequence.GetLength(), step);
 
+                Depth depthCaulc = new Depth();
+
                 CutRuleIterator iter = cutRule.GetIterator();
 
                 var fragments = new List<Chain>();
                 var partNames = new List<string>();
                 var lengthes = new List<int>();
+                var teoreticalDepht = new List<double>();
 
                 while (iter.Next())
                 {
@@ -119,6 +126,8 @@
                     fragments.Add(fragment);
                     partNames.Add(fragment.ToString());
                     lengthes.Add(fragment.GetLength());
+
+                    teoreticalDepht.Add(depthCaulc.Calculate(fragment, Link.Start));
                 }
 
                 characteristics = new double[fragments.Count];
@@ -130,14 +139,73 @@
                     // fragmentsData[k] = new FragmentData(characteristics, fragments[k].ToString(), starts[i][k], fragments[k].GetLength());
                 }
 
-                var predicted = new List<Chain>();
 
-               // TODO: sequence priction
+
+
+                // var predicted = new List<Chain>();
+
+                //int[] startingPart = new int[initialLength];
+
+
+                Chain predicted = new Chain(initialLength);
+
+
+                for (int i = 0; i < initialLength; i++)
+                {
+                    predicted.Set(sequence[i], i);
+                }
+
+                Alphabet alphabet = sequence.Alphabet;
+                IEnumerator enumerator = alphabet.GetEnumerator();
+                var resultSequencePredictionData = new List<SequencePredictionData>();
+
+                for (int i = initialLength; i < sequence.GetLength(); i++)
+                {
+                    Chain temp = new Chain(initialLength + i);
+                    for (int j = 0; j < initialLength + i - 1; j++)
+                    {
+                        temp.Set(predicted[j], j);
+                    }
+                    predicted = temp;
+                    double depth;
+                    do
+                    {
+                        predicted.Set((IBaseObject)enumerator.Current, i);
+                        depth = depthCaulc.Calculate(predicted, Link.Start);
+                        if (System.Math.Abs(depth - teoreticalDepht.ElementAt(i)) <= accuracy)
+                        {
+                            break;
+                        }
+                    } while (enumerator.MoveNext());
+
+                    resultSequencePredictionData.Add(new SequencePredictionData
+                    {
+                        Fragment = fragments.ElementAt(i).ToString(),
+                        Predicted = enumerator.Current.ToString(),
+                        ActualCharacteristic = depth,
+                        TeoreticalCharacteristic = teoreticalDepht.ElementAt(i)
+                    });
+                }
+
+                /*int equal = 0;
+                for (int i = initialLength; i < sequence.GetLength(); i++)
+                {
+                    if (sequence[i] == predicted[i])
+                    {
+                        equal++;
+                    }
+                }
+
+
+                double accuracyPercentage = equal / (sequence.GetLength() - initialLength);*/
+
+
+                // TODO: sequence prediction
+
+
                 var result = new Dictionary<string, object>
                                  {
-                                         { "characteristics", characteristics },
-                                         { "fragments", fragments },
-                                         { "predicted", predicted }
+                                         { "result", resultSequencePredictionData }
                                  };
 
                 return new Dictionary<string, object>
@@ -146,7 +214,5 @@
                            };
             });
         }
-
-
     }
 }
