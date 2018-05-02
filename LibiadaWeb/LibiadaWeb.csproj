@@ -223,6 +223,7 @@
     <Compile Include="Models\CalculatorsData\MattersImportResult.cs" />
     <Compile Include="Models\CalculatorsData\MattersTableRow.cs" />
     <Compile Include="Models\CalculatorsData\SequenceCharacteristics.cs" />
+    <Compile Include="Models\CalculatorsData\SequencePredictionData.cs" />
     <Compile Include="Models\Calculators\CongenericSequencesCharacteristicsCalculator.cs" />
     <Compile Include="Models\Calculators\SequencesCharacteristicsCalculator.cs" />
     <Compile Include="Models\CalculatorsData\FragmentData.cs" />
@@ -593,6 +594,8 @@
     <Content Include="Views\Sequences\SequenceGroups\Details.cshtml" />
     <Content Include="Views\Sequences\SequenceGroups\Edit.cshtml" />
     <Content Include="Views\Sequences\SequenceGroups\Index.cshtml" />
+    <Content Include="Views\Calculators\SequencePrediction\Index.cshtml" />
+    <Content Include="Views\Calculators\SequencePrediction\Result.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
