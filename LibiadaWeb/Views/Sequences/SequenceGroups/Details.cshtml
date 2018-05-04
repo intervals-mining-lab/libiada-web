@@ -1,4 +1,5 @@
-﻿@model SequenceGroup
+﻿@using LibiadaCore.Extensions
+@model SequenceGroup
 
 @{
     ViewBag.Title = "Sequences group";
@@ -67,6 +68,41 @@
         </dd>
     </dl>
 </div>
+@if (Model.Matters.Count > 0)
+{
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    @(Html.DisplayNameFor(model => model.Matters.First().Name))
+                </th>
+                <th>
+                    @(Html.DisplayNameFor(model => model.Matters.First().Group))
+                </th>
+                <th>
+                    @(Html.DisplayNameFor(model => model.Matters.First().SequenceType))
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var matter in Model.Matters)
+            {
+                <tr>
+                    <td>
+                        @matter.Name
+                    </td>
+                    <td>
+                        @matter.Group.GetDisplayValue()
+                    </td>
+                    <td>
+                        @matter.SequenceType.GetDisplayValue()
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")

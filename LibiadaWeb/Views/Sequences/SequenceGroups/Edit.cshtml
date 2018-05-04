@@ -29,6 +29,15 @@
             </div>
         </div>
         @Html.Partial("_NatureSelect")
+        <div class="form-group">
+            <label class="control-label col-md-2">Sequence group type</label>
+            <div class="col-md-10">
+                <select class="form-control" ng-model="sequenceGroupType" ng-options="n.Value as n.Text for n in sequenceGroupTypes | filter:{ Nature: nature }">
+                    <option value="">-- None --</option>
+                </select>
+                <input type="hidden" name="SequenceGroupType" ng-value="sequenceGroupType" />
+            </div>
+        </div>
         <matters-table matters="matters"
                        nature="nature"
                        groups="groups"
