@@ -141,7 +141,8 @@
                 var viewDataHelper = new ViewDataHelper(db);
                 var viewData = viewDataHelper.FillViewData(1, int.MaxValue);
                 var matterRepository = new MatterRepository(db);
-                bool Selected(Matter m) => sequenceGroup.Matters.Contains(m);
+                var matterIds = sequenceGroup.Matters.Select(m => m.Id);
+                bool Selected(Matter m) => matterIds.Contains(m.Id);
                 viewData["matters"] = matterRepository.GetMatterSelectList(db.Matter, Selected);
                 viewData["sequenceGroupTypes"] = EnumExtensions.ToArray<SequenceGroupType>().ToSelectListWithNature();
                 ViewBag.data = JsonConvert.SerializeObject(viewData);
