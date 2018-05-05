@@ -74,7 +74,7 @@
             Id = id;
             TaskType = taskType;
             UserId = userId;
-            UserName = HttpContext.Current.User.Identity.Name;
+            UserName = AccountHelper.GetUserNameById(userId);
             Created = DateTime.Now;
             TaskState = TaskState.InQueue;
         }
