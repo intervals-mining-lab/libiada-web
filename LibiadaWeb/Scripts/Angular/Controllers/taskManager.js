@@ -2,6 +2,27 @@
     "use strict";
 
     function taskManager($scope) {
+        function onStateChange(change) {
+            if (change.newState === $.signalR.connectionState.disconnected)
+                if (confirm('Connection lost. Refresh page?')) {
+                    location.reload(true);
+                }
+        };
+
+        function onHubStart(data) {
+            $scope.$apply();
+            $scope.tasksHub.server.getAllTasks().done(function (tasksJson) {
+                var tasks = JSON.parse(tasksJson);
+                for (var i = 0; i < tasks.length; i++) {
+                    $scope.tasks.push(tasks[i]);
+                }
+                $scope.loading = false;
+                try {
+                    $scope.$apply();
+                } catch (e) { }
+            });
+        };
+
         function taskEvent(event, data) {
             switch (event) {
                 case "AddTask":
@@ -33,38 +54,19 @@
             } catch (e) { }
         };
 
-        $.connection.hub.stateChanged(function (change) {
-            if (change.newState === $.signalR.connectionState.disconnected)
-                if (confirm('Connection lost. Refresh page?')) {
-                    location.reload(true);
-                }
-        });
-
-        $.connection.hub.start().done(function (data) {
-            $scope.$apply();
-            $scope.tasksHub.server.getAllTasks().done(function (tasksJson) {
-                var tasks = JSON.parse(tasksJson);
-                for (var i = 0; i < tasks.length; i++) {
-                    $scope.tasks.push(tasks[i]);
-                }
-                $scope.loading = false;
-                try {
-                    $scope.$apply();
-                } catch (e) { }
-            });
-        });
+        
 
         function calculateStatusClass(status) {
             return status === "InProgress" ? "info"
-                : status === "Completed" ? "success"
-                    : status === "Error" ? "danger" : "";
+                 : status === "Completed" ? "success"
+                 : status === "Error" ? "danger" : "";
         }
 
         function calculateStatusGlyphicon(status) {
             var icon = status === "InProgress" ? "glyphicon-tasks text-info"
-                : status === "Completed" ? "glyphicon-ok-sign text-success"
-                    : status === "Error" ? "glyphicon-alert text-danger"
-                        : status === "InQueue" ? "glyphicon-hourglass text-muted" : "";
+                     : status === "Completed" ? "glyphicon-ok-sign text-success"
+                     : status === "Error" ? "glyphicon-alert text-danger"
+                     : status === "InQueue" ? "glyphicon-hourglass text-muted" : "";
 
             return "glyphicon " + icon;
         }
@@ -80,17 +82,24 @@
             }
         }
 
+        $scope.onStateChange = onStateChange;
+        $scope.onHubStart = onHubStart;
+        $scope.taskEvent = taskEvent;
         $scope.calculateStatusClass = calculateStatusClass;
         $scope.calculateStatusGlyphicon = calculateStatusGlyphicon;
         $scope.deleteAllTasks = deleteAllTasks;
         $scope.deleteTask = deleteTask;
 
+        $scope.tasksHub = $.connection.tasksManagerHub;
+        $scope.tasksHub.client.TaskEvent = taskEvent;
+
+        $.connection.hub.stateChanged(onStateChange);
+        $.connection.hub.start().done(onHubStart);
+
         $scope.loadingScreenHeader = "Loading tasks";
         $scope.loading = true;
         $scope.tasks = [];
         $scope.flags = { reconnecting: false };
-        $scope.tasksHub = $.connection.tasksManagerHub;
-        $scope.tasksHub.client.TaskEvent = taskEvent;
     }
 
     angular.module("libiada").controller("TaskManagerCtrl", ["$scope", taskManager]);
