@@ -4,6 +4,7 @@
     ViewBag.Title = "Sequence prediction";
 }
 
+@Scripts.Render("~/bundles/Characteristic")
 @Html.Partial("_AngularControllerInitializer", "CalculationController")
 
 <h2>@ViewBag.Title</h2>
@@ -22,26 +23,31 @@
                        maximum-selected-matters="maximumSelectedMatters"
                        selected-matters="selectedMatters">
         </matters-table>
-        @Html.Partial("_Characteristic")
-        <div class="form-group">
-            <label class="control-label col-md-2" for="step">Step size:</label>
-            <div class="col-md-10">
-                <input class="form-control" name="step" type="number" value="1" min="1" id="step" />
+        <characteristic characteristic-types="characteristicTypes"
+                        nature="nature"
+                        notations="notations"
+                        languages="languages"
+                        translators="translators">
+        </characteristic>
+            <div class="form-group">
+                <label class="control-label col-md-2" for="step">Step size:</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="step" type="number" value="1" min="1" id="step" />
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-2" for="initialLength">Initial sequence length:</label>
-            <div class="col-md-10">
-                <input class="form-control" name="initialLength" type="number" value="1" min="1" id="initialLength" />
+            <div class="form-group">
+                <label class="control-label col-md-2" for="initialLength">Initial sequence length:</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="initialLength" type="number" value="1" min="1" id="initialLength" />
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-2" for="accuracy">Accuracy:</label>
-            <div class="col-md-10">
-                <input class="form-control" name="accuracy" type="number" value="1" min="1" id="accuracy" />
+            <div class="form-group">
+                <label class="control-label col-md-2" for="accuracy">Accuracy:</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="accuracy" type="number" value="1" min="1" id="accuracy" />
+                </div>
             </div>
-        </div>
-        <hr />
-        @Html.Partial("_MattersSubmit")
-    </div>
+            <hr />
+            @Html.Partial("_MattersSubmit")
+</div>
 }

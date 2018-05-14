@@ -2,7 +2,7 @@
 {
     public struct SequencePredictionData
     {
-        public double TeoreticalCharacteristic;
+        public double TheoreticalCharacteristic;
         public double ActualCharacteristic;
         public string Fragment;
         public string Predicted;

@@ -25,10 +25,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SequencePredictionController"/> class.
         /// </summary>
-        /// <param name="taskType">
-        /// The task type.
-        /// </param>
-        public SequencePredictionController(TaskType taskType) : base(taskType)
+        public SequencePredictionController() : base(TaskType.SequencePrediction)
         {
         }
 
@@ -157,7 +154,7 @@
 
                 Alphabet alphabet = sequence.Alphabet;
                 IEnumerator enumerator = alphabet.GetEnumerator();
-                var resultSequencePredictionData = new List<SequencePredictionData>();
+                var sequencePredictionResult = new List<SequencePredictionData>();
 
                 for (int i = initialLength; i < sequence.GetLength(); i++)
                 {
@@ -178,12 +175,12 @@
                         }
                     } while (enumerator.MoveNext());
 
-                    resultSequencePredictionData.Add(new SequencePredictionData
+                    sequencePredictionResult.Add(new SequencePredictionData
                     {
                         Fragment = fragments.ElementAt(i).ToString(),
                         Predicted = enumerator.Current.ToString(),
                         ActualCharacteristic = depth,
-                        TeoreticalCharacteristic = teoreticalDepht.ElementAt(i)
+                        TheoreticalCharacteristic = teoreticalDepht.ElementAt(i)
                     });
                 }
 
@@ -205,7 +202,7 @@
 
                 var result = new Dictionary<string, object>
                                  {
-                                         { "result", resultSequencePredictionData }
+                                         { "result", sequencePredictionResult }
                                  };
 
                 return new Dictionary<string, object>

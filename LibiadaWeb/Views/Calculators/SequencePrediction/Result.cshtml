@@ -6,31 +6,35 @@
 
 @if (ViewBag.Error == null)
 {
-    @Html.Partial("_AngularControllerInitializer", "CalculationResultController")
+    @Html.Partial("_AngularControllerInitializer", "SequencePredictionResultController")
 
-    <div ng-app="libiada" ng-controller="CalculationResultCtrl">
+    <div ng-app="libiada" ng-controller="SequencePredictionResultCtrl">
         @Html.Partial("_ModalLoadingWindow")
         <div ng-disabled="loading">
             <table class="table table-bordered table-hover" ng-cloak>
                 <thead>
-                <tr>
-                    <th>
-                        Characteristic value
-                    </th>
-                    <th>
-                        Fragment
-                    </th>
-                    <th>
-                        Predicted
-                    </th>
-                </tr>
+                    <tr>
+                        <th>
+                            Actual characteristic value
+                        </th>
+                        <th>
+                            Predicted characteristic value
+                        </th>
+                        <th>
+                            Fragment
+                        </th>
+                        <th>
+                            Predicted
+                        </th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="characteristic in result">
-                    <td ng-bind="characteristic.Characteristic"/>
-                    <td ng-bind="characteristic.Fragment" />
-                    <td ng-bind="characteristic.Predicted" />
-                </tr>
+                    <tr ng-repeat="characteristic in result">
+                        <td ng-bind="characteristic.ActualCharacteristic" />
+                        <td ng-bind="characteristic.TheoreticalCharacteristic" />
+                        <td ng-bind="characteristic.Fragment" />
+                        <td ng-bind="characteristic.Predicted" />
+                    </tr>
                 </tbody>
             </table>
             <br/>
