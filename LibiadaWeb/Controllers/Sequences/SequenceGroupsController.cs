@@ -157,17 +157,31 @@
         /// <param name="sequenceGroup">
         /// The sequence group.
         /// </param>
+        /// <param name="matterIds">
+        /// The group matters ids.
+        /// </param>
         /// <returns>
         /// The <see cref="Task"/>.
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Nature,SequenceGroupType,CreatorId,Created")] SequenceGroup sequenceGroup)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Nature,SequenceGroupType")] SequenceGroup sequenceGroup, long[] matterIds)
         {
             if (ModelState.IsValid)
             {
-                sequenceGroup.ModifierId = AccountHelper.GetUserId();
-                db.Entry(sequenceGroup).State = EntityState.Modified;
+                var originalSequenceGroup = db.SequenceGroup.Include(sg => sg.Matters).Single(sg => sg.Id == sequenceGroup.Id);
+                originalSequenceGroup.Name = sequenceGroup.Name;
+                originalSequenceGroup.Nature = sequenceGroup.Nature;
+                originalSequenceGroup.SequenceGroupType = sequenceGroup.SequenceGroupType;
+                originalSequenceGroup.ModifierId = AccountHelper.GetUserId();
+                var matters = db.Matter.Where(m => matterIds.Contains(m.Id)).ToArray();
+                originalSequenceGroup.Matters.Clear();
+                foreach (var matter in matters)
+                {
+                    originalSequenceGroup.Matters.Add(matter);
+                }
+
+                db.Entry(originalSequenceGroup).State = EntityState.Modified;
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
