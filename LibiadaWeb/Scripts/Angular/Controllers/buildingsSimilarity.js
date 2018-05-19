@@ -14,5 +14,4 @@
     }
 
     angular.module("libiada").controller("BuildingsSimilarityCtrl", ["$scope", "filterFilter", buildingsSimilarity]);
-    mattersTable();
 }

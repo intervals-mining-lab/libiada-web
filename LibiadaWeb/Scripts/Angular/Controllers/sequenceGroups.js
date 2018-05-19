@@ -14,5 +14,4 @@
     }
 
     angular.module("libiada").controller("sequenceGroupsCtrl", ["$scope", sequenceGroups]);
-    mattersTable();
 }

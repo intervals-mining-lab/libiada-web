@@ -5,7 +5,8 @@
         var ctrl = this;
 
         function filterByNature() {
-            ctrl.characteristic.notation = filterFilter(ctrl.notations, { Nature: ctrl.nature })[0];
+            if (ctrl.characteristic)
+                ctrl.characteristic.notation = filterFilter(ctrl.notations, { Nature: ctrl.nature })[0];
         }
 
         ctrl.$onInit = function () {
@@ -41,3 +42,5 @@
         }
     });
 }
+
+characteristic();

@@ -2,6 +2,8 @@
     ViewBag.Title = "Congeneric sequences characteristics calculation";
 }
 
+@Scripts.Render("~/bundles/Characteristics")
+
 @Html.Partial("_AngularControllerInitializer", "CalculationController")
 
 <h2>@ViewBag.Title</h2>
@@ -21,7 +23,12 @@
                        maximum-selected-matters="maximumSelectedMatters"
                        selected-matters="selectedMatters">
         </matters-table>
-        @Html.Partial("_Characteristics")
+        <characteristics characteristic-types="characteristicTypes"
+                         nature="nature"
+                         notations="notations"
+                         languages="languages"
+                         translators="translators">
+        </characteristics>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <label>

@@ -8,5 +8,4 @@
     }
 
     angular.module("libiada").controller("GenesImportCtrl", ["$scope", genesImport]);
-    mattersTable();
 }

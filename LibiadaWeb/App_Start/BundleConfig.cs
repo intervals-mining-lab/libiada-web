@@ -132,6 +132,9 @@
             bundles.Add(new ScriptBundle("~/bundles/Characteristic").Include(
                         "~/Scripts/Angular/Components/characteristic.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/Characteristics").Include(
+                        "~/Scripts/Angular/Components/characteristics.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/loadingWindow").Include(
                         "~/Scripts/Angular/Components/loadingWindow.js"));
 

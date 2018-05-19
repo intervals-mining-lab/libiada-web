@@ -22,15 +22,7 @@
         $scope.filterByFeature = FakeFilterByFeature;
 
         $scope.filters = [];
-        
-        $scope.subsequencesCharacteristic = {
-            characteristicType: $scope.characteristicTypes[0],
-            link: $scope.characteristicTypes[0].CharacteristicLinks[0],
-            notation: $scope.notations[0]
-        };
     }
 
     angular.module("libiada").controller("SequencesAlignmentCtrl", ["$scope", sequencesAlignment]);
-    mattersTable();
-    characteristic();
 }

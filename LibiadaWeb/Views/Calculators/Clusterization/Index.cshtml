@@ -2,6 +2,8 @@
     ViewBag.Title = "Clusterization";
 }
 
+@Scripts.Render("~/bundles/Characteristics")
+
 @Html.Partial("_AngularControllerInitializer", "CalculationController")
 
 <h2>@ViewBag.Title</h2>
@@ -21,7 +23,12 @@
                        maximum-selected-matters="maximumSelectedMatters"
                        selected-matters="selectedMatters">
         </matters-table>
-        @Html.Partial("_Characteristics")
+        <characteristics characteristic-types="characteristicTypes"
+                         nature="nature"
+                         notations="notations"
+                         languages="languages"
+                         translators="translators">
+        </characteristics>
 
         <div class="form-group">
             <label class="control-label col-md-2" for="clustersCount">Clusters count {{ClusterizationType.Text == 'FRiS-Cluster' ? '(Minimum clusters)' : ''}}:</label>

@@ -2,6 +2,8 @@
     ViewBag.Title = "Transformation of order of sequences";
 }
 
+@Scripts.Render("~/bundles/Characteristics")
+
 @Html.Partial("_AngularControllerInitializer", "OrderTransformerController")
 
 <h2>@ViewBag.Title</h2>
@@ -9,7 +11,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    <div class="form-horizontal" ng-controller="OrderTransformerCtrl" >
+    <div class="form-horizontal" ng-controller="OrderTransformerCtrl">
         <h4>Sequences and parameters</h4>
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.Partial("_NatureSelect")
@@ -21,7 +23,12 @@
                        selected-matters="selectedMatters">
         </matters-table>
         @Html.Partial("_OrderTransformations")
-        @Html.Partial("_Characteristics")
+        <characteristics characteristic-types="characteristicTypes"
+                         nature="nature"
+                         notations="notations"
+                         languages="languages"
+                         translators="translators">
+        </characteristics>
         @Html.Partial("_MattersSubmit")
     </div>
 }

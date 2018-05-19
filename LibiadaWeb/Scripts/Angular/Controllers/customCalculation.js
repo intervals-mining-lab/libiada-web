@@ -4,17 +4,6 @@
     function customCalculation($scope) {
         MapModelFromJson($scope, data);
 
-        function addCharacteristic() {
-            $scope.characteristics.push({
-                characteristicType: $scope.characteristicTypes[0],
-                link: $scope.characteristicTypes[0].CharacteristicLinks[0]
-            });
-        }
-
-        function deleteCharacteristic(characteristic) {
-            $scope.characteristics.splice($scope.characteristics.indexOf(characteristic), 1);
-        }
-
         function addSequence() {
             $scope.customSequences.push({});
         }
@@ -42,9 +31,6 @@
             $scope.selectedImageTransformators.splice($scope.transformations.indexOf(transformation), 1);
         }
 
-
-        $scope.addCharacteristic = addCharacteristic;
-        $scope.deleteCharacteristic = deleteCharacteristic;
         $scope.addSequence = addSequence;
         $scope.deleteSequence = deleteSequence;
         $scope.addTransformation = addTransformation;
@@ -52,12 +38,9 @@
         $scope.addImageTransformation = addImageTransformation;
         $scope.deleteImageTransformation = deleteImageTransformation;
 
-        $scope.isLinkable = IsLinkable;
-        $scope.selectLink = SelectLink;
         $scope.disableSubmit = FakeDisableSubmit;
 
         $scope.transformations = [];
-        $scope.characteristics = [];
         $scope.customSequences = [];
         $scope.selectedImageTransformators = [];
     }

@@ -3,6 +3,8 @@
 }
 
 @Scripts.Render("~/bundles/Characteristic")
+@Scripts.Render("~/bundles/Characteristics")
+
 @Html.Partial("_AngularControllerInitializer", "SubsequencesDistributionController")
 
 <h2>@ViewBag.Title</h2>
@@ -29,7 +31,12 @@
                         translators="translators">
         </characteristic>
         <hr />
-        @Html.Partial("_Characteristics")
+        <characteristics characteristic-types="characteristicTypes"
+                         nature="nature"
+                         notations="notations"
+                         languages="languages"
+                         translators="translators">
+        </characteristics>
         <hr />
         @Html.Partial("_MattersSubmit")
     </div>

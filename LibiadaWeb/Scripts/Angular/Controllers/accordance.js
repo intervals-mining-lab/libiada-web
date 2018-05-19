@@ -8,6 +8,4 @@
     }
 
 	angular.module("libiada").controller("AccordanceCtrl", ["$scope", "filterFilter", accordance]);
-    mattersTable();
-    characteristic();
 }

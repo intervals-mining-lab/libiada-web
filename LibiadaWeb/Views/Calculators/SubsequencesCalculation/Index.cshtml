@@ -2,6 +2,8 @@
     ViewBag.Title = "Subsequences characteristics calculation";
 }
 
+@Scripts.Render("~/bundles/Characteristics")
+
 @Html.Partial("_AngularControllerInitializer", "SubsequencesCalculationController")
 
 <h2>@ViewBag.Title</h2>
@@ -20,7 +22,12 @@
                        selected-matters="selectedMatters">
         </matters-table>
         @Html.Partial("_FeaturesSelect")
-        @Html.Partial("_Characteristics")
+        <characteristics characteristic-types="characteristicTypes"
+                         nature="nature"
+                         notations="notations"
+                         languages="languages"
+                         translators="translators">
+        </characteristics>
         @Html.Partial("_MattersSubmit")
     </div>
 }

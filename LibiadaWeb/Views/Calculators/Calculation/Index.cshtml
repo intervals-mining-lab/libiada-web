@@ -4,6 +4,8 @@
     ViewBag.Title = "Characteristics calculation";
 }
 
+@Scripts.Render("~/bundles/Characteristics")
+
 @Html.Partial("_AngularControllerInitializer", "CalculationController")
 
 <h2>@ViewBag.Title</h2>
@@ -23,7 +25,12 @@
                        maximum-selected-matters="maximumSelectedMatters"
                        selected-matters="selectedMatters">
         </matters-table>
-        @Html.Partial("_Characteristics")
+        <characteristics characteristic-types="characteristicTypes"
+                         nature="nature"
+                         notations="notations"
+                         languages="languages"
+                         translators="translators">
+        </characteristics>
         @if (AccountHelper.IsAdmin())
         {
             <div class="form-group" ng-if="nature==@((byte)Nature.Genetic)">
@@ -51,7 +58,7 @@
             </div>
             <hr />
         }
-        <input type="hidden" name="complementary" value="false"/>
+        <input type="hidden" name="complementary" value="false" />
         <input type="hidden" name="rotate" value="false" />
         @Html.Partial("_MattersSubmit")
     </div>
