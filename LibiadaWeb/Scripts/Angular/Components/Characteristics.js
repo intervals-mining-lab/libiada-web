@@ -55,7 +55,7 @@
             notations: "<",
             languages: "<",
             translators: "<",
-            hideNotation: "<"
+            hideNotation: "@"
         }
     });
 }

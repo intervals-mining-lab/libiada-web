@@ -135,7 +135,6 @@
             return string.Join("  ", characteristicTypeName, linkName);
         }
 
-
         /// <summary>
         /// Gets characteristics types.
         /// </summary>
