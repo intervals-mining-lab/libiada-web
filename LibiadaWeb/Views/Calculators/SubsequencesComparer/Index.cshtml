@@ -12,59 +12,53 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    <div class="form-horizontal" ng-controller="SequencesAlignmentCtrl">
-        <h4>Sequences and parameters</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <matters-table matters="matters"
-                       nature="nature"
-                       groups="groups"
-                       sequence-types="sequenceTypes"
-                       maximum-selected-matters="maximumSelectedMatters"
-                       selected-matters="selectedMatters">
-        </matters-table>
-        @Html.Partial("_FeaturesSelect")
-        @Html.Partial("_Filters")
-        <characteristic characteristic-types="characteristicTypes"
-                        nature="nature"
-                        notations="notations"
-                        languages="languages"
-                        translators="translators">
-        </characteristic>
+<div class="form-horizontal" ng-controller="SequencesAlignmentCtrl">
+    <h4>Sequences and parameters</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <matters-table matters="matters"
+                   nature="nature"
+                   groups="groups"
+                   sequence-types="sequenceTypes"
+                   maximum-selected-matters="maximumSelectedMatters"
+                   selected-matters="selectedMatters">
+    </matters-table>
+    @Html.Partial("_FeaturesSelect")
+    @Html.Partial("_Filters")
+    <characteristic characteristic-types="characteristicTypes"
+                    nature="nature"
+                    notations="notations"
+                    languages="languages"
+                    translators="translators">
+    </characteristic>
 
+    <characteristic characteristic-types="characteristicTypes"
+                    nature="nature"
+                    notations="notations"
+                    languages="languages"
+                    translators="translators"
+                    characteristic-name="subsequencesCharacteristicId"
+                    title="Subsequences characteristic">
+    </characteristic>
+
+    @if (AccountHelper.IsAdmin())
+    {
         <div class="form-group">
-            <label class="control-label col-md-2" for="subsequencesCharacteristic">Subsequences characteristic:</label>
+            <label class="control-label col-md-2" for="subsequencesCharacteristicNotation">Notation:</label>
             <div class="col-md-10">
-                <select class="form-control" title="Subsequences characteristic" ng-model="subsequencesCharacteristic.characteristicType" ng-options="c.Text for c in characteristicTypes" ng-change="selectLink(subsequencesCharacteristic)" id="subsequencesCharacteristic"></select>
-                <input type="hidden" name="subsequencesCharacteristicId" ng-value="subsequencesCharacteristic.characteristicType.Value" />
+                <select class="form-control" title="Notation" ng-model="subsequencesCharacteristic.notation" ng-options="n.Text for n in notations | filter:{ Nature: nature }" id="subsequencesCharacteristicNotation"></select>
             </div>
         </div>
-        <div class="form-group" ng-show="isLinkable(subsequencesCharacteristic)">
-            <label class="control-label col-md-2" for="subsequencesCharacteristicLink">Link:</label>
-            <div class="col-md-10">
-                <select class="form-control" title="Link" ng-model="subsequencesCharacteristic.link" ng-options="l.Text for l in subsequencesCharacteristic.characteristicType.CharacteristicLinks" id="subsequencesCharacteristicLink"></select>
-                <input type="hidden" name="subsequencesLinkId" ng-value="subsequencesCharacteristic.link.Value" />
-                <input type="hidden" name="subsequencesCharacteristicLinkId" ng-value="subsequencesCharacteristic.link.CharacteristicLinkId" />
-            </div>
+    }
+    <input type="hidden" name="subsequencesCharacteristicNotation" ng-value="subsequencesCharacteristic.notation.Value" />
+    <hr />
+    <div class="form-group">
+        <label class="control-label col-md-2" for="maxPercentageDifference">Maximum difference (%):</label>
+        <div class="col-md-10">
+            <input class="form-control" name="maxPercentageDifference" id="maxPercentageDifference" type="number" value="0" step="any" min="0" max="100" />
+            @Html.ValidationMessage("maxPercentageDifference", "", new { @class = "text-danger" })
         </div>
-        @if (AccountHelper.IsAdmin())
-        {
-            <div class="form-group">
-                <label class="control-label col-md-2" for="subsequencesCharacteristicNotation">Notation:</label>
-                <div class="col-md-10">
-                    <select class="form-control" title="Notation" ng-model="subsequencesCharacteristic.notation" ng-options="n.Text for n in notations | filter:{ Nature: nature }" id="subsequencesCharacteristicNotation"></select>
-                </div>
-            </div>
-        }
-        <input type="hidden" name="subsequencesCharacteristicNotation" ng-value="subsequencesCharacteristic.notation.Value" />
-        <hr />
-        <div class="form-group">
-            <label class="control-label col-md-2" for="maxPercentageDifference">Maximum difference (%):</label>
-            <div class="col-md-10">
-                <input class="form-control" name="maxPercentageDifference" id="maxPercentageDifference" type="number" value="0" step="any" min="0" max="100" />
-                @Html.ValidationMessage("maxPercentageDifference", "", new { @class = "text-danger" })
-            </div>
-        </div>
-        @Html.Partial("_MattersSubmit")
     </div>
+    @Html.Partial("_MattersSubmit")
+</div>
 }

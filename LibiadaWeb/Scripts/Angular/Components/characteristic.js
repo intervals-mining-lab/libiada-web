@@ -10,6 +10,8 @@
         }
 
         ctrl.$onInit = function () {
+            ctrl.characteristicName = ctrl.characteristicName || "characteristicLinkId";
+            ctrl.title = ctrl.title || "Characteristic";
             ctrl.characteristic = {
                 characteristicType: ctrl.characteristicTypes[0],
                 link: ctrl.characteristicTypes[0].CharacteristicLinks[0],
@@ -38,7 +40,9 @@
             nature: "<",
             notations: "<",
             languages: "<",
-            translators: "<"
+            translators: "<",
+            characteristicName: "@",
+            title: "@"            
         }
     });
 }

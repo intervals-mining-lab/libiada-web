@@ -5,16 +5,23 @@
     <div class="form-group">
         <label class="control-label col-md-2" for="characteristic">Characteristic:</label>
         <div class="col-md-10">
-            <select class="form-control" title="Characteristic" ng-model="characteristic.characteristicType" ng-options="c.Text for c in $ctrl.characteristicTypes" ng-change="$ctrl.selectLink(characteristic)" id="characteristic"></select>
-            <input type="hidden" name="characteristicIds" ng-value="characteristic.characteristicType.Value"/>
+            <select class="form-control"
+                    title="Characteristic"
+                    ng-model="characteristic.characteristicType"
+                    ng-options="c.Text for c in $ctrl.characteristicTypes"
+                    ng-change="$ctrl.selectLink(characteristic)"
+                    id="characteristic"></select>
         </div>
     </div>
     <div class="form-group" ng-show="$ctrl.isLinkable(characteristic)">
         <label class="control-label col-md-2" for="link">Link:</label>
         <div class="col-md-10">
-            <select class="form-control" title="Link" ng-model="characteristic.link" ng-options="l.Text for l in characteristic.characteristicType.CharacteristicLinks" id="link"></select>
-            <input type="hidden" name="linkIds" ng-value="characteristic.link.Value"/>
-            <input type="hidden" name="characteristicLinkIds" ng-value="characteristic.link.CharacteristicLinkId"/>
+            <select class="form-control"
+                    title="Link"
+                    ng-model="characteristic.link"
+                    ng-options="l.Text for l in characteristic.characteristicType.CharacteristicLinks"
+                    id="link"></select>
+            <input type="hidden" name="characteristicLinkIds" ng-value="characteristic.link.CharacteristicLinkId" />
         </div>
     </div>
     @if (AccountHelper.IsAdmin())
@@ -22,26 +29,38 @@
         <div class="form-group" ng-hide="$ctrl.hideNotation">
             <label class="control-label col-md-2" for="notation">Notation:</label>
             <div class="col-md-10">
-                <select class="form-control" title="Notation" ng-model="characteristic.notation" ng-options="n.Text for n in $ctrl.notations | filter:{ Nature: $ctrl.nature }" id="notation"></select>
+                <select class="form-control"
+                        title="Notation"
+                        ng-model="characteristic.notation"
+                        ng-options="n.Text for n in $ctrl.notations | filter:{ Nature: $ctrl.nature }"
+                        id="notation"></select>
             </div>
         </div>
     }
-    <input type="hidden" name="notations" ng-value="characteristic.notation.Value"/>
+    <input type="hidden" name="notations" ng-value="characteristic.notation.Value" />
 
     <div ng-switch="$ctrl.nature">
         <div ng-switch-when="@((byte)Nature.Literature)">
             <div class="form-group">
                 <label class="control-label col-md-2" for="language">Language:</label>
                 <div class="col-md-10">
-                    <select class="form-control" title="Language" ng-model="characteristic.language" ng-options="l.Text for l in $ctrl.languages" id="language"></select>
-                    <input type="hidden" name="languages" ng-value="characteristic.language.Value"/>
+                    <select class="form-control"
+                            title="Language"
+                            ng-model="characteristic.language"
+                            ng-options="l.Text for l in $ctrl.languages"
+                            id="language"></select>
+                    <input type="hidden" name="languages" ng-value="characteristic.language.Value" />
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2" for="translator">Translator:</label>
                 <div class="col-md-10">
-                    <select class="form-control" title="Translator" ng-model="characteristic.translator" ng-options="t.Text for t in $ctrl.translators" id="translator"></select>
-                    <input type="hidden" name="translators" ng-value="characteristic.translator.Value"/>
+                    <select class="form-control"
+                            title="Translator"
+                            ng-model="characteristic.translator"
+                            ng-options="t.Text for t in $ctrl.translators"
+                            id="translator"></select>
+                    <input type="hidden" name="translators" ng-value="characteristic.translator.Value" />
                 </div>
             </div>
         </div>
@@ -54,15 +73,25 @@
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <button type="button" class="btn btn-danger" ng-click="$ctrl.deleteCharacteristic(characteristic)" ng-disabled="$ctrl.characteristics.length <= 1">Delete characteristic</button>
+            <button type="button"
+                    class="btn btn-danger"
+                    ng-click="$ctrl.deleteCharacteristic(characteristic)"
+                    ng-disabled="$ctrl.characteristics.length <= 1">
+                Delete characteristic
+            </button>
         </div>
     </div>
-    <br/>
+    <br />
 </div>
 <div class="form-group">
     <div class="col-md-offset-2 col-md-10">
-        <button type="button" class="btn btn-success" ng-init="$ctrl.addCharacteristic()" ng-click="$ctrl.addCharacteristic()">Add characteristic</button>
+        <button type="button"
+                class="btn btn-success"
+                ng-init="$ctrl.addCharacteristic()"
+                ng-click="$ctrl.addCharacteristic()">
+            Add characteristic
+        </button>
     </div>
 </div>
-<hr/>
+<hr />
 <br />

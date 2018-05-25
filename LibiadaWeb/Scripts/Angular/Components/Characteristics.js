@@ -54,7 +54,8 @@
             nature: "<",
             notations: "<",
             languages: "<",
-            translators: "<"
+            translators: "<",
+            hideNotation: "<"
         }
     });
 }
