@@ -131,8 +131,6 @@
                 for (int k = 0; k < fragments.Count; k++)
                 {
                     characteristics[k] = calculator.Calculate(fragments[k], link);
-
-
                     // fragmentsData[k] = new FragmentData(characteristics, fragments[k].ToString(), starts[i][k], fragments[k].GetLength());
                 }
 
@@ -146,7 +144,6 @@
 
                 Chain predicted = new Chain(initialLength);
 
-
                 for (int i = 0; i < initialLength; i++)
                 {
                     predicted.Set(sequence[i], i);
@@ -158,27 +155,40 @@
 
                 for (int i = initialLength; i < sequence.GetLength(); i++)
                 {
-                    Chain temp = new Chain(initialLength + i);
-                    for (int j = 0; j < initialLength + i - 1; j++)
+                    Chain temp = new Chain(i + 1);
+                    for (int j = 0; j < i; j++)
                     {
                         temp.Set(predicted[j], j);
                     }
                     predicted = temp;
-                    double depth;
-                    do
+                    double depth = 0;
+                    /* do
+                     {
+                         predicted.Set((IBaseObject)enumerator.Current, i);
+                         depth = depthCaulc.Calculate(predicted, Link.Start);
+                         if (System.Math.Abs(depth - teoreticalDepht.ElementAt(i)) <= accuracy)
+                         {
+                             break;
+                         }
+                     } while (enumerator.MoveNext());*/
+                    IBaseObject predictedLetter = null;
+                    foreach (IBaseObject letter in alphabet)
                     {
-                        predicted.Set((IBaseObject)enumerator.Current, i);
+                        predicted.Set(letter, i);
                         depth = depthCaulc.Calculate(predicted, Link.Start);
                         if (System.Math.Abs(depth - teoreticalDepht.ElementAt(i)) <= accuracy)
                         {
+                            predictedLetter = letter;
                             break;
                         }
-                    } while (enumerator.MoveNext());
+                    }
+
+
 
                     sequencePredictionResult.Add(new SequencePredictionData
                     {
                         Fragment = fragments.ElementAt(i).ToString(),
-                        Predicted = enumerator.Current.ToString(),
+                        Predicted = /*enumerator.Current.ToString()*/ predicted.ToString(),
                         ActualCharacteristic = depth,
                         TheoreticalCharacteristic = teoreticalDepht.ElementAt(i)
                     });

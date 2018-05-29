@@ -8,8 +8,8 @@
 {
     @Html.Partial("_AngularControllerInitializer", "SequencePredictionResultController")
 
-    <div ng-app="libiada" ng-controller="SequencePredictionResultCtrl">
-        @Html.Partial("_ModalLoadingWindow")
+    <div ng-controller="SequencePredictionResultCtrl">
+        <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <div ng-disabled="loading">
             <table class="table table-bordered table-hover" ng-cloak>
                 <thead>
