@@ -10,12 +10,14 @@
         }
 
         function filterByNature() {
-            var notation = filterFilter(ctrl.notations, { Nature: ctrl.nature })[0];
-            ctrl.notation = notation;
-            // if notation is not linked to characteristic
-            angular.forEach(ctrl.characteristics, function (characteristic) {
-                characteristic.notation = notation;
-            });
+            if (!ctrl.hideNotation) {
+                var notation = filterFilter(ctrl.notations, { Nature: ctrl.nature })[0];
+                ctrl.notation = notation;
+                // if notation is not linked to characteristic
+                angular.forEach(ctrl.characteristics, function (characteristic) {
+                    characteristic.notation = notation;
+                });
+            }
         }
 
         ctrl.$onChanges = function (changes) {
@@ -29,7 +31,7 @@
                 characteristicType: ctrl.characteristicTypes[0],
                 link: ctrl.characteristicTypes[0].CharacteristicLinks[0],
                 // if notation is part of characterisitcs
-                notation: filterFilter(ctrl.notations, { Nature: ctrl.nature })[0],
+                notation: ctrl.hideNotation ? 0 : filterFilter(ctrl.notations, { Nature: ctrl.nature })[0],
                 language: ctrl.languages ? ctrl.languages[0] : null,
                 translator: ctrl.translators ? ctrl.translators[0] : null
             });
