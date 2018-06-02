@@ -11,7 +11,9 @@
 
 <div ng-controller="TaskManagerCtrl">
     <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
-    <input type="checkbox" id="AutoRedirect" checked> AutoRedirect to result page<br>
+    <div class="col-md-offset-10" ng-show="RedirectTaskId">
+        <input type="checkbox" id="AutoRedirect" checked>AutoRedirect to result page<br>
+    </div>
     <table ng-cloak st-table="tasks" class="table table-bordered table-hover">
         <thead>
             <tr>
