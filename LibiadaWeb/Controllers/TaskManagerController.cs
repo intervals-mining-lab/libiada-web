@@ -16,7 +16,7 @@
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        public ActionResult Index()
+        public ActionResult Index(int? id)
         {
             if (TempData["ErrorMessage"] != null)
             {

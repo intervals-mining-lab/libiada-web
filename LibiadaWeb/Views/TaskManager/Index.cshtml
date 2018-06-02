@@ -70,7 +70,7 @@
                     <big><span ng-class="calculateStatusGlyphicon(task.TaskState)" title="{{task.TaskStateName}}" aria-hidden="true"></span></big>
                 </td>
                 <td>
-                    <a ng-if="task.TaskState == 'Completed' || task.TaskState == 'Error'" ng-href="{{task.TaskType + '/Result/' + task.Id}}" target="_blank" rel="noopener">View result</a>
+                    <a ng-if="task.TaskState == 'Completed' || task.TaskState == 'Error'" ng-href="{{window.location.origin + '/' + task.TaskType + '/Result/' + task.Id}}" target="_blank" rel="noopener">View result</a>
                 </td>
                 <td>
                     <input type="hidden" name="id" ng-value="task.Id" />

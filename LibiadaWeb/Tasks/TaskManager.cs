@@ -92,7 +92,7 @@
         /// <param name="taskType">
         /// The task Type.
         /// </param>
-        public void CreateTask(Func<Dictionary<string, object>> action, TaskType taskType)
+        public long CreateTask(Func<Dictionary<string, object>> action, TaskType taskType)
         {
             CalculationTask databaseTask;
             Task task;
@@ -123,6 +123,7 @@
             }
             
             ManageTasks();
+            return task.TaskData.Id;
         }
 
         /// <summary>

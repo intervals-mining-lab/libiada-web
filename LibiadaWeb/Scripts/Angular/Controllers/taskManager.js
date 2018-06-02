@@ -15,6 +15,8 @@
                 var tasks = JSON.parse(tasksJson);
                 for (var i = 0; i < tasks.length; i++) {
                     $scope.tasks.push(tasks[i]);
+                    if ((tasks[i].Id == $scope.RedirectTaskId) & (tasks[i].TaskState === "Completed" || tasks[i].TaskState === "Error"))
+                        document.location.href = window.location.origin + '/' + tasks[i].TaskType + '/Result/' + $scope.RedirectTaskId;
                 }
                 $scope.loading = false;
                 try {
@@ -45,6 +47,8 @@
                     else {
                         $scope.tasks.push(data);
                     }
+                    if ((data.Id == $scope.RedirectTaskId) & (data.TaskState === "Completed" || data.TaskState === "Error"))
+                        document.location.href = window.location.origin + '/' + data.TaskType + '/Result/' + data.Id;
                     break;
                 default: console.log("Unknown task event");
                     break;
@@ -54,19 +58,19 @@
             } catch (e) { }
         };
 
-        
+
 
         function calculateStatusClass(status) {
             return status === "InProgress" ? "info"
-                 : status === "Completed" ? "success"
-                 : status === "Error" ? "danger" : "";
+                : status === "Completed" ? "success"
+                    : status === "Error" ? "danger" : "";
         }
 
         function calculateStatusGlyphicon(status) {
             var icon = status === "InProgress" ? "glyphicon-tasks text-info"
-                     : status === "Completed" ? "glyphicon-ok-sign text-success"
-                     : status === "Error" ? "glyphicon-alert text-danger"
-                     : status === "InQueue" ? "glyphicon-hourglass text-muted" : "";
+                : status === "Completed" ? "glyphicon-ok-sign text-success"
+                    : status === "Error" ? "glyphicon-alert text-danger"
+                        : status === "InQueue" ? "glyphicon-hourglass text-muted" : "";
 
             return "glyphicon " + icon;
         }
@@ -96,6 +100,10 @@
         $.connection.hub.stateChanged(onStateChange);
         $.connection.hub.start().done(onHubStart);
 
+        var location = window.location.href.split("/");
+        if (location[location.length - 1] != "TaskManager")
+            $scope.RedirectTaskId = location[location.length - 1];
+        else $scope.RedirectTaskId = null;
         $scope.loadingScreenHeader = "Loading tasks";
         $scope.loading = true;
         $scope.tasks = [];
