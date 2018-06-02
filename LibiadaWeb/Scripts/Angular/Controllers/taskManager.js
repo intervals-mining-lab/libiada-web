@@ -15,8 +15,9 @@
                 var tasks = JSON.parse(tasksJson);
                 for (var i = 0; i < tasks.length; i++) {
                     $scope.tasks.push(tasks[i]);
-                    if ((tasks[i].Id == $scope.RedirectTaskId) & (tasks[i].TaskState === "Completed" || tasks[i].TaskState === "Error"))
-                        document.location.href = window.location.origin + '/' + tasks[i].TaskType + '/Result/' + $scope.RedirectTaskId;
+                    if (document.getElementById("AutoRedirect").checked)
+                        if ((tasks[i].Id == $scope.RedirectTaskId) & (tasks[i].TaskState === "Completed" || tasks[i].TaskState === "Error"))
+                            document.location.href = window.location.origin + '/' + tasks[i].TaskType + '/Result/' + $scope.RedirectTaskId;
                 }
                 $scope.loading = false;
                 try {
@@ -47,8 +48,9 @@
                     else {
                         $scope.tasks.push(data);
                     }
-                    if ((data.Id == $scope.RedirectTaskId) & (data.TaskState === "Completed" || data.TaskState === "Error"))
-                        document.location.href = window.location.origin + '/' + data.TaskType + '/Result/' + data.Id;
+                    if (document.getElementById("AutoRedirect").checked)
+                        if ((data.Id == $scope.RedirectTaskId) & (data.TaskState === "Completed" || data.TaskState === "Error"))
+                            document.location.href = window.location.origin + '/' + data.TaskType + '/Result/' + data.Id;
                     break;
                 default: console.log("Unknown task event");
                     break;
