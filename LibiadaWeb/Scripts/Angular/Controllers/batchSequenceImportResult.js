@@ -30,5 +30,4 @@
 	}
 
 	angular.module("libiada").controller("BatchSequenceImportResultCtrl", ["$scope", "$http", batchSequenceImportResult]);
-	loadingWindow();
 }

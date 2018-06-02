@@ -103,5 +103,4 @@
     }
 
     angular.module("libiada").controller("TaskManagerCtrl", ["$scope", taskManager]);
-    loadingWindow();
 }

@@ -401,5 +401,5 @@
 	angular.module("libiada")
 		.filter('makePositive', makePositive)
 		.controller("SubsequencesComparerResultCtrl", ["$scope", "$http", subsequencesComparerResult]);
-	loadingWindow();
+	
 }

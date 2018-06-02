@@ -566,5 +566,5 @@
 	}
 
 	angular.module("libiada").controller("SubsequencesCalculationResultCtrl", ["$scope", "$http", "$sce", subsequencesCalculationResult]);
-	loadingWindow();
+	
 }

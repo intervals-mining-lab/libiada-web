@@ -21,5 +21,5 @@
     }
 
 	angular.module("libiada").controller("SequencesOrderDistributionResultCtrl", ["$scope", "$http", sequencesOrderDistributionResult]);
-	loadingWindow();
+	
 }

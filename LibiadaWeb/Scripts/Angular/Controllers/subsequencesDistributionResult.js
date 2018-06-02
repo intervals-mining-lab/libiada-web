@@ -555,5 +555,5 @@
 	}
 
 	angular.module("libiada").controller("SubsequencesDistributionResultCtrl", ["$scope", "$http", subsequencesDistributionResult]);
-	loadingWindow();
+	
 }

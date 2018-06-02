@@ -32,5 +32,5 @@
     }
 
     angular.module("libiada").controller("SequencePredictionResultCtrl", ["$scope", "$http", sequencePredictionResult]);
-    loadingWindow();
+    
 }
