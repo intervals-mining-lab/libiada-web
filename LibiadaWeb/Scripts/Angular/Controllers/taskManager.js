@@ -15,10 +15,10 @@
                 var tasks = JSON.parse(tasksJson);
                 for (var i = 0; i < tasks.length; i++) {
                     $scope.tasks.push(tasks[i]);
-                    if (document.getElementById("AutoRedirect").checked)
-                        if ((tasks[i].Id == $scope.RedirectTaskId) & (tasks[i].TaskState === "Completed" || tasks[i].TaskState === "Error"))
-                            document.location.href = window.location.origin + '/' + tasks[i].TaskType + '/Result/' + $scope.RedirectTaskId;
+
+                    $scope.tryRedirectToResult(tasks[i]);
                 }
+
                 $scope.loading = false;
                 try {
                     $scope.$apply();
@@ -44,13 +44,12 @@
                         taskToChange.ExecutionTime = data.ExecutionTime;
                         taskToChange.TaskState = data.TaskState;
                         taskToChange.TaskStateName = data.TaskStateName;
+
+                        $scope.tryRedirectToResult(taskToChange);
                     }
                     else {
                         $scope.tasks.push(data);
                     }
-                    if (document.getElementById("AutoRedirect").checked)
-                        if ((data.Id == $scope.RedirectTaskId) & (data.TaskState === "Completed" || data.TaskState === "Error"))
-                            document.location.href = window.location.origin + '/' + data.TaskType + '/Result/' + data.Id;
                     break;
                 default: console.log("Unknown task event");
                     break;
@@ -64,15 +63,15 @@
 
         function calculateStatusClass(status) {
             return status === "InProgress" ? "info"
-                : status === "Completed" ? "success"
-                    : status === "Error" ? "danger" : "";
+                 : status === "Completed" ? "success"
+                 : status === "Error" ? "danger" : "";
         }
 
         function calculateStatusGlyphicon(status) {
             var icon = status === "InProgress" ? "glyphicon-tasks text-info"
-                : status === "Completed" ? "glyphicon-ok-sign text-success"
-                    : status === "Error" ? "glyphicon-alert text-danger"
-                        : status === "InQueue" ? "glyphicon-hourglass text-muted" : "";
+                     : status === "Completed" ? "glyphicon-ok-sign text-success"
+                     : status === "Error" ? "glyphicon-alert text-danger"
+                     : status === "InQueue" ? "glyphicon-hourglass text-muted" : "";
 
             return "glyphicon " + icon;
         }
@@ -88,6 +87,14 @@
             }
         }
 
+        function tryRedirectToResult(task) {
+            if ($scope.autoRedirect &&
+               (task.Id == $scope.RedirectTaskId) &&
+               (task.TaskState === "Completed" || task.TaskState === "Error")) {
+                document.location.href = window.location.origin + '/' + task.TaskType + '/Result/' + task.Id;
+            }
+        }
+
         $scope.onStateChange = onStateChange;
         $scope.onHubStart = onHubStart;
         $scope.taskEvent = taskEvent;
@@ -95,6 +102,7 @@
         $scope.calculateStatusGlyphicon = calculateStatusGlyphicon;
         $scope.deleteAllTasks = deleteAllTasks;
         $scope.deleteTask = deleteTask;
+        $scope.tryRedirectToResult = tryRedirectToResult;
 
         $scope.tasksHub = $.connection.tasksManagerHub;
         $scope.tasksHub.client.TaskEvent = taskEvent;
@@ -110,6 +118,7 @@
         $scope.loading = true;
         $scope.tasks = [];
         $scope.flags = { reconnecting: false };
+        $scope.autoRedirect = true;
     }
 
     angular.module("libiada").controller("TaskManagerCtrl", ["$scope", taskManager]);

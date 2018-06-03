@@ -41,16 +41,6 @@
                     title="Subsequences characteristic">
     </characteristic>
 
-    @if (AccountHelper.IsAdmin())
-    {
-        <div class="form-group">
-            <label class="control-label col-md-2" for="subsequencesCharacteristicNotation">Notation:</label>
-            <div class="col-md-10">
-                <select class="form-control" title="Notation" ng-model="subsequencesCharacteristic.notation" ng-options="n.Text for n in notations | filter:{ Nature: nature }" id="subsequencesCharacteristicNotation"></select>
-            </div>
-        </div>
-    }
-    <input type="hidden" name="subsequencesCharacteristicNotation" ng-value="subsequencesCharacteristic.notation.Value" />
     <hr />
     <div class="form-group">
         <label class="control-label col-md-2" for="maxPercentageDifference">Maximum difference (%):</label>
