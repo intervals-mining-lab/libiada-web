@@ -5,9 +5,7 @@
         var ctrl = this;
 
         ctrl.$onInit = function () {
-        }
-
-        ctrl.$onChanges = function (changes) {
+            ctrl.transformations = [];
         }
 
         ctrl.addTransformation = function addTransformation() {
@@ -27,7 +25,6 @@
         templateUrl: window.location.origin + "/Partial/_OrderTransformations",
         controller: [OrderTransformationsController],
         bindings: {
-            transformations: "<",
             operations: "<",
             transformationLinks: "<"
         }

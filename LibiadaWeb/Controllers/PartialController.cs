@@ -49,7 +49,7 @@
         public PartialViewResult _Characteristics() => PartialView();
 
         /// <summary>
-        /// The Filter partial view.
+        /// The Order Transformations partial view.
         /// </summary>
         /// <returns>
         /// The <see cref="PartialViewResult"/>.

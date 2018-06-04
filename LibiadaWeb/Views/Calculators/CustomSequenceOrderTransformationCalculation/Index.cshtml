@@ -16,8 +16,7 @@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.Partial("_CustomSequences")
-        <order-transformations transformations="transformations"
-                               operations="operations"
+        <order-transformations operations="operations"
                                transformation-links="transformationLinks">
         </order-transformations>
         @*Html.Partial("_CharacteristicsWithoutNotation")*@

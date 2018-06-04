@@ -27,7 +27,6 @@
 
         $scope.disableSubmit = FakeDisableSubmit;
 
-        $scope.transformations = [];
         $scope.customSequences = [];
         $scope.selectedImageTransformators = [];
     }
