@@ -2,6 +2,7 @@
     ViewBag.Title = "Transformation of order of sequences";
 }
 
+@Scripts.Render("~/bundles/orderTransformations")
 @Html.Partial("_AngularControllerInitializer", "OrderTransformerController")
 
 <h2>@ViewBag.Title</h2>
@@ -20,7 +21,10 @@
                        maximum-selected-matters="maximumSelectedMatters"
                        selected-matters="selectedMatters">
         </matters-table>
-        @Html.Partial("_OrderTransformations")
+        <order-transformations transformations="transformations"
+                               operations="operations"
+                               transformation-links="transformationLinks">
+        </order-transformations>
         @Html.Partial("_MattersSubmit")
     </div>
 }

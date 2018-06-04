@@ -47,5 +47,13 @@
         /// The <see cref="PartialViewResult"/>.
         /// </returns>
         public PartialViewResult _Characteristics() => PartialView();
+
+        /// <summary>
+        /// The Filter partial view.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="PartialViewResult"/>.
+        /// </returns>
+        public PartialViewResult _OrderTransformations() => PartialView();
     }
 }

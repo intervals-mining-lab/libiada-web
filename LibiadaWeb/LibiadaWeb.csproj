@@ -406,6 +406,7 @@
     <Content Include="Scripts\Angular\Components\characteristic.js" />
     <Content Include="Scripts\Angular\Components\characteristics.js" />
     <Content Include="Scripts\Angular\Components\mattersTable.js" />
+    <Content Include="Scripts\Angular\Components\orderTransformations.js" />
     <Content Include="Scripts\Angular\Components\scrollJumper.js" />
     <Content Include="Scripts\Angular\Controllers\accordance.js" />
     <Content Include="Scripts\Angular\Controllers\batchSequenceImport.js" />

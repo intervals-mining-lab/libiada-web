@@ -141,6 +141,9 @@
             bundles.Add(new ScriptBundle("~/bundles/loadingWindow").Include(
                         "~/Scripts/Angular/Components/loadingWindow.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/orderTransformations").Include(
+                       "~/Scripts/Angular/Components/orderTransformations.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                         "~/Content/bootstrap.css",
                         "~/Content/site.css",
