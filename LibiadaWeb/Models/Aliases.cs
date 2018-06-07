@@ -4,6 +4,7 @@
     using System.Collections.ObjectModel;
 
     using LibiadaCore.Core;
+    using LibiadaCore.Core.ArrangementManagers;
     using LibiadaCore.Core.Characteristics.Calculators.AccordanceCalculators;
     using LibiadaCore.Core.Characteristics.Calculators.BinaryCalculators;
     using LibiadaCore.Core.Characteristics.Calculators.CongenericCalculators;
@@ -15,9 +16,22 @@
     public static class Aliases
     {
         /// <summary>
+        /// The user available arrangement types.
+        /// </summary>
+        public static readonly ReadOnlyCollection<ArrangementType> UserAvailableArrangementTypes = new ReadOnlyCollection<ArrangementType>(new List<ArrangementType>
+        {
+            ArrangementType.Intervals
+        });
+
+        /// <summary>
         /// The user available links.
         /// </summary>
-        public static readonly ReadOnlyCollection<Link> UserAvailableLinks = new ReadOnlyCollection<Link>(new List<Link> { Link.NotApplied, Link.Start, Link.Cycle });
+        public static readonly ReadOnlyCollection<Link> UserAvailableLinks = new ReadOnlyCollection<Link>(new List<Link>
+        {
+            Link.NotApplied,
+            Link.Start,
+            Link.Cycle
+        });
 
         /// <summary>
         /// The user available characteristics.

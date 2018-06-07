@@ -3,13 +3,17 @@
     using System.Web.Mvc;
 
     /// <summary>
-    /// The characteristic link data.
+    /// The arrangement type select list item.
     /// </summary>
-    public class LinkSelectListItem : SelectListItem
+    public class ArrangementTypeSelectListItem : SelectListItem
     {
+        /// <summary>
+        /// The value.
+        /// </summary>
+        public readonly int CharacteristicLinkId;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LinkSelectListItem"/> class.
+        /// Initializes a new instance of the <see cref="ArrangementTypeSelectListItem"/> class.
         /// </summary>
         /// <param name="characteristicLinkId">
         /// The characteristic type link id.
@@ -20,8 +24,9 @@
         /// <param name="text">
         /// The text.
         /// </param>
-        public LinkSelectListItem(int characteristicLinkId, string value, string text)
+        public ArrangementTypeSelectListItem(int characteristicLinkId, string value, string text)
         {
+            CharacteristicLinkId = characteristicLinkId;
             Value = value;
             Text = text;
         }

@@ -218,15 +218,27 @@
         {
             Dictionary<string, object> data = FillViewData(minSelectedMatters, maxSelectedMatters, submitName);
 
-            List<CharacteristicTypeData> characteristicTypes;
+            List<CharacteristicSelectListItem> characteristicTypes;
+            Dictionary<(int, int, int), int> characteristicsDictionary = new Dictionary<(int, int, int), int>();
 
             switch (characteristicsType)
             {
                 case CharacteristicCategory.Full:
                     characteristicTypes = FullCharacteristicRepository.Instance.GetCharacteristicTypes();
+                    var fullCharacteristics = FullCharacteristicRepository.Instance.CharacteristicLinks.ToArray();
+                    foreach (var characteristic in fullCharacteristics)
+                    {
+                        characteristicsDictionary.Add(((int)characteristic.FullCharacteristic, (int)characteristic.Link, (int)characteristic.ArrangementType), characteristic.Id);
+                    }
+
                     break;
                 case CharacteristicCategory.Congeneric:
                     characteristicTypes = CongenericCharacteristicRepository.Instance.GetCharacteristicTypes();
+                    var congenericCharacteristics = FullCharacteristicRepository.Instance.CharacteristicLinks.ToArray();
+                    foreach (var characteristic in congenericCharacteristics)
+                    {
+                        characteristicsDictionary.Add(((int)characteristic.FullCharacteristic, (int)characteristic.Link, (int)characteristic.ArrangementType), characteristic.Id);
+                    }
                     break;
                 case CharacteristicCategory.Accordance:
                     characteristicTypes = AccordanceCharacteristicRepository.Instance.GetCharacteristicTypes();
@@ -239,6 +251,7 @@
             }
 
             data.Add("characteristicTypes", characteristicTypes);
+            data.Add("characteristicsDictionary", characteristicsDictionary);
 
             return data;
         }

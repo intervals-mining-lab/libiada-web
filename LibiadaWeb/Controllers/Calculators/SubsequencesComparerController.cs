@@ -103,7 +103,7 @@
                 string sequenceCharacteristicName;
 
                 int mattersCount = matterIds.Length;
-                List<CharacteristicTypeData> localCharacteristicsType;
+                List<CharacteristicSelectListItem> localCharacteristicsType;
 
                 using (var db = new LibiadaWebEntities())
                 {

@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Web.Mvc;
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.AccordanceCalculators;
@@ -143,7 +144,7 @@
         /// <returns>
         /// The <see cref="List{CharacteristicData}"/>.
         /// </returns>
-        public List<CharacteristicTypeData> GetCharacteristicTypes()
+        public List<CharacteristicSelectListItem> GetCharacteristicTypes()
         {
             Link[] links;
             AccordanceCharacteristic[] characteristics;
@@ -158,16 +159,16 @@
                 characteristics = Aliases.UserAvailableAccordanceCharacteristics.ToArray();
             }
 
-            var result = new List<CharacteristicTypeData>(characteristics.Length);
+            var result = new List<CharacteristicSelectListItem>(characteristics.Length);
 
             foreach (AccordanceCharacteristic characteristic in characteristics)
             {
-                List<LinkSelectListItem> linkSelectListItems = characteristicsLinks
+                List<SelectListItem> linkSelectListItems = characteristicsLinks
                     .Where(cl => cl.AccordanceCharacteristic == characteristic && links.Contains(cl.Link))
-                    .Select(ctl => new LinkSelectListItem(ctl.Id, ctl.Link.ToString(), ctl.Link.GetDisplayValue()))
+                    .Select(cl => new SelectListItem { Value = cl.Link.ToString(), Text = cl.Link.GetDisplayValue() })
                     .ToList();
 
-                result.Add(new CharacteristicTypeData((byte)characteristic, characteristic.GetDisplayValue(), linkSelectListItems));
+                result.Add(new CharacteristicSelectListItem((byte)characteristic, characteristic.GetDisplayValue(), linkSelectListItems, null));
             }
 
             return result;

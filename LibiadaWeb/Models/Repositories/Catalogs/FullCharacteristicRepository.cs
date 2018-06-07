@@ -2,8 +2,10 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Web.Mvc;
 
     using LibiadaCore.Core;
+    using LibiadaCore.Core.ArrangementManagers;
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
     using LibiadaCore.Extensions;
 
@@ -141,31 +143,40 @@
         /// <returns>
         /// The <see cref="List{CharacteristicData}"/>.
         /// </returns>
-        public List<CharacteristicTypeData> GetCharacteristicTypes()
+        public List<CharacteristicSelectListItem> GetCharacteristicTypes()
         {
             Link[] links;
             FullCharacteristic[] characteristics;
+            ArrangementType[] arrangementTypes;
+
             if (AccountHelper.IsAdmin())
             {
                 links = EnumExtensions.ToArray<Link>();
                 characteristics = EnumExtensions.ToArray<FullCharacteristic>();
+                arrangementTypes = EnumExtensions.ToArray<ArrangementType>();
             }
             else
             {
                 links = Aliases.UserAvailableLinks.ToArray();
                 characteristics = Aliases.UserAvailableFullCharacteristics.ToArray();
+                arrangementTypes = Aliases.UserAvailableArrangementTypes.ToArray();
             }
 
-            var result = new List<CharacteristicTypeData>(characteristics.Length);
+            var result = new List<CharacteristicSelectListItem>(characteristics.Length);
 
             foreach (FullCharacteristic characteristic in characteristics)
             {
-                List<LinkSelectListItem> linkSelectListItems = characteristicsLinks
+                List<SelectListItem> linkSelectListItems = characteristicsLinks
                     .Where(cl => cl.FullCharacteristic == characteristic && links.Contains(cl.Link))
-                    .Select(ctl => new LinkSelectListItem(ctl.Id, ctl.Link.ToString(), ctl.Link.GetDisplayValue()))
+                    .Select(cl => new SelectListItem { Value = cl.Link.ToString(), Text = cl.Link.GetDisplayValue() })
+                    .Distinct(new SelectListItemComparer())
                     .ToList();
-
-                result.Add(new CharacteristicTypeData((byte)characteristic, characteristic.GetDisplayValue(), linkSelectListItems));
+                List<SelectListItem> arrangementTypeSelectListItems = characteristicsLinks
+                    .Where(cl => cl.FullCharacteristic == characteristic && arrangementTypes.Contains(cl.ArrangementType))
+                    .Select(cl => new SelectListItem { Value = cl.ArrangementType.ToString(), Text = cl.ArrangementType.GetDisplayValue() })
+                    .Distinct(new SelectListItemComparer())
+                    .ToList();
+                result.Add(new CharacteristicSelectListItem((byte)characteristic, characteristic.GetDisplayValue(), linkSelectListItems, arrangementTypeSelectListItems));
             }
 
             return result;

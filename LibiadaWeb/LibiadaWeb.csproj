@@ -218,6 +218,7 @@
     <Compile Include="Measure.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CalculatorsData\ArrangementTypeSelectListItem.cs" />
     <Compile Include="Models\CalculatorsData\AttributeValue.cs" />
     <Compile Include="Models\CalculatorsData\CongenericSequencesCharacteristics.cs" />
     <Compile Include="Models\CalculatorsData\MattersImportResult.cs" />
@@ -235,6 +236,7 @@
     <Compile Include="Models\Repositories\Catalogs\FullCharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\GeneticSequenceRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\IGeneticSequenceRepository.cs" />
+    <Compile Include="Models\SelectListItemComparer.cs" />
     <Compile Include="Models\SubsequenceImporter.cs" />
     <Compile Include="MusicSequence.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
@@ -302,7 +304,7 @@
     <Compile Include="Models\Account\VerifyCodeViewModel.cs" />
     <Compile Include="Models\Account\VerifyPhoneNumberViewModel.cs" />
     <Compile Include="Models\Aliases.cs" />
-    <Compile Include="Models\CalculatorsData\CharacteristicTypeData.cs" />
+    <Compile Include="Models\CalculatorsData\CharacteristicSelectListItem.cs" />
     <Compile Include="Models\CalculatorsData\LinkSelectListItem.cs" />
     <Compile Include="Models\CalculatorsData\SubsequenceData.cs" />
     <Compile Include="Models\CalculatorsData\SequenceData.cs" />

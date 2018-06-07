@@ -25,11 +25,12 @@
                 ctrl.filterByNature();
             }
         }
-
+        
         ctrl.addCharacteristic = function addCharacteristic() {
             ctrl.characteristics.push({
                 characteristicType: ctrl.characteristicTypes[0],
                 link: ctrl.characteristicTypes[0].CharacteristicLinks[0],
+                arrangementType: ctrl.characteristicTypes[0].ArrangementTypes[0],
                 // if notation is part of characterisitcs
                 notation: ctrl.hideNotation ? 0 : filterFilter(ctrl.notations, { Nature: ctrl.nature })[0],
                 language: ctrl.languages ? ctrl.languages[0] : null,
@@ -41,8 +42,14 @@
             ctrl.characteristics.splice(ctrl.characteristics.indexOf(characteristic), 1);
         }
 
+
         ctrl.isLinkable = IsLinkable;
-        ctrl.selectLink = SelectLink;
+        ctrl.selectLink = function (characteristic) {
+            "use strict";
+
+            characteristic.link = characteristic.characteristicType.CharacteristicLinks[0];
+            characteristic.arrangementType = characteristic.characteristicType.ArrangementTypes[0];
+        }
 
         ctrl.filterByNature = filterByNature;
 
@@ -57,6 +64,7 @@
             notations: "<",
             languages: "<",
             translators: "<",
+            characteristicsDictionary: "<",
             hideNotation: "@"
         }
     });
