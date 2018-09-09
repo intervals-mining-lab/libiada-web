@@ -25,7 +25,7 @@
     </div>
     @if (AccountHelper.IsAdmin())
     {
-        <div class="form-group">
+        <div class="form-group" ng-show="characteristic.characteristicType.ArrangementTypes.length > 1">
             <label class="control-label col-md-2" for="arrangementType">Arrangement type:</label>
             <div class="col-md-10">
                 <select class="form-control"
