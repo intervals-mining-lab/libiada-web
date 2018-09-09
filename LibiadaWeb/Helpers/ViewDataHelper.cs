@@ -168,7 +168,7 @@
                 sequenceTypes = EnumExtensions.ToArray<SequenceType>().Where(st => st.GetNature() == Nature.Genetic);
                 groups = EnumExtensions.ToArray<Group>().Where(g => g.GetNature() == Nature.Genetic);
             }
-            
+
             data.Add("natures", natures);
             data.Add("sequenceTypes", sequenceTypes.ToSelectListWithNature(true));
             data.Add("groups", groups.ToSelectListWithNature(true));
@@ -219,7 +219,7 @@
             Dictionary<string, object> data = FillViewData(minSelectedMatters, maxSelectedMatters, submitName);
 
             List<CharacteristicSelectListItem> characteristicTypes;
-            Dictionary<(int, int, int), int> characteristicsDictionary = new Dictionary<(int, int, int), int>();
+            var characteristicsDictionary = new Dictionary<(int, int, int), int>();
 
             switch (characteristicsType)
             {

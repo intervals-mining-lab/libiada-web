@@ -48,9 +48,9 @@
             </div>
         </div>
     }
-    <input type="hidden" 
-           name="characteristicLinkIds" 
-           ng-value="$ctrl.characteristicsDictionary[(characteristic.characteristicType, characteristic.link, characteristic.arrangementType)]" />
+    <input type="hidden"
+           name="characteristicLinkIds"
+           ng-value="$ctrl.characteristicsDictionary['(' + characteristic.characteristicType.Value + ', ' + characteristic.link.Value + ', ' + characteristic.arrangementType.Value + ')']" />
     <input type="hidden" name="notations" ng-value="characteristic.notation.Value" />
 
     <div ng-switch="$ctrl.nature">

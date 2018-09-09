@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-
-namespace LibiadaWeb.Models
+﻿namespace LibiadaWeb.Models
 {
+    using System.Collections.Generic;
     using System.Web.Mvc;
 
     /// <summary>
@@ -23,7 +22,7 @@ namespace LibiadaWeb.Models
         /// </returns>
         public bool Equals(SelectListItem x, SelectListItem y)
         {
-            return x.Text == y.Text && x.Value == y.Value;
+            return (x == y) || (!(x == null || y == null) && (x.Text == y.Text && x.Value == y.Value));
         }
 
         /// <summary>
