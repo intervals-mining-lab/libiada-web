@@ -13,13 +13,13 @@
                     id="characteristic"></select>
         </div>
     </div>
-    <div class="form-group" ng-show="$ctrl.isLinkable(characteristic)">
+    <div class="form-group" ng-show="characteristic.characteristicType.Links.length > 1">
         <label class="control-label col-md-2" for="link">Link:</label>
         <div class="col-md-10">
             <select class="form-control"
                     title="Link"
                     ng-model="characteristic.link"
-                    ng-options="l.Text for l in characteristic.characteristicType.CharacteristicLinks"
+                    ng-options="l.Text for l in characteristic.characteristicType.Links"
                     id="link"></select>
         </div>
     </div>

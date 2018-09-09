@@ -12,13 +12,7 @@
 function SelectLink(characteristic) {
     "use strict";
 
-    characteristic.link = characteristic.characteristicType.CharacteristicLinks[0];
-}
-
-function IsLinkable(characteristic) {
-    "use strict";
-
-    return characteristic.characteristicType.CharacteristicLinks.length > 1;
+    characteristic.link = characteristic.characteristicType.Links[0];
 }
 
 function SetCheckBoxesState(checkboxes, state, filter) {

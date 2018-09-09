@@ -6,8 +6,8 @@
 
         ctrl.characteristics = [];
 
-        ctrl.$onInit = function () {
-        }
+        ctrl.$onInit = function() {
+        };
 
         function filterByNature() {
             if (!ctrl.hideNotation) {
@@ -20,36 +20,34 @@
             }
         }
 
-        ctrl.$onChanges = function (changes) {
+        ctrl.$onChanges = function(changes) {
             if (changes.nature) {
                 ctrl.filterByNature();
             }
-        }
-        
+        };
+
         ctrl.addCharacteristic = function addCharacteristic() {
             ctrl.characteristics.push({
                 characteristicType: ctrl.characteristicTypes[0],
-                link: ctrl.characteristicTypes[0].CharacteristicLinks[0],
+                link: ctrl.characteristicTypes[0].Links[0],
                 arrangementType: ctrl.characteristicTypes[0].ArrangementTypes[0],
                 // if notation is part of characterisitcs
                 notation: ctrl.hideNotation ? 0 : filterFilter(ctrl.notations, { Nature: ctrl.nature })[0],
                 language: ctrl.languages ? ctrl.languages[0] : null,
                 translator: ctrl.translators ? ctrl.translators[0] : null
             });
-        }
+        };
 
         ctrl.deleteCharacteristic = function deleteCharacteristic(characteristic) {
             ctrl.characteristics.splice(ctrl.characteristics.indexOf(characteristic), 1);
-        }
+        };
 
-
-        ctrl.isLinkable = IsLinkable;
-        ctrl.selectLink = function (characteristic) {
+        ctrl.selectLink = function(characteristic) {
             "use strict";
 
-            characteristic.link = characteristic.characteristicType.CharacteristicLinks[0];
+            characteristic.link = characteristic.characteristicType.Links[0];
             characteristic.arrangementType = characteristic.characteristicType.ArrangementTypes[0];
-        }
+        };
 
         ctrl.filterByNature = filterByNature;
 

@@ -1,34 +1,51 @@
-﻿<br/>
+﻿@using LibiadaWeb.Helpers
+<br />
 <div ng-repeat="characteristic in characteristics">
     <div class="form-group">
         <label class="control-label col-md-2" for="characterisitc">Characteristic:</label>
         <div class="col-md-10">
-            <select class="form-control" 
-                    title="Characteristic" 
-                    ng-model="characteristic.characteristicType" 
-                    ng-options="c.Text for c in characteristicTypes" 
-                    ng-change="selectLink(characteristic)" 
-                    id="characterisitc">
-            </select>
+            <select class="form-control"
+                    title="Characteristic"
+                    ng-model="characteristic.characteristicType"
+                    ng-options="c.Text for c in characteristicTypes"
+                    ng-change="selectLink(characteristic)"
+                    id="characterisitc"></select>
         </div>
     </div>
-    <div class="form-group" ng-show="isLinkable(characteristic)">
+    <div class="form-group" ng-show="characteristic.characteristicType.Links.length > 1">
         <label class="control-label col-md-2" for="link">Link:</label>
         <div class="col-md-10">
-            <select class="form-control" 
-                    title="Link" 
-                    ng-model="characteristic.link" 
-                    ng-options="l.Text for l in characteristic.characteristicType.CharacteristicLinks" 
-                    id="link">
-            </select>
+            <select class="form-control"
+                    title="Link"
+                    ng-model="characteristic.link"
+                    ng-options="l.Text for l in characteristic.characteristicType.Links"
+                    id="link"></select>
             <input type="hidden" name="characteristicLinkIds" ng-value="characteristic.link.CharacteristicLinkId" />
         </div>
     </div>
+    @if (AccountHelper.IsAdmin())
+    {
+        <div class="form-group">
+            <label class="control-label col-md-2" for="arrangementType">Arrangement type:</label>
+            <div class="col-md-10">
+                <select class="form-control"
+                        title="Arrangement type"
+                        ng-model="characteristic.arrangementType"
+                        ng-options="l.Text for l in characteristic.characteristicType.ArrangementTypes"
+                        id="arrangementType"></select>
+
+            </div>
+        </div>
+    }
+    <input type="hidden"
+           name="characteristicLinkIds"
+           ng-value="$ctrl.characteristicsDictionary['(' + characteristic.characteristicType.Value + ', ' + characteristic.link.Value + ', ' + characteristic.arrangementType.Value + ')']" />
+
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <button type="button" 
-                    class="btn btn-danger" 
-                    ng-click="deleteCharacteristic(characteristic)" 
+            <button type="button"
+                    class="btn btn-danger"
+                    ng-click="deleteCharacteristic(characteristic)"
                     ng-disabled="characteristics.length <= 1">
                 Delete characteristic
             </button>
@@ -38,9 +55,9 @@
 </div>
 <div class="form-group">
     <div class="col-md-offset-2 col-md-10">
-        <button type="button" 
-                class="btn btn-success" 
-                ng-init="addCharacteristic()" 
+        <button type="button"
+                class="btn btn-success"
+                ng-init="addCharacteristic()"
                 ng-click="addCharacteristic()">
             Add characteristic
         </button>

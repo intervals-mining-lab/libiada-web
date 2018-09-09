@@ -4,32 +4,28 @@
     function Characteristic(filterFilter) {
         var ctrl = this;
 
-        function filterByNature() {
-            if (ctrl.characteristic)
-                ctrl.characteristic.notation = filterFilter(ctrl.notations, { Nature: ctrl.nature })[0];
-        }
-
-        ctrl.$onInit = function () {
+        ctrl.$onInit = function() {
             ctrl.characteristicName = ctrl.characteristicName || "characteristicLinkId";
             ctrl.title = ctrl.title || "Characteristic";
             ctrl.characteristic = {
                 characteristicType: ctrl.characteristicTypes[0],
-                link: ctrl.characteristicTypes[0].CharacteristicLinks[0],
+                link: ctrl.characteristicTypes[0].Links[0],
                 notation: filterFilter(ctrl.notations, { Nature: ctrl.nature })[0]
             };
-        }
+        };
 
-        ctrl.$onChanges = function (changes) {
+        ctrl.$onChanges = function(changes) {
             if (changes.nature) {
                 ctrl.filterByNature();
             }
-        }
+        };
 
-        ctrl.isLinkable = IsLinkable;
+        ctrl.filterByNature = function () {
+            if (ctrl.characteristic)
+                ctrl.characteristic.notation = filterFilter(ctrl.notations, { Nature: ctrl.nature })[0];
+        };
+
         ctrl.selectLink = SelectLink;
-
-        ctrl.filterByNature = filterByNature;
-
     }
 
     angular.module("libiada").component("characteristic", {
@@ -42,7 +38,7 @@
             languages: "<",
             translators: "<",
             characteristicName: "@",
-            title: "@"            
+            title: "@"
         }
     });
 }

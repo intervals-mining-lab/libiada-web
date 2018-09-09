@@ -348,7 +348,6 @@
 		$scope.calculateLocalCharacteristics = calculateLocalCharacteristics;
 		$scope.drawLocalCharacteristics = drawLocalCharacteristics;
 
-		$scope.isLinkable = IsLinkable;
 		$scope.selectLink = SelectLink;
 
 		$scope.loadingScreenHeader = "Loading data";
@@ -368,7 +367,7 @@
 
 				$scope.characteristic = {
 					characteristicType: $scope.characteristicTypes[0],
-					link: $scope.characteristicTypes[0].CharacteristicLinks[0]
+					link: $scope.characteristicTypes[0].Links[0]
 				};
 
 				$scope.loading = false;
@@ -401,5 +400,5 @@
 	angular.module("libiada")
 		.filter('makePositive', makePositive)
 		.controller("SubsequencesComparerResultCtrl", ["$scope", "$http", subsequencesComparerResult]);
-	
+
 }

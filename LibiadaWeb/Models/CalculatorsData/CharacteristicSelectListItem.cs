@@ -11,7 +11,7 @@
         /// <summary>
         /// The characteristic links.
         /// </summary>
-        public readonly List<SelectListItem> CharacteristicLinks;
+        public readonly List<SelectListItem> Links;
 
         /// <summary>
         /// The arrangement types.
@@ -27,17 +27,17 @@
         /// <param name="text">
         /// The text.
         /// </param>
-        /// <param name="characteristicLinks">
-        /// The characteristic links.
+        /// <param name="links">
+        /// Applicable to characteristic links.
         /// </param>
         /// <param name="arrangementTypes">
-        /// The arrangement types.
+        /// Applicable to characteristic arrangement types.
         /// </param>
-        public CharacteristicSelectListItem(int value, string text, List<SelectListItem> characteristicLinks, List<SelectListItem> arrangementTypes)
+        public CharacteristicSelectListItem(int value, string text, List<SelectListItem> links, List<SelectListItem> arrangementTypes)
         {
             Value = value.ToString();
             Text = text;
-            CharacteristicLinks = characteristicLinks;
+            Links = links;
             ArrangementTypes = arrangementTypes;
         }
     }

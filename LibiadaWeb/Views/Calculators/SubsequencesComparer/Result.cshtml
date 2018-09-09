@@ -121,10 +121,10 @@
                                             <select class="form-control" title="Characteristic" ng-model="characteristic.characteristicType" ng-options="c.Text for c in characteristicTypes" ng-change="selectLink(characteristic)" id="characteristic"></select>
                                         </div>
                                     </div>
-                                    <div class="form-group" ng-show="isLinkable(characteristic)">
+                                    <div class="form-group" ng-show="characteristic.characteristicType.Links.length > 1">
                                         <label class="control-label col-md-2" for="link">Link:</label>
                                         <div class="col-md-10">
-                                            <select class="form-control" title="Link" ng-model="characteristic.link" ng-options="l.Text for l in characteristic.characteristicType.CharacteristicLinks" id="link"></select>
+                                            <select class="form-control" title="Link" ng-model="characteristic.link" ng-options="l.Text for l in characteristic.characteristicType.Links" id="link"></select>
                                         </div>
                                     </div>
                                     <div class="form-group">
