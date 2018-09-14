@@ -51,14 +51,31 @@
             @Html.DisplayFor(model => model.Nature)
         </dd>
 
+        <dt>
+            Sequences count
+        </dt>
+
+        <dd>
+            @ViewBag.SequencesCount
+        </dd>
+
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
-        </div>
+    <div class="form-actions no-color">
+        @if (ViewBag.SequencesCount > 0)
+        {
+           <p class="text-danger"> Sorry, matter with child sequences cannot be deleted</p>
+        }
+        else
+        {
+            <input type="submit" value="Delete" class="btn btn-default" />
+        }
+        <br />
+        @Html.ActionLink("Back to List", "Index")
+    </div>
     }
 </div>

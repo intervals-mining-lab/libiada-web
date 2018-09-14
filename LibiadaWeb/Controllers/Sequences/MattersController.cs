@@ -74,6 +74,8 @@
                     return HttpNotFound();
                 }
 
+                ViewBag.SequencesCount = db.CommonSequence.Count(c => c.MatterId == matter.Id);
+
                 return View(matter);
             }
         }
@@ -110,7 +112,7 @@
                                    { "natures", natures },
                                    { "groups", groups },
                                    { "sequenceTypes", sequenceTypes },
-                                   { "matter", new StringedMatter(matter) }
+                                   { "matter", new StringedMatter(matter, db.CommonSequence.Count(c => c.MatterId == matter.Id)) }
                                };
 
                 ViewBag.data = JsonConvert.SerializeObject(data);
@@ -132,29 +134,29 @@
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Nature,Description,Group,SequenceType")] Matter matter)
         {
-            if (ModelState.IsValid)
+            using (var db = new LibiadaWebEntities())
             {
-                using (var db = new LibiadaWebEntities())
+                if (ModelState.IsValid)
                 {
                     db.Entry(matter).State = EntityState.Modified;
                     await db.SaveChangesAsync();
                     return RedirectToAction("Index");
                 }
-            }
 
-            var groups = EnumExtensions.ToArray<Group>().ToSelectListWithNature();
-            var sequenceTypes = EnumExtensions.ToArray<SequenceType>().ToSelectListWithNature();
-            var natures = EnumHelper.GetSelectList(typeof(Nature), matter.Nature);
-            var data = new Dictionary<string, object>
+                var groups = EnumExtensions.ToArray<Group>().ToSelectListWithNature();
+                var sequenceTypes = EnumExtensions.ToArray<SequenceType>().ToSelectListWithNature();
+                var natures = EnumHelper.GetSelectList(typeof(Nature), matter.Nature);
+                var data = new Dictionary<string, object>
                                {
                                    { "natures", natures },
                                    { "groups", groups },
                                    { "sequenceTypes", sequenceTypes },
-                                   { "matter", new StringedMatter(matter) }
+                                   { "matter", new StringedMatter(matter, db.CommonSequence.Count(c => c.MatterId == matter.Id)) }
                                };
 
-            ViewBag.data = JsonConvert.SerializeObject(data);
-            return View(matter);
+                ViewBag.data = JsonConvert.SerializeObject(data);
+                return View(matter);
+            }
         }
 
         /// <summary>
@@ -181,6 +183,7 @@
                     return HttpNotFound();
                 }
 
+                ViewBag.SequencesCount = db.CommonSequence.Count(c => c.MatterId == matter.Id);
                 return View(matter);
             }
         }
@@ -242,6 +245,8 @@
             /// </summary>
             public readonly string SequenceType;
 
+            public readonly int SequencesCount;
+
             /// <summary>
             /// Initializes a new instance of the <see cref="StringedMatter"/> struct
             /// from given matter instance.
@@ -249,7 +254,10 @@
             /// <param name="matter">
             /// The matter.
             /// </param>
-            public StringedMatter(Matter matter)
+            /// <param name="sequencesCount">
+            /// Matter's sequences Count.
+            /// </param>
+            public StringedMatter(Matter matter, int sequencesCount)
             {
                 Id = matter.Id;
                 Name = matter.Name;
@@ -257,6 +265,7 @@
                 Nature = ((byte)matter.Nature).ToString();
                 Group = ((byte)matter.Group).ToString();
                 SequenceType = ((byte)matter.SequenceType).ToString();
+                SequencesCount = sequencesCount;
             }
         }
     }

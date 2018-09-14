@@ -49,7 +49,7 @@
         <dd>
             @Html.DisplayFor(model => model.Nature)
         </dd>
-        
+
         <dt>
             @Html.DisplayNameFor(model => model.Group)
         </dt>
@@ -57,13 +57,21 @@
         <dd>
             @Html.DisplayFor(model => model.Group)
         </dd>
-        
+
         <dt>
             @Html.DisplayNameFor(model => model.SequenceType)
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.SequenceType)
+        </dd>
+
+        <dt>
+            Sequences count
+        </dt>
+
+        <dd>
+            @ViewBag.SequencesCount
         </dd>
 
     </dl>
