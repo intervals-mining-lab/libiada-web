@@ -8,6 +8,7 @@
         $scope.disableSubmit = $scope.minimumSelectedMatters > 0;
 
         // if notation is not linked to characteristic
+        $scope.notation = $scope.notations[0];
         $scope.language = $scope.languages[0];
         $scope.translator = $scope.translators[0];
 

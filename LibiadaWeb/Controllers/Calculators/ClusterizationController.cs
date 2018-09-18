@@ -83,7 +83,7 @@
         /// </param>
         /// <param name="clustersCount">
         /// The clusters count.
-        /// Minimum clusters count for methods 
+        /// Minimum clusters count for methods
         /// that use range of clusters.
         /// </param>
         /// <param name="clusterizationType">
@@ -112,7 +112,7 @@
         [ValidateAntiForgeryToken]
         public ActionResult Index(
             long[] matterIds,
-            int[] characteristicLinkIds,
+            short[] characteristicLinkIds,
             Notation[] notations,
             Language[] languages,
             int clustersCount,

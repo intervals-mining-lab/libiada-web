@@ -10,6 +10,7 @@
             ctrl.characteristic = {
                 characteristicType: ctrl.characteristicTypes[0],
                 link: ctrl.characteristicTypes[0].Links[0],
+                arrangementType: ctrl.characteristicTypes[0].ArrangementTypes[0],
                 notation: filterFilter(ctrl.notations, { Nature: ctrl.nature })[0]
             };
         };
@@ -37,6 +38,7 @@
             notations: "<",
             languages: "<",
             translators: "<",
+            characteristicsDictionary: "<",
             characteristicName: "@",
             title: "@"
         }

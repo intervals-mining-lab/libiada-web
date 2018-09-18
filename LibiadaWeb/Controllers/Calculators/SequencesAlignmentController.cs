@@ -48,7 +48,7 @@
                 var viewDataHelper = new ViewDataHelper(db);
                 ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillSubsequencesViewData(2, 2, "Align"));
             }
-           
+
             return View();
         }
 
@@ -117,7 +117,7 @@
                     long secondParentId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
                     secondSequenceCharacteristics = SubsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(secondParentId, characteristicLinkId, features);
                 }
-                
+
 
                 if (sort)
                 {

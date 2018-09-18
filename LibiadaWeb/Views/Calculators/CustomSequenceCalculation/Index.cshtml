@@ -17,12 +17,12 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.Partial("_CustomSequences")
         <characteristics characteristic-types="characteristicTypes"
+                         characteristics-dictionary="characteristicsDictionary"
                          nature="nature"
                          notations="notations"
                          languages="languages"
                          translators="translators"
-                         hide-notation="true"
-                         characteristics-dictionary="characteristicsDictionary">
+                         hide-notation="true">
         </characteristics>
         <br />
         <div class="form-group">

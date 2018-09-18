@@ -103,15 +103,15 @@
                 string sequenceCharacteristicName;
 
                 int mattersCount = matterIds.Length;
-                List<CharacteristicSelectListItem> localCharacteristicsType;
+                Dictionary<string,object> characteristicsTypesData;
 
                 using (var db = new LibiadaWebEntities())
                 {
                     // Sequences characteristic
                     var geneticSequenceRepository = new GeneticSequenceRepository(db);
                     long[] chains = geneticSequenceRepository.GetNucleotideSequenceIds(matterIds);
-
-                    sequenceCharacteristicName = FullCharacteristicRepository.Instance.GetCharacteristicName(characteristicLinkId);
+                    var fullCharacteristicRepository = FullCharacteristicRepository.Instance;
+                    sequenceCharacteristicName = fullCharacteristicRepository.GetCharacteristicName(characteristicLinkId);
 
                     // Sequences characteristic
                     matterIds = OrderMatterIds(matterIds, characteristicLinkId, chains);
@@ -132,12 +132,9 @@
                         matterNames[n] = parentSequences[parentSequenceIds[n]].MatterName;
                     }
 
-                    var subsequencesCharacteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
-
-                    characteristicName = subsequencesCharacteristicTypeLinkRepository.GetCharacteristicName(subsequencesCharacteristicLinkId);
-
-                    var fullCharacteristicRepository = FullCharacteristicRepository.Instance;
-                    localCharacteristicsType = fullCharacteristicRepository.GetCharacteristicTypes();
+                    characteristicName = fullCharacteristicRepository.GetCharacteristicName(subsequencesCharacteristicLinkId);
+                    var viewDataHelper = new ViewDataHelper(db);
+                    characteristicsTypesData = viewDataHelper.GetCharacteristicsData(CharacteristicCategory.Full);
                 }
 
                 var characteristicValueSubsequences = new Dictionary<double, List<(int, int)>>();
@@ -145,7 +142,7 @@
                 // cycle through matters
                 for (int i = 0; i < mattersCount; i++)
                 {
-                    var subsequencesData = CalculateSubsequencesCharacteristics(
+                    SubsequenceData[] subsequencesData = CalculateSubsequencesCharacteristics(
                             new[] { subsequencesCharacteristicLinkId },
                             features,
                             parentSequenceIds[i],
@@ -184,9 +181,13 @@
                     { "attributeValues", attributeValues.Select(sa => new { attribute = sa.AttributeId, value = sa.Value }) },
                     { "attributes", EnumExtensions.ToArray<LibiadaWeb.Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
                     { "maxPercentageDifference", maxPercentageDifference },
-                    { "sequenceCharacteristicName", sequenceCharacteristicName },
-                    { "characteristicTypes", localCharacteristicsType }
+                    { "sequenceCharacteristicName", sequenceCharacteristicName }
                 };
+
+                foreach (KeyValuePair<string, object> keyValuePair in characteristicsTypesData)
+                {
+                    result.Add(keyValuePair.Key,keyValuePair.Value);
+                }
 
                 return new Dictionary<string, object>
                            {
@@ -196,6 +197,21 @@
             });
         }
 
+        /// <summary>
+        /// Orders matter ids by characteristic values.
+        /// </summary>
+        /// <param name="matterIds">
+        /// The matter ids.
+        /// </param>
+        /// <param name="characteristicLinkId">
+        /// The characteristic link id.
+        /// </param>
+        /// <param name="chains">
+        /// The chains.
+        /// </param>
+        /// <returns>
+        /// The <see cref="T:long[]"/>.
+        /// </returns>
         private long[] OrderMatterIds(long[] matterIds, short characteristicLinkId, long[] chains)
         {
             double[] completeSequencesCharacteristics = SequencesCharacteristicsCalculator.Calculate(chains, characteristicLinkId);
@@ -210,6 +226,21 @@
             return matterCharacteristics.OrderBy(mc => mc.Item2).Select(mc => mc.Item1).ToArray();
         }
 
+        /// <summary>
+        /// Calculates similarities.
+        /// </summary>
+        /// <param name="similarityMatrix">
+        /// The similarity matrix.
+        /// </param>
+        /// <param name="characteristics">
+        /// The characteristics.
+        /// </param>
+        /// <param name="mattersCount">
+        /// The matters count.
+        /// </param>
+        /// <returns>
+        /// The <see cref="T:object[,]"/>.
+        /// </returns>
         private object[,] Similarities(List<(int, int, double)>[,] similarityMatrix, SubsequenceData[][] characteristics, int mattersCount)
         {
             var similarities = new object[mattersCount, mattersCount];
@@ -292,6 +323,18 @@
             return similarities;
         }
 
+        /// <summary>
+        /// Extracts similar pairs.
+        /// </summary>
+        /// <param name="characteristicValueSubsequences">
+        /// The characteristic value subsequences.
+        /// </param>
+        /// <param name="percentageDifference">
+        /// The percentage difference.
+        /// </param>
+        /// <returns>
+        /// The <see cref="T:List{((int, int), (int, int), double)}"/>.
+        /// </returns>
         private List<((int, int), (int, int), double)> ExtractSimilarPairs(
             Dictionary<double, List<(int, int)>> characteristicValueSubsequences,
             double percentageDifference)
@@ -402,6 +445,18 @@
             return result;
         }
 
+        /// <summary>
+        /// Fills similarity matrix from similarity pairs list.
+        /// </summary>
+        /// <param name="mattersCount">
+        /// The matters count.
+        /// </param>
+        /// <param name="similarPairs">
+        /// The similar pairs.
+        /// </param>
+        /// <returns>
+        /// The <see cref="T:List{(int, int, double)}[,]"/>.
+        /// </returns>
         private List<(int, int, double)>[,] FillSimilarityMatrix(int mattersCount, List<((int,int),(int,int),double)> similarPairs)
         {
             var similarityMatrix = new List<(int, int, double)>[mattersCount, mattersCount];

@@ -1,7 +1,10 @@
 ﻿@{
     ViewBag.Title = "Subsequences comparer";
 }
+
+@Scripts.Render("~/bundles/Characteristic")
 @Scripts.Render("~/bundles/loadingWindow")
+
 @if (ViewBag.Error == null)
 {
     <h2>@ViewBag.Title</h2>
@@ -115,18 +118,11 @@
                             </div>
                             <div class="panel-collapse collapse" id="additionalActions{{$index + 1}}">
                                 <div class="panel-body">
-                                    <div class="form-group">
-                                        <label class="control-label col-md-2" for="characteristic">Characteristic:</label>
-                                        <div class="col-md-10">
-                                            <select class="form-control" title="Characteristic" ng-model="characteristic.characteristicType" ng-options="c.Text for c in characteristicTypes" ng-change="selectLink(characteristic)" id="characteristic"></select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group" ng-show="characteristic.characteristicType.Links.length > 1">
-                                        <label class="control-label col-md-2" for="link">Link:</label>
-                                        <div class="col-md-10">
-                                            <select class="form-control" title="Link" ng-model="characteristic.link" ng-options="l.Text for l in characteristic.characteristicType.Links" id="link"></select>
-                                        </div>
-                                    </div>
+                                    <characteristic characteristic-types="characteristicTypes"
+                                                    characteristics-dictionary="characteristicsDictionary"
+                                                    nature="nature"
+                                                    notations="notations">
+                                    </characteristic>
                                     <div class="form-group">
                                         <label class="control-label col-md-2" for="windowSize">Window size:</label>
                                         <div class="col-md-10">

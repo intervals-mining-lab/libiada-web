@@ -37,7 +37,7 @@
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        public string GetSubsequenceCharacteristic(long subsequenceId, int characteristicLinkId, int windowSize, int step)
+        public string GetSubsequenceCharacteristic(long subsequenceId, short characteristicLinkId, int windowSize, int step)
         {
             Chain chain;
             IFullCalculator calculator;

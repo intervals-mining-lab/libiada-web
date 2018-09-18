@@ -95,7 +95,7 @@
             Link[] transformationLinkIds,
             int[] transformationIds,
             int iterationsCount,
-            int[] characteristicLinkIds,
+            short[] characteristicLinkIds,
             string[] customSequences,
             bool localFile,
             HttpPostedFileBase[] file)

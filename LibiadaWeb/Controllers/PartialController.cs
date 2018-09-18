@@ -49,6 +49,14 @@
         public PartialViewResult _Characteristics() => PartialView();
 
         /// <summary>
+        /// The characteristics without notation.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="PartialViewResult"/>.
+        /// </returns>
+        public PartialViewResult _CharacteristicsWithoutNotation() => PartialView();
+
+        /// <summary>
         /// The Order Transformations partial view.
         /// </summary>
         /// <returns>

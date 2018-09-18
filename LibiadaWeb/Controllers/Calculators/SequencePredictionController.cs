@@ -1,5 +1,6 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
@@ -9,13 +10,12 @@
     using LibiadaCore.Misc.Iterators;
 
     using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
     using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
-    using System.Collections;
-    using LibiadaWeb.Models.CalculatorsData;
 
     /// <summary>
     /// The sequence prediction controller.

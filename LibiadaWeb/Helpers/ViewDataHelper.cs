@@ -217,41 +217,11 @@
         public Dictionary<string, object> FillViewData(CharacteristicCategory characteristicsType, int minSelectedMatters, int maxSelectedMatters, string submitName)
         {
             Dictionary<string, object> data = FillViewData(minSelectedMatters, maxSelectedMatters, submitName);
-
-            List<CharacteristicSelectListItem> characteristicTypes;
-            var characteristicsDictionary = new Dictionary<(int, int, int), int>();
-
-            switch (characteristicsType)
+            var characteristicsData = GetCharacteristicsData(characteristicsType);
+            foreach (KeyValuePair<string, object> keyValuePair in characteristicsData)
             {
-                case CharacteristicCategory.Full:
-                    characteristicTypes = FullCharacteristicRepository.Instance.GetCharacteristicTypes();
-                    var fullCharacteristics = FullCharacteristicRepository.Instance.CharacteristicLinks.ToArray();
-                    foreach (var characteristic in fullCharacteristics)
-                    {
-                        characteristicsDictionary.Add(((int)characteristic.FullCharacteristic, (int)characteristic.Link, (int)characteristic.ArrangementType), characteristic.Id);
-                    }
-
-                    break;
-                case CharacteristicCategory.Congeneric:
-                    characteristicTypes = CongenericCharacteristicRepository.Instance.GetCharacteristicTypes();
-                    var congenericCharacteristics = FullCharacteristicRepository.Instance.CharacteristicLinks.ToArray();
-                    foreach (var characteristic in congenericCharacteristics)
-                    {
-                        characteristicsDictionary.Add(((int)characteristic.FullCharacteristic, (int)characteristic.Link, (int)characteristic.ArrangementType), characteristic.Id);
-                    }
-                    break;
-                case CharacteristicCategory.Accordance:
-                    characteristicTypes = AccordanceCharacteristicRepository.Instance.GetCharacteristicTypes();
-                    break;
-                case CharacteristicCategory.Binary:
-                    characteristicTypes = BinaryCharacteristicRepository.Instance.GetCharacteristicTypes();
-                    break;
-                default:
-                    throw new InvalidEnumArgumentException(nameof(characteristicsType), (int)characteristicsType, typeof(CharacteristicCategory));
+                data.Add(keyValuePair.Key, keyValuePair.Value);
             }
-
-            data.Add("characteristicTypes", characteristicTypes);
-            data.Add("characteristicsDictionary", characteristicsDictionary);
 
             return data;
         }
@@ -283,10 +253,13 @@
             var groups = EnumExtensions.ToArray<Group>().Where(g => g.GetNature() == Nature.Genetic);
             var features = EnumExtensions.ToArray<Feature>().Where(f => f.GetNature() == Nature.Genetic).ToArray();
             var selectedFeatures = features.Where(f => f != Feature.NonCodingSequence);
-            var characteristicTypes = FullCharacteristicRepository.Instance.GetCharacteristicTypes();
+            var characteristicsData = GetCharacteristicsData(CharacteristicCategory.Full);
+            foreach (KeyValuePair<string, object> keyValuePair in characteristicsData)
+            {
+                data.Add(keyValuePair.Key, keyValuePair.Value);
+            }
 
             data.Add("submitName", submitName);
-            data.Add("characteristicTypes", characteristicTypes);
             data.Add("notations", geneticNotations.ToSelectListWithNature());
             data.Add("nature", (byte)Nature.Genetic);
             data.Add("features", features.ToSelectListWithNature(selectedFeatures));
@@ -294,6 +267,59 @@
             data.Add("groups", groups.ToSelectListWithNature(true));
 
             return data;
+        }
+
+        /// <summary>
+        /// Get characteristics data (characteristics select list and dictionary).
+        /// </summary>
+        /// <param name="characteristicsCategory">
+        /// The characteristics category.
+        /// </param>
+        /// <returns>
+        /// The <see cref="T:List"/>.
+        /// </returns>
+        /// <exception cref="InvalidEnumArgumentException">
+        /// Thrown if <see cref="CharacteristicCategory"/> is unknown.
+        /// </exception>
+        public Dictionary<string, object> GetCharacteristicsData(CharacteristicCategory characteristicsCategory)
+        {
+            List<CharacteristicSelectListItem> characteristicTypes;
+            var characteristicsDictionary = new Dictionary<(short, short, short), short>();
+
+            switch (characteristicsCategory)
+            {
+                case CharacteristicCategory.Full:
+                    characteristicTypes = FullCharacteristicRepository.Instance.GetCharacteristicTypes();
+                    FullCharacteristicLink[] fullCharacteristics = FullCharacteristicRepository.Instance.CharacteristicLinks.ToArray();
+                    foreach (FullCharacteristicLink characteristic in fullCharacteristics)
+                    {
+                        characteristicsDictionary.Add(((short)characteristic.FullCharacteristic, (short)characteristic.Link, (short)characteristic.ArrangementType), characteristic.Id);
+                    }
+
+                    break;
+                case CharacteristicCategory.Congeneric:
+                    characteristicTypes = CongenericCharacteristicRepository.Instance.GetCharacteristicTypes();
+                    CongenericCharacteristicLink[] congenericCharacteristics = CongenericCharacteristicRepository.Instance.CharacteristicLinks.ToArray();
+                    foreach (CongenericCharacteristicLink characteristic in congenericCharacteristics)
+                    {
+                        characteristicsDictionary.Add(((short)characteristic.CongenericCharacteristic, (short)characteristic.Link, (short)characteristic.ArrangementType), characteristic.Id);
+                    }
+                    break;
+                case CharacteristicCategory.Accordance:
+                    characteristicTypes = AccordanceCharacteristicRepository.Instance.GetCharacteristicTypes();
+                    break;
+                case CharacteristicCategory.Binary:
+                    characteristicTypes = BinaryCharacteristicRepository.Instance.GetCharacteristicTypes();
+                    break;
+                default:
+                    throw new InvalidEnumArgumentException(nameof(characteristicsCategory), (byte)characteristicsCategory, typeof(CharacteristicCategory));
+            }
+
+            return new Dictionary<string, object>()
+                       {
+                           { "characteristicTypes", characteristicTypes },
+                           { "characteristicsDictionary", characteristicsDictionary }
+                       };
         }
 
         /// <summary>

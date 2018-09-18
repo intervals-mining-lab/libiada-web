@@ -20,12 +20,22 @@
                 ng-model="$ctrl.characteristic.link"
                 ng-options="l.Text for l in $ctrl.characteristic.characteristicType.Links"
                 id="link"></select>
-        <input type="hidden" name="{{$ctrl.characteristicName}}" ng-value="$ctrl.characteristic.link.CharacteristicLinkId" />
     </div>
 </div>
 @if (AccountHelper.IsAdmin())
 {
     <div class="form-group" ng-show="$ctrl.characteristic.characteristicType.ArrangementTypes.length > 1">
+        <label class="control-label col-md-2" for="arrangementType">Arrangement type:</label>
+        <div class="col-md-10">
+            <select class="form-control"
+                    title="Arrangement type"
+                    ng-model="$ctrl.characteristic.arrangementType"
+                    ng-options="a.Text for a in $ctrl.characteristic.characteristicType.ArrangementTypes"
+                    id="arrangementType"></select>
+
+        </div>
+    </div>
+    <div class="form-group" ng-show="$ctrl.hideNotation">
         <label class="control-label col-md-2" for="notation">Notation:</label>
         <div class="col-md-10">
             <select class="form-control"
@@ -36,6 +46,10 @@
         </div>
     </div>
 }
+<input type="hidden"
+       name="{{$ctrl.characteristicName}}"
+       ng-model="$ctrl.characteristicLinkId"
+       ng-value="$ctrl.characteristicsDictionary['(' + $ctrl.characteristic.characteristicType.Value + ', ' + $ctrl.characteristic.link.Value + ', ' + $ctrl.characteristic.arrangementType.Value + ')']" />
 <input type="hidden" name="notation" ng-value="$ctrl.characteristic.notation.Value" />
 
 <div ng-switch="$ctrl.nature">

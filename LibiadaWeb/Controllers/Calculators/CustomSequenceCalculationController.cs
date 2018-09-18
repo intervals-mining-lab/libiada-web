@@ -83,7 +83,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(int[] characteristicLinkIds, string[] customSequences, bool localFile, string fileType)
+        public ActionResult Index(short[] characteristicLinkIds, string[] customSequences, bool localFile, string fileType)
         {
             return CreateTask(() =>
                 {

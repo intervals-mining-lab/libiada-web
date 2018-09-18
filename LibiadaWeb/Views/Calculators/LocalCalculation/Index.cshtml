@@ -5,6 +5,7 @@
 
 <h2>@ViewBag.Title</h2>
 
+@Scripts.Render("~/bundles/CharacteristicsWithoutNotation")
 @Html.Partial("_AngularControllerInitializer", "CalculationController")
 
 @using (Html.BeginForm())
@@ -22,7 +23,11 @@
                        maximum-selected-matters="maximumSelectedMatters"
                        selected-matters="selectedMatters">
         </matters-table>
-        @Html.Partial("_CharacteristicsWithoutNotation")
+        <characteristics-without-notation characteristic-types="characteristicTypes"
+                                          characteristics-dictionary="characteristicsDictionary"
+                                          languages="languages"
+                                          translators="translators">
+        </characteristics-without-notation>
         @if (AccountHelper.IsAdmin())
         {
             <div class="form-group">
@@ -32,84 +37,87 @@
                 </div>
             </div>
         }
-        <input type="hidden" name="notation" ng-value="notation.Value"/>
-        <div ng-switch="nature">
-            <div ng-switch-when="@((byte)Nature.Literature)">
-                <div class="form-group">
-                    <label class="control-label col-md-2" for="language">Language:</label>
-                    <div class="col-md-10">
-                        <select class="form-control" title="Language" ng-model="language" ng-options="l.Text for l in languages" id="language"></select>
-                        <input type="hidden" name="language" ng-value="language.Value" />
+        <input type="hidden" name="notation" ng-value="notation.Value" />
+        @if (AccountHelper.IsAdmin())
+        {
+            <div ng-switch="nature">
+                <div ng-switch-when="@((byte)Nature.Literature)">
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="language">Language:</label>
+                        <div class="col-md-10">
+                            <select class="form-control" title="Language" ng-model="language" ng-options="l.Text for l in languages" id="language"></select>
+                            <input type="hidden" name="language" ng-value="language.Value" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="translator">Translator:</label>
+                        <div class="col-md-10">
+                            <select class="form-control" title="Translator" ng-model="translator" ng-options="t.Text for t in translators" id="translator"></select>
+                            <input type="hidden" name="translator" ng-value="translator.Value" />
+                        </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="control-label col-md-2" for="translator">Translator:</label>
-                    <div class="col-md-10">
-                        <select class="form-control" title="Translator" ng-model="translator" ng-options="t.Text for t in translators" id="translator"></select>
-                        <input type="hidden" name="translator" ng-value="translator.Value" />
-                    </div>
+                <div ng-switch-when="@((byte)Nature.Genetic)">
+                </div>
+                <div ng-switch-when="@((byte)Nature.Music)">
+                </div>
+                <div ng-switch-when="@((byte)Nature.MeasurementData)">
                 </div>
             </div>
-            <div ng-switch-when="@((byte)Nature.Genetic)">
+            <br />
+            <br />
+            <div class="form-group">
+                <label class="control-label col-md-2" for="length">Window size:</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="length" type="number" value="50" min="1" id="length" />
+                    @Html.ValidationMessage("length", "", new { @class = "text-danger" })
+                </div>
             </div>
-            <div ng-switch-when="@((byte)Nature.Music)">
+            <div class="form-group">
+                <label class="control-label col-md-2" for="step">Step size:</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="step" type="number" value="1" min="1" id="step" />
+                    @Html.ValidationMessage("step", "", new { @class = "text-danger" })
+                </div>
             </div>
-            <div ng-switch-when="@((byte)Nature.MeasurementData)">
+            <hr />
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <label>
+                        <input type="checkbox" name="delta" value="true" />
+                        <input type="hidden" name="delta" value="false" />
+                        Calculate difference between characteristics
+                    </label>
+                </div>
             </div>
-        </div>
-        <br />
-        <br />
-        <div class="form-group">
-            <label class="control-label col-md-2" for="length">Window size:</label>
-            <div class="col-md-10">
-                <input class="form-control" name="length" type="number" value="50" min="1" id="length" />
-                @Html.ValidationMessage("length", "", new { @class = "text-danger" })
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <label>
+                        <input type="checkbox" name="growingWindow" value="true" />
+                        <input type="hidden" name="growingWindow" value="false" />
+                        Growing window (start is fixed at 0 position)
+                    </label>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-2" for="step">Step size:</label>
-            <div class="col-md-10">
-                <input class="form-control" name="step" type="number" value="1" min="1" id="step" />
-                @Html.ValidationMessage("step", "", new { @class = "text-danger" })
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <label>
+                        <input type="checkbox" name="fourier" value="true" />
+                        <input type="hidden" name="fourier" value="false" />
+                        Calculate Fast fourier transform
+                    </label>
+                </div>
             </div>
-        </div>
-        <hr />
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <label>
-                    <input type="checkbox" name="delta" value="true" />
-                    <input type="hidden" name="delta" value="false" />
-                    Calculate difference between characteristics
-                </label>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <label>
+                        <input type="checkbox" name="autocorrelation" value="true" />
+                        <input type="hidden" name="autocorrelation" value="false" />
+                        Calculate autocorrelation
+                    </label>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <label>
-                    <input type="checkbox" name="growingWindow" value="true" />
-                    <input type="hidden" name="growingWindow" value="false" />
-                    Growing window (start is fixed at 0 position)
-                </label>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <label>
-                    <input type="checkbox" name="fourier" value="true" />
-                    <input type="hidden" name="fourier" value="false" />
-                    Calculate Fast fourier transform
-                </label>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <label>
-                    <input type="checkbox" name="autocorrelation" value="true" />
-                    <input type="hidden" name="autocorrelation" value="false" />
-                    Calculate autocorrelation
-                </label>
-            </div>
-        </div>
+        }
         <hr />
         @Html.Partial("_MattersSubmit")
     </div>

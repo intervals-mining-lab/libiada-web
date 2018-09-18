@@ -9,7 +9,7 @@
     using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
-    /// The sequence cleaner controller controller.
+    /// The sequence cleaner controller.
     /// </summary>
     [Authorize(Roles = "Admin")]
     public class SequenceCleanerController : Controller

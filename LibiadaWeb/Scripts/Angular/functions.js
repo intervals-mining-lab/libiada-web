@@ -13,6 +13,7 @@ function SelectLink(characteristic) {
     "use strict";
 
     characteristic.link = characteristic.characteristicType.Links[0];
+    characteristic.arrangementType = characteristic.characteristicType.ArrangementTypes[0];
 }
 
 function SetCheckBoxesState(checkboxes, state, filter) {

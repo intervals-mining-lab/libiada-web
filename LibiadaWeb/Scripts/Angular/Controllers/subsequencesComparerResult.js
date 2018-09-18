@@ -129,14 +129,14 @@
 			$scope.loadingScreenHeader = "Loading local characteristics...";
 
 			$http.get("/api/LocalCalculationWebApi?subsequenceId=" + firstSubsequenceId +
-				"&characteristicLinkId=" + $scope.characteristic.link.CharacteristicLinkId +
+				"&characteristicLinkId=" + $scope.characteristicLinkId +
 				"&windowSize=" + $scope.slidingWindowParams.windowSize +
 				"&step=" + $scope.slidingWindowParams.step)
 				.then(function (firstCharacteristics) {
 					$scope.firstSubsequenceLocalCharactristics = JSON.parse(firstCharacteristics.data);
 
 					$http.get("/api/LocalCalculationWebApi?subsequenceId=" + secondSubsequenceId +
-						"&characteristicLinkId=" + $scope.characteristic.link.CharacteristicLinkId +
+						"&characteristicLinkId=" + $scope.characteristicLinkId +
 						"&windowSize=" + $scope.slidingWindowParams.windowSize +
 						"&step=" + $scope.slidingWindowParams.step)
 						.then(function (secondCharacteristics) {
@@ -348,8 +348,6 @@
 		$scope.calculateLocalCharacteristics = calculateLocalCharacteristics;
 		$scope.drawLocalCharacteristics = drawLocalCharacteristics;
 
-		$scope.selectLink = SelectLink;
-
 		$scope.loadingScreenHeader = "Loading data";
 
 		var location = window.location.href.split("/");
@@ -365,11 +363,6 @@
 					$scope.equalElements[i] = new Array($scope.mattersNames.length);
 				}
 
-				$scope.characteristic = {
-					characteristicType: $scope.characteristicTypes[0],
-					link: $scope.characteristicTypes[0].Links[0]
-				};
-
 				$scope.loading = false;
 			}, function () {
 				alert("Failed loading characteristic data");
@@ -382,6 +375,7 @@
 			step: 1
 		};
 
+	    $scope.characteristicLinkId = 0;
 		$scope.equalElementsToShow = [];
 		$scope.filters = [];
 		$scope.legendHeight = 40;
@@ -394,7 +388,7 @@
 	}
 
 	function makePositive() {
-		return function (num) { return Math.abs(num); }
+		return function(num) { return Math.abs(num); };
 	}
 
 	angular.module("libiada")

@@ -107,7 +107,7 @@
         [ValidateAntiForgeryToken]
         public ActionResult Index(
             long[] matterIds,
-            int[] characteristicLinkIds,
+            short[] characteristicLinkIds,
             Language? language,
             Translator? translator,
             Notation notation,

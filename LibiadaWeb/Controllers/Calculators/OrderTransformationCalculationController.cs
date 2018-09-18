@@ -93,7 +93,7 @@
             Link[] transformationLinkIds,
             int[] transformationIds,
             int iterationsCount,
-            int[] characteristicLinkIds,
+            short[] characteristicLinkIds,
             Notation[] notations,
             Language[] languages,
             Translator?[] translators)
