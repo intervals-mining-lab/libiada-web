@@ -229,7 +229,7 @@
                     {
                         long firstElementId = sequenceElements[i];
                         long secondElementId = sequenceElements[i];
-                        if (!databaseCharacteristics.Any(b => b.FirstElementId == firstElementId && b.SecondElementId == secondElementId))
+                        if (i != j && !databaseCharacteristics.Any(b => b.FirstElementId == firstElementId && b.SecondElementId == secondElementId))
                         {
                             double result = calculator.Calculate(chain.GetRelationIntervalsManager(i + 1, j + 1), link);
 

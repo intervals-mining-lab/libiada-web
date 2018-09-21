@@ -184,9 +184,9 @@
                     { "sequenceCharacteristicName", sequenceCharacteristicName }
                 };
 
-                foreach (KeyValuePair<string, object> keyValuePair in characteristicsTypesData)
+                foreach ((string key, object value) in characteristicsTypesData)
                 {
-                    result.Add(keyValuePair.Key,keyValuePair.Value);
+                    result.Add(key, value);
                 }
 
                 return new Dictionary<string, object>

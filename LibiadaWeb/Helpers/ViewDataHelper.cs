@@ -7,6 +7,8 @@
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
 
+    using LibiadaCore.Extensions;
+
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
@@ -217,10 +219,10 @@
         public Dictionary<string, object> FillViewData(CharacteristicCategory characteristicsType, int minSelectedMatters, int maxSelectedMatters, string submitName)
         {
             Dictionary<string, object> data = FillViewData(minSelectedMatters, maxSelectedMatters, submitName);
-            var characteristicsData = GetCharacteristicsData(characteristicsType);
-            foreach (KeyValuePair<string, object> keyValuePair in characteristicsData)
+            Dictionary<string, object> characteristicsData = GetCharacteristicsData(characteristicsType);
+            foreach ((string key, object value) in characteristicsData)
             {
-                data.Add(keyValuePair.Key, keyValuePair.Value);
+                data.Add(key, value);
             }
 
             return data;
@@ -246,17 +248,17 @@
             var sequenceIds = db.Subsequence.Select(s => s.SequenceId).Distinct();
             var matterIds = db.DnaSequence.Where(c => sequenceIds.Contains(c.Id)).Select(c => c.MatterId).ToList();
 
-            var data = GetMattersData(minSelectedMatters, maxSelectedMatters, m => matterIds.Contains(m.Id));
+            Dictionary<string, object> data = GetMattersData(minSelectedMatters, maxSelectedMatters, m => matterIds.Contains(m.Id));
 
             var geneticNotations = EnumExtensions.ToArray<Notation>().Where(n => n.GetNature() == Nature.Genetic);
             var sequenceTypes = EnumExtensions.ToArray<SequenceType>().Where(st => st.GetNature() == Nature.Genetic);
             var groups = EnumExtensions.ToArray<Group>().Where(g => g.GetNature() == Nature.Genetic);
             var features = EnumExtensions.ToArray<Feature>().Where(f => f.GetNature() == Nature.Genetic).ToArray();
             var selectedFeatures = features.Where(f => f != Feature.NonCodingSequence);
-            var characteristicsData = GetCharacteristicsData(CharacteristicCategory.Full);
-            foreach (KeyValuePair<string, object> keyValuePair in characteristicsData)
+            Dictionary<string, object> characteristicsData = GetCharacteristicsData(CharacteristicCategory.Full);
+            foreach ((string key, object value) in characteristicsData)
             {
-                data.Add(keyValuePair.Key, keyValuePair.Value);
+                data.Add(key, value);
             }
 
             data.Add("submitName", submitName);
@@ -290,8 +292,9 @@
             {
                 case CharacteristicCategory.Full:
                     characteristicTypes = FullCharacteristicRepository.Instance.GetCharacteristicTypes();
-                    FullCharacteristicLink[] fullCharacteristics = FullCharacteristicRepository.Instance.CharacteristicLinks.ToArray();
-                    foreach (FullCharacteristicLink characteristic in fullCharacteristics)
+
+                    var fullCharacteristics = FullCharacteristicRepository.Instance.CharacteristicLinks.ToArray();
+                    foreach (var characteristic in fullCharacteristics)
                     {
                         characteristicsDictionary.Add(((short)characteristic.FullCharacteristic, (short)characteristic.Link, (short)characteristic.ArrangementType), characteristic.Id);
                     }
@@ -299,17 +302,33 @@
                     break;
                 case CharacteristicCategory.Congeneric:
                     characteristicTypes = CongenericCharacteristicRepository.Instance.GetCharacteristicTypes();
-                    CongenericCharacteristicLink[] congenericCharacteristics = CongenericCharacteristicRepository.Instance.CharacteristicLinks.ToArray();
-                    foreach (CongenericCharacteristicLink characteristic in congenericCharacteristics)
+
+                    var congenericCharacteristics = CongenericCharacteristicRepository.Instance.CharacteristicLinks.ToArray();
+                    foreach (var characteristic in congenericCharacteristics)
                     {
                         characteristicsDictionary.Add(((short)characteristic.CongenericCharacteristic, (short)characteristic.Link, (short)characteristic.ArrangementType), characteristic.Id);
                     }
+
                     break;
                 case CharacteristicCategory.Accordance:
                     characteristicTypes = AccordanceCharacteristicRepository.Instance.GetCharacteristicTypes();
+
+                    var accordanceCharacteristics = AccordanceCharacteristicRepository.Instance.CharacteristicLinks.ToArray();
+                    foreach (var characteristic in accordanceCharacteristics)
+                    {
+                        characteristicsDictionary.Add(((short)characteristic.AccordanceCharacteristic, (short)characteristic.Link, 0), characteristic.Id);
+                    }
+
                     break;
                 case CharacteristicCategory.Binary:
                     characteristicTypes = BinaryCharacteristicRepository.Instance.GetCharacteristicTypes();
+
+                    var binaryCharacteristics = BinaryCharacteristicRepository.Instance.CharacteristicLinks.ToArray();
+                    foreach (var characteristic in binaryCharacteristics)
+                    {
+                        characteristicsDictionary.Add(((short)characteristic.BinaryCharacteristic, (short)characteristic.Link, 0), characteristic.Id);
+                    }
+
                     break;
                 default:
                     throw new InvalidEnumArgumentException(nameof(characteristicsCategory), (byte)characteristicsCategory, typeof(CharacteristicCategory));

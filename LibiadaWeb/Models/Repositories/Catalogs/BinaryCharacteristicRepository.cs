@@ -5,6 +5,7 @@
     using System.Web.Mvc;
 
     using LibiadaCore.Core;
+    using LibiadaCore.Core.ArrangementManagers;
     using LibiadaCore.Core.Characteristics.Calculators.BinaryCalculators;
     using LibiadaCore.Extensions;
 
@@ -182,6 +183,7 @@
         {
             Link[] links;
             BinaryCharacteristic[] characteristics;
+            ArrangementType arrangementType = ArrangementType.Intervals;
             if (AccountHelper.IsAdmin())
             {
                 links = EnumExtensions.ToArray<Link>();
@@ -199,10 +201,13 @@
             {
                 List<SelectListItem> linkSelectListItems = characteristicsLinks
                     .Where(cl => cl.BinaryCharacteristic == characteristic && links.Contains(cl.Link))
-                    .Select(cl => new SelectListItem { Value = cl.Link.ToString(), Text = cl.Link.GetDisplayValue() })
+                    .Select(cl => new SelectListItem { Value = ((byte)cl.Link).ToString(), Text = cl.Link.GetDisplayValue() })
                     .ToList();
-
-                result.Add(new CharacteristicSelectListItem((byte)characteristic, characteristic.GetDisplayValue(), linkSelectListItems, null));
+                var arrangementTypeSelectListItems = new List<SelectListItem>
+                                                         {
+                                                             new SelectListItem { Value = ((byte)arrangementType).ToString(), Text = arrangementType.GetDisplayValue() }
+                                                         };
+                result.Add(new CharacteristicSelectListItem((byte)characteristic, characteristic.GetDisplayValue(), linkSelectListItems, arrangementTypeSelectListItems));
             }
 
             return result;
