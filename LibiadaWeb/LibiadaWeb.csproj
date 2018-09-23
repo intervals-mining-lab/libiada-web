@@ -593,7 +593,7 @@
     <Content Include="Views\Calculators\SequencesOrderDistribution\Result.cshtml" />
     <Content Include="Views\Calculators\MusicFiles\Result.cshtml" />
     <Content Include="Views\Calculators\MusicFiles\Index.cshtml" />
-    <Content Include="Views\Partial\_ImageTransformators.cshtml" />
+    <Content Include="Views\Partial\_ImageTransformers.cshtml" />
     <Content Include="Views\Partial\_ScrollJumper.cshtml" />
     <Content Include="Views\Sequences\SequenceGroups\Create.cshtml" />
     <Content Include="Views\Sequences\SequenceGroups\Delete.cshtml" />

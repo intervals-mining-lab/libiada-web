@@ -13,11 +13,11 @@
         }
 
         function addImageTransformation() {
-            $scope.selectedImageTransformators.push({ value: $scope.imageTransformators[0].Value });
+            $scope.selectedImageTransformers.push({ value: $scope.imageTransformers[0].Value });
         }
 
         function deleteImageTransformation(transformation) {
-            $scope.selectedImageTransformators.splice($scope.transformations.indexOf(transformation), 1);
+            $scope.selectedImageTransformers.splice($scope.transformations.indexOf(transformation), 1);
         }
 
         $scope.addSequence = addSequence;
@@ -28,7 +28,7 @@
         $scope.disableSubmit = FakeDisableSubmit;
 
         $scope.customSequences = [];
-        $scope.selectedImageTransformators = [];
+        $scope.selectedImageTransformers = [];
     }
 
     angular.module("libiada").controller("CustomCalculationCtrl", ["$scope", customCalculation]);
