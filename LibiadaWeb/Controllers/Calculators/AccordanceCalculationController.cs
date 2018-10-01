@@ -152,7 +152,7 @@
                 switch (calculationType)
                 {
                     case "Equality":
-                        if (!firstChainAlphabet.Equals(secondChainAlphabet))
+                        if (!firstChainAlphabet.SetEquals(secondChainAlphabet))
                         {
                             throw new Exception("Alphabets of sequences are not equal.");
                         }
