@@ -184,6 +184,13 @@
         /// </summary>
         [Display(Name = "Sequence prediction")]
         [TaskClass(typeof(SequencePredictionController))]
-        SequencePrediction = 25
+        SequencePrediction = 25,
+
+        /// <summary>
+        /// Batch poems import.
+        /// </summary>
+        [Display(Name = "Batch poems import")]
+        [TaskClass(typeof(BatchPoemsImportController))]
+        BatchPoemsImport = 26
     }
 }

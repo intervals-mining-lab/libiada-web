@@ -88,6 +88,14 @@
         [Display(Name = "Integer values")]
         [Description("Numeric values of measured parameter")]
         [Nature(Nature.MeasurementData)]
-        IntegerValues = 10
+        IntegerValues = 10,
+
+        /// <summary>
+        /// The consonance notation.
+        /// </summary>
+        [Display(Name = "Consonance notation")]
+        [Description("Phonemes segmented into short sequences")]
+        [Nature(Nature.Literature)]
+        Consonance = 11,
     }
 }

@@ -50,6 +50,9 @@
             bundles.Add(new ScriptBundle("~/bundles/controllers/BatchSequenceImportController").Include(
                         "~/Scripts/Angular/Controllers/batchSequenceImport.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/controllers/BatchPoemsImportController").Include(
+                "~/Scripts/Angular/Controllers/batchPoemsImport.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/controllers/BatchSequenceImportResultController").Include(
                         "~/Scripts/Angular/Controllers/batchSequenceImportResult.js"));
 

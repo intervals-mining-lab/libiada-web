@@ -148,6 +148,7 @@
     <Compile Include="Controllers\PartialController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\Sequences\BatchGenesImportController.cs" />
+    <Compile Include="Controllers\Sequences\BatchPoemsImportController.cs" />
     <Compile Include="Controllers\Sequences\BatchSequenceImportController.cs" />
     <Compile Include="Controllers\Sequences\CommonSequencesController.cs" />
     <Compile Include="Controllers\Sequences\CustomSequenceOrderTransformerController.cs" />
@@ -412,6 +413,7 @@
     <Content Include="Scripts\Angular\Components\orderTransformations.js" />
     <Content Include="Scripts\Angular\Components\scrollJumper.js" />
     <Content Include="Scripts\Angular\Controllers\accordance.js" />
+    <Content Include="Scripts\Angular\Controllers\batchPoemsImport.js" />
     <Content Include="Scripts\Angular\Controllers\batchSequenceImport.js" />
     <Content Include="Scripts\Angular\Controllers\batchSequenceImportResult.js" />
     <Content Include="Scripts\Angular\Controllers\calculationResult.js" />
@@ -602,12 +604,14 @@
     <Content Include="Views\Sequences\SequenceGroups\Index.cshtml" />
     <Content Include="Views\Calculators\SequencePrediction\Index.cshtml" />
     <Content Include="Views\Calculators\SequencePrediction\Result.cshtml" />
+    <Content Include="Views\Sequences\BatchPoemsImport\Index.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\BatchPoemsImport\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
