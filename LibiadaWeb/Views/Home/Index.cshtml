@@ -16,23 +16,25 @@
             @Html.ActionLink(AccountHelper.IsAdmin() ? "Matters" : "Sequences", "Index", "Matters")
             <br />
             @if (AccountHelper.IsAdmin())
-    {
-        @Html.ActionLink("Sequences", "Index", "CommonSequences")
-        <br />
-        @Html.ActionLink("Batch sequences import", "Index", "BatchsequenceImport")
-        <br />
-        @Html.ActionLink("Genes import", "Index", "GenesImport")
-        <br />
-        @Html.ActionLink("Batch genes import", "Index", "BatchGenesImport")
-        <br />
-        @Html.ActionLink("Sequences groups", "Index", "SequenceGroups")
-        <br />
-        @Html.ActionLink("Genetic sequences transformation", "Index", "SequenceTransformer")
-        <br />
-        @Html.ActionLink("Order transformation (high order)", "Index", "OrderTransformer")
-        <br />
-        @Html.ActionLink("Custom sequences order transformation (high order)", "Index", "CustomSequenceOrderTransformer")
-}
+            {
+                @Html.ActionLink("Sequences", "Index", "CommonSequences")
+                <br />
+                @Html.ActionLink("Batch poems import", "Index", "BatchPoemsImport")
+                <br />
+                @Html.ActionLink("Batch sequences import", "Index", "BatchsequenceImport")
+                <br />
+                @Html.ActionLink("Genes import", "Index", "GenesImport")
+                <br />
+                @Html.ActionLink("Batch genes import", "Index", "BatchGenesImport")
+                <br />
+                @Html.ActionLink("Sequences groups", "Index", "SequenceGroups")
+                <br />
+                @Html.ActionLink("Genetic sequences transformation", "Index", "SequenceTransformer")
+                <br />
+                @Html.ActionLink("Order transformation (high order)", "Index", "OrderTransformer")
+                <br />
+                @Html.ActionLink("Custom sequences order transformation (high order)", "Index", "CustomSequenceOrderTransformer")
+            }
         </div>
         <div class="col-md-4">
             <h2>Calculators</h2>
@@ -55,7 +57,7 @@
                 @Html.ActionLink("Subsequences characteristics calculation", "Index", "SubsequencesCalculation")
                 <br />
                 @Html.ActionLink("Subsequences similarity", "Index", "SubsequencesSimilarity")
-                <br/>
+                <br />
                 @Html.ActionLink("Calculation of characteristics of congeneric sequences", "Index", "CongenericCalculation")
                 <br />
                 @Html.ActionLink("Calculation of relation characteristics of congeneric sequences", "Index", "RelationCalculation")
@@ -68,11 +70,11 @@
                 <br />
                 @Html.ActionLink("Data visualization", "Index", "Charts")
                 <h2>Research</h2>
-                @Html.ActionLink("Calculate distribution of sequences by order.", "Index", "SequencesOrderDistribution")
+                @Html.ActionLink("Calculate distribution of sequences by order", "Index", "SequencesOrderDistribution")
                 <br />
-                @Html.ActionLink("Music files processor.", "Index", "MusicFiles")
-				<br/>
-				@Html.ActionLink("Sequence predictions", "Index", "SequencePrediction")
+                @Html.ActionLink("Music files processor", "Index", "MusicFiles")
+                <br />
+                @Html.ActionLink("Sequence predictions", "Index", "SequencePrediction")
             }
         </div>
         <div class="col-md-4">
