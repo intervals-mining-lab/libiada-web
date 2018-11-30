@@ -11,6 +11,8 @@ using Newtonsoft.Json;
 
 namespace LibiadaWeb.Controllers.Sequences
 {
+    using Microsoft.Ajax.Utilities;
+
     public class BatchPoemsImportController : AbstractResultController
     {
         public BatchPoemsImportController() : base(TaskType.BatchPoemsImport)
@@ -42,9 +44,14 @@ namespace LibiadaWeb.Controllers.Sequences
 
                     for (int i = 0; i < Request.Files.Count; i++)
                     {
-                        var importResult = new MatterImportResult();
-
                         string sequenceName = Request.Files[i].FileName;
+
+                        var importResult = new MatterImportResult()
+                                               {
+                                                   MatterName = sequenceName
+                                               };
+
+                        
                         try
                         {
                             CommonSequence sequence = new CommonSequence
@@ -81,6 +88,13 @@ namespace LibiadaWeb.Controllers.Sequences
                         catch (Exception exception)
                         {
                             importResult.Result = $"Failed to import poem: {exception.Message}";
+                            while (exception.InnerException != null)
+                            {
+                                importResult.Result += $" {exception.InnerException.Message}";
+
+                                exception = exception.InnerException;
+                            }
+
                             importResult.Status = "Error";
                             importResults.Add(importResult);
                         }

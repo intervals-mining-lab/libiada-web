@@ -105,9 +105,11 @@
                             {
                                 statuses[i] = "Error";
                                 results[i] = exception.Message;
-                                if (exception.InnerException != null)
+                                while (exception.InnerException != null)
                                 {
                                     results[i] += $" {exception.InnerException.Message}";
+
+                                    exception = exception.InnerException;
                                 }
                             }
                         }

@@ -605,6 +605,7 @@
     <Content Include="Views\Calculators\SequencePrediction\Index.cshtml" />
     <Content Include="Views\Calculators\SequencePrediction\Result.cshtml" />
     <Content Include="Views\Sequences\BatchPoemsImport\Index.cshtml" />
+    <Content Include="Views\Sequences\BatchPoemsImport\Result.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
