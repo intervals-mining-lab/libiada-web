@@ -51,11 +51,11 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             string stringSequence = FileHelper.ReadSequenceFromStream(sequenceStream);
             string[] text = stringSequence.Split(new[] { '\n', '\r', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
 
-            var chain = new BaseChain(text.Length - 1);
+            var chain = new BaseChain(text.Length);
 
             // file always contains empty string at the end
             // TODO: rewrite this, add empty string check at the end or write a normal trim
-            for (int i = 0; i < text.Length - 1; i++)
+            for (int i = 0; i < text.Length; i++)
             {
                 chain.Set(new ValueString(text[i]), i);
             }

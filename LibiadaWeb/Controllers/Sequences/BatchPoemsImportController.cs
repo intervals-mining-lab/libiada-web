@@ -44,7 +44,7 @@ namespace LibiadaWeb.Controllers.Sequences
 
                     for (int i = 0; i < Request.Files.Count; i++)
                     {
-                        string sequenceName = Request.Files[i].FileName;
+                        string sequenceName = Request.Files[i].FileName.Substring(0, Request.Files[i].FileName.LastIndexOf('.'));
 
                         var importResult = new MatterImportResult()
                                                {
