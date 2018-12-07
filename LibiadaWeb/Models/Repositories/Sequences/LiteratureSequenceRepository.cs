@@ -49,15 +49,23 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         public void Create(CommonSequence commonSequence, Stream sequenceStream, Language language, bool original, Translator translator)
         {
             string stringSequence = FileHelper.ReadSequenceFromStream(sequenceStream);
-            string[] text = stringSequence.Split(new[] { '\n', '\r', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-
-            var chain = new BaseChain(text.Length);
-
-            // file always contains empty string at the end
-            // TODO: rewrite this, add empty string check at the end or write a normal trim
-            for (int i = 0; i < text.Length; i++)
+            BaseChain chain;
+            if (commonSequence.Notation == Notation.Letters)
             {
-                chain.Set(new ValueString(text[i]), i);
+                chain = new BaseChain(stringSequence);
+            }
+            else
+            {
+                string[] text = stringSequence.Split(new[] { '\n', '\r', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+
+                chain = new BaseChain(text.Length);
+
+                // file always contains empty string at the end
+                // TODO: rewrite this, add empty string check at the end or write a normal trim
+                for (int i = 0; i < text.Length; i++)
+                {
+                    chain.Set(new ValueString(text[i]), i);
+                }
             }
 
             MatterRepository.CreateMatterFromSequence(commonSequence);
