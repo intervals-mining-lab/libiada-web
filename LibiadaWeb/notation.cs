@@ -97,5 +97,13 @@
         [Description("Phonemes segmented into short sequences")]
         [Nature(Nature.Literature)]
         Consonance = 11,
+
+        /// <summary>
+        /// The consonance notation.
+        /// </summary>
+        [Display(Name = "Phonemes")]
+        [Description("Literature texts and poems segmented into phonemes")]
+        [Nature(Nature.Literature)]
+        Phonemes = 12,
     }
 }
