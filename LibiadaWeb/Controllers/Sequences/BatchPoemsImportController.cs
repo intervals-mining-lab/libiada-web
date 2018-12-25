@@ -32,7 +32,7 @@ namespace LibiadaWeb.Controllers.Sequences
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(Notation notation)
+        public ActionResult Index(Notation notation, bool dropPunctuation)
         {
             return CreateTask(() =>
             {
@@ -80,8 +80,7 @@ namespace LibiadaWeb.Controllers.Sequences
 
                             LiteratureSequenceRepository repository = new LiteratureSequenceRepository(db);
 
-                            repository.Create(sequence, Request.Files[i].InputStream, Language.Russian, true,
-                                Translator.NoneOrManual);
+                            repository.Create(sequence, Request.Files[i].InputStream, Language.Russian, true, Translator.NoneOrManual, dropPunctuation);
                             importResult.Status = "Success";
                             importResults.Add(importResult);
                         }

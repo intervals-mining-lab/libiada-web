@@ -3,7 +3,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using System;
     using System.Collections.Generic;
     using System.IO;
-
+    using System.Linq;
     using LibiadaCore.Core;
     using LibiadaCore.Core.SimpleTypes;
 
@@ -46,12 +46,17 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="translator">
         /// The translator id.
         /// </param>
-        public void Create(CommonSequence commonSequence, Stream sequenceStream, Language language, bool original, Translator translator)
+        public void Create(CommonSequence commonSequence, Stream sequenceStream, Language language, bool original, Translator translator, bool dropPunctuation = false)
         {
             string stringSequence = FileHelper.ReadSequenceFromStream(sequenceStream);
             BaseChain chain;
             if (commonSequence.Notation == Notation.Letters)
             {
+                stringSequence = stringSequence.ToUpper();
+                if (dropPunctuation)
+                {
+                    stringSequence = new string(stringSequence.Where(c => !char.IsPunctuation(c)).ToArray());
+                }
                 chain = new BaseChain(stringSequence);
             }
             else
