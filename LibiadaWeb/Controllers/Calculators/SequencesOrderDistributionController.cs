@@ -78,7 +78,11 @@
 
                 var data = new Dictionary<string, object>
                 {
-                    { "result", result.Select(r => new { order = r.Key, sequences = r.Value.Select(s => s.ToString(",")).ToArray() }) }
+                    { "result", result.Select(r => new
+                    {
+                        order = r.Key,
+                        sequences = r.Value.Select(s => s.ToString(",")).ToArray()
+                    }) }
                 };
 
                 return new Dictionary<string, object>
