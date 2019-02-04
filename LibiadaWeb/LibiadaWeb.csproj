@@ -136,6 +136,7 @@
     <Compile Include="Controllers\Calculators\CalculationController.cs" />
     <Compile Include="Controllers\Calculators\ClusterizationController.cs" />
     <Compile Include="Controllers\Calculators\CongenericCalculationController.cs" />
+    <Compile Include="Controllers\Calculators\OrderCalculationController.cs" />
     <Compile Include="Controllers\Calculators\SequencesOrderDistributionController.cs" />
     <Compile Include="Controllers\Calculators\SubsequencesComparerController.cs" />
     <Compile Include="Controllers\Calculators\SubsequencesCalculationController.cs" />
@@ -421,6 +422,7 @@
     <Content Include="Scripts\Angular\Controllers\localCalculationResult.js" />
     <Content Include="Scripts\Angular\Controllers\matterEdit.js" />
     <Content Include="Scripts\Angular\Controllers\musicFilesResult.js" />
+    <Content Include="Scripts\Angular\Controllers\orderCalculation.js" />
     <Content Include="Scripts\Angular\Controllers\orderTransformer.js" />
     <Content Include="Scripts\Angular\Controllers\sequenceGroups.js" />
     <Content Include="Scripts\Angular\Controllers\sequencePredictionResult.js" />
@@ -606,6 +608,8 @@
     <Content Include="Views\Calculators\SequencePrediction\Result.cshtml" />
     <Content Include="Views\Sequences\BatchPoemsImport\Index.cshtml" />
     <Content Include="Views\Sequences\BatchPoemsImport\Result.cshtml" />
+    <Content Include="Views\Calculators\OrderCalculation\Index.cshtml" />
+    <Content Include="Views\Calculators\OrderCalculation\Result.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

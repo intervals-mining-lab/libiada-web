@@ -191,6 +191,13 @@
         /// </summary>
         [Display(Name = "Batch poems import")]
         [TaskClass(typeof(BatchPoemsImportController))]
-        BatchPoemsImport = 26
+        BatchPoemsImport = 26,
+
+        /// <summary>
+        /// Order calculation.
+        /// </summary>
+        [Display(Name = "Order calculation")]
+        [TaskClass(typeof(OrderCalculationController))]
+        OrderCalculation = 27
     }
 }
