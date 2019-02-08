@@ -177,7 +177,7 @@
     </Compile>
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Feature.cs" />
-    <Compile Include="Fmotiv.cs">
+    <Compile Include="Fmotif.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
     <Compile Include="FullCharacteristicLink.cs">

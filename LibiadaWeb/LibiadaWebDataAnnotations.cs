@@ -128,23 +128,23 @@
     }
 
     /// <summary>
-    /// The fmotiv.
+    /// The fmotif.
     /// </summary>
-    [MetadataType(typeof(FmotivDataAnnotations))]
-    public partial class Fmotiv
+    [MetadataType(typeof(FmotifDataAnnotations))]
+    public partial class Fmotif
     {
     }
 
     /// <summary>
-    /// The fmotiv data annotations.
+    /// The fmotif data annotations.
     /// </summary>
-    public class FmotivDataAnnotations : CommonSequenceDataAnnotations
+    public class FmotifDataAnnotations : CommonSequenceDataAnnotations
     {
         /// <summary>
-        /// Gets or sets the fmotiv_type_id.
+        /// Gets or sets the fmotif_type_id.
         /// </summary>
         [Display(Name = "Fmotif type")]
-        public int FmotivType { get; set; }
+        public int FmotifType { get; set; }
     }
 
     /// <summary>

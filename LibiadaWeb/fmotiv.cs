@@ -12,9 +12,9 @@ namespace LibiadaWeb
     using System;
     using System.Collections.Generic;
     
-    public partial class Fmotiv
+    public partial class Fmotif
     {
-        public Fmotiv()
+        public Fmotif()
         {
             BinaryCharacteristicValue = new HashSet<BinaryCharacteristicValue>();
             CongenericCharacteristicValue = new HashSet<CongenericCharacteristicValue>();
