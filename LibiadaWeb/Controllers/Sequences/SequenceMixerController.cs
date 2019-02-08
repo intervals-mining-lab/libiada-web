@@ -130,8 +130,8 @@
             BaseChain chain = sequenceRepository.GetLibiadaBaseChain(sequenceId);
             for (int i = 0; i < scrambling; i++)
             {
-                int firstIndex = randomGenerator.Next(chain.GetLength());
-                int secondIndex = randomGenerator.Next(chain.GetLength());
+                int firstIndex = randomGenerator.Next(chain.Length);
+                int secondIndex = randomGenerator.Next(chain.Length);
 
                 IBaseObject firstElement = chain[firstIndex];
                 IBaseObject secondElement = chain[secondIndex];

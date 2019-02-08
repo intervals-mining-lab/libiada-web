@@ -166,8 +166,8 @@
                 for (int i = 0; i < chains.Length; i++)
                 {
                     CutRule cutRule = growingWindow
-                            ? (CutRule)new CutRuleWithFixedStart(chains[i].GetLength(), step)
-                            : new SimpleCutRule(chains[i].GetLength(), step, length);
+                            ? (CutRule)new CutRuleWithFixedStart(chains[i].Length, step)
+                            : new SimpleCutRule(chains[i].Length, step, length);
 
                     CutRuleIterator iterator = cutRule.GetIterator();
 
@@ -188,7 +188,7 @@
                         fragments.Add(fragment);
                         partNames[i].Add(fragment.ToString());
                         starts[i].Add(iterator.GetStartPosition());
-                        lengthes[i].Add(fragment.GetLength());
+                        lengthes[i].Add(fragment.Length);
                     }
 
                     var fragmentsData = new FragmentData[fragments.Count];
@@ -200,7 +200,7 @@
                             characteristics[j] = calculators[j].Calculate(fragments[k], links[j]);
                         }
 
-                        fragmentsData[k] = new FragmentData(characteristics, fragments[k].ToString(), starts[i][k], fragments[k].GetLength());
+                        fragmentsData[k] = new FragmentData(characteristics, fragments[k].ToString(), starts[i][k], fragments[k].Length);
                     }
 
                     double[][] differenceData = null;

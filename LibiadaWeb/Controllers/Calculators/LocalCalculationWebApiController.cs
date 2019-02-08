@@ -58,7 +58,7 @@
                 chain = subsequenceExtractor.ExtractChains(subsequence.SequenceId, new[] { subsequence }).Single();
             }
 
-            CutRule cutRule = new SimpleCutRule(chain.GetLength(), step, windowSize);
+            CutRule cutRule = new SimpleCutRule(chain.Length, step, windowSize);
 
             CutRuleIterator iterator = cutRule.GetIterator();
 

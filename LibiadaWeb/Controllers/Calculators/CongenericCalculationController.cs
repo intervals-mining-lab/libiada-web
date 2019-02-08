@@ -273,7 +273,7 @@
                 //            double k = 1 / Math.Log(counts.Max());
                 //            double b = (k / maxFrequency) - 1;
                 //            int n = 1;
-                //            double plow = chain.GetLength();
+                //            double plow = chain.Length;
                 //            double p = k / (b + n);
                 //            while (p >= (1 / plow))
                 //            {

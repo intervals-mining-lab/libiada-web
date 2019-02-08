@@ -100,7 +100,7 @@
 
                 // characteristics = SequencesCharacteristicsCalculator.Calculate( new[] { sequenceId }, characteristicLinkId);
 
-                CutRule cutRule = new CutRuleWithFixedStart(sequence.GetLength(), step);
+                CutRule cutRule = new CutRuleWithFixedStart(sequence.Length, step);
 
                 Depth depthCaulc = new Depth();
 
@@ -122,7 +122,7 @@
 
                     fragments.Add(fragment);
                     partNames.Add(fragment.ToString());
-                    lengthes.Add(fragment.GetLength());
+                    lengthes.Add(fragment.Length);
 
                     teoreticalDepht.Add(depthCaulc.Calculate(fragment, Link.Start));
                 }
@@ -131,7 +131,7 @@
                 for (int k = 0; k < fragments.Count; k++)
                 {
                     characteristics[k] = calculator.Calculate(fragments[k], link);
-                    // fragmentsData[k] = new FragmentData(characteristics, fragments[k].ToString(), starts[i][k], fragments[k].GetLength());
+                    // fragmentsData[k] = new FragmentData(characteristics, fragments[k].ToString(), starts[i][k], fragments[k].Length);
                 }
 
 
@@ -153,7 +153,7 @@
                 IEnumerator enumerator = alphabet.GetEnumerator();
                 var sequencePredictionResult = new List<SequencePredictionData>();
 
-                for (int i = initialLength; i < sequence.GetLength(); i++)
+                for (int i = initialLength; i < sequence.Length; i++)
                 {
                     Chain temp = new Chain(i + 1);
                     for (int j = 0; j < i; j++)
@@ -195,7 +195,7 @@
                 }
 
                 /*int equal = 0;
-                for (int i = initialLength; i < sequence.GetLength(); i++)
+                for (int i = initialLength; i < sequence.Length; i++)
                 {
                     if (sequence[i] == predicted[i])
                     {
@@ -204,7 +204,7 @@
                 }
 
 
-                double accuracyPercentage = equal / (sequence.GetLength() - initialLength);*/
+                double accuracyPercentage = equal / (sequence.Length - initialLength);*/
 
 
                 // TODO: sequence prediction

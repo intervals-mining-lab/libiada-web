@@ -121,16 +121,16 @@
                         }
                     }
 
-                    if (chain.GetLength() != dbChain.GetLength())
+                    if (chain.Length != dbChain.Length)
                     {
-                        message = $"Sequence length in db {dbChain.GetLength()}, and sequence length from file{chain.GetLength()}";
+                        message = $"Sequence length in db {dbChain.Length}, and sequence length from file{chain.Length}";
                         return new Dictionary<string, object> { { "data", JsonConvert.SerializeObject(new { message, status }) } };
                     }
 
                     int[] libiadaBuilding = chain.Building;
                     int[] dataBaseBuilding = dbChain.Building;
 
-                    for (int j = 0; j < chain.GetLength(); j++)
+                    for (int j = 0; j < chain.Length; j++)
                     {
                         if (libiadaBuilding[j] != dataBaseBuilding[j])
                         {
