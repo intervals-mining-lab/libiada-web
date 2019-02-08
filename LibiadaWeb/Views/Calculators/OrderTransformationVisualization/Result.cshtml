@@ -1,0 +1,74 @@
+﻿@{
+    ViewBag.Title = "Order transformation visualization";
+}
+@Scripts.Render("~/bundles/loadingWindow")
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Error == null)
+{
+    @Html.Partial("_AngularControllerInitializer", "OrderTransformationVisualizationResultController")
+
+    <div ng-controller="OrderTransformationVisualizationResultCtrl">
+        <loading-window loading = "loading" loading-screen-header = "loadingScreenHeader"></loading-window>
+        <div ng-disabled="loading">
+            <table st-table="ordersTable" class="table table-bordered table-hover" ng-cloak>
+                <thead>
+                    <tr>
+                        <th>
+                            Order ID
+                        </th>
+                        <th>
+                            Order
+                        </th>
+                        <th>
+                            Count of unique final orders
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="order in orders">
+                        <td ng-bind="order.OrderId" />
+                        <td ng-bind="order.Order" />
+                        <td ng-bind="countOfUniqueFinalOrders[{{order.OrderId - 1}}]" />
+                    </tr>
+                </tbody>
+            </table>
+            <br />
+            <div class="form-group">
+                <label class="control-label col-md-2" for="initialOrder">Initial order Id:</label>
+                <div class="col-md-10">
+                    <select class="form-control" title="Initial order" ng-model="initialOrder" ng-options="order.OrderId for order in orders" id="initialOrder"></select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2" for="typeOfTransformation">Type of transform.:</label>
+                <div class="col-md-10">
+                    <select class="form-control" title="Type of transformation" ng-model="typeOfTransformation" ng-options="t.Text for t in transformationsList" id="typeOfTransformation"></select>
+                </div>
+            </div>
+            <br />
+            <div class="form-group">
+                <label class="control-label col-md-2" for="height">Height:</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="height" id="height" type="number" min="{{500 + legendHeight}}" step="20" ng-model="height" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2" for="width">Width:</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="width" id="width" type="number" min="{{400}}" step="20" ng-model="width" />
+                </div>
+            </div>
+            <br />
+            <input type="button" class="btn btn-default" ng-click="draw()" value="Draw" />
+            <div id="chart">
+            </div>
+
+            </div>
+        </div>
+    <br />
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/d3js")
+}
