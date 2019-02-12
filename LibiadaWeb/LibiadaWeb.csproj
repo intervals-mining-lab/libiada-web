@@ -154,6 +154,7 @@
     <Compile Include="Controllers\Sequences\CommonSequencesController.cs" />
     <Compile Include="Controllers\Sequences\CustomSequenceOrderTransformerController.cs" />
     <Compile Include="Controllers\Sequences\MattersController.cs" />
+    <Compile Include="Controllers\Sequences\OrderTransformationConvergenceController.cs" />
     <Compile Include="Controllers\Sequences\OrderTransformerController.cs" />
     <Compile Include="Controllers\Sequences\SequenceCheckController.cs" />
     <Compile Include="Controllers\Sequences\SequenceCleanerController.cs" />
@@ -610,6 +611,8 @@
     <Content Include="Views\Sequences\BatchPoemsImport\Result.cshtml" />
     <Content Include="Views\Calculators\OrderCalculation\Index.cshtml" />
     <Content Include="Views\Calculators\OrderCalculation\Result.cshtml" />
+    <Content Include="Views\Sequences\OrderTransformationConvergence\Index.cshtml" />
+    <Content Include="Views\Sequences\OrderTransformationConvergence\Result.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
