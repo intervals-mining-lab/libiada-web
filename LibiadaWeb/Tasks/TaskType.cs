@@ -199,12 +199,19 @@
         [Display(Name = "Order calculation")]
         [TaskClass(typeof(OrderCalculationController))]
         OrderCalculation = 27,
+		
+        /// <summary>
+        /// Order transformation convergence.
+        /// </summary>
+        [Display(Name = "Order transformation convergence")]
+        [TaskClass(typeof(OrderTransformationConvergenceController))]
+        OrderTransformationConvergence = 28,
 
         /// <summary>
         /// Order calculation.
         /// </summary>
         [Display(Name = "Order transformation visualization")]
         [TaskClass(typeof(OrderTransformationVisualizationController))]
-        OrderTransformationVisualization = 28
+        OrderTransformationVisualization = 29
     }
 }
