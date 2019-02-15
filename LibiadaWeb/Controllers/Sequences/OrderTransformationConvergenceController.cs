@@ -92,7 +92,8 @@
             {
                 var sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId).Id;
                 var sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
-                int loopIneration = -1;
+                int loopIteration = -1;
+                int lastIteration = -1;
                 var transformationsResult = new List<int[]>();
                 transformationsResult.Add(sequence.Building);
                 for (int j = 0; j < iterationsCount; j++)
@@ -105,12 +106,15 @@
 
                         if (transformationsResult.Any(tr => tr.SequenceEqual(sequence.Building)))
                         {
-                            loopIneration = transformationsResult.FindIndex(tr => tr.SequenceEqual(sequence.Building));
-                            break;
+                            loopIteration = transformationsResult.FindIndex(tr => tr.SequenceEqual(sequence.Building)) + 1;
+                            lastIteration = j + 1;
+                            goto exitLoops;
                         }
                         transformationsResult.Add(sequence.Building);
                     }
                 }
+
+                exitLoops:
 
                 var transformations = new Dictionary<int, string>();
                 for (int i = 0; i < transformationIds.Length; i++)
@@ -124,7 +128,8 @@
                     { "transformationsList", transformations },
                     { "iterationsCount", iterationsCount },
                     { "transformationsResult", transformationsResult },
-                    { "loopIteration", loopIneration }
+                    { "loopIteration", loopIteration },
+                    { "lastIteration", lastIteration }
                 };
                 return result;
             });

@@ -7,25 +7,28 @@
 {
     <table>
         <tbody>
-        @foreach (var transformation in ViewBag.transformationsList)
-        {
-            <tr>
-                <td>
-                    @transformation.Value
-                </td>
-            </tr>
-        }
+            @foreach (var transformation in ViewBag.transformationsList)
+            {
+                <tr>
+                    <td>
+                        @transformation.Value
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 
-    <br/>
+    <br />
     <div>
         Loop iteration = @ViewBag.loopIteration
+    </div>
+    <div>
+        Last iteration = @ViewBag.lastIteration
     </div>
     <div class="monospace">
         Transformations repeated @ViewBag.iterationsCount times
     </div>
-    <br/>
+    <br />
     <div class="monospace">
         @ViewBag.chain.ToString(" ")
     </div>
