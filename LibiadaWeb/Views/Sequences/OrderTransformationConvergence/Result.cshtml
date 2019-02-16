@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "Order transformation result";
+}
+
+<h2>@ViewBag.Title</h2>
+@if (ViewBag.Error == null)
+{
+    <table>
+        <tbody>
+            @foreach (var transformation in ViewBag.transformationsList)
+            {
+                <tr>
+                    <td>
+                        @transformation.Value
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <br />
+    <div>
+        Loop iteration = @ViewBag.loopIteration
+    </div>
+    <div>
+        Last iteration = @ViewBag.lastIteration
+    </div>
+    <div class="monospace">
+        Transformations repeated @ViewBag.iterationsCount times
+    </div>
+    <br />
+    <div class="monospace">
+        @ViewBag.chain.ToString(" ")
+    </div>
+}
