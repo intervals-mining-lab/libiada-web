@@ -18,6 +18,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     /// </summary>
     public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepository
     {
+
+        protected readonly FmotifRepository FmotifRepository;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MusicSequenceRepository"/> class.
         /// </summary>
@@ -26,6 +29,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </param>
         public MusicSequenceRepository(LibiadaWebEntities db) : base(db)
         {
+            FmotifRepository = new FmotifRepository(db);
         }
 
         /// <summary>
@@ -70,6 +74,8 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                     break;
                 case Notation.FormalMotifs:
                     chain = ConvertCongenericScoreTrackToFormalMotifsBaseChain(tempTrack.CongenericScoreTracks[0]);
+                    MatterRepository.CreateMatterFromSequence(sequence);
+                    alphabet = FmotifRepository.GetOrCreateFmotifsInDb(chain.Alphabet);
                     break;
             }
 
@@ -163,7 +169,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         {
             var borodaDivider = new BorodaDivider();
             FmotifChain fMotifChain = borodaDivider.Divide(scoreTrack, ParamPauseTreatment.Ignore, ParamEqualFM.NonSequent);
-            return new BaseChain(((IEnumerable<IBaseObject>)fMotifChain).ToList());
+            return new BaseChain(((IEnumerable<IBaseObject>)fMotifChain.FmotifsList).ToList());
         }
     }
 }

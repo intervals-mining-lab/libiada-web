@@ -186,9 +186,6 @@
           <Property Name="notation" Type="int2" Nullable="false" />
           <Property Name="created" Type="timestamptz" Precision="7" Nullable="false" />
           <Property Name="modified" Type="timestamptz" Precision="7" Nullable="false" />
-          <Property Name="matter_id" Type="int8" Nullable="false" />
-          <Property Name="remote_id" Type="varchar" MaxLength="255" />
-          <Property Name="remote_db" Type="int2" />
           <Property Name="fmotif_type" Type="int2" Nullable="false" />
         </EntityType>
         <EntityType Name="full_characteristic">
@@ -496,18 +493,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="fk_fmotif_matter">
-          <End Role="matter" Type="Self.matter" Multiplicity="1" />
-          <End Role="fmotif" Type="Self.fmotif" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="matter">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="fmotif">
-              <PropertyRef Name="matter_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="fk_full_characteristic_link">
           <End Role="full_characteristic_link" Type="Self.full_characteristic_link" Multiplicity="1" />
           <End Role="full_characteristic" Type="Self.full_characteristic" Multiplicity="*" />
@@ -732,10 +717,6 @@
             <End Role="matter" EntitySet="matter" />
             <End Role="dna_chain" EntitySet="dna_chain" />
           </AssociationSet>
-          <AssociationSet Name="fk_fmotif_matter" Association="Self.fk_fmotif_matter">
-            <End Role="matter" EntitySet="matter" />
-            <End Role="fmotif" EntitySet="fmotif" />
-          </AssociationSet>
           <AssociationSet Name="fk_full_characteristic_link" Association="Self.fk_full_characteristic_link">
             <End Role="full_characteristic_link" EntitySet="full_characteristic_link" />
             <End Role="full_characteristic" EntitySet="full_characteristic" />
@@ -934,11 +915,6 @@
           <AssociationSet Name="fk_characteristic_literature_chain" Association="Self.fk_characteristic_literature_chain">
             <End Role="LiteratureSequence" EntitySet="LiteratureSequence" />
             <End Role="CharacteristicValue" EntitySet="CharacteristicValue" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_fmotif_matter" Association="Self.fk_fmotif_matter">
-            <End Role="Matter" EntitySet="Matter" />
-            <End Role="Fmotif" EntitySet="Fmotif" />
           </AssociationSet>
 
           <AssociationSet Name="fk_binary_characteristic_fmotif" Association="Self.fk_binary_characteristic_fmotif">
@@ -1307,7 +1283,6 @@
           <NavigationProperty Name="Sequence" Relationship="Self.fk_chain_matter" FromRole="Matter" ToRole="CommonSequence" />
           <NavigationProperty Name="DnaSequence" Relationship="Self.fk_dna_chain_matter" FromRole="Matter" ToRole="DnaSequence" />
           <NavigationProperty Name="LiteratureSequence" Relationship="Self.fk_literature_chain_matter" FromRole="Matter" ToRole="LiteratureSequence" />
-          <NavigationProperty Name="Fmotif" Relationship="Self.fk_fmotif_matter" FromRole="Matter" ToRole="Fmotif" />
           <NavigationProperty Name="Measure" Relationship="Self.fk_measure_matter" FromRole="Matter" ToRole="Measure" />
           <NavigationProperty Name="MusicSequence" Relationship="Self.fk_music_chain_matter" FromRole="Matter" ToRole="MusicSequence" />
           <NavigationProperty Name="DataSequence" Relationship="Self.fk_data_chain_matter" FromRole="Matter" ToRole="DataSequence" />
@@ -1331,17 +1306,13 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None"/>
+          <Property Name="Value" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="Name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
           <Property Name="Notation" Type="LibiadaWebModel.Notation" Nullable="false" />
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
-          <Property Name="MatterId" Type="Int64" Nullable="false" />
-          <Property Name="Value" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
-          <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
-          <Property Name="Name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
-          <Property Name="FmotifType" Type="LibiadaWebModel.FmotifType" Nullable="false" />
-          <Property Name="RemoteDb" Type="LibiadaWebModel.RemoteDb" />
-          <Property Name="RemoteId" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
-          <NavigationProperty Name="Matter" Relationship="Self.fk_fmotif_matter" FromRole="Fmotif" ToRole="Matter" />
+          <Property Name="FmotifType" Type="LibiadaWebModel.FmotifType" Nullable="false" />
           <NavigationProperty Name="BinaryCharacteristicValue" Relationship="Self.fk_binary_characteristic_fmotif" FromRole="Fmotif" ToRole="BinaryCharacteristicValue" />
           <NavigationProperty Name="CongenericCharacteristicValue" Relationship="Self.fk_congeneric_characteristic_fmotif" FromRole="Fmotif" ToRole="CongenericCharacteristicValue" />
           <NavigationProperty Name="CharacteristicValue" Relationship="Self.fk_characteristic_fmotif" FromRole="Fmotif" ToRole="CharacteristicValue" />
@@ -1855,19 +1826,6 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="LiteratureSequence">
-              <PropertyRef Name="MatterId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
-        <Association Name="fk_fmotif_matter">
-          <End Role="Matter" Type="Self.Matter" Multiplicity="1" />
-          <End Role="Fmotif" Type="Self.Fmotif" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Matter">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Fmotif">
               <PropertyRef Name="MatterId" />
             </Dependent>
           </ReferentialConstraint>
@@ -2410,13 +2368,10 @@
                 <ScalarProperty Name="Id" ColumnName="id" />
                 <ScalarProperty Name="Notation" ColumnName="notation" />
                 <ScalarProperty Name="Created" ColumnName="created" />
-                <ScalarProperty Name="MatterId" ColumnName="matter_id" />
                 <ScalarProperty Name="Value" ColumnName="value" />
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="FmotifType" ColumnName="fmotif_type" />
-                <ScalarProperty Name="RemoteDb" ColumnName="remote_db" />
-                <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
               </MappingFragment>
             </EntityTypeMapping>

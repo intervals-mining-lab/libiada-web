@@ -2237,4 +2237,53 @@ ALTER TABLE congeneric_characteristic_link ADD CONSTRAINT uk_congeneric_characte
 
 ALTER TABLE sequence_group ADD COLUMN sequence_group_type SMALLINT;
 
+-- 17.02.2019
+-- Change DB structure for fmotifs.
+
+DROP TABLE fmotiv;
+
+CREATE TABLE fmotif
+(
+  id bigint NOT NULL DEFAULT nextval('elements_id_seq'::regclass), 
+  value character varying(255), 
+  description text, 
+  name character varying(255), 
+  notation smallint NOT NULL DEFAULT 6, 
+  created timestamp with time zone NOT NULL DEFAULT now(),
+  modified timestamp with time zone NOT NULL DEFAULT now(),
+  alphabet bigint[] NOT NULL, 
+  building integer[] NOT NULL,
+  fmotif_type smallint NOT NULL,
+  CONSTRAINT pk_fmotif PRIMARY KEY (id),
+  CONSTRAINT fk_fmotif_element_key FOREIGN KEY (id)
+      REFERENCES element_key (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY DEFERRED
+) INHERITS (element);
+
+ALTER TABLE fmotif OWNER TO postgres;
+COMMENT ON TABLE fmotif IS 'Fmotifs table';
+COMMENT ON COLUMN fmotif.id IS 'Unique internal identificator';
+COMMENT ON COLUMN fmotif.value IS 'Fmotif hash';
+COMMENT ON COLUMN fmotif.description IS 'Fmotif description';
+COMMENT ON COLUMN fmotif.name IS 'Fmotif name';
+COMMENT ON COLUMN fmotif.notation IS 'Fmotif notation, always 6';
+COMMENT ON COLUMN fmotif.created IS 'Creation date';
+COMMENT ON COLUMN fmotif.alphabet IS 'Fmotif alphabet of notes';
+COMMENT ON COLUMN fmotif.building IS 'Fmotif order';
+COMMENT ON COLUMN fmotif.fmotif_type IS 'Type of fmotif';
+
+CREATE INDEX ix_fmotif_alphabet ON fmotif USING gin (alphabet);
+
+CREATE TRIGGER tgi_fmotif_building_check BEFORE INSERT ON fmotif FOR EACH ROW EXECUTE PROCEDURE trigger_building_check();
+COMMENT ON TRIGGER tgi_fmotif_building_check ON fmotif IS 'Trigger validating fmotif order';
+
+CREATE TRIGGER tgiu_fmotif_alphabet AFTER INSERT OR UPDATE OF alphabet ON fmotif FOR EACH STATEMENT EXECUTE PROCEDURE trigger_check_alphabet();
+COMMENT ON TRIGGER tgiu_fmotif_alphabet ON fmotif IS 'Trigger validating fmotif alphabet';
+
+CREATE TRIGGER tgiu_fmotif_modified BEFORE INSERT OR UPDATE ON fmotif FOR EACH ROW EXECUTE PROCEDURE trigger_set_modified();
+COMMENT ON TRIGGER tgiu_fmotif_modified ON fmotif IS 'Trigger filling creation and modification date';
+
+CREATE TRIGGER tgiud_fmotif_element_key_bound AFTER INSERT OR UPDATE OF id OR DELETE ON fmotif FOR EACH ROW EXECUTE PROCEDURE trigger_element_key_bound();
+COMMENT ON TRIGGER tgiud_fmotif_element_key_bound ON fmotif IS 'Trigger that dublicates insert, update and delete of fmotifs into element_key table';
+  
 COMMIT;

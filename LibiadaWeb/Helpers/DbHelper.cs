@@ -107,6 +107,42 @@
         }
 
         /// <summary>
+        /// Gets fmotif's alphabet ids.
+        /// </summary>
+        /// <param name="db">
+        /// Database connection.
+        /// </param>
+        /// <param name="fmotifId">
+        /// The fmotif id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="List{Int64}"/>.
+        /// </returns>
+        public static List<long> GetFmotifAlphabet(LibiadaWebEntities db, long fmotifId)
+        {
+            const string Query = "SELECT unnest(alphabet) FROM fmotif WHERE id = @id";
+            return db.Database.SqlQuery<long>(Query, new NpgsqlParameter("@id", fmotifId)).ToList();
+        }
+
+        /// <summary>
+        /// Gets building of fmotif by id.
+        /// </summary>
+        /// <param name="db">
+        /// Database connection.
+        /// </param>
+        /// <param name="fmotifId">
+        /// The fmotif id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="T:int[]"/>.
+        /// </returns>
+        public static int[] GetFmotifBuilding(LibiadaWebEntities db, long fmotifId)
+        {
+            const string Query = "SELECT unnest(building) FROM fmotif WHERE id = @id";
+            return db.Database.SqlQuery<int>(Query, new NpgsqlParameter("@id", fmotifId)).ToArray();
+        }
+
+        /// <summary>
         /// The execute custom sql command with parameters.
         /// </summary>
         /// <param name="db">

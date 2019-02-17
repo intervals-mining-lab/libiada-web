@@ -237,7 +237,9 @@
     <Compile Include="Models\Repositories\Catalogs\BinaryCharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\CongenericCharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\FullCharacteristicRepository.cs" />
+    <Compile Include="Models\Repositories\Sequences\FmotifRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\GeneticSequenceRepository.cs" />
+    <Compile Include="Models\Repositories\Sequences\IFmotifRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\IGeneticSequenceRepository.cs" />
     <Compile Include="Models\SelectListItemComparer.cs" />
     <Compile Include="Models\SubsequenceImporter.cs" />
