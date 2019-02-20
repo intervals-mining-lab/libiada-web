@@ -27,9 +27,9 @@
                 </thead>
                 <tbody>
                     <tr ng-repeat="order in orders">
-                        <td ng-bind="order.OrderId" />
-                        <td ng-bind="order.Order" />
-                        <td ng-bind="countOfUniqueFinalOrders[{{order.OrderId - 1}}]" />
+                        <td ng-bind="$index" />
+                        <td ng-bind="order" />
+                        <td ng-bind="transformationsData[$index].UniqueFinalOrdersCount" />
                     </tr>
                 </tbody>
             </table>
@@ -37,7 +37,7 @@
             <div class="form-group">
                 <label class="control-label col-md-2" for="initialOrder">Initial order Id:</label>
                 <div class="col-md-10">
-                    <select class="form-control" title="Initial order" ng-model="initialOrder" ng-options="order.OrderId for order in orders" id="initialOrder"></select>
+                    <select class="form-control" title="Initial order" ng-model="initialOrder" ng-options="orderId.id for orderId in ordersIds" id="initialOrder"></select>
                 </div>
             </div>
             <div class="form-group">

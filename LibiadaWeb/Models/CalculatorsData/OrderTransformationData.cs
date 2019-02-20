@@ -7,10 +7,8 @@ namespace LibiadaWeb.Models.CalculatorsData
 {
     public class OrderTransformationData
     {
-        public int OrderId { get; set; }
-
         public OrderTransformationResult[] ResultTransformation { get; set; }
 
-        public UniqueFinalOrder[] UniqueFinalOrders { get; set; }
+        public int UniqueFinalOrdersCount { get; set; }
     }
 }

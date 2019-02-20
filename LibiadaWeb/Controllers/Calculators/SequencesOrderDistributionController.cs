@@ -80,7 +80,7 @@ namespace LibiadaWeb.Controllers.Calculators
                         sequenceGenerator = (ISequenceGenerator)new NonredundantSequenceGenerator();
                         orders = orderGenerator.GenerateOrders(length, alphabetCardinality);
                         break;
-                    default: throw new ArgumentException("Invalid type of generate"); break;
+                    default: throw new ArgumentException("Invalid type of generate");
                 }
                 var sequences = sequenceGenerator.GenerateSequences(length, alphabetCardinality);
                 Dictionary<int[], List<BaseChain>> result = new Dictionary<int[], List<BaseChain>>(new OrderEqualityComparer());
