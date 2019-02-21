@@ -7,6 +7,7 @@
     using LibiadaCore.Core;
     using LibiadaCore.Core.SimpleTypes;
     using LibiadaWeb.Helpers;
+
     using Npgsql;
     using NpgsqlTypes;
 
@@ -110,13 +111,13 @@
                 {
                     ParameterName = "description",
                     NpgsqlDbType = NpgsqlDbType.Text,
-                    Value = ""
+                    Value = string.Empty
                 },
                 new NpgsqlParameter
                 {
                     ParameterName = "name",
                     NpgsqlDbType = NpgsqlDbType.Varchar,
-                    Value = ""
+                    Value = string.Empty
                 },
                 new NpgsqlParameter
                 {

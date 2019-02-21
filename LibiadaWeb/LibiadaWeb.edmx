@@ -246,9 +246,6 @@
           <Property Name="notation" Type="int2" Nullable="false" />
           <Property Name="created" Type="timestamptz" Precision="7" Nullable="false" />
           <Property Name="modified" Type="timestamptz" Precision="7" Nullable="false" />
-          <Property Name="matter_id" Type="int8" Nullable="false" />
-          <Property Name="remote_id" Type="varchar" MaxLength="255" />
-          <Property Name="remote_db" Type="int2" />
           <Property Name="beats" Type="int4" Nullable="false" />
           <Property Name="beatbase" Type="int4" Nullable="false" />
           <Property Name="ticks_per_beat" Type="int4" />
@@ -531,18 +528,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="fk_measure_matter">
-          <End Role="matter" Type="Self.matter" Multiplicity="1" />
-          <End Role="measure" Type="Self.measure" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="matter">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="measure">
-              <PropertyRef Name="matter_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="fk_music_chain_matter">
           <End Role="matter" Type="Self.matter" Multiplicity="1" />
           <End Role="music_chain" Type="Self.music_chain" Multiplicity="*" />
@@ -728,10 +713,6 @@
           <AssociationSet Name="fk_matter_sequence_group" Association="Self.fk_matter_sequence_group">
             <End Role="sequence_group" EntitySet="sequence_group" />
             <End Role="sequence_group_matter" EntitySet="sequence_group_matter" />
-          </AssociationSet>
-          <AssociationSet Name="fk_measure_matter" Association="Self.fk_measure_matter">
-            <End Role="matter" EntitySet="matter" />
-            <End Role="measure" EntitySet="measure" />
           </AssociationSet>
           <AssociationSet Name="fk_music_chain_matter" Association="Self.fk_music_chain_matter">
             <End Role="matter" EntitySet="matter" />
@@ -940,11 +921,6 @@
           <AssociationSet Name="fk_congeneric_characteristic_element" Association="Self.fk_congeneric_characteristic_element">
             <End Role="Element" EntitySet="Element" />
             <End Role="CongenericCharacteristicValue" EntitySet="CongenericCharacteristicValue" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_measure_matter" Association="Self.fk_measure_matter">
-            <End Role="Matter" EntitySet="Matter" />
-            <End Role="Measure" EntitySet="Measure" />
           </AssociationSet>
 
           <AssociationSet Name="fk_binary_characteristic_measure" Association="Self.fk_binary_characteristic_measure">
@@ -1283,7 +1259,6 @@
           <NavigationProperty Name="Sequence" Relationship="Self.fk_chain_matter" FromRole="Matter" ToRole="CommonSequence" />
           <NavigationProperty Name="DnaSequence" Relationship="Self.fk_dna_chain_matter" FromRole="Matter" ToRole="DnaSequence" />
           <NavigationProperty Name="LiteratureSequence" Relationship="Self.fk_literature_chain_matter" FromRole="Matter" ToRole="LiteratureSequence" />
-          <NavigationProperty Name="Measure" Relationship="Self.fk_measure_matter" FromRole="Matter" ToRole="Measure" />
           <NavigationProperty Name="MusicSequence" Relationship="Self.fk_music_chain_matter" FromRole="Matter" ToRole="MusicSequence" />
           <NavigationProperty Name="DataSequence" Relationship="Self.fk_data_chain_matter" FromRole="Matter" ToRole="DataSequence" />
           <NavigationProperty Name="SequenceGroup" Relationship="Self.sequence_group_matter" FromRole="Matter" ToRole="SequenceGroup" />
@@ -1325,7 +1300,6 @@
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None"/>
           <Property Name="Notation" Type="LibiadaWebModel.Notation" Nullable="false" />
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
-          <Property Name="MatterId" Type="Int64" Nullable="false" />
           <Property Name="Value" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
           <Property Name="Name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
@@ -1333,11 +1307,8 @@
           <Property Name="Beatbase" Type="Int32" Nullable="false" />
           <Property Name="TicksPerBeat" Type="Int32" />
           <Property Name="Fifths" Type="Int32" Nullable="false" />
-          <Property Name="RemoteDb" Type="LibiadaWebModel.RemoteDb" />
-          <Property Name="RemoteId" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="major" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Matter" Relationship="Self.fk_measure_matter" FromRole="Measure" ToRole="Matter" />
           <NavigationProperty Name="BinaryCharacteristicValue" Relationship="Self.fk_binary_characteristic_measure" FromRole="Measure" ToRole="BinaryCharacteristicValue" />
           <NavigationProperty Name="CongenericCharacteristicValue" Relationship="Self.fk_congeneric_characteristic_measure" FromRole="Measure" ToRole="CongenericCharacteristicValue" />
           <NavigationProperty Name="CharacteristicValue" Relationship="Self.fk_characteristic_measure" FromRole="Measure" ToRole="CharacteristicValue" />
@@ -1889,19 +1860,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_measure_matter">
-          <End Role="Matter" Type="Self.Matter" Multiplicity="1" />
-          <End Role="Measure" Type="Self.Measure" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Matter">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Measure">
-              <PropertyRef Name="MatterId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="fk_binary_characteristic_measure">
           <End Role="Measure" Type="Self.Measure" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -2384,7 +2342,6 @@
                 <ScalarProperty Name="Id" ColumnName="id" />
                 <ScalarProperty Name="Notation" ColumnName="notation" />
                 <ScalarProperty Name="Created" ColumnName="created" />
-                <ScalarProperty Name="MatterId" ColumnName="matter_id" />
                 <ScalarProperty Name="Value" ColumnName="value" />
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="Name" ColumnName="name" />
@@ -2392,8 +2349,6 @@
                 <ScalarProperty Name="Beatbase" ColumnName="beatbase" />
                 <ScalarProperty Name="TicksPerBeat" ColumnName="ticks_per_beat" />
                 <ScalarProperty Name="Fifths" ColumnName="fifths" />
-                <ScalarProperty Name="RemoteDb" ColumnName="remote_db" />
-                <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
               </MappingFragment>
             </EntityTypeMapping>

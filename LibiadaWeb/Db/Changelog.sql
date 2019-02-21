@@ -2286,4 +2286,13 @@ COMMENT ON TRIGGER tgiu_fmotif_modified ON fmotif IS 'Trigger filling creation a
 CREATE TRIGGER tgiud_fmotif_element_key_bound AFTER INSERT OR UPDATE OF id OR DELETE ON fmotif FOR EACH ROW EXECUTE PROCEDURE trigger_element_key_bound();
 COMMENT ON TRIGGER tgiud_fmotif_element_key_bound ON fmotif IS 'Trigger that dublicates insert, update and delete of fmotifs into element_key table';
   
+-- 19.02.2019
+-- Change DB structure for measures.
+
+ALTER TABLE measure DROP COLUMN matter_id;
+ALTER TABLE measure DROP COLUMN remote_id;
+ALTER TABLE measure DROP COLUMN remote_db;
+ALTER TABLE measure DROP CONSTRAINT fk_measure_chain_key;
+DROP TRIGGER tgiud_measure_chain_key_bound ON measure;
+
 COMMIT;

@@ -21,6 +21,8 @@ namespace LibiadaWeb.Models.Repositories.Sequences
 
         protected readonly FmotifRepository FmotifRepository;
 
+        protected readonly MeasureRepository MeasureRepository;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MusicSequenceRepository"/> class.
         /// </summary>
@@ -30,6 +32,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         public MusicSequenceRepository(LibiadaWebEntities db) : base(db)
         {
             FmotifRepository = new FmotifRepository(db);
+            MeasureRepository = new MeasureRepository(db);
         }
 
         /// <summary>
@@ -71,6 +74,8 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                     break;
                 case Notation.Measures:
                     chain = ConvertCongenericScoreTrackToMeasuresBaseChain(tempTrack.CongenericScoreTracks[0]);
+                    MatterRepository.CreateMatterFromSequence(sequence);
+                    alphabet = MeasureRepository.GetOrCreateMeasuresInDb(chain.Alphabet);
                     break;
                 case Notation.FormalMotifs:
                     chain = ConvertCongenericScoreTrackToFormalMotifsBaseChain(tempTrack.CongenericScoreTracks[0]);
@@ -152,7 +157,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         private BaseChain ConvertCongenericScoreTrackToMeasuresBaseChain(CongenericScoreTrack scoreTrack)
         {
-            List<LibiadaCore.Core.SimpleTypes.Measure> measures = scoreTrack.MeasureOrder();
+            List<Measure> measures = scoreTrack.MeasureOrder();
             return new BaseChain(((IEnumerable<IBaseObject>)measures).ToList());
         }
 

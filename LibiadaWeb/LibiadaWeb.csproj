@@ -241,6 +241,8 @@
     <Compile Include="Models\Repositories\Sequences\GeneticSequenceRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\IFmotifRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\IGeneticSequenceRepository.cs" />
+    <Compile Include="Models\Repositories\Sequences\IMeasureRepsitory.cs" />
+    <Compile Include="Models\Repositories\Sequences\MeasureRepository.cs" />
     <Compile Include="Models\SelectListItemComparer.cs" />
     <Compile Include="Models\SubsequenceImporter.cs" />
     <Compile Include="MusicSequence.cs">
