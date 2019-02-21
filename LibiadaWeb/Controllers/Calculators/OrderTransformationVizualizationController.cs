@@ -61,14 +61,12 @@ namespace LibiadaWeb.Controllers.Calculators
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
-        public ActionResult Index(int length, bool multiThreading)
+        public ActionResult Index(int length)
         {
             return CreateTask(() =>
             {
-                var orderGenerator = new OrderGenerator();
-                var orders = orderGenerator.GenerateOrders(length);
-                var orderTransformer = new OrderTransformer(orders);
-                orderTransformer.TransformateOrders(multiThreading);
+                var orderTransformer = new OrderTransformer();
+                orderTransformer.CalculateTransformations(length);
                 var typesOfTransformationsList = new SelectListItem[orderTransformer.TypesOfTransformations.Length+1];
                 typesOfTransformationsList[0] = new SelectListItem
                 {

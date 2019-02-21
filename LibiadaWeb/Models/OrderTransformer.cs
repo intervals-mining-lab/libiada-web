@@ -1,24 +1,19 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Web.Services.Description;
 using LibiadaCore.Misc;
 using LibiadaWeb.Models.CalculatorsData;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc;
-
+using Accord.Math;
 using LibiadaCore.Core;
-
-using LibiadaWeb.Tasks;
-
-using Newtonsoft.Json;
-
 using SequenceGenerator;
 
 namespace LibiadaWeb.Models
 {
     public class OrderTransformer
     {
+        private OrderGenerator orderGenerator;
+
         private string[] typesOfTransformations = new string[]{
             "Dissimilar order",
             "High order, link start",
@@ -44,86 +39,36 @@ namespace LibiadaWeb.Models
             get { return typesOfTransformations; }
         }
 
-        public OrderTransformer(List<int[]> orders)
+        public OrderTransformer()
         {
-            this.orders = orders;
-            transformationsData = new OrderTransformationData[ordersCount];
-            ordersCount = orders.Count;
+            orderGenerator = new OrderGenerator();
         }
 
-        public void TransformateOrders(bool multiThreading)
+        public void CalculateTransformations(int length)
+        {
+            orders = orderGenerator.GenerateOrders(length);
+            ordersCount = orders.Count;
+            transformationsData = new OrderTransformationData[ordersCount];
+        }
+
+        private void TransformOrders()
         {
             var resultData = new List<OrderTransformationData>();
-            if (multiThreading)
+            var ordersIds = orders.Select(o => orders.IndexOf(o)).ToArray();
+            var typesIds = typesOfTransformations.Select(t => typesOfTransformations.IndexOf(t));
+            transformationsData = ordersIds.AsParallel().AsOrdered().Select(el => new OrderTransformationData
             {
-                var ordersTasks = new Task<OrderTransformationData>[ordersCount];
-                var countTasks = new Task<int>[ordersCount];
-                for (int i = 0; i < ordersCount; i++)
-                {
-                    int orderIndex = i;
-                    ordersTasks[i] = new Task<OrderTransformationData>(() =>
-                    {
-                        var transformationsTasks = new Task<OrderTransformationResult>[typesOfTransformations.Length];
-                        for (int j = 0; j < typesOfTransformations.Length; j++)
-                        {
-                            int typeOfTransformation = j;
-                            transformationsTasks[j] = new Task<OrderTransformationResult>(() => TransformateOrder(typeOfTransformation, orderIndex));
-                        }
-                        foreach (var task in transformationsTasks)
-                        {
-                            task.Start();
-                        }
-                        System.Threading.Tasks.Task.WaitAll(transformationsTasks);
-                        return new OrderTransformationData
-                        {
-                            ResultTransformation = transformationsTasks.Select(t => t.Result).ToArray()
-                        };
-                    });
-                    countTasks[i] = new Task<int>(() => SearchUniqueFinalOrdersCount(orderIndex));
-                }
-                foreach (var task in ordersTasks)
-                {
-                    task.Start();
-                }
-                System.Threading.Tasks.Task.WaitAll(ordersTasks);
-                foreach (var task in ordersTasks)
-                {
-                    resultData.Add(task.Result);
-                }
-                transformationsData = resultData.ToArray();
-                foreach (var task in countTasks)
-                {
-                    task.Start();
-                }
-                System.Threading.Tasks.Task.WaitAll(countTasks);
-                for (int i = 0; i < ordersCount; i++)
-                {
-                    resultData[i].UniqueFinalOrdersCount = countTasks[i].Result;
-                }
-            }
-            else
+                ResultTransformation = typesIds.AsParallel().AsOrdered().Select(t => TransformOrder(t, el)).ToArray()
+            }).ToArray();
+            resultData = ordersIds.AsParallel().AsOrdered().Select(el => new OrderTransformationData
             {
-                for (int i = 0; i < ordersCount; i++)
-                {
-                    var transformationResults = new List<OrderTransformationResult>();
-                    for (int j = 0; j < typesOfTransformations.Length; j++)
-                    {
-                        transformationResults.Add(TransformateOrder(j, i));
-                    }
-                    resultData.Add(new OrderTransformationData());
-                    resultData[i].ResultTransformation = transformationResults.ToArray();
-                }
-                transformationsData = resultData.ToArray();
-                for (int i = 0; i < ordersCount; i++)
-                {
-                    int count = SearchUniqueFinalOrdersCount(i);
-                    resultData[i].UniqueFinalOrdersCount = count;
-                }
-            }
+                ResultTransformation = transformationsData[el].ResultTransformation,
+                UniqueFinalOrdersCount = CalculateUniqueOrdersCount(el)
+            }).ToList();
             transformationsData = resultData.ToArray();
         }
 
-        private OrderTransformationResult TransformateOrder(int transformationType, int id)
+        private OrderTransformationResult TransformOrder(int transformationType, int id)
         {
             var transformationResult = new OrderTransformationResult();
             Chain chain;
@@ -150,11 +95,11 @@ namespace LibiadaWeb.Models
             return transformationResult;
         }
 
-        private int SearchUniqueFinalOrdersCount(int id)
+        private int CalculateUniqueOrdersCount(int id)
         {
             bool completed = false;
             var ordersForChecking = new List<int> { id };
-            var checkedOrders = new List<int> {id};
+            var checkedOrders = new List<int> { id };
             while (!completed)
             {
                 var newOrders = new List<int>();
