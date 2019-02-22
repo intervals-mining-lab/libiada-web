@@ -52,7 +52,7 @@
                                 || measure.Attributes.Size.BeatBase != dbMeasure.Beats
                                 || measure.Attributes.Size.TicksPerBeat != dbMeasure.TicksPerBeat)
                             {
-                                throw new Exception("Found in db fmotif is not equal to local fmotif.");
+                                throw new Exception("Found in db measure is not equal to local measure.");
                             }
 
                             return dbMeasure.Id;
