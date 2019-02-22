@@ -11,13 +11,10 @@
             }
         }
 
-        // initializes data for chart
-        function fillPointsAndLines() {
-            $scope.points = [];
-            $scope.lines = [];
+        function fillPoints() {
             var initialOrder = $scope.initialOrder.id;
             var typeOfTransformation = $scope.typeOfTransformation.Text;
-            var addedOrders = [initialOrder];
+            var checkedOrders = [initialOrder];
             var ordersForChecking = [initialOrder];
             var visibilityTranform = [];
             for (var l = 0; l < $scope.legend.length; l++) {
@@ -31,102 +28,36 @@
                 visibilityTranformation: visibilityTranform
             });
             var counterIdPoints = 1;
-            var counterIdLines = 0;
             $scope.counterIteration = 1;
             while (ordersForChecking.length > 0) {
                 var newOrdersForChecking = [];
                 for (var i = 0; i < ordersForChecking.length; i++) {
-                    for (var j = 0;
-                        j < $scope.transformationsData[ordersForChecking[i]].ResultTransformation.length;
-                        j++) {
+                    for (var j = 0; j < $scope.transformationsData[ordersForChecking[i]].ResultTransformation.length; j++) {
                         if ((typeOfTransformation === "All" ||
-                            $scope.transformationsData[ordersForChecking[i]].ResultTransformation[j].Transformation ===
-                            typeOfTransformation)) {
+                            $scope.transformationsData[ordersForChecking[i]].ResultTransformation[j].Transformation === typeOfTransformation)) {
                             var pointExist = false;
                             for (var k = 0; k < $scope.points.length; k++) {
                                 if ($scope.points[k].x === $scope.counterIteration &&
-                                    $scope.points[k].y ===
-                                    $scope.transformationsData[ordersForChecking[i]].ResultTransformation[j].OrderId) {
+                                    $scope.points[k].y === $scope.transformationsData[ordersForChecking[i]].ResultTransformation[j].OrderId) {
                                     pointExist = true;
                                     break;
                                 }
                             }
                             if (!pointExist) {
                                 $scope.points.push({
-                                    id: counterIdPoints,
+                                    id: counterIdPoints++,
                                     Value: $scope.transformationsData[ordersForChecking[i]].ResultTransformation[j].OrderId,
                                     x: $scope.counterIteration,
                                     y: $scope.transformationsData[ordersForChecking[i]].ResultTransformation[j].OrderId,
                                     visibilityTranformation: visibilityTranform
                                 });
-                                counterIdPoints++;
                             }
-                            if (addedOrders.indexOf(
+                            if (checkedOrders.indexOf(
                                 $scope.transformationsData[ordersForChecking[i]].ResultTransformation[j].OrderId) === -1) {
-                                addedOrders.push(
+                                checkedOrders.push(
                                     $scope.transformationsData[ordersForChecking[i]].ResultTransformation[j].OrderId);
                                 newOrdersForChecking.push(
                                     $scope.transformationsData[ordersForChecking[i]].ResultTransformation[j].OrderId);
-                            }
-                            var lineExist = false;
-                            var lineIterator = 0;
-                            for (var k = 0; k < $scope.lines.length; k++) {
-                                if ($scope.lines[k].x1 === $scope.counterIteration - 1 &&
-                                    $scope.lines[k].y1 === ordersForChecking[i] &&
-                                    $scope.lines[k].x2 === $scope.counterIteration &&
-                                    $scope.lines[k].y2 === $scope.transformationsData[ordersForChecking[i]].ResultTransformation[j].OrderId) {
-                                    lineExist = true;
-                                    lineIterator = ++$scope.lines[k].iterator;
-                                    break;
-                                }
-                            }
-                            if (lineExist) {
-                                var cyline =
-                                    ($scope.transformationsData[ordersForChecking[i]].ResultTransformation[j].OrderId +
-                                        ordersForChecking[i]) /
-                                    2.0;
-                                var a = $scope.transformationsData[ordersForChecking[i]].ResultTransformation[j].OrderId -
-                                    ordersForChecking[i];
-                                var shifty = 0.1 + 0.05 * Math.abs(a);
-                                var shiftx = 0.1 + 0.005 * $scope.orders.length;
-                                var shift = shifty > shiftx ? shifty : shiftx;
-                                $scope.lines.push({
-                                    id: counterIdLines,
-                                    Value: $scope.transformationsData[ordersForChecking[i]].ResultTransformation[j].Transformation,
-                                    arrowType: $scope.legend.length,
-                                    iterator: 0,
-                                    x1: $scope.counterIteration - 1,
-                                    y1: ordersForChecking[i],
-                                    x2: $scope.counterIteration - 0.5,
-                                    y2: cyline + shift * lineIterator,
-                                    startOrderId: ordersForChecking[i]
-                                });
-                                counterIdLines++;
-                                $scope.lines.push({
-                                    id: counterIdLines,
-                                    Value: $scope.transformationsData[ordersForChecking[i]].ResultTransformation[j].Transformation,
-                                    arrowType: j,
-                                    iterator: 0,
-                                    x1: $scope.counterIteration - 0.5,
-                                    y1: cyline + shift * lineIterator,
-                                    x2: $scope.counterIteration,
-                                    y2: $scope.transformationsData[ordersForChecking[i]].ResultTransformation[j].OrderId,
-                                    startOrderId: ordersForChecking[i]
-                                });
-                                counterIdLines++;
-                            } else {
-                                $scope.lines.push({
-                                    id: counterIdLines,
-                                    Value: $scope.transformationsData[ordersForChecking[i]].ResultTransformation[j].Transformation,
-                                    arrowType: j,
-                                    iterator: 0,
-                                    x1: $scope.counterIteration - 1,
-                                    y1: ordersForChecking[i],
-                                    x2: $scope.counterIteration,
-                                    y2: $scope.transformationsData[ordersForChecking[i]].ResultTransformation[j].OrderId,
-                                    startOrderId: ordersForChecking[i]
-                                });
-                                counterIdLines++;
                             }
                         }
                     }
@@ -134,6 +65,109 @@
                 ordersForChecking = newOrdersForChecking;
                 $scope.counterIteration++;
             }
+        }
+
+        function fillLines() {
+            var counterIdLines = 0;
+            for (var i = 0; i < $scope.points.length; i++) {
+                var transformationsExist = false;
+                for (var l = 0; l < $scope.lines.length; l++) {
+                    if ($scope.lines[l].startOrderId === $scope.points[i].Value &&
+                        $scope.lines[l].x1 < $scope.points[i].x) {
+                        transformationsExist = true;
+                    }
+                }
+                if (!transformationsExist) {
+                    for (var j = 0;
+                        j < $scope.transformationsData[$scope.points[i].Value].ResultTransformation.length;
+                        j++) {
+                        var transformationType =
+                            $scope.transformationsData[$scope.points[i].Value].ResultTransformation[j].Transformation;
+                        var childOrder = $scope.transformationsData[$scope.points[i].Value].ResultTransformation[j]
+                            .OrderId;
+                        var line = {
+                            x1: $scope.points[i].x,
+                            y1: $scope.points[i].y,
+                            x2: $scope.points[i].x + 1,
+                            y2: childOrder,
+                            Value: transformationType,
+                            startOrderId: $scope.points[i].Value
+                        };
+                        var orderExist = false;
+                        for (var k = 0; k < $scope.points.length; k++) {
+                            if ($scope.points[k].x === $scope.points[i].x + 1 &&
+                                $scope.points[k].y === childOrder) {
+                                orderExist = true;
+                                break;
+                            }
+                        }
+                        if (orderExist) {
+                            var lineExist = false;
+                            var lineIterator = 0;
+                            for (var k = 0; k < $scope.lines.length; k++) {
+                                if ($scope.lines[k].x1 === line.x1 &&
+                                    $scope.lines[k].y1 === line.y1 &&
+                                    $scope.lines[k].x2 === line.x2 &&
+                                    $scope.lines[k].y2 === line.y2) {
+                                    lineExist = true;
+                                    lineIterator = ++$scope.lines[k].iterator;
+                                    break;
+                                }
+                            }
+                            if (lineExist) {
+                                var cyline = (line.y1 + line.y2) / 2.0;
+                                var cxline = (line.x1 + line.x2) / 2.0;
+                                var yAmplitude = line.y1 - line.y2;
+                                var xAmplitude = line.x2 - line.x1;
+                                var shifty = 0.01 * yAmplitude;
+                                var shiftx = 0.2 * xAmplitude;
+                                $scope.lines.push({
+                                    id: counterIdLines++,
+                                    Value: line.Value,
+                                    arrowType: -1,
+                                    iterator: 0,
+                                    x1: line.x1,
+                                    y1: line.y1,
+                                    x2: cxline + shifty * lineIterator,
+                                    y2: cyline + shiftx * lineIterator,
+                                    startOrderId: line.startOrderId
+                                });
+                                $scope.lines.push({
+                                    id: counterIdLines++,
+                                    Value: line.Value,
+                                    arrowType: j,
+                                    iterator: 0,
+                                    x1: cxline + shifty * lineIterator,
+                                    y1: cyline + shiftx * lineIterator,
+                                    x2: line.x2,
+                                    y2: line.y2,
+                                    startOrderId: line.startOrderId
+                                });
+                            } else {
+                                $scope.lines.push({
+                                    id: counterIdLines++,
+                                    Value: line.Value,
+                                    arrowType: j,
+                                    iterator: 0,
+                                    x1: line.x1,
+                                    y1: line.y1,
+                                    x2: line.x2,
+                                    y2: line.y2,
+                                    startOrderId: line.startOrderId
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // initializes data for chart
+        function fillPointsAndLines() {
+            $scope.points = [];
+            $scope.lines = [];
+            fillPoints();
+            fillLines();
         }
 
         // constructs string representing tooltip text (inner html)
@@ -188,7 +222,7 @@
                 .on("click", function (vt) {
                     vt.visible = !vt.visible;
                     d3.select(this).style("fill-opacity", function () { return vt.visible ? 1 : 0; });
-                    svg.selectAll(".line")
+                    svg.selectAll(".transform-line")
                         .filter(function (line) {
                             return line.startOrderId === d.Value && line.Value === vt.name;
                         })
@@ -196,7 +230,7 @@
                             return vt.visible ? "visible" : "hidden";
                         });
                 });
-            
+
 
             tooltip.style("background", "#eee")
                 .style("color", "#000")
@@ -268,11 +302,13 @@
             var yMin = d3.min($scope.points, $scope.yValue);
             var yMargin = (yMax - yMin) * 0.05;
 
+            var yAmplitude = yMax - yMin;
+
             var yScale = d3.scaleLinear()
                 .domain([yMin - yMargin, yMax + yMargin])
                 .range([height, 0]);
             var yAxis = d3.axisLeft(yScale)
-                .ticks($scope.orders.length > 16 ? ($scope.orders.length + 1) / 10 : ($scope.orders.length + 1))
+                .ticks(yAmplitude > 20 ? yAmplitude / 10 : yAmplitude)
                 .tickSizeInner(-width)
                 .tickSizeOuter(0)
                 .tickPadding(10);
@@ -349,11 +385,11 @@
                 .style("font-size", "12pt");
 
             // draw lines
-            g.selectAll(".line")
+            g.selectAll(".transform-line")
                 .data($scope.lines)
                 .enter()
                 .append("line")
-                .attr("class", "line")
+                .attr("class", "transform-line")
                 .attr("x1", function (d) { return xScale(d.x1); })
                 .attr("y1", function (d) { return yScale(d.y1); })
                 .attr("x2", function (d) { return xScale(d.x2); })
@@ -378,7 +414,7 @@
                     legendEntry.select("rect")
                         .style("fill-opacity", function () { return d.visible ? 1 : 0; });
 
-                    svg.selectAll(".line")
+                    svg.selectAll(".transform-line")
                         .filter(function (line) { return line.Value === d.name; })
                         .attr("visibility", function (line) {
                             return d.visible ? "visible" : "hidden";
@@ -457,10 +493,9 @@
                 }
 
                 $scope.fillLegend();
-
                 $scope.legendHeight = $scope.legend.length * 20;
                 $scope.height = 800 + $scope.legendHeight;
-                
+
 
                 $scope.loading = false;
             }, function () {

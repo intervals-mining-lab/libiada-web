@@ -49,6 +49,7 @@ namespace LibiadaWeb.Models
             orders = orderGenerator.GenerateOrders(length);
             ordersCount = orders.Count;
             transformationsData = new OrderTransformationData[ordersCount];
+            TransformOrders();
         }
 
         private void TransformOrders()
