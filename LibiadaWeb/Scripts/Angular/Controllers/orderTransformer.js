@@ -4,7 +4,6 @@
     function orderTransformer($scope, filterFilter) {
         MapModelFromJson($scope, data);
 
-        $scope.transformations = [];
         $scope.nature = $scope.natures[0].Value;
     }
 
