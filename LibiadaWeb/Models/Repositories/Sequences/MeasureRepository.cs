@@ -71,8 +71,6 @@
             const string Query = @"INSERT INTO measure (
                                         id,
                                         value,
-                                        description,
-                                        name,
                                         notation,
                                         alphabet,
                                         building,
@@ -84,8 +82,6 @@
                                     ) VALUES (
                                         @id,
                                         @value,
-                                        @description,
-                                        @name,
                                         @notation,
                                         @alphabet,
                                         @building,
@@ -119,21 +115,9 @@
                 },
                 new NpgsqlParameter
                 {
-                    ParameterName = "description",
-                    NpgsqlDbType = NpgsqlDbType.Text,
-                    Value = string.Empty
-                },
-                new NpgsqlParameter
-                {
-                    ParameterName = "name",
-                    NpgsqlDbType = NpgsqlDbType.Varchar,
-                    Value = string.Empty
-                },
-                new NpgsqlParameter
-                {
                     ParameterName = "notation",
                     NpgsqlDbType = NpgsqlDbType.Smallint,
-                    Value = Notation.FormalMotifs
+                    Value = Notation.Measures
                 },
                 new NpgsqlParameter
                 {

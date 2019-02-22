@@ -69,8 +69,6 @@
             const string Query = @"INSERT INTO fmotif (
                                         id,
                                         value,
-                                        description,
-                                        name,
                                         notation,
                                         alphabet,
                                         building,
@@ -78,8 +76,6 @@
                                     ) VALUES (
                                         @id,
                                         @value,
-                                        @description,
-                                        @name,
                                         @notation,
                                         @alphabet,
                                         @building,
@@ -106,18 +102,6 @@
                     ParameterName = "value",
                     NpgsqlDbType = NpgsqlDbType.Varchar,
                     Value = BitConverter.ToString(fmotif.GetMD5HashCode()).Replace("-", string.Empty)
-                },
-                new NpgsqlParameter
-                {
-                    ParameterName = "description",
-                    NpgsqlDbType = NpgsqlDbType.Text,
-                    Value = string.Empty
-                },
-                new NpgsqlParameter
-                {
-                    ParameterName = "name",
-                    NpgsqlDbType = NpgsqlDbType.Varchar,
-                    Value = string.Empty
                 },
                 new NpgsqlParameter
                 {
