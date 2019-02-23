@@ -10,17 +10,15 @@ using SequenceGenerator;
 
 namespace LibiadaWeb.Models
 {
+    using LibiadaWeb.Extensions;
+
+    using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
+
     public class OrderTransformer
     {
         private OrderGenerator orderGenerator;
 
-        private string[] typesOfTransformations = new string[]{
-            "Dissimilar order",
-            "High order, link start",
-            "High order, link end",
-            "High order, link cycle start",
-            "High order, link cycle end"
-        };
+        private OrderTransformation[] typesOfTransformations;
 
         private List<int[]> orders;
         private OrderTransformationData[] transformationsData;
@@ -36,7 +34,7 @@ namespace LibiadaWeb.Models
         }
         public string[] TypesOfTransformations
         {
-            get { return typesOfTransformations; }
+            get { return typesOfTransformations.Select(t => EnumExtensions.GetDisplayValue(t)).ToArray(); }
         }
 
         public OrderTransformer()
@@ -49,6 +47,7 @@ namespace LibiadaWeb.Models
             orders = orderGenerator.GenerateOrders(length);
             ordersCount = orders.Count;
             transformationsData = new OrderTransformationData[ordersCount];
+            typesOfTransformations = EnumExtensions.ToArray<OrderTransformation>();
             TransformOrders();
         }
 
@@ -56,10 +55,9 @@ namespace LibiadaWeb.Models
         {
             var resultData = new List<OrderTransformationData>();
             var ordersIds = orders.Select(o => orders.IndexOf(o)).ToArray();
-            var typesIds = typesOfTransformations.Select(t => typesOfTransformations.IndexOf(t));
             transformationsData = ordersIds.AsParallel().AsOrdered().Select(el => new OrderTransformationData
             {
-                ResultTransformation = typesIds.AsParallel().AsOrdered().Select(t => TransformOrder(t, el)).ToArray()
+                ResultTransformation = typesOfTransformations.AsParallel().AsOrdered().Select(t => TransformOrder(t, el)).ToArray()
             }).ToArray();
             resultData = ordersIds.AsParallel().AsOrdered().Select(el => new OrderTransformationData
             {
@@ -69,27 +67,20 @@ namespace LibiadaWeb.Models
             transformationsData = resultData.ToArray();
         }
 
-        private OrderTransformationResult TransformOrder(int transformationType, int id)
+        private OrderTransformationResult TransformOrder(OrderTransformation transformationType, int id)
         {
             var transformationResult = new OrderTransformationResult();
-            Chain chain;
-            switch (transformationType)
-            {
-
-                case 0: chain = DissimilarChainFactory.Create((BaseChain)new Chain(orders[id])); break;
-                case 1: chain = HighOrderFactory.Create(new Chain(orders[id]), Link.Start); break;
-                case 2: chain = HighOrderFactory.Create(new Chain(orders[id]), Link.End); break;
-                case 3: chain = HighOrderFactory.Create(new Chain(orders[id]), Link.CycleEnd); break;
-                case 4: chain = HighOrderFactory.Create(new Chain(orders[id]), Link.CycleStart); break;
-                default: throw new ArgumentException("Invalid type transformation");
-            }
+            Chain chain = transformationType == OrderTransformation.Dissimilar
+                              ? DissimilarChainFactory.Create(new BaseChain(orders[id]))
+                              : HighOrderFactory.Create(
+                                  new Chain(orders[id]),
+                                  EnumExtensions.GetLink(transformationType));
             for (int i = 0; i < ordersCount; i++)
             {
                 if (orders[i].SequenceEqual(chain.Building))
                 {
                     transformationResult.OrderId = i;
-                    transformationResult.Transformation =
-                        typesOfTransformations[transformationType];
+                    transformationResult.Transformation = TypesOfTransformations[typesOfTransformations.IndexOf(transformationType)];
                     break;
                 }
             }

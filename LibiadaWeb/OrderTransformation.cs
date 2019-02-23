@@ -1,5 +1,5 @@
-﻿using LibiadaCore.Core;
-using LibiadaWeb.Attributes;
+﻿using LibiadaCore.Attributes;
+using LibiadaCore.Core;
 using System.ComponentModel.DataAnnotations;
 
 namespace LibiadaWeb
