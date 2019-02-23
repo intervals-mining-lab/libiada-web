@@ -149,6 +149,7 @@
     <Compile Include="Controllers\PartialController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\Sequences\BatchGenesImportController.cs" />
+    <Compile Include="Controllers\Sequences\BatchMusicImportController.cs" />
     <Compile Include="Controllers\Sequences\BatchPoemsImportController.cs" />
     <Compile Include="Controllers\Sequences\BatchSequenceImportController.cs" />
     <Compile Include="Controllers\Sequences\CommonSequencesController.cs" />
@@ -419,6 +420,7 @@
     <Content Include="Scripts\Angular\Components\orderTransformations.js" />
     <Content Include="Scripts\Angular\Components\scrollJumper.js" />
     <Content Include="Scripts\Angular\Controllers\accordance.js" />
+    <Content Include="Scripts\Angular\Controllers\batchMusicImport.js" />
     <Content Include="Scripts\Angular\Controllers\batchPoemsImport.js" />
     <Content Include="Scripts\Angular\Controllers\batchSequenceImport.js" />
     <Content Include="Scripts\Angular\Controllers\batchSequenceImportResult.js" />
@@ -617,6 +619,8 @@
     <Content Include="Views\Calculators\OrderCalculation\Result.cshtml" />
     <Content Include="Views\Sequences\OrderTransformationConvergence\Index.cshtml" />
     <Content Include="Views\Sequences\OrderTransformationConvergence\Result.cshtml" />
+    <Content Include="Views\Sequences\BatchMusicImport\Index.cshtml" />
+    <Content Include="Views\Sequences\BatchMusicImport\Result.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
