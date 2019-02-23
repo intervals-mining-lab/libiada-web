@@ -82,78 +82,80 @@
                         j++) {
                         var transformationType =
                             $scope.transformationsData[$scope.points[i].Value].ResultTransformation[j].Transformation;
-                        var childOrder = $scope.transformationsData[$scope.points[i].Value].ResultTransformation[j]
-                            .OrderId;
-                        var line = {
-                            x1: $scope.points[i].x,
-                            y1: $scope.points[i].y,
-                            x2: $scope.points[i].x + 1,
-                            y2: childOrder,
-                            Value: transformationType,
-                            startOrderId: $scope.points[i].Value
-                        };
-                        var orderExist = false;
-                        for (var k = 0; k < $scope.points.length; k++) {
-                            if ($scope.points[k].x === $scope.points[i].x + 1 &&
-                                $scope.points[k].y === childOrder) {
-                                orderExist = true;
-                                break;
-                            }
-                        }
-                        if (orderExist) {
-                            var lineExist = false;
-                            var lineIterator = 0;
-                            for (var m = 0; m < $scope.lines.length; m++) {
-                                if ($scope.lines[m].x1 === line.x1 &&
-                                    $scope.lines[m].y1 === line.y1 &&
-                                    $scope.lines[m].x2 === line.x2 &&
-                                    $scope.lines[m].y2 === line.y2) {
-                                    lineExist = true;
-                                    lineIterator = ++$scope.lines[m].iterator;
+                        if ($scope.transformationType.Text === "All" ||
+                            transformationType === $scope.transformationType.Text) {
+                            var childOrder = $scope.transformationsData[$scope.points[i].Value].ResultTransformation[j]
+                                .OrderId;
+                            var line = {
+                                x1: $scope.points[i].x,
+                                y1: $scope.points[i].y,
+                                x2: $scope.points[i].x + 1,
+                                y2: childOrder,
+                                Value: transformationType,
+                                startOrderId: $scope.points[i].Value
+                            };
+                            var orderExist = false;
+                            for (var k = 0; k < $scope.points.length; k++) {
+                                if ($scope.points[k].x === $scope.points[i].x + 1 &&
+                                    $scope.points[k].y === childOrder) {
+                                    orderExist = true;
                                     break;
                                 }
                             }
-                            if (lineExist) {
-                                var cyline = (line.y1 + line.y2) / 2.0;
-                                var cxline = (line.x1 + line.x2) / 2.0;
-                                var yAmplitude = line.y1 - line.y2;
-                                var xAmplitude = line.x2 - line.x1;
-                                var shifty = 0.01 * yAmplitude;
-                                var shiftx = 0.2 * xAmplitude;
-                                $scope.lines.push({
-                                    id: counterIdLines++,
-                                    Value: line.Value,
-                                    arrowType: -1,
-                                    iterator: 0,
-                                    x1: line.x1,
-                                    y1: line.y1,
-                                    x2: cxline + shifty * lineIterator,
-                                    y2: cyline + shiftx * lineIterator,
-                                    startOrderId: line.startOrderId
-                                });
-                                $scope.lines.push({
-                                    id: counterIdLines++,
-                                    Value: line.Value,
-                                    arrowType: j,
-                                    iterator: 0,
-                                    x1: cxline + shifty * lineIterator,
-                                    y1: cyline + shiftx * lineIterator,
-                                    x2: line.x2,
-                                    y2: line.y2,
-                                    startOrderId: line.startOrderId
-                                });
-                            } else {
-                                $scope.lines.push({
-                                    id: counterIdLines++,
-                                    Value: line.Value,
-                                    arrowType: j,
-                                    iterator: 0,
-                                    x1: line.x1,
-                                    y1: line.y1,
-                                    x2: line.x2,
-                                    y2: line.y2,
-                                    startOrderId: line.startOrderId
-                                });
+                            if (orderExist) {
+                                var lineExist = false;
+                                var lineIterator = 0;
+                                for (var m = 0; m < $scope.lines.length; m++) {
+                                    if ($scope.lines[m].x1 === line.x1 &&
+                                        $scope.lines[m].y1 === line.y1 &&
+                                        $scope.lines[m].x2 === line.x2 &&
+                                        $scope.lines[m].y2 === line.y2) {
+                                        lineExist = true;
+                                        lineIterator = ++$scope.lines[m].iterator;
+                                        break;
+                                    }
+                                }
+                                if (lineExist) {
+                                    var cyline = (line.y1 + line.y2) / 2.0;
+                                    var cxline = (line.x1 + line.x2) / 2.0;
+                                    var yAmplitude = line.y2 - line.y1;
+                                    var shifty = 0.8 * lineIterator;
+                                    var shiftx = 0.05 * lineIterator * Math.abs(yAmplitude) / $scope.ordersIds.length;
+                                    $scope.lines.push({
+                                        id: counterIdLines++,
+                                        Value: line.Value,
+                                        arrowType: -1,
+                                        iterator: 0,
+                                        x1: line.x1,
+                                        y1: line.y1,
+                                        x2: cxline + shiftx,
+                                        y2: cyline + shifty,
+                                        startOrderId: line.startOrderId
+                                    });
+                                    $scope.lines.push({
+                                        id: counterIdLines++,
+                                        Value: line.Value,
+                                        arrowType: j,
+                                        iterator: 0,
+                                        x1: cxline + shiftx,
+                                        y1: cyline + shifty,
+                                        x2: line.x2,
+                                        y2: line.y2,
+                                        startOrderId: line.startOrderId
+                                    });
+                                } else {
+                                    $scope.lines.push({
+                                        id: counterIdLines++,
+                                        Value: line.Value,
+                                        arrowType: j,
+                                        iterator: 0,
+                                        x1: line.x1,
+                                        y1: line.y1,
+                                        x2: line.x2,
+                                        y2: line.y2,
+                                        startOrderId: line.startOrderId
+                                    });
+                                }
                             }
                         }
                     }
