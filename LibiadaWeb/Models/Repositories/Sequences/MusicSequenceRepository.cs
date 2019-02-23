@@ -12,6 +12,8 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using LibiadaCore.Music.MusicXml;
 
     using LibiadaWeb.Helpers;
+    using Npgsql;
+    using NpgsqlTypes;
 
     /// <summary>
     /// The music sequence repository.
@@ -62,29 +64,19 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 throw new Exception("Track contains more then one or zero congeneric score tracks (parts).");
             }
 
-            BaseChain chain = null;
-            long[] alphabet = null;
+            MatterRepository.CreateMatterFromSequence(sequence);
 
-            switch (sequence.Notation)
-            {
-                case Notation.Notes:
-                    chain = ConvertCongenericScoreTrackToNotesBaseChain(tempTrack.CongenericScoreTracks[0]);
-                    MatterRepository.CreateMatterFromSequence(sequence);
-                    alphabet = ElementRepository.GetOrCreateNotesInDb(chain.Alphabet);
-                    break;
-                case Notation.Measures:
-                    chain = ConvertCongenericScoreTrackToMeasuresBaseChain(tempTrack.CongenericScoreTracks[0]);
-                    MatterRepository.CreateMatterFromSequence(sequence);
-                    alphabet = MeasureRepository.GetOrCreateMeasuresInDb(chain.Alphabet);
-                    break;
-                case Notation.FormalMotifs:
-                    chain = ConvertCongenericScoreTrackToFormalMotifsBaseChain(tempTrack.CongenericScoreTracks[0]);
-                    MatterRepository.CreateMatterFromSequence(sequence);
-                    alphabet = FmotifRepository.GetOrCreateFmotifsInDb(chain.Alphabet);
-                    break;
-            }
+            BaseChain chain = ConvertCongenericScoreTrackToNotesBaseChain(tempTrack.CongenericScoreTracks[0]);
+            long[] alphabet = ElementRepository.GetOrCreateNotesInDb(chain.Alphabet);
+            Create(sequence, alphabet, chain.Building, Notation.Notes);
 
-            Create(sequence, alphabet, chain.Building);
+            chain = ConvertCongenericScoreTrackToMeasuresBaseChain(tempTrack.CongenericScoreTracks[0]);
+            alphabet = MeasureRepository.GetOrCreateMeasuresInDb(chain.Alphabet);
+            Create(sequence, alphabet, chain.Building, Notation.Measures);
+
+            chain = ConvertCongenericScoreTrackToFormalMotifsBaseChain(tempTrack.CongenericScoreTracks[0]);
+            alphabet = FmotifRepository.GetOrCreateFmotifsInDb(chain.Alphabet);
+            Create(sequence, alphabet, chain.Building, Notation.FormalMotifs);
         }
 
         /// <summary>
@@ -99,9 +91,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="building">
         /// The building.
         /// </param>
-        public void Create(CommonSequence commonSequence, long[] alphabet, int[] building)
+        public void Create(CommonSequence commonSequence, long[] alphabet, int[] building, Notation notation)
         {
-            List<object> parameters = FillParams(commonSequence, alphabet, building);
+            List<object> parameters = FillParams(commonSequence, alphabet, building, notation);
 
             const string Query = @"INSERT INTO music_chain (
                                         id,
@@ -123,6 +115,73 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             DbHelper.ExecuteCommand(Db, Query, parameters.ToArray());
         }
 
+        /// <summary>
+        /// The fill parameters.
+        /// </summary>
+        /// <param name="commonSequence">
+        /// The sequence.
+        /// </param>
+        /// <param name="alphabet">
+        /// The alphabet.
+        /// </param>
+        /// <param name="building">
+        /// The building.
+        /// </param>
+        /// <returns>
+        /// The <see cref="List{Object}"/>.
+        /// </returns>
+        private List<object> FillParams(CommonSequence commonSequence, long[] alphabet, int[] building, Notation notation)
+        {
+            commonSequence.Id = DbHelper.GetNewElementId(Db);
+
+            var parameters = new List<object>
+            {
+                new NpgsqlParameter
+                {
+                    ParameterName = "id",
+                    NpgsqlDbType = NpgsqlDbType.Bigint,
+                    Value = commonSequence.Id
+                },
+                new NpgsqlParameter
+                {
+                    ParameterName = "notation",
+                    NpgsqlDbType = NpgsqlDbType.Smallint,
+                    Value = notation
+                },
+                new NpgsqlParameter
+                {
+                    ParameterName = "matter_id",
+                    NpgsqlDbType = NpgsqlDbType.Bigint,
+                    Value = commonSequence.MatterId
+                },
+                new NpgsqlParameter
+                {
+                    ParameterName = "alphabet",
+                    NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Bigint,
+                    Value = alphabet
+                },
+                new NpgsqlParameter
+                {
+                    ParameterName = "building",
+                    NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Integer,
+                    Value = building
+                },
+                new NpgsqlParameter
+                {
+                    ParameterName = "remote_id",
+                    NpgsqlDbType = NpgsqlDbType.Varchar,
+                    Value = (object)commonSequence.RemoteId ?? DBNull.Value
+                },
+                new NpgsqlParameter
+                {
+                    ParameterName = "remote_db",
+                    NpgsqlDbType = NpgsqlDbType.Smallint,
+                    Value = (object)commonSequence.RemoteDb ?? DBNull.Value
+                }
+            };
+            return parameters;
+        }
+  
         /// <summary>
         /// The dispose.
         /// </summary>
