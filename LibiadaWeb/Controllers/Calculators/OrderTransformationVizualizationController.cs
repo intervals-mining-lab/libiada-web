@@ -1,23 +1,14 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Web.Services.Description;
-using LibiadaCore.Misc;
-using LibiadaWeb.Models;
-using LibiadaWeb.Models.CalculatorsData;
+﻿using LibiadaWeb.Models;
 
 namespace LibiadaWeb.Controllers.Calculators
 {
     using System.Collections.Generic;
-    using System.Linq;
     using System.Web.Mvc;
-
-    using LibiadaCore.Core;
+    using System.Web.Mvc.Html;
 
     using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
-
-    using SequenceGenerator;
 
     /// <summary>
     /// Calculates distribution of sequences by order.
@@ -51,12 +42,6 @@ namespace LibiadaWeb.Controllers.Calculators
         /// <param name="length">
         /// The length.
         /// </param>
-        /// <param name="alphabetCardinality">
-        /// The alphabet cardinality.
-        /// </param>
-        /// <param name="generateStrict">
-        /// The generate strict.
-        /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
@@ -67,29 +52,13 @@ namespace LibiadaWeb.Controllers.Calculators
             {
                 var orderTransformer = new OrderTransformer();
                 orderTransformer.CalculateTransformations(length);
-                var typesOfTransformationsList = new SelectListItem[orderTransformer.TypesOfTransformations.Length+1];
-                typesOfTransformationsList[0] = new SelectListItem
-                {
-                    Value = 0.ToString(),
-                    Text = "All",
-                    Selected = false
-                };
-                for (int i = 0; i < orderTransformer.TypesOfTransformations.Length; i++)
-                {
-                    typesOfTransformationsList[i+1] = new SelectListItem
-                    {
-                        Value = (i+1).ToString(),
-                        Text = orderTransformer.TypesOfTransformations[i],
-                        Selected = false
-                    };
-                }
-
+                var typesOfTransformationsList = new List<SelectListItem> { new SelectListItem { Value = 0.ToString(), Text = "All", Selected = true } };
+                typesOfTransformationsList.AddRange(EnumHelper.GetSelectList(typeof(OrderTransformation)));
                 var data = new Dictionary<string, object>
                 {
-                    { "transformationsData", orderTransformer.TransformationsData},
-                    { "orders", orderTransformer.Orders},
-                    { "transformationsName", orderTransformer.TypesOfTransformations},
-                    { "transformationsList", typesOfTransformationsList},
+                    { "transformationsData", orderTransformer.TransformationsData },
+                    { "orders", orderTransformer.Orders },
+                    { "transformationsList", typesOfTransformationsList },
 
                 };
 
@@ -99,6 +68,5 @@ namespace LibiadaWeb.Controllers.Calculators
                 };
             });
         }
-
     }
 }

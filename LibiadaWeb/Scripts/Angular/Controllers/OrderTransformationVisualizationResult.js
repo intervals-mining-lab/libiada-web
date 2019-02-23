@@ -6,26 +6,25 @@
         // initializes data for chart
         function fillLegend() {
             $scope.legend = [];
-            for (var i = 0; i < $scope.transformationsName.length; i++) {
-                $scope.legend.push({ name: $scope.transformationsName[i], visible: true });
+            for (var i = 1; i < $scope.transformationsList.length; i++) {
+                $scope.legend.push({ name: $scope.transformationsList[i].Text, visible: true });
             }
         }
 
         function fillPoints() {
             var initialOrder = $scope.initialOrder.id;
-            var typeOfTransformation = $scope.typeOfTransformation.Text;
             var checkedOrders = [initialOrder];
             var ordersForChecking = [initialOrder];
-            var visibilityTranform = [];
+            var transformationVisibility = [];
             for (var l = 0; l < $scope.legend.length; l++) {
-                visibilityTranform.push({ name: $scope.legend[l].name, visible: $scope.legend[l].visible });
+                transformationVisibility.push({ name: $scope.legend[l].name, visible: $scope.legend[l].visible });
             }
             $scope.points.push({
                 id: 0,
                 Value: initialOrder,
                 x: 0,
                 y: initialOrder,
-                visibilityTranformation: visibilityTranform
+                transformationVisibility: transformationVisibility
             });
             var counterIdPoints = 1;
             $scope.counterIteration = 1;
@@ -33,8 +32,8 @@
                 var newOrdersForChecking = [];
                 for (var i = 0; i < ordersForChecking.length; i++) {
                     for (var j = 0; j < $scope.transformationsData[ordersForChecking[i]].ResultTransformation.length; j++) {
-                        if ((typeOfTransformation === "All" ||
-                            $scope.transformationsData[ordersForChecking[i]].ResultTransformation[j].Transformation === typeOfTransformation)) {
+                        if ($scope.transformationType.Text === "All" ||
+                            $scope.transformationsData[ordersForChecking[i]].ResultTransformation[j].Transformation === $scope.transformationType.Text) {
                             var pointExist = false;
                             for (var k = 0; k < $scope.points.length; k++) {
                                 if ($scope.points[k].x === $scope.counterIteration &&
@@ -49,7 +48,7 @@
                                     Value: $scope.transformationsData[ordersForChecking[i]].ResultTransformation[j].OrderId,
                                     x: $scope.counterIteration,
                                     y: $scope.transformationsData[ordersForChecking[i]].ResultTransformation[j].OrderId,
-                                    visibilityTranformation: visibilityTranform
+                                    transformationVisibility: transformationVisibility
                                 });
                             }
                             if (checkedOrders.indexOf(
@@ -104,13 +103,13 @@
                         if (orderExist) {
                             var lineExist = false;
                             var lineIterator = 0;
-                            for (var k = 0; k < $scope.lines.length; k++) {
-                                if ($scope.lines[k].x1 === line.x1 &&
-                                    $scope.lines[k].y1 === line.y1 &&
-                                    $scope.lines[k].x2 === line.x2 &&
-                                    $scope.lines[k].y2 === line.y2) {
+                            for (var m = 0; m < $scope.lines.length; m++) {
+                                if ($scope.lines[m].x1 === line.x1 &&
+                                    $scope.lines[m].y1 === line.y1 &&
+                                    $scope.lines[m].x2 === line.x2 &&
+                                    $scope.lines[m].y2 === line.y2) {
                                     lineExist = true;
-                                    lineIterator = ++$scope.lines[k].iterator;
+                                    lineIterator = ++$scope.lines[m].iterator;
                                     break;
                                 }
                             }
@@ -207,7 +206,7 @@
                 .attr("height", $scope.legend.length * 20)
                 .attr("width", 20)
                 .selectAll(".dotlegend")
-                .data(d.visibilityTranformation)
+                .data(d.transformationVisibility)
                 .enter()
                 .append("g")
                 .attr("class", "dotlegend")
@@ -421,8 +420,8 @@
                         });
                     for (var k = 0; k < $scope.points.length; k++) {
                         for (var j = 0; j < $scope.legend.length; j++) {
-                            if ($scope.points[k].visibilityTranformation[j].name === d.name) {
-                                $scope.points[k].visibilityTranformation[j].visible = d.visible;
+                            if ($scope.points[k].transformationVisibility[j].name === d.name) {
+                                $scope.points[k].transformationVisibility[j].visible = d.visible;
                             }
                         }
                     }
@@ -495,7 +494,8 @@
                 $scope.fillLegend();
                 $scope.legendHeight = $scope.legend.length * 20;
                 $scope.height = 800 + $scope.legendHeight;
-
+                $scope.initialOrder = $scope.ordersIds[0];
+                $scope.transformationType = $scope.transformationsList[0];
 
                 $scope.loading = false;
             }, function () {

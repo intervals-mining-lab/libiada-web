@@ -1,41 +1,25 @@
-﻿using System;
-using System.Threading.Tasks;
-using LibiadaCore.Misc;
+﻿using LibiadaCore.Misc;
 using LibiadaWeb.Models.CalculatorsData;
 using System.Collections.Generic;
 using System.Linq;
-using Accord.Math;
 using LibiadaCore.Core;
 using SequenceGenerator;
 
 namespace LibiadaWeb.Models
 {
-    using LibiadaWeb.Extensions;
+    using LibiadaCore.Extensions;
 
     using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
 
     public class OrderTransformer
     {
-        private OrderGenerator orderGenerator;
+        private readonly OrderGenerator orderGenerator;
 
         private OrderTransformation[] typesOfTransformations;
-
-        private List<int[]> orders;
-        private OrderTransformationData[] transformationsData;
         private int ordersCount;
 
-        public List<int[]> Orders
-        {
-            get { return orders; }
-        }
-        public OrderTransformationData[] TransformationsData
-        {
-            get { return transformationsData; }
-        }
-        public string[] TypesOfTransformations
-        {
-            get { return typesOfTransformations.Select(t => EnumExtensions.GetDisplayValue(t)).ToArray(); }
-        }
+        public List<int[]> Orders { get; private set; }
+        public OrderTransformationData[] TransformationsData { get; private set; }
 
         public OrderTransformer()
         {
@@ -44,43 +28,43 @@ namespace LibiadaWeb.Models
 
         public void CalculateTransformations(int length)
         {
-            orders = orderGenerator.GenerateOrders(length);
-            ordersCount = orders.Count;
-            transformationsData = new OrderTransformationData[ordersCount];
+            Orders = orderGenerator.GenerateOrders(length);
+            ordersCount = Orders.Count;
+            TransformationsData = new OrderTransformationData[ordersCount];
             typesOfTransformations = EnumExtensions.ToArray<OrderTransformation>();
             TransformOrders();
         }
 
         private void TransformOrders()
         {
-            var resultData = new List<OrderTransformationData>();
-            var ordersIds = orders.Select(o => orders.IndexOf(o)).ToArray();
-            transformationsData = ordersIds.AsParallel().AsOrdered().Select(el => new OrderTransformationData
+            int[] ordersIds = Orders.Select(o => Orders.IndexOf(o)).ToArray();
+            TransformationsData = ordersIds.AsParallel().AsOrdered().Select(el => new OrderTransformationData
             {
                 ResultTransformation = typesOfTransformations.AsParallel().AsOrdered().Select(t => TransformOrder(t, el)).ToArray()
             }).ToArray();
-            resultData = ordersIds.AsParallel().AsOrdered().Select(el => new OrderTransformationData
+
+            List<OrderTransformationData> resultData = ordersIds.AsParallel().AsOrdered().Select(el => new OrderTransformationData
             {
-                ResultTransformation = transformationsData[el].ResultTransformation,
+                ResultTransformation = TransformationsData[el].ResultTransformation,
                 UniqueFinalOrdersCount = CalculateUniqueOrdersCount(el)
             }).ToList();
-            transformationsData = resultData.ToArray();
+
+            TransformationsData = resultData.ToArray();
         }
 
         private OrderTransformationResult TransformOrder(OrderTransformation transformationType, int id)
         {
             var transformationResult = new OrderTransformationResult();
             Chain chain = transformationType == OrderTransformation.Dissimilar
-                              ? DissimilarChainFactory.Create(new BaseChain(orders[id]))
-                              : HighOrderFactory.Create(
-                                  new Chain(orders[id]),
-                                  EnumExtensions.GetLink(transformationType));
+                              ? DissimilarChainFactory.Create(new BaseChain(Orders[id]))
+                              : HighOrderFactory.Create(new Chain(Orders[id]), transformationType.GetLink());
+
             for (int i = 0; i < ordersCount; i++)
             {
-                if (orders[i].SequenceEqual(chain.Building))
+                if (Orders[i].SequenceEqual(chain.Building))
                 {
                     transformationResult.OrderId = i;
-                    transformationResult.Transformation = TypesOfTransformations[typesOfTransformations.IndexOf(transformationType)];
+                    transformationResult.Transformation = transformationType.GetDisplayValue();
                     break;
                 }
             }
@@ -95,14 +79,14 @@ namespace LibiadaWeb.Models
             while (!completed)
             {
                 var newOrders = new List<int>();
-                foreach (var order in ordersForChecking)
+                foreach (int order in ordersForChecking)
                 {
                     for (int i = 0; i < typesOfTransformations.Length; i++)
                     {
-                        if (!checkedOrders.Contains(transformationsData[order].ResultTransformation[i].OrderId))
+                        if (!checkedOrders.Contains(TransformationsData[order].ResultTransformation[i].OrderId))
                         {
-                            checkedOrders.Add(transformationsData[order].ResultTransformation[i].OrderId);
-                            newOrders.Add(transformationsData[order].ResultTransformation[i].OrderId);
+                            checkedOrders.Add(TransformationsData[order].ResultTransformation[i].OrderId);
+                            newOrders.Add(TransformationsData[order].ResultTransformation[i].OrderId);
                         }
                     }
 

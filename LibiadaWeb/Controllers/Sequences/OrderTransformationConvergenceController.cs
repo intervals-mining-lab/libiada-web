@@ -52,7 +52,7 @@
         {
             var viewDataHelper = new ViewDataHelper(db);
             var data = viewDataHelper.FillViewData(1, 1, "Transform");
-            
+
             var transformations = EnumHelper.GetSelectList(typeof(OrderTransformation));
             data.Add("transformations", transformations);
 
