@@ -13,25 +13,15 @@ namespace LibiadaWeb.Models
 
     public class OrderTransformer
     {
-        private readonly OrderGenerator orderGenerator;
-
-        private OrderTransformation[] typesOfTransformations;
-        private int ordersCount;
-
         public List<int[]> Orders { get; private set; }
         public OrderTransformationData[] TransformationsData { get; private set; }
 
-        public OrderTransformer()
-        {
-            orderGenerator = new OrderGenerator();
-        }
 
         public void CalculateTransformations(int length)
         {
+            var orderGenerator = new OrderGenerator();
             Orders = orderGenerator.GenerateOrders(length);
-            ordersCount = Orders.Count;
-            TransformationsData = new OrderTransformationData[ordersCount];
-            typesOfTransformations = EnumExtensions.ToArray<OrderTransformation>();
+            TransformationsData = new OrderTransformationData[Orders.Count];
             TransformOrders();
         }
 
@@ -40,7 +30,7 @@ namespace LibiadaWeb.Models
             int[] ordersIds = Orders.Select(o => Orders.IndexOf(o)).ToArray();
             TransformationsData = ordersIds.AsParallel().AsOrdered().Select(el => new OrderTransformationData
             {
-                ResultTransformation = typesOfTransformations.AsParallel().AsOrdered().Select(t => TransformOrder(t, el)).ToArray()
+                ResultTransformation = EnumExtensions.ToArray<OrderTransformation>().AsParallel().AsOrdered().Select(t => TransformOrder(t, el)).ToArray()
             }).ToArray();
 
             List<OrderTransformationData> resultData = ordersIds.AsParallel().AsOrdered().Select(el => new OrderTransformationData
@@ -59,7 +49,7 @@ namespace LibiadaWeb.Models
                               ? DissimilarChainFactory.Create(new BaseChain(Orders[id]))
                               : HighOrderFactory.Create(new Chain(Orders[id]), transformationType.GetLink());
 
-            for (int i = 0; i < ordersCount; i++)
+            for (int i = 0; i < Orders.Count; i++)
             {
                 if (Orders[i].SequenceEqual(chain.Building))
                 {
@@ -73,6 +63,7 @@ namespace LibiadaWeb.Models
 
         private int CalculateUniqueOrdersCount(int id)
         {
+            OrderTransformation[] transformationTypes = EnumExtensions.ToArray<OrderTransformation>();
             bool completed = false;
             var ordersForChecking = new List<int> { id };
             var checkedOrders = new List<int> { id };
@@ -81,7 +72,7 @@ namespace LibiadaWeb.Models
                 var newOrders = new List<int>();
                 foreach (int order in ordersForChecking)
                 {
-                    for (int i = 0; i < typesOfTransformations.Length; i++)
+                    for (int i = 0; i < transformationTypes.Length; i++)
                     {
                         if (!checkedOrders.Contains(TransformationsData[order].ResultTransformation[i].OrderId))
                         {

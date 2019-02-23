@@ -52,13 +52,15 @@ namespace LibiadaWeb.Controllers.Calculators
             {
                 var orderTransformer = new OrderTransformer();
                 orderTransformer.CalculateTransformations(length);
-                var typesOfTransformationsList = new List<SelectListItem> { new SelectListItem { Value = 0.ToString(), Text = "All", Selected = true } };
-                typesOfTransformationsList.AddRange(EnumHelper.GetSelectList(typeof(OrderTransformation)));
+
+                var transformationsSelectList = new List<SelectListItem> { new SelectListItem { Value = 0.ToString(), Text = "All" } };
+                transformationsSelectList.AddRange(EnumHelper.GetSelectList(typeof(OrderTransformation)));
+
                 var data = new Dictionary<string, object>
                 {
                     { "transformationsData", orderTransformer.TransformationsData },
                     { "orders", orderTransformer.Orders },
-                    { "transformationsList", typesOfTransformationsList },
+                    { "transformationsList", transformationsSelectList },
 
                 };
 
