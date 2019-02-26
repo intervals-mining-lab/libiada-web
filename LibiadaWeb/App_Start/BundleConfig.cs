@@ -104,6 +104,9 @@
             bundles.Add(new ScriptBundle("~/bundles/controllers/OrderCalculationController").Include(
                 "~/Scripts/Angular/Controllers/orderCalculation.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/controllers/OrderTransformationResultController").Include(
+                "~/Scripts/Angular/Controllers/orderTransformationResult.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/controllers/SequencesOrderDistributionController").Include(
                 "~/Scripts/Angular/Controllers/sequencesOrderDistribution.js"));
 

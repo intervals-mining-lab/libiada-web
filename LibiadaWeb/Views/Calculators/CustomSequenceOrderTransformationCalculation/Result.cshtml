@@ -1,40 +1,30 @@
 ﻿@{
     ViewBag.Title = "Characteristics of custom sequence";
 }
+@Scripts.Render("~/bundles/loadingWindow")
 
 <h2>@ViewBag.Title</h2>
 @if (ViewBag.Error == null)
 {
+
+    @Html.Partial("_AngularControllerInitializer", "OrderTransformationResultController")
+
     <table class="table table-bordered table-hover">
         <thead>
-            <tr>
-                <th>
-                    Sequence \ characteristic name
-                </th>
-                @foreach (var characteristicName in ViewBag.characteristicNames)
-                {
-                    <th>
-                        @Html.Raw(characteristicName.Replace("  ", "<br/>"))
-                    </th>
-                }
-            </tr>
+        <tr>
+            <th>
+                Sequence \ characteristic name
+            </th>
+            <th ng-repeat="characteristicName in characteristicNames" ng-bind="characteristicName" />
+        </tr>
         </thead>
         <tbody>
-            @for (int i = 0; i < ViewBag.characteristics.GetLength(0); i++)
-            {
-                <tr>
-                    <td>
-                        @ViewBag.names[i]
-                    </td>
-                    @for (int j = 0; j < ViewBag.characteristics.GetLength(1); j++)
-                    {
-                        <td>
-                            @ViewBag.characteristics[i, j]
-                    </td>
-                    }
-                </tr>
-            }
+        <tr ng-repeat="characteristic in characteristics">
+            <td ng-bind="characteristic.MatterName" />
+            <td ng-repeat="value in characteristic.Characteristics" ng-bind="value" />
+        </tr>
         </tbody>
+
     </table>
 }
 

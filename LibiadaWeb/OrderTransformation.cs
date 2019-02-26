@@ -1,5 +1,4 @@
 ﻿using LibiadaCore.Core;
-using LibiadaWeb.Attributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace LibiadaWeb
@@ -7,23 +6,23 @@ namespace LibiadaWeb
     public enum OrderTransformation: byte
     {
         [Display(Name = "Dissimilar order")]
-        [Link(Link.NotApplied)]
+        [LibiadaCore.Attributes.Link(Link.NotApplied)]
         Dissimilar = 1,
 
         [Display(Name = "High order with link to the begining")]
-        [Link(Link.Start)]
+        [LibiadaCore.Attributes.Link(Link.Start)]
         HighOrderToStart = 2,
 
         [Display(Name = "High order with link to the end")]
-        [Link(Link.End)]
+        [LibiadaCore.Attributes.Link(Link.End)]
         HighOrderToEnd = 3,
 
         [Display(Name = "High order with cyclic link to the begining")]
-        [Link(Link.CycleStart)]
+        [LibiadaCore.Attributes.Link(Link.CycleStart)]
         HighOrderCyclicToStart = 4,
 
         [Display(Name = "High order with cyclic link to the end")]
-        [Link(Link.CycleEnd)]
+        [LibiadaCore.Attributes.Link(Link.CycleEnd)]
         HighOrderCyclicToEnd = 5
     }
 }

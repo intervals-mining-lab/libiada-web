@@ -99,7 +99,6 @@
     </Compile>
     <Compile Include="Attribute.cs" />
     <Compile Include="Attributes\GenBankFeatureNameAttribute.cs" />
-    <Compile Include="Attributes\LinkAttribute.cs" />
     <Compile Include="Attributes\SequenceGroupTypeAttribute.cs" />
     <Compile Include="Attributes\ImageTransformerTypeAttribute.cs" />
     <Compile Include="Attributes\TaskClassAttribute.cs" />
@@ -425,6 +424,7 @@
     <Content Include="Scripts\Angular\Controllers\matterEdit.js" />
     <Content Include="Scripts\Angular\Controllers\musicFilesResult.js" />
     <Content Include="Scripts\Angular\Controllers\orderCalculation.js" />
+    <Content Include="Scripts\Angular\Controllers\orderTransformationResult.js" />
     <Content Include="Scripts\Angular\Controllers\orderTransformer.js" />
     <Content Include="Scripts\Angular\Controllers\sequenceGroups.js" />
     <Content Include="Scripts\Angular\Controllers\sequencePredictionResult.js" />
