@@ -8,8 +8,6 @@
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
     using LibiadaCore.Extensions;
     using LibiadaCore.Misc;
-
-    using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
@@ -164,7 +162,7 @@
                 var transformations = new Dictionary<int, string>();
                 for (int i = 0; i < transformationsSequence.Length; i++)
                 {
-                    transformations.Add(i, transformationsSequence[i] == OrderTransformation.Dissimilar ? "dissimilar" : $"higher order {EnumExtensions.GetLink(transformationsSequence[i]).GetDisplayValue()}");
+                    transformations.Add(i, OrderTransformation.Dissimilar.GetDisplayValue());
                 }
 
                 var result = new Dictionary<string, object>

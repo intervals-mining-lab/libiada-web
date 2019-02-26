@@ -114,7 +114,7 @@
                 var transformations = new Dictionary<int, string>();
                 for (int i = 0; i < transformationsSequence.Length; i++)
                 {
-                    transformations.Add(i, transformationsSequence[i] == OrderTransformation.Dissimilar ? "dissimilar" : $"higher order {transformationsSequence[i].GetDisplayValue()}");
+                    transformations.Add(i, OrderTransformation.Dissimilar.GetDisplayValue());
                 }
 
                 var result = new Dictionary<string, object>
