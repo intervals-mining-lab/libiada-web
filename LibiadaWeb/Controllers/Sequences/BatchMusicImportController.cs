@@ -11,6 +11,7 @@
     using Newtonsoft.Json;
     using Microsoft.Ajax.Utilities;
     using LibiadaCore.Music;
+    using System.Web.Mvc.Html;
 
     public class BatchMusicImportController : AbstractResultController
     {
@@ -27,7 +28,7 @@
             var viewData = new Dictionary<string, object>
             {
                 { "notations", new [] { Notation.Notes, Notation.Measures, Notation.FormalMotifs }.ToSelectListWithNature() },
-                { "pauseParams", new [] { ParamPauseTreatment.Ignore, ParamPauseTreatment.NoteTrace, ParamPauseTreatment.SilenceNote} }
+                { "pauseParams", EnumHelper.GetSelectList(typeof(ParamPauseTreatment)) }
             };
 
             ViewBag.data = JsonConvert.SerializeObject(viewData);

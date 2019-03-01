@@ -281,14 +281,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         private long CreateMatter(Matter matter)
         {
-            if (matter.Nature == Nature.Music)
-            {
-                var dbMatter = db.Matter.Where(m => m.Name == matter.Name).ToList();
-                if (dbMatter.Count > 0)
-                {
-                    return dbMatter.First().Id;
-                }
-            }
             db.Matter.Add(matter);
             db.SaveChanges();
             return matter.Id;

@@ -29,7 +29,7 @@
                     @Html.ValidationMessageFor(model => model.Matter.Nature, "", new { @class = "text-danger" })
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" ng-hide="nature == @((byte)Nature.Music)">
                 @Html.LabelFor(model => model.Notation, new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     <select class="form-control" ng-model="notationId" ng-options="n.Value as n.Text for n in notations | filter:{ Nature: nature }"></select>
