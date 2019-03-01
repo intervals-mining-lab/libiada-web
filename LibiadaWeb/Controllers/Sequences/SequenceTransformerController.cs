@@ -5,7 +5,7 @@
     using System.Web.Mvc;
 
     using LibiadaCore.Core;
-    using LibiadaCore.Misc.DataTransformers;
+    using LibiadaCore.DataTransformers;
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Sequences;

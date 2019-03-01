@@ -8,8 +8,8 @@
     using Bio.Extensions;
 
     using LibiadaCore.Core;
+    using LibiadaCore.DataTransformers;
     using LibiadaCore.Extensions;
-    using LibiadaCore.Misc;
 
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;

@@ -11,8 +11,9 @@
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
+    using LibiadaCore.DataTransformers;
     using LibiadaCore.Extensions;
-    using LibiadaCore.Misc;
+
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Tasks;
