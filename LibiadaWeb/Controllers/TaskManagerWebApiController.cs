@@ -70,7 +70,8 @@
                 throw new Exception("Task doesn't have additional data");
             }
 
-            List<(int, int, double)> result = ((List<(int, int, double)>[,])task.Result["additionalData"])[firstIndex, secondIndex];
+            List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)> result =
+                ((List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>[,])task.Result["additionalData"])[firstIndex, secondIndex];
 
             return JsonConvert.SerializeObject(result);
         }
