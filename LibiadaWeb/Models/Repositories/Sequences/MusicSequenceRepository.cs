@@ -66,17 +66,27 @@ namespace LibiadaWeb.Models.Repositories.Sequences
 
             MatterRepository.CreateMatterFromSequence(sequence);
 
-            BaseChain chain = ConvertCongenericScoreTrackToNotesBaseChain(tempTrack.CongenericScoreTracks[0]);
-            long[] alphabet = ElementRepository.GetOrCreateNotesInDb(chain.Alphabet);
-            Create(sequence, alphabet, chain.Building, Notation.Notes);
+            BaseChain notesSequence = ConvertCongenericScoreTrackToNotesBaseChain(tempTrack.CongenericScoreTracks[0]);
+            long[] notesAlphabet = ElementRepository.GetOrCreateNotesInDb(notesSequence.Alphabet);
+            Create(sequence, notesAlphabet, notesSequence.Building, Notation.Notes);
 
-            chain = ConvertCongenericScoreTrackToMeasuresBaseChain(tempTrack.CongenericScoreTracks[0]);
-            alphabet = MeasureRepository.GetOrCreateMeasuresInDb(chain.Alphabet);
-            Create(sequence, alphabet, chain.Building, Notation.Measures);
+            BaseChain measuresSequence = ConvertCongenericScoreTrackToMeasuresBaseChain(tempTrack.CongenericScoreTracks[0]);
+            long[] measuresAlphabet = MeasureRepository.GetOrCreateMeasuresInDb(measuresSequence.Alphabet);
+            Create(sequence, measuresAlphabet, measuresSequence.Building, Notation.Measures);
 
-            chain = ConvertCongenericScoreTrackToFormalMotifsBaseChain(tempTrack.CongenericScoreTracks[0]);
-            alphabet = FmotifRepository.GetOrCreateFmotifsInDb(chain.Alphabet);
-            Create(sequence, alphabet, chain.Building, Notation.FormalMotifs);
+            foreach (PauseTreatment pauseTreatment in Enum.GetValues(typeof(PauseTreatment)))
+            {
+                if (pauseTreatment != PauseTreatment.NotApplicable)
+                {
+                    BaseChain fmotifsSecuence = ConvertCongenericScoreTrackToFormalMotifsBaseChain(tempTrack.CongenericScoreTracks[0], pauseTreatment, false);
+                    long[] fmotifsAlphabet = FmotifRepository.GetOrCreateFmotifsInDb(fmotifsSecuence.Alphabet);
+                    Create(sequence, fmotifsAlphabet, fmotifsSecuence.Building, Notation.FormalMotifs, pauseTreatment, false);
+
+                    fmotifsSecuence = ConvertCongenericScoreTrackToFormalMotifsBaseChain(tempTrack.CongenericScoreTracks[0], pauseTreatment, true);
+                    fmotifsAlphabet = FmotifRepository.GetOrCreateFmotifsInDb(fmotifsSecuence.Alphabet);
+                    Create(sequence, fmotifsAlphabet, fmotifsSecuence.Building, Notation.FormalMotifs, pauseTreatment, true);
+                }
+            }
         }
 
         /// <summary>
@@ -91,9 +101,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="building">
         /// The building.
         /// </param>
-        public void Create(CommonSequence commonSequence, long[] alphabet, int[] building, Notation notation)
+        public void Create(CommonSequence commonSequence, long[] alphabet, int[] building, Notation notation, PauseTreatment pauseTreatment = PauseTreatment.NotApplicable, bool sequentialTransfer = false)
         {
-            List<object> parameters = FillParams(commonSequence, alphabet, building, notation);
+            List<object> parameters = FillParams(commonSequence, alphabet, building, notation, pauseTreatment, sequentialTransfer);
 
             const string Query = @"INSERT INTO music_chain (
                                         id,
@@ -102,7 +112,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         alphabet,
                                         building,
                                         remote_id,
-                                        remote_db
+                                        remote_db,
+                                        pause_treatment,
+                                        sequential_transfer
                                     ) VALUES (
                                         @id,
                                         @notation,
@@ -110,7 +122,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         @alphabet,
                                         @building,
                                         @remote_id,
-                                        @remote_db
+                                        @remote_db,
+                                        @pause_treatment,
+                                        @sequential_transfer
                                     );";
             DbHelper.ExecuteCommand(Db, Query, parameters.ToArray());
         }
@@ -130,7 +144,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <returns>
         /// The <see cref="List{Object}"/>.
         /// </returns>
-        private List<object> FillParams(CommonSequence commonSequence, long[] alphabet, int[] building, Notation notation)
+        private List<object> FillParams(CommonSequence commonSequence, long[] alphabet, int[] building, Notation notation, PauseTreatment pauseTreatment, bool sequentialTransfer)
         {
             commonSequence.Id = DbHelper.GetNewElementId(Db);
 
@@ -177,6 +191,17 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                     ParameterName = "remote_db",
                     NpgsqlDbType = NpgsqlDbType.Smallint,
                     Value = (object)commonSequence.RemoteDb ?? DBNull.Value
+                },
+                new NpgsqlParameter
+                {
+                    ParameterName = "pause_treatment",
+                    NpgsqlDbType = NpgsqlDbType.Smallint,
+                    Value = pauseTreatment
+                },new NpgsqlParameter
+                {
+                    ParameterName = "sequential_transfer",
+                    NpgsqlDbType = NpgsqlDbType.Smallint,
+                    Value = sequentialTransfer
                 }
             };
             return parameters;
@@ -229,10 +254,10 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <returns>
         /// The <see cref="BaseChain"/>.
         /// </returns>
-        private BaseChain ConvertCongenericScoreTrackToFormalMotifsBaseChain(CongenericScoreTrack scoreTrack)
+        private BaseChain ConvertCongenericScoreTrackToFormalMotifsBaseChain(CongenericScoreTrack scoreTrack, PauseTreatment pauseTreatment, bool sequentialTransfer)
         {
             var borodaDivider = new BorodaDivider();
-            FmotifChain fmotifChain = borodaDivider.Divide(scoreTrack, ParamPauseTreatment.Ignore, ParamEqualFM.NonSequent);
+            FmotifChain fmotifChain = borodaDivider.Divide(scoreTrack, pauseTreatment, sequentialTransfer);
             return new BaseChain(((IEnumerable<IBaseObject>)fmotifChain.FmotifsList).ToList());
         }
     }

@@ -28,7 +28,7 @@
             var viewData = new Dictionary<string, object>
             {
                 { "notations", new [] { Notation.Notes, Notation.Measures, Notation.FormalMotifs }.ToSelectListWithNature() },
-                { "pauseParams", EnumHelper.GetSelectList(typeof(ParamPauseTreatment)) }
+                { "pauseParams", EnumHelper.GetSelectList(typeof(PauseTreatment)) }
             };
 
             ViewBag.data = JsonConvert.SerializeObject(viewData);

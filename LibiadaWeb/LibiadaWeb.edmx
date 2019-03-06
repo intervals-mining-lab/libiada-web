@@ -1330,6 +1330,8 @@
           <NavigationProperty Name="BinaryCharacteristicValue" Relationship="Self.fk_binary_characteristic_music_chain" FromRole="MusicSequence" ToRole="BinaryCharacteristicValue" />
           <NavigationProperty Name="CongenericCharacteristicValue" Relationship="Self.fk_congeneric_characteristic_music_chain" FromRole="MusicSequence" ToRole="CongenericCharacteristicValue" />
           <NavigationProperty Name="CharacteristicValue" Relationship="Self.fk_characteristic_music_chain" FromRole="MusicSequence" ToRole="CharacteristicValue" />
+          <Property Name="PauseTreatment" Type="Int16" Nullable="false" />
+          <Property Name="SequentialTransfer" Type="Boolean" Nullable="false" />
         </EntityType>
 
         <EntityType Name="DataSequence">
@@ -2365,6 +2367,8 @@
                 <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
                 <ScalarProperty Name="Description" ColumnName="description" />
+                <ScalarProperty Name="PauseTreatment" ColumnName="pause_treatment" />
+                <ScalarProperty Name="SequentialTransfer" ColumnName="sequential_transfer" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
