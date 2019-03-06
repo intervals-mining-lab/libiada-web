@@ -161,6 +161,8 @@
                         "~/Content/site.css",
                         "~/Content/scrollUpDown.css"));
 
+            bundles.Add(new ScriptBundle("~/bundles/controllers/FmotifsDictionaryController").Include(
+                "~/Scripts/Angular/Controllers/fmotifsDictionary.js"));
             // BundleTable.EnableOptimizations = true;
         }
     }
