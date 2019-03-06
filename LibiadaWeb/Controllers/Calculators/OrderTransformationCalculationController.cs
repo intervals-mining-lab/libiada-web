@@ -3,19 +3,19 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
-
+    using System.Web.Mvc.Html;
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
+    using LibiadaCore.DataTransformers;
     using LibiadaCore.Extensions;
-    using LibiadaCore.Misc;
 
-    using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
     using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
+    using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
 
     /// <summary>
     /// The order transformation calculation controller.
@@ -42,15 +42,8 @@
             var viewDataHelper = new ViewDataHelper(db);
             Dictionary<string, object> data = viewDataHelper.FillViewData(CharacteristicCategory.Full, 1, int.MaxValue, "Calculate");
 
-            var transformationLinks = new[] { Link.Start, Link.End, Link.CycleStart, Link.CycleEnd };
-            data.Add("transformationLinks", transformationLinks.ToSelectList());
-
-            var operations = new[]
-            {
-                new SelectListItem { Text = "Dissimilar", Value = 1.ToString() },
-                new SelectListItem { Text = "Higher order", Value = 2.ToString() }
-            };
-            data.Add("operations", operations);
+            var transformations = EnumHelper.GetSelectList(typeof(OrderTransformation));
+            data.Add("transformations", transformations);
 
             ViewBag.data = JsonConvert.SerializeObject(data);
             return View();
@@ -65,7 +58,7 @@
         /// <param name="transformationLinkIds">
         /// The transformation link ids.
         /// </param>
-        /// <param name="transformationIds">
+        /// <param name="transformationsSequence">
         /// The transformation ids.
         /// </param>
         /// <param name="iterationsCount">
@@ -90,8 +83,7 @@
         [ValidateAntiForgeryToken]
         public ActionResult Index(
             long[] matterIds,
-            Link[] transformationLinkIds,
-            int[] transformationIds,
+            OrderTransformation[] transformationsSequence,
             int iterationsCount,
             short[] characteristicLinkIds,
             Notation[] notations,
@@ -133,10 +125,10 @@
                         Chain sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
                         for (int l = 0; l < iterationsCount; l++)
                         {
-                            for (int j = 0; j < transformationIds.Length; j++)
+                            for (int j = 0; j < transformationsSequence.Length; j++)
                             {
-                                sequence = transformationIds[j] == 1 ? DissimilarChainFactory.Create(sequence)
-                                                                     : HighOrderFactory.Create(sequence, transformationLinkIds[j]);
+                                sequence = transformationsSequence[j] == OrderTransformation.Dissimilar ? DissimilarChainFactory.Create(sequence)
+                                                                     : HighOrderFactory.Create(sequence, EnumExtensions.GetLink(transformationsSequence[j]));
                             }
                         }
 
@@ -169,9 +161,9 @@
                 }
 
                 var transformations = new Dictionary<int, string>();
-                for (int i = 0; i < transformationIds.Length; i++)
+                for (int i = 0; i < transformationsSequence.Length; i++)
                 {
-                    transformations.Add(i, transformationIds[i] == 1 ? "dissimilar" : $"higher order {transformationLinkIds[i].GetDisplayValue()}");
+                    transformations.Add(i, transformationsSequence[i].GetDisplayValue());
                 }
 
                 var result = new Dictionary<string, object>

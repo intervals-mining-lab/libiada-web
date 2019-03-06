@@ -2295,6 +2295,13 @@ ALTER TABLE measure DROP COLUMN remote_db;
 ALTER TABLE measure DROP CONSTRAINT fk_measure_chain_key;
 DROP TRIGGER tgiud_measure_chain_key_bound ON measure;
 
+-- 01.03.2019
+-- Recreate unique constraints on sequences tables.
+
+ALTER TABLE dna_chain ADD CONSTRAINT uk_dna_chain UNIQUE (matter_id, notation);
+ALTER TABLE literature_chain ADD CONSTRAINT uk_literature_chain UNIQUE (notation, matter_id, language, translator);
+ALTER TABLE music_chain ADD CONSTRAINT uk_music_chain UNIQUE (matter_id, notation);
+ALTER TABLE data_chain ADD CONSTRAINT uk_data_chain UNIQUE (notation, matter_id);
 
 -- 06.03.2019
 -- Change music_chain structure

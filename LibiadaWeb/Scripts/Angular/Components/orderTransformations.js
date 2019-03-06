@@ -5,18 +5,17 @@
         var ctrl = this;
 
         ctrl.$onInit = function () {
-            ctrl.transformations = [];
+            ctrl.transformationsSequence = [];
         }
 
         ctrl.addTransformation = function addTransformation() {
-            ctrl.transformations.push({
-                link: ctrl.transformationLinks[0],
-                operation: ctrl.operations[0]
+            ctrl.transformationsSequence.push({
+                transformation: ctrl.transformations[0]
             });
         }
 
         ctrl.deleteTransformation = function deleteTransformation(transformation) {
-            ctrl.transformations.splice(ctrl.transformations.indexOf(transformation), 1);
+            ctrl.transformations.splice(ctrl.transformationsSequence.indexOf(transformation), 1);
         }
 
     }
@@ -25,8 +24,7 @@
         templateUrl: window.location.origin + "/Partial/_OrderTransformations",
         controller: [OrderTransformationsController],
         bindings: {
-            operations: "<",
-            transformationLinks: "<"
+            transformations: "<"
         }
     });
 }

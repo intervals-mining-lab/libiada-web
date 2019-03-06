@@ -6,7 +6,7 @@
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
-    using LibiadaCore.Misc.Iterators;
+    using LibiadaCore.Iterators;
 
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Catalogs;

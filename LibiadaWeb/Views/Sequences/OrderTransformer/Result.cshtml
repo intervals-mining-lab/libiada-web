@@ -1,28 +1,44 @@
 ﻿@{
     ViewBag.Title = "Order transformation result";
 }
+@Scripts.Render("~/bundles/loadingWindow")
 
 <h2>@ViewBag.Title</h2>
+
 @if (ViewBag.Error == null)
 {
-    <table>
-        <tbody>
-        @foreach (var transformation in ViewBag.transformationsList)
-        {
+    @Html.Partial("_AngularControllerInitializer", "OrderTransformationResultController")
+        
+<div ng-controller="OrderTransformationResultCtrl">
+    <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
+    <div ng-disabled="loading">
+        <table class="table table-bordered table-hover" ng-cloak>
+            <thead>
             <tr>
-                <td>
-                    @transformation.Value
-                </td>
+                <th>
+                    №
+                </th>
+                <th>
+                    Transformation
+                </th>
             </tr>
-        }
-        </tbody>
-    </table>
-    <br/>
-    <div class="monospace">
-        Transformations repeated @ViewBag.iterationsCount times
+            </thead>
+            <tbody>
+            <tr ng-repeat="transformation in transformationsList">
+                <td ng-bind="$index + 1"/>
+                <td ng-bind="transformation"/>
+            </tr>
+            </tbody>
+        </table>
+        <br />
+        <div class="monospace">
+            Transformations repeated {{iterationsCount}} times
+        </div>
+        <br />
+        <div class="monospace">
+            {{chain}}
+        </div>
     </div>
-    <br/>
-    <div class="monospace">
-        @ViewBag.chain.ToString(" ")
-    </div>
+</div>
+   
 }
