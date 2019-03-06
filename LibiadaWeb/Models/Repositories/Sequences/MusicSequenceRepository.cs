@@ -200,7 +200,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 },new NpgsqlParameter
                 {
                     ParameterName = "sequential_transfer",
-                    NpgsqlDbType = NpgsqlDbType.Smallint,
+                    NpgsqlDbType = NpgsqlDbType.Boolean,
                     Value = sequentialTransfer
                 }
             };
