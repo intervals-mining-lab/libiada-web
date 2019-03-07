@@ -13,7 +13,7 @@
             $scope.characteristicComparers.splice($scope.characteristicComparers.indexOf(characteristicComparer), 1);
         }
 
-        // fills array of currently visible points
+        // fills array of currently visible points ***
         function fillVisiblePoints() {
             $scope.visiblePoints = [];
             for (var i = 0; i < $scope.points.length; i++) {
@@ -41,7 +41,7 @@
             return false;
         }
 
-        // adds and applies new filter
+        // adds and applies new filter @@@
         function addFilter() {
             if ($scope.newFilter.length > 0) {
                 $scope.filters.push({ value: $scope.newFilter });
@@ -61,7 +61,7 @@
             // todo: add error message if filter is empty
         }
 
-        // deletes given filter
+        // deletes given filter @@@
         function deleteFilter(filter) {
             d3.selectAll(".dot")
                 .attr("visibility", function (d) {
@@ -106,7 +106,7 @@
             }
         }
 
-        // filters dots by subsequences feature
+        // filters dots by subsequences feature @@@
         function filterByFeature(feature) {
             d3.selectAll(".dot")
                 .filter(function (dot) {
@@ -168,7 +168,7 @@
             return attributesText.join("<br/>");
         }
 
-        // shows tooltip for dot or group of dots
+        // shows tooltip for dot or group of dots @@@
         function showTooltip(selectedPoints, tooltip, svg) {
             $scope.clearTooltip(tooltip);
             tooltip.style("opacity", 0.9);
@@ -258,7 +258,7 @@
             return tooltipContent.join("</br>");
         }
 
-        // clears tooltip and unselects dots
+        // clears tooltip and unselects dots @@@
         function clearTooltip(tooltip) {
             if (tooltip) {
                 tooltip.html("").style("opacity", 0);
@@ -293,52 +293,47 @@
             return $scope.colorMap(v.Id);
         }
 
-        function cLegend(matters) {
-            return matters.map(function (m) {
-                return {
-                    target: m.name,
-                    value: {
-                        marker: { color: cColor(m) }
-                    }
-                }
-            });
-        }
 
         // main drawing method
         function drawGenesMap() {
             var chartParams = { responsive: true };
-            var layout = {};
-            var data = $scope.points.map(function (points) {
+            var layout = {
+                xaxis: {
+                    title: {
+                        text: $scope.sequenceCharacteristicName,
+                        font: {
+                            family: 'Courier New, monospace',
+                            size: 12,
+                        }
+                    },
+                },
+                yaxis: {
+                    title: {
+                        text: $scope.subsequenceCharacteristic.Text,
+                        font: {
+                            family: 'Courier New, monospace',
+                            size: 12,
+                        }
+                    }
+                }
+            };
+            var data = $scope.points.map(function (points, index) {
                 return {
                     type: 'scatter',
                     mode: 'markers',
-                    x: xValues(points),
-                    y: yValues(points),
+                    x0: xValues(points),
+                    x1: xValues(points),
+                    y0: yValues(points),
+                    y1: yValues(points),
                     text: cText(points),
                     mode: "markers",
-                    type: "scatter"
+                    marker: {
+                        opacity: 0.5,
+                        },
+                    type: "scatter",
+                    name: $scope.matters[index].name
                 }
             });
-            //[{
-            //    type: 'scatter',
-            //    mode: 'markers',
-            //    x: xValues($scope.points),
-            //    y: yValues($scope.points),
-            //    text: cText($scope.points),
-            //    marker: {
-            //        size: $scope.dotRadius,
-            //        //color: color($scope.points),
-            //    },
-            //    transforms: [
-            //        {
-            //            type: 'groupby',
-            //            groups: cText($scope.points),
-            //            styles: cLegend($scope.matters),
-
-            //        }]
-            //}];
-
-
 
             Plotly.plot('chart', data, layout, chartParams);
 
