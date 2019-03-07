@@ -622,6 +622,6 @@
             });
     }
 
-    angular.module("libiada").controller("SubsequencesDistributionResultPlotlyCtrl", ["$scope", "$http", subsequencesDistributionResultPlotly]);
+    angular.module("libiada", []).controller("SubsequencesDistributionResultPlotlyCtrl", ["$scope", "$http", subsequencesDistributionResultPlotly]);
 
 }
