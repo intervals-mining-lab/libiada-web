@@ -319,12 +319,10 @@
             };
             var data = $scope.points.map(function (points, index) {
                 return {
-                    type: 'scatter',
+                    type: 'scattergl',
                     mode: 'markers',
-                    x0: xValues(points),
-                    x1: xValues(points),
-                    y0: yValues(points),
-                    y1: yValues(points),
+                    x: xValues(points),
+                    y: yValues(points),
                     text: cText(points),
                     mode: "markers",
                     marker: {
