@@ -19,37 +19,6 @@
     </div>
 
     <div class="form-group">
-        <label class="control-label col-md-2" for="notation">Notation of imported music:</label>
-        <div class="col-md-10">
-            <select class="form-control"
-                    title="Notation"
-                    ng-model="notation"
-                    ng-options="n.Text for n in notations"
-                    id="notation"></select>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label class="control-label col-md-2" for="pauseParam">Pause parameter:</label>
-        <div class="col-md-10">
-            <select class="form-control"
-                    title="Pause parameter"
-                    ng-model="pauseParam"
-                    ng-options="p.Text for p in pauseParams"
-                    id="pauseParam"></select>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <label>
-                <input type="checkbox" name="sequentTransfer" value="true" />
-                Sequent transfer
-            </label>
-        </div>
-    </div>
-    <input type="hidden" name="notation" ng-value="notation.Value" />
-    <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <input type="submit" value="Create" class="btn btn-default" ng-disabled="files.length < 1" />
         </div>

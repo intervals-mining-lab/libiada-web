@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Web.Mvc;
     using LibiadaWeb.Extensions;
@@ -12,6 +13,7 @@
     using Microsoft.Ajax.Utilities;
     using LibiadaCore.Music;
     using System.Web.Mvc.Html;
+    using System.Web;
 
     public class BatchMusicImportController : AbstractResultController
     {
@@ -25,19 +27,12 @@
         // GET: BatchMusicImport
         public ActionResult Index()
         {
-            var viewData = new Dictionary<string, object>
-            {
-                { "notations", new [] { Notation.Notes, Notation.Measures, Notation.FormalMotifs }.ToSelectListWithNature() },
-                { "pauseParams", EnumHelper.GetSelectList(typeof(PauseTreatment)) }
-            };
-
-            ViewBag.data = JsonConvert.SerializeObject(viewData);
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(Notation notation)
+        public ActionResult Index(HttpPostedFileBase[] files)
         {
             return CreateTask(() =>
             {
@@ -56,14 +51,9 @@
                             MatterName = sequenceName
                         };
 
-
                         try
                         {
-                            CommonSequence sequence = new CommonSequence
-                            {
-                                Notation = notation
-                            };
-
+                            var sequence = new CommonSequence();
 
                             if (matters.Any(m => m.Name == sequenceName))
                             {
