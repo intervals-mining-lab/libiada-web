@@ -439,6 +439,7 @@
     <Content Include="Scripts\Angular\Controllers\calculation.js" />
     <Content Include="Scripts\Angular\Controllers\subsequencesCalculation.js" />
     <Content Include="Scripts\Angular\Controllers\matterSequenceCreate.js" />
+    <Content Include="Scripts\Angular\Controllers\subsequencesDistributionResultPlotly.js" />
     <Content Include="Scripts\Angular\Controllers\subsequencesDistributionResult.js" />
     <Content Include="Scripts\Angular\Controllers\taskManager.js" />
     <Content Include="Scripts\Angular\Directives\tableParse.js" />
@@ -486,6 +487,8 @@
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\Angular\functions.js" />
     <Content Include="Scripts\Angular\Components\loadingWindow.js" />
+    <Content Include="Scripts\plotly\plotly.js" />
+    <Content Include="Scripts\plotly\plotly.min.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
@@ -556,7 +559,7 @@
     <Content Include="Views\Partial\_MattersSubmit.cshtml" />
     <Content Include="Views\Calculators\Charts\Index.cshtml" />
     <Content Include="Views\Calculators\SubsequencesDistribution\Index.cshtml" />
-    <Content Include="Views\Calculators\SubsequencesDistribution\Result.cshtml" />
+    <Content Include="Views\Calculators\SubsequencesDistribution\OldResult.cshtml" />
     <Content Include="Views\Partial\_LocalFile.cshtml" />
     <Content Include="Views\Sequences\GenesImport\Result.cshtml" />
     <Content Include="Views\Calculators\SubsequencesSimilarity\Result.cshtml" />
@@ -613,6 +616,7 @@
     <Content Include="Views\Calculators\OrderCalculation\Result.cshtml" />
     <Content Include="Views\Sequences\OrderTransformationConvergence\Index.cshtml" />
     <Content Include="Views\Sequences\OrderTransformationConvergence\Result.cshtml" />
+    <Content Include="Views\Calculators\SubsequencesDistribution\Result.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
