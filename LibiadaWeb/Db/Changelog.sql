@@ -2237,4 +2237,15 @@ ALTER TABLE congeneric_characteristic_link ADD CONSTRAINT uk_congeneric_characte
 
 ALTER TABLE sequence_group ADD COLUMN sequence_group_type SMALLINT;
 
+-- 01.03.2019
+-- Recreate unique constraints on sequences tables.
+
+ALTER TABLE dna_chain ADD CONSTRAINT uk_dna_chain UNIQUE (matter_id, notation);
+
+ALTER TABLE literature_chain ADD CONSTRAINT uk_literature_chain UNIQUE (notation, matter_id, language, translator);
+
+ALTER TABLE music_chain ADD CONSTRAINT uk_music_chain UNIQUE (matter_id, notation);
+
+ALTER TABLE data_chain ADD CONSTRAINT uk_data_chain UNIQUE (notation, matter_id);
+
 COMMIT;

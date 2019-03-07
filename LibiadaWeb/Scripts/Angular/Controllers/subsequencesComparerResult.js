@@ -50,11 +50,11 @@
 				for (var j = 0; j < $scope.filters.length; j++) {
 					var filterValue = $scope.filters[j].value.toUpperCase();
 
-					var firstSubsequenceIndex = elements[i].Item1;
+                    var firstSubsequenceIndex = elements[i].firstSubsequenceIndex;
 					var firstVisible = $scope.isAttributeEqual($scope.firstMatterIndex, firstSubsequenceIndex, "product", filterValue);
 					firstVisible = firstVisible || $scope.isAttributeEqual($scope.firstMatterIndex, firstSubsequenceIndex, "locus_tag", filterValue);
 
-					var secondSubsequenceIndex = elements[i].Item2;
+                    var secondSubsequenceIndex = elements[i].secondSubsequenceIndex;
 					var secondVisible = $scope.isAttributeEqual($scope.secondMatterIndex, secondSubsequenceIndex, "product", filterValue);
 					secondVisible = secondVisible || $scope.isAttributeEqual($scope.secondMatterIndex, secondSubsequenceIndex, "locus_tag", filterValue);
 
@@ -375,7 +375,7 @@
 			step: 1
 		};
 
-	    $scope.characteristicLinkId = 0;
+        $scope.characteristicLinkId = 0;
 		$scope.equalElementsToShow = [];
 		$scope.filters = [];
 		$scope.legendHeight = 40;
