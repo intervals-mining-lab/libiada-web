@@ -185,7 +185,7 @@
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            
+
             return View(sequenceGroup);
         }
 

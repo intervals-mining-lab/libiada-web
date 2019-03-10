@@ -11,7 +11,6 @@
     using LibiadaCore.DataTransformers;
     using LibiadaCore.Extensions;
 
-    using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Tasks;
 
@@ -40,7 +39,7 @@
         public ActionResult Index()
         {
             var data = new Dictionary<string, object>();
-            
+
             var transformations = EnumHelper.GetSelectList(typeof(OrderTransformation));
             data.Add("transformations", transformations);
 
@@ -51,7 +50,7 @@
         /// <summary>
         /// The index.
         /// </summary>
-        /// <param name="transformationLinkIds">
+        /// <param name="transformationsSequence">
         /// The transformation link ids.
         /// </param>
         /// <param name="transformationsSequence">
@@ -61,7 +60,7 @@
         /// Number of transformations iterations.
         /// </param>
         /// <param name="customSequences">
-        /// Custom sequences inputed by user.
+        /// Custom sequences from user input.
         /// </param>
         /// <param name="localFile">
         /// Local file flag.
@@ -111,7 +110,7 @@
                     {
                         for (int i = 0; i < transformationsSequence.Length; i++)
                         {
-                            sequences[k] = transformationsSequence[i] == OrderTransformation.Dissimilar 
+                            sequences[k] = transformationsSequence[i] == OrderTransformation.Dissimilar
                                                ? DissimilarChainFactory.Create(sequences[k])
                                                : HighOrderFactory.Create(sequences[k], EnumExtensions.GetLink(transformationsSequence[i]));
                         }

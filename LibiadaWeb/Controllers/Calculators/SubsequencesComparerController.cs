@@ -9,6 +9,7 @@
 
     using LibiadaCore.Extensions;
 
+    using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.CalculatorsData;
@@ -20,6 +21,8 @@
     using Newtonsoft.Json;
 
     using static LibiadaWeb.Models.Calculators.SubsequencesCharacteristicsCalculator;
+
+    using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
 
     /// <summary>
     /// The subsequences comparer controller.
@@ -166,7 +169,7 @@
                     }
                 }
 
-                List<((int matterIndex, int subsequenceIndex) firstSequence, (int mamatterIndextterId, int subsequenceIndex) secondSequence, double difference)> similarPairs =
+                List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> similarPairs =
                     ExtractSimilarPairs(characteristicValueSubsequences, percentageDifference);
 
                 List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>[,] similarityMatrix =
@@ -184,7 +187,9 @@
                     { "attributeValues", attributeValues.Select(sa => new { attribute = sa.AttributeId, value = sa.Value }) },
                     { "attributes", EnumExtensions.ToArray<LibiadaWeb.Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
                     { "maxPercentageDifference", maxPercentageDifference },
-                    { "sequenceCharacteristicName", sequenceCharacteristicName }
+                    { "sequenceCharacteristicName", sequenceCharacteristicName },
+                    { "nature", (byte)Nature.Genetic },
+                    { "notations", EnumExtensions.ToArray<Notation>().Where(n => n.GetNature() == Nature.Genetic).ToSelectListWithNature() }
                 };
 
                 foreach ((string key, object value) in characteristicsTypesData)
@@ -342,7 +347,7 @@
         /// <returns>
         /// The <see cref="T:List{((int, int), (int, int), double)}"/>.
         /// </returns>
-        private List<((int matterIndex, int subsequenceIndex) firstSequence, (int mamatterIndextterId, int subsequenceIndex) secondSequence, double difference)> ExtractSimilarPairs(
+        private List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> ExtractSimilarPairs(
             Dictionary<double, List<(int matterId, int subsequenceIndex)>> characteristicValueSubsequences,
             double percentageDifference)
         {
