@@ -4,33 +4,33 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
-    using LibiadaWeb.Extensions;
+
     using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Sequences;
     using LibiadaWeb.Tasks;
     using Newtonsoft.Json;
 
+    using System.Web;
+
     [Authorize(Roles = "Admin")]
-    public class BatchPoemsImportController : AbstractResultController
+    public class BatchMusicImportController : AbstractResultController
     {
-        public BatchPoemsImportController() : base(TaskType.BatchPoemsImport)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BatchMusicImportController"/> class.
+        /// </summary>
+        public BatchMusicImportController() : base(TaskType.BatchMusicImport)
         {
         }
 
-        // GET: BatchPoemsImport
+        // GET: BatchMusicImport
         public ActionResult Index()
         {
-            var viewData = new Dictionary<string, object>
-            {
-                { "notations", new [] { Notation.Letters, Notation.Consonance }.ToSelectListWithNature() }
-            };
-            ViewBag.data = JsonConvert.SerializeObject(viewData);
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(Notation notation, bool dropPunctuation)
+        public ActionResult Index(HttpPostedFileBase[] files)
         {
             return CreateTask(() =>
             {
@@ -38,53 +38,48 @@
 
                 using (var db = new LibiadaWebEntities())
                 {
-                    Matter[] matters = db.Matter.Where(m => m.Nature == Nature.Literature).ToArray();
+                    Matter[] matters = db.Matter.Where(m => m.Nature == Nature.Music).ToArray();
 
                     for (int i = 0; i < Request.Files.Count; i++)
                     {
                         string sequenceName = Request.Files[i].FileName.Substring(0, Request.Files[i].FileName.LastIndexOf('.'));
 
                         var importResult = new MatterImportResult()
-                                               {
-                                                   MatterName = sequenceName
-                                               };
-
+                        {
+                            MatterName = sequenceName
+                        };
 
                         try
                         {
-                            var sequence = new CommonSequence
-                            {
-                                Notation = notation
-                            };
-
+                            var sequence = new CommonSequence();
 
                             if (matters.Any(m => m.Name == sequenceName))
                             {
                                 sequence.MatterId = matters.Single(m => m.Name == sequenceName).Id;
-                                importResult.Result = "Successfully imported poem for existing matter";
+                                importResult.Result = "Successfully imported music for existing matter";
                             }
                             else
                             {
                                 sequence.Matter = new Matter
                                 {
                                     Name = sequenceName,
-                                    Group = Group.ClassicalLiterature,
-                                    Nature = Nature.Literature,
-                                    SequenceType = SequenceType.CompleteText
+                                    Group = Group.ClassicalMusic,
+                                    Nature = Nature.Music,
+                                    SequenceType = SequenceType.CompleteMusicalComposition
                                 };
 
-                                importResult.Result = "Successfully imported poem and created matter";
+                                importResult.Result = "Successfully imported music and created matter";
                             }
 
-                            var repository = new LiteratureSequenceRepository(db);
+                            var repository = new MusicSequenceRepository(db);
 
-                            repository.Create(sequence, Request.Files[i].InputStream, Language.Russian, true, Translator.NoneOrManual, dropPunctuation);
+                            repository.Create(sequence, Request.Files[i].InputStream);
                             importResult.Status = "Success";
                             importResults.Add(importResult);
                         }
                         catch (Exception exception)
                         {
-                            importResult.Result = $"Failed to import poem: {exception.Message}";
+                            importResult.Result = $"Failed to import music: {exception.Message}";
                             while (exception.InnerException != null)
                             {
                                 importResult.Result += $" {exception.InnerException.Message}";

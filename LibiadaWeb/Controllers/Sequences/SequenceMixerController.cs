@@ -163,7 +163,7 @@
                     dnaSequenceRepository.Create(result, dnaSequence.Partial, alphabet, chain.Building);
                     break;
                 case Nature.Music:
-                    musicSequenceRepository.Create(result, alphabet, chain.Building);
+                    musicSequenceRepository.Create(result, alphabet, chain.Building, result.Notation);
                     break;
                 case Nature.Literature:
                     LiteratureSequence sequence = db.LiteratureSequence.Single(c => c.Id == sequenceId);

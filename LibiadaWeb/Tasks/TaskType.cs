@@ -205,7 +205,13 @@
         /// </summary>
         [Display(Name = "Order transformation convergence")]
         [TaskClass(typeof(OrderTransformationConvergenceController))]
-        OrderTransformationConvergence = 28
+        OrderTransformationConvergence = 28,
 
+        /// <summary>
+        /// Batch music import.
+        /// </summary>
+        [Display(Name = "Batch music import")]
+        [TaskClass(typeof(BatchMusicImportController))]
+        BatchMusicImport = 29
     }
 }

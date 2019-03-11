@@ -2237,15 +2237,79 @@ ALTER TABLE congeneric_characteristic_link ADD CONSTRAINT uk_congeneric_characte
 
 ALTER TABLE sequence_group ADD COLUMN sequence_group_type SMALLINT;
 
+-- 17.02.2019
+-- Change DB structure for fmotifs.
+
+DROP TABLE fmotiv;
+
+CREATE TABLE fmotif
+(
+  id bigint NOT NULL DEFAULT nextval('elements_id_seq'::regclass), 
+  value character varying(255), 
+  description text, 
+  name character varying(255), 
+  notation smallint NOT NULL DEFAULT 6, 
+  created timestamp with time zone NOT NULL DEFAULT now(),
+  modified timestamp with time zone NOT NULL DEFAULT now(),
+  alphabet bigint[] NOT NULL, 
+  building integer[] NOT NULL,
+  fmotif_type smallint NOT NULL,
+  CONSTRAINT pk_fmotif PRIMARY KEY (id),
+  CONSTRAINT fk_fmotif_element_key FOREIGN KEY (id)
+      REFERENCES element_key (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY DEFERRED
+) INHERITS (element);
+
+ALTER TABLE fmotif OWNER TO postgres;
+COMMENT ON TABLE fmotif IS 'Fmotifs table';
+COMMENT ON COLUMN fmotif.id IS 'Unique internal identificator';
+COMMENT ON COLUMN fmotif.value IS 'Fmotif hash';
+COMMENT ON COLUMN fmotif.description IS 'Fmotif description';
+COMMENT ON COLUMN fmotif.name IS 'Fmotif name';
+COMMENT ON COLUMN fmotif.notation IS 'Fmotif notation, always 6';
+COMMENT ON COLUMN fmotif.created IS 'Creation date';
+COMMENT ON COLUMN fmotif.alphabet IS 'Fmotif alphabet of notes';
+COMMENT ON COLUMN fmotif.building IS 'Fmotif order';
+COMMENT ON COLUMN fmotif.fmotif_type IS 'Type of fmotif';
+
+CREATE INDEX ix_fmotif_alphabet ON fmotif USING gin (alphabet);
+
+CREATE TRIGGER tgi_fmotif_building_check BEFORE INSERT ON fmotif FOR EACH ROW EXECUTE PROCEDURE trigger_building_check();
+COMMENT ON TRIGGER tgi_fmotif_building_check ON fmotif IS 'Trigger validating fmotif order';
+
+CREATE TRIGGER tgiu_fmotif_alphabet AFTER INSERT OR UPDATE OF alphabet ON fmotif FOR EACH STATEMENT EXECUTE PROCEDURE trigger_check_alphabet();
+COMMENT ON TRIGGER tgiu_fmotif_alphabet ON fmotif IS 'Trigger validating fmotif alphabet';
+
+CREATE TRIGGER tgiu_fmotif_modified BEFORE INSERT OR UPDATE ON fmotif FOR EACH ROW EXECUTE PROCEDURE trigger_set_modified();
+COMMENT ON TRIGGER tgiu_fmotif_modified ON fmotif IS 'Trigger filling creation and modification date';
+
+CREATE TRIGGER tgiud_fmotif_element_key_bound AFTER INSERT OR UPDATE OF id OR DELETE ON fmotif FOR EACH ROW EXECUTE PROCEDURE trigger_element_key_bound();
+COMMENT ON TRIGGER tgiud_fmotif_element_key_bound ON fmotif IS 'Trigger that dublicates insert, update and delete of fmotifs into element_key table';
+  
+-- 19.02.2019
+-- Change DB structure for measures.
+
+ALTER TABLE measure DROP COLUMN matter_id;
+ALTER TABLE measure DROP COLUMN remote_id;
+ALTER TABLE measure DROP COLUMN remote_db;
+ALTER TABLE measure DROP CONSTRAINT fk_measure_chain_key;
+DROP TRIGGER tgiud_measure_chain_key_bound ON measure;
+
 -- 01.03.2019
 -- Recreate unique constraints on sequences tables.
 
 ALTER TABLE dna_chain ADD CONSTRAINT uk_dna_chain UNIQUE (matter_id, notation);
-
 ALTER TABLE literature_chain ADD CONSTRAINT uk_literature_chain UNIQUE (notation, matter_id, language, translator);
-
 ALTER TABLE music_chain ADD CONSTRAINT uk_music_chain UNIQUE (matter_id, notation);
-
 ALTER TABLE data_chain ADD CONSTRAINT uk_data_chain UNIQUE (notation, matter_id);
+
+-- 06.03.2019
+-- Change music_chain structure
+ALTER TABLE music_chain ADD COLUMN pause_treatment smallint NOT NULL DEFAULT 0;
+ALTER TABLE music_chain ADD COLUMN sequential_transfer boolean NOT NULL DEFAULT false;
+ALTER TABLE music_chain DROP CONSTRAINT uk_music_chain;
+ALTER TABLE music_chain ADD CONSTRAINT uk_music_chain UNIQUE (matter_id, notation, pause_treatment, sequential_transfer);
+ALTER TABLE music_chain ADD CONSTRAINT chk_pause_treatment_and_sequential_transfer CHECK ((notation = 6 AND pause_treatment != 0) OR ((notation = 7 OR notation = 8) AND pause_treatment = 0 AND NOT sequential_transfer));
+
 
 COMMIT;

@@ -53,6 +53,9 @@
             bundles.Add(new ScriptBundle("~/bundles/controllers/BatchSequenceImportController").Include(
                         "~/Scripts/Angular/Controllers/batchSequenceImport.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/controllers/BatchMusicImportController").Include(
+                "~/Scripts/Angular/Controllers/batchMusicImport.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/controllers/BatchPoemsImportController").Include(
                 "~/Scripts/Angular/Controllers/batchPoemsImport.js"));
 
@@ -167,6 +170,8 @@
                         "~/Content/site.css",
                         "~/Content/scrollUpDown.css"));
 
+            bundles.Add(new ScriptBundle("~/bundles/controllers/FmotifsDictionaryController").Include(
+                "~/Scripts/Angular/Controllers/fmotifsDictionary.js"));
             // BundleTable.EnableOptimizations = true;
         }
     }

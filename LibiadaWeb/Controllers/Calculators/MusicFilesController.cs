@@ -12,6 +12,7 @@
     /// <summary>
     /// The music files controller.
     /// </summary>
+    [Authorize(Roles = "Admin")]
     public class MusicFilesController : AbstractResultController
     {
         /// <summary>

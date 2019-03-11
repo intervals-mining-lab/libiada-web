@@ -90,9 +90,9 @@
 			$scope.secondMatterIndex = secondIndex;
 
 			$scope.similarityValue = similarityValue;
-			$scope.similarityValueSelected = true;
+            $scope.similarityValueSelected = true;
 
-			if ($scope.equalElements[firstIndex][secondIndex]) {
+            if ($scope.equalElements[firstIndex][secondIndex]) {
 				$scope.equalElementsToShow = $scope.equalElements[firstIndex][secondIndex];
 				$scope.loading = false;
 			} else {
@@ -115,7 +115,7 @@
 			}
 		}
 
-		// calculates cell hihglight color using d3.js color scale
+		// calculates cell highlight color using d3.js color scale
 		function getHighlightColor(value) {
 			var color = d3.scaleLinear()
 				.domain([0, 0.1, 0.5, 1])
@@ -126,21 +126,26 @@
 		// calculates and displays local characteristics for given subsequences
 		function calculateLocalCharacteristics(firstSubsequenceId, secondSubsequenceId, index) {
 			$scope.loading = true;
-			$scope.loadingScreenHeader = "Loading local characteristics...";
+            $scope.loadingScreenHeader = "Loading local characteristics...";
+
+            var characteristicType = $scope.characteristic.characteristicType.Value;
+            var link = $scope.characteristic.link.Value;
+            var arrangementType = $scope.characteristic.arrangementType.Value;
+            var characteristicId = $scope.characteristicsDictionary["(" + characteristicType+ ", " + link + ", " + arrangementType + ")"];
 
 			$http.get("/api/LocalCalculationWebApi?subsequenceId=" + firstSubsequenceId +
-				"&characteristicLinkId=" + $scope.characteristicLinkId +
+                "&characteristicLinkId=" + characteristicId +
 				"&windowSize=" + $scope.slidingWindowParams.windowSize +
 				"&step=" + $scope.slidingWindowParams.step)
 				.then(function (firstCharacteristics) {
-					$scope.firstSubsequenceLocalCharactristics = JSON.parse(firstCharacteristics.data);
+					$scope.firstSubsequenceLocalCharacteristics = JSON.parse(firstCharacteristics.data);
 
 					$http.get("/api/LocalCalculationWebApi?subsequenceId=" + secondSubsequenceId +
-						"&characteristicLinkId=" + $scope.characteristicLinkId +
+                        "&characteristicLinkId=" + characteristicId +
 						"&windowSize=" + $scope.slidingWindowParams.windowSize +
 						"&step=" + $scope.slidingWindowParams.step)
 						.then(function (secondCharacteristics) {
-							$scope.secondSubsequenceLocalCharactristics = JSON.parse(secondCharacteristics.data);
+							$scope.secondSubsequenceLocalCharacteristics = JSON.parse(secondCharacteristics.data);
 							$scope.drawLocalCharacteristics(firstSubsequenceId, secondSubsequenceId, index);
 
 							$scope.loading = false;
@@ -156,25 +161,25 @@
 				});
 		}
 
-		// draws local charactetistics linechart
+		// draws local characteristics line-chart
 		function drawLocalCharacteristics(firstSubsequenceId, secondSubsequenceId, index) {
 			var legendData = [
 				{ id: firstSubsequenceId, name: "First", visible: true, points: [] },
 				{ id: secondSubsequenceId, name: "Second", visible: true, points: [] }];
 
-			for (var j = 0; j < $scope.firstSubsequenceLocalCharactristics.length; j++) {
+			for (var j = 0; j < $scope.firstSubsequenceLocalCharacteristics.length; j++) {
 				legendData[0].points.push({
 					id: firstSubsequenceId,
 					x: j,
-					value: +$scope.firstSubsequenceLocalCharactristics[j]
+					value: +$scope.firstSubsequenceLocalCharacteristics[j]
 				});
 			}
 
-			for (var k = 0; k < $scope.secondSubsequenceLocalCharactristics.length; k++) {
+			for (var k = 0; k < $scope.secondSubsequenceLocalCharacteristics.length; k++) {
 				legendData[1].points.push({
 					id: secondSubsequenceId,
 					x: k,
-					value: +$scope.secondSubsequenceLocalCharactristics[k]
+					value: +$scope.secondSubsequenceLocalCharacteristics[k]
 				});
 			}
 
@@ -193,10 +198,10 @@
 			var yMinArray = [];
 
 			legendData.forEach(function (data) {
-				xMinArray.push(d3.min(data.points, function (d) { return d.x }));
-				xMaxArray.push(d3.max(data.points, function (d) { return d.x }));
-				yMinArray.push(d3.min(data.points, function (d) { return d.value }));
-				yMaxArray.push(d3.max(data.points, function (d) { return d.value }));
+				xMinArray.push(d3.min(data.points, function (d) { return d.x; }));
+				xMaxArray.push(d3.max(data.points, function (d) { return d.x; }));
+				yMinArray.push(d3.min(data.points, function (d) { return d.value; }));
+				yMaxArray.push(d3.max(data.points, function (d) { return d.value; }));
 			});
 
 			// setup x
@@ -344,13 +349,28 @@
 		$scope.isAttributeEqual = isAttributeEqual;
 		$scope.elementVisible = elementVisible;
 		$scope.showEqualPairs = showEqualPairs;
-		$scope.applyFilters = applyFilters;
+        $scope.applyFilters = applyFilters;
 		$scope.calculateLocalCharacteristics = calculateLocalCharacteristics;
 		$scope.drawLocalCharacteristics = drawLocalCharacteristics;
 
-		$scope.loadingScreenHeader = "Loading data";
+        $scope.slidingWindowParams = {
+            windowSize: 50,
+            step: 1
+        };
 
-		var location = window.location.href.split("/");
+        $scope.equalElementsToShow = [];
+        $scope.filters = [];
+        $scope.legendHeight = 40;
+        $scope.width = 1050;
+        $scope.height = 800;
+        $scope.dotRadius = 4;
+        $scope.selectedDotRadius = $scope.dotRadius * 2;
+        $scope.similarityValue = {};
+        $scope.similarityValueSelected = false;
+        $scope.loadingScreenHeader = "Loading data";
+        $scope.characteristic = {};
+
+        var location = window.location.href.split("/");
 		$scope.taskId = location[location.length - 1];
 		$scope.loading = true;
 		$http.get("/api/TaskManagerWebApi/" + $scope.taskId)
@@ -369,23 +389,7 @@
 
 				$scope.loading = false;
 			});
-
-		$scope.slidingWindowParams = {
-			windowSize: 50,
-			step: 1
-		};
-
-        $scope.characteristicLinkId = 0;
-		$scope.equalElementsToShow = [];
-		$scope.filters = [];
-		$scope.legendHeight = 40;
-		$scope.width = 1050;
-		$scope.height = 800;
-		$scope.dotRadius = 4;
-		$scope.selectedDotRadius = $scope.dotRadius * 2;
-		$scope.similarityValue = {};
-		$scope.similarityValueSelected = false;
-	}
+    }
 
 	function makePositive() {
 		return function(num) { return Math.abs(num); };

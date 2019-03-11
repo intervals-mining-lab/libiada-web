@@ -149,10 +149,12 @@
     <Compile Include="Controllers\PartialController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\Sequences\BatchGenesImportController.cs" />
+    <Compile Include="Controllers\Sequences\BatchMusicImportController.cs" />
     <Compile Include="Controllers\Sequences\BatchPoemsImportController.cs" />
     <Compile Include="Controllers\Sequences\BatchSequenceImportController.cs" />
     <Compile Include="Controllers\Sequences\CommonSequencesController.cs" />
     <Compile Include="Controllers\Sequences\CustomSequenceOrderTransformerController.cs" />
+    <Compile Include="Controllers\Sequences\FmotifsDictionaryController.cs" />
     <Compile Include="Controllers\Sequences\MattersController.cs" />
     <Compile Include="Controllers\Sequences\OrderTransformationConvergenceController.cs" />
     <Compile Include="Controllers\Sequences\OrderTransformerController.cs" />
@@ -178,7 +180,7 @@
     </Compile>
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Feature.cs" />
-    <Compile Include="Fmotiv.cs">
+    <Compile Include="Fmotif.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
     <Compile Include="FullCharacteristicLink.cs">
@@ -237,8 +239,12 @@
     <Compile Include="Models\Repositories\Catalogs\BinaryCharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\CongenericCharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\FullCharacteristicRepository.cs" />
+    <Compile Include="Models\Repositories\Sequences\FmotifRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\GeneticSequenceRepository.cs" />
+    <Compile Include="Models\Repositories\Sequences\IFmotifRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\IGeneticSequenceRepository.cs" />
+    <Compile Include="Models\Repositories\Sequences\IMeasureRepsitory.cs" />
+    <Compile Include="Models\Repositories\Sequences\MeasureRepository.cs" />
     <Compile Include="Models\SelectListItemComparer.cs" />
     <Compile Include="Models\SubsequenceImporter.cs" />
     <Compile Include="MusicSequence.cs">
@@ -415,11 +421,13 @@
     <Content Include="Scripts\Angular\Components\orderTransformations.js" />
     <Content Include="Scripts\Angular\Components\scrollJumper.js" />
     <Content Include="Scripts\Angular\Controllers\accordance.js" />
+    <Content Include="Scripts\Angular\Controllers\batchMusicImport.js" />
     <Content Include="Scripts\Angular\Controllers\batchPoemsImport.js" />
     <Content Include="Scripts\Angular\Controllers\batchSequenceImport.js" />
     <Content Include="Scripts\Angular\Controllers\batchSequenceImportResult.js" />
     <Content Include="Scripts\Angular\Controllers\calculationResult.js" />
     <Content Include="Scripts\Angular\Controllers\charts.js" />
+    <Content Include="Scripts\Angular\Controllers\fmotifsDictionary.js" />
     <Content Include="Scripts\Angular\Controllers\localCalculationResult.js" />
     <Content Include="Scripts\Angular\Controllers\matterEdit.js" />
     <Content Include="Scripts\Angular\Controllers\musicFilesResult.js" />
@@ -618,6 +626,9 @@
     <Content Include="Views\Sequences\OrderTransformationConvergence\Index.cshtml" />
     <Content Include="Views\Sequences\OrderTransformationConvergence\Result.cshtml" />
     <Content Include="Views\Calculators\SubsequencesDistribution\Result.cshtml" />
+    <Content Include="Views\Sequences\BatchMusicImport\Index.cshtml" />
+    <Content Include="Views\Sequences\BatchMusicImport\Result.cshtml" />
+    <Content Include="Views\Sequences\FmotifsDictionary\Index.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
