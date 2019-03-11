@@ -298,6 +298,7 @@
         function drawGenesMap() {
             var chartParams = { responsive: true };
             var layout = {
+                hovermode: "closest",
                 xaxis: {
                     title: {
                         text: $scope.sequenceCharacteristicName,
@@ -317,6 +318,7 @@
                     }
                 }
             };
+            var myPlot = document.getElementById('chart');
             var data = $scope.points.map(function (points, index) {
                 return {
                     type: 'scattergl',
@@ -334,6 +336,19 @@
             });
 
             Plotly.plot('chart', data, layout, chartParams);
+
+            myPlot.on('plotly_click', function (data) {
+                var pts = '';
+                for (var i = 0; i < data.points.length; i++) {
+                    pts = 'x = ' + data.points[i].x + '\ny = ' +
+                        data.points[i].y.toPrecision(4) + '\n\n' +
+                        "curve number = " + data.points[i].curveNumber + '\n\n' +
+                        "point number = " + data.points[i].pointNumber + '\n\n' +
+                        "point index = " + data.points[i].pointIndex + '\n\n' +
+                        "text = " + data.points[i].text + '\n\n' ;
+                }
+                alert('Closest point clicked:\n\n' + pts);
+            });
 
             //$scope.loading = true;
             //$scope.loadingScreenHeader = "Drawing...";
