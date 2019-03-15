@@ -199,7 +199,7 @@
         [Display(Name = "Order calculation")]
         [TaskClass(typeof(OrderCalculationController))]
         OrderCalculation = 27,
-		
+
         /// <summary>
         /// Order transformation convergence.
         /// </summary>
@@ -219,6 +219,13 @@
         /// </summary>
         [Display(Name = "Order transformation visualization")]
         [TaskClass(typeof(OrderTransformationVisualizationController))]
-        OrderTransformationVisualization = 30
+        OrderTransformationVisualization = 30,
+
+        /// <summary>
+        /// Fmotifs dictionary.
+        /// </summary>
+        [Display(Name = "Fmotifs dictionary")]
+        [TaskClass(typeof(FmotifsDictionaryController))]
+        FmotifsDictionary = 31
     }
 }

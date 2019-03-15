@@ -1,5 +1,4 @@
-﻿using LibiadaCore.Misc;
-using LibiadaWeb.Models.CalculatorsData;
+﻿using LibiadaWeb.Models.CalculatorsData;
 using System.Collections.Generic;
 using System.Linq;
 using LibiadaCore.Core;
@@ -7,6 +6,7 @@ using SequenceGenerator;
 
 namespace LibiadaWeb.Models
 {
+    using LibiadaCore.DataTransformers;
     using LibiadaCore.Extensions;
 
     using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
