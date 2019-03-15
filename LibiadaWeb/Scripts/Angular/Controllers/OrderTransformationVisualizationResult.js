@@ -119,7 +119,7 @@
                                     var cyline = (line.y1 + line.y2) / 2.0;
                                     var cxline = (line.x1 + line.x2) / 2.0;
                                     var yAmplitude = line.y2 - line.y1;
-                                    var shifty = 0.8 * lineIterator;
+                                    var shifty = 0.2 * lineIterator;
                                     var shiftx = 0.05 * lineIterator * Math.abs(yAmplitude) / $scope.ordersIds.length;
                                     $scope.lines.push({
                                         id: counterIdLines++,
