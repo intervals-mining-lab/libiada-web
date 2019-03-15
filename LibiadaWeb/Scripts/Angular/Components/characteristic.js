@@ -4,26 +4,26 @@
     function Characteristic(filterFilter) {
         var ctrl = this;
 
-        ctrl.$onInit = function() {
+        ctrl.$onInit = function () {
             ctrl.characteristicName = ctrl.characteristicName || "characteristicLinkId";
             ctrl.title = ctrl.title || "Characteristic";
-            ctrl.characteristic = {
-                characteristicType: ctrl.characteristicTypes[0],
-                link: ctrl.characteristicTypes[0].Links[0],
-                arrangementType: ctrl.characteristicTypes[0].ArrangementTypes[0],
-                notation: filterFilter(ctrl.notations, { Nature: ctrl.nature })[0]
-            };
+            ctrl.characteristic = ctrl.characteristic || {};
+            ctrl.characteristic.characteristicType = ctrl.characteristicTypes[0];
+            ctrl.characteristic.link = ctrl.characteristicTypes[0].Links[0];
+            ctrl.characteristic.arrangementType = ctrl.characteristicTypes[0].ArrangementTypes[0];
+            ctrl.characteristic.notation = filterFilter(ctrl.notations, { Nature: ctrl.nature })[0];
         };
 
-        ctrl.$onChanges = function(changes) {
+        ctrl.$onChanges = function (changes) {
             if (changes.nature) {
                 ctrl.filterByNature();
             }
         };
 
         ctrl.filterByNature = function () {
-            if (ctrl.characteristic)
+            if (ctrl.characteristic) {
                 ctrl.characteristic.notation = filterFilter(ctrl.notations, { Nature: ctrl.nature })[0];
+            }
         };
 
         ctrl.selectLink = SelectLink;
@@ -33,6 +33,7 @@
         templateUrl: window.location.origin + "/Partial/_Characteristic",
         controller: ["filterFilter", Characteristic],
         bindings: {
+            characteristic: "=?",
             characteristicTypes: "<",
             nature: "<",
             notations: "<",

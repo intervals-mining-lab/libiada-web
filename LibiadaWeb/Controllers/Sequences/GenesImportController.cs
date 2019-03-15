@@ -82,8 +82,7 @@
                         subsequenceImporter.CreateSubsequences();
                     }
 
-                    Dictionary<byte, string> features = EnumExtensions.ToArray<Feature>()
-                        .ToDictionary(f => (byte)f, f => f.GetDisplayValue());
+                    var features = EnumExtensions.ToArray<Feature>().ToDictionary(f => (byte)f, f => f.GetDisplayValue());
                     string matterName = db.Matter.Single(m => m.Id == matterId).Name;
                     SubsequenceData[] sequenceSubsequences = db.Subsequence
                         .Where(s => s.SequenceId == parentSequence.Id)

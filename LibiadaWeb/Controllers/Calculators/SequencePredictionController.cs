@@ -7,7 +7,7 @@
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
-    using LibiadaCore.Misc.Iterators;
+    using LibiadaCore.Iterators;
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.CalculatorsData;
@@ -20,6 +20,7 @@
     /// <summary>
     /// The sequence prediction controller.
     /// </summary>
+    [Authorize(Roles = "Admin")]
     public class SequencePredictionController : AbstractResultController
     {
         /// <summary>

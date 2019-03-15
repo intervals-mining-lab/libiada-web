@@ -274,7 +274,7 @@
 
             // calculating frequencies of elements in alphabet
             Alphabet alphabet = chain.Alphabet;
-            var frequencies = new (IBaseObject, double)[alphabet.Cardinality];
+            var frequencies = new (IBaseObject element, double frequency)[alphabet.Cardinality];
             for (int f = 0; f < alphabet.Cardinality; f++)
             {
                 var probabilityCalculator = new Probability();
@@ -290,8 +290,8 @@
             {
                 for (int j = 0; j < frequencyCount; j++)
                 {
-                    int firstElementNumber = alphabet.IndexOf(frequencies[i].Item1) + 1;
-                    int secondElementNumber = alphabet.IndexOf(frequencies[j].Item1) + 1;
+                    int firstElementNumber = alphabet.IndexOf(frequencies[i].element) + 1;
+                    int secondElementNumber = alphabet.IndexOf(frequencies[j].element) + 1;
                     long firstElementId = sequenceElements[firstElementNumber];
                     long secondElementId = sequenceElements[secondElementNumber];
 
@@ -318,9 +318,9 @@
         /// <returns>
         /// The <see cref="T:(IBaseObject, double)[]"/>.
         /// </returns>
-        private (IBaseObject, double)[] SortKeyValuePairList((IBaseObject, double)[] arrayForSort)
+        private (IBaseObject, double)[] SortKeyValuePairList((IBaseObject element, double frequency)[] arrayForSort)
         {
-            return arrayForSort.OrderBy(pair => pair.Item2).ToArray();
+            return arrayForSort.OrderBy(pair => pair.frequency).ToArray();
         }
     }
 }

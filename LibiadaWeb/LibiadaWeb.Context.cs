@@ -37,7 +37,7 @@ namespace LibiadaWeb
         public virtual DbSet<LiteratureSequence> LiteratureSequence { get; set; }
         public virtual DbSet<Matter> Matter { get; set; }
         public virtual DbSet<SequenceAttribute> SequenceAttribute { get; set; }
-        public virtual DbSet<Fmotiv> Fmotiv { get; set; }
+        public virtual DbSet<Fmotif> Fmotif { get; set; }
         public virtual DbSet<CongenericCharacteristicValue> CongenericCharacteristicValue { get; set; }
         public virtual DbSet<Measure> Measure { get; set; }
         public virtual DbSet<MusicSequence> MusicSequence { get; set; }

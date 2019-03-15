@@ -29,6 +29,8 @@ namespace LibiadaWeb
         public string RemoteId { get; set; }
         public System.DateTimeOffset Modified { get; set; }
         public string Description { get; set; }
+        public short PauseTreatment { get; set; }
+        public bool SequentialTransfer { get; set; }
     
         public virtual Matter Matter { get; set; }
         public virtual ICollection<BinaryCharacteristicValue> BinaryCharacteristicValue { get; set; }

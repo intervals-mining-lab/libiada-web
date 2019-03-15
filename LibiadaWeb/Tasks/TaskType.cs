@@ -208,10 +208,17 @@
         OrderTransformationConvergence = 28,
 
         /// <summary>
+        /// Batch music import.
+        /// </summary>
+        [Display(Name = "Batch music import")]
+        [TaskClass(typeof(BatchMusicImportController))]
+        BatchMusicImport = 29,
+
+        /// <summary>
         /// Order calculation.
         /// </summary>
         [Display(Name = "Order transformation visualization")]
         [TaskClass(typeof(OrderTransformationVisualizationController))]
-        OrderTransformationVisualization = 29
+        OrderTransformationVisualization = 30
     }
 }

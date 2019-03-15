@@ -21,7 +21,7 @@
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.Feature" Width="1.5" PointX="20.25" PointY="30.625" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.Translator" Width="1.5" PointX="0.5" PointY="47.625" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.RemoteDb" Width="1.75" PointX="7.375" PointY="42.875" IsExpanded="true" />
-        <edmx:EntityTypeShape EntityType="LibiadaWebModel.Fmotiv" Width="2.25" PointX="0.5" PointY="20" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="LibiadaWebModel.Fmotif" Width="2.25" PointX="0.5" PointY="20" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.CongenericCharacteristic" Width="2" PointX="18" PointY="31.75" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.Instrument" Width="1.5" PointX="6" PointY="18.625" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.Measure" Width="1.5" PointX="9" PointY="20.75" IsExpanded="true" />
@@ -30,7 +30,7 @@
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.Note" Width="1.5" PointX="2.625" PointY="15.375" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.Pitch" Width="1.5" PointX="0.5" PointY="15.625" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.Accidental" Width="1.5" PointX="5.375" PointY="20.5" IsExpanded="true" />
-        <edmx:EntityTypeShape EntityType="LibiadaWebModel.FmotivType" Width="1.5" PointX="10.5" PointY="47.625" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="LibiadaWebModel.FmotifType" Width="1.5" PointX="10.5" PointY="47.625" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.NoteSymbol" Width="1.5" PointX="0.5" PointY="18" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.Tie" Width="1.5" PointX="0.5" PointY="24" IsExpanded="true" />
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_binary_characteristic_chain" ManuallyRouted="false" />
@@ -76,14 +76,14 @@
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_literature_chain_remote_db" ManuallyRouted="false" />
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_music_chain_remote_db" ManuallyRouted="false" />
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_data_chain_remote_db" ManuallyRouted="false" />
-        <edmx:AssociationConnector Association="LibiadaWebModel.fk_fmotiv_remote_db" ManuallyRouted="false" />
+        <edmx:AssociationConnector Association="LibiadaWebModel.fk_fmotif_remote_db" ManuallyRouted="false" />
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_measure_remote_db" ManuallyRouted="false" />
-        <edmx:AssociationConnector Association="LibiadaWebModel.fk_fmotiv_matter" ManuallyRouted="false" />
-        <edmx:AssociationConnector Association="LibiadaWebModel.fk_fmotiv_notation" ManuallyRouted="false" />
-        <edmx:AssociationConnector Association="LibiadaWebModel.fk_fmotiv_feature" ManuallyRouted="false" />
-        <edmx:AssociationConnector Association="LibiadaWebModel.fk_binary_characteristic_fmotiv" ManuallyRouted="false" />
-        <edmx:AssociationConnector Association="LibiadaWebModel.fk_congeneric_characteristic_fmotiv" ManuallyRouted="false" />
-        <edmx:AssociationConnector Association="LibiadaWebModel.fk_characteristic_fmotiv" ManuallyRouted="false" />
+        <edmx:AssociationConnector Association="LibiadaWebModel.fk_fmotif_matter" ManuallyRouted="false" />
+        <edmx:AssociationConnector Association="LibiadaWebModel.fk_fmotif_notation" ManuallyRouted="false" />
+        <edmx:AssociationConnector Association="LibiadaWebModel.fk_fmotif_feature" ManuallyRouted="false" />
+        <edmx:AssociationConnector Association="LibiadaWebModel.fk_binary_characteristic_fmotif" ManuallyRouted="false" />
+        <edmx:AssociationConnector Association="LibiadaWebModel.fk_congeneric_characteristic_fmotif" ManuallyRouted="false" />
+        <edmx:AssociationConnector Association="LibiadaWebModel.fk_characteristic_fmotif" ManuallyRouted="false" />
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_congeneric_characteristic_type_link" ManuallyRouted="false" />
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_congeneric_characteristic_element" ManuallyRouted="false" />
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_measure_matter" ManuallyRouted="false" />
@@ -107,7 +107,7 @@
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_note_notation" ManuallyRouted="false" />
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_pitch_accidental" ManuallyRouted="false" >
         </edmx:AssociationConnector>
-        <edmx:AssociationConnector Association="LibiadaWebModel.fk_fmotiv_fmotiv_type" ManuallyRouted="false" />
+        <edmx:AssociationConnector Association="LibiadaWebModel.fk_fmotif_fmotif_type" ManuallyRouted="false" />
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_pitch_note_symbol" ManuallyRouted="false" />
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_note_tie" ManuallyRouted="false" />
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_pitch_instrument" ManuallyRouted="false" />

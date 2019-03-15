@@ -4,11 +4,10 @@
     using System.Linq;
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
-    using LibiadaCore.Core;
-    using LibiadaCore.Extensions;
-    using LibiadaCore.Misc;
 
-    using LibiadaWeb.Extensions;
+    using LibiadaCore.DataTransformers;
+    using LibiadaCore.Extensions;
+
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Sequences;
     using LibiadaWeb.Tasks;
@@ -97,16 +96,19 @@
                 var transformations = new Dictionary<int, string>();
                 for (int i = 0; i < transformationsSequence.Length; i++)
                 {
-                    transformations.Add(i, transformationsSequence[i] == OrderTransformation.Dissimilar ? "dissimilar" : $"higher order {EnumExtensions.GetLink(transformationsSequence[i]).GetDisplayValue()}");
+                    transformations.Add(i, transformationsSequence[i].GetDisplayValue());
                 }
 
                 var result = new Dictionary<string, object>
                 {
-                    { "chain", sequence },
+                    { "chain", sequence.ToString(" ") },
                     { "transformationsList", transformations },
                     { "iterationsCount", iterationsCount }
                 };
-                return result;
+                return new Dictionary<string, object>
+                           {
+                               { "data", JsonConvert.SerializeObject(result) }
+                           };
             });
         }
     }

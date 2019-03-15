@@ -1,8 +1,6 @@
 ﻿namespace LibiadaWeb.Controllers
 {
-    using System;
     using System.Web.Mvc;
-    using LibiadaWeb.Tasks;
 
     /// <summary>
     /// The calculation controller.

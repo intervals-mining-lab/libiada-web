@@ -8,10 +8,9 @@
     using Bio.Extensions;
 
     using LibiadaCore.Core;
+    using LibiadaCore.DataTransformers;
     using LibiadaCore.Extensions;
-    using LibiadaCore.Misc;
 
-    using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Tasks;
 
@@ -40,7 +39,7 @@
         public ActionResult Index()
         {
             var data = new Dictionary<string, object>();
-            
+
             var transformations = EnumHelper.GetSelectList(typeof(OrderTransformation));
             data.Add("transformations", transformations);
 
@@ -51,7 +50,7 @@
         /// <summary>
         /// The index.
         /// </summary>
-        /// <param name="transformationLinkIds">
+        /// <param name="transformationsSequence">
         /// The transformation link ids.
         /// </param>
         /// <param name="transformationsSequence">
@@ -61,7 +60,7 @@
         /// Number of transformations iterations.
         /// </param>
         /// <param name="customSequences">
-        /// Custom sequences inputed by user.
+        /// Custom sequences from user input.
         /// </param>
         /// <param name="localFile">
         /// Local file flag.
@@ -85,7 +84,7 @@
             {
                 int sequencesCount = localFile ? Request.Files.Count : customSequences.Length;
                 var sourceSequences = new string[sequencesCount];
-                var sequences = new string[sequencesCount];
+                var sequences = new Chain[sequencesCount];
                 var names = new string[sequencesCount];
 
                 for (int i = 0; i < sequencesCount; i++)
@@ -104,15 +103,16 @@
                     }
                 }
 
-                for (int k = 0; k < iterationsCount; k++)
+                for (int k = 0; k < sequencesCount; k++)
                 {
-                    var sequence = new Chain(sourceSequences[k]);
+                    sequences[k] = new Chain(sourceSequences[k]);
                     for (int j = 0; j < iterationsCount; j++)
                     {
                         for (int i = 0; i < transformationsSequence.Length; i++)
                         {
-                            sequence = transformationsSequence[i] == OrderTransformation.Dissimilar ? DissimilarChainFactory.Create(sequence)
-                                                                 : HighOrderFactory.Create(sequence, EnumExtensions.GetLink(transformationsSequence[i]));
+                            sequences[k] = transformationsSequence[i] == OrderTransformation.Dissimilar
+                                               ? DissimilarChainFactory.Create(sequences[k])
+                                               : HighOrderFactory.Create(sequences[k], EnumExtensions.GetLink(transformationsSequence[i]));
                         }
                     }
                 }
@@ -120,17 +120,20 @@
                 var transformations = new Dictionary<int, string>();
                 for (int i = 0; i < transformationsSequence.Length; i++)
                 {
-                    transformations.Add(i, transformationsSequence[i] == OrderTransformation.Dissimilar ? "dissimilar" : $"higher order {EnumExtensions.GetLink(transformationsSequence[i]).GetDisplayValue()}");
+                    transformations.Add(i, transformationsSequence[i].GetDisplayValue());
                 }
 
                 var result = new Dictionary<string, object>
                 {
                     { "names", names },
-                    { "sequences", sequences },
+                    { "sequences", sequences.Select((s, i) => new { name = names[i], value = s.ToString(" ") }).ToArray() },
                     { "transformationsList", transformations },
                     { "iterationsCount", iterationsCount }
                 };
-                return result;
+                return new Dictionary<string, object>
+                           {
+                               { "data", JsonConvert.SerializeObject(result) }
+                           };
             });
         }
     }

@@ -8,7 +8,7 @@
 @Scripts.Render("~/bundles/Characteristics")
 @Html.Partial("_AngularControllerInitializer", "CustomCalculationController")
 
-@using (Html.BeginForm("Index", "CustomSequenceCalculation", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Index", "CustomSequenceOrderTransformationCalculation", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     <div class="form-horizontal" ng-controller="CustomCalculationCtrl">
@@ -18,7 +18,7 @@
         @Html.Partial("_CustomSequences")
         <order-transformations transformations="transformations">
         </order-transformations>
-        @*Html.Partial("_CharacteristicsWithoutNotation")*@
+
         <characteristics characteristic-types="characteristicTypes"
                          characteristics-dictionary="characteristicsDictionary"
                          nature="nature"

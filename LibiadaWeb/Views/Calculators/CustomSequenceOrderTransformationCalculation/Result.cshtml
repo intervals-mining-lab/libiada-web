@@ -2,39 +2,79 @@
     ViewBag.Title = "Characteristics of custom sequence";
 }
 
+@Scripts.Render("~/bundles/loadingWindow")
 <h2>@ViewBag.Title</h2>
+
 @if (ViewBag.Error == null)
 {
-    <table class="table table-bordered table-hover">
-        <thead>
-            <tr>
-                <th>
-                    Sequence \ characteristic name
-                </th>
-                @foreach (var characteristicName in ViewBag.characteristicNames)
-                {
-                    <th>
-                        @Html.Raw(characteristicName.Replace("  ", "<br/>"))
-                    </th>
-                }
-            </tr>
-        </thead>
-        <tbody>
-            @for (int i = 0; i < ViewBag.characteristics.GetLength(0); i++)
-            {
-                <tr>
-                    <td>
-                        @ViewBag.names[i]
-                    </td>
-                    @for (int j = 0; j < ViewBag.characteristics.GetLength(1); j++)
-                    {
-                        <td>
-                            @ViewBag.characteristics[i, j]
-                    </td>
-                    }
+    @Html.Partial("_AngularControllerInitializer", "CalculationResultController")
+
+    <div ng-controller="CalculationResultCtrl">
+        <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
+        <div ng-disabled="loading">
+            <table class="table table-bordered table-hover" ng-cloak>
+                <tbody>
+                <tr ng-repeat="t in transformationsList">
+                    <td ng-bind="t" />
                 </tr>
-            }
-        </tbody>
-    </table>
+                </tbody>
+            </table>
+            <br />
+            <div class="monospace">
+                Transformations repeated {{iterationsCount}} times
+            </div>
+            <table st-table="characteristics" class="table table-bordered table-hover" ng-cloak>
+                <thead>
+                    <tr>
+                        <th>
+                            Sequence name
+                        </th>
+                        <th ng-repeat="characteristicName in characteristicNames" ng-bind="characteristicName" />
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="characteristic in characteristics">
+                        <td ng-bind="characteristic.MatterName" />
+                        <td ng-repeat="value in characteristic.Characteristics" ng-bind="value" />
+                    </tr>
+                </tbody>
+            </table>
+            <br />
+            <div class="form-group">
+                <label class="control-label col-md-2" for="firstCharacteristic">First characteristic:</label>
+                <div class="col-md-10">
+                    <select class="form-control" title="First characteristic" ng-model="firstCharacteristic" ng-options="c.Text for c in characteristicsList" id="firstCharacteristic"></select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2" for="secondCharacteristic">Second characteristic:</label>
+                <div class="col-md-10">
+                    <select class="form-control" title="Second characteristic" ng-model="secondCharacteristic" ng-options="c.Text for c in characteristicsList" id="secondCharacteristic"></select>
+                </div>
+            </div>
+            <br />
+            <div class="form-group">
+                <label class="control-label col-md-2" for="height">Height:</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="height" id="height" type="number" min="{{500 + legendHeight}}" step="20" ng-model="height" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2" for="width">Width:</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="width" id="width" type="number" min="{{400}}" step="20" ng-model="width" />
+                </div>
+            </div>
+            <br />
+            <input type="button" class="btn btn-default" ng-click="draw()" value="Draw" />
+            <div id="chart">
+            </div>
+        </div>
+    </div>
+    <br />
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/d3js")
 }
 

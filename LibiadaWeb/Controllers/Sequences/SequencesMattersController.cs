@@ -110,24 +110,23 @@
                         sequenceStream = FileHelper.GetFileStream(Request.Files[0]);
                     }
 
-                    var dnaSequenceRepository = new GeneticSequenceRepository(db);
-                    var literatureSequenceRepository = new LiteratureSequenceRepository(db);
-                    var musicSequenceRepository = new MusicSequenceRepository(db);
-                    var dataSequenceRepository = new DataSequenceRepository(db);
-
                     switch (nature)
                     {
                         case Nature.Genetic:
                             ISequence bioSequence = NcbiHelper.GetFastaSequence(sequenceStream);
+                            var dnaSequenceRepository = new GeneticSequenceRepository(db);
                             dnaSequenceRepository.Create(commonSequence, bioSequence, partial ?? false);
                             break;
                         case Nature.Music:
+                            var musicSequenceRepository = new MusicSequenceRepository(db);
                             musicSequenceRepository.Create(commonSequence, sequenceStream);
                             break;
                         case Nature.Literature:
+                            var literatureSequenceRepository = new LiteratureSequenceRepository(db);
                             literatureSequenceRepository.Create(commonSequence, sequenceStream, language ?? Language.Russian, original ?? true, translator ?? Translator.NoneOrManual);
                             break;
                         case Nature.MeasurementData:
+                            var dataSequenceRepository = new DataSequenceRepository(db);
                             dataSequenceRepository.Create(commonSequence, sequenceStream, precision ?? 0);
                             break;
                         default:
