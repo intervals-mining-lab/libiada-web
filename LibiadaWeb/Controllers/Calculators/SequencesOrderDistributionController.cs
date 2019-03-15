@@ -1,4 +1,6 @@
-﻿namespace LibiadaWeb.Controllers.Calculators
+﻿using System;
+
+namespace LibiadaWeb.Controllers.Calculators
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -53,18 +55,34 @@
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
-        public ActionResult Index(int length, int alphabetCardinality, bool generateStrict)
+        public ActionResult Index(int length, int alphabetCardinality, int typeGenerate)
         {
             return CreateTask(() =>
             {
-                var sequenceGenerator = generateStrict ?
-                                       (ISequenceGenerator)new StrictSequenceGenerator() :
-                                       new SequenceGenerator();
-                var sequences = sequenceGenerator.GenerateSequences(length, alphabetCardinality);
+                ISequenceGenerator sequenceGenerator = null;
                 var orderGenerator = new OrderGenerator();
-                var orders = generateStrict ?
-                                 orderGenerator.StrictGenerateOrders(length, alphabetCardinality) :
-                                 orderGenerator.GenerateOrders(length, alphabetCardinality);
+                var orders = new List<int[]>();
+                switch (typeGenerate)
+                {
+                    case 0:
+                        sequenceGenerator = (ISequenceGenerator) new StrictSequenceGenerator();
+                        orders = orderGenerator.StrictGenerateOrders(length, alphabetCardinality);
+                        break;
+                    case 1:
+                        sequenceGenerator = (ISequenceGenerator)new SequenceGenerator();
+                        orders = orderGenerator.GenerateOrders(length, alphabetCardinality);
+                        break; 
+                    case 2:
+                        sequenceGenerator = (ISequenceGenerator) new NonredundantStrictSequenceGenerator();
+                        orders = orderGenerator.StrictGenerateOrders(length, alphabetCardinality);
+                        break;
+                    case 3:
+                        sequenceGenerator = (ISequenceGenerator)new NonredundantSequenceGenerator();
+                        orders = orderGenerator.GenerateOrders(length, alphabetCardinality);
+                        break;
+                    default: throw new ArgumentException("Invalid type of generate");
+                }
+                var sequences = sequenceGenerator.GenerateSequences(length, alphabetCardinality);
                 Dictionary<int[], List<BaseChain>> result = new Dictionary<int[], List<BaseChain>>(new OrderEqualityComparer());
                 foreach (var order in orders)
                 {

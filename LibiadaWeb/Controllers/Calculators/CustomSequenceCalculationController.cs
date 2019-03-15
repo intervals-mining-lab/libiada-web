@@ -161,11 +161,11 @@
                         }
                     }
 
-                    var characteristics = new double[sequences.Length][];
+                    
                     var sequencesCharacteristics = new SequenceCharacteristics[sequences.Length];
                     for (int j = 0; j < sequences.Length; j++)
                     {
-                        characteristics[j] = new double[characteristicLinkIds.Length];
+                        var characteristics = new double[characteristicLinkIds.Length];
                         for (int k = 0; k < characteristicLinkIds.Length; k++)
                         {
                             sequences[j].FillIntervalManagers();
@@ -174,13 +174,13 @@
                             FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkIds[k]);
                             IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
 
-                            characteristics[j][k] = calculator.Calculate(sequences[j], link);
+                            characteristics[k] = calculator.Calculate(sequences[j], link);
                         }
 
                         sequencesCharacteristics[j] = new SequenceCharacteristics
                                                           {
                                                               MatterName = sequencesNames[j],
-                                                              Characteristics = characteristics[j]
+                                                              Characteristics = characteristics
                                                           };
                     }
 

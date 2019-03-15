@@ -1,18 +1,16 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using LibiadaWeb.Extensions;
-using LibiadaWeb.Models.CalculatorsData;
-using LibiadaWeb.Models.Repositories.Sequences;
-using LibiadaWeb.Tasks;
-using Newtonsoft.Json;
-
-namespace LibiadaWeb.Controllers.Sequences
+﻿namespace LibiadaWeb.Controllers.Sequences
 {
-    using Microsoft.Ajax.Utilities;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+    using LibiadaWeb.Extensions;
+    using LibiadaWeb.Models.CalculatorsData;
+    using LibiadaWeb.Models.Repositories.Sequences;
+    using LibiadaWeb.Tasks;
+    using Newtonsoft.Json;
 
+    [Authorize(Roles = "Admin")]
     public class BatchPoemsImportController : AbstractResultController
     {
         public BatchPoemsImportController() : base(TaskType.BatchPoemsImport)
@@ -51,10 +49,10 @@ namespace LibiadaWeb.Controllers.Sequences
                                                    MatterName = sequenceName
                                                };
 
-                        
+
                         try
                         {
-                            CommonSequence sequence = new CommonSequence
+                            var sequence = new CommonSequence
                             {
                                 Notation = notation
                             };
@@ -78,7 +76,7 @@ namespace LibiadaWeb.Controllers.Sequences
                                 importResult.Result = "Successfully imported poem and created matter";
                             }
 
-                            LiteratureSequenceRepository repository = new LiteratureSequenceRepository(db);
+                            var repository = new LiteratureSequenceRepository(db);
 
                             repository.Create(sequence, Request.Files[i].InputStream, Language.Russian, true, Translator.NoneOrManual, dropPunctuation);
                             importResult.Status = "Success";

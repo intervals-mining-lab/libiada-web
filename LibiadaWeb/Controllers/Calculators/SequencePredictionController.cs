@@ -20,6 +20,7 @@
     /// <summary>
     /// The sequence prediction controller.
     /// </summary>
+    [Authorize(Roles = "Admin")]
     public class SequencePredictionController : AbstractResultController
     {
         /// <summary>

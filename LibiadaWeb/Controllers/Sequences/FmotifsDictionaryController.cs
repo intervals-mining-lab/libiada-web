@@ -21,7 +21,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="FmotifsDictionaryController"/> class.
         /// </summary>
-        public FmotifsDictionaryController() : base(TaskType.CommonSequences)
+        public FmotifsDictionaryController() : base(TaskType.FmotifsDictionary)
         {
         }
 

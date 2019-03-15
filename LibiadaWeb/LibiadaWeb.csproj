@@ -131,6 +131,7 @@
     <Compile Include="Controllers\Calculators\LocalCalculationWebApiController.cs" />
     <Compile Include="Controllers\Calculators\MusicFilesController.cs" />
     <Compile Include="Controllers\Calculators\OrderTransformationCalculationController.cs" />
+    <Compile Include="Controllers\Calculators\OrderTransformationVizualizationController.cs" />
     <Compile Include="Controllers\Calculators\SequencePredictionController.cs" />
     <Compile Include="Controllers\Calculators\SequencesAlignmentController.cs" />
     <Compile Include="Controllers\Calculators\CalculationController.cs" />
@@ -228,6 +229,8 @@
     <Compile Include="Models\CalculatorsData\CongenericSequencesCharacteristics.cs" />
     <Compile Include="Models\CalculatorsData\MattersImportResult.cs" />
     <Compile Include="Models\CalculatorsData\MattersTableRow.cs" />
+    <Compile Include="Models\CalculatorsData\OrderTransformationData.cs" />
+    <Compile Include="Models\CalculatorsData\OrderTransformationResult.cs" />
     <Compile Include="Models\CalculatorsData\SequenceCharacteristics.cs" />
     <Compile Include="Models\CalculatorsData\SequencePredictionData.cs" />
     <Compile Include="Models\Calculators\CongenericSequencesCharacteristicsCalculator.cs" />
@@ -235,6 +238,7 @@
     <Compile Include="Models\CalculatorsData\FragmentData.cs" />
     <Compile Include="Models\Calculators\SubsequencesCharacteristicsCalculator.cs" />
     <Compile Include="Models\CalculatorsData\SelectListItemWithNature.cs" />
+    <Compile Include="Models\OrderTransformer.cs" />
     <Compile Include="Models\Repositories\Catalogs\AccordanceCharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\BinaryCharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\CongenericCharacteristicRepository.cs" />
@@ -439,7 +443,9 @@
     <Content Include="Scripts\Angular\Controllers\sequencesAlignment.js" />
     <Content Include="Scripts\Angular\Controllers\buildingsSimilarity.js" />
     <Content Include="Scripts\Angular\Controllers\customCalculation.js" />
+    <Content Include="Scripts\Angular\Controllers\OrderTransformationVisualization.js" />
     <Content Include="Scripts\Angular\Controllers\sequencesOrderDistribution.js" />
+    <Content Include="Scripts\Angular\Controllers\OrderTransformationVisualizationResult.js" />
     <Content Include="Scripts\Angular\Controllers\sequencesOrderDistributionResult.js" />
     <Content Include="Scripts\Angular\Controllers\subsequencesCalculationResult.js" />
     <Content Include="Scripts\Angular\Controllers\subsequencesComparerResult.js" />
@@ -620,6 +626,8 @@
     <Content Include="Views\Sequences\BatchPoemsImport\Result.cshtml" />
     <Content Include="Views\Calculators\OrderCalculation\Index.cshtml" />
     <Content Include="Views\Calculators\OrderCalculation\Result.cshtml" />
+    <Content Include="Views\Calculators\OrderTransformationVisualization\Index.cshtml" />
+    <Content Include="Views\Calculators\OrderTransformationVisualization\Result.cshtml" />
     <Content Include="Views\Sequences\OrderTransformationConvergence\Index.cshtml" />
     <Content Include="Views\Sequences\OrderTransformationConvergence\Result.cshtml" />
     <Content Include="Views\Sequences\BatchMusicImport\Index.cshtml" />

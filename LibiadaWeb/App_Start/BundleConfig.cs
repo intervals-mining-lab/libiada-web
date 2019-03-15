@@ -116,6 +116,12 @@
             bundles.Add(new ScriptBundle("~/bundles/controllers/SequencesOrderDistributionResultController").Include(
                 "~/Scripts/Angular/Controllers/sequencesOrderDistributionResult.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/controllers/OrderTransformationVisualizationController").Include(
+                "~/Scripts/Angular/Controllers/orderTransformationVisualization.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/controllers/OrderTransformationVisualizationResultController").Include(
+                "~/Scripts/Angular/Controllers/orderTransformationVisualizationResult.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/controllers/SubsequencesCalculationController").Include(
                         "~/Scripts/Angular/Controllers/subsequencesCalculation.js",
                         "~/Scripts/Angular/Components/mattersTable.js"));

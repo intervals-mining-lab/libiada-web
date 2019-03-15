@@ -2,19 +2,17 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Web.Mvc;
-    using LibiadaWeb.Extensions;
+
     using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Sequences;
     using LibiadaWeb.Tasks;
     using Newtonsoft.Json;
-    using Microsoft.Ajax.Utilities;
-    using LibiadaCore.Music;
-    using System.Web.Mvc.Html;
+
     using System.Web;
 
+    [Authorize(Roles = "Admin")]
     public class BatchMusicImportController : AbstractResultController
     {
         /// <summary>
@@ -73,7 +71,7 @@
                                 importResult.Result = "Successfully imported music and created matter";
                             }
 
-                            MusicSequenceRepository repository = new MusicSequenceRepository(db);
+                            var repository = new MusicSequenceRepository(db);
 
                             repository.Create(sequence, Request.Files[i].InputStream);
                             importResult.Status = "Success";

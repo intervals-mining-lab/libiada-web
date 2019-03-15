@@ -51,7 +51,7 @@
         {
             var viewDataHelper = new ViewDataHelper(db);
             var data = viewDataHelper.FillViewData(1, 1, "Transform");
-            
+
             var transformations = EnumHelper.GetSelectList(typeof(OrderTransformation));
             data.Add("transformations", transformations);
 
@@ -89,7 +89,7 @@
                 int lastIteration = -1;
                 var transformationsResult = new List<int[]>();
                 transformationsResult.Add(sequence.Building);
-                
+
                 for (int j = 0; j < iterationsCount; j++)
                 {
                     for (int i = 0; i < transformationsSequence.Length; i++)

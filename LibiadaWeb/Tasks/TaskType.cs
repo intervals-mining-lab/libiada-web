@@ -212,6 +212,20 @@
         /// </summary>
         [Display(Name = "Batch music import")]
         [TaskClass(typeof(BatchMusicImportController))]
-        BatchMusicImport = 29
+        BatchMusicImport = 29,
+
+        /// <summary>
+        /// Order calculation.
+        /// </summary>
+        [Display(Name = "Order transformation visualization")]
+        [TaskClass(typeof(OrderTransformationVisualizationController))]
+        OrderTransformationVisualization = 30,
+
+        /// <summary>
+        /// Fmotifs dictionary.
+        /// </summary>
+        [Display(Name = "Fmotifs dictionary")]
+        [TaskClass(typeof(FmotifsDictionaryController))]
+        FmotifsDictionary = 31
     }
 }
