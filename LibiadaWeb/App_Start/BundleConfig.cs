@@ -141,6 +141,9 @@
                         "~/Scripts/Angular/Directives/tableParse.js",
                         "~/Scripts/Angular/Controllers/charts.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/controllers/FmotifsDictionaryController").Include(
+                        "~/Scripts/Angular/Controllers/fmotifsDictionary.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/scrollJumper").Include(
                         "~/Scripts/Angular/Components/scrollJumper.js"));
 
@@ -163,9 +166,6 @@
                         "~/Content/bootstrap.css",
                         "~/Content/site.css",
                         "~/Content/scrollUpDown.css"));
-
-            bundles.Add(new ScriptBundle("~/bundles/controllers/FmotifsDictionaryController").Include(
-                "~/Scripts/Angular/Controllers/fmotifsDictionary.js"));
             // BundleTable.EnableOptimizations = true;
         }
     }

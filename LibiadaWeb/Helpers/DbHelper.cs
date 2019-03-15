@@ -179,6 +179,42 @@
         }
 
         /// <summary>
+        /// Gets fmotif's alphabet ids.
+        /// </summary>
+        /// <param name="db">
+        /// Database connection.
+        /// </param>
+        /// <param name="musicChainId">
+        /// The fmotif id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="List{Int64}"/>.
+        /// </returns>
+        public static List<long> GetMusicChainAlphabet(LibiadaWebEntities db, long musicChainId)
+        {
+            const string Query = "SELECT unnest(alphabet) FROM music_chain WHERE id = @id";
+            return db.Database.SqlQuery<long>(Query, new NpgsqlParameter("@id", musicChainId)).ToList();
+        }
+
+        /// <summary>
+        /// Gets building of fmotif by id.
+        /// </summary>
+        /// <param name="db">
+        /// Database connection.
+        /// </param>
+        /// <param name="musicChainId">
+        /// The fmotif id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="T:int[]"/>.
+        /// </returns>
+        public static int[] GetMusicChainBuilding(LibiadaWebEntities db, long musicChainId)
+        {
+            const string Query = "SELECT unnest(building) FROM music_chain WHERE id = @id";
+            return db.Database.SqlQuery<int>(Query, new NpgsqlParameter("@id", musicChainId)).ToArray();
+        }
+
+        /// <summary>
         /// The execute custom sql command with parameters.
         /// </summary>
         /// <param name="db">

@@ -625,6 +625,7 @@
     <Content Include="Views\Sequences\BatchMusicImport\Index.cshtml" />
     <Content Include="Views\Sequences\BatchMusicImport\Result.cshtml" />
     <Content Include="Views\Sequences\FmotifsDictionary\Index.cshtml" />
+    <Content Include="Views\Sequences\FmotifsDictionary\Details.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
