@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "Segmentation of custom sequences";
+}
+
+@Scripts.Render("~/bundles/segmentation")
+@Html.Partial("_AngularControllerInitializer", "SegmentationController")
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal" ng-controller="SegmentationCtrl">
+        <h4>Sequences and parameters</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.Partial("_CustomSequences")
+        <hr />
+        <br />
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="submit" value="Calculate" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}

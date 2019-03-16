@@ -226,6 +226,13 @@
         /// </summary>
         [Display(Name = "Fmotifs dictionary")]
         [TaskClass(typeof(FmotifsDictionaryController))]
-        FmotifsDictionary = 31
+        FmotifsDictionary = 31,
+
+        /// <summary>
+        /// Segmentation.
+        /// </summary>
+        [Display(Name = "Segmentation")]
+        [TaskClass(typeof(CustomSequenceSegmentationController))]
+        Segmentation = 33
     }
 }

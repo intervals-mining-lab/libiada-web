@@ -26,6 +26,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SequenceGenerator", "..\lib
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SequenceGenerator.Tests", "..\libiada-core\SequenceGenerator.Tests\SequenceGenerator.Tests.csproj", "{81F0D3F4-BC3C-4A45-A1A5-2D95D30F3D02}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Segmenter", "..\libiada-core\Segmenter\Segmenter.csproj", "{F304D262-E8B1-4A0D-A528-82A7D1EB758C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Segmenter.Tests", "..\libiada-core\Segmenter.Tests\Segmenter.Tests.csproj", "{E312E269-6F5E-494F-AEEC-201A44CAC779}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -64,6 +68,14 @@ Global
 		{81F0D3F4-BC3C-4A45-A1A5-2D95D30F3D02}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81F0D3F4-BC3C-4A45-A1A5-2D95D30F3D02}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81F0D3F4-BC3C-4A45-A1A5-2D95D30F3D02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F304D262-E8B1-4A0D-A528-82A7D1EB758C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F304D262-E8B1-4A0D-A528-82A7D1EB758C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F304D262-E8B1-4A0D-A528-82A7D1EB758C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F304D262-E8B1-4A0D-A528-82A7D1EB758C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E312E269-6F5E-494F-AEEC-201A44CAC779}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E312E269-6F5E-494F-AEEC-201A44CAC779}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E312E269-6F5E-494F-AEEC-201A44CAC779}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E312E269-6F5E-494F-AEEC-201A44CAC779}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

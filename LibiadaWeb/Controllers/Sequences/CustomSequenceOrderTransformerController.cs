@@ -53,9 +53,6 @@
         /// <param name="transformationsSequence">
         /// The transformation link ids.
         /// </param>
-        /// <param name="transformationsSequence">
-        /// The transformation ids.
-        /// </param>
         /// <param name="iterationsCount">
         /// Number of transformations iterations.
         /// </param>
