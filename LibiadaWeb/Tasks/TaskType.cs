@@ -226,6 +226,13 @@
         /// </summary>
         [Display(Name = "Fmotifs dictionary")]
         [TaskClass(typeof(FmotifsDictionaryController))]
-        FmotifsDictionary = 31
+        FmotifsDictionary = 31,
+
+        /// <summary>
+        /// Order transformation characteristics dynamic visualization.
+        /// </summary>
+        [Display(Name = "Order transformation characteristics dynamic visualization")]
+        [TaskClass(typeof(OrderTransformationCharacteristicsDynamicVisualizationController))]
+        OrderTransformationCharacteristicsDynamicVisualization = 32
     }
 }

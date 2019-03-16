@@ -131,6 +131,7 @@
     <Compile Include="Controllers\Calculators\LocalCalculationWebApiController.cs" />
     <Compile Include="Controllers\Calculators\MusicFilesController.cs" />
     <Compile Include="Controllers\Calculators\OrderTransformationCalculationController.cs" />
+    <Compile Include="Controllers\Calculators\OrderTransformationCharacteristicsDynamicVisualizationController.cs" />
     <Compile Include="Controllers\Calculators\OrderTransformationVizualizationController.cs" />
     <Compile Include="Controllers\Calculators\SequencePredictionController.cs" />
     <Compile Include="Controllers\Calculators\SequencesAlignmentController.cs" />
@@ -436,6 +437,7 @@
     <Content Include="Scripts\Angular\Controllers\matterEdit.js" />
     <Content Include="Scripts\Angular\Controllers\musicFilesResult.js" />
     <Content Include="Scripts\Angular\Controllers\orderCalculation.js" />
+    <Content Include="Scripts\Angular\Controllers\orderTransformationCharacteristicsDynamicVisualizationResult.js" />
     <Content Include="Scripts\Angular\Controllers\orderTransformationResult.js" />
     <Content Include="Scripts\Angular\Controllers\orderTransformer.js" />
     <Content Include="Scripts\Angular\Controllers\sequenceGroups.js" />
@@ -633,6 +635,8 @@
     <Content Include="Views\Sequences\BatchMusicImport\Index.cshtml" />
     <Content Include="Views\Sequences\BatchMusicImport\Result.cshtml" />
     <Content Include="Views\Sequences\FmotifsDictionary\Index.cshtml" />
+    <Content Include="Views\Calculators\OrderTransformationCharacteristicsDynamicVisualization\Index.cshtml" />
+    <Content Include="Views\Calculators\OrderTransformationCharacteristicsDynamicVisualization\Result.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

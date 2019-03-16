@@ -6,7 +6,6 @@
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
-    using System.Xml;
 
     using Bio;
     using Bio.Extensions;
@@ -61,9 +60,6 @@
         /// <summary>
         /// The index.
         /// </summary>
-        /// <param name="transformationLinkIds">
-        /// The transformation link ids.
-        /// </param>
         /// <param name="transformationsSequence">
         /// The transformation ids.
         /// </param>
@@ -118,7 +114,6 @@
                     }
                 }
 
-                
                 var sequencesCharacteristics = new SequenceCharacteristics[sequences.Length];
                 for (int j = 0; j < sequences.Length; j++)
                 {
