@@ -229,7 +229,14 @@
         FmotifsDictionary = 31,
 
         /// <summary>
-        /// Segmentation.
+        /// Order transformation characteristics dynamic visualization.
+        /// </summary>
+        [Display(Name = "Order transformation characteristics dynamic visualization")]
+        [TaskClass(typeof(OrderTransformationCharacteristicsDynamicVisualizationController))]
+        OrderTransformationCharacteristicsDynamicVisualization = 32,
+
+        /// <summary>
+        /// Segmentation task.
         /// </summary>
         [Display(Name = "Segmentation")]
         [TaskClass(typeof(CustomSequenceSegmentationController))]
