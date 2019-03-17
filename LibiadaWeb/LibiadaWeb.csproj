@@ -445,9 +445,9 @@
     <Content Include="Scripts\Angular\Controllers\sequencesAlignment.js" />
     <Content Include="Scripts\Angular\Controllers\buildingsSimilarity.js" />
     <Content Include="Scripts\Angular\Controllers\customCalculation.js" />
-    <Content Include="Scripts\Angular\Controllers\OrderTransformationVisualization.js" />
+    <Content Include="Scripts\Angular\Controllers\orderTransformationVisualization.js" />
     <Content Include="Scripts\Angular\Controllers\sequencesOrderDistribution.js" />
-    <Content Include="Scripts\Angular\Controllers\OrderTransformationVisualizationResult.js" />
+    <Content Include="Scripts\Angular\Controllers\orderTransformationVisualizationResult.js" />
     <Content Include="Scripts\Angular\Controllers\sequencesOrderDistributionResult.js" />
     <Content Include="Scripts\Angular\Controllers\subsequencesCalculationResult.js" />
     <Content Include="Scripts\Angular\Controllers\subsequencesComparerResult.js" />
