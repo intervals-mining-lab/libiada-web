@@ -31,16 +31,32 @@
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <label>
-                        <input type="radio" name="generateStrict" id="generateStrict" value="true" checked />
-                        Generate sequnces with only given alphabet cardinality
+                        <input type="radio" name="typeGenerate" id="typeGenerate" value="0" checked />
+                        Generate all possible sequences with only given alphabet cardinality
                     </label>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <label>
-                        <input type="radio" name="generateStrict" id="generateStrict" value="false" />
-                        Generate sequnces with alphabet cardinality less or equal to given
+                        <input type="radio" name="typeGenerate" id="typeGenerate" value="1" />
+                        Generate all possible sequences with alphabet cardinality less or equal to given
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <label>
+                        <input type="radio" name="typeGenerate" id="typeGenerate" value="2" />
+                        Generate only non-redundant sequences with only given alphabet cardinality
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <label>
+                        <input type="radio" name="typeGenerate" id="typeGenerate" value="3" />
+                        Generate only non-redundant sequences with alphabet cardinality less or equal to given
                     </label>
                 </div>
             </div>

@@ -50,14 +50,14 @@
                         "~/Scripts/Angular/Controllers/accordance.js",
                         "~/Scripts/Angular/Components/mattersTable.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/controllers/BatchSequenceImportController").Include(
-                        "~/Scripts/Angular/Controllers/batchSequenceImport.js"));
-
             bundles.Add(new ScriptBundle("~/bundles/controllers/BatchMusicImportController").Include(
                 "~/Scripts/Angular/Controllers/batchMusicImport.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/BatchPoemsImportController").Include(
                 "~/Scripts/Angular/Controllers/batchPoemsImport.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/controllers/BatchSequenceImportController").Include(
+                "~/Scripts/Angular/Controllers/batchSequenceImport.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/BatchSequenceImportResultController").Include(
                         "~/Scripts/Angular/Controllers/batchSequenceImportResult.js"));
@@ -73,8 +73,15 @@
             bundles.Add(new ScriptBundle("~/bundles/controllers/CalculationResultController").Include(
                         "~/Scripts/Angular/Controllers/calculationResult.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/controllers/ChartsController").Include(
+                "~/Scripts/Angular/Directives/tableParse.js",
+                "~/Scripts/Angular/Controllers/charts.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/controllers/CustomCalculationController").Include(
                         "~/Scripts/Angular/Controllers/customCalculation.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/controllers/FmotifsDictionaryController").Include(
+                "~/Scripts/Angular/Controllers/fmotifsDictionary.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/GenesImportController").Include(
                         "~/Scripts/Angular/Controllers/genesImport.js",
@@ -92,9 +99,24 @@
             bundles.Add(new ScriptBundle("~/bundles/controllers/MusicFilesResultController").Include(
                         "~/Scripts/Angular/Controllers/musicFilesResult.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/controllers/OrderCalculationController").Include(
+                "~/Scripts/Angular/Controllers/orderCalculation.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/controllers/OrderTransformationCharacteristicsDynamicVisualizationResultController").Include(
+                "~/Scripts/Angular/Controllers/orderTransformationCharacteristicsDynamicVisualizationResult.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/controllers/OrderTransformationResultController").Include(
+                "~/Scripts/Angular/Controllers/orderTransformationResult.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/controllers/OrderTransformationVisualizationController").Include(
+                "~/Scripts/Angular/Controllers/orderTransformationVisualization.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/controllers/OrderTransformationVisualizationResultController").Include(
+                "~/Scripts/Angular/Controllers/orderTransformationVisualizationResult.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/controllers/OrderTransformerController").Include(
-                        "~/Scripts/Angular/Controllers/orderTransformer.js",
-                        "~/Scripts/Angular/Components/mattersTable.js"));
+                "~/Scripts/Angular/Controllers/orderTransformer.js",
+                "~/Scripts/Angular/Components/mattersTable.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/SequenceGroupsController").Include(
                 "~/Scripts/Angular/Controllers/sequenceGroups.js",
@@ -106,12 +128,6 @@
             bundles.Add(new ScriptBundle("~/bundles/controllers/SequencesAlignmentController").Include(
                         "~/Scripts/Angular/Controllers/sequencesAlignment.js",
                         "~/Scripts/Angular/Components/mattersTable.js"));
-
-            bundles.Add(new ScriptBundle("~/bundles/controllers/OrderCalculationController").Include(
-                "~/Scripts/Angular/Controllers/orderCalculation.js"));
-
-            bundles.Add(new ScriptBundle("~/bundles/controllers/OrderTransformationResultController").Include(
-                "~/Scripts/Angular/Controllers/orderTransformationResult.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/SequencesOrderDistributionController").Include(
                 "~/Scripts/Angular/Controllers/sequencesOrderDistribution.js"));
@@ -126,12 +142,12 @@
             bundles.Add(new ScriptBundle("~/bundles/controllers/SubsequencesCalculationResultController").Include(
                         "~/Scripts/Angular/Controllers/subsequencesCalculationResult.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/controllers/SubsequencesComparerResultController").Include(
+                "~/Scripts/Angular/Controllers/subsequencesComparerResult.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/controllers/SubsequencesDistributionController").Include(
                         "~/Scripts/Angular/Controllers/subsequencesDistribution.js",
                         "~/Scripts/Angular/Components/mattersTable.js"));
-
-            bundles.Add(new ScriptBundle("~/bundles/controllers/SubsequencesComparerResultController").Include(
-                        "~/Scripts/Angular/Controllers/subsequencesComparerResult.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/SubsequencesDistributionResultController").Include(
                         "~/Scripts/Angular/Controllers/subsequencesDistributionResult.js"));
@@ -142,10 +158,6 @@
             bundles.Add(new ScriptBundle("~/bundles/controllers/TaskManagerController").Include(
                         "~/Scripts/jquery.signalR-{version}.js",
                         "~/Scripts/Angular/Controllers/taskManager.js"));
-
-            bundles.Add(new ScriptBundle("~/bundles/controllers/ChartsController").Include(
-                        "~/Scripts/Angular/Directives/tableParse.js",
-                        "~/Scripts/Angular/Controllers/charts.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/scrollJumper").Include(
                         "~/Scripts/Angular/Components/scrollJumper.js"));
@@ -170,8 +182,6 @@
                         "~/Content/site.css",
                         "~/Content/scrollUpDown.css"));
 
-            bundles.Add(new ScriptBundle("~/bundles/controllers/FmotifsDictionaryController").Include(
-                "~/Scripts/Angular/Controllers/fmotifsDictionary.js"));
             // BundleTable.EnableOptimizations = true;
         }
     }

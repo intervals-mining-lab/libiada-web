@@ -6,6 +6,7 @@
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
+
     using Bio;
     using Bio.Extensions;
 
@@ -15,6 +16,7 @@
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Tasks;
 
@@ -42,24 +44,22 @@
         /// </returns>
         public ActionResult Index()
         {
-            var data = new Dictionary<string, object>
-                {
-                    { "characteristicTypes", FullCharacteristicRepository.Instance.GetCharacteristicTypes() }
-                };
+            using (var db = new LibiadaWebEntities() )
+            {
+                var viewDataHelper = new ViewDataHelper(db);
+                var data = viewDataHelper.GetCharacteristicsData(CharacteristicCategory.Full);
 
-            var transformations = EnumHelper.GetSelectList(typeof(OrderTransformation));
-            data.Add("transformations", transformations);
+                var transformations = EnumHelper.GetSelectList(typeof(OrderTransformation));
+                data.Add("transformations", transformations);
 
-            ViewBag.data = JsonConvert.SerializeObject(data);
-            return View();
+                ViewBag.data = JsonConvert.SerializeObject(data);
+                return View();
+            }
         }
 
         /// <summary>
         /// The index.
         /// </summary>
-        /// <param name="transformationLinkIds">
-        /// The transformation link ids.
-        /// </param>
         /// <param name="transformationsSequence">
         /// The transformation ids.
         /// </param>
@@ -96,7 +96,7 @@
                 var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
                 int sequencesCount = localFile ? Request.Files.Count : customSequences.Length;
                 var sequences = new string[sequencesCount];
-                var names = new string[sequencesCount];
+                var sequencesNames = new string[sequencesCount];
 
                 for (int i = 0; i < sequencesCount; i++)
                 {
@@ -105,19 +105,19 @@
                         Stream sequenceStream = FileHelper.GetFileStream(file[i]);
                         ISequence fastaSequence = NcbiHelper.GetFastaSequence(sequenceStream);
                         sequences[i] = fastaSequence.ConvertToString();
-                        names[i] = fastaSequence.ID;
+                        sequencesNames[i] = fastaSequence.ID;
                     }
                     else
                     {
                         sequences[i] = customSequences[i];
-                        names[i] = $"Custom sequence {i + 1}. Length: {customSequences[i].Length}";
+                        sequencesNames[i] = $"Custom sequence {i + 1}. Length: {customSequences[i].Length}";
                     }
                 }
 
-                var characteristics = new double[sequences.Length, characteristicLinkIds.Length];
-
+                var sequencesCharacteristics = new SequenceCharacteristics[sequences.Length];
                 for (int j = 0; j < sequences.Length; j++)
                 {
+                    var characteristics = new double[characteristicLinkIds.Length];
                     for (int k = 0; k < characteristicLinkIds.Length; k++)
                     {
                         var sequence = new Chain(sequences[j]);
@@ -134,8 +134,14 @@
                         FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkIds[k]);
                         IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
 
-                        characteristics[j, k] = calculator.Calculate(sequence, link);
+                        characteristics[k] = calculator.Calculate(sequence, link);
                     }
+
+                    sequencesCharacteristics[j] = new SequenceCharacteristics
+                                                      {
+                                                          MatterName = sequencesNames[j],
+                                                          Characteristics = characteristics
+                                                      };
                 }
 
                 string[] characteristicNames = characteristicLinkIds.Select(c => characteristicTypeLinkRepository.GetCharacteristicName(c)).ToArray();
@@ -159,7 +165,7 @@
 
                 var result = new Dictionary<string, object>
                                  {
-                                     { "characteristics", characteristics },
+                                     { "characteristics", sequencesCharacteristics },
                                      { "characteristicNames", characteristicNames },
                                      { "characteristicsList", characteristicsList },
                                      { "transformationsList", transformations },

@@ -21,12 +21,12 @@
     /// The order transformation calculation controller.
     /// </summary>
     [Authorize(Roles = "Admin")]
-    public class OrderTransformationCalculationController : AbstractResultController
+    public class OrderTransformationCharacteristicsDynamicVisualizationController : AbstractResultController
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="OrderTransformationCalculationController"/> class.
+        /// Initializes a new instance of the <see cref="OrderTransformationCharacteristicsDynamicVisualizationController"/> class.
         /// </summary>
-        public OrderTransformationCalculationController() : base(TaskType.OrderTransformationCalculation)
+        public OrderTransformationCharacteristicsDynamicVisualizationController() : base(TaskType.OrderTransformationCharacteristicsDynamicVisualization)
         {
         }
 
@@ -61,16 +61,16 @@
         /// <param name="iterationsCount">
         /// Number of transformations iterations.
         /// </param>
-        /// <param name="characteristicLinkIds">
+        /// <param name="characteristicLinkId">
         /// The characteristic type link ids.
         /// </param>
-        /// <param name="notations">
+        /// <param name="notation">
         /// The notation ids.
         /// </param>
-        /// <param name="languages">
+        /// <param name="language">
         /// The language ids.
         /// </param>
-        /// <param name="translators">
+        /// <param name="translator">
         /// The translator ids.
         /// </param>
         /// <returns>
@@ -82,10 +82,10 @@
             long[] matterIds,
             OrderTransformation[] transformationsSequence,
             int iterationsCount,
-            short[] characteristicLinkIds,
-            Notation[] notations,
-            Language[] languages,
-            Translator?[] translators)
+            short characteristicLinkId,
+            Notation notation,
+            Language? language,
+            Translator? translator)
         {
             return CreateTask(() =>
             {
@@ -99,16 +99,12 @@
                 for (int i = 0; i < matterIds.Length; i++)
                 {
                     long matterId = matterIds[i];
-                    var characteristics = new double[characteristicLinkIds.Length];
-                    for (int k = 0; k < characteristicLinkIds.Length; k++)
+                    var characteristics = new double[transformationsSequence.Length];
+                    for (int k = 0; k < transformationsSequence.Length; k++)
                     {
-                        Notation notation = notations[k];
                         long sequenceId;
                         if (matters[matterId].Nature == Nature.Literature)
                         {
-                            Language language = languages[k];
-                            Translator? translator = translators[k];
-
                             sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId &&
                                                                            l.Notation == notation
                                                                            && l.Language == language
@@ -118,6 +114,9 @@
                         {
                             sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
                         }
+                        Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
+                        FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
+                        IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
 
                         Chain sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
                         for (int l = 0; l < iterationsCount; l++)
@@ -126,36 +125,16 @@
                             {
                                 sequence = transformationsSequence[j] == OrderTransformation.Dissimilar ? DissimilarChainFactory.Create(sequence)
                                                                      : HighOrderFactory.Create(sequence, EnumExtensions.GetLink(transformationsSequence[j]));
+                                characteristics[k] = calculator.Calculate(sequence, link);
                             }
                         }
-
-                        int characteristicLinkId = characteristicLinkIds[k];
-                        Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
-                        FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
-
-                        IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
-                        characteristics[k] = calculator.Calculate(sequence, link);
                     }
 
                     mattersCharacteristics[i] = new { matterName = matters[matterId].Name, characteristics };
                 }
 
-                var characteristicNames = new string[characteristicLinkIds.Length];
-                for (int k = 0; k < characteristicLinkIds.Length; k++)
-                {
-                    characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[k], notations[k]);
-                }
+                var characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
 
-                var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
-                for (int i = 0; i < characteristicNames.Length; i++)
-                {
-                    characteristicsList[i] = new SelectListItem
-                    {
-                        Value = i.ToString(),
-                        Text = characteristicNames[i],
-                        Selected = false
-                    };
-                }
 
                 var transformations = new Dictionary<int, string>();
                 for (int i = 0; i < transformationsSequence.Length; i++)
@@ -166,8 +145,7 @@
                 var result = new Dictionary<string, object>
                                  {
                                      { "characteristics", mattersCharacteristics },
-                                     { "characteristicNames", characteristicNames },
-                                     { "characteristicsList", characteristicsList },
+                                     { "characteristicNames", characteristicName },
                                      { "transformationsList", transformations },
                                      { "iterationsCount", iterationsCount }
                                  };
