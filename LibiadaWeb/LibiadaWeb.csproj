@@ -637,6 +637,7 @@
     <Content Include="Views\Sequences\FmotifsDictionary\Index.cshtml" />
     <Content Include="Views\Calculators\OrderTransformationCharacteristicsDynamicVisualization\Index.cshtml" />
     <Content Include="Views\Calculators\OrderTransformationCharacteristicsDynamicVisualization\Result.cshtml" />
+    <Content Include="Views\Sequences\FmotifsDictionary\Details.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

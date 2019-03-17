@@ -73,11 +73,11 @@ namespace LibiadaWeb.Controllers.Calculators
                         orders = orderGenerator.GenerateOrders(length, alphabetCardinality);
                         break; 
                     case 2:
-                        sequenceGenerator = (ISequenceGenerator) new NonredundantStrictSequenceGenerator();
+                        sequenceGenerator = (ISequenceGenerator) new NonRedundantStrictSequenceGenerator();
                         orders = orderGenerator.StrictGenerateOrders(length, alphabetCardinality);
                         break;
                     case 3:
-                        sequenceGenerator = (ISequenceGenerator)new NonredundantSequenceGenerator();
+                        sequenceGenerator = (ISequenceGenerator)new NonRedundantSequenceGenerator();
                         orders = orderGenerator.GenerateOrders(length, alphabetCardinality);
                         break;
                     default: throw new ArgumentException("Invalid type of generate");
