@@ -11,6 +11,8 @@
     using LibiadaWeb.Tasks;
     using LibiadaWeb.Helpers;
     using Newtonsoft.Json;
+    using LibiadaCore.Core.SimpleTypes;
+    using LibiadaCore.Music;
 
     /// <summary>
     /// The common sequences controller.
@@ -64,31 +66,50 @@
                     return HttpNotFound();
                 }
 
-                var fmotifs = new Dictionary<Fmotif, (int, List<Note>)>();
-                var notes = new List<List<Note>>();
                 var musicChainAlphabet = DbHelper.GetMusicChainAlphabet(db, musicSequence.Id).Select(el => db.Fmotif.Single(f => f.Id == el)).ToList();
                 var musicChainBuilding = DbHelper.GetMusicChainBuilding(db, musicSequence.Id);
-                foreach(var fmotif in musicChainAlphabet)
-                {
-                    var fmotifAlphabet = DbHelper.GetFmotifAlphabet(db, fmotif.Id);
-                    var fmotifBuilding = DbHelper.GetFmotifBuilding(db, fmotif.Id);
-                    notes.Add(new List<Note>());
-                    for (int i = 0; i < fmotifBuilding.Length; i++)
-                    {
-                        var index = fmotifAlphabet.ElementAt(fmotifBuilding[i] - 1);
-                        notes.Last().Add(db.Note.Single(n => n.Id == index));
-                    }
-                }
-
+                var sortedFmotifs = new Dictionary<LibiadaWeb.Fmotif, int>();
                 for (int i = 0; i < musicChainAlphabet.Count; i++)
                 {
-                    fmotifs.Add(musicChainAlphabet[i], (musicChainBuilding.Count(el => el == i + 1), notes[i]));
+                    sortedFmotifs.Add(musicChainAlphabet[i], musicChainBuilding.Count(el => el == i + 1));
                 }
-                var data = fmotifs.OrderByDescending(pair => pair.Value.Item1).ToDictionary(pair => pair.Key.Id,
-                    pair => (
-                    Count:pair.Value.Item1,
-                    Notes:pair.Value.Item2.Select(n => (n.Id, PitchsId : n.Pitch.Select(p => p.Midinumber).ToList(), n.Numerator, n.Denominator)).ToList()));
-                ViewBag.Fmotifs = data;
+                sortedFmotifs = sortedFmotifs.OrderByDescending(pair => pair.Value)
+                                             .ToDictionary(pair => pair.Key, pair => pair.Value);
+
+                var fmotifsChain = new List<Fmotif>();
+                foreach (var fmotif in sortedFmotifs.Keys)
+                {
+                    var newFmotif = new Fmotif(fmotif.FmotifType, 
+                                              (PauseTreatment) musicSequence.PauseTreatment, 
+                                               fmotif.Id);
+
+                    var fmotifAlphabet = DbHelper.GetFmotifAlphabet(db, fmotif.Id);
+                    var fmotifBuilding = DbHelper.GetFmotifBuilding(db, fmotif.Id);
+                    foreach (var position in fmotifBuilding)
+                    {
+                        var dbNoteId = fmotifAlphabet.ElementAt(position - 1);
+                        var dbNote = db.Note.Single(n => n.Id == dbNoteId);
+                        var newPitches = new List<Pitch>();
+                        foreach (var pitch in dbNote.Pitch)
+                        {
+                            newPitches.Add(new Pitch(pitch.Midinumber));
+                        }
+
+                        var newNote = new ValueNote(newPitches,
+                                                    new Duration(dbNote.Numerator,
+                                                                 dbNote.Denominator,
+                                                                 dbNote.Onumerator,
+                                                                 dbNote.Odenominator, 1),
+                                                    dbNote.Triplet,
+                                                    dbNote.Tie,
+                                                    (int)dbNote.Priority);
+                        newNote.Id = dbNote.Id;
+                        newFmotif.NoteList.Add(newNote);
+                    }
+                    fmotifsChain.Add(newFmotif);
+                }
+                var result = new Dictionary<string, object> { { "fmotifs", fmotifsChain } };
+                ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object> { { "data", result } });
                 return View(musicSequence);
             }
         }
