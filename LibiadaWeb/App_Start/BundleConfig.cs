@@ -182,6 +182,9 @@
                         "~/Content/site.css",
                         "~/Content/scrollUpDown.css"));
 
+            bundles.Add(new StyleBundle("~/Content/genesMap").Include(
+                        "~/Content/GenesMap.css"));
+
             // BundleTable.EnableOptimizations = true;
         }
     }

@@ -329,7 +329,7 @@
                     mode: "markers",
                     marker: {
                         opacity: 0.5,
-                        },
+                    },
                     type: "scatter",
                     name: $scope.matters[index].name
                 }
@@ -345,7 +345,7 @@
                         "curve number = " + data.points[i].curveNumber + '\n\n' +
                         "point number = " + data.points[i].pointNumber + '\n\n' +
                         "point index = " + data.points[i].pointIndex + '\n\n' +
-                        "text = " + data.points[i].text + '\n\n' ;
+                        "text = " + data.points[i].text + '\n\n';
                 }
                 alert('Closest point clicked:\n\n' + pts);
             });
@@ -573,6 +573,26 @@
             //$scope.loading = false;
         }
 
+        function dragbarMouseDown(e) {
+            e.preventDefault();
+
+            $scope.dragging = true;
+            var main = $('#main');
+            var ghostbar = $('<div>',
+                {
+                    id: 'ghostbar',
+                    css: {
+                        height: main.outerHeight(),
+                        top: main.offset().top,
+                        left: main.offset().left
+                    }
+                }).appendTo('body');
+
+            $(document).mousemove(function (e) {
+                ghostbar.css("left", e.pageX + 2);
+            });
+        };
+
         $scope.setCheckBoxesState = SetCheckBoxesState;
 
         $scope.drawGenesMap = drawGenesMap;
@@ -594,6 +614,7 @@
         $scope.deleteFilter = deleteFilter;
         $scope.getAttributeIdByName = getAttributeIdByName;
         $scope.isAttributeEqual = isAttributeEqual;
+        $scope.dragbarMouseDown = dragbarMouseDown;
 
         $scope.dotRadius = 4;
         $scope.selectedDotRadius = $scope.dotRadius * 3;
@@ -604,12 +625,28 @@
         $scope.filters = [];
         $scope.productFilter = "";
 
+        $scope.i = 0;
+        $scope.dragging = false;
+
+
+        $(document).mouseup(function (e) {
+            if ($scope.dragging) {
+                $('#sidebar').css("width", e.pageX + 2);
+                $('#main').css("left", e.pageX + 2);
+                $('#ghostbar').remove();
+                $(document).unbind('mousemove');
+                $scope.dragging = false;
+            }
+        });
+
+
         $scope.loadingScreenHeader = "Loading genes map data";
 
         var location = window.location.href.split("/");
         $scope.taskId = location[location.length - 1];
 
         $scope.loading = true;
+
 
         $http.get("/api/TaskManagerWebApi/" + $scope.taskId)
             .then(function (data) {
@@ -623,6 +660,7 @@
                 $scope.fillPoints();
                 $scope.addCharacteristicComparer();
                 $scope.loading = false;
+                drawGenesMap();
             }, function () {
                 alert("Failed loading genes map data");
 

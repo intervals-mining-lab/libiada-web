@@ -1,0 +1,41 @@
+﻿body, html {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+#main {
+    float: right;
+    position: absolute;
+    height: 200px;
+    right: 0;
+    left: 200px;
+    margin-top: 10px;
+}
+
+#sidebar {
+    margin-top: 10px;
+    width: 200px;
+    float: left;
+    position: absolute;
+    height: 200px;
+    overflow-y: hidden;
+}
+
+#dragbar {
+    background-color: darkgray;
+    height: 100%;
+    float: right;
+    width: 2px;
+    cursor: col-resize;
+}
+
+#ghostbar {
+    width: 2px;
+    background-color: #000;
+    opacity: 0.5;
+    position: absolute;
+    cursor: col-resize;
+    z-index: 999
+}
