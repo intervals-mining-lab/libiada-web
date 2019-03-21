@@ -41,88 +41,81 @@
                         <div id="chart" class="responsive-chart">
                         </div>
                     </div>
+                    <div id="dragbar" @*ng-mousedown="dragbarMouseDown($event)"*@></div>
                     <div id="sidebar">
-                        <span id="position"></span>
+                        <ul class="nav nav-tabs">
+                            <li role="presentation"><a ng-click="$scope.tab='Legend'" href="#">Legend</a></li>
+                            <li role="presentation"><a ng-click="$scope.tab='Characteristic'" href="#">Characteristic</a></li>
+                            <li role="presentation"><a ng-click="$scope.tab='Similar sequences'" href="#">Similar sequences</a></li>
+                            <li role="presentation"><a ng-click="$scope.tab='Features'" href="#">Features</a></li>
+                            <li role="presentation"><a ng-click="$scope.tab='Filter'" href="#">Filter</a></li>
+                        </ul>
+                        <div ng-switch="$scope.tab">
+                            <div ng-switch-when="Legend">
 
-
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <ul class="nav nav-tabs">
-                                    <li role="presentation"><a ng-click="$scope.tab='Legend'" href="#">Legend</a></li>
-                                    <li role="presentation"><a ng-click="$scope.tab='Characteristic'" href="#">Characteristic</a></li>
-                                    <li role="presentation"><a ng-click="$scope.tab='Similar sequences'" href="#">Similar sequences</a></li>
-                                    <li role="presentation"><a ng-click="$scope.tab='Features'" href="#">Features</a></li>
-                                    <li role="presentation"><a ng-click="$scope.tab='Filter'" href="#">Filter</a></li>
-                                </ul>
                             </div>
-                            <div class="panel-body">
-                                <div ng-switch="$scope.tab">
-                                    <div ng-switch-when="Legend">
-
+                            <div ng-switch-when="Characteristic">
+                                <br/>
+                                <div class="form-group">
+                                    <label class="control-label col-md-2" for="subsequenceCharacteristic">Second characteristic:</label>
+                                    <div class="col-md-10">
+                                        <select class="form-control" title="Subsequnce characteristic" ng-model="subsequenceCharacteristic" ng-options="c.Text for c in subsequencesCharacteristicsList" id="subsequenceCharacteristic"></select>
                                     </div>
-                                    <div ng-switch-when="Characteristic">
-                                        <div class="form-group">
-                                            <label class="control-label col-md-2" for="subsequenceCharacteristic">Second characteristic:</label>
-                                            <div class="col-md-10">
-                                                <select class="form-control" title="Subsequnce characteristic" ng-model="subsequenceCharacteristic" ng-options="c.Text for c in subsequencesCharacteristicsList" id="subsequenceCharacteristic"></select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-md-offset-2 col-md-10">
-                                                <label>
-                                                    <input type="checkbox" name="numericXAxis" ng-model="numericXAxis" value="false" />
-                                                    Numeric x axis
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div ng-switch-when="Similar sequences">
-                                        <div class="form-group">
-                                            <div class="col-md-offset-2 col-md-10">
-                                                <label>
-                                                    <input type="checkbox" name="highlight" ng-model="highlight" value="false" />
-                                                    Highlight similar subsequences
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div ng-show="highlight">
-                                            <div ng-repeat="characteristicComparer in characteristicComparers">
-                                                <div class="form-group">
-                                                    <label class="control-label col-md-2" for="characteristic">Characteristic:</label>
-                                                    <div class="col-md-10">
-                                                        <select class="form-control" ng-model="characteristicComparer.characteristic" ng-options="c.Text for c in subsequencesCharacteristicsList" id="characteristic" title="Characteristic"></select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-md-2" for="precision">Precision of characteristic comparison:</label>
-                                                    <div class="col-md-10">
-                                                        <input class="form-control" ng-model="characteristicComparer.precision" type="number" value="0" step="any" min="0" id="precision" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-offset-2 col-md-10">
-                                                        <button type="button" class="btn btn-danger" ng-click="deleteCharacteristicComparer(characteristicComparer)" ng-disabled="characteristicComparers.length <= 1">Delete characteristic comparer</button>
-                                                    </div>
-                                                </div>
-                                                <br />
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-md-offset-2 col-md-10">
-                                                    <button type="button" class="btn btn-success" ng-click="addCharacteristicComparer()">Add characteristic comparer</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div ng-switch-when="Features">
-                                        @Html.Partial("_FeaturesSelect")
-                                    </div>
-                                    <div ng-switch-when="Filter">
-                                        @Html.Partial("_Filters")
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-10">
+                                        <label>
+                                            <input type="checkbox" name="numericXAxis" ng-model="numericXAxis" value="false" />
+                                            Numeric x axis
+                                        </label>
                                     </div>
                                 </div>
                             </div>
+                            <div ng-switch-when="Similar sequences">
+                                <br />
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-10">
+                                        <label>
+                                            <input type="checkbox" name="highlight" ng-model="highlight" value="false" />
+                                            Highlight similar subsequences
+                                        </label>
+                                    </div>
+                                </div>
+                                <div ng-show="highlight">
+                                    <div ng-repeat="characteristicComparer in characteristicComparers">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-2" for="characteristic">Characteristic:</label>
+                                            <div class="col-md-10">
+                                                <select class="form-control" ng-model="characteristicComparer.characteristic" ng-options="c.Text for c in subsequencesCharacteristicsList" id="characteristic" title="Characteristic"></select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-2" for="precision">Precision of characteristic comparison:</label>
+                                            <div class="col-md-10">
+                                                <input class="form-control" ng-model="characteristicComparer.precision" type="number" value="0" step="any" min="0" id="precision" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-offset-2 col-md-10">
+                                                <button type="button" class="btn btn-danger" ng-click="deleteCharacteristicComparer(characteristicComparer)" ng-disabled="characteristicComparers.length <= 1">Delete characteristic comparer</button>
+                                            </div>
+                                        </div>
+                                        <br />
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-offset-2 col-md-10">
+                                            <button type="button" class="btn btn-success" ng-click="addCharacteristicComparer()">Add characteristic comparer</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div ng-switch-when="Features">
+                                @Html.Partial("_FeaturesSelect")
+                            </div>
+                            <div ng-switch-when="Filter">
+                                @Html.Partial("_Filters")
+                            </div>
                         </div>
-                        <div id="dragbar" @*ng-mousedown="dragbarMouseDown($event)"*@></div>
                     </div>
                 </div>
             </div>
