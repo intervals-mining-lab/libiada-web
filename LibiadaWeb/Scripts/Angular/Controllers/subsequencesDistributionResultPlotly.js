@@ -573,25 +573,25 @@
             //$scope.loading = false;
         }
 
-        function dragbarMouseDown(e) {
-            e.preventDefault();
+        //function dragbarMouseDown(e) {
+        //    e.preventDefault();
 
-            $scope.dragging = true;
-            var main = $('#main');
-            var ghostbar = $('<div>',
-                {
-                    id: 'ghostbar',
-                    css: {
-                        height: main.outerHeight(),
-                        top: main.offset().top,
-                        left: main.offset().left
-                    }
-                }).appendTo('body');
+        //    $scope.dragging = true;
+        //    var main = $('#main');
+        //    var ghostbar = $('<div>',
+        //        {
+        //            id: 'ghostbar',
+        //            css: {
+        //                height: main.outerHeight(),
+        //                top: main.offset().top,
+        //                left: main.offset().left
+        //            }
+        //        }).appendTo('body');
 
-            $(document).mousemove(function (e) {
-                ghostbar.css("left", e.pageX + 2);
-            });
-        };
+        //    $(document).mousemove(function (e) {
+        //        ghostbar.css("left", e.pageX + 2);
+        //    });
+        //};
 
         $scope.setCheckBoxesState = SetCheckBoxesState;
 
@@ -614,7 +614,7 @@
         $scope.deleteFilter = deleteFilter;
         $scope.getAttributeIdByName = getAttributeIdByName;
         $scope.isAttributeEqual = isAttributeEqual;
-        $scope.dragbarMouseDown = dragbarMouseDown;
+       // $scope.dragbarMouseDown = dragbarMouseDown;
 
         $scope.dotRadius = 4;
         $scope.selectedDotRadius = $scope.dotRadius * 3;
@@ -624,20 +624,21 @@
         $scope.characteristicComparers = [];
         $scope.filters = [];
         $scope.productFilter = "";
+        $scope.tab = "None";
 
         $scope.i = 0;
         $scope.dragging = false;
 
 
-        $(document).mouseup(function (e) {
-            if ($scope.dragging) {
-                $('#sidebar').css("width", e.pageX + 2);
-                $('#main').css("left", e.pageX + 2);
-                $('#ghostbar').remove();
-                $(document).unbind('mousemove');
-                $scope.dragging = false;
-            }
-        });
+        //$(document).mouseup(function (e) {
+        //    if ($scope.dragging) {
+        //        $('#sidebar').css("width", e.pageX + 2);
+        //        $('#main').css("left", e.pageX + 2);
+        //        $('#ghostbar').remove();
+        //        $(document).unbind('mousemove');
+        //        $scope.dragging = false;
+        //    }
+        //});
 
 
         $scope.loadingScreenHeader = "Loading genes map data";

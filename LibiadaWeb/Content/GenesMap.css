@@ -1,32 +1,31 @@
 ﻿body, html {
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     padding: 0;
     margin: 0;
+    
 }
 
 #main {
-    float: right;
+    float: left;
     position: absolute;
-    height: 200px;
-    right: 0;
-    left: 200px;
-    margin-top: 10px;
+    width: 600px;
 }
 
 #sidebar {
-    margin-top: 10px;
-    width: 200px;
-    float: left;
+    left: 600px;
+    right: 0;
+    float: right;
     position: absolute;
-    height: 200px;
-    overflow-y: hidden;
+    /*height: 200px;*/
+    overflow-y: auto;
+    height: 100vh;
 }
 
 #dragbar {
     background-color: darkgray;
     height: 100%;
-    float: right;
+    float: left;
     width: 2px;
     cursor: col-resize;
 }
