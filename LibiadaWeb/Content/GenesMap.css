@@ -9,11 +9,12 @@
 #main {
     float: left;
     position: absolute;
-    width: 600px;
+    width: 70vw;
 }
 
 #sidebar {
-    left: 600px;
+    /*left: 70vw;*/
+    width:30vw;
     right: 0;
     float: right;
     position: absolute;

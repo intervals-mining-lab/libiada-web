@@ -79,7 +79,7 @@
                                     </big>
                                 </a>
                             </li>
-                            <li role="presentation" ng-show="$scope.tooltipVisible">
+                            <li role="presentation" @*ng-show="tooltipVisible"*@>
                                 <a ng-click="$scope.tab='Tooltip'" href="#">
                                     <big>
                                         <span class="glyphicon glyphicon-info-sign" title="Tooltip" aria-label="Tooltip" aria-hidden="true"></span>
@@ -94,13 +94,12 @@
                             <div ng-switch-when="Characteristic">
                                 <br />
                                 <div class="form-group">
-                                    <label class="control-label col-md-2" for="subsequenceCharacteristic">Second characteristic:</label>
                                     <div class="col-md-10">
                                         <select class="form-control" title="Subsequnce characteristic" ng-model="subsequenceCharacteristic" ng-options="c.Text for c in subsequencesCharacteristicsList" id="subsequenceCharacteristic"></select>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <div class="col-md-offset-2 col-md-10">
+                                    <div class="col-md-10">
                                         <label>
                                             <input type="checkbox" name="numericXAxis" ng-model="numericXAxis" value="false" />
                                             Numeric x axis
@@ -111,7 +110,7 @@
                             <div ng-switch-when="Similar sequences">
                                 <br />
                                 <div class="form-group">
-                                    <div class="col-md-offset-2 col-md-10">
+                                    <div class="col-md-10">
                                         <label>
                                             <input type="checkbox" name="highlight" ng-model="highlight" value="false" />
                                             Highlight similar subsequences
@@ -121,26 +120,25 @@
                                 <div ng-show="highlight">
                                     <div ng-repeat="characteristicComparer in characteristicComparers">
                                         <div class="form-group">
-                                            <label class="control-label col-md-2" for="characteristic">Characteristic:</label>
                                             <div class="col-md-10">
                                                 <select class="form-control" ng-model="characteristicComparer.characteristic" ng-options="c.Text for c in subsequencesCharacteristicsList" id="characteristic" title="Characteristic"></select>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label col-md-2" for="precision">Precision of characteristic comparison:</label>
-                                            <div class="col-md-10">
+                                            <label class="control-label col-md-8" for="precision">Precision of characteristic comparison:</label>
+                                            <div class="col-md-8">
                                                 <input class="form-control" ng-model="characteristicComparer.precision" type="number" value="0" step="any" min="0" id="precision" />
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="col-md-offset-2 col-md-10">
+                                            <div class="col-md-10">
                                                 <button type="button" class="btn btn-danger" ng-click="deleteCharacteristicComparer(characteristicComparer)" ng-disabled="characteristicComparers.length <= 1">Delete characteristic comparer</button>
                                             </div>
                                         </div>
                                         <br />
                                     </div>
                                     <div class="form-group">
-                                        <div class="col-md-offset-2 col-md-10">
+                                        <div class="col-md-10">
                                             <button type="button" class="btn btn-success" ng-click="addCharacteristicComparer()">Add characteristic comparer</button>
                                         </div>
                                     </div>
@@ -151,6 +149,24 @@
                             </div>
                             <div ng-switch-when="Features">
                                 @Html.Partial("_FeaturesSelect")
+                            </div>
+                            <div ng-switch-when="Tooltip">
+                                <div ng-repeat="tooltipElement in tooltipElements">
+                                    <a target='_blank' rel='noopener' ng-if="tooltipElement.sequenceRemoteId" ng-model="tooltipElement.Name" ng-href='https://www.ncbi.nlm.nih.gov/nuccore/{{tooltipElement.sequenceRemoteId}}'>
+                                    </a>
+                                    <span ng-if="!tooltipElement.remoteId" ng-model="tooltipElement.Name"></span>
+                                    <br />
+                                    <a target='_blank' rel='noopener' ng-if="tooltipElement.remoteId" ng-href='https://www.ncbi.nlm.nih.gov/nuccore/{{tooltipElement.remoteId}}'>
+                                        Peptide ncbi page
+                                    </a>
+                                    <br />
+                                    {{tooltipElement.features}}
+                                    <div ng-repeat="attribute in tooltipElement.attributes">
+                                        {{attribute}}
+                                    </div>
+                                    <br/>
+                                    <span ng-if="tooltipElement.partial">Partial</span>
+                                </div>
                             </div>
                         </div>
                     </div>

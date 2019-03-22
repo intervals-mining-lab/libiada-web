@@ -165,97 +165,101 @@
                 attributesText.push($scope.attributes[attributeValue.attribute] + (attributeValue.value === "" ? "" : " = " + attributeValue.value));
             }
 
-            return attributesText.join("<br/>");
+            return attributesText;
         }
 
         // shows tooltip for dot or group of dots @@@
-        function showTooltip(selectedPoints, tooltip, svg) {
-            $scope.clearTooltip(tooltip);
-            tooltip.style("opacity", 0.9);
+        function showTooltip(data) {
+         //   $scope.clearTooltip(tooltip);
+            $scope.tooltipVisible = true;
+            $scope.tooltipElements.length = 0;
 
             var tooltipHtml = [];
 
-            tooltip.selectedPoints = selectedPoints;
+            //tooltip.selectedPoints = selectedPoints;
 
-            var point = selectedPoints[0];
-            tooltip.selectedDots = svg.selectAll(".dot")
-                .filter(function (dot) {
-                    if ($scope.dotVisible(dot)) {
-                        if (dot.matterId === point.matterId && $scope.yValue(dot) === $scope.yValue(point)) { // if dots are in the same position
-                            tooltipHtml.push($scope.fillPointTooltip(dot));
-                            return true;
-                        } else if ($scope.highlight) { // if similar dot are highlighted
-                            for (var i = 0; i < $scope.characteristicComparers.length; i++) {
-                                var dotValue = dot.subsequenceCharacteristics[$scope.characteristicComparers[i].characteristic.Value];
-                                var dValue = point.subsequenceCharacteristics[$scope.characteristicComparers[i].characteristic.Value];
-                                if (Math.abs(dotValue - dValue) > $scope.characteristicComparers[i].precision) { // if dValue is out of range for any comparer
-                                    return false;
-                                }
-                            }
+            var points = data.points;
 
-                            var tooltipColor = $scope.dotsSimilar(point, dot) ? "text-success" : "text-danger";
-                            tooltipHtml.push("<span class='" + tooltipColor + "'>" + $scope.fillPointTooltip(dot) + "</span>");
-                            svg.append("line")
-                                .attr("class", "similar-line")
-                                .attr("x1", $scope.xMap(point))
-                                .attr("y1", $scope.yMap(point))
-                                .attr("x2", $scope.xMap(dot))
-                                .attr("y2", $scope.yMap(dot))
-                                .attr("stroke-width", 1)
-                                .attr("opacity", 0.4)
-                                .attr("stroke", $scope.colorMap($scope.cValue(point)));
-                            return true;
-                        }
-                    }
+            for (var i = 0; i < points.length; i++) {
+                $scope.tooltipElements.push(fillPointTooltip(points[i]));
+            }
 
-                    return false;
-                })
-                .attr("rx", $scope.selectedDotRadius);
-            tooltip.lines = svg.selectAll(".similar-line");
-            tooltip.html(tooltipHtml.join("</br></br>"));
+            //var point = selectedPoints[0];
+            //tooltip.selectedDots = svg.selectAll(".dot")
+            //    .filter(function (dot) {
+            //        if ($scope.dotVisible(dot)) {
+            //            if (dot.matterId === point.matterId && $scope.yValue(dot) === $scope.yValue(point)) { // if dots are in the same position
+            //                tooltipHtml.push($scope.fillPointTooltip(dot));
+            //                return true;
+            //            } else if ($scope.highlight) { // if similar dot are highlighted
+            //                for (var i = 0; i < $scope.characteristicComparers.length; i++) {
+            //                    var dotValue = dot.subsequenceCharacteristics[$scope.characteristicComparers[i].characteristic.Value];
+            //                    var dValue = point.subsequenceCharacteristics[$scope.characteristicComparers[i].characteristic.Value];
+            //                    if (Math.abs(dotValue - dValue) > $scope.characteristicComparers[i].precision) { // if dValue is out of range for any comparer
+            //                        return false;
+            //                    }
+            //                }
 
-            var matrix = tooltip.selectedDots.nodes()[0].parentNode.getScreenCTM()
-                .translate($scope.xMap(point), $scope.yMap(point));
+            //                var tooltipColor = $scope.dotsSimilar(point, dot) ? "text-success" : "text-danger";
+            //                tooltipHtml.push("<span class='" + tooltipColor + "'>" + $scope.fillPointTooltip(dot) + "</span>");
+            //                svg.append("line")
+            //                    .attr("class", "similar-line")
+            //                    .attr("x1", $scope.xMap(point))
+            //                    .attr("y1", $scope.yMap(point))
+            //                    .attr("x2", $scope.xMap(dot))
+            //                    .attr("y2", $scope.yMap(dot))
+            //                    .attr("stroke-width", 1)
+            //                    .attr("opacity", 0.4)
+            //                    .attr("stroke", $scope.colorMap($scope.cValue(point)));
+            //                return true;
+            //            }
+            //        }
 
-            tooltip.style("background", "#eee")
-                .style("color", "#000")
-                .style("border-radius", "5px")
-                .style("font-family", "monospace")
-                .style("padding", "5px")
-                .style("left", (window.pageXOffset + matrix.e + 15) + "px")
-                .style("top", (window.pageYOffset + matrix.f + 15) + "px");
+            //        return false;
+            //    })
+            //    .attr("rx", $scope.selectedDotRadius);
+            //tooltip.lines = svg.selectAll(".similar-line");
+            //tooltip.html(tooltipHtml.join("</br></br>"));
+
+            //var matrix = tooltip.selectedDots.nodes()[0].parentNode.getScreenCTM()
+            //    .translate($scope.xMap(point), $scope.yMap(point));
+
+            //tooltip.style("background", "#eee")
+            //    .style("color", "#000")
+            //    .style("border-radius", "5px")
+            //    .style("font-family", "monospace")
+            //    .style("padding", "5px")
+            //    .style("left", (window.pageXOffset + matrix.e + 15) + "px")
+            //    .style("top", (window.pageYOffset + matrix.f + 15) + "px");
+
+            $scope.$apply();
         }
 
         // constructs string representing tooltip text (inner html)
         function fillPointTooltip(d) {
-            var tooltipContent = [];
-            var genBankLink = "<a target='_blank' rel='noopener' href='https://www.ncbi.nlm.nih.gov/nuccore/";
-            var name = $scope.matters.find(function (m) { return m.id === d.matterId; }).name;
-            var header = d.sequenceRemoteId ? genBankLink + d.sequenceRemoteId + "'>" + name + "</a>" : name;
-            tooltipContent.push(header);
+            var point = $scope.points[d.curveNumber][d.pointNumber];
+            var tooltipElement = {
+                name: $scope.matters[d.curveNumber].name,
+                sequenceRemoteId: point.sequenceRemoteId,
+                features: $scope.features[point.featureId].Text,
+                attributes: $scope.getAttributesText(point.attributes),
+                partial: point.partial
+            };
 
-            if (d.subsequenceRemoteId) {
-                var peptideGenbankLink = genBankLink + d.subsequenceRemoteId + "'>Peptide ncbi page</a>";
-                tooltipContent.push(peptideGenbankLink);
+            if (point.subsequenceRemoteId) {
+                tooltipElement.remoteId = point.subsequenceRemoteId;
             }
 
-            tooltipContent.push($scope.features[d.featureId].Text);
-            tooltipContent.push($scope.getAttributesText(d.attributes));
+            //var start = d.positions[0] + 1;
+            //var end = d.positions[0] + d.lengths[0];
+            //var positionGenbankLink = d.sequenceRemoteId ?
+            //    genBankLink + d.sequenceRemoteId + "?from=" + start + "&to=" + end + "'>" + d.positions.join(", ") + "</a>" :
+            //    d.positions.join(", ");
+            //tooltipContent.push("Position: " + positionGenbankLink);
+            //tooltipContent.push("Length: " + d.lengths.join(", "));
+            //tooltipContent.push("(" + d.x + ", " + $scope.yValue(d) + ")");
 
-            if (d.partial) {
-                tooltipContent.push("partial");
-            }
-
-            var start = d.positions[0] + 1;
-            var end = d.positions[0] + d.lengths[0];
-            var positionGenbankLink = d.sequenceRemoteId ?
-                genBankLink + d.sequenceRemoteId + "?from=" + start + "&to=" + end + "'>" + d.positions.join(", ") + "</a>" :
-                d.positions.join(", ");
-            tooltipContent.push("Position: " + positionGenbankLink);
-            tooltipContent.push("Length: " + d.lengths.join(", "));
-            tooltipContent.push("(" + d.x + ", " + $scope.yValue(d) + ")");
-
-            return tooltipContent.join("</br>");
+            return tooltipElement;
         }
 
         // clears tooltip and unselects dots @@@
@@ -298,7 +302,6 @@
         function drawGenesMap() {
             var chartParams = { responsive: true };
             var layout = {
-                legend: { "orientation": "h" },
                 hovermode: "closest",
                 xaxis: {
                     title: {
@@ -320,6 +323,9 @@
                 }
             };
             var myPlot = document.getElementById('chart');
+
+            while (myPlot.firstChild) myPlot.removeChild(myPlot.firstChild);
+
             var data = $scope.points.map(function (points, index) {
                 return {
                     type: 'scattergl',
@@ -331,25 +337,26 @@
                     marker: {
                         opacity: 0.5,
                     },
-                    type: "scatter",
                     name: $scope.matters[index].name
                 }
             });
 
             Plotly.plot('chart', data, layout, chartParams);
 
-            myPlot.on('plotly_click', function (data) {
-                var pts = '';
-                for (var i = 0; i < data.points.length; i++) {
-                    pts = 'x = ' + data.points[i].x + '\ny = ' +
-                        data.points[i].y.toPrecision(4) + '\n\n' +
-                        "curve number = " + data.points[i].curveNumber + '\n\n' +
-                        "point number = " + data.points[i].pointNumber + '\n\n' +
-                        "point index = " + data.points[i].pointIndex + '\n\n' +
-                        "text = " + data.points[i].text + '\n\n';
-                }
-                alert('Closest point clicked:\n\n' + pts);
-            });
+            myPlot.on('plotly_click', $scope.showTooltip
+            //    function (data) {
+            //    var pts = '';
+            //    for (var i = 0; i < data.points.length; i++) {
+            //        pts = 'x = ' + data.points[i].x + '\ny = ' +
+            //            data.points[i].y.toPrecision(4) + '\n\n' +
+            //            "curve number = " + data.points[i].curveNumber + '\n\n' +
+            //            "point number = " + data.points[i].pointNumber + '\n\n' +
+            //            "point index = " + data.points[i].pointIndex + '\n\n' +
+            //            "text = " + data.points[i].text + '\n\n';
+            //    }
+            //    alert('Closest point clicked:\n\n' + pts);
+                //}
+            );
 
             //$scope.loading = true;
             //$scope.loadingScreenHeader = "Drawing...";
@@ -627,6 +634,7 @@
         $scope.productFilter = "";
         $scope.tab = "None";
         $scope.tooltipVisible = false;
+        $scope.tooltipElements = [];
 
         $scope.i = 0;
         $scope.dragging = false;
