@@ -151,10 +151,11 @@
                                 @Html.Partial("_FeaturesSelect")
                             </div>
                             <div ng-switch-when="Tooltip">
-                                <div ng-repeat="tooltipElement in tooltipElements">
-                                    <a target='_blank' rel='noopener' ng-if="tooltipElement.sequenceRemoteId" ng-model="tooltipElement.Name" ng-href='https://www.ncbi.nlm.nih.gov/nuccore/{{tooltipElement.sequenceRemoteId}}'>
+                                <div ng-repeat="tooltipElement in tooltipElements" class="monospace">
+                                    <a target='_blank' rel='noopener' ng-if="tooltipElement.sequenceRemoteId" ng-href='https://www.ncbi.nlm.nih.gov/nuccore/{{tooltipElement.sequenceRemoteId}}'>
+                                        {{tooltipElement.name}}
                                     </a>
-                                    <span ng-if="!tooltipElement.remoteId" ng-model="tooltipElement.Name"></span>
+                                    <span ng-if="!tooltipElement.sequenceRemoteId" ng-model="tooltipElement.name"></span>
                                     <br />
                                     <a target='_blank' rel='noopener' ng-if="tooltipElement.remoteId" ng-href='https://www.ncbi.nlm.nih.gov/nuccore/{{tooltipElement.remoteId}}'>
                                         Peptide ncbi page
