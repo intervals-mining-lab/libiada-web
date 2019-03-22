@@ -44,18 +44,55 @@
                     <div id="dragbar" @*ng-mousedown="dragbarMouseDown($event)"*@></div>
                     <div id="sidebar">
                         <ul class="nav nav-tabs">
-                            <li role="presentation"><a ng-click="$scope.tab='Legend'" href="#">Legend</a></li>
-                            <li role="presentation"><a ng-click="$scope.tab='Characteristic'" href="#">Characteristic</a></li>
-                            <li role="presentation"><a ng-click="$scope.tab='Similar sequences'" href="#">Similar sequences</a></li>
-                            <li role="presentation"><a ng-click="$scope.tab='Features'" href="#">Features</a></li>
-                            <li role="presentation"><a ng-click="$scope.tab='Filter'" href="#">Filter</a></li>
+                            <li role="presentation">
+                                <a ng-click="$scope.tab='Legend'" href="#">
+                                    <big>
+                                        <span class="glyphicon glyphicon-list" title="Legend" aria-label="Legend" aria-hidden="true"></span>
+                                    </big>
+                                </a>
+                            </li>
+                            <li role="presentation">
+                                <a ng-click="$scope.tab='Characteristic'" href="#">
+                                    <big>
+                                        <span class="glyphicon glyphicon-equalizer" title="Display settings" aria-label="Display settings" aria-hidden="true"></span>
+                                    </big>
+                                </a>
+                            </li>
+                            <li role="presentation">
+                                <a ng-click="$scope.tab='Similar sequences'" href="#">
+                                    <big>
+                                        <span class="glyphicon glyphicon-link" title="Similar sequences" aria-label="Similar sequences" aria-hidden="true"></span>
+                                    </big>
+                                </a>
+                            </li>
+                            <li role="presentation">
+                                <a ng-click="$scope.tab='Filter'" href="#">
+                                    <big>
+                                        <span class="glyphicon glyphicon-search" title="Find by product" aria-label="Find by product" aria-hidden="true"></span>
+                                    </big>
+                                </a>
+                            </li>
+                            <li role="presentation">
+                                <a ng-click="$scope.tab='Features'" href="#">
+                                    <big>
+                                        <span class="glyphicon glyphicon-filter" title="Features select" aria-label="Features select" aria-hidden="true"></span>
+                                    </big>
+                                </a>
+                            </li>
+                            <li role="presentation" ng-show="$scope.tooltipVisible">
+                                <a ng-click="$scope.tab='Tooltip'" href="#">
+                                    <big>
+                                        <span class="glyphicon glyphicon-info-sign" title="Tooltip" aria-label="Tooltip" aria-hidden="true"></span>
+                                    </big>
+                                </a>
+                            </li>
                         </ul>
                         <div ng-switch="$scope.tab">
                             <div ng-switch-when="Legend">
 
                             </div>
                             <div ng-switch-when="Characteristic">
-                                <br/>
+                                <br />
                                 <div class="form-group">
                                     <label class="control-label col-md-2" for="subsequenceCharacteristic">Second characteristic:</label>
                                     <div class="col-md-10">
@@ -109,11 +146,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div ng-switch-when="Features">
-                                @Html.Partial("_FeaturesSelect")
-                            </div>
                             <div ng-switch-when="Filter">
                                 @Html.Partial("_Filters")
+                            </div>
+                            <div ng-switch-when="Features">
+                                @Html.Partial("_FeaturesSelect")
                             </div>
                         </div>
                     </div>

@@ -298,6 +298,7 @@
         function drawGenesMap() {
             var chartParams = { responsive: true };
             var layout = {
+                legend: { "orientation": "h" },
                 hovermode: "closest",
                 xaxis: {
                     title: {
@@ -625,6 +626,7 @@
         $scope.filters = [];
         $scope.productFilter = "";
         $scope.tab = "None";
+        $scope.tooltipVisible = false;
 
         $scope.i = 0;
         $scope.dragging = false;
