@@ -305,8 +305,8 @@
             return points.map(function (d) { return d.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value] });
         }
 
-        function cText(points) {
-            return points.map(function (d) { return d.matterId; });
+        function cText(points, index) {
+            return points.map(function (d) { return $scope.matters[index].name; });
         }
 
         function cColor(v) {
@@ -345,11 +345,12 @@
 
             var data = $scope.points.map(function (points, index) {
                 return {
+                    hoverinfo: 'text+x+y',
                     type: 'scattergl',
                     mode: 'markers',
                     x: xValues(points),
                     y: yValues(points),
-                    text: cText(points),
+                    text: cText(points, index),
                     mode: "markers",
                     marker: {
                         opacity: 0.5,
