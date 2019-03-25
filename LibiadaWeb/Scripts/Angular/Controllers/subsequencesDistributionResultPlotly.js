@@ -241,17 +241,34 @@
             var tooltipElement = {
                 name: $scope.matters[d.curveNumber].name,
                 sequenceRemoteId: point.sequenceRemoteId,
-                features: $scope.features[point.featureId].Text,
+                feature: $scope.features[point.featureId].Text,
                 attributes: $scope.getAttributesText(point.attributes),
                 partial: point.partial
             };
 
+
+
             if (point.subsequenceRemoteId) {
                 tooltipElement.remoteId = point.subsequenceRemoteId;
             }
+            tooltipElement.position = "(";
+            tooltipElement.length = 0;
+            tooltipElement.positions = point.positions;
+            tooltipElement.lengths = point.lengths;
 
-            //var start = d.positions[0] + 1;
-            //var end = d.positions[0] + d.lengths[0];
+
+            for (var i = 0; i < point.positions.length; i++) {
+                tooltipElement.position += point.positions[i]+1;
+                tooltipElement.position += "..";
+                tooltipElement.position += point.positions[i] + point.lengths[i];
+                tooltipElement.length += point.lengths[i];
+                if (i !== point.positions.length - 1) {
+                    tooltipElement.position += ", ";
+                }
+            }
+
+            tooltipElement.position += ")";
+            
             //var positionGenbankLink = d.sequenceRemoteId ?
             //    genBankLink + d.sequenceRemoteId + "?from=" + start + "&to=" + end + "'>" + d.positions.join(", ") + "</a>" :
             //    d.positions.join(", ");

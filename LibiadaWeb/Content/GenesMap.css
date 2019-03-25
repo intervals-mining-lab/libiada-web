@@ -25,10 +25,11 @@
 
 #dragbar {
     background-color: darkgray;
-    height: 100%;
+    /*height: 100%;*/
     float: left;
-    width: 2px;
+    /*width: 100%;*/
     cursor: col-resize;
+    outline: 4px dotted red;
 }
 
 #ghostbar {

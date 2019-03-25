@@ -152,21 +152,33 @@
                             </div>
                             <div ng-switch-when="Tooltip">
                                 <div ng-repeat="tooltipElement in tooltipElements" class="monospace">
-                                    <a target='_blank' rel='noopener' ng-if="tooltipElement.sequenceRemoteId" ng-href='https://www.ncbi.nlm.nih.gov/nuccore/{{tooltipElement.sequenceRemoteId}}'>
+                                    <a target="_blank" rel="noopener" ng-if="tooltipElement.sequenceRemoteId"
+                                       ng-href="https://www.ncbi.nlm.nih.gov/nuccore/{{tooltipElement.sequenceRemoteId}}">
                                         {{tooltipElement.name}}
                                     </a>
-                                    <span ng-if="!tooltipElement.sequenceRemoteId" ng-model="tooltipElement.name"></span>
+                                    <span ng-if="!tooltipElement.sequenceRemoteId">{{tooltipElement.name}}</span>
                                     <br />
-                                    <a target='_blank' rel='noopener' ng-if="tooltipElement.remoteId" ng-href='https://www.ncbi.nlm.nih.gov/nuccore/{{tooltipElement.remoteId}}'>
+                                    <a target="_blank" rel="noopener" ng-if="tooltipElement.remoteId" ng-href="https://www.ncbi.nlm.nih.gov/nuccore/{{tooltipElement.remoteId}}">
                                         Peptide ncbi page
                                     </a>
-                                    <br />
-                                    {{tooltipElement.features}}
+                                    <div>
+                                        {{tooltipElement.feature}}
+                                    </div>
                                     <div ng-repeat="attribute in tooltipElement.attributes">
                                         {{attribute}}
                                     </div>
-                                    <br/>
-                                    <span ng-if="tooltipElement.partial">Partial</span>
+                                    <div ng-if="tooltipElement.partial">Partial</div>
+                                    <div>
+                                        Position:
+                                        <a target="_blank" rel="noopener" ng-if="tooltipElement.sequenceRemoteId"
+                                           ng-href="https://www.ncbi.nlm.nih.gov/nuccore/{{tooltipElement.sequenceRemoteId}}?from={{tooltipElement.positions[0]+1}}&to={{tooltipElement.positions[0]+tooltipElement.lengths[0]}}">
+                                            {{tooltipElement.position}}
+                                        </a>
+                                        <span ng-if="!tooltipElement.sequenceRemoteId">{{tooltipElement.position}}</span>
+                                    </div>
+                                    <div>
+                                        Lenght:{{tooltipElement.length}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
