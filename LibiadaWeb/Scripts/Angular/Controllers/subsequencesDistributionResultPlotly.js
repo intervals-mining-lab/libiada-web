@@ -171,18 +171,33 @@
         // shows tooltip for dot or group of dots @@@
         function showTooltip(data) {
             $("a[href='#tooltip']").tab("show");
+
             //   $scope.clearTooltip(tooltip);
             $scope.tooltipVisible = true;
             $scope.tooltipElements.length = 0;
 
-            var tooltipHtml = [];
-
-            //tooltip.selectedPoints = selectedPoints;
-
             var points = data.points;
-
+            
             for (var i = 0; i < points.length; i++) {
-                $scope.tooltipElements.push(fillPointTooltip(points[i]));
+                var point = $scope.points[points[i].curveNumber][points[i].pointNumber];
+                var matterName = $scope.matters[points[i].curveNumber].name;
+                $scope.tooltipElements.push(fillPointTooltip(point, matterName));
+            }
+
+            for (var i = 0; i < $scope.points.length; i++) {
+                for (var j = 0; j < $scope.points[i].length; j++) {
+                    var similar = $scope.characteristicComparers.every(function (filter) {
+                        var selectedPointValue = point.subsequenceCharacteristics[filter.characteristic.Value];
+                        var anotherPointValue = $scope.points[i][j].subsequenceCharacteristics[filter.characteristic.Value];
+                        return Math.abs(selectedPointValue - anotherPointValue) <= filter.precision;
+                    });
+
+                    if (similar) {
+                        var point = $scope.points[i][j];
+                        var matterName = $scope.matters[i].name;
+                        $scope.tooltipElements.push(fillPointTooltip(point, matterName));
+                    }
+                }
             }
 
             //var point = selectedPoints[0];
@@ -237,10 +252,9 @@
         }
 
         // constructs string representing tooltip text (inner html)
-        function fillPointTooltip(d) {
-            var point = $scope.points[d.curveNumber][d.pointNumber];
+        function fillPointTooltip(point, matterName) {
             var tooltipElement = {
-                name: $scope.matters[d.curveNumber].name,
+                name: matterName,
                 sequenceRemoteId: point.sequenceRemoteId,
                 feature: $scope.features[point.featureId].Text,
                 attributes: $scope.getAttributesText(point.attributes),
@@ -259,7 +273,7 @@
 
 
             for (var i = 0; i < point.positions.length; i++) {
-                tooltipElement.position += point.positions[i]+1;
+                tooltipElement.position += point.positions[i] + 1;
                 tooltipElement.position += "..";
                 tooltipElement.position += point.positions[i] + point.lengths[i];
                 tooltipElement.length += point.lengths[i];
@@ -269,7 +283,7 @@
             }
 
             tooltipElement.position += ")";
-            
+
             //var positionGenbankLink = d.sequenceRemoteId ?
             //    genBankLink + d.sequenceRemoteId + "?from=" + start + "&to=" + end + "'>" + d.positions.join(", ") + "</a>" :
             //    d.positions.join(", ");
@@ -363,17 +377,17 @@
             Plotly.plot('chart', data, layout, chartParams);
 
             myPlot.on('plotly_click', $scope.showTooltip
-            //    function (data) {
-            //    var pts = '';
-            //    for (var i = 0; i < data.points.length; i++) {
-            //        pts = 'x = ' + data.points[i].x + '\ny = ' +
-            //            data.points[i].y.toPrecision(4) + '\n\n' +
-            //            "curve number = " + data.points[i].curveNumber + '\n\n' +
-            //            "point number = " + data.points[i].pointNumber + '\n\n' +
-            //            "point index = " + data.points[i].pointIndex + '\n\n' +
-            //            "text = " + data.points[i].text + '\n\n';
-            //    }
-            //    alert('Closest point clicked:\n\n' + pts);
+                //    function (data) {
+                //    var pts = '';
+                //    for (var i = 0; i < data.points.length; i++) {
+                //        pts = 'x = ' + data.points[i].x + '\ny = ' +
+                //            data.points[i].y.toPrecision(4) + '\n\n' +
+                //            "curve number = " + data.points[i].curveNumber + '\n\n' +
+                //            "point number = " + data.points[i].pointNumber + '\n\n' +
+                //            "point index = " + data.points[i].pointIndex + '\n\n' +
+                //            "text = " + data.points[i].text + '\n\n';
+                //    }
+                //    alert('Closest point clicked:\n\n' + pts);
                 //}
             );
 
@@ -641,7 +655,7 @@
         $scope.deleteFilter = deleteFilter;
         $scope.getAttributeIdByName = getAttributeIdByName;
         $scope.isAttributeEqual = isAttributeEqual;
-       // $scope.dragbarMouseDown = dragbarMouseDown;
+        // $scope.dragbarMouseDown = dragbarMouseDown;
 
         $scope.dotRadius = 4;
         $scope.selectedDotRadius = $scope.dotRadius * 3;

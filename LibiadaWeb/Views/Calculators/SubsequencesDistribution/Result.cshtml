@@ -150,7 +150,7 @@
                             <div role="tabpanel" class="tab-pane" id="features">
                                 @Html.Partial("_FeaturesSelect")
                             </div>
-                            <div role="tabpanel" class="tab-pane" id="tooltip" data-target="#tooltip">
+                            <div role="tabpanel" class="tab-pane" id="tooltip">
                                 <div ng-repeat="tooltipElement in tooltipElements" class="monospace">
                                     <a target="_blank" rel="noopener" ng-if="tooltipElement.sequenceRemoteId"
                                        ng-href="https://www.ncbi.nlm.nih.gov/nuccore/{{tooltipElement.sequenceRemoteId}}">
@@ -179,6 +179,7 @@
                                     <div>
                                         Lenght:{{tooltipElement.length}}
                                     </div>
+                                    <br/>
                                 </div>
                             </div>
                         </div>
