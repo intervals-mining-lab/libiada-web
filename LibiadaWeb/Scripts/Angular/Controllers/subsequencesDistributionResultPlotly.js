@@ -170,7 +170,8 @@
 
         // shows tooltip for dot or group of dots @@@
         function showTooltip(data) {
-         //   $scope.clearTooltip(tooltip);
+            $("a[href='#tooltip']").tab("show");
+            //   $scope.clearTooltip(tooltip);
             $scope.tooltipVisible = true;
             $scope.tooltipElements.length = 0;
 
@@ -656,6 +657,8 @@
 
         $scope.i = 0;
         $scope.dragging = false;
+
+        $('[data-toggle="tooltip"]').tooltip();
 
 
         //$(document).mouseup(function (e) {

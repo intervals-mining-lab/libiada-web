@@ -43,55 +43,55 @@
                     </div>
                     <div id="dragbar" @*ng-mousedown="dragbarMouseDown($event)"*@></div>
                     <div id="sidebar">
-                        <ul class="nav nav-tabs">
-                            <li role="presentation">
-                                <a ng-click="$scope.tab='Legend'" href="#">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" data-trigger="hover" data-toggle="tooltip" data-placement="bottom" title="Legend">
+                                <a href="#legend" aria-controls="Legend" role="tab" data-toggle="tab">
                                     <big>
-                                        <span class="glyphicon glyphicon-list" title="Legend" aria-label="Legend" aria-hidden="true"></span>
+                                        <span class="glyphicon glyphicon-list" aria-label="Legend" aria-hidden="true"></span>
                                     </big>
                                 </a>
                             </li>
-                            <li role="presentation">
-                                <a ng-click="$scope.tab='Characteristic'" href="#">
+                            <li role="presentation" data-trigger="hover" data-toggle="tooltip" data-placement="bottom" title="Display settings">
+                                <a href="#characteristic" aria-controls="Characteristic" role="tab" data-toggle="tab">
                                     <big>
-                                        <span class="glyphicon glyphicon-equalizer" title="Display settings" aria-label="Display settings" aria-hidden="true"></span>
+                                        <span class="glyphicon glyphicon-equalizer" aria-label="Display settings" aria-hidden="true"></span>
                                     </big>
                                 </a>
                             </li>
-                            <li role="presentation">
-                                <a ng-click="$scope.tab='Similar sequences'" href="#">
+                            <li role="presentation" data-trigger="hover" data-toggle="tooltip" data-placement="bottom" title="Similar sequences">
+                                <a href="#similar-sequences" aria-controls="Similar-Sequences" role="tab" data-toggle="tab">
                                     <big>
-                                        <span class="glyphicon glyphicon-link" title="Similar sequences" aria-label="Similar sequences" aria-hidden="true"></span>
+                                        <span class="glyphicon glyphicon-link" aria-label="Similar sequences" aria-hidden="true"></span>
                                     </big>
                                 </a>
                             </li>
-                            <li role="presentation">
-                                <a ng-click="$scope.tab='Filter'" href="#">
+                            <li role="presentation" data-trigger="hover" data-toggle="tooltip" data-placement="bottom" title="Find by product">
+                                <a href="#filter" aria-controls="Filter" role="tab" data-toggle="tab">
                                     <big>
-                                        <span class="glyphicon glyphicon-search" title="Find by product" aria-label="Find by product" aria-hidden="true"></span>
+                                        <span class="glyphicon glyphicon-search" aria-label="Find by product" aria-hidden="true"></span>
                                     </big>
                                 </a>
                             </li>
-                            <li role="presentation">
-                                <a ng-click="$scope.tab='Features'" href="#">
+                            <li role="presentation" data-trigger="hover" data-toggle="tooltip" data-placement="bottom" title="Features select">
+                                <a href="#features" aria-controls="Features" role="tab" data-toggle="tab">
                                     <big>
-                                        <span class="glyphicon glyphicon-filter" title="Features select" aria-label="Features select" aria-hidden="true"></span>
+                                        <span class="glyphicon glyphicon-filter" aria-label="Features select" aria-hidden="true"></span>
                                     </big>
                                 </a>
                             </li>
-                            <li role="presentation" @*ng-show="tooltipVisible"*@>
-                                <a ng-click="$scope.tab='Tooltip'" href="#">
+                            <li role="presentation" data-trigger="hover" data-toggle="tooltip" data-placement="bottom" title="Tooltip">
+                                <a href="#tooltip" aria-controls="Tooltip" role="tab" data-toggle="tab" data-target="#tooltip">
                                     <big>
-                                        <span class="glyphicon glyphicon-info-sign" title="Tooltip" aria-label="Tooltip" aria-hidden="true"></span>
+                                        <span class="glyphicon glyphicon-info-sign" aria-label="Tooltip" aria-hidden="true"></span>
                                     </big>
                                 </a>
                             </li>
                         </ul>
-                        <div ng-switch="$scope.tab">
-                            <div ng-switch-when="Legend">
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane" id="legend">
 
                             </div>
-                            <div ng-switch-when="Characteristic">
+                            <div role="tabpanel" class="tab-pane" id="characteristic">
                                 <br />
                                 <div class="form-group">
                                     <div class="col-md-10">
@@ -107,7 +107,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div ng-switch-when="Similar sequences">
+                            <div role="tabpanel" class="tab-pane" id="similar-sequences">
                                 <br />
                                 <div class="form-group">
                                     <div class="col-md-10">
@@ -144,13 +144,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <div ng-switch-when="Filter">
+                            <div role="tabpanel" class="tab-pane" id="filter">
                                 @Html.Partial("_Filters")
                             </div>
-                            <div ng-switch-when="Features">
+                            <div role="tabpanel" class="tab-pane" id="features">
                                 @Html.Partial("_FeaturesSelect")
                             </div>
-                            <div ng-switch-when="Tooltip">
+                            <div role="tabpanel" class="tab-pane" id="tooltip" data-target="#tooltip">
                                 <div ng-repeat="tooltipElement in tooltipElements" class="monospace">
                                     <a target="_blank" rel="noopener" ng-if="tooltipElement.sequenceRemoteId"
                                        ng-href="https://www.ncbi.nlm.nih.gov/nuccore/{{tooltipElement.sequenceRemoteId}}">
