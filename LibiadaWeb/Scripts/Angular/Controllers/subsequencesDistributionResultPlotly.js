@@ -149,12 +149,12 @@
                     var firstProductId = $scope.getAttributeIdByName(d, "product");
                     var secondProductId = $scope.getAttributeIdByName(dot, "product");
                     if ($scope.attributeValues[firstProductId].value.toUpperCase() !== $scope.attributeValues[secondProductId].value.toUpperCase()) {
-                        return false;
+                        return $scope.pointsSimilarity.different;
                     }
                     break;
             }
 
-            return true;
+            return $scope.pointsSimilarity.similar;
         }
 
         // gets attributes text for given subsequence
@@ -177,25 +177,29 @@
             $scope.tooltipElements.length = 0;
 
             var points = data.points;
-            
+
             for (var i = 0; i < points.length; i++) {
                 var point = $scope.points[points[i].curveNumber][points[i].pointNumber];
                 var matterName = $scope.matters[points[i].curveNumber].name;
-                $scope.tooltipElements.push(fillPointTooltip(point, matterName));
+                $scope.tooltipElements.push(fillPointTooltip(point, matterName, $scope.pointsSimilarity.same));
             }
+
+            var selectedPoint = $scope.points[points[0].curveNumber][points[0].pointNumber];
 
             for (var i = 0; i < $scope.points.length; i++) {
                 for (var j = 0; j < $scope.points[i].length; j++) {
-                    var similar = $scope.characteristicComparers.every(function (filter) {
-                        var selectedPointValue = point.subsequenceCharacteristics[filter.characteristic.Value];
-                        var anotherPointValue = $scope.points[i][j].subsequenceCharacteristics[filter.characteristic.Value];
-                        return Math.abs(selectedPointValue - anotherPointValue) <= filter.precision;
-                    });
+                    if (selectedPoint !== $scope.points[i][j]) {
+                        var similar = $scope.characteristicComparers.every(function (filter) {
+                            var selectedPointValue = selectedPoint.subsequenceCharacteristics[filter.characteristic.Value];
+                            var anotherPointValue = $scope.points[i][j].subsequenceCharacteristics[filter.characteristic.Value];
+                            return Math.abs(selectedPointValue - anotherPointValue) <= filter.precision;
+                        });
 
-                    if (similar) {
-                        var point = $scope.points[i][j];
-                        var matterName = $scope.matters[i].name;
-                        $scope.tooltipElements.push(fillPointTooltip(point, matterName));
+                        if (similar) {
+                            var point = $scope.points[i][j];
+                            var matterName = $scope.matters[i].name;
+                            $scope.tooltipElements.push(fillPointTooltip(point, matterName, $scope.dotsSimilar(point, selectedPoint)));
+                        }
                     }
                 }
             }
@@ -252,13 +256,18 @@
         }
 
         // constructs string representing tooltip text (inner html)
-        function fillPointTooltip(point, matterName) {
+        function fillPointTooltip(point, matterName, similarity) {
+            var color = similarity === $scope.pointsSimilarity.same ? ""
+                      : similarity === $scope.pointsSimilarity.similar ? "bg-success"
+                    : similarity === $scope.pointsSimilarity.different ? "bg-danger" : "bg-danger";
+
             var tooltipElement = {
                 name: matterName,
                 sequenceRemoteId: point.sequenceRemoteId,
                 feature: $scope.features[point.featureId].Text,
                 attributes: $scope.getAttributesText(point.attributes),
-                partial: point.partial
+                partial: point.partial,
+                color: color
             };
 
 
@@ -665,9 +674,9 @@
         $scope.characteristicComparers = [];
         $scope.filters = [];
         $scope.productFilter = "";
-        $scope.tab = "None";
         $scope.tooltipVisible = false;
         $scope.tooltipElements = [];
+        $scope.pointsSimilarity = Object.freeze({ "same": 0, "similar": 1, "different": 2 });
 
         $scope.i = 0;
         $scope.dragging = false;
