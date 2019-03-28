@@ -168,11 +168,10 @@
             return attributesText;
         }
 
-        // shows tooltip for dot or group of dots @@@
+        // shows tooltip for dot or group of dots
         function showTooltip(data) {
             $("a[href='#tooltip']").tab("show");
 
-            //   $scope.clearTooltip(tooltip);
             $scope.tooltipVisible = true;
             $scope.tooltipElements.length = 0;
 
@@ -204,25 +203,8 @@
                 }
             }
 
-            //var point = selectedPoints[0];
-            //tooltip.selectedDots = svg.selectAll(".dot")
-            //    .filter(function (dot) {
-            //        if ($scope.dotVisible(dot)) {
-            //            if (dot.matterId === point.matterId && $scope.yValue(dot) === $scope.yValue(point)) { // if dots are in the same position
-            //                tooltipHtml.push($scope.fillPointTooltip(dot));
-            //                return true;
-            //            } else if ($scope.highlight) { // if similar dot are highlighted
-            //                for (var i = 0; i < $scope.characteristicComparers.length; i++) {
-            //                    var dotValue = dot.subsequenceCharacteristics[$scope.characteristicComparers[i].characteristic.Value];
-            //                    var dValue = point.subsequenceCharacteristics[$scope.characteristicComparers[i].characteristic.Value];
-            //                    if (Math.abs(dotValue - dValue) > $scope.characteristicComparers[i].precision) { // if dValue is out of range for any comparer
-            //                        return false;
-            //                    }
-            //                }
 
-            //                var tooltipColor = $scope.dotsSimilar(point, dot) ? "text-success" : "text-danger";
-            //                tooltipHtml.push("<span class='" + tooltipColor + "'>" + $scope.fillPointTooltip(dot) + "</span>");
-            //                svg.append("line")
+                        //                svg.append("line")
             //                    .attr("class", "similar-line")
             //                    .attr("x1", $scope.xMap(point))
             //                    .attr("y1", $scope.yMap(point))
@@ -239,18 +221,6 @@
             //    })
             //    .attr("rx", $scope.selectedDotRadius);
             //tooltip.lines = svg.selectAll(".similar-line");
-            //tooltip.html(tooltipHtml.join("</br></br>"));
-
-            //var matrix = tooltip.selectedDots.nodes()[0].parentNode.getScreenCTM()
-            //    .translate($scope.xMap(point), $scope.yMap(point));
-
-            //tooltip.style("background", "#eee")
-            //    .style("color", "#000")
-            //    .style("border-radius", "5px")
-            //    .style("font-family", "monospace")
-            //    .style("padding", "5px")
-            //    .style("left", (window.pageXOffset + matrix.e + 15) + "px")
-            //    .style("top", (window.pageYOffset + matrix.f + 15) + "px");
 
             $scope.$apply();
         }
@@ -259,7 +229,7 @@
         function fillPointTooltip(point, matterName, similarity) {
             var color = similarity === $scope.pointsSimilarity.same ? ""
                       : similarity === $scope.pointsSimilarity.similar ? "bg-success"
-                    : similarity === $scope.pointsSimilarity.different ? "bg-danger" : "bg-danger";
+                      : similarity === $scope.pointsSimilarity.different ? "bg-danger" : "bg-danger";
 
             var tooltipElement = {
                 name: matterName,
@@ -270,16 +240,14 @@
                 color: color
             };
 
-
-
             if (point.subsequenceRemoteId) {
                 tooltipElement.remoteId = point.subsequenceRemoteId;
             }
+
             tooltipElement.position = "(";
             tooltipElement.length = 0;
             tooltipElement.positions = point.positions;
             tooltipElement.lengths = point.lengths;
-
 
             for (var i = 0; i < point.positions.length; i++) {
                 tooltipElement.position += point.positions[i] + 1;
@@ -293,28 +261,9 @@
 
             tooltipElement.position += ")";
 
-            //var positionGenbankLink = d.sequenceRemoteId ?
-            //    genBankLink + d.sequenceRemoteId + "?from=" + start + "&to=" + end + "'>" + d.positions.join(", ") + "</a>" :
-            //    d.positions.join(", ");
-            //tooltipContent.push("Position: " + positionGenbankLink);
-            //tooltipContent.push("Length: " + d.lengths.join(", "));
             //tooltipContent.push("(" + d.x + ", " + $scope.yValue(d) + ")");
 
             return tooltipElement;
-        }
-
-        // clears tooltip and unselects dots @@@
-        function clearTooltip(tooltip) {
-            if (tooltip) {
-                tooltip.html("").style("opacity", 0);
-
-                if (tooltip.selectedDots) {
-                    tooltip.selectedDots.attr("rx", $scope.dotRadius);
-                }
-                if (tooltip.lines) {
-                    tooltip.lines.remove();
-                }
-            }
         }
 
         function isKeyUpOrDown(keyCode) {
@@ -332,12 +281,6 @@
         function cText(points, index) {
             return points.map(function (d) { return $scope.matters[index].name; });
         }
-
-        function cColor(v) {
-            $scope.colorMap = d3.scaleOrdinal(d3.schemeCategory20);
-            return $scope.colorMap(v.Id);
-        }
-
 
         // main drawing method
         function drawGenesMap() {
@@ -385,20 +328,7 @@
 
             Plotly.plot('chart', data, layout, chartParams);
 
-            myPlot.on('plotly_click', $scope.showTooltip
-                //    function (data) {
-                //    var pts = '';
-                //    for (var i = 0; i < data.points.length; i++) {
-                //        pts = 'x = ' + data.points[i].x + '\ny = ' +
-                //            data.points[i].y.toPrecision(4) + '\n\n' +
-                //            "curve number = " + data.points[i].curveNumber + '\n\n' +
-                //            "point number = " + data.points[i].pointNumber + '\n\n' +
-                //            "point index = " + data.points[i].pointIndex + '\n\n' +
-                //            "text = " + data.points[i].text + '\n\n';
-                //    }
-                //    alert('Closest point clicked:\n\n' + pts);
-                //}
-            );
+            myPlot.on('plotly_click', $scope.showTooltip);
 
             //$scope.loading = true;
             //$scope.loadingScreenHeader = "Drawing...";
@@ -654,7 +584,6 @@
         $scope.getAttributesText = getAttributesText;
         $scope.fillPointTooltip = fillPointTooltip;
         $scope.showTooltip = showTooltip;
-        $scope.clearTooltip = clearTooltip;
         $scope.isKeyUpOrDown = isKeyUpOrDown;
         $scope.yValue = yValues;
         $scope.xValue = xValues;
@@ -707,15 +636,12 @@
             .then(function (data) {
                 MapModelFromJson($scope, JSON.parse(data.data));
 
-                $scope.legendHeight = $scope.result.length * 20;
-                $scope.height = 800 + $scope.legendHeight;
-                $scope.width = 800;
                 $scope.subsequenceCharacteristic = $scope.subsequencesCharacteristicsList[0];
 
                 $scope.fillPoints();
                 $scope.addCharacteristicComparer();
-                $scope.loading = false;
                 drawGenesMap();
+                $scope.loading = false;
             }, function () {
                 alert("Failed loading genes map data");
 
