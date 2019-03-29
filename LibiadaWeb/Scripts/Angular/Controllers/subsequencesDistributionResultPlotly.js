@@ -46,16 +46,27 @@
             if ($scope.newFilter.length > 0) {
                 $scope.filters.push({ value: $scope.newFilter });
 
-                d3.selectAll(".dot")
-                    .attr("visibility", function (d) {
-                        var filterValue = $scope.newFilter.toUpperCase();
-                        var visible = $scope.isAttributeEqual(d, "product", filterValue);
-                        visible = visible || $scope.isAttributeEqual(d, "locus_tag", filterValue);
-                        d.filtersVisible.push(visible);
-                        return $scope.dotVisible(d) ? "visible" : "hidden";
-                    });
+                var filterValue = $scope.filters[$scope.filters.length - 1].value.toUpperCase();
 
-                $scope.fillVisiblePoints();
+                for (var i = 0; i < $scope.points.length; i++) {
+                    for (var j = 0; j < $scope.points[i].length; j++) {
+                        var point = $scope.points[i][j];
+                        var visible = $scope.isAttributeEqual(point, "product", filterValue);
+                        visible = visible || $scope.isAttributeEqual(point, "locus_tag", filterValue);
+                        point.filtersVisible.push(visible);
+                        point.visible = $scope.dotVisible(point);
+                    }
+                    var update = {
+                        //"marker": { color: $scope.points[i].map(p => p.visible ? "green" : "red") },
+                        "visible": $scope.points[i].map(p => p.visible ) 
+                    };
+                    Plotly.restyle($scope.myPlot, update, [i]);
+
+                }
+
+                
+
+               // $scope.fillVisiblePoints();
                 $scope.newFilter = "";
             }
             // todo: add error message if filter is empty
@@ -129,11 +140,9 @@
 
         // checks if dot is visible
         function dotVisible(dot) {
-            var filterVisible = dot.filtersVisible.length === 0 || dot.filtersVisible.some(function (element) {
-                return element;
-            });
+            var filterVisible = dot.filtersVisible.length === 0 || dot.filtersVisible.some(fv => fv);
 
-            return dot.featureVisible && dot.matterVisible && filterVisible;
+            return dot.featureVisible && filterVisible;
         }
 
         // determines if dots are similar by product
@@ -204,7 +213,7 @@
             }
 
 
-                        //                svg.append("line")
+            //                svg.append("line")
             //                    .attr("class", "similar-line")
             //                    .attr("x1", $scope.xMap(point))
             //                    .attr("y1", $scope.yMap(point))
@@ -228,8 +237,8 @@
         // constructs string representing tooltip text (inner html)
         function fillPointTooltip(point, matterName, similarity) {
             var color = similarity === $scope.pointsSimilarity.same ? ""
-                      : similarity === $scope.pointsSimilarity.similar ? "bg-success"
-                      : similarity === $scope.pointsSimilarity.different ? "bg-danger" : "bg-danger";
+                : similarity === $scope.pointsSimilarity.similar ? "bg-success"
+                    : similarity === $scope.pointsSimilarity.different ? "bg-danger" : "bg-danger";
 
             var tooltipElement = {
                 name: matterName,
@@ -270,14 +279,6 @@
             return keyCode === 40 || keyCode === 38;
         }
 
-        function xValues(points) {
-            return points.map(function (d) { return $scope.numericXAxis ? d.numericX : d.x; });
-        }
-
-        function yValues(points) {
-            return points.map(function (d) { return d.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value] });
-        }
-
         function cText(points, index) {
             return points.map(function (d) { return $scope.matters[index].name; });
         }
@@ -306,17 +307,18 @@
                     }
                 }
             };
-            var myPlot = document.getElementById('chart');
 
-            while (myPlot.firstChild) myPlot.removeChild(myPlot.firstChild);
+            $scope.myPlot = document.getElementById('chart');
+
+            while ($scope.myPlot.firstChild) $scope.myPlot.removeChild($scope.myPlot.firstChild);
 
             var data = $scope.points.map(function (points, index) {
                 return {
                     hoverinfo: 'text+x+y',
                     type: 'scattergl',
                     mode: 'markers',
-                    x: xValues(points),
-                    y: yValues(points),
+                    x: points.map(p => $scope.numericXAxis ? p.numericX : p.x),
+                    y: points.map(p => p.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value]),
                     text: cText(points, index),
                     mode: "markers",
                     marker: {
@@ -328,7 +330,7 @@
 
             Plotly.plot('chart', data, layout, chartParams);
 
-            myPlot.on('plotly_click', $scope.showTooltip);
+            $scope.myPlot.on('plotly_click', $scope.showTooltip);
 
             //$scope.loading = true;
             //$scope.loadingScreenHeader = "Drawing...";
@@ -585,8 +587,6 @@
         $scope.fillPointTooltip = fillPointTooltip;
         $scope.showTooltip = showTooltip;
         $scope.isKeyUpOrDown = isKeyUpOrDown;
-        $scope.yValue = yValues;
-        $scope.xValue = xValues;
         $scope.addCharacteristicComparer = addCharacteristicComparer;
         $scope.deleteCharacteristicComparer = deleteCharacteristicComparer;
         $scope.addFilter = addFilter;
