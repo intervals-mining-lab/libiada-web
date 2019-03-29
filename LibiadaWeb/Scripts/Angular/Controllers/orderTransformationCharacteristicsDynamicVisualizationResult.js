@@ -39,17 +39,8 @@
         function fillPointTooltip(d) {
             var tooltipContent = [];
             tooltipContent.push("Name: " + d.name);
-
-
-            var pointsCharacteristics = [];
-            for (var i = 0; i < $scope.characteristics[d.id].characteristics.length; i++) {
-                pointsCharacteristics.push($scope.characteristicsName +
-                    ": " +
-                    $scope.characteristics[d.id].characteristics[i]);
-            }
-
-            tooltipContent.push(pointsCharacteristics.join("<br/>"));
-
+            tooltipContent.push($scope.characteristicName + ": " +$scope.characteristics[d.id].characteristics[d.x]);
+            tooltipContent.push($scope.transformationsList[d.x % $scope.transformationsList.length]);
             return tooltipContent.join("</br>");
         }
 
