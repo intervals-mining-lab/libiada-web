@@ -58,7 +58,8 @@
                     }
                     var update = {
                         //"marker": { color: $scope.points[i].map(p => p.visible ? "green" : "red") },
-                        "visible": $scope.points[i].map(p => p.visible ) 
+                        "marker": { opacity: $scope.points[i].map(p => p.visible ? "0.5" : "0") }
+                        //"visible": $scope.points[i].map(p => p.visible) 
                     };
                     Plotly.restyle($scope.myPlot, update, [i]);
 
@@ -555,25 +556,6 @@
             //$scope.loading = false;
         }
 
-        //function dragbarMouseDown(e) {
-        //    e.preventDefault();
-
-        //    $scope.dragging = true;
-        //    var main = $('#main');
-        //    var ghostbar = $('<div>',
-        //        {
-        //            id: 'ghostbar',
-        //            css: {
-        //                height: main.outerHeight(),
-        //                top: main.offset().top,
-        //                left: main.offset().left
-        //            }
-        //        }).appendTo('body');
-
-        //    $(document).mousemove(function (e) {
-        //        ghostbar.css("left", e.pageX + 2);
-        //    });
-        //};
 
         $scope.setCheckBoxesState = SetCheckBoxesState;
 
@@ -593,7 +575,7 @@
         $scope.deleteFilter = deleteFilter;
         $scope.getAttributeIdByName = getAttributeIdByName;
         $scope.isAttributeEqual = isAttributeEqual;
-        // $scope.dragbarMouseDown = dragbarMouseDown;
+        $scope.dragbarMouseDown = dragbarMouseDown;
 
         $scope.dotRadius = 4;
         $scope.selectedDotRadius = $scope.dotRadius * 3;
@@ -613,16 +595,32 @@
         $('[data-toggle="tooltip"]').tooltip();
 
 
-        //$(document).mouseup(function (e) {
-        //    if ($scope.dragging) {
-        //        $('#sidebar').css("width", e.pageX + 2);
-        //        $('#main').css("left", e.pageX + 2);
-        //        $('#ghostbar').remove();
-        //        $(document).unbind('mousemove');
-        //        $scope.dragging = false;
-        //    }
-        //});
 
+        // dragbar
+        function dragbarMouseDown() {
+            var main = document.getElementById('main');
+            var right = document.getElementById('sidebar');
+            var bar = document.getElementById('dragbar');
+
+            const drag = (e) => {
+                document.selection ? document.selection.empty() : window.getSelection().removeAllRanges();
+                var chart_width = main.style.width = (e.pageX - bar.offsetWidth / 2) + 'px';
+                console.log(chart_width)
+
+                Plotly.relayout('chart', {
+                    autosize : true
+                })
+            }
+
+            bar.addEventListener('mousedown', () => {
+                document.addEventListener('mousemove', drag);
+            });
+
+            bar.addEventListener('mouseup', () => {
+                document.removeEventListener('mousemove', drag);
+            });
+            
+        }
 
         $scope.loadingScreenHeader = "Loading genes map data";
 

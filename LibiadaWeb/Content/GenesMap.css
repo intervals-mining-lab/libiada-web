@@ -3,40 +3,51 @@
     height: 100vh;
     padding: 0;
     margin: 0;
-    
+}
+
+#container {
+    display: flex;
 }
 
 #main {
-    float: left;
-    position: absolute;
     width: 70vw;
+    min-width : 300px;
 }
 
 #sidebar {
-    /*left: 70vw;*/
-    width:30vw;
-    right: 0;
-    float: right;
-    position: absolute;
-    /*height: 200px;*/
+    flex: 1;
+    width: 30vw;
+}
+
+#nav {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 5px;
+}
+
+.tab-content {
+    padding-left: 10px;
+    padding-top: 10px;
     overflow-y: auto;
-    height: 100vh;
+    height: calc(100vh - 60px);
 }
 
 #dragbar {
     background-color: darkgray;
-    /*height: 100%;*/
-    float: left;
-    /*width: 100%;*/
+    height: 100vh;
+    width: 3px;
     cursor: col-resize;
-    outline: 4px dotted red;
+    margin-left : 1px;
 }
 
-#ghostbar {
-    width: 2px;
-    background-color: #000;
-    opacity: 0.5;
-    position: absolute;
-    cursor: col-resize;
-    z-index: 999
+
+.form-horizontal .form-group {
+    margin: 0 !important;
 }
+
+/*@media (min-width: 400px) {
+    .nav-tabs {
+        flex-direction: column;
+        width: 50px;
+    }
+}*/

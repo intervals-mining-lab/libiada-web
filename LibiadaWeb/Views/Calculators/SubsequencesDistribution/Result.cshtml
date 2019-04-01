@@ -35,15 +35,14 @@
             @Scripts.Render("~/bundles/loadingWindow")
             <div class="form-horizontal" ng-controller="SubsequencesDistributionResultPlotlyCtrl">
                 <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
-                <div ng-disabled="loading" ng-cloack>
+                <div id="container" ng-disabled="loading" ng-cloack>
 
                     <div id="main">
-                        <div id="chart" class="responsive-chart">
-                        </div>
+                        <div id="chart" class="responsive-chart"></div>
                     </div>
-                    <div id="dragbar" @*ng-mousedown="dragbarMouseDown($event)"*@></div>
+                    <div id="dragbar" ng-mousedown="dragbarMouseDown()"></div>
                     <div id="sidebar">
-                        <ul class="nav nav-tabs" role="tablist">
+                        <ul id='nav' class="nav nav-tabs" role="tablist">
                             <li role="presentation" data-trigger="hover" data-toggle="tooltip" data-placement="bottom" title="Legend">
                                 <a href="#legend" aria-controls="Legend" role="tab" data-toggle="tab">
                                     <big>
@@ -89,7 +88,6 @@
                         </ul>
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane" id="legend">
-
                             </div>
                             <div role="tabpanel" class="tab-pane" id="characteristic">
                                 <br />
@@ -179,7 +177,7 @@
                                     <div>
                                         Lenght:{{tooltipElement.length}}
                                     </div>
-                                    <hr/>
+                                    <hr />
                                 </div>
                             </div>
                         </div>
