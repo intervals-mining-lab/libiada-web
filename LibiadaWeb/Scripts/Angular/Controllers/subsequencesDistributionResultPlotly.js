@@ -17,8 +17,11 @@
         function fillVisiblePoints() {
             $scope.visiblePoints = [];
             for (var i = 0; i < $scope.points.length; i++) {
-                if ($scope.dotVisible($scope.points[i])) {
-                    $scope.visiblePoints.push($scope.points[i]);
+                $scope.visiblePoints[i] = [];
+                for (var j = 0; j < $scope.points[i].length; j++) {
+                    if ($scope.dotVisible($scope.points[i][j])) {
+                        $scope.visiblePoints[i].push($scope.points[i][j]);
+                    }
                 }
             }
         }
@@ -48,6 +51,8 @@
 
                 var filterValue = $scope.filters[$scope.filters.length - 1].value.toUpperCase();
 
+                var points = $scope.plot.data;
+
                 for (var i = 0; i < $scope.points.length; i++) {
                     for (var j = 0; j < $scope.points[i].length; j++) {
                         var point = $scope.points[i][j];
@@ -56,18 +61,34 @@
                         point.filtersVisible.push(visible);
                         point.visible = $scope.dotVisible(point);
                     }
-                    var update = {
-                        //"marker": { color: $scope.points[i].map(p => p.visible ? "green" : "red") },
-                        "marker": { opacity: $scope.points[i].map(p => p.visible ? "0.5" : "0") }
-                        //"visible": $scope.points[i].map(p => p.visible) 
-                    };
-                    Plotly.restyle($scope.myPlot, update, [i]);
+                    //var update = {
+                    //    //"marker": { color: $scope.points[i].map(p => p.visible ? "green" : "red") },
+                    //    "marker": { opacity: $scope.points[i].map(p => p.visible ? "0.5" : "0") },
+                    //    "hoverinfo":  $scope.points[i].map(p => p.visible ? "text+x+y" : "none")
+                    //    //"visible": $scope.points[i].map(p => p.visible) 
+                    ////};
+                    //Plotly.restyle($scope.myPlot, update, [i]);
 
                 }
 
-                
+                $scope.fillVisiblePoints();
 
-               // $scope.fillVisiblePoints();
+                var data = $scope.visiblePoints.map(function (points, index) {
+                    return {
+                        hoverinfo: 'text+x+y',
+                        type: 'scattergl',
+                        mode: 'markers',
+                        x: points.map(p => $scope.numericXAxis ? p.numericX : p.x),
+                        y: points.map(p => p.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value]),
+                        text: cText(points, index),
+                        mode: "markers",
+                        marker: points.map(p => { return { opacity: 0.5, visible: !$scope.dotVisible(p) } }),
+                        name: $scope.matters[index].name
+                    }
+                });
+
+                Plotly.react($scope.plot, data, $scope.layout);
+
                 $scope.newFilter = "";
             }
             // todo: add error message if filter is empty
@@ -279,7 +300,7 @@
         // main drawing method
         function drawGenesMap() {
             var chartParams = { responsive: true };
-            var layout = {
+            $scope.layout = {
                 hovermode: "closest",
                 xaxis: {
                     title: {
@@ -314,14 +335,14 @@
                     y: points.map(p => p.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value]),
                     text: cText(points, index),
                     mode: "markers",
-                    marker: {
-                        opacity: 0.5,
-                    },
+                    marker: points.map(p => { return { opacity: 0.5, visible: !$scope.dotVisible(p)}}),
                     name: $scope.matters[index].name
                 }
             });
 
-            Plotly.plot('chart', data, layout, chartParams);
+            $scope.plot = document.getElementById("chart");
+
+            Plotly.plot('chart', data, $scope.layout, chartParams);
 
             $scope.myPlot.on('plotly_click', data => {
                 var selectedPoint = $scope.points[data.points[0].curveNumber][data.points[0].pointNumber];
