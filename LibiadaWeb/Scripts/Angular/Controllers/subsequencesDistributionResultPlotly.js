@@ -179,25 +179,17 @@
         }
 
         // shows tooltip for dot or group of dots
-        function showTooltip(data) {
+        function showTooltip(selectedPoint) {
             $("a[href='#tooltip']").tab("show");
 
             $scope.tooltipVisible = true;
             $scope.tooltipElements.length = 0;
 
-            var points = data.points;
-
-            for (var i = 0; i < points.length; i++) {
-                var point = $scope.points[points[i].curveNumber][points[i].pointNumber];
-                var matterName = $scope.matters[points[i].curveNumber].name;
-                $scope.tooltipElements.push(fillPointTooltip(point, matterName, $scope.pointsSimilarity.same));
-            }
-
-            var selectedPoint = $scope.points[points[0].curveNumber][points[0].pointNumber];
+            $scope.tooltipElements.push(fillPointTooltip(selectedPoint, matterName, $scope.pointsSimilarity.same));
 
             for (var i = 0; i < $scope.points.length; i++) {
                 for (var j = 0; j < $scope.points[i].length; j++) {
-                    if (selectedPoint !== $scope.points[i][j]) {
+                    if (selectedPoint !== $scope.points[i][j] && $scope.highlight) {
                         var similar = $scope.characteristicComparers.every(function (filter) {
                             var selectedPointValue = selectedPoint.subsequenceCharacteristics[filter.characteristic.Value];
                             var anotherPointValue = $scope.points[i][j].subsequenceCharacteristics[filter.characteristic.Value];
@@ -331,7 +323,10 @@
 
             Plotly.plot('chart', data, layout, chartParams);
 
-            $scope.myPlot.on('plotly_click', $scope.showTooltip);
+            $scope.myPlot.on('plotly_click', data => {
+                var selectedPoint = $scope.points[data.points[0].curveNumber][data.points[0].pointNumber];
+                $scope.showTooltip(selectedPoint);
+            });
 
             //$scope.loading = true;
             //$scope.loadingScreenHeader = "Drawing...";
