@@ -51,8 +51,6 @@
 
                 var filterValue = $scope.filters[$scope.filters.length - 1].value.toUpperCase();
 
-                var points = $scope.plot.data;
-
                 for (var i = 0; i < $scope.points.length; i++) {
                     for (var j = 0; j < $scope.points[i].length; j++) {
                         var point = $scope.points[i][j];
@@ -61,33 +59,9 @@
                         point.filtersVisible.push(visible);
                         point.visible = $scope.dotVisible(point);
                     }
-                    //var update = {
-                    //    //"marker": { color: $scope.points[i].map(p => p.visible ? "green" : "red") },
-                    //    "marker": { opacity: $scope.points[i].map(p => p.visible ? "0.5" : "0") },
-                    //    "hoverinfo":  $scope.points[i].map(p => p.visible ? "text+x+y" : "none")
-                    //    //"visible": $scope.points[i].map(p => p.visible) 
-                    ////};
-                    //Plotly.restyle($scope.myPlot, update, [i]);
-
                 }
 
-                $scope.fillVisiblePoints();
-
-                var data = $scope.visiblePoints.map(function (points, index) {
-                    return {
-                        hoverinfo: 'text+x+y',
-                        type: 'scattergl',
-                        mode: 'markers',
-                        x: points.map(p => $scope.numericXAxis ? p.numericX : p.x),
-                        y: points.map(p => p.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value]),
-                        text: cText(points, index),
-                        mode: "markers",
-                        marker: points.map(p => { return { opacity: 0.5, visible: !$scope.dotVisible(p) } }),
-                        name: $scope.matters[index].name
-                    }
-                });
-
-                Plotly.react($scope.plot, data, $scope.layout);
+                $scope.redrawGenesMap();
 
                 $scope.newFilter = "";
             }
@@ -96,13 +70,17 @@
 
         // deletes given filter @@@
         function deleteFilter(filter) {
-            d3.selectAll(".dot")
-                .attr("visibility", function (d) {
-                    d.filtersVisible.splice($scope.filters.indexOf(filter), 1);
-                    return $scope.dotVisible(d) ? "visible" : "hidden";
-                });
+            for (var i = 0; i < $scope.points.length; i++) {
+                for (var j = 0; j < $scope.points[i].length; j++) {
+                    var point = $scope.points[i][j];
+
+                    point.filtersVisible.splice($scope.filters.indexOf(filter), 1);
+                    point.visible = $scope.dotVisible(point);
+                }
+            }
+
             $scope.filters.splice($scope.filters.indexOf(filter), 1);
-            $scope.fillVisiblePoints();
+            $scope.redrawGenesMap();
         }
 
         // initializes data for genes map
@@ -163,7 +141,6 @@
         // checks if dot is visible
         function dotVisible(dot) {
             var filterVisible = dot.filtersVisible.length === 0 || dot.filtersVisible.some(fv => fv);
-
             return dot.featureVisible && filterVisible;
         }
 
@@ -208,17 +185,17 @@
 
             $scope.tooltipElements.push(fillPointTooltip(selectedPoint, matterName, $scope.pointsSimilarity.same));
 
-            for (var i = 0; i < $scope.points.length; i++) {
-                for (var j = 0; j < $scope.points[i].length; j++) {
-                    if (selectedPoint !== $scope.points[i][j] && $scope.highlight) {
+            for (var i = 0; i < $scope.visiblePoints.length; i++) {
+                for (var j = 0; j < $scope.visiblePoints[i].length; j++) {
+                    if (selectedPoint !== $scope.visiblePoints[i][j] && $scope.highlight) {
                         var similar = $scope.characteristicComparers.every(function (filter) {
                             var selectedPointValue = selectedPoint.subsequenceCharacteristics[filter.characteristic.Value];
-                            var anotherPointValue = $scope.points[i][j].subsequenceCharacteristics[filter.characteristic.Value];
+                            var anotherPointValue = $scope.visiblePoints[i][j].subsequenceCharacteristics[filter.characteristic.Value];
                             return Math.abs(selectedPointValue - anotherPointValue) <= filter.precision;
                         });
 
                         if (similar) {
-                            var point = $scope.points[i][j];
+                            var point = $scope.visiblePoints[i][j];
                             var matterName = $scope.matters[i].name;
                             $scope.tooltipElements.push(fillPointTooltip(point, matterName, $scope.dotsSimilar(point, selectedPoint)));
                         }
@@ -299,7 +276,7 @@
 
         // main drawing method
         function drawGenesMap() {
-            var chartParams = { responsive: true };
+
             $scope.layout = {
                 hovermode: "closest",
                 xaxis: {
@@ -322,32 +299,13 @@
                 }
             };
 
-            $scope.myPlot = document.getElementById('chart');
-
-            while ($scope.myPlot.firstChild) $scope.myPlot.removeChild($scope.myPlot.firstChild);
-
-            var data = $scope.points.map(function (points, index) {
-                return {
-                    hoverinfo: 'text+x+y',
-                    type: 'scattergl',
-                    mode: 'markers',
-                    x: points.map(p => $scope.numericXAxis ? p.numericX : p.x),
-                    y: points.map(p => p.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value]),
-                    text: cText(points, index),
-                    mode: "markers",
-                    marker: points.map(p => { return { opacity: 0.5, visible: !$scope.dotVisible(p)}}),
-                    name: $scope.matters[index].name
-                }
-            });
-
             $scope.plot = document.getElementById("chart");
 
-            Plotly.plot('chart', data, $scope.layout, chartParams);
+            while ($scope.plot.firstChild) $scope.plot.removeChild($scope.plot.firstChild);
 
-            $scope.myPlot.on('plotly_click', data => {
-                var selectedPoint = $scope.points[data.points[0].curveNumber][data.points[0].pointNumber];
-                $scope.showTooltip(selectedPoint);
-            });
+            $scope.redrawGenesMap();
+
+            
 
             //$scope.loading = true;
             //$scope.loadingScreenHeader = "Drawing...";
@@ -572,10 +530,37 @@
             //$scope.loading = false;
         }
 
+        function redrawGenesMap() {
+
+            $scope.fillVisiblePoints();
+
+            var data = $scope.visiblePoints.map(function (points, index) {
+                return {
+                    hoverinfo: 'text+x+y',
+                    type: 'scattergl',
+                    mode: 'markers',
+                    x: points.map(p => $scope.numericXAxis ? p.numericX : p.x),
+                    y: points.map(p => p.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value]),
+                    text: cText(points, index),
+                    mode: "markers",
+                    marker:  { opacity: 0.5 },
+                    name: $scope.matters[index].name
+                }
+            });
+
+            Plotly.newPlot($scope.plot, data, $scope.layout, { responsive: true });
+
+            $scope.plot.on("plotly_click", data => {
+                var selectedPoint = $scope.visiblePoints[data.points[0].curveNumber][data.points[0].pointNumber];
+                $scope.showTooltip(selectedPoint);
+            });
+        }
+
 
         $scope.setCheckBoxesState = SetCheckBoxesState;
 
         $scope.drawGenesMap = drawGenesMap;
+        $scope.redrawGenesMap = redrawGenesMap;
         $scope.dotVisible = dotVisible;
         $scope.dotsSimilar = dotsSimilar;
         $scope.fillVisiblePoints = fillVisiblePoints;
