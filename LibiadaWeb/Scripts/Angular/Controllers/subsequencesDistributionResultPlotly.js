@@ -13,7 +13,7 @@
             $scope.characteristicComparers.splice($scope.characteristicComparers.indexOf(characteristicComparer), 1);
         }
 
-        // fills array of currently visible points ***
+        // fills array of currently visible points
         function fillVisiblePoints() {
             $scope.visiblePoints = [];
             for (var i = 0; i < $scope.points.length; i++) {
@@ -44,7 +44,7 @@
             return false;
         }
 
-        // adds and applies new filter @@@
+        // adds and applies new filter
         function addFilter() {
             if ($scope.newFilter.length > 0) {
                 $scope.filters.push({ value: $scope.newFilter });
@@ -68,7 +68,7 @@
             // todo: add error message if filter is empty
         }
 
-        // deletes given filter @@@
+        // deletes given filter
         function deleteFilter(filter) {
             for (var i = 0; i < $scope.points.length; i++) {
                 for (var j = 0; j < $scope.points[i].length; j++) {
@@ -119,23 +119,18 @@
 
         // filters dots by subsequences feature @@@
         function filterByFeature(feature) {
-            d3.selectAll(".dot")
-                .filter(function (dot) {
-                    return dot.featureId === parseInt(feature.Value);
-                })
-                .attr("visibility", function (d) {
-                    d.featureVisible = feature.Selected;
-                    return $scope.dotVisible(d) ? "visible" : "hidden";
-                });
-
             for (var i = 0; i < $scope.points.length; i++) {
-                if ($scope.points[i].featureId === parseInt(feature.Value)) {
-                    $scope.points[i].featureVisible = feature.Selected;
+                for (var j = 0; j < $scope.points[i].length; j++) {
+                    var point = $scope.points[i][j];
+
+                    if (point.featureId === parseInt(feature.Value)) {
+                        point.featureVisible = feature.Selected;
+                        point.visible = $scope.dotVisible(point);
+                    }
                 }
             }
 
-            // optimize this method calls
-            $scope.fillVisiblePoints();
+            $scope.redrawGenesMap();
         }
 
         // checks if dot is visible
@@ -305,7 +300,7 @@
 
             $scope.redrawGenesMap();
 
-            
+
 
             //$scope.loading = true;
             //$scope.loadingScreenHeader = "Drawing...";
@@ -543,7 +538,7 @@
                     y: points.map(p => p.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value]),
                     text: cText(points, index),
                     mode: "markers",
-                    marker:  { opacity: 0.5 },
+                    marker: { opacity: 0.5 },
                     name: $scope.matters[index].name
                 }
             });
@@ -609,7 +604,7 @@
                 console.log(chart_width)
 
                 Plotly.relayout('chart', {
-                    autosize : true
+                    autosize: true
                 })
             }
 
@@ -620,7 +615,7 @@
             bar.addEventListener('mouseup', () => {
                 document.removeEventListener('mousemove', drag);
             });
-            
+
         }
 
         $scope.loadingScreenHeader = "Loading genes map data";
