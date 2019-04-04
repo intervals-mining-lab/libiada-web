@@ -660,6 +660,10 @@
       <Project>{791da20b-3149-4bb0-9aff-6ced1a94d828}</Project>
       <Name>LibiadaCore</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\libiada-core\Segmenter\Segmenter.csproj">
+      <Project>{F304D262-E8B1-4A0D-A528-82A7D1EB758C}</Project>
+      <Name>Segmenter</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\libiada-core\SequenceGenerator\SequenceGenerator.csproj">
       <Project>{C65C1903-8A6A-43CC-BB08-4107DE51C8ED}</Project>
       <Name>SequenceGenerator</Name>

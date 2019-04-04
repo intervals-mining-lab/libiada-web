@@ -3,10 +3,14 @@
     using System.Collections.Generic;
     using System.Web;
     using System.Web.Mvc;
-
+    using System.Web.Mvc.Html;
     using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
+
+    using Segmenter.Model.Criterion;
+    using Segmenter.Model.Seekers;
+    using Segmenter.Model.Threshold;
 
     /// <summary>
     /// The custom sequence segmentation controller.
@@ -29,6 +33,12 @@
         /// </returns>
         public ActionResult Index()
         {
+            ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object>
+                               {
+                                   { "thresholds", EnumHelper.GetSelectList(typeof(Threshold)) },
+                                   { "segmentationCriterions", EnumHelper.GetSelectList(typeof(SegmentationCriterion)) },
+                                   { "deviationCalculationMethods", EnumHelper.GetSelectList(typeof(DeviationCalculationMethod)) }
+                               });
             return View();
         }
 
