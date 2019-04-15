@@ -515,14 +515,48 @@
             //		}
             //	});
 
-            //// preventing scroll in key up and key down
-            //window.addEventListener("keydown", function (e) {
-            //	if ($scope.isKeyUpOrDown(e.keyCode)) {
-            //		e.preventDefault();
-            //	}
-            //}, false);
+
 
             //$scope.loading = false;
+        }
+
+        function keyUpDownPress(keyCode) {
+            var nextPointIndex;
+            var visibleMattersPoints = $scope.visiblePoints[$scope.selectedMatterIndex];
+
+            if ($scope.selectedPointIndex >= 0) {
+                switch (keyCode) {
+                    case 40: // down
+                        for (var i = $scope.selectedPointIndex + 1; i < visibleMattersPoints.length; i++) {
+                            var characteristic = $scope.subsequenceCharacteristic.Value;
+                            var firstPointCharacteristic = visibleMattersPoints[$scope.selectedPointIndex].subsequenceCharacteristics[characteristic];
+                            var secondPointCharacteristic = visibleMattersPoints[i].subsequenceCharacteristics[characteristic];
+
+                            if (firstPointCharacteristic !== secondPointCharacteristic) {
+                                nextPointIndex = i;
+                                break;
+                            }
+                        }
+                        break;
+                    case 38: // up
+                        for (var j = $scope.selectedPointIndex - 1; j >= 0; j--) {
+                            var characteristic = $scope.subsequenceCharacteristic.Value;
+                            var firstPointCharacteristic = visibleMattersPoints[$scope.selectedPointIndex].subsequenceCharacteristics[characteristic];
+                            var secondPointCharacteristic = visibleMattersPoints[j].subsequenceCharacteristics[characteristic];
+
+                            if (firstPointCharacteristic !== secondPointCharacteristic) {
+                                nextPointIndex = j;
+                                break;
+                            }
+                        }
+                        break;
+                }
+            }
+
+            if (nextPointIndex) {
+                $scope.showTooltip(visibleMattersPoints[nextPointIndex]);
+                $scope.selectedPointIndex = nextPointIndex;
+            }
         }
 
         function redrawGenesMap() {
@@ -546,6 +580,8 @@
             Plotly.newPlot($scope.plot, data, $scope.layout, { responsive: true });
 
             $scope.plot.on("plotly_click", data => {
+                $scope.selectedPointIndex = data.points[0].pointNumber;
+                $scope.selectedMatterIndex = data.points[0].curveNumber;
                 var selectedPoint = $scope.visiblePoints[data.points[0].curveNumber][data.points[0].pointNumber];
                 $scope.showTooltip(selectedPoint);
             });
@@ -572,6 +608,7 @@
         $scope.getAttributeIdByName = getAttributeIdByName;
         $scope.isAttributeEqual = isAttributeEqual;
         $scope.dragbarMouseDown = dragbarMouseDown;
+        $scope.keyUpDownPress = keyUpDownPress;
 
         $scope.dotRadius = 4;
         $scope.selectedDotRadius = $scope.dotRadius * 3;
@@ -589,6 +626,14 @@
         $scope.dragging = false;
 
         $('[data-toggle="tooltip"]').tooltip();
+
+        // preventing scroll in key up and key down
+        window.addEventListener("keydown", function (e) {
+            if ($scope.isKeyUpOrDown(e.keyCode)) {
+                e.preventDefault();
+                $scope.keyUpDownPress(e.keyCode);
+            }
+        }, false);
 
 
 
