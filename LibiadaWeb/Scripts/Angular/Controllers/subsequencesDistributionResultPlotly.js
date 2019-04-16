@@ -179,6 +179,7 @@
             $scope.tooltipElements.length = 0;
 
             $scope.tooltipElements.push(fillPointTooltip(selectedPoint, matterName, $scope.pointsSimilarity.same));
+            var similarPoints = [];
 
             for (var i = 0; i < $scope.visiblePoints.length; i++) {
                 for (var j = 0; j < $scope.visiblePoints[i].length; j++) {
@@ -191,6 +192,7 @@
 
                         if (similar) {
                             var point = $scope.visiblePoints[i][j];
+                            similarPoints.push(point);
                             var matterName = $scope.matters[i].name;
                             $scope.tooltipElements.push(fillPointTooltip(point, matterName, $scope.dotsSimilar(point, selectedPoint)));
                         }
@@ -218,8 +220,8 @@
             //tooltip.lines = svg.selectAll(".similar-line");
 
             var update = {
-                "marker.symbol": $scope.visiblePoints.map(points => points.map(point => point === selectedPoint ? "diamond-wide" : "circle-open")),
-                "marker.size": $scope.visiblePoints.map(points => points.map(point => point === selectedPoint ? 15 : 6))
+                "marker.symbol": $scope.visiblePoints.map(points => points.map(point => point === selectedPoint || similarPoints.includes(point) ? "diamond-wide" : "circle-open")),
+                "marker.size": $scope.visiblePoints.map(points => points.map(point => point === selectedPoint || similarPoints.includes(point) ? 15 : 6))
             }
 
             Plotly.restyle($scope.plot, update);
