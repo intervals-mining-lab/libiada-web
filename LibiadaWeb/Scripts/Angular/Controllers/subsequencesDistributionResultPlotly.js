@@ -117,7 +117,7 @@
             }
         }
 
-        // filters dots by subsequences feature @@@
+        // filters dots by subsequences feature
         function filterByFeature(feature) {
             for (var i = 0; i < $scope.points.length; i++) {
                 for (var j = 0; j < $scope.points[i].length; j++) {
@@ -216,6 +216,13 @@
             //    })
             //    .attr("rx", $scope.selectedDotRadius);
             //tooltip.lines = svg.selectAll(".similar-line");
+
+            var update = {
+                "marker.symbol": $scope.visiblePoints.map(points => points.map(point => point === selectedPoint ? "diamond-wide" : "circle-open")),
+                "marker.size": $scope.visiblePoints.map(points => points.map(point => point === selectedPoint ? 15 : 6))
+            }
+
+            Plotly.restyle($scope.plot, update);
 
             $scope.$apply();
         }
@@ -522,11 +529,12 @@
 
         function keyUpDownPress(keyCode) {
             var nextPointIndex;
+            var hasNextPoint = false;
             var visibleMattersPoints = $scope.visiblePoints[$scope.selectedMatterIndex];
 
             if ($scope.selectedPointIndex >= 0) {
                 switch (keyCode) {
-                    case 40: // down
+                    case 38: // up
                         for (var i = $scope.selectedPointIndex + 1; i < visibleMattersPoints.length; i++) {
                             var characteristic = $scope.subsequenceCharacteristic.Value;
                             var firstPointCharacteristic = visibleMattersPoints[$scope.selectedPointIndex].subsequenceCharacteristics[characteristic];
@@ -534,11 +542,12 @@
 
                             if (firstPointCharacteristic !== secondPointCharacteristic) {
                                 nextPointIndex = i;
+                                hasNextPoint = true;
                                 break;
                             }
                         }
                         break;
-                    case 38: // up
+                    case 40: // down
                         for (var j = $scope.selectedPointIndex - 1; j >= 0; j--) {
                             var characteristic = $scope.subsequenceCharacteristic.Value;
                             var firstPointCharacteristic = visibleMattersPoints[$scope.selectedPointIndex].subsequenceCharacteristics[characteristic];
@@ -546,6 +555,7 @@
 
                             if (firstPointCharacteristic !== secondPointCharacteristic) {
                                 nextPointIndex = j;
+                                hasNextPoint = true;
                                 break;
                             }
                         }
@@ -553,7 +563,7 @@
                 }
             }
 
-            if (nextPointIndex) {
+            if (hasNextPoint) {
                 $scope.showTooltip(visibleMattersPoints[nextPointIndex]);
                 $scope.selectedPointIndex = nextPointIndex;
             }
@@ -562,6 +572,7 @@
         function redrawGenesMap() {
 
             $scope.fillVisiblePoints();
+            $scope.selectedPointIndex = -1;
 
             var data = $scope.visiblePoints.map(function (points, index) {
                 return {
@@ -572,7 +583,7 @@
                     y: points.map(p => p.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value]),
                     text: cText(points, index),
                     mode: "markers",
-                    marker: { opacity: 0.5 },
+                    marker: { opacity: 0.5, symbol: "circle-open" },
                     name: $scope.matters[index].name
                 }
             });
@@ -678,6 +689,13 @@
                 $scope.subsequenceCharacteristic = $scope.subsequencesCharacteristicsList[0];
 
                 $scope.fillPoints();
+
+                var comparer = (first, second) =>
+                    first.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value] - second.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value];
+
+                $scope.points = $scope.points.map(points => points.sort(comparer));
+                $scope.visiblePoints = $scope.visiblePoints.map(points => points.sort(comparer));
+
                 $scope.addCharacteristicComparer();
                 drawGenesMap();
                 $scope.loading = false;
