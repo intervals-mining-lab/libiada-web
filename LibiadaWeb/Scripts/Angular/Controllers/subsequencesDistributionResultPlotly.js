@@ -528,7 +528,7 @@
         }
 
         function keyUpDownPress(keyCode) {
-            var nextPointIndex;
+            var nextPointIndex = -1;
             var hasNextPoint = false;
             var visibleMattersPoints = $scope.visiblePoints[$scope.selectedMatterIndex];
 
@@ -542,7 +542,6 @@
 
                             if (firstPointCharacteristic !== secondPointCharacteristic) {
                                 nextPointIndex = i;
-                                hasNextPoint = true;
                                 break;
                             }
                         }
@@ -555,7 +554,6 @@
 
                             if (firstPointCharacteristic !== secondPointCharacteristic) {
                                 nextPointIndex = j;
-                                hasNextPoint = true;
                                 break;
                             }
                         }
@@ -563,7 +561,7 @@
                 }
             }
 
-            if (hasNextPoint) {
+            if (nextPointIndex >= 0) {
                 $scope.showTooltip(visibleMattersPoints[nextPointIndex]);
                 $scope.selectedPointIndex = nextPointIndex;
             }
