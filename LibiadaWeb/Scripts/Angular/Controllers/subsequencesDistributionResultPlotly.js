@@ -88,7 +88,9 @@
             var id = 0;
             for (var i = 0; i < $scope.result.length; i++) {
                 var sequenceData = $scope.result[i];
-                $scope.matters.push({ id: sequenceData.MatterId, name: sequenceData.MatterName, visible: true });
+                $scope.matters.push({ id: sequenceData.MatterId, name: sequenceData.MatterName, visible: true, index: i, color: $scope.colorScale(i) });
+                // hack for legend dot color
+                document.styleSheets[0].addRule(".legend" + sequenceData.MatterId + ":after", "background:" + $scope.colorScale(i)+";");
                 $scope.points.push([]);
                 $scope.visiblePoints.push([]);
                 for (var j = 0; j < sequenceData.SubsequencesData.length; j++) {
@@ -107,7 +109,7 @@
                         x: sequenceData.Characteristic,
                         subsequenceCharacteristics: subsequenceData.CharacteristicsValues,
                         featureVisible: true,
-                        matterVisible: true,
+                        legendVisible: true,
                         filtersVisible: []
                     };
                     $scope.points[i].push(point);
@@ -136,7 +138,7 @@
         // checks if dot is visible
         function dotVisible(dot) {
             var filterVisible = dot.filtersVisible.length === 0 || dot.filtersVisible.some(fv => fv);
-            return dot.featureVisible && filterVisible;
+            return dot.legendVisible && dot.featureVisible && filterVisible;
         }
 
         // determines if dots are similar by product
@@ -305,7 +307,7 @@
 
             $scope.plot = document.getElementById("chart");
 
-            while ($scope.plot.firstChild) $scope.plot.removeChild($scope.plot.firstChild);
+        //    while ($scope.plot.firstChild) $scope.plot.removeChild($scope.plot.firstChild);
 
             $scope.redrawGenesMap();
 
@@ -531,7 +533,6 @@
 
         function keyUpDownPress(keyCode) {
             var nextPointIndex = -1;
-            var hasNextPoint = false;
             var visibleMattersPoints = $scope.visiblePoints[$scope.selectedMatterIndex];
 
             if ($scope.selectedPointIndex >= 0) {
@@ -578,13 +579,13 @@
                 return {
                     hoverinfo: 'text+x+y',
                     type: 'scattergl',
-                    mode: 'markers',
                     x: points.map(p => $scope.numericXAxis ? p.numericX : p.x),
                     y: points.map(p => p.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value]),
                     text: cText(points, index),
                     mode: "markers",
-                    marker: { opacity: 0.5, symbol: "circle-open" },
-                    name: $scope.matters[index].name
+                    marker: { opacity: 0.5, symbol: "circle-open", color: $scope.colorScale(index) },
+                    name: $scope.matters[index].name,
+
                 }
             });
 
@@ -598,6 +599,17 @@
             });
         }
 
+        function legendClick(legendItem) {
+            //legendItem.visible = !legendItem.visible;
+
+                for (var j = 0; j < $scope.points[legendItem.index].length; j++) {
+                    var point = $scope.points[legendItem.index][j];
+                    point.legendVisible = !point.legendVisible;
+                }
+
+            $scope.redrawGenesMap();
+        }
+
 
         $scope.setCheckBoxesState = SetCheckBoxesState;
 
@@ -607,6 +619,7 @@
         $scope.dotsSimilar = dotsSimilar;
         $scope.fillVisiblePoints = fillVisiblePoints;
         $scope.filterByFeature = filterByFeature;
+        $scope.legendClick = legendClick;
         $scope.fillPoints = fillPoints;
         $scope.getAttributesText = getAttributesText;
         $scope.fillPointTooltip = fillPointTooltip;
@@ -620,12 +633,14 @@
         $scope.isAttributeEqual = isAttributeEqual;
         $scope.dragbarMouseDown = dragbarMouseDown;
         $scope.keyUpDownPress = keyUpDownPress;
+        $scope.colorScale = d3.scaleOrdinal(d3.schemeCategory20);
 
         $scope.dotRadius = 4;
         $scope.selectedDotRadius = $scope.dotRadius * 3;
         $scope.points = [];
         $scope.visiblePoints = [];
         $scope.matters = [];
+        $scope.legend = [];
         $scope.characteristicComparers = [];
         $scope.filters = [];
         $scope.productFilter = "";

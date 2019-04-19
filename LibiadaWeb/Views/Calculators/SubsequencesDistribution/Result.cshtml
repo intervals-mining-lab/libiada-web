@@ -88,6 +88,17 @@
                         </ul>
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane" id="legend">
+                                    <!-- .roundedOne -->
+                                <div ng-repeat="legendItem in matters">
+                                    <div  class="roundedOne">
+                                    <input  type="checkbox" ng-change="legendClick(legendItem)" ng-model="legendItem.visible" id="{{'matter' + legendItem.id}}" name="check" checked />
+                                    <label for="{{'matter' + legendItem.id}}" ng-class="'legend' + legendItem.id"></label>
+                                    <label for="{{'matter' + legendItem.id}}" class="monospace">{{legendItem.name}}</label>
+                                    </div>
+                                    <br/>
+                                </div>
+                                        
+                                        <!-- end .roundedOne -->
                             </div>
                             <div role="tabpanel" class="tab-pane" id="characteristic">
                                 <br />
