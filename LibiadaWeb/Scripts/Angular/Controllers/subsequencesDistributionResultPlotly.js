@@ -284,6 +284,7 @@
         function drawGenesMap() {
 
             $scope.layout = {
+                showlegend: false,
                 hovermode: "closest",
                 xaxis: {
                     title: {
