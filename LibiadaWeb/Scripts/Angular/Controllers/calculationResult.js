@@ -41,12 +41,12 @@
 			tooltipContent.push("Name: " + d.name);
 
 
-			var pointSharacteristics = [];
+            var pointsCharacteristics = [];
 			for (var i = 0; i < $scope.characteristics[d.id].Characteristics.length; i++) {
-				pointSharacteristics.push($scope.characteristicsList[i].Text + ": " + $scope.characteristics[d.id].Characteristics[i]);
+                pointsCharacteristics.push($scope.characteristicsList[i].Text + ": " + $scope.characteristics[d.id].Characteristics[i]);
 			}
 
-			tooltipContent.push(pointSharacteristics.join("<br/>"));
+            tooltipContent.push(pointsCharacteristics.join("<br/>"));
 
 			return tooltipContent.join("</br>");
 		}
