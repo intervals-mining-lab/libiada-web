@@ -313,6 +313,9 @@
 
 				$scope.firstCharacteristic = $scope.characteristicsList[0];
 				$scope.secondCharacteristic = $scope.characteristicsList.length > 1 ? $scope.characteristicsList[1] : $scope.characteristicsList[0];
+                $scope.aligner = $scope.aligners[0];
+                $scope.distanceCalculator = $scope.distanceCalculators[0];
+                $scope.aggregator = $scope.aggregators[0];
 
 				$scope.legendHeight = $scope.legend.length * 20;
 				$scope.height = 800 + $scope.legendHeight;
