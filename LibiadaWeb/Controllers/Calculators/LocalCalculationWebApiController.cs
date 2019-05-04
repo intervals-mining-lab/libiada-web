@@ -12,6 +12,7 @@
     using LibiadaCore.Iterators;
     using LibiadaCore.TimeSeries.Aggregators;
     using LibiadaCore.TimeSeries.Aligners;
+    using LibiadaCore.TimeSeries.OneDimensional.Comparers;
     using LibiadaCore.TimeSeries.OneDimensional.DistanceCalculators;
 
     using LibiadaWeb.Models;
@@ -112,20 +113,39 @@
 
             var data = (string)task.Result["data"];
 
-
-            //var characteristicsJson = JsonConvert.SerializeObject(data.Values);
-            var characteristicsObject = JsonConvert.DeserializeObject<dynamic>(data);
-            var characteristics = characteristicsObject.characteristics;
+            var characteristicsObject = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(data);
+            var characteristics = characteristicsObject["characteristics"];
             LocalCharacteristicsData[] chars = characteristics.ToObject<LocalCharacteristicsData[]>();
-            //LocalCharacteristicsData[] chars =
-            //    JsonConvert.DeserializeObject<LocalCharacteristicsData[]>(characteristics);
-            //LocalCharacteristicsData chars = (LocalCharacteristicsData)characteristics;
-            //LocalCharacteristicsData chars = JsonConvert.DeserializeObject<LocalCharacteristicsData>((string)characteristics);
-            //var chars = characteristicsObject;
-            //characteristicsObject
 
+            double[][] series = new double[chars.Length][];
 
-            return "";
+            for (int i = 0; i < chars.Length; i++)
+            {
+                series[i] = chars[i].fragmentsData.Select(fd => fd.Characteristics[0]).ToArray();
+            }
+
+            AlignersFactory alignersFactory = new AlignersFactory();
+            DistanceCalculatorsFactory calculatorsFactory = new DistanceCalculatorsFactory();
+            AggregatorsFactory aggregatorsFactory = new AggregatorsFactory();
+
+            OneDimensionalTimeSeriesComparer comparer = new OneDimensionalTimeSeriesComparer(
+                alignersFactory.GetAligner(aligner),
+                calculatorsFactory.GetDistanceCalculator(distanceCalculator),
+                aggregatorsFactory.GetAggregator(aggregator));
+
+            //List<double> result = new List<double>();
+            double[,] result = new double[series.Length, series.Length];
+
+            for (int i = 0; i < series.Length - 1; i++)
+            {
+                for (int j = i + 1; j < series.Length; j++)
+                {
+                    result[i,j] = comparer.GetDistance(series[i], series[j]);
+                    result[j,i] = comparer.GetDistance(series[i], series[j]);
+                }
+            }
+
+            return JsonConvert.SerializeObject(result);
         }
     }
 }

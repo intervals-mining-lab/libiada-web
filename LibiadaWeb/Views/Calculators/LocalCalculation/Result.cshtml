@@ -58,6 +58,22 @@
             </div>
             <input type="button" class="btn btn-default" ng-click="calculateLocalCharacteristicsSimilarityMatrix()" value="Calculate similarity matrix" />
             <br />
+            <table class="table table-bordered" ng-show="comparisonMatrix">
+                <tbody>
+                <tr>
+                    <td />
+                    <td ng-repeat="comparisonRaw in comparisonMatrix" title="{{characteristics[$index].matterName}}">{{$index + 1}}</td>
+                </tr>
+                <tr ng-repeat="comparisonRaw in comparisonMatrix">
+                    <td title="{{characteristics[$index].matterName}}">{{$index + 1}}</td>
+                    <td ng-repeat="comparisonValue in comparisonRaw"
+                        title="{{characteristics[$parent.$index].matterName}} &#13{{characteristics[$index].matterName}}">
+                        {{comparisonValue.toFixed(5)}}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <br />
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <label>

@@ -1,6 +1,5 @@
 ﻿namespace LibiadaWeb.Models.CalculatorsData
 {
-    using Newtonsoft.Json;
 
     public class LocalCharacteristicsData
     {

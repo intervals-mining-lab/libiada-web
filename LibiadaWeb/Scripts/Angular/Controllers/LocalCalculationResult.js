@@ -112,10 +112,10 @@
                     + "&aligner=" + $scope.aligner.Value
                     + "&distanceCalculator=" + $scope.distanceCalculator.Value
                     + "&aggregator=" + $scope.aggregator.Value)
-                .then(function () {
-                    
+                .then(function (result) {
+                    $scope.comparisonMatrix = JSON.parse(result.data);
                 }, function (error) {
-                    console.log(error);
+
                     alert("Failed loading alignment data");
 
                     $scope.loading = false;
