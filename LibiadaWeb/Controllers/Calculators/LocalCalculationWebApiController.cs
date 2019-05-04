@@ -1,17 +1,26 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Http;
 
+    using Accord.IO;
+
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
     using LibiadaCore.Iterators;
+    using LibiadaCore.TimeSeries.Aggregators;
+    using LibiadaCore.TimeSeries.Aligners;
+    using LibiadaCore.TimeSeries.OneDimensional.DistanceCalculators;
 
     using LibiadaWeb.Models;
+    using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
+    using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// The local calculation web api controller.
@@ -37,7 +46,11 @@
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        public string GetSubsequenceCharacteristic(long subsequenceId, short characteristicLinkId, int windowSize, int step)
+        public string GetSubsequenceCharacteristic(
+            long subsequenceId,
+            short characteristicLinkId,
+            int windowSize,
+            int step)
         {
             Chain chain;
             IFullCalculator calculator;
@@ -47,7 +60,8 @@
             {
                 var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
 
-                FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
+                FullCharacteristic characteristic =
+                    characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
                 calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
                 link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
 
@@ -84,6 +98,34 @@
             }
 
             return JsonConvert.SerializeObject(characteristics);
+        }
+
+        [HttpGet]
+        public string CalculateLocalCharacteristicsSimilarityMatrix(
+            int taskId,
+            Aligner aligner,
+            DistanceCalculator distanceCalculator,
+            Aggregator aggregator)
+        {
+            TaskManager taskManager = TaskManager.Instance;
+            Task task = taskManager.GetTask(taskId);
+
+            var data = (string)task.Result["data"];
+
+
+            //var characteristicsJson = JsonConvert.SerializeObject(data.Values);
+            var characteristicsObject = JsonConvert.DeserializeObject<dynamic>(data);
+            var characteristics = characteristicsObject.characteristics;
+            LocalCharacteristicsData[] chars = characteristics.ToObject<LocalCharacteristicsData[]>();
+            //LocalCharacteristicsData[] chars =
+            //    JsonConvert.DeserializeObject<LocalCharacteristicsData[]>(characteristics);
+            //LocalCharacteristicsData chars = (LocalCharacteristicsData)characteristics;
+            //LocalCharacteristicsData chars = JsonConvert.DeserializeObject<LocalCharacteristicsData>((string)characteristics);
+            //var chars = characteristicsObject;
+            //characteristicsObject
+
+
+            return "";
         }
     }
 }

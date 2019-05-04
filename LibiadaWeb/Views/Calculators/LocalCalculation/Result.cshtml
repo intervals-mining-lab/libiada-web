@@ -13,30 +13,30 @@
             <div ng-repeat="chainsCharacteristics in characteristics">
                 <h3>{{chainsCharacteristics.matterName}}</h3>
                 @*<table st-table="characteristics" class="table table-bordered table-hover" ng-cloak>
-                <thead>
-                    <tr>
-                        <th>
-                            Fragment name
-                        </th>
-                        <th>
-                            Start
-                        </th>
-                        <th>
-                            Length
-                        </th>
-                        <th ng-repeat="characteristicName in characteristicNames" ng-bind="characteristicName" />
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="fragmentsData in chainsCharacteristics.fragmentsData">
-                        <td ng-bind="fragmentsData.Name" />
-                        <td ng-bind="fragmentsData.Start" />
-                        <td ng-bind="fragmentsData.Length" />
-                        <td ng-repeat="value in fragmentsData.Characteristics" ng-bind="value" />
-                    </tr>
-                </tbody>
-            </table>
-            <br />*@
+                        <thead>
+                            <tr>
+                                <th>
+                                    Fragment name
+                                </th>
+                                <th>
+                                    Start
+                                </th>
+                                <th>
+                                    Length
+                                </th>
+                                <th ng-repeat="characteristicName in characteristicNames" ng-bind="characteristicName" />
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="fragmentsData in chainsCharacteristics.fragmentsData">
+                                <td ng-bind="fragmentsData.Name" />
+                                <td ng-bind="fragmentsData.Start" />
+                                <td ng-bind="fragmentsData.Length" />
+                                <td ng-repeat="value in fragmentsData.Characteristics" ng-bind="value" />
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br />*@
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2" for="aligner">Aligner:</label>
@@ -56,7 +56,8 @@
                     <select class="form-control" title="Aggregator" ng-model="aggregator" ng-options="c.Text for c in aggregators" id="aggregator"></select>
                 </div>
             </div>
-            <br/>
+            <input type="button" class="btn btn-default" ng-click="calculateLocalCharacteristicsSimilarityMatrix()" value="Calculate similarity matrix" />
+            <br />
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <label>
