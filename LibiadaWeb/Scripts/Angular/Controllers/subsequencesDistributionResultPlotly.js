@@ -90,7 +90,7 @@
                 var sequenceData = $scope.result[i];
                 $scope.matters.push({ id: sequenceData.MatterId, name: sequenceData.MatterName, visible: true, index: i, color: $scope.colorScale(i) });
                 // hack for legend dot color
-                document.styleSheets[0].addRule(".legend" + sequenceData.MatterId + ":after", "background:" + $scope.colorScale(i)+";");
+                document.styleSheets[0].insertRule(".legend" + sequenceData.MatterId + ":after { background:" + $scope.colorScale(i)+"}");
                 $scope.points.push([]);
                 $scope.visiblePoints.push([]);
                 for (var j = 0; j < sequenceData.SubsequencesData.length; j++) {
