@@ -1,130 +1,102 @@
-﻿@using LibiadaCore.Extensions
-@model MusicSequence
+﻿    ﻿@model MusicSequence
 
-@{
-    ViewBag.Title = "Music sequence details";
-}
+    @section Scripts {
+        @Scripts.Render("~/bundles/loadingWindow")
+        @Scripts.Render("~/bundles/midijs")
+    }
 
-<h2>@ViewBag.Title</h2>
+    @{
+        ViewBag.Title = "Fmotif dictionary";
+    }
 
-@Html.Partial("_AngularControllerInitializer", "FmotifsDictionaryController")
+    <h2>@ViewBag.Title</h2>
 
-<div>
-    <h4>Music sequence</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Created)
-        </dt>
+    @Html.Partial("_AngularControllerInitializer", "FmotifsDictionaryController")
 
-        <dd>
-            @Html.DisplayFor(model => model.Created)
-        </dd>
+    <div ng-controller="FmotifsDictionaryCtrl" ng-init="onload()">
+        <div>
+            <h4>Music sequence</h4>
+            @*<input type="button" class="btn btn-default" id="all" ng-click="playAll()" value="PlayAll" />*@
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Created)
+                </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Created)
+                </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Description)
+                </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Id)
-        </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Description)
+                </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Id)
-        </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Id)
+                </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Matter.Id)
-        </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Id)
+                </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Matter.Id)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Matter.Name)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Matter.Id)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Matter.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Notation)
-        </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Matter.Id)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Matter.Name)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Notation)
-        </dd>
-    </dl>
-</div>
-<div ng-init="fmotifs(@ViewBag.Fmotifs)">
-    <h4>Formal motifs</h4>
-    <hr />
-    <table class="table table-bordered table-hover">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(Fmotif => Fmotif.Id)
-            </th>
-            <th>
-                Count of entries
-            </th>
-            <th>
-                Note
-            </th>
-        </tr>
-        @foreach (var fmotif in ViewBag.Fmotifs)
-        {
-            <tr>
-                <th rowspan="@(fmotif.Value.Item2.Count*3+1)">
-                    @fmotif.Key
-                </th>
-                <th rowspan="@(fmotif.Value.Item2.Count*3+1)">
-                    @fmotif.Value.Item1
-                </th>
-            </tr>
-            foreach (var note in fmotif.Value.Item2)
-            {
-                <tr>
-                    <th colspan="@(note.Item2.Count != 0 ? note.Item2.Count : 1)">
-                        @note.Item1
-                    </th>
-                </tr>
-                if (note.Item2.Count != 0)
-                {
-                    <tr>
-                        @foreach (var pitch in note.Item2)
-                        {
-                            <th>
-                                @pitch
-                            </th>
-                        }
-                    </tr>
-                    <tr>
-                        @foreach (var pitch in note.Item2)
-                        {
-                            <th>
-                                @note.Item3 / @note.Item4
-                            </th>
-                        }
-                    </tr>
-                }
-                else
-                {
+                <dd>
+                    @Html.DisplayFor(model => model.Matter.Name)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Notation)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Notation)
+                </dd>
+            </dl>
+        </div>
+        <div>
+            <h4>Formal motifs</h4>
+            <hr />
+            <table class="table table-bordered table-hover">
+                <thead>
                     <tr>
                         <th>
-                            Pause
+                            Formal motif ID
                         </th>
-                    </tr>
-                    <tr>
                         <th>
-                            @note.Item3 / @note.Item4
+                            Notation
+                        </th>
+                        <th>
+                            Visualization
                         </th>
                     </tr>
-                }
-            }
-        }
-    </table>
-</div>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="fmotif in data.fmotifs">
+                        <th>
+                            {{fmotif.Id}}
+                        </th>
+                        <th>
+                            <div id="notation_{{fmotif.Id}}"></div>
+                        </th>
+                        <th>
+                            <div id="visualization_{{fmotif.Id}}"></div>
+                            <input type="button" class="btn btn-default" ng-click="play($index)" value="Play" />
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
