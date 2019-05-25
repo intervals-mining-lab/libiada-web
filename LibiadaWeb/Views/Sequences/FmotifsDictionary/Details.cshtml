@@ -74,10 +74,10 @@
                 <thead>
                     <tr>
                         <th>
-                            Formal motif ID
+                            Notation
                         </th>
                         <th>
-                            Notation
+                            Vusialization
                         </th>
                         <th>
                             Acoustic
@@ -88,12 +88,12 @@
                     <tr ng-repeat="fmotif in data.fmotifs">
                         <th>
                             {{fmotif.Id}}
-                        </th>
-                        <th>
-                            <div id="notation_{{fmotif.Id}}"></div>
+                            <div id="notation_{{fmotif.Id}}"></div><div id="notation_{{fmotif.Id}}"></div>
                         </th>
                         <th>
                             <div id="visualization_{{fmotif.Id}}"></div>
+                        </th>
+                        <th>
                             <input type="button" class="btn btn-default" ng-click="play($index)" value="Play" />
                         </th>
                     </tr>

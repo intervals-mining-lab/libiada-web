@@ -108,7 +108,8 @@
                     }
                     fmotifsChain.Add(newFmotif);
                 }
-                var result = new Dictionary<string, object> { { "fmotifs", fmotifsChain } };
+                var result = new Dictionary<string, object> { { "fmotifs", fmotifsChain },
+                                                              { "sequentialTransfer", musicSequence.SequentialTransfer} };
                 ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object> { { "data", result } });
                 return View(musicSequence);
             }
