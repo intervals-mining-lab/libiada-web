@@ -21,14 +21,24 @@
         };
 
         var player = {
-            barDuration: 4,
+            barDuration: 8,
             timeline: 0,
             velocity: 127,
-            play: function (pitches, duration, moveTime, event) {
-                MIDI.chordOn(0, pitches, this.velocity, this.timeline);
-                setTimeout(keyOn, this.timeline * 1000, event, pitches);
-                MIDI.chordOff(0, pitches, this.velocity, this.timeline + this.barDuration * duration);
-                setTimeout(keyOff, (this.timeline + this.barDuration * duration) * 900, event);
+            play: function (note, minOctave, moveTime, event) {
+                var chord = [];
+                var duration = note.Duration.Value;
+                for (var i = 0; i < note.Pitches.length; i++) {
+                    if ($scope.data.sequentialTransfer) {
+                        chord[i] = note.Pitches[i].MidiNumber + 60;
+                    }
+                    else {
+                        chord[i] = note.Pitches[i].MidiNumber;
+                    }
+                }
+                MIDI.chordOn(0, chord, this.velocity, this.timeline);
+                setTimeout(this.keyOn, this.timeline * 1000, event, note, minOctave);
+                MIDI.chordOff(0, chord, this.velocity, this.timeline + this.barDuration * duration);
+                setTimeout(this.keyOff, (this.timeline + this.barDuration * duration) * 900, event);
 
                 if (typeof moveTime !== 'undefined' && moveTime === true) {
                     this.move(duration);
@@ -36,37 +46,57 @@
             },
             move: function (duration) {
                 this.timeline += this.barDuration * duration;
+            },
+            keyOn: function (event, note, min) {
+                for (var i = 0; i < note.Pitches.length; i++) {
+                    var pitch = note.Pitches[i];
+                    var step = pitch.Step;
+                    var currentOctave = pitch.Octave > min ? 1 : 0;
+                    var key = d3.select("#visualization_" + $scope.data.fmotifs[event].Id)
+                        .select(".key_" + (step + currentOctave * 12))
+                        .selectAll("rect");
+                    key.style("fill", "blue")
+                        .style("fill-opacity", 1);
+                }
+            },
+            keyOff: function (event) {
+                for (var i = 0; i < 24; i++) {
+                    var key = d3.select("#visualization_" + $scope.data.fmotifs[event].Id)
+                        .select(".key_" + (i))
+                        .selectAll("rect");
+                    if (getLine(i % 12).alter === 0) {
+                        key.style("fill", "none");
+                    }
+                    else if (getLine(i % 12).alter === 1) {
+                        key.style("fill", "black");
+                    }
+                }
             }
-        };
+        }
 
         $scope.play = function (event) {
             MIDI.setVolume(0, 80);
+            player.timeline = 0;
             var notes = $scope.data.fmotifs[event].NoteList;
-            var octaver = $scope.data.sequentialTransfer ? 60 : 0;
+            var min = 9;
             for (var i = 0; i < notes.length; i++) {
                 if (notes[i].Pitches.length > 0) {
-                    var pitches = [];
                     for (var j = 0; j < notes[i].Pitches.length; j++) {
-                        pitches[j] = notes[i].Pitches[j].MidiNumber + octaver;
+                        min = notes[i].Pitches[j].Octave < min ? notes[i].Pitches[j].Octave : min;
                     }
-                    player.play(pitches, notes[i].Duration.Value, true, event);
-                }
-                else {
-                    player.play(0, notes[i].Duration.Value, true, event);
                 }
             }
-            player.timeline = 0;
+            for (var i = 0; i < notes.length; i++) {
+                if (notes[i].Pitches.length > 0) {
+                    player.play(notes[i], min, true, event);
+                }
+                else {
+                    player.play(0, min, true, event);
+                }
+            }
         };
 
-        
-        $scope.width = 50;
-        $scope.height = 7;
-        $scope.margin = 20;
-        $scope.dotRadius = 5;
-        var notation;
-        var visualization;
-
-        var getNote = function (step) {
+        function getLine(step) {
             switch (step) {
                 case 0: return { line: 0, alter: 0, note: "C" };
                 case 1: return { line: 0, alter: 1, note: "C#" };
@@ -81,15 +111,17 @@
                 case 10: return { line: 5, alter: 1, note: "A#" };
                 case 11: return { line: 6, alter: 0, note: "B" };
                 default: return {line: -1, alter: -1, note: -1};
-                    
             }
+        }
+
+        function getHorizontalInterval(fmotif) {
+            return 450 / (fmotif.NoteList.length + 1);
         }
 
         function drawKeyboard() {
             var rectPosX = 0;
             for (var i = 0; i < 24; i++) {
-
-                if (getNote(i % 12).alter === 0) {
+                if (getLine(i % 12).alter === 0) {
                     visualization.append("g")
                         .attr("class", "key_" + i)
                         .append("rect")
@@ -103,7 +135,7 @@
                 }
             }
             for (var i = 0; i < 24; i++) {
-                if (getNote(i % 12).alter === 1) {
+                if (getLine(i % 12).alter === 1) {
                     visualization.append("g")
                         .attr("class", "key_" + i)
                         .append("rect")
@@ -116,141 +148,224 @@
                 }
             }
         }
-        
-        function keyOn(event, pitches) {
-            for (var i = 0; i < pitches.length; i++) {
-                var key = d3.select("#visualization_" + $scope.data.fmotifs[event].Id)
-                    .select(".key_" + (pitches[i] % 24))
-                    .selectAll("rect");
-                key.style("fill", "blue")
-                    .style("fill-opacity", 1);
+
+        function drawStaff() {
+            for (var i = 3; i < 12; i++) {
+                if (i % 2 !== 0) {
+                    notation.append("line")
+                        .attr("x1", 0)
+                        .attr("y1", $scope.margin + i * $scope.verticalInterval)
+                        .attr("x2", 450)
+                        .attr("y2", $scope.margin + i * $scope.verticalInterval)
+                        .style("stroke", "#000")
+                        .style("stroke-width", 2);
+                }
             }
-            
+            notation.append("line")
+                .attr("x1", 0)
+                .attr("y1", $scope.margin + 3 * $scope.verticalInterval)
+                .attr("x2", 0)
+                .attr("y2", $scope.margin + 11 * $scope.verticalInterval)
+                .style("stroke", "#000")
+                .style("stroke-width", 5);
+            notation.append("line")
+                .attr("x1", 450)
+                .attr("y1", $scope.margin + 3 * $scope.verticalInterval)
+                .attr("x2", 450)
+                    .attr("y2", $scope.margin + 11 * $scope.verticalInterval)
+                .style("stroke", "#000")
+                .style("stroke-width", 5);
         }
 
-        function keyOff(event) {
-            for (var i = 0; i < 24; i++) {
-                var key = d3.select("#visualization_" + $scope.data.fmotifs[event].Id)
-                    .select(".key_" + (i))
-                    .selectAll("rect");
-                if (getNote(i % 12).alter === 0) {
-                    key.style("fill", "none");
-                }
-                else if (getNote(i % 12).alter === 1) {
-                    key.style("fill", "black");
+        function drawNotes(group, note, octave, iterator, x, y) {
+            var step = note.Pitches[iterator].Step;
+            if (octave === 0 && (step === 0 || step === 1)) {
+                group.append("line")
+                    .attr("x1", x - 15)
+                    .attr("y1", y)
+                    .attr("x2", x + 15)
+                    .attr("y2", y)
+                    .style("stroke", "#000")
+                    .style("stroke-width", 2);
+            }
+            if (octave === 1) {
+                switch (step) {
+                    case 9:
+                    case 10:
+                        group.append("line")
+                            .attr("x1", x - 15)
+                            .attr("y1", y)
+                            .attr("x2", x + 15)
+                            .attr("y2", y)
+                            .style("stroke", "#000")
+                            .style("stroke-width", 2);
+                        break;
+                    case 11:
+                        group.append("line")
+                            .attr("x1", x - 15)
+                            .attr("y1", y + 5)
+                            .attr("x2", x + 15)
+                            .attr("y2", y + 5)
+                            .style("stroke", "#000")
+                            .style("stroke-width", 2);
+                        break;
+                    default: break;
                 }
             }
+            if (note.Duration.OriginalDenominator === 1 || note.Duration.OriginalDenominator === 2) {
+                group.append("ellipse")
+                    .attr("rx", 7)
+                    .attr("ry", 5)
+                    .attr("cx", x)
+                    .attr("cy", y)
+                    .attr("transform", "rotate(350 " + x + " " + y + ")")
+                    .style("fill-opacity", 1)
+                    .style("fill", "black");
+                group.append("ellipse")
+                    .attr("rx", 4)
+                    .attr("ry", 2)
+                    .attr("cx", x)
+                    .attr("cy", y)
+                    .attr("transform", "rotate(330 " + x + " " + y + ")")
+                    .style("fill-opacity", 1)
+                    .style("fill", "white");
+            }
+            else {
+                group.append("ellipse")
+                    .attr("rx", 7)
+                    .attr("ry", 5)
+                    .attr("cx", x)
+                    .attr("cy", y)
+                    .attr("transform", "rotate(350 " + x + " " + y + ")")
+                    .style("fill-opacity", 1)
+                    .style("fill", "black");
+            }
         }
-        
+
+        function drawPause(group, note, x) {
+            if (note.Duration.OriginalDenominator === 1) {
+                group.append("rect")
+                    .attr("width", 10)
+                    .attr("height", 5)
+                    .attr("x", x)
+                    .attr("y", $scope.margin + 6 * $scope.verticalInterval)
+                    .style("fill", "black");
+            }
+            else {
+                group.append("rect")
+                    .attr("width", 10)
+                    .attr("height", 5)
+                    .attr("x", x)
+                    .attr("y", $scope.margin + (6 - 1) * $scope.verticalInterval)
+                    .style("fill", "black");
+            }
+        }
+
+        $scope.margin = 40;
+        $scope.verticalInterval = (140 - $scope.margin * 2) / 14;
+        var notation;
+        var visualization;
+
         $(function () {
             for (var i = 0; i < $scope.data.fmotifs.length; i++) {
                 var fmotif = $scope.data.fmotifs[i];
-                var width = $scope.width * fmotif.NoteList.length;
-                var height = $scope.height * 14 + $scope.margin * 2;
+                var horizontalInterval = getHorizontalInterval(fmotif);
                 notation = d3
                     .select("#notation_" + fmotif.Id)
                     .append("svg")
-                    .attr("width", width)
-                    .attr("height", height);
+                    .attr("width", 450)
+                    .attr("height", 140);
                 visualization = d3
                     .select("#visualization_" + fmotif.Id)
                     .append("svg")
                     .attr("width", 350)
                     .attr("height", 100);
-                drawKeyboard();               
-                for (var j = 3; j < 13; j++) {
-                    if (j % 2 !== 0) {
-                        notation.append("line")
-                            .attr("x1", 0)
-                            .attr("y1", $scope.margin + j * $scope.height)
-                            .attr("x2", width)
-                            .attr("y2", $scope.margin + j * $scope.height)
-                            .style("stroke", "#000")
-                            .style("stroke-width", "2");
-                    }
-                }
+                drawKeyboard();   
+                drawStaff();
                 var min = 9;
                 for (var j = 0; j < fmotif.NoteList.length; j++) {
                     var note = fmotif.NoteList[j];
-                    for (var k = 0; k < note.Pitches.length; k++) {
+;                    for (var k = 0; k < note.Pitches.length; k++) {
                         var pitch = note.Pitches[k];
                         min = pitch.Octave < min ? pitch.Octave : min;
                     }
                 }
                 for (var j = 0; j < fmotif.NoteList.length; j++) {
                     var note = fmotif.NoteList[j];
-                    var center = $scope.margin + (6) * $scope.height;
-                    if (note.Pitches.length > 0) {
-                        var maxy = 0;
-                        var miny = $scope.width * 2 + $scope.height * 20;
+                    var chord = notation.append("g");
+                    var x = (j + 1) * horizontalInterval;
+                    if (note.Pitches.length === 0) {
+                        drawPause(chord, note, x);
+                    }
+                    else {
+                        var lineUp = false;
+                        var miny = 1000;
+                        var maxy = -1000;
                         for (var k = 0; k < note.Pitches.length; k++) {
                             var pitch = note.Pitches[k];
                             var currentOctave = pitch.Octave > min ? 1 : 0;
-                            var type = getNote(pitch.Step);
-                            var y = $scope.margin + (6 - type.line + 7 * (1 - currentOctave)) * $scope.height;
+                            var step = getLine(pitch.Step);
+                            var y = $scope.margin + (13 - (step.line + 7 * currentOctave)) * $scope.verticalInterval;
+                            if (currentOctave === 0 && pitch.Step < 10) {
+                                lineUp = true;
+                            }
+                            console.log(lineUp);
                             miny = y < miny ? y : miny;
-                            maxy = y > maxy ? y : maxy;
-                            notation.append("ellipse")
-                                .attr("rx", $scope.dotRadius)
-                                .attr("ry", $scope.dotRadius)
-                                .attr("cx", $scope.width * (j + 1) - 25)
-                                .attr("cy", y)
-                                .style("fill-opacity", 1)
-                                .style("fill", "black")
-                                .style("stroke", "black");
+                            maxy = y < maxy ? maxy : y;
+                            drawNotes(chord, note, currentOctave, k, x, y);
                         }
-                        if (note.Pitches.length > 1) {
-                            miny -= center;
-                            maxy -= center;
-                            var direction = 0;
-                            if (Math.sign(miny) === Math.sign(maxy)) {
-                                direction = Math.sign(miny);
-                            }
-                            else {
-                                direction = Math.abs(miny) > Math.abs(maxy) ? -1 : 1;
-                            }
-                            notation.append("line")
-                                .attr("x1", $scope.width * (j + 1) - 25 - 3 * direction)
-                                .attr("y1", direction < 0 ? maxy + center : miny + center)
-                                .attr("x2", $scope.width * (j + 1) - 25 - 3 * direction)
-                                .attr("y2", direction < 0 ? 0 + $scope.margin / 2 : height - $scope.margin / 2)
-                                .style("stroke", "#000")
-                                .style("stroke-width", "2");
-                            notation.append("line")
-                                .attr("x1", $scope.width * (j + 1) - 25 - 2 * direction)
-                                .attr("y1", direction < 0 ? 0 + $scope.margin / 2 : height - $scope.margin / 2)
-                                .attr("x2", $scope.width * (j + 1) - 25 - 10 * direction)
-                                .attr("y2", direction < 0 ? 0 + $scope.margin / 2 : height - $scope.margin / 2)
-                                .style("stroke", "#000")
-                                .style("stroke-width", "2");
+                        var flagx, flagy;
+                        if (!lineUp && note.Duration.OriginalDenominator > 1) {
+                            flagx = x - 6;
+                            flagy = maxy + 40;
+                            chord.append("line")
+                                .attr("x1", flagx)
+                                .attr("y1", miny + 1)
+                                .attr("x2", flagx)
+                                .attr("y2", flagy)
+                                .style("stroke", "black")
+                                .style("stroke-width", 2);
                         }
-                        else {
-                            var direction = miny - center < 0 ? -1 : 1;
-                            if (note.Duration.OriginalValue < 1) {
-                                notation.append("line")
-                                    .attr("x1", $scope.width * (j + 1) - 25 - 2 * direction)
-                                    .attr("y1", miny)
-                                    .attr("x2", $scope.width * (j + 1) - 25 - 2 * direction)
-                                    .attr("y2", direction < 0 ? 0 + $scope.margin / 2 : height - $scope.margin / 2)
-                                    .style("stroke", "#000")
-                                    .style("stroke-width", "2");
-                                notation.append("line")
-                                    .attr("x1", $scope.width * (j + 1) - 25 - 2 * direction)
-                                    .attr("y1", direction < 0 ? 0 + $scope.margin / 2 : height - $scope.margin / 2)
-                                    .attr("x2", $scope.width * (j + 1) - 25 - 10 * direction)
-                                    .attr("y2", direction < 0 ? 0 + $scope.margin / 2 : height - $scope.margin / 2)
-                                    .style("stroke", "#000")
-                                    .style("stroke-width", "2");
+                        else if (lineUp && note.Duration.OriginalDenominator > 1) {
+                            flagx = x + 6;
+                            flagy = miny - 40;
+                            chord.append("line")
+                                .attr("x1", flagx)
+                                .attr("y1", maxy - 1)
+                                .attr("x2", flagx)
+                                .attr("y2", flagy)
+                                .style("stroke", "black")
+                                .style("stroke-width", 2);
+                        }
+                        var flags = 0;
+                        switch (note.Duration.OriginalDenominator) {
+                            case 8: flags = 1; break;
+                            case 16: flags = 2; break;
+                            case 32: flags = 3; break;
+                            case 64: flags = 4; break;
+                        }
+                        if (flags > 0) {
+                            for (var k = 0; k < flags; k++) {
+                                if (lineUp) {
+                                    chord.append("line")
+                                        .attr("x1", flagx)
+                                        .attr("y1", flagy + k * 4)
+                                        .attr("x2", flagx + 16)
+                                        .attr("y2", flagy + k * 4 + 4)
+                                        .style("stroke", "black")
+                                        .style("stroke-width", 2);
+                                }
+                                else if (!lineUp) {
+                                    chord.append("line")
+                                        .attr("x1", flagx)
+                                        .attr("y1", flagy - k * 4)
+                                        .attr("x2", flagx - 16)
+                                        .attr("y2", flagy - k * 4 - 4)
+                                        .style("stroke", "black")
+                                        .style("stroke-width", 2);
+                                }
                             }
                         }
-                    }
-                    else {
-                        notation.append("rect")
-                            .attr("width", $scope.dotRadius * 2)
-                            .attr("height", $scope.dotRadius * 2)
-                            .attr("x", $scope.width * (j + 1) - 25 - $scope.dotRadius)
-                            .attr("y", center - $scope.dotRadius)
-                            .style("fill", "black");
                     }
                 }
             }
