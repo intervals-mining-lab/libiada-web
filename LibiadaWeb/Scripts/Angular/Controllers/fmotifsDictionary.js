@@ -50,7 +50,7 @@
             keyOn: function (event, note, min) {
                 for (var i = 0; i < note.Pitches.length; i++) {
                     var pitch = note.Pitches[i];
-                    var step = pitch.Step;
+                    var step = pitch.MidiNumber % 12;
                     var currentOctave = pitch.Octave > min ? 1 : 0;
                     var key = d3.select("#visualization_" + $scope.data.fmotifs[event].Id)
                         .select(".key_" + (step + currentOctave * 12))
@@ -87,12 +87,7 @@
                 }
             }
             for (var i = 0; i < notes.length; i++) {
-                if (notes[i].Pitches.length > 0) {
                     player.play(notes[i], min, true, event);
-                }
-                else {
-                    player.play(0, min, true, event);
-                }
             }
         };
 
@@ -178,7 +173,7 @@
         }
 
         function drawNotes(group, note, octave, iterator, x, y) {
-            var step = note.Pitches[iterator].Step;
+            var step = note.Pitches[iterator].MidiNumber % 12;
             if (octave === 0 && (step === 0 || step === 1)) {
                 group.append("line")
                     .attr("x1", x - 15)
@@ -239,6 +234,14 @@
                     .attr("transform", "rotate(350 " + x + " " + y + ")")
                     .style("fill-opacity", 1)
                     .style("fill", "black");
+            }
+            if (getLine(step).alter === 1) {
+                group.append("text")
+                    .attr("x", x - 20)
+                    .attr("y", y + 4)
+                    .attr("font-size", "19px")
+                    .attr("font-style", "italic")
+                    .text("#");
             }
         }
 
@@ -309,7 +312,6 @@
                             if (currentOctave === 0 && pitch.Step < 10) {
                                 lineUp = true;
                             }
-                            console.log(lineUp);
                             miny = y < miny ? y : miny;
                             maxy = y < maxy ? maxy : y;
                             drawNotes(chord, note, currentOctave, k, x, y);
