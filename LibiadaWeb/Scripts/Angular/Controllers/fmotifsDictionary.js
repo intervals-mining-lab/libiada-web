@@ -88,8 +88,8 @@
                     .style("stroke", "blue");
                 chord.selectAll(".white")
                     .style("fill", "white");
-                chord.selectAll(".black")
-                    .style("fill", "black");
+                chord.selectAll(".blackline")
+                    .style("stroke", "black");
             },
             noteOff: function (event) {
                 var chord = d3.select("#notation_" + $scope.data.fmotifs[event].Id)
@@ -202,7 +202,7 @@
                 .attr("x1", 450)
                 .attr("y1", $scope.margin + 3 * $scope.verticalInterval)
                 .attr("x2", 450)
-                    .attr("y2", $scope.margin + 11 * $scope.verticalInterval)
+                .attr("y2", $scope.margin + 11 * $scope.verticalInterval)
                 .style("stroke", "#000")
                 .style("stroke-width", 5);
         }
@@ -211,7 +211,7 @@
             var step = note.Pitches[iterator].MidiNumber % 12;
             if (octave === 0 && (step === 0 || step === 1)) {
                 group.append("line")
-                    .attr("class", "black")
+                    .attr("class", "blackline")
                     .attr("x1", x - 15)
                     .attr("y1", y)
                     .attr("x2", x + 15)
@@ -224,7 +224,7 @@
                     case 9:
                     case 10:
                         group.append("line")
-                            .attr("class", "black")
+                            .attr("class", "blackline")
                             .attr("x1", x - 15)
                             .attr("y1", y)
                             .attr("x2", x + 15)
@@ -234,7 +234,7 @@
                         break;
                     case 11:
                         group.append("line")
-                            .attr("class", "black")
+                            .attr("class", "blackline")
                             .attr("x1", x - 15)
                             .attr("y1", y + 5)
                             .attr("x2", x + 15)
