@@ -20,6 +20,8 @@
 
         };
 
+        var chordIndex;
+
         var player = {
             barDuration: 8,
             timeline: 0,
@@ -37,9 +39,10 @@
                 }
                 MIDI.chordOn(0, chord, this.velocity, this.timeline);
                 setTimeout(this.keyOn, this.timeline * 1000, event, note, minOctave);
+                setTimeout(this.noteOn, this.timeline * 1000, event);
                 MIDI.chordOff(0, chord, this.velocity, this.timeline + this.barDuration * duration);
                 setTimeout(this.keyOff, (this.timeline + this.barDuration * duration) * 900, event);
-
+                setTimeout(this.noteOff, (this.timeline + this.barDuration * duration) * 900, event);
                 if (typeof moveTime !== 'undefined' && moveTime === true) {
                     this.move(duration);
                 }
@@ -71,6 +74,37 @@
                         key.style("fill", "black");
                     }
                 }
+            },
+            noteOn: function (event) {
+                var chord = d3.select("#notation_" + $scope.data.fmotifs[event].Id)
+                    .select(".chord_" + (chordIndex));
+                chord.selectAll("ellipse")
+                    .style("fill", "blue");
+                chord.selectAll("rect")
+                    .style("fill", "blue");
+                chord.selectAll("text")
+                    .style("fill", "blue");
+                chord.selectAll("line")
+                    .style("stroke", "blue");
+                chord.selectAll(".white")
+                    .style("fill", "white");
+                chord.selectAll(".black")
+                    .style("fill", "black");
+            },
+            noteOff: function (event) {
+                var chord = d3.select("#notation_" + $scope.data.fmotifs[event].Id)
+                    .select(".chord_" + (chordIndex));
+                chord.selectAll("ellipse")
+                    .style("fill", "black");
+                chord.selectAll("rect")
+                    .style("fill", "black");
+                chord.selectAll("text")
+                    .style("fill", "black");
+                chord.selectAll("line")
+                    .style("stroke", "black");
+                chord.selectAll(".white")
+                    .style("fill", "white");
+                chordIndex++;
             }
         }
 
@@ -79,6 +113,7 @@
             player.timeline = 0;
             var notes = $scope.data.fmotifs[event].NoteList;
             var min = 9;
+            chordIndex = 0;
             for (var i = 0; i < notes.length; i++) {
                 if (notes[i].Pitches.length > 0) {
                     for (var j = 0; j < notes[i].Pitches.length; j++) {
@@ -87,7 +122,7 @@
                 }
             }
             for (var i = 0; i < notes.length; i++) {
-                    player.play(notes[i], min, true, event);
+                player.play(notes[i], min, true, event);
             }
         };
 
@@ -176,6 +211,7 @@
             var step = note.Pitches[iterator].MidiNumber % 12;
             if (octave === 0 && (step === 0 || step === 1)) {
                 group.append("line")
+                    .attr("class", "black")
                     .attr("x1", x - 15)
                     .attr("y1", y)
                     .attr("x2", x + 15)
@@ -188,6 +224,7 @@
                     case 9:
                     case 10:
                         group.append("line")
+                            .attr("class", "black")
                             .attr("x1", x - 15)
                             .attr("y1", y)
                             .attr("x2", x + 15)
@@ -197,6 +234,7 @@
                         break;
                     case 11:
                         group.append("line")
+                            .attr("class", "black")
                             .attr("x1", x - 15)
                             .attr("y1", y + 5)
                             .attr("x2", x + 15)
@@ -217,6 +255,7 @@
                     .style("fill-opacity", 1)
                     .style("fill", "black");
                 group.append("ellipse")
+                    .attr("class", "white")
                     .attr("rx", 4)
                     .attr("ry", 2)
                     .attr("cx", x)
@@ -273,16 +312,18 @@
             for (var i = 0; i < $scope.data.fmotifs.length; i++) {
                 var fmotif = $scope.data.fmotifs[i];
                 var horizontalInterval = getHorizontalInterval(fmotif);
-                notation = d3
-                    .select("#notation_" + fmotif.Id)
+                notation = d3.select("#notation_" + fmotif.Id)
                     .append("svg")
                     .attr("width", 450)
-                    .attr("height", 140);
-                visualization = d3
-                    .select("#visualization_" + fmotif.Id)
+                    .attr("height", 140)
+                    .style("display", "block")
+                    .style("margin", "auto");
+                visualization = d3.select("#visualization_" + fmotif.Id)
                     .append("svg")
                     .attr("width", 350)
-                    .attr("height", 100);
+                    .attr("height", 100)
+                    .style("display", "block")
+                    .style("margin", "auto");
                 drawKeyboard();   
                 drawStaff();
                 var min = 9;
@@ -295,7 +336,8 @@
                 }
                 for (var j = 0; j < fmotif.NoteList.length; j++) {
                     var note = fmotif.NoteList[j];
-                    var chord = notation.append("g");
+                    var chord = notation.append("g")
+                        .attr("class", "chord_" + j);
                     var x = (j + 1) * horizontalInterval;
                     if (note.Pitches.length === 0) {
                         drawPause(chord, note, x);

@@ -17,7 +17,6 @@
     <div ng-controller="FmotifsDictionaryCtrl" ng-init="onload()">
         <div>
             <h4>Music sequence</h4>
-            @*<input type="button" class="btn btn-default" id="all" ng-click="playAll()" value="PlayAll" />*@
             <hr />
             <dl class="dl-horizontal">
                 <dt>
@@ -87,7 +86,6 @@
                 <tbody>
                     <tr ng-repeat="fmotif in data.fmotifs">
                         <th>
-                            {{fmotif.Id}}
                             <div id="notation_{{fmotif.Id}}"></div><div id="notation_{{fmotif.Id}}"></div>
                         </th>
                         <th>
