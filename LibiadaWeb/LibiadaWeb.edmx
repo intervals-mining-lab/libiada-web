@@ -1328,7 +1328,7 @@
           <Property Name="RemoteId" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
-          <Property Name="PauseTreatment" Type="Int16" Nullable="false" />
+          <Property Name="PauseTreatment" Type="LibiadaWebModel.PauseTreatment" Nullable="false" />
           <Property Name="SequentialTransfer" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Matter" Relationship="Self.fk_music_chain_matter" FromRole="MusicSequence" ToRole="Matter" />
           <NavigationProperty Name="BinaryCharacteristicValue" Relationship="Self.fk_binary_characteristic_music_chain" FromRole="MusicSequence" ToRole="BinaryCharacteristicValue" />
@@ -2108,6 +2108,7 @@
         </Association>
         <EnumType Name="ArrangementType" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.ArrangementManagers.ArrangementType" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="SequenceGroupType" UnderlyingType="Int16" a:ExternalTypeName="SequenceGroupType" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="PauseTreatment" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Music.PauseTreatment" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
 
       </Schema>
     </edmx:ConceptualModels>
