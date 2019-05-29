@@ -41,7 +41,7 @@
             @Html.DisplayFor(modelItem => item.PauseTreatment)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.SequentialTransfer)
+            @(item.SequentialTransfer ? "Yes" : "No")
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Created)
