@@ -6,6 +6,7 @@
 
         console.log($scope);
 
+        // initializes MIDI player
         $scope.onload = function () {
             MIDI.loadPlugin({
                 soundfontUrl: "../../Scripts/midijs/soundfont/",
@@ -22,18 +23,18 @@
 
         var chordIndex;
 
+        // plays chords with animation
         var player = {
             barDuration: 8,
             timeline: 0,
             velocity: 127,
-            play: function (note, minOctave, moveTime, event) {
+            play: function(note, minOctave, moveTime, event) {
                 var chord = [];
                 var duration = note.Duration.Value;
                 for (var i = 0; i < note.Pitches.length; i++) {
                     if ($scope.data.sequentialTransfer) {
                         chord[i] = note.Pitches[i].MidiNumber + 60;
-                    }
-                    else {
+                    } else {
                         chord[i] = note.Pitches[i].MidiNumber;
                     }
                 }
@@ -47,10 +48,10 @@
                     this.move(duration);
                 }
             },
-            move: function (duration) {
+            move: function(duration) {
                 this.timeline += this.barDuration * duration;
             },
-            keyOn: function (event, note, min) {
+            keyOn: function(event, note, min) {
                 for (var i = 0; i < note.Pitches.length; i++) {
                     var pitch = note.Pitches[i];
                     var step = pitch.MidiNumber % 12;
@@ -62,20 +63,19 @@
                         .style("fill-opacity", 1);
                 }
             },
-            keyOff: function (event) {
+            keyOff: function(event) {
                 for (var i = 0; i < 24; i++) {
                     var key = d3.select("#visualization_" + $scope.data.fmotifs[event].Id)
                         .select(".key_" + (i))
                         .selectAll("rect");
                     if (getLine(i % 12).alter === 0) {
                         key.style("fill", "none");
-                    }
-                    else if (getLine(i % 12).alter === 1) {
+                    } else if (getLine(i % 12).alter === 1) {
                         key.style("fill", "black");
                     }
                 }
             },
-            noteOn: function (event) {
+            noteOn: function(event) {
                 var chord = d3.select("#notation_" + $scope.data.fmotifs[event].Id)
                     .select(".chord_" + (chordIndex));
                 chord.selectAll("ellipse")
@@ -91,7 +91,7 @@
                 chord.selectAll(".blackline")
                     .style("stroke", "black");
             },
-            noteOff: function (event) {
+            noteOff: function(event) {
                 var chord = d3.select("#notation_" + $scope.data.fmotifs[event].Id)
                     .select(".chord_" + (chordIndex));
                 chord.selectAll("ellipse")
@@ -106,8 +106,9 @@
                     .style("fill", "white");
                 chordIndex++;
             }
-        }
+        };
 
+        // plays Fmotifs with animation
         $scope.play = function (event) {
             MIDI.setVolume(0, 80);
             player.timeline = 0;
@@ -126,6 +127,7 @@
             }
         };
 
+        // gets note's line and alter
         function getLine(step) {
             switch (step) {
                 case 0: return { line: 0, alter: 0, note: "C" };
@@ -144,10 +146,12 @@
             }
         }
 
+        // calculates interval between chords
         function getHorizontalInterval(fmotif) {
             return 450 / (fmotif.NoteList.length + 1);
         }
 
+        // draws piano keyboard
         function drawKeyboard() {
             var rectPosX = 0;
             for (var i = 0; i < 24; i++) {
@@ -179,6 +183,7 @@
             }
         }
 
+        // draws notation staff
         function drawStaff() {
             for (var i = 3; i < 12; i++) {
                 if (i % 2 !== 0) {
@@ -207,7 +212,8 @@
                 .style("stroke-width", 5);
         }
 
-        function drawNotes(group, note, octave, iterator, x, y) {
+        // draws note
+        function drawNote(group, note, octave, iterator, x, y) {
             var step = note.Pitches[iterator].MidiNumber % 12;
             if (octave === 0 && (step === 0 || step === 1)) {
                 group.append("line")
@@ -284,6 +290,7 @@
             }
         }
 
+        // draws pause
         function drawPause(group, note, x) {
             if (note.Duration.OriginalDenominator === 1) {
                 group.append("rect")
@@ -308,6 +315,7 @@
         var notation;
         var visualization;
 
+        // draws everything
         $(function () {
             for (var i = 0; i < $scope.data.fmotifs.length; i++) {
                 var fmotif = $scope.data.fmotifs[i];
@@ -356,12 +364,12 @@
                             }
                             miny = y < miny ? y : miny;
                             maxy = y < maxy ? maxy : y;
-                            drawNotes(chord, note, currentOctave, k, x, y);
+                            drawNote(chord, note, currentOctave, k, x, y);
                         }
                         var flagx, flagy;
                         if (!lineUp && note.Duration.OriginalDenominator > 1) {
                             flagx = x - 6;
-                            flagy = maxy + 40;
+                            flagy = maxy + 48;
                             chord.append("line")
                                 .attr("x1", flagx)
                                 .attr("y1", miny + 1)
@@ -372,7 +380,7 @@
                         }
                         else if (lineUp && note.Duration.OriginalDenominator > 1) {
                             flagx = x + 6;
-                            flagy = miny - 40;
+                            flagy = miny - 48;
                             chord.append("line")
                                 .attr("x1", flagx)
                                 .attr("y1", maxy - 1)
@@ -387,26 +395,28 @@
                             case 16: flags = 2; break;
                             case 32: flags = 3; break;
                             case 64: flags = 4; break;
+                            case 128: flags = 5; break;
+                            case 256: flags = 6; break;
                         }
                         if (flags > 0) {
                             for (var k = 0; k < flags; k++) {
                                 if (lineUp) {
                                     chord.append("line")
                                         .attr("x1", flagx)
-                                        .attr("y1", flagy + k * 4)
+                                        .attr("y1", flagy + k * 4 + 1)
                                         .attr("x2", flagx + 16)
-                                        .attr("y2", flagy + k * 4 + 4)
+                                        .attr("y2", flagy + k * 4 + 2)
                                         .style("stroke", "black")
-                                        .style("stroke-width", 2);
+                                        .style("stroke-width", 3);
                                 }
                                 else if (!lineUp) {
                                     chord.append("line")
                                         .attr("x1", flagx)
-                                        .attr("y1", flagy - k * 4)
+                                        .attr("y1", flagy - k * 4 - 1)
                                         .attr("x2", flagx - 16)
-                                        .attr("y2", flagy - k * 4 - 4)
+                                        .attr("y2", flagy - k * 4 - 2)
                                         .style("stroke", "black")
-                                        .style("stroke-width", 2);
+                                        .style("stroke-width", 3);
                                 }
                             }
                         }
