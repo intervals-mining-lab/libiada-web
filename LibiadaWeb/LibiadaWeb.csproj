@@ -228,6 +228,7 @@
     <Compile Include="Models\CalculatorsData\ArrangementTypeSelectListItem.cs" />
     <Compile Include="Models\CalculatorsData\AttributeValue.cs" />
     <Compile Include="Models\CalculatorsData\CongenericSequencesCharacteristics.cs" />
+    <Compile Include="Models\CalculatorsData\LocalCharacteristicsData.cs" />
     <Compile Include="Models\CalculatorsData\MattersImportResult.cs" />
     <Compile Include="Models\CalculatorsData\MattersTableRow.cs" />
     <Compile Include="Models\CalculatorsData\OrderTransformationData.cs" />

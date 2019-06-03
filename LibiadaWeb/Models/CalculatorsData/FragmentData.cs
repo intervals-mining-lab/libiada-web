@@ -8,7 +8,7 @@ namespace LibiadaWeb.Models.CalculatorsData
         /// <summary>
         /// The characteristics values.
         /// </summary>
-        public readonly double[] Characteristics;
+        public double[] Characteristics;
 
         /// <summary>
         /// The name of the fragment.

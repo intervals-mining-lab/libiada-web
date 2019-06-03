@@ -105,9 +105,24 @@
 
 		function yValue(d) {
 			return $scope.lineChart ? d.x : d.y;
-		}
+        }
 
-		function draw() {
+        function calculateLocalCharacteristicsSimilarityMatrix() {
+            $http.get("/api/LocalCalculationWebApi?taskId=" + $scope.taskId
+                    + "&aligner=" + $scope.aligner.Value
+                    + "&distanceCalculator=" + $scope.distanceCalculator.Value
+                    + "&aggregator=" + $scope.aggregator.Value)
+                .then(function (result) {
+                    $scope.comparisonMatrix = JSON.parse(result.data);
+                }, function (error) {
+
+                    alert("Failed loading alignment data");
+
+                    $scope.loading = false;
+                });
+        }
+
+        function draw() {
 			$scope.fillPoints();
 
 			// removing previous chart and tooltip if any
@@ -287,6 +302,7 @@
 				.style("font-size", "9pt");
 		}
 
+        $scope.calculateLocalCharacteristicsSimilarityMatrix = calculateLocalCharacteristicsSimilarityMatrix;
 		$scope.draw = draw;
 		$scope.fillPoints = fillPoints;
 		$scope.fillPointTooltip = fillPointTooltip;
@@ -313,6 +329,9 @@
 
 				$scope.firstCharacteristic = $scope.characteristicsList[0];
 				$scope.secondCharacteristic = $scope.characteristicsList.length > 1 ? $scope.characteristicsList[1] : $scope.characteristicsList[0];
+                $scope.aligner = $scope.aligners[0];
+                $scope.distanceCalculator = $scope.distanceCalculators[0];
+                $scope.aggregator = $scope.aggregators[0];
 
 				$scope.legendHeight = $scope.legend.length * 20;
 				$scope.height = 800 + $scope.legendHeight;
@@ -324,5 +343,5 @@
 			});
 	}
 
-	angular.module("libiada").controller("LocalCalculationResultCtrl", ["$scope", "$http", localCalculationResult]);
+    angular.module("libiada").controller("LocalCalculationResultCtrl", ["$scope", "$http", localCalculationResult]);
 }

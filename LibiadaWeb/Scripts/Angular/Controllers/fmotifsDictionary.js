@@ -284,7 +284,7 @@
                 group.append("text")
                     .attr("x", x - 25)
                     .attr("y", y + 6)
-                    .attr("font-size", "30px")
+                    .attr("font-size", "25px")
                     .text("\u266F");
             }
         }

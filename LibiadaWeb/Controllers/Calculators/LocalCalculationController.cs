@@ -3,11 +3,15 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+    using System.Web.Mvc.Html;
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
     using LibiadaCore.Extensions;
     using LibiadaCore.Iterators;
+    using LibiadaCore.TimeSeries.Aggregators;
+    using LibiadaCore.TimeSeries.Aligners;
+    using LibiadaCore.TimeSeries.OneDimensional.DistanceCalculators;
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.CalculatorsData;
@@ -222,7 +226,11 @@
                         autocorrelationData = AutoCorrelation.CalculateAutocorrelation(fragmentsData.Select(f => f.Characteristics).ToArray());
                     }
 
-                    mattersCharacteristics[i] = new { matterName = matters[matterIds[i]].Name, fragmentsData, differenceData, fourierData, autocorrelationData };
+                    mattersCharacteristics[i] = new LocalCharacteristicsData{ matterName = matters[matterIds[i]].Name,
+                                                                              fragmentsData = fragmentsData,
+                                                                              differenceData = differenceData,
+                                                                              fourierData = fourierData,
+                                                                              autocorrelationData = autocorrelationData };
                 }
 
                 for (int l = 0; l < characteristicLinkIds.Length; l++)
@@ -251,7 +259,10 @@
                     { "lengthes", lengthes },
                     { "characteristicNames", characteristicNames },
                     { "matterIds", matterIds },
-                    { "characteristicsList", characteristicsList }
+                    { "characteristicsList", characteristicsList },
+                    { "aligners", EnumHelper.GetSelectList(typeof(Aligner)) },
+                    { "distanceCalculators", EnumHelper.GetSelectList(typeof(DistanceCalculator)) },
+                    { "aggregators", EnumHelper.GetSelectList(typeof(Aggregator)) }
                 };
 
                 return new Dictionary<string, object> { { "data", JsonConvert.SerializeObject(result) } };
