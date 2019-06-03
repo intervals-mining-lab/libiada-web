@@ -282,31 +282,93 @@
             }
             if (getLine(step).alter === 1) {
                 group.append("text")
-                    .attr("x", x - 20)
-                    .attr("y", y + 4)
-                    .attr("font-size", "19px")
-                    .attr("font-style", "italic")
-                    .text("#");
+                    .attr("x", x - 25)
+                    .attr("y", y + 6)
+                    .attr("font-size", "30px")
+                    .text("\u266F");
             }
         }
 
         // draws pause
         function drawPause(group, note, x) {
-            if (note.Duration.OriginalDenominator === 1) {
-                group.append("rect")
-                    .attr("width", 10)
-                    .attr("height", 5)
-                    .attr("x", x)
-                    .attr("y", $scope.margin + 6 * $scope.verticalInterval)
-                    .style("fill", "black");
+            switch (note.Duration.OriginalDenominator) {
+                case 1:
+                    group.append("rect")
+                        .attr("width", 10)
+                        .attr("height", 5)
+                        .attr("x", x)
+                        .attr("y", $scope.margin + 6 * $scope.verticalInterval)
+                        .style("fill", "black");
+                    break;
+                case 2:
+                    group.append("rect")
+                        .attr("width", 10)
+                        .attr("height", 5)
+                        .attr("x", x)
+                        .attr("y", $scope.margin + 5 * $scope.verticalInterval)
+                        .style("fill", "black");
+                    break;
+                case 4:
+                    group.append("text")
+                        .attr("x", x)
+                        .attr("y", $scope.margin + 10 * $scope.verticalInterval)
+                        .attr("font-size", "35px")
+                        .text(signFromCharCode(0x1D13D));
+                        break;
+                case 8:
+                    group.append("text")
+                        .attr("x", x)
+                        .attr("y", $scope.margin + 11 * $scope.verticalInterval)
+                        .attr("font-size", "35px")
+                        .text(signFromCharCode(0x1D13E));
+                    break;
+                case 16:
+                    group.append("text")
+                        .attr("x", x)
+                        .attr("y", $scope.margin + 10 * $scope.verticalInterval)
+                        .attr("font-size", "35px")
+                        .text(signFromCharCode(0x1D13F));
+                    break;
+                case 32:
+                    group.append("text")
+                        .attr("x", x)
+                        .attr("y", $scope.margin + 10 * $scope.verticalInterval)
+                        .attr("font-size", "35px")
+                        .text(signFromCharCode(0x1D140));
+                    break;
+                case 64:
+                    group.append("text")
+                        .attr("x", x)
+                        .attr("y", $scope.margin + 9 * $scope.verticalInterval)
+                        .attr("font-size", "35px")
+                        .text(signFromCharCode(0x1D141));
+                    break;
+                case 128:
+                    group.append("text")
+                        .attr("x", x)
+                        .attr("y", $scope.margin + 9 * $scope.verticalInterval)
+                        .attr("font-size", "35px")
+                        .text(signFromCharCode(0x1D142));
+                    break;
+                default:
+                    group.append("rect")
+                        .attr("width", 10)
+                        .attr("height", 5)
+                        .attr("x", x)
+                        .attr("y", $scope.margin + 6 * $scope.verticalInterval)
+                        .style("fill", "black");
+                    break;
+            }
+        }
+
+        // draws symbol from char code
+        function signFromCharCode(code) {
+            if (code > 0xFFFF) {
+                code -= 0x10000;
+                return String.fromCharCode(0xD800 + (code >> 10), 0xDC00 + (code & 0x3FF));
             }
             else {
-                group.append("rect")
-                    .attr("width", 10)
-                    .attr("height", 5)
-                    .attr("x", x)
-                    .attr("y", $scope.margin + (6 - 1) * $scope.verticalInterval)
-                    .style("fill", "black");
+                return String.fromCharCode(code);
             }
         }
 
@@ -396,7 +458,6 @@
                             case 32: flags = 3; break;
                             case 64: flags = 4; break;
                             case 128: flags = 5; break;
-                            case 256: flags = 6; break;
                         }
                         if (flags > 0) {
                             for (var k = 0; k < flags; k++) {
