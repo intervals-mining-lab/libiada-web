@@ -30,7 +30,6 @@ namespace LibiadaWeb
         public int Onumerator { get; set; }
         public int Odenominator { get; set; }
         public bool Triplet { get; set; }
-        public Nullable<int> Priority { get; set; }
         public LibiadaCore.Core.SimpleTypes.Tie Tie { get; set; }
         public System.DateTimeOffset Modified { get; set; }
     

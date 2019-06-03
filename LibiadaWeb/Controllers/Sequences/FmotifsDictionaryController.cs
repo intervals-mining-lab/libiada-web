@@ -103,8 +103,7 @@ namespace LibiadaWeb.Controllers.Sequences
                                                                  dbNote.Onumerator,
                                                                  dbNote.Odenominator, 1),
                                                     dbNote.Triplet,
-                                                    dbNote.Tie,
-                                                    (int)dbNote.Priority);
+                                                    dbNote.Tie);
                         newNote.Id = dbNote.Id;
                         newFmotif.NoteList.Add(newNote);
                     }

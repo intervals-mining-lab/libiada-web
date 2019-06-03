@@ -283,7 +283,6 @@
           <Property Name="onumerator" Type="int4" Nullable="false" />
           <Property Name="odenominator" Type="int4" Nullable="false" />
           <Property Name="triplet" Type="bool" Nullable="false" />
-          <Property Name="priority" Type="int4" />
           <Property Name="tie" Type="int2" Nullable="false" />
         </EntityType>
         <EntityType Name="note_pitch">
@@ -1369,7 +1368,6 @@
           <Property Name="Onumerator" Type="Int32" Nullable="false" />
           <Property Name="Odenominator" Type="Int32" Nullable="false" />
           <Property Name="Triplet" Type="Boolean" Nullable="false" />
-          <Property Name="Priority" Type="Int32" />
           <Property Name="Tie" Type="LibiadaWebModel.Tie" Nullable="false" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <NavigationProperty Name="Pitch" Relationship="Self.note_pitch" FromRole="Note" ToRole="Pitch" />
@@ -2405,7 +2403,6 @@
                 <ScalarProperty Name="Onumerator" ColumnName="onumerator" />
                 <ScalarProperty Name="Odenominator" ColumnName="odenominator" />
                 <ScalarProperty Name="Triplet" ColumnName="triplet" />
-                <ScalarProperty Name="Priority" ColumnName="priority" />
                 <ScalarProperty Name="Tie" ColumnName="tie" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
               </MappingFragment>
