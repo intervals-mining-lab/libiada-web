@@ -1,0 +1,109 @@
+﻿@{
+    ViewBag.Title = "Orders Intervals Distributions Accordance";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@Html.Partial("_AngularControllerInitializer", "OrdersIntervalsDistributionsAccordanceController")
+
+@using (Html.BeginForm())
+{
+<div ng-controller="OrdersIntervalsDistributionsAccordanceCtrl">
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>Parameters</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <label class="control-label col-md-2" for="length">Generated orders length:</label>
+            <div class="col-md-10">
+                <input class="form-control" name="length" type="number" value="4" min="0" id="length" />
+                @Html.ValidationMessage("length", "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2" for="alphabetCardinality">Generated orders alphabet cardinality:</label>
+            <div class="col-md-10">
+                <input class="form-control" name="alphabetCardinality" type="number" value="4" min="0" id="alphabetCardinality" />
+                @Html.ValidationMessage("alphabetCardinality", "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="radio" name="generateStrict" id="generateStrict" value="0" checked />
+                    Generate all possible orders with only given alphabet cardinality
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="radio" name="generateStrict" id="generateStrict" value="1" />
+                    Generate all possible orders with alphabet cardinality less or equal to given
+                </label>
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="radio" name="link" id="link" value="1" checked />
+                    Link: None
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="radio" name="link" id="link" value="2" checked />
+                    Link: Start
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="radio" name="link" id="link" value="3" checked />
+                    Link: End
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="radio" name="link" id="link" value="4" checked />
+                    Link: Both
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="radio" name="link" id="link" value="5" checked />
+                    Link: Circle
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="radio" name="link" id="link" value="6" checked />
+                    Link: Circle start
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="radio" name="link" id="link" value="7" checked />
+                    Link: Circle end
+                </label>
+            </div>
+        </div>
+        @Html.Partial("_MattersSubmit")
+    </div>
+
+</div>
+}
+

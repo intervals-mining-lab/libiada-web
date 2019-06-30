@@ -139,6 +139,7 @@
     <Compile Include="Controllers\Calculators\ClusterizationController.cs" />
     <Compile Include="Controllers\Calculators\CongenericCalculationController.cs" />
     <Compile Include="Controllers\Calculators\OrderCalculationController.cs" />
+    <Compile Include="Controllers\Calculators\OrdersIntervalsDistributionsAccordanceController.cs" />
     <Compile Include="Controllers\Calculators\SequencesOrderDistributionController.cs" />
     <Compile Include="Controllers\Calculators\SubsequencesComparerController.cs" />
     <Compile Include="Controllers\Calculators\SubsequencesCalculationController.cs" />
@@ -447,8 +448,10 @@
     <Content Include="Scripts\Angular\Controllers\buildingsSimilarity.js" />
     <Content Include="Scripts\Angular\Controllers\customCalculation.js" />
     <Content Include="Scripts\Angular\Controllers\orderTransformationVisualization.js" />
+    <Content Include="Scripts\Angular\Controllers\ordersIntervalsDistributionsAccordance.js" />
     <Content Include="Scripts\Angular\Controllers\sequencesOrderDistribution.js" />
     <Content Include="Scripts\Angular\Controllers\orderTransformationVisualizationResult.js" />
+    <Content Include="Scripts\Angular\Controllers\ordersIntervalsDistributionsAccordanceResult.js" />
     <Content Include="Scripts\Angular\Controllers\sequencesOrderDistributionResult.js" />
     <Content Include="Scripts\Angular\Controllers\subsequencesCalculationResult.js" />
     <Content Include="Scripts\Angular\Controllers\subsequencesComparerResult.js" />
@@ -639,6 +642,8 @@
     <Content Include="Views\Calculators\OrderTransformationCharacteristicsDynamicVisualization\Index.cshtml" />
     <Content Include="Views\Calculators\OrderTransformationCharacteristicsDynamicVisualization\Result.cshtml" />
     <Content Include="Views\Sequences\FmotifsDictionary\Details.cshtml" />
+    <Content Include="Views\Calculators\OrdersIntervalsDistributionsAccordance\Index.cshtml" />
+    <Content Include="Views\Calculators\OrdersIntervalsDistributionsAccordance\Result.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

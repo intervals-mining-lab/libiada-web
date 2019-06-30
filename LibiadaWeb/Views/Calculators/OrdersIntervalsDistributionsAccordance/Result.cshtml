@@ -1,0 +1,69 @@
+﻿
+@{
+    ViewBag.Title = "Orders Intervals Distributions Accordance";
+}
+@Scripts.Render("~/bundles/loadingWindow")
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Error == null)
+{
+    @Html.Partial("_AngularControllerInitializer", "OrdersIntervalsDistributionsAccordanceResultController")
+
+    <div ng-controller="OrdersIntervalsDistributionsAccordanceResultCtrl">
+        <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
+        <div ng-disabled="loading">
+            <div ng-repeat="distributionIntervals in result">
+                <table class="table table-bordered table-hover" ng-cloak>
+                    <thead>
+                        <tr>
+                            <th>
+                                #
+                            </th>
+                            <th>
+                                <div>
+                                    <text ng-repeat="interval in distributionIntervals.distributionIntervals">
+                                        <text>|{{interval.interval}}|&nbsp</text>
+                                    </text>
+                                </div>
+                                <div>
+                                    <text ng-repeat="interval in distributionIntervals.distributionIntervals">
+                                        <text>|{{interval.count}}|&nbsp</text>
+                                    </text>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="order in distributionIntervals.orders">
+                            <td ng-bind="$index+1"></td>
+                            <td ng-bind="order"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br />
+            <div class="form-group">
+                <label class="control-label col-md-2" for="height">Height:</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="height" id="height" type="number" min="{{500}}" step="20" ng-model="height" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2" for="width">Width:</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="width" id="width" type="number" min="{{400}}" step="20" ng-model="width" />
+                </div>
+            </div>
+            <br />
+            <input type="button" class="btn btn-default" ng-click="draw()" value="Draw" />
+            <div id="chart">
+            </div>
+
+        </div>
+    </div>
+    <br />
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/d3js")
+}
