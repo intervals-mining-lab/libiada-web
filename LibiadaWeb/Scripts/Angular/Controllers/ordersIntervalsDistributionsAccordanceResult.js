@@ -8,15 +8,19 @@
             $scope.points = [];
 
             for (var i = 0; i < $scope.result.length; i++) {
-                var distributionIntervals = $scope.result[i].distributionIntervals;
-                var orders = $scope.result[i].orders;
-                $scope.points.push({
-                    id: i,
-                    distributionIntervals: distributionIntervals,
-                    x: i + 1,
-                    y: orders.length,
-                    orders: orders
-                });
+                if ($scope.result[i].link === $scope.linkType.Text) {
+                for (var j = 0; j < $scope.result[i].accordance.length; j++) {
+                    var distributionIntervals = $scope.result[i].accordance[j].distributionIntervals;
+                    var orders = $scope.result[i].accordance[j].orders;
+                    $scope.points.push({
+                        id: j,
+                        distributionIntervals: distributionIntervals,
+                        x: j + 1,
+                        y: orders.length,
+                        orders: orders
+                    });
+                    }
+                }
             }
         }
 
@@ -200,7 +204,7 @@
                 .attr("class", "label")
                 .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top) + ")")
                 .style("text-anchor", "middle")
-                .text("Intervals distributon link " + $scope.link)
+                .text("Intervals distributon link " + $scope.linkType.Text)
                 .style("font-size", "12pt");
 
             // y-axis
@@ -257,6 +261,7 @@
         $http.get("/api/TaskManagerWebApi/" + $scope.taskId)
             .then(function (data) {
                 MapModelFromJson($scope, JSON.parse(data.data));
+                console.log($scope);
 				$scope.loading = false;
                 
             }, function () {

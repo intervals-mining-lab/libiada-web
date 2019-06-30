@@ -12,36 +12,12 @@
     <div ng-controller="OrdersIntervalsDistributionsAccordanceResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <div ng-disabled="loading">
-            <div ng-repeat="distributionIntervals in result">
-                <table class="table table-bordered table-hover" ng-cloak>
-                    <thead>
-                        <tr>
-                            <th>
-                                #
-                            </th>
-                            <th>
-                                <div>
-                                    <text ng-repeat="interval in distributionIntervals.distributionIntervals">
-                                        <text>|{{interval.interval}}|&nbsp</text>
-                                    </text>
-                                </div>
-                                <div>
-                                    <text ng-repeat="interval in distributionIntervals.distributionIntervals">
-                                        <text>|{{interval.count}}|&nbsp</text>
-                                    </text>
-                                </div>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="order in distributionIntervals.orders">
-                            <td ng-bind="$index+1"></td>
-                            <td ng-bind="order"></td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="form-group">
+                <label class="control-label col-md-2" for="linkType">Link:</label>
+                <div class="col-md-10">
+                    <select class="form-control" title="Link type" ng-model="linkType" ng-options="t.Text for t in linkList" id="linkType"></select>
+                </div>
             </div>
-            <br />
             <div class="form-group">
                 <label class="control-label col-md-2" for="height">Height:</label>
                 <div class="col-md-10">
