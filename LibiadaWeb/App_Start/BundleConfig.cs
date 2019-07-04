@@ -138,6 +138,12 @@
             bundles.Add(new ScriptBundle("~/bundles/controllers/OrdersIntervalsDistributionsAccordanceResultController").Include(
                 "~/Scripts/Angular/Controllers/ordersIntervalsDistributionsAccordanceResult.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/controllers/IntervalsCharacteristicsDistributionController").Include(
+                "~/Scripts/Angular/Controllers/intervalsCharacteristicsDistribution.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/controllers/IntervalsCharacteristicsDistributionResultController").Include(
+                "~/Scripts/Angular/Controllers/intervalsCharacteristicsDistributionResult.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/controllers/SubsequencesCalculationController").Include(
                         "~/Scripts/Angular/Controllers/subsequencesCalculation.js",
                         "~/Scripts/Angular/Components/mattersTable.js"));

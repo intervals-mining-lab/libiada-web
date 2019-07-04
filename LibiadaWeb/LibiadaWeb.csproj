@@ -130,6 +130,7 @@
     <Compile Include="Controllers\Calculators\CustomSequenceOrderTransformationCalculationController.cs" />
     <Compile Include="Controllers\Calculators\LocalCalculationWebApiController.cs" />
     <Compile Include="Controllers\Calculators\MusicFilesController.cs" />
+    <Compile Include="Controllers\Calculators\IntervalsCharacteristicsDistributionController.cs" />
     <Compile Include="Controllers\Calculators\OrderTransformationCalculationController.cs" />
     <Compile Include="Controllers\Calculators\OrderTransformationCharacteristicsDynamicVisualizationController.cs" />
     <Compile Include="Controllers\Calculators\OrderTransformationVizualizationController.cs" />
@@ -439,6 +440,8 @@
     <Content Include="Scripts\Angular\Controllers\matterEdit.js" />
     <Content Include="Scripts\Angular\Controllers\musicFilesResult.js" />
     <Content Include="Scripts\Angular\Controllers\orderCalculation.js" />
+    <Content Include="Scripts\Angular\Controllers\intervalsCharacteristicsDistribution.js" />
+    <Content Include="Scripts\Angular\Controllers\intervalsCharacteristicsDistributionResult.js" />
     <Content Include="Scripts\Angular\Controllers\orderTransformationCharacteristicsDynamicVisualizationResult.js" />
     <Content Include="Scripts\Angular\Controllers\orderTransformationResult.js" />
     <Content Include="Scripts\Angular\Controllers\orderTransformer.js" />
@@ -644,6 +647,8 @@
     <Content Include="Views\Sequences\FmotifsDictionary\Details.cshtml" />
     <Content Include="Views\Calculators\OrdersIntervalsDistributionsAccordance\Index.cshtml" />
     <Content Include="Views\Calculators\OrdersIntervalsDistributionsAccordance\Result.cshtml" />
+    <Content Include="Views\Calculators\IntervalsCharacteristicsDistribution\Index.cshtml" />
+    <Content Include="Views\Calculators\IntervalsCharacteristicsDistribution\Result.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

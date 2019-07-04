@@ -1,24 +1,29 @@
-﻿function OrdersIntervalsDistributionsAccordanceResultController() {
+﻿function IntervalsCharacteristicsDistributionResultController() {
     "use strict";
 
-    function ordersIntervalsDistributionsAccordanceResult($scope, $http) {
+    function intervalsCharacteristicsDistributionResult($scope, $http) {
 
         // initializes data for chart
         function fillPoints() {
             $scope.points = [];
-
+            var index = 0;
+            var chT = $scope.characteristic.Text.split("  ");
+            var ch = +$scope.characteristic.Value;
+            console.log(ch);
             for (var i = 0; i < $scope.result.length; i++) {
-                if ($scope.result[i].link === $scope.linkType.Text) {
+                if ($scope.result[i].link === chT[chT.length-1]) {
                 for (var j = 0; j < $scope.result[i].accordance.length; j++) {
                     var distributionIntervals = $scope.result[i].accordance[j].distributionIntervals;
                     var orders = $scope.result[i].accordance[j].orders;
-                    $scope.points.push({
-                        id: j,
-                        distributionIntervals: distributionIntervals,
-                        x: j + 1,
-                        y: orders.length,
-                        orders: orders
-                    });
+                    for (var k = 0; k < orders.length; k++) {
+                        $scope.points.push({
+                            id: index++,
+                            distributionIntervals: distributionIntervals,
+                            x: j + 1,
+                            y: orders[k].characteristics.Characteristics[ch],
+                            order: orders[k].order
+                        });
+                    }
                     }
                 }
             }
@@ -28,27 +33,12 @@
         // constructs string representing tooltip text (inner html)
         function fillPointTooltip(d) {
             var tooltipContent = [];
-            tooltipContent.push("Distribution intervals: ");
-            var pointsIntervals = [];
-            for (var i = 0; i < d.distributionIntervals.length; i++) {
-                pointsIntervals.push(d.distributionIntervals[i].interval)
-            }
-            tooltipContent.push(pointsIntervals.join("|"));
-            var pointsCounts = [];
-            for (var i = 0; i < d.distributionIntervals.length; i++) {
-                pointsCounts.push(d.distributionIntervals[i].count)
-            }
-            tooltipContent.push(pointsCounts.join("|"));
-            tooltipContent.push("Count of orders: " + d.orders.length);
-            tooltipContent.push("Orders: ");
 
 
-            var pointsOrders = [];
-            for (var i = 0; i < d.orders.length && i < 20; i++) {
-                pointsOrders.push(d.orders[i]);
-            }
+            var pointsOrder = [];
+                pointsOrder.push(d.order);
 
-            tooltipContent.push(pointsOrders.join("<br/>"));
+            tooltipContent.push(pointsOrder.join("<br/>"));
 
             return tooltipContent.join("</br>");
         }
@@ -60,6 +50,21 @@
             tooltip.style("opacity", 0.9);
 
             var tooltipHtml = [];
+            tooltipHtml.push("Characterisctic value: ");
+            tooltipHtml.push(d.y);
+            tooltipHtml.push("Distribution intervals: ");
+            var pointsIntervals = [];
+            for (var i = 0; i < d.distributionIntervals.length; i++) {
+                pointsIntervals.push(d.distributionIntervals[i].interval)
+            }
+            tooltipHtml.push(pointsIntervals.join("|"));
+            var pointsCounts = [];
+            for (var i = 0; i < d.distributionIntervals.length; i++) {
+                pointsCounts.push(d.distributionIntervals[i].count)
+            }
+            tooltipHtml.push(pointsCounts.join("|"));
+            tooltipHtml.push("Orders: ");
+
 
             tooltip.selectedDots = svg.selectAll(".dot")
                 .filter(function (dot) {
@@ -200,11 +205,13 @@
                 .attr("transform", "translate(0," + height + ")")
                 .call(xAxis);
 
+            var chTX = $scope.characteristic.Text.split("  ");
+
             svg.append("text")
                 .attr("class", "label")
                 .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top) + ")")
                 .style("text-anchor", "middle")
-                .text("Intervals distributon link " + $scope.linkType.Text)
+                .text("Intervals distributon link " + chTX[chTX.length-1])
                 .style("font-size", "12pt");
 
             // y-axis
@@ -219,7 +226,7 @@
                 .attr("x", 0 - (height / 2))
                 .attr("dy", ".71em")
                 .style("text-anchor", "middle")
-                .text("Count of orders")
+                .text($scope.characteristic.Text)
                 .style("font-size", "12pt");
 
             // draw dots
@@ -236,6 +243,8 @@
                 .style("fill", function (d) { return color(cValue(d)); })
                 .style("stroke", function (d) { return color(cValue(d)); })
                 .on("click", function (d) { return $scope.showTooltip(d, tooltip, d3.select(this), svg); });
+
+            console.log($scope);
             
         }
 
@@ -261,6 +270,7 @@
         $http.get("/api/TaskManagerWebApi/" + $scope.taskId)
             .then(function (data) {
                 MapModelFromJson($scope, JSON.parse(data.data));
+                console.log($scope);
 				$scope.loading = false;
                 
             }, function () {
@@ -269,6 +279,6 @@
             });
     }
 
-    angular.module("libiada").controller("OrdersIntervalsDistributionsAccordanceResultCtrl", ["$scope", "$http", ordersIntervalsDistributionsAccordanceResult]);
+    angular.module("libiada").controller("IntervalsCharacteristicsDistributionResultCtrl", ["$scope", "$http", intervalsCharacteristicsDistributionResult]);
 	
 }

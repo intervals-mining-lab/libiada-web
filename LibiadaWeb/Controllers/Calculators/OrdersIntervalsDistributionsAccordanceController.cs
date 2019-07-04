@@ -99,9 +99,9 @@ namespace LibiadaWeb.Controllers.Calculators
                                 }
                             }
                         }
-                        if (accordance.Keys.Any(intervals => intervals.SequenceEqual(fullIntervals)))
+                        if (accordance.Keys.Any(intervals => intervals.All(i1 => fullIntervals.Any(i2 => i2.Key == i1.Key && i2.Value == i1.Value))))
                         {
-                            accordance[accordance.Keys.First(intervals => intervals.SequenceEqual(fullIntervals))].Add(order);
+                            accordance[accordance.Keys.First(intervals => intervals.All(i1 => fullIntervals.Any(i2 => i2.Key == i1.Key && i2.Value == i1.Value)))].Add(order);
                         }
                         else
                         {
