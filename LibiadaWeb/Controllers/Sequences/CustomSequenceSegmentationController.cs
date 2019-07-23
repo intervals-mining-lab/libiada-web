@@ -1,4 +1,6 @@
-﻿namespace LibiadaWeb.Controllers.Sequences
+﻿using Segmenter.Model;
+
+namespace LibiadaWeb.Controllers.Sequences
 {
     using System.Collections.Generic;
     using System.Web;
@@ -36,36 +38,60 @@
             ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object>
                                {
                                    { "thresholds", EnumHelper.GetSelectList(typeof(Threshold)) },
-                                   { "segmentationCriterions", EnumHelper.GetSelectList(typeof(SegmentationCriterion)) },
+                                   { "segmentationCriterion", EnumHelper.GetSelectList(typeof(SegmentationCriterion)) },
                                    { "deviationCalculationMethods", EnumHelper.GetSelectList(typeof(DeviationCalculationMethod)) }
                                });
             return View();
         }
 
-        /// <summary>
-        /// The index.
-        /// </summary>
-        /// <param name="customSequences">
-        /// The custom sequences.
-        /// </param>
-        /// <param name="file">
-        /// The file.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Index(
             string[] customSequences,
-            HttpPostedFileBase[] file)
+            HttpPostedFileBase[] file,
+            double leftBorder,
+            double rightBorder,
+            double step,
+            double precision,
+            Threshold threshold,
+            int wordLengthDecrement,
+            SegmentationCriterion segmentationCriterion,
+            int wordLength,
+            DeviationCalculationMethod deviationCalculationMethod,
+            int balance)
         {
             return CreateTask(() =>
             {
+                string chain;
+                string chainName;
+
+
+
+                Input inputData = new Input
+                {
+                    Seeker = deviationCalculationMethod,
+                    Algorithm = 0,
+                    Balance = balance,
+                    Chain = chain,
+                    ChainName = chainName,
+                    LeftBound = leftBorder,
+                    RightBound = rightBorder,
+                    Precision = precision,
+                    Step = step,
+                    StopCriterion = segmentationCriterion,
+                    ThresholdMethod = threshold,
+                    WindowDecrement = wordLengthDecrement,
+                    WindowLength = wordLength
+                };
+
+
+                var segmenter = new Algorithm(inputData);
+
                 var result = new Dictionary<string, object>
                 {
 
                 };
+
                 return new Dictionary<string, object>
                        {
                            { "data", JsonConvert.SerializeObject(result) }
