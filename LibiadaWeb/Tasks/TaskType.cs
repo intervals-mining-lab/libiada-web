@@ -233,6 +233,20 @@
         /// </summary>
         [Display(Name = "Order transformation characteristics dynamic visualization")]
         [TaskClass(typeof(OrderTransformationCharacteristicsDynamicVisualizationController))]
-        OrderTransformationCharacteristicsDynamicVisualization = 32
+        OrderTransformationCharacteristicsDynamicVisualization = 32,
+
+        /// <summary>
+        /// Calculate accordance of orders by intervals distributions.
+        /// </summary>
+        [Display(Name = "Calculate accordance of orders by intervals distributions")]
+        [TaskClass(typeof(OrdersIntervalsDistributionsAccordanceController))]
+        OrdersIntervalsDistributionsAccordance = 33,
+
+        /// <summary>
+        /// Calculate characteristics of intervals distributions.
+        /// </summary>
+        [Display(Name = "Calculate characteristics of intervals distributions")]
+        [TaskClass(typeof(IntervalsCharacteristicsDistributionController))]
+        IntervalsCharacteristicsDistribution = 34
     }
 }

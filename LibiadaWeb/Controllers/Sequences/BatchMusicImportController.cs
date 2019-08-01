@@ -16,7 +16,7 @@
     public class BatchMusicImportController : AbstractResultController
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BatchMusicImportController"/> class.
+        /// The batch music import controller.
         /// </summary>
         public BatchMusicImportController() : base(TaskType.BatchMusicImport)
         {
@@ -28,6 +28,12 @@
             return View();
         }
 
+        /// <summary>
+        /// Imports sequences from uploaded MusicXML files.
+        /// </summary>
+        /// <param name="files">
+        /// Uploaded MusicXML files.</param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Index(HttpPostedFileBase[] files)
