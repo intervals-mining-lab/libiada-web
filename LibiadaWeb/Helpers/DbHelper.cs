@@ -179,7 +179,7 @@
         }
 
         /// <summary>
-        /// Gets fmotif's alphabet ids.
+        /// Gets music chain's alphabet ids.
         /// </summary>
         /// <param name="db">
         /// Database connection.
@@ -197,7 +197,7 @@
         }
 
         /// <summary>
-        /// Gets building of fmotif by id.
+        /// Gets building of music chain by id.
         /// </summary>
         /// <param name="db">
         /// Database connection.

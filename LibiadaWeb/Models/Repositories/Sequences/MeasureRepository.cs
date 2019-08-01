@@ -10,15 +10,34 @@
     using Npgsql;
     using NpgsqlTypes;
 
+    /// <summary>
+    /// The measure repository.
+    /// </summary>
     public class MeasureRepository : IMeasureRepsitory
     {
+        /// <summary>
+        /// The db.
+        /// </summary>
         private readonly LibiadaWebEntities db;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MeasureRepository"/> class.
+        /// </summary>
+        /// <param name="db">
+        /// The db.
+        /// </param>
         public MeasureRepository(LibiadaWebEntities db)
         {
             this.db = db;
         }
 
+        /// <summary>
+        /// The get or create measure in db.
+        /// </summary>
+        /// <param name="alphabet">
+        /// The alphabet.
+        /// </param>
+        /// <returns></returns>
         public long[] GetOrCreateMeasuresInDb(Alphabet alphabet)
         {
             var result = new long[alphabet.Cardinality];
@@ -30,6 +49,15 @@
             return result;
         }
 
+        /// <summary>
+        /// Saves measures to db.
+        /// </summary>
+        /// <param name="measure">
+        /// The measure.
+        /// </param>
+        /// <returns>
+        /// The <see cref="long"/>.
+        /// </returns>
         public long CreateMeasure(Measure measure)
         {
             var measureChain= new BaseChain(measure.NoteList.Cast<IBaseObject>().ToList());
@@ -64,6 +92,21 @@
             return Create(measure, notes, measureChain.Building);
         }
 
+        /// <summary>
+        /// The insert.
+        /// </summary>
+        /// <param name="measure">
+        /// The measure.
+        /// </param>
+        /// <param name="alphabet">
+        /// The alphabet.
+        /// </param>
+        /// <param name="building">
+        /// The building.
+        /// </param>
+        /// <returns>
+        /// The <see cref="long"/>.
+        /// </returns>
         public long Create(Measure measure, long[] alphabet, int[] building)
         {
             List<object> parameters = FillParams(measure, alphabet, building);
@@ -95,6 +138,21 @@
             return measure.Id;
         }
 
+        /// <summary>
+        /// The fill parameters.
+        /// </summary>
+        /// <param name="measure">
+        /// The measure.
+        /// </param>
+        /// <param name="alphabet">
+        /// The alphabet.
+        /// </param>
+        /// <param name="building">
+        /// The building.
+        /// </param>
+        /// <returns>
+        /// The <see cref="List{Object}"/>.
+        /// </returns>
         protected List<object> FillParams(Measure measure, long[] alphabet, int[] building)
         {
             measure.Id = DbHelper.GetNewElementId(db);
@@ -165,6 +223,9 @@
             return parameters;
         }
 
+        /// <summary>
+        /// The dispose.
+        /// </summary>
         public void Dispose()
         {
             db.Dispose();

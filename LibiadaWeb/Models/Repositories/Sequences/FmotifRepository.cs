@@ -11,15 +11,36 @@
     using Npgsql;
     using NpgsqlTypes;
 
+    /// <summary>
+    /// The Fmotif repository.
+    /// </summary>
     public class FmotifRepository : IFmotifRepository
     {
+        /// <summary>
+        /// The db.
+        /// </summary>
         private readonly LibiadaWebEntities db;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FmotifRepository"/> class.
+        /// </summary>
+        /// <param name="db">
+        /// The db.
+        /// </param>
         public FmotifRepository(LibiadaWebEntities db)
         {
             this.db = db;
         }
 
+        /// <summary>
+        /// The get or create Fmotifs in db.
+        /// </summary>
+        /// <param name="alphabet">
+        /// The alphabet.
+        /// </param>
+        /// <returns>
+        /// The <see cref="T:long[]"/>.
+        /// </returns>
         public long[] GetOrCreateFmotifsInDb(Alphabet alphabet)
         {
             var result = new long[alphabet.Cardinality];
@@ -31,6 +52,15 @@
             return result;
         }
 
+        /// <summary>
+        /// Saves Fmotifs to db.
+        /// </summary>
+        /// <param name="fmotif">
+        /// The Fmotif.
+        /// </param>
+        /// <returns>
+        /// The <see cref="long"/>.
+        /// </returns>
         public long CreateFmotif(Fmotif fmotif)
         {
             var fmotifChain = new BaseChain(fmotif.NoteList.Cast<IBaseObject>().ToList());
@@ -62,6 +92,21 @@
             return Create(fmotif, notes, fmotifChain.Building);
         }
 
+        /// <summary>
+        /// The insert.
+        /// </summary>
+        /// <param name="fmotif">
+        /// The Fmotif.
+        /// </param>
+        /// <param name="alphabet">
+        /// The alphabet.
+        /// </param>
+        /// <param name="building">
+        /// The building.
+        /// </param>
+        /// <returns>
+        /// The <see cref="long"/>.
+        /// </returns>
         public long Create(Fmotif fmotif, long[] alphabet, int[] building)
         {
             List<object> parameters = FillParams(fmotif, alphabet, building);
@@ -85,6 +130,21 @@
             return fmotif.Id;
         }
 
+        /// <summary>
+        /// The fill parameters.
+        /// </summary>
+        /// <param name="fmotif">
+        /// The Fmotif.
+        /// </param>
+        /// <param name="alphabet">
+        /// The alphabet.
+        /// </param>
+        /// <param name="building">
+        /// The building.
+        /// </param>
+        /// <returns>
+        /// The <see cref="List{Object}"/>.
+        /// </returns>
         protected List<object> FillParams(Fmotif fmotif, long[] alphabet, int[] building)
         {
             fmotif.Id = DbHelper.GetNewElementId(db);
@@ -131,6 +191,9 @@
             return parameters;
         }
 
+        /// <summary>
+        /// The dispose.
+        /// </summary>
         public void Dispose()
         {
             db.Dispose();
