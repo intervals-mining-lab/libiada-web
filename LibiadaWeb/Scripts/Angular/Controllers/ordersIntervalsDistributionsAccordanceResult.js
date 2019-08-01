@@ -1,22 +1,26 @@
-﻿function SequencesOrderDistributionResultController() {
+﻿function OrdersIntervalsDistributionsAccordanceResultController() {
     "use strict";
 
-    function sequencesOrderDistributionResult($scope, $http) {
+    function ordersIntervalsDistributionsAccordanceResult($scope, $http) {
 
         // initializes data for chart
         function fillPoints() {
             $scope.points = [];
 
             for (var i = 0; i < $scope.result.length; i++) {
-                var order = $scope.result[i].order;
-                var sequences = $scope.result[i].sequences;
-                $scope.points.push({
-                    id: i,
-                    order: order,
-                    x: i + 1,
-                    y: sequences.length,
-                    sequences: sequences
-                });
+                if ($scope.result[i].link === $scope.linkType.Text) {
+                for (var j = 0; j < $scope.result[i].accordance.length; j++) {
+                    var distributionIntervals = $scope.result[i].accordance[j].distributionIntervals;
+                    var orders = $scope.result[i].accordance[j].orders;
+                    $scope.points.push({
+                        id: j,
+                        distributionIntervals: distributionIntervals,
+                        x: j + 1,
+                        y: orders.length,
+                        orders: orders
+                    });
+                    }
+                }
             }
         }
 
@@ -24,17 +28,27 @@
         // constructs string representing tooltip text (inner html)
         function fillPointTooltip(d) {
             var tooltipContent = [];
-            tooltipContent.push("Order: " + d.order);
-            tooltipContent.push("Count of sequences: " + d.sequences.length);
-            tooltipContent.push("Sequences: ");
+            tooltipContent.push("Distribution intervals: ");
+            var pointsIntervals = [];
+            for (var i = 0; i < d.distributionIntervals.length; i++) {
+                pointsIntervals.push(d.distributionIntervals[i].interval)
+            }
+            tooltipContent.push(pointsIntervals.join("|"));
+            var pointsCounts = [];
+            for (var i = 0; i < d.distributionIntervals.length; i++) {
+                pointsCounts.push(d.distributionIntervals[i].count)
+            }
+            tooltipContent.push(pointsCounts.join("|"));
+            tooltipContent.push("Count of orders: " + d.orders.length);
+            tooltipContent.push("Orders: ");
 
 
-            var pointsSequences = [];
-            for (var i = 0; i < d.sequences.length && i < 20; i++) {
-                pointsSequences.push(d.sequences[i]);
+            var pointsOrders = [];
+            for (var i = 0; i < d.orders.length && i < 20; i++) {
+                pointsOrders.push(d.orders[i]);
             }
 
-            tooltipContent.push(pointsSequences.join("<br/>"));
+            tooltipContent.push(pointsOrders.join("<br/>"));
 
             return tooltipContent.join("</br>");
         }
@@ -190,7 +204,7 @@
                 .attr("class", "label")
                 .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top) + ")")
                 .style("text-anchor", "middle")
-                .text("Orders")
+                .text("Intervals distributon link " + $scope.linkType.Text)
                 .style("font-size", "12pt");
 
             // y-axis
@@ -205,7 +219,7 @@
                 .attr("x", 0 - (height / 2))
                 .attr("dy", ".71em")
                 .style("text-anchor", "middle")
-                .text("Count of sequences")
+                .text("Count of orders")
                 .style("font-size", "12pt");
 
             // draw dots
@@ -247,6 +261,7 @@
         $http.get("/api/TaskManagerWebApi/" + $scope.taskId)
             .then(function (data) {
                 MapModelFromJson($scope, JSON.parse(data.data));
+                console.log($scope);
 				$scope.loading = false;
                 
             }, function () {
@@ -255,6 +270,6 @@
             });
     }
 
-	angular.module("libiada").controller("SequencesOrderDistributionResultCtrl", ["$scope", "$http", sequencesOrderDistributionResult]);
+    angular.module("libiada").controller("OrdersIntervalsDistributionsAccordanceResultCtrl", ["$scope", "$http", ordersIntervalsDistributionsAccordanceResult]);
 	
 }
