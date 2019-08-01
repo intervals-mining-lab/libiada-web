@@ -245,6 +245,9 @@
             /// </summary>
             public readonly string SequenceType;
 
+            /// <summary>
+            /// The matters sequences count.
+            /// </summary>
             public readonly int SequencesCount;
 
             /// <summary>

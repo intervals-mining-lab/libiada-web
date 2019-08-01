@@ -11,7 +11,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using LibiadaCore.Music;
     using LibiadaCore.Music.MusicXml;
 
-    using LibiadaWeb.Helpers;
+    using Helpers;
     using Npgsql;
     using NpgsqlTypes;
 
@@ -20,9 +20,14 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     /// </summary>
     public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepository
     {
-
+        /// <summary>
+        /// The Fmotifs repository.
+        /// </summary>
         protected readonly FmotifRepository FmotifRepository;
 
+        /// <summary>
+        /// The measures repository.
+        /// </summary>
         protected readonly MeasureRepository MeasureRepository;
 
         /// <summary>

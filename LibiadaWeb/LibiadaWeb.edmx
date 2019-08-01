@@ -283,7 +283,6 @@
           <Property Name="onumerator" Type="int4" Nullable="false" />
           <Property Name="odenominator" Type="int4" Nullable="false" />
           <Property Name="triplet" Type="bool" Nullable="false" />
-          <Property Name="priority" Type="int4" />
           <Property Name="tie" Type="int2" Nullable="false" />
         </EntityType>
         <EntityType Name="note_pitch">
@@ -1328,7 +1327,7 @@
           <Property Name="RemoteId" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
-          <Property Name="PauseTreatment" Type="Int16" Nullable="false" />
+          <Property Name="PauseTreatment" Type="LibiadaWebModel.PauseTreatment" Nullable="false" />
           <Property Name="SequentialTransfer" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Matter" Relationship="Self.fk_music_chain_matter" FromRole="MusicSequence" ToRole="Matter" />
           <NavigationProperty Name="BinaryCharacteristicValue" Relationship="Self.fk_binary_characteristic_music_chain" FromRole="MusicSequence" ToRole="BinaryCharacteristicValue" />
@@ -1369,7 +1368,6 @@
           <Property Name="Onumerator" Type="Int32" Nullable="false" />
           <Property Name="Odenominator" Type="Int32" Nullable="false" />
           <Property Name="Triplet" Type="Boolean" Nullable="false" />
-          <Property Name="Priority" Type="Int32" />
           <Property Name="Tie" Type="LibiadaWebModel.Tie" Nullable="false" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <NavigationProperty Name="Pitch" Relationship="Self.note_pitch" FromRole="Note" ToRole="Pitch" />
@@ -2108,6 +2106,7 @@
         </Association>
         <EnumType Name="ArrangementType" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.ArrangementManagers.ArrangementType" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="SequenceGroupType" UnderlyingType="Int16" a:ExternalTypeName="SequenceGroupType" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="PauseTreatment" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Music.PauseTreatment" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
 
       </Schema>
     </edmx:ConceptualModels>
@@ -2404,7 +2403,6 @@
                 <ScalarProperty Name="Onumerator" ColumnName="onumerator" />
                 <ScalarProperty Name="Odenominator" ColumnName="odenominator" />
                 <ScalarProperty Name="Triplet" ColumnName="triplet" />
-                <ScalarProperty Name="Priority" ColumnName="priority" />
                 <ScalarProperty Name="Tie" ColumnName="tie" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
               </MappingFragment>
