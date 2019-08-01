@@ -141,6 +141,12 @@
             bundles.Add(new ScriptBundle("~/bundles/controllers/OrdersIntervalsDistributionsAccordanceResultController").Include(
                 "~/Scripts/Angular/Controllers/ordersIntervalsDistributionsAccordanceResult.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/controllers/IntervalsCharacteristicsDistributionController").Include(
+                "~/Scripts/Angular/Controllers/intervalsCharacteristicsDistribution.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/controllers/IntervalsCharacteristicsDistributionResultController").Include(
+                "~/Scripts/Angular/Controllers/intervalsCharacteristicsDistributionResult.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/controllers/SubsequencesCalculationController").Include(
                         "~/Scripts/Angular/Controllers/subsequencesCalculation.js",
                         "~/Scripts/Angular/Components/mattersTable.js"));
@@ -190,6 +196,18 @@
 
             bundles.Add(new StyleBundle("~/Content/genesMap").Include(
                         "~/Content/GenesMap.css"));
+            bundles.Add(new ScriptBundle("~/bundles/midijs").Include(
+                        "~/Scripts/midijs/inc/shim/Base64.js",
+                        "~/Scripts/midijs/inc/shim/Base64binary.js",
+                        "~/Scripts/midijs/inc/shim/WebAudioAPI.js",
+                        "~/Scripts/midijs/js/midi/audioDetect.js",
+                        "~/Scripts/midijs/js/midi/gm.js",
+                        "~/Scripts/midijs/js/midi/loader.js",
+                        "~/Scripts/midijs/js/midi/plugin.audiotag.js",
+                        "~/Scripts/midijs/js/midi/plugin.webaudio.js",
+                        "~/Scripts/midijs/js/midi/plugin.webmidi.js",
+                        "~/Scripts/midijs/js/util/dom_request_xhr.js",
+                        "~/Scripts/midijs/js/util/dom_request_script.js"));
 
             // BundleTable.EnableOptimizations = true;
         }

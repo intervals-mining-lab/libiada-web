@@ -99,34 +99,33 @@
                 for (int i = 0; i < matterIds.Length; i++)
                 {
                     long matterId = matterIds[i];
-                    var characteristics = new double[transformationsSequence.Length];
-                    for (int k = 0; k < transformationsSequence.Length; k++)
+                    long sequenceId;
+                    if (matters[matterId].Nature == Nature.Literature)
                     {
-                        long sequenceId;
-                        if (matters[matterId].Nature == Nature.Literature)
-                        {
-                            sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId &&
-                                                                           l.Notation == notation
-                                                                           && l.Language == language
-                                                                           && translator == l.Translator).Id;
-                        }
-                        else
-                        {
-                            sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
-                        }
-                        Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
-                        FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
-                        IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
+                        sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId &&
+                                                                       l.Notation == notation
+                                                                       && l.Language == language
+                                                                       && translator == l.Translator).Id;
+                    }
+                    else
+                    {
+                        sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
+                    }
 
-                        Chain sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
-                        for (int l = 0; l < iterationsCount; l++)
+                    Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
+                    FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
+                    IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
+
+                    Chain sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
+
+                    var characteristics = new double[transformationsSequence.Length * iterationsCount];
+                    for (int j = 0; j < iterationsCount; j++)
+                    {
+                        for (int k = 0; k < transformationsSequence.Length; k++)
                         {
-                            for (int j = 0; j < transformationsSequence.Length; j++)
-                            {
-                                sequence = transformationsSequence[j] == OrderTransformation.Dissimilar ? DissimilarChainFactory.Create(sequence)
-                                                                     : HighOrderFactory.Create(sequence, EnumExtensions.GetLink(transformationsSequence[j]));
-                                characteristics[k] = calculator.Calculate(sequence, link);
-                            }
+                            sequence = transformationsSequence[k] == OrderTransformation.Dissimilar ? DissimilarChainFactory.Create(sequence)
+                                                                 : HighOrderFactory.Create(sequence, transformationsSequence[k].GetLink());
+                            characteristics[transformationsSequence.Length * j + k] = calculator.Calculate(sequence, link);
                         }
                     }
 
@@ -136,17 +135,11 @@
                 var characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
 
 
-                var transformations = new Dictionary<int, string>();
-                for (int i = 0; i < transformationsSequence.Length; i++)
-                {
-                    transformations.Add(i, transformationsSequence[i].GetDisplayValue());
-                }
-
                 var result = new Dictionary<string, object>
                                  {
                                      { "characteristics", mattersCharacteristics },
-                                     { "characteristicNames", characteristicName },
-                                     { "transformationsList", transformations },
+                                     { "characteristicName", characteristicName },
+                                     { "transformationsList", transformationsSequence.Select(ts => ts.GetDisplayValue()) },
                                      { "iterationsCount", iterationsCount }
                                  };
 

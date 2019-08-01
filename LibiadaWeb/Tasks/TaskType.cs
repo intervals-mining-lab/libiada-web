@@ -240,6 +240,13 @@
         /// </summary>
         [Display(Name = "Calculate accordance of orders by intervals distributions")]
         [TaskClass(typeof(OrdersIntervalsDistributionsAccordanceController))]
-        OrdersIntervalsDistributionsAccordance = 33
+        OrdersIntervalsDistributionsAccordance = 33,
+
+        /// <summary>
+        /// Calculate characteristics of intervals distributions.
+        /// </summary>
+        [Display(Name = "Calculate characteristics of intervals distributions")]
+        [TaskClass(typeof(IntervalsCharacteristicsDistributionController))]
+        IntervalsCharacteristicsDistribution = 34
     }
 }
