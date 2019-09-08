@@ -249,19 +249,26 @@
         [Display(Name = "Calculate characteristics of intervals distributions")]
         [TaskClass(typeof(IntervalsCharacteristicsDistributionController))]
         IntervalsCharacteristicsDistribution = 34,
-		
-		/// <summary>
+
+        /// <summary>
+        /// Segmentation task.
+        /// </summary>
+        [Display(Name = "Segmentation")]
+        [TaskClass(typeof(CustomSequenceSegmentationController))]
+        Segmentation = 35,
+
+        /// <summary>
         /// Segmentation task.
         /// </summary>
         [Display(Name = "Custom sequence segmentation")]
         [TaskClass(typeof(CustomSequenceSegmentationController))]
-        CustomSequenceSegmentation = 35,
+        CustomSequenceSegmentation = 36,
 
         /// <summary>
         /// Poem segmentation task.
         /// </summary>
         [Display(Name = "Poem segmentation")]
         [TaskClass(typeof(PoemSegmentationController))]
-        PoemSegmentation = 36
+        PoemSegmentation = 37
     }
 }

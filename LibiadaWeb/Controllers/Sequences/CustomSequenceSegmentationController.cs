@@ -23,7 +23,7 @@ namespace LibiadaWeb.Controllers.Sequences
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomSequenceSegmentationController"/> class.
         /// </summary>
-        public CustomSequenceSegmentationController() : base(TaskType.CustomSequenceSegmentation)
+        public CustomSequenceSegmentationController() : base(TaskType.Segmentation)
         {
         }
 
@@ -36,11 +36,11 @@ namespace LibiadaWeb.Controllers.Sequences
         public ActionResult Index()
         {
             ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object>
-                               {
-                                   { "thresholds", EnumHelper.GetSelectList(typeof(Threshold)) },
-                                   { "segmentationCriterion", EnumHelper.GetSelectList(typeof(SegmentationCriterion)) },
-                                   { "deviationCalculationMethods", EnumHelper.GetSelectList(typeof(DeviationCalculationMethod)) }
-                               });
+                {
+                    { "thresholds", EnumHelper.GetSelectList(typeof(Threshold)) },
+                    { "segmentationCriterion", EnumHelper.GetSelectList(typeof(SegmentationCriterion)) },
+                    { "deviationCalculationMethods", EnumHelper.GetSelectList(typeof(DeviationCalculationMethod)) }
+                });
             return View();
         }
 
@@ -93,9 +93,9 @@ namespace LibiadaWeb.Controllers.Sequences
                 };
 
                 return new Dictionary<string, object>
-                       {
-                           { "data", JsonConvert.SerializeObject(result) }
-                       };
+                    {
+                        { "data", JsonConvert.SerializeObject(result) }
+                    };
             });
         }
     }
