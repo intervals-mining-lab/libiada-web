@@ -2304,12 +2304,16 @@ ALTER TABLE music_chain ADD CONSTRAINT uk_music_chain UNIQUE (matter_id, notatio
 ALTER TABLE data_chain ADD CONSTRAINT uk_data_chain UNIQUE (notation, matter_id);
 
 -- 06.03.2019
--- Change music_chain structure
+-- Change music_chain structure.
 ALTER TABLE music_chain ADD COLUMN pause_treatment smallint NOT NULL DEFAULT 0;
 ALTER TABLE music_chain ADD COLUMN sequential_transfer boolean NOT NULL DEFAULT false;
 ALTER TABLE music_chain DROP CONSTRAINT uk_music_chain;
 ALTER TABLE music_chain ADD CONSTRAINT uk_music_chain UNIQUE (matter_id, notation, pause_treatment, sequential_transfer);
 ALTER TABLE music_chain ADD CONSTRAINT chk_pause_treatment_and_sequential_transfer CHECK ((notation = 6 AND pause_treatment != 0) OR ((notation = 7 OR notation = 8) AND pause_treatment = 0 AND NOT sequential_transfer));
 
+--03.06.2019
+-- Delete priority from notes.
+
+ALTER TABLE note DROP COLUMN priority;
 
 COMMIT;

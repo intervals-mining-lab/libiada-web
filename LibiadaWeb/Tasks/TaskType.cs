@@ -237,16 +237,31 @@
 
         /// <summary>
         /// Custom sequence segmentation task.
+        /// Accordance of orders by intervals distributions.
+        /// </summary>
+        [Display(Name = "Calculate accordance of orders by intervals distributions")]
+        [TaskClass(typeof(OrdersIntervalsDistributionsAccordanceController))]
+        OrdersIntervalsDistributionsAccordance = 33,
+
+        /// <summary>
+        /// Calculate characteristics of intervals distributions.
+        /// </summary>
+        [Display(Name = "Calculate characteristics of intervals distributions")]
+        [TaskClass(typeof(IntervalsCharacteristicsDistributionController))]
+        IntervalsCharacteristicsDistribution = 34,
+		
+		/// <summary>
+        /// Segmentation task.
         /// </summary>
         [Display(Name = "Custom sequence segmentation")]
         [TaskClass(typeof(CustomSequenceSegmentationController))]
-        CustomSequenceSegmentation = 33,
+        CustomSequenceSegmentation = 35,
 
         /// <summary>
         /// Poem segmentation task.
         /// </summary>
         [Display(Name = "Poem segmentation")]
         [TaskClass(typeof(PoemSegmentationController))]
-        PoemSegmentation = 34
+        PoemSegmentation = 36
     }
 }

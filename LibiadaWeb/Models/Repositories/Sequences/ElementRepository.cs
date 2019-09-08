@@ -110,7 +110,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                         Onumerator = note.Duration.OriginalNumerator,
                         Odenominator = note.Duration.OriginalDenominator,
                         Tie = note.Tie,
-                        Priority = note.Priority,
                         Pitch = db.Pitch.Where(p => pitches.Contains(p.Id)).ToList(),
                         Notation = Notation.Notes
                     };

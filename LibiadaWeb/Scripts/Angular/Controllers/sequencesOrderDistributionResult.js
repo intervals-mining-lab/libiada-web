@@ -115,12 +115,18 @@
             var xMargin = (xMax - xMin) * 0.05;
 
             var xScale = d3.scaleLinear()
-                .domain([xMin - xMargin, xMax + xMargin])
-                .range([0, width]);
-            var xAxis = d3.axisBottom(xScale)
-                .tickSizeInner(-height)
-                .tickSizeOuter(0)
-                .tickPadding(10);
+                    .domain([xMin - xMargin, xMax + xMargin])
+                    .range([0, width]);
+            var xAxis = $scope.points.length > 10 ?
+                d3.axisBottom(xScale)
+                    .tickSizeInner(-height)
+                    .tickSizeOuter(0)
+                    .tickPadding(10) :
+                d3.axisBottom(xScale)
+                    .ticks($scope.points.length)
+                    .tickSizeInner(-height)
+                    .tickSizeOuter(0)
+                    .tickPadding(10);
 
             $scope.xMap = function (d) { return xScale($scope.xValue(d)); };
 
@@ -130,13 +136,24 @@
             var yMin = d3.min($scope.points, $scope.yValue);
             var yMargin = (yMax - yMin) * 0.05;
 
-            var yScale = d3.scaleLinear()
-                .domain([yMin - yMargin, yMax + yMargin])
-                .range([height, 0]);
-            var yAxis = d3.axisLeft(yScale)
-                .tickSizeInner(-width)
-                .tickSizeOuter(0)
-                .tickPadding(10);
+            var yScale = yMax - yMin < 100 ?
+                d3.scaleLinear()
+                    .domain([yMin - yMargin, yMax + yMargin])
+                    .range([height, 0]) :
+                d3.scaleLog()
+                    .base(10)
+                    .domain([1, Math.pow(10, Math.ceil(Math.log10(yMax)))])
+                    .range([height, 0]);
+            var yAxis = yMax - yMin < 100 ?
+                d3.axisLeft(yScale)
+                    .tickSizeInner(-width)
+                    .tickSizeOuter(0)
+                    .tickPadding(10) :
+                d3.axisLeft(yScale)
+                    .tickFormat(d3.format(""))
+                    .tickSizeInner(-width)
+                    .tickSizeOuter(0)
+                    .tickPadding(10);
 
             $scope.yMap = function (d) { return yScale($scope.yValue(d)); };
 

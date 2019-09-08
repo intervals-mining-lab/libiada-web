@@ -90,16 +90,22 @@
                     int sequencesCount = localFile ? Request.Files.Count : customSequences.Length;
                     var sequencesNames = new string[sequencesCount];
                     var sequences = new Chain[sequencesCount];
-
-                    for (int i = 0; i < sequencesCount; i++)
+                    if (localFile)
                     {
-                        if (localFile)
+                        for (int i = 0; i < sequencesCount; i++)
                         {
+
                             Stream sequenceStream = FileHelper.GetFileStream(Request.Files[i]);
                             switch (fileType)
                             {
                                 case "literature":
                                     throw new NotImplementedException();
+                                case "text":
+                                    sequencesNames[i] = Request.Files[i].FileName;
+                                    using (StreamReader sr = new StreamReader(sequenceStream))
+                                    {
+                                        sequences[i] = new Chain(sr.ReadToEnd());
+                                    }
                                     break;
                                 case "image":
                                     var image = Image.Load(sequenceStream);
@@ -157,14 +163,16 @@
                                     throw new ArgumentException("Unknown file type", nameof(fileType));
                             }
                         }
-                        else
+                    }
+                    else
+                    {
+                        for (int i = 0; i < sequencesCount; i++)
                         {
                             sequences[i] = new Chain(customSequences[i].Split(delimiter).Select(el => (IBaseObject)new ValueString(el)).ToList());
                             sequencesNames[i] = $"Custom sequence {i + 1}. Length: {customSequences[i].Length}";
                         }
                     }
 
-                    
                     var sequencesCharacteristics = new SequenceCharacteristics[sequences.Length];
                     for (int j = 0; j < sequences.Length; j++)
                     {
@@ -181,10 +189,10 @@
                         }
 
                         sequencesCharacteristics[j] = new SequenceCharacteristics
-                                                          {
-                                                              MatterName = sequencesNames[j],
-                                                              Characteristics = characteristics
-                                                          };
+                        {
+                            MatterName = sequencesNames[j],
+                            Characteristics = characteristics
+                        };
                     }
 
                     var characteristicNames = new string[characteristicLinkIds.Length];
@@ -193,11 +201,11 @@
                     {
                         characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[k]);
                         characteristicsList[k] = new SelectListItem
-                                                     {
-                                                         Value = k.ToString(),
-                                                         Text = characteristicNames[k],
-                                                         Selected = false
-                                                     };
+                        {
+                            Value = k.ToString(),
+                            Text = characteristicNames[k],
+                            Selected = false
+                        };
                     }
 
                     var result = new Dictionary<string, object>

@@ -61,7 +61,7 @@
             <input class="form-control"
                    name="wordLengthDecrement"
                    id="wordLengthDecrement"
-                   type="Word length decrement"
+                   type="number"
                    min="1"
                    max="{{wordLength - 1}}"
                    step="1"
@@ -77,9 +77,9 @@
             <select class="form-control"
                     title="Segmentation criterion"
                     ng-model="segmentationCriterion"
-                    ng-options="c.Text for c in segmentationCriterions"
-                    ng-init="segmentationCriterion=segmentationCriterions[0]"
-                    id="threshold"></select>
+                    ng-options="c.Text for c in segmentationCriterion"
+                    ng-init="segmentationCriterion=segmentationCriterion[0]"
+                    id="segmentationCriterion"></select>
         </div>
     </div>
     <div class="form-group">
@@ -106,7 +106,7 @@
                     ng-model="deviationCalculationMethod"
                     ng-options="c.Text for c in deviationCalculationMethods"
                     ng-init="deviationCalculationMethod=deviationCalculationMethods[0]"
-                    id="threshold"></select>
+                    id="deviationCalculationMethod"></select>
         </div>
     </div>
     <div class="form-group">

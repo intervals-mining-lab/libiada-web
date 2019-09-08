@@ -238,6 +238,29 @@
     /// </summary>
     public class MusicSequenceDataAnnotations : CommonSequenceDataAnnotations
     {
+        /// <summary>
+        /// Gets or sets the matter id.
+        /// </summary>
+        [Display(Name = "Musical sequences")]
+        public long MatterId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the notation id.
+        /// </summary>
+        [Display(Name = "Notation")]
+        public Notation Notation { get; set; }
+
+        /// <summary>
+        /// Gets or sets the pause treatment.
+        /// </summary>
+        [Display(Name = "Pause treatment")]
+        public short PauseTreatment { get; set; }
+
+        /// <summary>
+        /// Gets or sets the sequential transfer.
+        /// </summary>
+        [Display(Name = "Sequential transfer")]
+        public bool SequentialTransfer { get; set; }
     }
 
     /// <summary>
