@@ -4,7 +4,9 @@
     function calculation($scope, filterFilter) {
         MapModelFromJson($scope, data);
 
-        $scope.nature = $scope.natures[0].Value;
+        if ($scope.natures) {
+            $scope.nature = $scope.natures[0].Value;
+        }
         $scope.disableSubmit = $scope.minimumSelectedMatters > 0;
 
         // if notation is not linked to characteristic

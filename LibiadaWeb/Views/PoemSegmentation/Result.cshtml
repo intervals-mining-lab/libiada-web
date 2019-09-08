@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "Segmentation result";
+}
+@Scripts.Render("~/bundles/loadingWindow")
+
+<h2>@ViewBag.Title</h2>
+@if (ViewBag.Error == null)
+{
+    @Html.Partial("_AngularControllerInitializer", "CalculationResultController")
+    <h3>@ViewBag.poemName</h3>
+    <br />
+    <div ng-controller="CalculationResultCtrl">
+        <table class="table table-bordered table-hover" ng-cloak>
+            <thead>
+                <tr>
+                    <th>
+                        Consonance
+                    </th>
+                    <th>
+                        Count
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="(key, value) in segmentedString">
+                    <td>{{key}}</td>
+                    <td>{{value}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>
+            <h4>Segmented Text</h4>
+            <br />
+            {{segmentedText}}
+        </p>
+        <hr />
+        <p>
+            <h4>Chain</h4>
+            <br />
+            {{poemChain}}
+        </p>
+    </div>
+
+}

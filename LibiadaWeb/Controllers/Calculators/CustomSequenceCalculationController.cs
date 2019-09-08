@@ -83,7 +83,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(short[] characteristicLinkIds, string[] customSequences, bool localFile, string fileType)
+        public ActionResult Index(short[] characteristicLinkIds, string[] customSequences, bool localFile, string fileType, char[] delimiter)
         {
             return CreateTask(() =>
                 {
@@ -98,6 +98,9 @@
                             Stream sequenceStream = FileHelper.GetFileStream(Request.Files[i]);
                             switch (fileType)
                             {
+                                case "literature":
+                                    throw new NotImplementedException();
+                                    break;
                                 case "image":
                                     var image = Image.Load(sequenceStream);
                                     var sequence = ImageProcessor.ProcessImage(image, new IImageTransformer[0], new IMatrixTransformer[0], new LineOrderExtractor());
@@ -156,7 +159,7 @@
                         }
                         else
                         {
-                            sequences[i] = new Chain(customSequences[i]);
+                            sequences[i] = new Chain(customSequences[i].Split(delimiter).Select(el => (IBaseObject)new ValueString(el)).ToList());
                             sequencesNames[i] = $"Custom sequence {i + 1}. Length: {customSequences[i].Length}";
                         }
                     }

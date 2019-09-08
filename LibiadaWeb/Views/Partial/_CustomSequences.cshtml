@@ -10,7 +10,13 @@
 <div class="form-group" ng-show="localFile">
     <div class="col-md-offset-2 col-md-10">
         <label>
-            <input type="radio" name="fileType" ng-model="fileType" value="genetic" selected/>
+            <input type="radio" name="fileType" ng-model="fileType" value="literature" selected />
+            File contains literature sequence
+        </label>
+    </div>
+    <div class="col-md-offset-2 col-md-10">
+        <label>
+            <input type="radio" name="fileType" ng-model="fileType" value="genetic" />
             File contains genetic sequence
         </label>
     </div>
@@ -53,6 +59,12 @@
         <div class="col-md-offset-2 col-md-10">
             <button type="button" class="btn btn-success" ng-init="addSequence()" ng-click="addSequence()">Add sequence</button>
         </div>
+    </div>
+</div>
+<div class="form-group" ng-if ="fileType=='literature'">
+    <label class="control-label col-md-2" for="filterInput">Delimiter:</label>
+    <div class="col-md-10">
+        <input class="form-control" type="text" ng-model="delimiter" id="delimiter" name="delimiter" />
     </div>
 </div>
 @Html.Partial("_ImageTransformers")

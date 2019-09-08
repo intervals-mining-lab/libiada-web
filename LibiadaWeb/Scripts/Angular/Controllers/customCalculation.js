@@ -27,6 +27,7 @@
 
         $scope.disableSubmit = FakeDisableSubmit;
 
+        $scope.fileType = "literature";
         $scope.customSequences = [];
         $scope.selectedImageTransformers = [];
     }

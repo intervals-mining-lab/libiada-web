@@ -161,6 +161,7 @@
     <Compile Include="Controllers\Sequences\OrderTransformationConvergenceController.cs" />
     <Compile Include="Controllers\Sequences\OrderTransformerController.cs" />
     <Compile Include="Controllers\Sequences\CustomSequenceSegmentationController.cs" />
+    <Compile Include="Controllers\Sequences\PoemSegmentationController.cs" />
     <Compile Include="Controllers\Sequences\SequenceCheckController.cs" />
     <Compile Include="Controllers\Sequences\SequenceCleanerController.cs" />
     <Compile Include="Controllers\Sequences\SequenceElementsController.cs" />
@@ -641,6 +642,8 @@
     <Content Include="Views\Calculators\OrderTransformationCharacteristicsDynamicVisualization\Index.cshtml" />
     <Content Include="Views\Calculators\OrderTransformationCharacteristicsDynamicVisualization\Result.cshtml" />
     <Content Include="Views\Sequences\FmotifsDictionary\Details.cshtml" />
+    <Content Include="Views\PoemSegmentation\Index.cshtml" />
+    <Content Include="Views\PoemSegmentation\Result.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -236,10 +236,17 @@
         OrderTransformationCharacteristicsDynamicVisualization = 32,
 
         /// <summary>
-        /// Segmentation task.
+        /// Custom sequence segmentation task.
         /// </summary>
-        [Display(Name = "Segmentation")]
+        [Display(Name = "Custom sequence segmentation")]
         [TaskClass(typeof(CustomSequenceSegmentationController))]
-        Segmentation = 33
+        CustomSequenceSegmentation = 33,
+
+        /// <summary>
+        /// Poem segmentation task.
+        /// </summary>
+        [Display(Name = "Poem segmentation")]
+        [TaskClass(typeof(PoemSegmentationController))]
+        PoemSegmentation = 34
     }
 }

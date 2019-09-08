@@ -104,6 +104,14 @@
         [Display(Name = "Mitochondrial plasmid")]
         [Description("Complete mitochondrial plasmid sequence")]
         [Nature(Nature.Genetic)]
-        MitochondrialPlasmid = 12
+        MitochondrialPlasmid = 12,
+
+        /// <summary>
+        /// Complete poem text.
+        /// </summary>
+        [Display(Name = "Complete Poem")]
+        [Description("Complete poem text")]
+        [Nature(Nature.Literature)]
+        CompletePoem = 13
     }
 }

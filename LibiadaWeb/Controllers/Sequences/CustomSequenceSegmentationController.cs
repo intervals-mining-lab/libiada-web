@@ -21,7 +21,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomSequenceSegmentationController"/> class.
         /// </summary>
-        public CustomSequenceSegmentationController() : base(TaskType.Segmentation)
+        public CustomSequenceSegmentationController() : base(TaskType.CustomSequenceSegmentation)
         {
         }
 
