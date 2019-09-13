@@ -71,41 +71,24 @@ namespace LibiadaWeb.Controllers.Calculators
                         break;
                     default: throw new ArgumentException("Invalid type of generate");
                 }
-                var result = new Dictionary<string, Dictionary<Dictionary<int, int>, List<int[]>>>();
+                var result = new Dictionary<string, Dictionary<IntervalsDistribution, List<int[]>>>();
                 foreach (var link in EnumExtensions.ToArray<Link>())
                 {
                     if (link == Link.NotApplied)
                     {
                         continue;
                     }
-                    var accordance = new Dictionary<Dictionary<int, int>, List<int[]>>();
+                    var accordance = new Dictionary<IntervalsDistribution, List<int[]>>();
                     foreach (var order in orders)
                     {
-                        var sequence = new Chain(order.Select(Convert.ToInt16).ToArray());
-                        sequence.FillIntervalManagers();
-                        var fullIntervals = new Dictionary<int, int>();
-                        foreach (var el in sequence.Alphabet.ToList())
+                        var orderIntervalsDistribution = IntervalsDistributionExtractor.GetIntervalsDistribution(order, link);
+                        if (accordance.ContainsKey(orderIntervalsDistribution))
                         {
-                            var congIntervals = sequence.CongenericChain(el).GetArrangement(link);
-                            foreach (var interval in congIntervals)
-                            {
-                                if (fullIntervals.Any(e => e.Key == interval))
-                                {
-                                    fullIntervals[interval]++;
-                                }
-                                else
-                                {
-                                    fullIntervals.Add(interval, 1);
-                                }
-                            }
-                        }
-                        if (accordance.Keys.Any(intervals => intervals.All(i1 => fullIntervals.Any(i2 => i2.Key == i1.Key && i2.Value == i1.Value))))
-                        {
-                            accordance[accordance.Keys.First(intervals => intervals.All(i1 => fullIntervals.Any(i2 => i2.Key == i1.Key && i2.Value == i1.Value)))].Add(order);
+                            accordance[orderIntervalsDistribution].Add(order);
                         }
                         else
                         {
-                            accordance.Add(fullIntervals, new List<int[]> { order });
+                            accordance.Add(orderIntervalsDistribution, new List<int[]> { order });
                         }
                     }
                     result.Add(EnumExtensions.GetDisplayValue<Link>(link), accordance);
@@ -118,7 +101,7 @@ namespace LibiadaWeb.Controllers.Calculators
                     {
                         link = r.Key.ToString(),
                         accordance = r.Value.Select(d => new {
-                            distributionIntervals = d.Key.Select(pair => new
+                            distributionIntervals = d.Key.Distribution.Select(pair => new
                             {
                                 interval = pair.Key,
                                 count = pair.Value
