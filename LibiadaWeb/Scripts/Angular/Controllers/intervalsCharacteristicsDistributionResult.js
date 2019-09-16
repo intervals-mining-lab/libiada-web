@@ -9,21 +9,20 @@
             var index = 0;
             var chT = $scope.characteristic.Text.split("  ");
             var ch = +$scope.characteristic.Value;
-            console.log(ch);
             for (var i = 0; i < $scope.result.length; i++) {
                 if ($scope.result[i].link === chT[chT.length-1]) {
-                for (var j = 0; j < $scope.result[i].accordance.length; j++) {
-                    var distributionIntervals = $scope.result[i].accordance[j].distributionIntervals;
-                    var orders = $scope.result[i].accordance[j].orders;
-                    for (var k = 0; k < orders.length; k++) {
-                        $scope.points.push({
-                            id: index++,
-                            distributionIntervals: distributionIntervals,
-                            x: j + 1,
-                            y: orders[k].characteristics.Characteristics[ch],
-                            order: orders[k].order
-                        });
-                    }
+                    for (var j = 0; j < $scope.result[i].accordance.length; j++) {
+                        var distributionIntervals = $scope.result[i].accordance[j].distributionIntervals;
+                        var orders = $scope.result[i].accordance[j].orders;
+                        for (var k = 0; k < orders.length; k++) {
+                            $scope.points.push({
+                                id: index++,
+                                distributionIntervals: distributionIntervals,
+                                x: j + 1,
+                                y: orders[k].characteristics.Characteristics[ch],
+                                order: orders[k].order
+                            });
+                        }
                     }
                 }
             }
@@ -53,16 +52,21 @@
             tooltipHtml.push("Characterisctic value: ");
             tooltipHtml.push(d.y);
             tooltipHtml.push("Distribution intervals: ");
-            var pointsIntervals = [];
+            var intervals = [];
+            //var pointsIntervals = [];
+            //for (var i = 0; i < d.distributionIntervals.length; i++) {
+            //    pointsIntervals.push(d.distributionIntervals[i].interval)
+            //}
+            //tooltipContent.push(pointsIntervals.join("|"));
+            //var pointsCounts = [];
+            //for (var i = 0; i < d.distributionIntervals.length; i++) {
+            //    pointsCounts.push(d.distributionIntervals[i].count)
+            //}
+            //tooltipContent.push(pointsCounts.join("|"));
             for (var i = 0; i < d.distributionIntervals.length; i++) {
-                pointsIntervals.push(d.distributionIntervals[i].interval)
+                intervals.push([d.distributionIntervals[i].interval, d.distributionIntervals[i].count]);
+                tooltipHtml.push(intervals[i].join("|"));
             }
-            tooltipHtml.push(pointsIntervals.join("|"));
-            var pointsCounts = [];
-            for (var i = 0; i < d.distributionIntervals.length; i++) {
-                pointsCounts.push(d.distributionIntervals[i].count)
-            }
-            tooltipHtml.push(pointsCounts.join("|"));
             tooltipHtml.push("Orders: ");
 
 
@@ -270,7 +274,6 @@
         $http.get("/api/TaskManagerWebApi/" + $scope.taskId)
             .then(function (data) {
                 MapModelFromJson($scope, JSON.parse(data.data));
-                console.log($scope);
 				$scope.loading = false;
                 
             }, function () {

@@ -12,26 +12,6 @@
     <div ng-controller="SequencesOrderDistributionResultCtrl">
         <loading-window loading = "loading" loading-screen-header = "loadingScreenHeader"></loading-window>
         <div ng-disabled="loading">
-            <div ng-repeat="order in result">
-                <table class="table table-bordered table-hover" ng-cloak>
-                    <thead>
-                        <tr>
-                            <th>
-                                #
-                            </th>
-                            <th ng-bind="order.order">
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="sequence in order.sequences">
-                            <td ng-bind="$index+1"></td>
-                            <td ng-bind="sequence"></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <br />
             <div class="form-group">
                 <label class="control-label col-md-2" for="height">Height:</label>
                 <div class="col-md-10">
@@ -46,6 +26,22 @@
             </div>
             <br />
             <input type="button" class="btn btn-default" ng-click="draw()" value="Draw" />
+            <br />
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Уровни</th>
+                        <th>Количество распределений</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="level in accordanceLevels">
+                        <td ng-bind="level.level"></td>
+                        <td ng-bind="level.distributionsCount"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <br />
             <div id="chart">
             </div>
 

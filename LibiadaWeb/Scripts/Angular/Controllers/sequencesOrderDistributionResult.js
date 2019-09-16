@@ -6,10 +6,14 @@
         // initializes data for chart
         function fillPoints() {
             $scope.points = [];
+            $scope.maxLevel = 1;
 
             for (var i = 0; i < $scope.result.length; i++) {
                 var order = $scope.result[i].order;
                 var sequences = $scope.result[i].sequences;
+                if (sequences.length > $scope.maxLevel) {
+                    $scope.maxLevel = sequences.length;
+                }
                 $scope.points.push({
                     id: i,
                     order: order,
@@ -17,6 +21,24 @@
                     y: sequences.length,
                     sequences: sequences
                 });
+            }
+        }
+
+        function fillAccordanceLevels() {
+            $scope.accordanceLevels = [];
+            for (var i = 0; i <= $scope.maxLevel; i++) {
+                var count = 0;
+                for (var j = 0; j < $scope.points.length; j++) {
+                    if ($scope.points[j].y === i) {
+                        count++;
+                    }
+                }
+                if (count !== 0) {
+                    $scope.accordanceLevels.push({
+                        level: i,
+                        distributionsCount: count
+                    });
+                }
             }
         }
 
@@ -98,6 +120,7 @@
 
         function draw() {
             $scope.fillPoints();
+            $scope.fillAccordanceLevels();
 
             // removing previous chart and tooltip if any
             d3.select(".tooltip").remove();
@@ -237,6 +260,10 @@
         $scope.height = 600;
         $scope.dotRadius = 4;
         $scope.selectedDotRadius = $scope.dotRadius * 2;
+
+        $scope.fillAccordanceLevels = fillAccordanceLevels;
+        $scope.accordanceLevels = [];
+        $scope.maxLevel = 1;
 
 		$scope.loadingScreenHeader = "Loading Data";
 		$scope.loading = true;

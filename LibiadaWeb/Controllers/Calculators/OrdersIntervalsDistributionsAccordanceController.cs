@@ -78,20 +78,8 @@ namespace LibiadaWeb.Controllers.Calculators
                     {
                         continue;
                     }
-                    var accordance = new Dictionary<IntervalsDistribution, List<int[]>>();
-                    foreach (var order in orders)
-                    {
-                        var orderIntervalsDistribution = IntervalsDistributionExtractor.GetIntervalsDistribution(order, link);
-                        if (accordance.ContainsKey(orderIntervalsDistribution))
-                        {
-                            accordance[orderIntervalsDistribution].Add(order);
-                        }
-                        else
-                        {
-                            accordance.Add(orderIntervalsDistribution, new List<int[]> { order });
-                        }
-                    }
-                    result.Add(EnumExtensions.GetDisplayValue<Link>(link), accordance);
+                    result.Add(EnumExtensions.GetDisplayValue<Link>(link), 
+                        IntervalsDistributionExtractor.GetOrdersIntervalsDistributionsAccordance(orders.ToArray(), link));
                 }
                 var list = EnumHelper.GetSelectList(typeof(Link));
                 list.RemoveAt(0);

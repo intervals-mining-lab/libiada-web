@@ -6,12 +6,15 @@
         // initializes data for chart
         function fillPoints() {
             $scope.points = [];
-
+            $scope.maxLevel = 1;
             for (var i = 0; i < $scope.result.length; i++) {
                 if ($scope.result[i].link === $scope.linkType.Text) {
                 for (var j = 0; j < $scope.result[i].accordance.length; j++) {
                     var distributionIntervals = $scope.result[i].accordance[j].distributionIntervals;
                     var orders = $scope.result[i].accordance[j].orders;
+                    if (orders.length > $scope.maxLevel) {
+                        $scope.maxLevel = orders.length;
+                    }
                     $scope.points.push({
                         id: j,
                         distributionIntervals: distributionIntervals,
@@ -20,6 +23,24 @@
                         orders: orders
                     });
                     }
+                }
+            }
+        }
+
+        function fillAccordanceLevels() {
+            $scope.accordanceLevels = [];
+            for (var i = 0; i <= $scope.maxLevel; i++) {
+                var count = 0;
+                for (var j = 0; j < $scope.points.length; j++) {
+                    if ($scope.points[j].y === i) {
+                        count++;
+                    }
+                }
+                if (count !== 0) {
+                    $scope.accordanceLevels.push({
+                        level: i,
+                        distributionsCount: count
+                    });
                 }
             }
         }
@@ -117,7 +138,7 @@
 
         function draw() {
             $scope.fillPoints();
-
+            $scope.fillAccordanceLevels();
             // removing previous chart and tooltip if any
             d3.select(".tooltip").remove();
             d3.select(".chart-svg").remove();
@@ -256,6 +277,10 @@
         $scope.height = 600;
         $scope.dotRadius = 4;
         $scope.selectedDotRadius = $scope.dotRadius * 2;
+
+        $scope.fillAccordanceLevels = fillAccordanceLevels;
+        $scope.accordanceLevels = [];
+        $scope.maxLevel = 1;
 
 		$scope.loadingScreenHeader = "Loading Data";
 		$scope.loading = true;

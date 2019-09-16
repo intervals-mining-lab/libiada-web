@@ -141,50 +141,24 @@ namespace LibiadaWeb.Controllers.Calculators
                     index[i] = i;
                 }
 
-                var resultIntervals = new Dictionary<string, Dictionary<Dictionary<int, int>, Dictionary<int[], SequenceCharacteristics>>>();
+                var resultIntervals = new Dictionary<string, Dictionary<IntervalsDistribution, Dictionary<int[], SequenceCharacteristics>>>();
                 foreach (var link in EnumExtensions.ToArray<Link>())
                 {
                     if (link == Link.NotApplied)
                     {
                         continue;
                     }
-                    var accordance = new Dictionary<Dictionary<int, int>, Dictionary<int[], SequenceCharacteristics>>();
-                    for (int j = 0; j < orders.Count; j++)
+                    var accordance = IntervalsDistributionExtractor.GetOrdersIntervalsDistributionsAccordance(orders.ToArray(), link);
+                    var resultAccordance = new Dictionary<IntervalsDistribution, Dictionary<int[], SequenceCharacteristics>>();
+                    foreach(var element in accordance)
                     {
-                        var order = orders[j];
-                        var sequence = new Chain(order.Select(Convert.ToInt16).ToArray());
-                        sequence.FillIntervalManagers();
-                        var fullIntervals = new Dictionary<int, int>();
-                        foreach (var el in sequence.Alphabet.ToList())
+                        resultAccordance.Add(element.Key, new Dictionary<int[], SequenceCharacteristics>());
+                        foreach(var order in element.Value)
                         {
-                            var congIntervals = sequence.CongenericChain(el).GetArrangement(link);
-                            foreach (var interval in congIntervals)
-                            {
-                                if (fullIntervals.Any(e => e.Key == interval))
-                                {
-                                    fullIntervals[interval]++;
-                                }
-                                else
-                                {
-                                    fullIntervals.Add(interval, 1);
-                                }
-                            }
-                        }
-                        if (accordance.Keys.Any(intervals => intervals.All(i1 => fullIntervals.Any(i2 => i2.Key == i1.Key && i2.Value == i1.Value))))
-                        {
-                            accordance[accordance.Keys.First(intervals => intervals.All(i1 => fullIntervals.Any(i2 => i2.Key == i1.Key && i2.Value == i1.Value)))].Add(order, sequencesCharacteristics.First(el => el.MatterName.SequenceEqual(String.Join(",", orders[j].Select(n => n.ToString()).ToArray()))));
-                        }
-                        else
-                        {
-                            accordance.Add(fullIntervals, new Dictionary<int[], SequenceCharacteristics> {
-                                {
-                                    order,
-                                    sequencesCharacteristics.First(el => el.MatterName.SequenceEqual(String.Join(",", orders[j].Select(n => n.ToString()).ToArray())))
-                                }
-                            });
+                            resultAccordance[element.Key].Add(order, sequencesCharacteristics.FirstOrDefault(el => el.MatterName.SequenceEqual(String.Join(",", order.Select(n => n.ToString()).ToArray()))));
                         }
                     }
-                    resultIntervals.Add(EnumExtensions.GetDisplayValue<Link>(link), accordance);
+                    resultIntervals.Add(EnumExtensions.GetDisplayValue<Link>(link), resultAccordance);
                 }
 
 
@@ -196,7 +170,7 @@ namespace LibiadaWeb.Controllers.Calculators
                     {
                         link = r.Key.ToString(),
                         accordance = r.Value.Select(d => new {
-                            distributionIntervals = d.Key.Select(pair => new
+                            distributionIntervals = d.Key.Distribution.Select(pair => new
                             {
                                 interval = pair.Key,
                                 count = pair.Value
