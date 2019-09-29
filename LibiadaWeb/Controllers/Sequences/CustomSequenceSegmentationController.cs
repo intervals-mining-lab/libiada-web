@@ -3,9 +3,12 @@
 namespace LibiadaWeb.Controllers.Sequences
 {
     using System.Collections.Generic;
+    using System.IO;
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
+
+    using LibiadaWeb.Helpers;
     using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
@@ -48,7 +51,8 @@ namespace LibiadaWeb.Controllers.Sequences
         [ValidateAntiForgeryToken]
         public ActionResult Index(
             string[] customSequences,
-            HttpPostedFileBase[] file,
+            HttpPostedFileBase[] files,
+            bool localFile,
             double leftBorder,
             double rightBorder,
             double step,
@@ -62,30 +66,52 @@ namespace LibiadaWeb.Controllers.Sequences
         {
             return CreateTask(() =>
             {
-                string chain;
-                string chainName;
+                int sequencesCount = localFile ? Request.Files.Count : customSequences.Length;
+
+                var sequencesNames = new string[sequencesCount];
+                var sequences = new string[sequencesCount];
 
 
-
-                Input inputData = new Input
+                for (int i = 0; i < sequencesCount; i++)
                 {
-                    Seeker = deviationCalculationMethod,
-                    Algorithm = 0,
-                    Balance = balance,
-                    Chain = chain,
-                    ChainName = chainName,
-                    LeftBound = leftBorder,
-                    RightBound = rightBorder,
-                    Precision = precision,
-                    Step = step,
-                    StopCriterion = segmentationCriterion,
-                    ThresholdMethod = threshold,
-                    WindowDecrement = wordLengthDecrement,
-                    WindowLength = wordLength
-                };
+                    if (localFile)
+                    {
+                        sequencesNames[i] = Request.Files[i].FileName;
+
+                        Stream sequenceStream = FileHelper.GetFileStream(Request.Files[i]);
+                        using (var sr = new StreamReader(sequenceStream))
+                        {
+                            sequences[i] = sr.ReadToEnd();
+                        }
+                    }
+                    else
+                    {
+                        sequencesNames[i] = $"Custom sequence {i + 1}. Length: {customSequences[i].Length}";
+                        sequences[i] = customSequences[i];
+                    }
+
+                    var inputData = new Input
+                    {
+                        Seeker = deviationCalculationMethod,
+                        Algorithm = 0,
+                        Balance = balance,
+                        Chain = sequences[i],
+                        ChainName = sequencesNames[i],
+                        LeftBound = leftBorder,
+                        RightBound = rightBorder,
+                        Precision = precision,
+                        Step = step,
+                        StopCriterion = segmentationCriterion,
+                        ThresholdMethod = threshold,
+                        WindowDecrement = wordLengthDecrement,
+                        WindowLength = wordLength
+                    };
 
 
-                var segmenter = new Algorithm(inputData);
+                    var segmenter = new Algorithm(inputData);
+
+                    segmenter.Run();
+                }
 
                 var result = new Dictionary<string, object>
                 {

@@ -78,6 +78,9 @@
         /// <param name="fileType">
         /// Uploaded files type.
         /// </param>
+        /// <param name="delimiter">
+        /// Delimiter of components in the sequence.
+        /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
@@ -102,7 +105,7 @@
                                     throw new NotImplementedException();
                                 case "text":
                                     sequencesNames[i] = Request.Files[i].FileName;
-                                    using (StreamReader sr = new StreamReader(sequenceStream))
+                                    using (var sr = new StreamReader(sequenceStream))
                                     {
                                         sequences[i] = new Chain(sr.ReadToEnd());
                                     }
