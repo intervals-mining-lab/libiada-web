@@ -41,7 +41,7 @@ namespace LibiadaWeb.Controllers.Sequences
             ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object>
                 {
                     { "thresholds", EnumHelper.GetSelectList(typeof(Threshold)) },
-                    { "segmentationCriterion", EnumHelper.GetSelectList(typeof(SegmentationCriterion)) },
+                    { "segmentationCriteria", EnumHelper.GetSelectList(typeof(SegmentationCriterion)) },
                     { "deviationCalculationMethods", EnumHelper.GetSelectList(typeof(DeviationCalculationMethod)) }
                 });
             return View();
@@ -53,10 +53,10 @@ namespace LibiadaWeb.Controllers.Sequences
             string[] customSequences,
             HttpPostedFileBase[] files,
             bool localFile,
-            double leftBorder,
-            double rightBorder,
-            double step,
-            double precision,
+            string leftBorder,
+            string rightBorder,
+            string step,
+            string precision,
             Threshold threshold,
             int wordLengthDecrement,
             SegmentationCriterion segmentationCriterion,
@@ -97,10 +97,10 @@ namespace LibiadaWeb.Controllers.Sequences
                         Balance = balance,
                         Chain = sequences[i],
                         ChainName = sequencesNames[i],
-                        LeftBound = leftBorder,
-                        RightBound = rightBorder,
-                        Precision = precision,
-                        Step = step,
+                        LeftBound = double.Parse(leftBorder),
+                        RightBound = double.Parse(rightBorder),
+                        Precision = double.Parse(precision),
+                        Step = double.Parse(step),
                         StopCriterion = segmentationCriterion,
                         ThresholdMethod = threshold,
                         WindowDecrement = wordLengthDecrement,
