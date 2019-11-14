@@ -184,6 +184,7 @@
     </Compile>
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Feature.cs" />
+    <Compile Include="Extensions\FeatureExtensions.cs" />
     <Compile Include="Fmotif.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
