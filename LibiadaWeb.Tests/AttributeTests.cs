@@ -15,7 +15,12 @@
         /// <summary>
         /// The attributes count.
         /// </summary>
-        private const int AttributesCount = 41;
+        private const int AttributesCount = 44;
+
+        /// <summary>
+        /// Array of all attributes.
+        /// </summary>
+        private readonly Attribute[] attributes = EnumExtensions.ToArray<Attribute>();
 
         /// <summary>
         /// Tests count of attributes.
@@ -23,7 +28,7 @@
         [Test]
         public void AttributesCountTest()
         {
-            var actualCount = EnumExtensions.ToArray<Attribute>().Length;
+            var actualCount = attributes.Length;
             Assert.AreEqual(AttributesCount, actualCount);
         }
 
@@ -33,7 +38,6 @@
         [Test]
         public void AttributeValuesTest()
         {
-            var attributes = EnumExtensions.ToArray<Attribute>();
             for (int i = 1; i <= AttributesCount; i++)
             {
                 Assert.IsTrue(attributes.Contains((Attribute)i));
@@ -90,6 +94,9 @@
         [TestCase((Attribute)39, "number")]
         [TestCase((Attribute)40, "replace")]
         [TestCase((Attribute)41, "compare")]
+        [TestCase((Attribute)42, "allele")]
+        [TestCase((Attribute)43, "trans_splicing")]
+        [TestCase((Attribute)44, "frequency")]
         public void AttributesDisplayValuesTest(Attribute attribute, string name)
         {
             Assert.AreEqual(name, attribute.GetDisplayValue());
@@ -101,7 +108,6 @@
         [Test]
         public void AttributeValuesUniqueTest()
         {
-            var attributes = EnumExtensions.ToArray<Attribute>();
             var attributeValues = attributes.Cast<byte>();
             Assert.That(attributeValues, Is.Unique);
         }

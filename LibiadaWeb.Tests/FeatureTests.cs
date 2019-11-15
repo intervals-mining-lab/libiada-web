@@ -19,7 +19,12 @@
         /// <summary>
         /// The features count.
         /// </summary>
-        private const int FeaturesCount = 29;
+        private const int FeaturesCount = 35;
+
+        /// <summary>
+        /// Array of all features.
+        /// </summary>
+        private readonly Feature[] features = EnumExtensions.ToArray<Feature>();
 
         /// <summary>
         /// Tests count of features.
@@ -27,7 +32,7 @@
         [Test]
         public void FeatureCountTest()
         {
-            int actualCount = EnumExtensions.ToArray<Feature>().Length;
+            int actualCount = features.Length;
             Assert.AreEqual(FeaturesCount, actualCount);
         }
 
@@ -37,8 +42,6 @@
         [Test]
         public void FeatureValuesTest()
         {
-            Feature[] features = EnumExtensions.ToArray<Feature>();
-
             for (int i = 0; i < FeaturesCount; i++)
             {
                 Assert.IsTrue(features.Contains((Feature)i));
@@ -86,6 +89,12 @@
         [TestCase((Feature)26, "FiveEnd", "5'UTR")]
         [TestCase((Feature)27, "PrimerBind", "primer_bind")]
         [TestCase((Feature)28, "Intron", "intron")]
+        [TestCase((Feature)29, "Operon", "operon")]
+        [TestCase((Feature)30, "PolyASite", "polyA_site")]
+        [TestCase((Feature)31, "ModifiedBase", "modified_base")]
+        [TestCase((Feature)32, "MiscellaneousRecombination", "misc_recomb")]
+        [TestCase((Feature)33, "Exon", "exon")]
+        [TestCase((Feature)34, "Unsure", "unsure")]
         public void FeatureNameAndGenBankNameTest(Feature feature, string name, string genBankName)
         {
             Assert.AreEqual(name, feature.GetName());
@@ -135,7 +144,6 @@
         [Test]
         public void FeatureValuesUniqueTest()
         {
-            Feature[] features = EnumExtensions.ToArray<Feature>();
             Assert.That(features.Cast<byte>(), Is.Unique);
         }
     }
