@@ -26,11 +26,7 @@
         /// Tests count of attributes.
         /// </summary>
         [Test]
-        public void AttributesCountTest()
-        {
-            var actualCount = attributes.Length;
-            Assert.AreEqual(AttributesCount, actualCount);
-        }
+        public void AttributesCountTest() => Assert.AreEqual(AttributesCount, attributes.Length);
 
         /// <summary>
         /// Tests values of attributes.
@@ -97,19 +93,12 @@
         [TestCase((Attribute)42, "allele")]
         [TestCase((Attribute)43, "trans_splicing")]
         [TestCase((Attribute)44, "frequency")]
-        public void AttributesDisplayValuesTest(Attribute attribute, string name)
-        {
-            Assert.AreEqual(name, attribute.GetDisplayValue());
-        }
+        public void AttributesDisplayValuesTest(Attribute attribute, string name) => Assert.AreEqual(name, attribute.GetDisplayValue());
 
         /// <summary>
         /// Tests that all attributes values are unique.
         /// </summary>
         [Test]
-        public void AttributeValuesUniqueTest()
-        {
-            var attributeValues = attributes.Cast<byte>();
-            Assert.That(attributeValues, Is.Unique);
-        }
+        public void AttributeValuesUniqueTest() => Assert.That(attributes.Cast<byte>(), Is.Unique);
     }
 }

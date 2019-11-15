@@ -27,14 +27,15 @@
         private readonly Feature[] features = EnumExtensions.ToArray<Feature>();
 
         /// <summary>
+        /// Array of all natures.
+        /// </summary>
+        private readonly Nature[] natures = EnumExtensions.ToArray<Nature>();
+
+        /// <summary>
         /// Tests count of features.
         /// </summary>
         [Test]
-        public void FeatureCountTest()
-        {
-            int actualCount = features.Length;
-            Assert.AreEqual(FeaturesCount, actualCount);
-        }
+        public void FeatureCountTest() => Assert.AreEqual(FeaturesCount, features.Length);
 
         /// <summary>
         /// Tests values of features.
@@ -108,10 +109,7 @@
         /// The feature.
         /// </param>
         [Test]
-        public void FeatureHasDisplayValueTest([Values]Feature feature)
-        {
-            Assert.IsFalse(string.IsNullOrEmpty(feature.GetDisplayValue()));
-        }
+        public void FeatureHasDisplayValueTest([Values]Feature feature) => Assert.That(feature.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all features have description.
@@ -120,10 +118,7 @@
         /// The feature.
         /// </param>
         [Test]
-        public void FeatureHasDescriptionTest([Values]Feature feature)
-        {
-            Assert.IsFalse(string.IsNullOrEmpty(feature.GetDescription()));
-        }
+        public void FeatureHasDescriptionTest([Values]Feature feature) => Assert.That(feature.GetDescription(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all features have valid nature attribute.
@@ -132,19 +127,12 @@
         /// The feature.
         /// </param>
         [Test]
-        public void FeatureHasNatureTest([Values]Feature feature)
-        {
-            Nature[] natures = EnumExtensions.ToArray<Nature>();
-            Assert.True(natures.Contains(feature.GetNature()));
-        }
+        public void FeatureHasValidNatureTest([Values]Feature feature) => Assert.True(natures.Contains(feature.GetNature()));
 
         /// <summary>
         /// Tests that all features values are unique.
         /// </summary>
         [Test]
-        public void FeatureValuesUniqueTest()
-        {
-            Assert.That(features.Cast<byte>(), Is.Unique);
-        }
+        public void FeatureValuesUniqueTest() => Assert.That(features.Cast<byte>(), Is.Unique);
     }
 }

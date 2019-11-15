@@ -31,11 +31,7 @@
         /// Tests count of task types.
         /// </summary>
         [Test]
-        public void TaskTypeCountTest()
-        {
-            int actualCount = taskTypes.Length;
-            Assert.AreEqual(TaskTypesCount, actualCount);
-        }
+        public void TaskTypeCountTest() => Assert.AreEqual(TaskTypesCount, taskTypes.Length);
 
         /// <summary>
         /// Tests values of task types.
@@ -92,10 +88,7 @@
         [TestCase((TaskType)32, "OrderTransformationCharacteristicsDynamicVisualization")]
         [TestCase((TaskType)33, "OrdersIntervalsDistributionsAccordance")]
         [TestCase((TaskType)34, "IntervalsCharacteristicsDistribution")]
-        public void TaskTypeNameTest(TaskType taskType, string name)
-        {
-            Assert.AreEqual(name, taskType.GetName());
-        }
+        public void TaskTypeNameTest(TaskType taskType, string name) => Assert.AreEqual(name, taskType.GetName());
 
         /// <summary>
         /// Tests that all task types have display value.
@@ -104,10 +97,7 @@
         /// The task type.
         /// </param>
         [Test]
-        public void TaskTypeHasDisplayValueTest([Values]TaskType taskType)
-        {
-            Assert.IsFalse(string.IsNullOrEmpty(taskType.GetDisplayValue()));
-        }
+        public void TaskTypeHasDisplayValueTest([Values]TaskType taskType) => Assert.That(taskType.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all task types have display value.
@@ -116,18 +106,12 @@
         /// The task type.
         /// </param>
         [Test]
-        public void TaskTypeHasTaskClassAttributeTest([Values]TaskType taskType)
-        {
-            Assert.IsNotNull(taskType.GetTaskClass());
-        }
+        public void TaskTypeHasTaskClassAttributeTest([Values]TaskType taskType) => Assert.IsNotNull(taskType.GetTaskClass());
 
         /// <summary>
         /// Tests that all task types values are unique.
         /// </summary>
         [Test]
-        public void TaskTypeValuesUniqueTest()
-        {
-            Assert.That(taskTypes.Cast<byte>(), Is.Unique);
-        }
+        public void TaskTypeValuesUniqueTest() => Assert.That(taskTypes.Cast<byte>(), Is.Unique);
     }
 }

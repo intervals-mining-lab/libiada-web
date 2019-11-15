@@ -22,14 +22,20 @@
         private const int RemoteDbsCount = 1;
 
         /// <summary>
+        /// Array of all remote databases.
+        /// </summary>
+        private readonly RemoteDb[] remoteDbs = EnumExtensions.ToArray<RemoteDb>();
+
+        /// <summary>
+        /// Array of all natures.
+        /// </summary>
+        private readonly Nature[] natures = EnumExtensions.ToArray<Nature>();
+
+        /// <summary>
         /// Tests count of remote dbs.
         /// </summary>
         [Test]
-        public void RemoteDbCountTest()
-        {
-            var actualCount = EnumExtensions.ToArray<RemoteDb>().Length;
-            Assert.AreEqual(RemoteDbsCount, actualCount);
-        }
+        public void RemoteDbCountTest() => Assert.AreEqual(RemoteDbsCount, remoteDbs.Length);
 
         /// <summary>
         /// Tests values of remote dbs.
@@ -37,8 +43,6 @@
         [Test]
         public void RemoteDbValuesTest()
         {
-            var remoteDbs = EnumExtensions.ToArray<RemoteDb>();
-
             for (int i = 1; i <= RemoteDbsCount; i++)
             {
                 Assert.IsTrue(remoteDbs.Contains((RemoteDb)i));
@@ -55,10 +59,7 @@
         /// The name.
         /// </param>
         [TestCase((RemoteDb)1, "GenBank")]
-        public void RemoteDbNamesTest(RemoteDb remoteDb, string name)
-        {
-            Assert.AreEqual(name, remoteDb.GetName());
-        }
+        public void RemoteDbNamesTest(RemoteDb remoteDb, string name) => Assert.AreEqual(name, remoteDb.GetName());
 
         /// <summary>
         /// Tests that all remote dbs have display value.
@@ -67,10 +68,7 @@
         /// The remote db.
         /// </param>
         [Test]
-        public void RemoteDbHasDisplayValueTest([Values]RemoteDb remoteDb)
-        {
-            Assert.IsFalse(string.IsNullOrEmpty(remoteDb.GetDisplayValue()));
-        }
+        public void RemoteDbHasDisplayValueTest([Values]RemoteDb remoteDb) => Assert.That(remoteDb.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all remote dbs have description.
@@ -79,10 +77,7 @@
         /// The remote db.
         /// </param>
         [Test]
-        public void RemoteDbHasDescriptionTest([Values]RemoteDb remoteDb)
-        {
-            Assert.IsFalse(string.IsNullOrEmpty(remoteDb.GetDescription()));
-        }
+        public void RemoteDbHasDescriptionTest([Values]RemoteDb remoteDb) => Assert.That(remoteDb.GetDescription(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all remote dbs have valid nature attribute.
@@ -91,21 +86,12 @@
         /// The remote db.
         /// </param>
         [Test]
-        public void RemoteDbHasNatureTest([Values]RemoteDb remoteDb)
-        {
-            var natures = EnumExtensions.ToArray<Nature>();
-            Assert.True(natures.Contains(remoteDb.GetNature()));
-        }
+        public void RemoteDbHasNatureTest([Values]RemoteDb remoteDb) => Assert.True(natures.Contains(remoteDb.GetNature()));
 
         /// <summary>
         /// Tests that all remote dbs values are unique.
         /// </summary>
         [Test]
-        public void RemoteDbValuesUniqueTest()
-        {
-            var remoteDbs = EnumExtensions.ToArray<RemoteDb>();
-            var remoteDbValues = remoteDbs.Cast<byte>();
-            Assert.That(remoteDbValues, Is.Unique);
-        }
+        public void RemoteDbValuesUniqueTest() => Assert.That(remoteDbs.Cast<byte>(), Is.Unique);
     }
 }
