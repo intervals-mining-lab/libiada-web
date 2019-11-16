@@ -20,14 +20,15 @@
         private const int NaturesCount = 4;
 
         /// <summary>
+        /// Array of all natures.
+        /// </summary>
+        private readonly Nature[] natures = EnumExtensions.ToArray<Nature>();
+
+        /// <summary>
         /// Tests count of natures.
         /// </summary>
         [Test]
-        public void NatureCountTest()
-        {
-            var actualCount = EnumExtensions.ToArray<Nature>().Length;
-            Assert.AreEqual(NaturesCount, actualCount);
-        }
+        public void NatureCountTest() => Assert.AreEqual(NaturesCount, natures.Length);
 
         /// <summary>
         /// Tests values of natures.
@@ -35,7 +36,6 @@
         [Test]
         public void NatureValuesTest()
         {
-            var natures = EnumExtensions.ToArray<Nature>();
             for (int i = 1; i <= NaturesCount; i++)
             {
                 Assert.IsTrue(natures.Contains((Nature)i));
@@ -55,10 +55,7 @@
         [TestCase((Nature)2, "Music")]
         [TestCase((Nature)3, "Literature")]
         [TestCase((Nature)4, "MeasurementData")]
-        public void NatureNamesTest(Nature nature, string name)
-        {
-            Assert.AreEqual(name, nature.GetName());
-        }
+        public void NatureNamesTest(Nature nature, string name) => Assert.AreEqual(name, nature.GetName());
 
         /// <summary>
         /// Tests that all natures have display value.
@@ -67,10 +64,7 @@
         /// The nature.
         /// </param>
         [Test]
-        public void NatureHasDisplayValueTest([Values]Nature nature)
-        {
-            Assert.IsFalse(string.IsNullOrEmpty(nature.GetDisplayValue()));
-        }
+        public void NatureHasDisplayValueTest([Values]Nature nature) => Assert.IsFalse(string.IsNullOrEmpty(nature.GetDisplayValue()));
 
         /// <summary>
         /// Tests that all natures have description.
@@ -79,20 +73,12 @@
         /// The nature.
         /// </param>
         [Test]
-        public void NatureHasDescriptionTest([Values]Nature nature)
-        {
-            Assert.IsFalse(string.IsNullOrEmpty(nature.GetDescription()));
-        }
+        public void NatureHasDescriptionTest([Values]Nature nature) => Assert.IsFalse(string.IsNullOrEmpty(nature.GetDescription()));
 
         /// <summary>
         /// Tests that all natures values are unique.
         /// </summary>
         [Test]
-        public void NatureValuesUniqueTest()
-        {
-            var natures = EnumExtensions.ToArray<Nature>();
-            var natureValues = natures.Cast<byte>();
-            Assert.That(natureValues, Is.Unique);
-        }
+        public void NatureValuesUniqueTest() => Assert.That(natures.Cast<byte>(), Is.Unique);
     }
 }

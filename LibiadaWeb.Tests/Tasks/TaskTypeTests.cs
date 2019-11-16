@@ -4,10 +4,12 @@
 
     using LibiadaCore.Extensions;
 
-    using LibiadaWeb.Attributes;
+    using LibiadaWeb.Extensions;
     using LibiadaWeb.Tasks;
 
     using NUnit.Framework;
+
+    using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
 
     /// <summary>
     /// TaskType enum tests.
@@ -18,17 +20,18 @@
         /// <summary>
         /// The task types count.
         /// </summary>
-        private const int TaskTypesCount = 31;
+        private const int TaskTypesCount = 34;
+
+        /// <summary>
+        /// Array of all tasks types.
+        /// </summary>
+        private readonly TaskType[] taskTypes = EnumExtensions.ToArray<TaskType>();
 
         /// <summary>
         /// Tests count of task types.
         /// </summary>
         [Test]
-        public void TaskTypeCountTest()
-        {
-            int actualCount = EnumExtensions.ToArray<TaskType>().Length;
-            Assert.AreEqual(TaskTypesCount, actualCount);
-        }
+        public void TaskTypeCountTest() => Assert.AreEqual(TaskTypesCount, taskTypes.Length);
 
         /// <summary>
         /// Tests values of task types.
@@ -36,8 +39,6 @@
         [Test]
         public void TaskTypeValuesTest()
         {
-            TaskType[] taskTypes = EnumExtensions.ToArray<TaskType>();
-
             for (int i = 1; i <= TaskTypesCount; i++)
             {
                 Assert.IsTrue(taskTypes.Contains((TaskType)i));
@@ -84,10 +85,10 @@
         [TestCase((TaskType)29, "BatchMusicImport")]
         [TestCase((TaskType)30, "OrderTransformationVisualization")]
         [TestCase((TaskType)31, "FmotifsDictionary")]
-        public void TaskTypeNameTest(TaskType taskType, string name)
-        {
-            Assert.AreEqual(name, taskType.GetName());
-        }
+        [TestCase((TaskType)32, "OrderTransformationCharacteristicsDynamicVisualization")]
+        [TestCase((TaskType)33, "OrdersIntervalsDistributionsAccordance")]
+        [TestCase((TaskType)34, "IntervalsCharacteristicsDistribution")]
+        public void TaskTypeNameTest(TaskType taskType, string name) => Assert.AreEqual(name, taskType.GetName());
 
         /// <summary>
         /// Tests that all task types have display value.
@@ -96,10 +97,7 @@
         /// The task type.
         /// </param>
         [Test]
-        public void TaskTypeHasDisplayValueTest([Values]TaskType taskType)
-        {
-            Assert.IsFalse(string.IsNullOrEmpty(taskType.GetDisplayValue()));
-        }
+        public void TaskTypeHasDisplayValueTest([Values]TaskType taskType) => Assert.That(taskType.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all task types have display value.
@@ -108,19 +106,12 @@
         /// The task type.
         /// </param>
         [Test]
-        public void TaskTypeHasTaskClassAttributeTest([Values]TaskType taskType)
-        {
-            Assert.IsNotNull(taskType.GetAttribute<TaskType, TaskClassAttribute>().Value);
-        }
+        public void TaskTypeHasTaskClassAttributeTest([Values]TaskType taskType) => Assert.IsNotNull(taskType.GetTaskClass());
 
         /// <summary>
         /// Tests that all task types values are unique.
         /// </summary>
         [Test]
-        public void TaskTypeValuesUniqueTest()
-        {
-            TaskType[] taskTypes = EnumExtensions.ToArray<TaskType>();
-            Assert.That(taskTypes.Cast<byte>(), Is.Unique);
-        }
+        public void TaskTypeValuesUniqueTest() => Assert.That(taskTypes.Cast<byte>(), Is.Unique);
     }
 }

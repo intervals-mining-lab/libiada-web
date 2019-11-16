@@ -22,14 +22,20 @@
         private const int GroupsCount = 6;
 
         /// <summary>
+        /// Array of all groups.
+        /// </summary>
+        private readonly Group[] groups = EnumExtensions.ToArray<Group>();
+
+        /// <summary>
+        /// Array of all natures.
+        /// </summary>
+        private readonly Nature[] natures = EnumExtensions.ToArray<Nature>();
+
+        /// <summary>
         /// Tests count of groups.
         /// </summary>
         [Test]
-        public void GroupCountTest()
-        {
-            var actualCount = EnumExtensions.ToArray<Group>().Length;
-            Assert.AreEqual(GroupsCount, actualCount);
-        }
+        public void GroupCountTest() => Assert.AreEqual(GroupsCount, groups.Length);
 
         /// <summary>
         /// Tests values of groups.
@@ -37,8 +43,6 @@
         [Test]
         public void GroupValuesTest()
         {
-            var groups = EnumExtensions.ToArray<Group>();
-
             for (int i = 1; i <= GroupsCount; i++)
             {
                 Assert.IsTrue(groups.Contains((Group)i));
@@ -60,10 +64,7 @@
         [TestCase((Group)4, "ObservationData")]
         [TestCase((Group)5, "Virus")]
         [TestCase((Group)6, "Eucariote")]
-        public void GroupNamesTest(Group group, string name)
-        {
-            Assert.AreEqual(name, group.GetName());
-        }
+        public void GroupNamesTest(Group group, string name) => Assert.AreEqual(name, @group.GetName());
 
         /// <summary>
         /// Tests that all groups have display value.
@@ -72,10 +73,7 @@
         /// The group.
         /// </param>
         [Test]
-        public void GroupHasDisplayValueTest([Values]Group group)
-        {
-            Assert.IsFalse(string.IsNullOrEmpty(group.GetDisplayValue()));
-        }
+        public void GroupHasDisplayValueTest([Values]Group group) => Assert.That(group.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all groups have description.
@@ -84,10 +82,7 @@
         /// The group.
         /// </param>
         [Test]
-        public void GroupHasDescriptionTest([Values]Group group)
-        {
-            Assert.IsFalse(string.IsNullOrEmpty(group.GetDescription()));
-        }
+        public void GroupHasDescriptionTest([Values]Group group) => Assert.That(group.GetDescription(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all groups have valid nature attribute.
@@ -96,21 +91,12 @@
         /// The group.
         /// </param>
         [Test]
-        public void GroupHasNatureTest([Values]Group group)
-        {
-            var natures = EnumExtensions.ToArray<Nature>();
-            Assert.True(natures.Contains(group.GetNature()));
-        }
+        public void GroupHasNatureTest([Values]Group group) => Assert.True(natures.Contains(@group.GetNature()));
 
         /// <summary>
         /// Tests that all groups values are unique.
         /// </summary>
         [Test]
-        public void GroupValuesUniqueTest()
-        {
-            var groups = EnumExtensions.ToArray<Group>();
-            var groupValues = groups.Cast<byte>();
-            Assert.That(groupValues, Is.Unique);
-        }
+        public void GroupValuesUniqueTest() => Assert.That(groups.Cast<byte>(), Is.Unique);
     }
 }

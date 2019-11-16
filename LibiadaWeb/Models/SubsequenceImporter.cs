@@ -8,6 +8,7 @@
 
     using LibiadaCore.Extensions;
 
+    using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Catalogs;
 

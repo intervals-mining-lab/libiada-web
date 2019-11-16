@@ -4,11 +4,15 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
 
     using LibiadaCore.Extensions;
 
+    using FeatureExtensions = LibiadaWeb.Extensions.FeatureExtensions;
+
     /// <summary>
     /// The feature repository.
     /// </summary>
     public static class FeatureRepository
     {
+        private static readonly Feature[] features = EnumExtensions.ToArray<Feature>();
+
         /// <summary>
         /// Gets feature by name.
         /// </summary>
@@ -20,7 +24,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public static Feature GetFeatureByName(string name)
         {
-            return EnumExtensions.ToArray<Feature>().Single(f => f.GetGenBankName() == name);
+            return features.Single(f => FeatureExtensions.GetGenBankName(f) == name);
         }
 
         /// <summary>
@@ -34,7 +38,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public static bool FeatureExists(string name)
         {
-            return EnumExtensions.ToArray<Feature>().Any(f => f.GetGenBankName() == name);
+            return features.Any(f => FeatureExtensions.GetGenBankName(f) == name);
         }
     }
 }
