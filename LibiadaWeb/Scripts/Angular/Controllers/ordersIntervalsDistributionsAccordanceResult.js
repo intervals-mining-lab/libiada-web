@@ -184,13 +184,13 @@
                     .base(10)
                     .domain([1, Math.pow(10, Math.ceil(Math.log10(yMax)))])
                     .range([height, 0]);
-            var yAxis = yMax - yMin < 100 ?
+            var yAxis = yMax - yMin < 10 ?
                 d3.axisLeft(yScale)
+                    .ticks(yMax - yMin)
                     .tickSizeInner(-width)
                     .tickSizeOuter(0)
                     .tickPadding(10) :
                 d3.axisLeft(yScale)
-                    .tickFormat(d3.format(""))
                     .tickSizeInner(-width)
                     .tickSizeOuter(0)
                     .tickPadding(10);
