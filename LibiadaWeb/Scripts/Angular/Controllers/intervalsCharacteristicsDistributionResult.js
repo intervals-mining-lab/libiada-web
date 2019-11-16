@@ -181,7 +181,7 @@
             $scope.yMap = function (d) { return yScale($scope.yValue(d)); };
 
             // setup fill color
-            var cValue = function (d) { return d.cluster; };
+            var cValue = function (d) { return d.x; };
             var color = d3.scaleOrdinal(d3.schemeCategory20);
 
             // add the graph canvas to the body of the webpage
