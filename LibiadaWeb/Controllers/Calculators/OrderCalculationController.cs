@@ -69,6 +69,9 @@ namespace LibiadaWeb.Controllers.Calculators
         /// <param name="generateStrict">
         /// The generate strict.
         /// </param>
+        /// <param name="characteristicLinkIds">
+        /// CharacteristicLinks ids.
+        /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>

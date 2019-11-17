@@ -48,8 +48,8 @@ namespace LibiadaWeb.Controllers.Calculators
         /// <param name="alphabetCardinality">
         /// The alphabet cardinality.
         /// </param>
-        /// <param name="generateStrict">
-        /// The generate strict.
+        /// <param name="typeGenerate">
+        /// Sequence generation type.
         /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
@@ -59,37 +59,38 @@ namespace LibiadaWeb.Controllers.Calculators
         {
             return CreateTask(() =>
             {
-                ISequenceGenerator sequenceGenerator = null;
+                ISequenceGenerator sequenceGenerator;
                 var orderGenerator = new OrderGenerator();
-                var orders = new List<int[]>();
+                List<int[]> orders;
+                // TODO: add enum
                 switch (typeGenerate)
                 {
                     case 0:
-                        sequenceGenerator = (ISequenceGenerator) new StrictSequenceGenerator();
+                        sequenceGenerator = new StrictSequenceGenerator();
                         orders = orderGenerator.StrictGenerateOrders(length, alphabetCardinality);
                         break;
                     case 1:
-                        sequenceGenerator = (ISequenceGenerator)new SequenceGenerator();
+                        sequenceGenerator = new SequenceGenerator();
                         orders = orderGenerator.GenerateOrders(length, alphabetCardinality);
-                        break; 
+                        break;
                     case 2:
-                        sequenceGenerator = (ISequenceGenerator) new NonRedundantStrictSequenceGenerator();
+                        sequenceGenerator = new NonRedundantStrictSequenceGenerator();
                         orders = orderGenerator.StrictGenerateOrders(length, alphabetCardinality);
                         break;
                     case 3:
-                        sequenceGenerator = (ISequenceGenerator)new NonRedundantSequenceGenerator();
+                        sequenceGenerator = new NonRedundantSequenceGenerator();
                         orders = orderGenerator.GenerateOrders(length, alphabetCardinality);
                         break;
                     default: throw new ArgumentException("Invalid type of generate");
                 }
                 var sequences = sequenceGenerator.GenerateSequences(length, alphabetCardinality);
-                Dictionary<int[], List<BaseChain>> result = new Dictionary<int[], List<BaseChain>>(new OrderEqualityComparer());
-                foreach (var order in orders)
+                var result = new Dictionary<int[], List<BaseChain>>(new OrderEqualityComparer());
+                foreach (int[] order in orders)
                 {
                     result.Add(order, new List<BaseChain>());
                 }
 
-                foreach (var sequence in sequences)
+                foreach (BaseChain sequence in sequences)
                 {
                     result[sequence.Building].Add(sequence);
                 }
@@ -97,10 +98,11 @@ namespace LibiadaWeb.Controllers.Calculators
                 var data = new Dictionary<string, object>
                 {
                     { "result", result.Select(r => new
-                    {
-                        order = r.Key,
-                        sequences = r.Value.Select(s => s.ToString(",")).ToArray()
-                    }) }
+                        {
+                            order = r.Key,
+                            sequences = r.Value.Select(s => s.ToString(",")).ToArray()
+                        })
+                    }
                 };
 
                 return new Dictionary<string, object>
