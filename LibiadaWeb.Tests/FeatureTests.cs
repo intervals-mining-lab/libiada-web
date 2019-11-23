@@ -19,17 +19,23 @@
         /// <summary>
         /// The features count.
         /// </summary>
-        private const int FeaturesCount = 29;
+        private const int FeaturesCount = 35;
+
+        /// <summary>
+        /// Array of all features.
+        /// </summary>
+        private readonly Feature[] features = EnumExtensions.ToArray<Feature>();
+
+        /// <summary>
+        /// Array of all natures.
+        /// </summary>
+        private readonly Nature[] natures = EnumExtensions.ToArray<Nature>();
 
         /// <summary>
         /// Tests count of features.
         /// </summary>
         [Test]
-        public void FeatureCountTest()
-        {
-            int actualCount = EnumExtensions.ToArray<Feature>().Length;
-            Assert.AreEqual(FeaturesCount, actualCount);
-        }
+        public void FeatureCountTest() => Assert.AreEqual(FeaturesCount, features.Length);
 
         /// <summary>
         /// Tests values of features.
@@ -37,8 +43,6 @@
         [Test]
         public void FeatureValuesTest()
         {
-            Feature[] features = EnumExtensions.ToArray<Feature>();
-
             for (int i = 0; i < FeaturesCount; i++)
             {
                 Assert.IsTrue(features.Contains((Feature)i));
@@ -86,6 +90,12 @@
         [TestCase((Feature)26, "FiveEnd", "5'UTR")]
         [TestCase((Feature)27, "PrimerBind", "primer_bind")]
         [TestCase((Feature)28, "Intron", "intron")]
+        [TestCase((Feature)29, "Operon", "operon")]
+        [TestCase((Feature)30, "PolyASite", "polyA_site")]
+        [TestCase((Feature)31, "ModifiedBase", "modified_base")]
+        [TestCase((Feature)32, "MiscellaneousRecombination", "misc_recomb")]
+        [TestCase((Feature)33, "Exon", "exon")]
+        [TestCase((Feature)34, "Unsure", "unsure")]
         public void FeatureNameAndGenBankNameTest(Feature feature, string name, string genBankName)
         {
             Assert.AreEqual(name, feature.GetName());
@@ -99,10 +109,7 @@
         /// The feature.
         /// </param>
         [Test]
-        public void FeatureHasDisplayValueTest([Values]Feature feature)
-        {
-            Assert.IsFalse(string.IsNullOrEmpty(feature.GetDisplayValue()));
-        }
+        public void FeatureHasDisplayValueTest([Values]Feature feature) => Assert.That(feature.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all features have description.
@@ -111,10 +118,7 @@
         /// The feature.
         /// </param>
         [Test]
-        public void FeatureHasDescriptionTest([Values]Feature feature)
-        {
-            Assert.IsFalse(string.IsNullOrEmpty(feature.GetDescription()));
-        }
+        public void FeatureHasDescriptionTest([Values]Feature feature) => Assert.That(feature.GetDescription(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all features have valid nature attribute.
@@ -123,20 +127,12 @@
         /// The feature.
         /// </param>
         [Test]
-        public void FeatureHasNatureTest([Values]Feature feature)
-        {
-            Nature[] natures = EnumExtensions.ToArray<Nature>();
-            Assert.True(natures.Contains(feature.GetNature()));
-        }
+        public void FeatureHasValidNatureTest([Values]Feature feature) => Assert.True(natures.Contains(feature.GetNature()));
 
         /// <summary>
         /// Tests that all features values are unique.
         /// </summary>
         [Test]
-        public void FeatureValuesUniqueTest()
-        {
-            Feature[] features = EnumExtensions.ToArray<Feature>();
-            Assert.That(features.Cast<byte>(), Is.Unique);
-        }
+        public void FeatureValuesUniqueTest() => Assert.That(features.Cast<byte>(), Is.Unique);
     }
 }

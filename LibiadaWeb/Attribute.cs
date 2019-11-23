@@ -248,9 +248,27 @@
         Replace = 40,
 
         /// <summary>
-        /// The compare.
+        /// The reference details of an existing public INSD entry to which a comparison is made.
         /// </summary>
         [Display(Name = "compare")]
-        Compare = 41
+        Compare = 41,
+
+        /// <summary>
+        /// The name of the allele for the given gene.
+        /// </summary>
+        [Display(Name = "allele")]
+        Allele = 42,
+
+        /// <summary>
+        /// Indicates that exons from two RNA molecules are ligated in intermolecular reaction to form mature RNA.
+        /// </summary>
+        [Display(Name = "trans_splicing")]
+        TransSplicing = 43,
+
+        /// <summary>
+        /// Frequency of the occurrence of a feature.
+        /// </summary>
+        [Display(Name = "frequency")]
+        Frequency = 44
     }
 }

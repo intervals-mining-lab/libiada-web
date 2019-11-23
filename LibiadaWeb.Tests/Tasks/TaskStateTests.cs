@@ -20,14 +20,15 @@
         private const int TaskStatesCount = 4;
 
         /// <summary>
+        /// Array of all task states.
+        /// </summary>
+        private readonly TaskState[] taskStates = EnumExtensions.ToArray<TaskState>();
+
+        /// <summary>
         /// Tests count of task states.
         /// </summary>
         [Test]
-        public void TaskStateCountTest()
-        {
-            int actualCount = EnumExtensions.ToArray<TaskState>().Length;
-            Assert.AreEqual(TaskStatesCount, actualCount);
-        }
+        public void TaskStateCountTest() => Assert.AreEqual(TaskStatesCount, taskStates.Length);
 
         /// <summary>
         /// Tests values of task states.
@@ -35,8 +36,6 @@
         [Test]
         public void TaskStateValuesTest()
         {
-            TaskState[] taskStates = EnumExtensions.ToArray<TaskState>();
-
             for (int i = 1; i <= TaskStatesCount; i++)
             {
                 Assert.IsTrue(taskStates.Contains((TaskState)i));
@@ -56,10 +55,7 @@
         [TestCase((TaskState)2, "InProgress")]
         [TestCase((TaskState)3, "Completed")]
         [TestCase((TaskState)4, "Error")]
-        public void TaskStateNameTest(TaskState taskState, string name)
-        {
-            Assert.AreEqual(name, taskState.GetName());
-        }
+        public void TaskStateNameTest(TaskState taskState, string name) => Assert.AreEqual(name, taskState.GetName());
 
         /// <summary>
         /// Tests that all task states have display value.
@@ -68,10 +64,7 @@
         /// The task state.
         /// </param>
         [Test]
-        public void TaskStateHasDisplayValueTest([Values]TaskState taskState)
-        {
-            Assert.IsFalse(string.IsNullOrEmpty(taskState.GetDisplayValue()));
-        }
+        public void TaskStateHasDisplayValueTest([Values]TaskState taskState) => Assert.That(taskState.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all task states have description.
@@ -80,19 +73,12 @@
         /// The task state.
         /// </param>
         [Test]
-        public void TaskStateHasDescriptionTest([Values]TaskState taskState)
-        {
-            Assert.IsFalse(string.IsNullOrEmpty(taskState.GetDescription()));
-        }
+        public void TaskStateHasDescriptionTest([Values]TaskState taskState) => Assert.That(taskState.GetDescription(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all task states values are unique.
         /// </summary>
         [Test]
-        public void TaskStateValuesUniqueTest()
-        {
-            TaskState[] taskStates = EnumExtensions.ToArray<TaskState>();
-            Assert.That(taskStates.Cast<byte>(), Is.Unique);
-        }
+        public void TaskStateValuesUniqueTest() => Assert.That(taskStates.Cast<byte>(), Is.Unique);
     }
 }

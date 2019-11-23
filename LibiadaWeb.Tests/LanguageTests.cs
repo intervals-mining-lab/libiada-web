@@ -18,14 +18,15 @@
         private const int LanguagesCount = 3;
 
         /// <summary>
+        /// Array of all languages.
+        /// </summary>
+        private readonly Language[] languages = EnumExtensions.ToArray<Language>();
+
+        /// <summary>
         /// Tests count of languages.
         /// </summary>
         [Test]
-        public void LanguageCountTest()
-        {
-            var actualCount = EnumExtensions.ToArray<Language>().Length;
-            Assert.AreEqual(LanguagesCount, actualCount);
-        }
+        public void LanguageCountTest() => Assert.AreEqual(LanguagesCount, languages.Length);
 
         /// <summary>
         /// Tests values of languages.
@@ -33,7 +34,6 @@
         [Test]
         public void LanguageValuesTest()
         {
-            var languages = EnumExtensions.ToArray<Language>();
             for (int i = 1; i <= LanguagesCount; i++)
             {
                 Assert.IsTrue(languages.Contains((Language)i));
@@ -52,10 +52,7 @@
         [TestCase((Language)1, "Russian")]
         [TestCase((Language)2, "English")]
         [TestCase((Language)3, "German")]
-        public void LanguageNamesTest(Language language, string name)
-        {
-            Assert.AreEqual(name, language.GetName());
-        }
+        public void LanguageNamesTest(Language language, string name) => Assert.AreEqual(name, language.GetName());
 
         /// <summary>
         /// Tests that all languages have display value.
@@ -64,10 +61,7 @@
         /// The language.
         /// </param>
         [Test]
-        public void LanguageHasDisplayValueTest([Values]Language language)
-        {
-            Assert.IsFalse(string.IsNullOrEmpty(language.GetDisplayValue()));
-        }
+        public void LanguageHasDisplayValueTest([Values]Language language) => Assert.That(language.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all languages have description.
@@ -76,20 +70,12 @@
         /// The language.
         /// </param>
         [Test]
-        public void LanguageHasDescriptionTest([Values]Language language)
-        {
-            Assert.IsFalse(string.IsNullOrEmpty(language.GetDescription()));
-        }
+        public void LanguageHasDescriptionTest([Values]Language language) => Assert.That(language.GetDescription(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all languages values are unique.
         /// </summary>
         [Test]
-        public void LanguageValuesUniqueTest()
-        {
-            var languages = EnumExtensions.ToArray<Language>();
-            var languageValues = languages.Cast<byte>();
-            Assert.That(languageValues, Is.Unique);
-        }
+        public void LanguageValuesUniqueTest() => Assert.That(languages.Cast<byte>(), Is.Unique);
     }
 }

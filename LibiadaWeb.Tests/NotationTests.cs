@@ -22,14 +22,20 @@
         private const int NotationsCount = 12;
 
         /// <summary>
+        /// Array of all notations.
+        /// </summary>
+        private readonly Notation[] notations = EnumExtensions.ToArray<Notation>();
+
+        /// <summary>
+        /// Array of all natures.
+        /// </summary>
+        private readonly Nature[] natures = EnumExtensions.ToArray<Nature>();
+
+        /// <summary>
         /// Tests count of notations.
         /// </summary>
         [Test]
-        public void NotationCountTest()
-        {
-            var actualCount = EnumExtensions.ToArray<Notation>().Length;
-            Assert.AreEqual(NotationsCount, actualCount);
-        }
+        public void NotationCountTest() => Assert.AreEqual(NotationsCount, notations.Length);
 
         /// <summary>
         /// Tests values of notations.
@@ -37,8 +43,6 @@
         [Test]
         public void NotationValuesTest()
         {
-            var notations = EnumExtensions.ToArray<Notation>();
-
             for (int i = 1; i <= NotationsCount; i++)
             {
                 Assert.IsTrue(notations.Contains((Notation)i));
@@ -66,10 +70,7 @@
         [TestCase((Notation)10, "IntegerValues")]
         [TestCase((Notation)11, "Consonance")]
         [TestCase((Notation)12, "Phonemes")]
-        public void NotationNamesTest(Notation notation, string name)
-        {
-            Assert.AreEqual(name, notation.GetName());
-        }
+        public void NotationNamesTest(Notation notation, string name) => Assert.AreEqual(name, notation.GetName());
 
         /// <summary>
         /// Tests that all notations have display value.
@@ -78,10 +79,7 @@
         /// The notation.
         /// </param>
         [Test]
-        public void NotationHasDisplayValueTest([Values]Notation notation)
-        {
-            Assert.IsFalse(string.IsNullOrEmpty(notation.GetDisplayValue()));
-        }
+        public void NotationHasDisplayValueTest([Values]Notation notation) => Assert.That(notation.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all notations have description.
@@ -90,10 +88,7 @@
         /// The notation.
         /// </param>
         [Test]
-        public void NotationHasDescriptionTest([Values]Notation notation)
-        {
-            Assert.IsFalse(string.IsNullOrEmpty(notation.GetDescription()));
-        }
+        public void NotationHasDescriptionTest([Values]Notation notation) => Assert.That(notation.GetDescription(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all notations have valid nature attribute.
@@ -102,21 +97,12 @@
         /// The notation.
         /// </param>
         [Test]
-        public void NotationHasNatureTest([Values]Notation notation)
-        {
-            var natures = EnumExtensions.ToArray<Nature>();
-            Assert.True(natures.Contains(notation.GetNature()));
-        }
+        public void NotationHasNatureTest([Values]Notation notation) => Assert.True(natures.Contains(notation.GetNature()));
 
         /// <summary>
         /// Tests that all notations values are unique.
         /// </summary>
         [Test]
-        public void NotationValuesUniqueTest()
-        {
-            var notations = EnumExtensions.ToArray<Notation>();
-            var notationValues = notations.Cast<byte>();
-            Assert.That(notationValues, Is.Unique);
-        }
+        public void NotationValuesUniqueTest() => Assert.That(notations.Cast<byte>(), Is.Unique);
     }
 }
