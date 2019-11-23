@@ -182,17 +182,20 @@
 
                     while (iterator.Next())
                     {
-                        var fragment = new Chain(iterator.GetEndPosition() - iterator.GetStartPosition());
+                        int start = iterator.GetStartPosition();
+                        int end = iterator.GetEndPosition();
 
-                        for (int k = 0; iterator.GetStartPosition() + k < iterator.GetEndPosition(); k++)
+                        var fragment = new List<IBaseObject>();
+                        for (int k = 0; start + k < end; k++)
                         {
-                            fragment.Set(chains[i][iterator.GetStartPosition() + k], k);
+                            fragment.Add(chains[i][start + k]);
                         }
 
-                        fragments.Add(fragment);
+                        fragments.Add(new Chain(fragment));
+
                         partNames[i].Add(fragment.ToString());
                         starts[i].Add(iterator.GetStartPosition());
-                        lengthes[i].Add(fragment.Length);
+                        lengthes[i].Add(fragment.Count);
                     }
 
                     var fragmentsData = new FragmentData[fragments.Count];

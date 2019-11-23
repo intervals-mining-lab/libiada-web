@@ -61,16 +61,10 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             }
             else
             {
-                string[] text = stringSequence.Split(new[] { '\n', '\r', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-
-                chain = new BaseChain(text.Length);
-
                 // file always contains empty string at the end
                 // TODO: rewrite this, add empty string check at the end or write a normal trim
-                for (int i = 0; i < text.Length; i++)
-                {
-                    chain.Set(new ValueString(text[i]), i);
-                }
+                string[] text = stringSequence.Split(new[] { '\n', '\r', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                chain = new BaseChain(text.Select(e => (ValueString)e).Cast<IBaseObject>().ToList());
             }
 
             MatterRepository.CreateMatterFromSequence(commonSequence);

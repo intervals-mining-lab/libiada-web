@@ -1,5 +1,6 @@
 namespace LibiadaWeb.Models.Repositories.Catalogs
 {
+    using System.Collections.Generic;
     using System.Linq;
 
     using LibiadaCore.Extensions;
@@ -11,34 +12,35 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
     /// </summary>
     public static class FeatureRepository
     {
-        private static readonly Feature[] features = EnumExtensions.ToArray<Feature>();
+        private static readonly Dictionary<string, Feature> featuresDictionary = EnumExtensions.ToArray<Feature>()
+                                                                                               .ToDictionary(FeatureExtensions.GetGenBankName);
 
         /// <summary>
         /// Gets feature by name.
         /// </summary>
-        /// <param name="name">
-        /// The name.
+        /// <param name="genBankName">
+        /// The feature name in GenBank.
         /// </param>
         /// <returns>
         /// The <see cref="int"/>.
         /// </returns>
-        public static Feature GetFeatureByName(string name)
+        public static Feature GetFeatureByName(string genBankName)
         {
-            return features.Single(f => FeatureExtensions.GetGenBankName(f) == name);
+            return featuresDictionary[genBankName];
         }
 
         /// <summary>
         /// Checks if feature exists.
         /// </summary>
-        /// <param name="name">
-        /// The name of feature.
+        /// <param name="genBankName">
+        /// The feature name in GenBank.
         /// </param>
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        public static bool FeatureExists(string name)
+        public static bool FeatureExists(string genBankName)
         {
-            return features.Any(f => FeatureExtensions.GetGenBankName(f) == name);
+            return featuresDictionary.ContainsKey(genBankName);
         }
     }
 }
