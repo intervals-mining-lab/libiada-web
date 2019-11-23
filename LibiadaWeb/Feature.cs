@@ -3,8 +3,6 @@
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
-    using LibiadaCore.Extensions;
-
     using LibiadaWeb.Attributes;
 
     /// <summary>
@@ -271,26 +269,60 @@
         [Description("A segment of DNA that is transcribed, but removed from within the transcript by splicing together the sequences (exons) on either side of it.")]
         [Nature(Nature.Genetic)]
         [GenBankFeatureName("intron")]
-        Intron = 28
-    }
+        Intron = 28,
 
-    /// <summary>
-    /// Feature extension methods.
-    /// </summary>
-    public static class FeatureExtensions
-    {
         /// <summary>
-        /// Gets genBank feature name.
+        /// The operon.
         /// </summary>
-        /// <param name="value">
-        /// Feature value.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        public static string GetGenBankName(this Feature value)
-        {
-            return value.GetAttribute<Feature, GenBankFeatureNameAttribute>().Value;
-        }
+        [Display(Name = "Operon")]
+        [Description("Region containing polycistronic transcript including a cluster of genes that are under the control of the same regulatory sequences/promoter and in the same biological pathway.")]
+        [Nature(Nature.Genetic)]
+        [GenBankFeatureName("operon")]
+        Operon = 29,
+
+        /// <summary>
+        /// The polyA site.
+        /// </summary>
+        [Display(Name = "PolyA site")]
+        [Description("Site on an RNA transcript to which will be added adenine residues by post-transcriptional polyadenylation.")]
+        [Nature(Nature.Genetic)]
+        [GenBankFeatureName("polyA_site")]
+        PolyASite = 30,
+
+        /// <summary>
+        /// The modified base.
+        /// </summary>
+        [Display(Name = "Modified base")]
+        [Description("The indicated nucleotide is a modified nucleotide and should be substituted for by the indicated molecule (given in the mod_base qualifier value).")]
+        [Nature(Nature.Genetic)]
+        [GenBankFeatureName("modified_base")]
+        ModifiedBase = 31,
+
+        /// <summary>
+        /// The miscellaneous recombination.
+        /// </summary>
+        [Display(Name = "Miscellaneous recombination")]
+        [Description("Site of any generalized, site-specific or replicative recombination event where there is a breakage and reunion of duplex DNA that cannot be described by other recombination keys or qualifiers of source key (/proviral).")]
+        [Nature(Nature.Genetic)]
+        [GenBankFeatureName("misc_recomb")]
+        MiscellaneousRecombination = 32,
+
+        /// <summary>
+        /// The exon.
+        /// </summary>
+        [Display(Name = "Exon")]
+        [Description("Region of genome that codes for portion of spliced mRNA, rRNA and tRNA; may contain 5'UTR, all CDSs and 3' UTR.")]
+        [Nature(Nature.Genetic)]
+        [GenBankFeatureName("exon")]
+        Exon = 33,
+
+        /// <summary>
+        /// The unsure.
+        /// </summary>
+        [Display(Name = "Unsure")]
+        [Description("A small region of sequenced bases, generally 10 or fewer in its length, which could not be confidently identified. Such a region might contain called bases (A, T, G, or C), or a mixture of called-bases and uncalled-bases ('N'). The unsure feature should not be used when annotating gaps in genome assemblies. Please refer to assembly_gap feature for gaps within the sequence of an assembled genome. For annotation of gaps in other sequences than assembled genomes use the gap feature.")]
+        [Nature(Nature.Genetic)]
+        [GenBankFeatureName("unsure")]
+        Unsure = 34
     }
 }

@@ -18,14 +18,15 @@
         private const int TranslatorsCount = 4;
 
         /// <summary>
+        /// Array of all automatic translators.
+        /// </summary>
+        private readonly Translator[] translators = EnumExtensions.ToArray<Translator>();
+
+        /// <summary>
         /// Tests count of translators.
         /// </summary>
         [Test]
-        public void TranslatorCountTest()
-        {
-            var actualCount = EnumExtensions.ToArray<Translator>().Length;
-            Assert.AreEqual(TranslatorsCount, actualCount);
-        }
+        public void TranslatorCountTest() => Assert.AreEqual(TranslatorsCount, translators.Length);
 
         /// <summary>
         /// Tests values of translators.
@@ -33,7 +34,6 @@
         [Test]
         public void TranslatorValuesTest()
         {
-            var translators = EnumExtensions.ToArray<Translator>();
             for (int i = 0; i < TranslatorsCount; i++)
             {
                 Assert.IsTrue(translators.Contains((Translator)i));
@@ -53,10 +53,7 @@
         [TestCase((Translator)1, "GoogleTranslate")]
         [TestCase((Translator)2, "Promt")]
         [TestCase((Translator)3, "InterTran")]
-        public void TranslatorNamesTest(Translator translator, string name)
-        {
-            Assert.AreEqual(name, translator.GetName());
-        }
+        public void TranslatorNamesTest(Translator translator, string name) => Assert.AreEqual(name, translator.GetName());
 
         /// <summary>
         /// Tests that all translators have display value.
@@ -65,10 +62,7 @@
         /// The translator.
         /// </param>
         [Test]
-        public void TranslatorHasDisplayValueTest([Values]Translator translator)
-        {
-            Assert.IsFalse(string.IsNullOrEmpty(translator.GetDisplayValue()));
-        }
+        public void TranslatorHasDisplayValueTest([Values]Translator translator) => Assert.That(translator.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all translators have description.
@@ -77,20 +71,12 @@
         /// The translator.
         /// </param>
         [Test]
-        public void TranslatorHasDescriptionTest([Values]Translator translator)
-        {
-            Assert.IsFalse(string.IsNullOrEmpty(translator.GetDescription()));
-        }
+        public void TranslatorHasDescriptionTest([Values]Translator translator) => Assert.That(translator.GetDescription(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all translators values are unique.
         /// </summary>
         [Test]
-        public void TranslatorValuesUniqueTest()
-        {
-            var translators = EnumExtensions.ToArray<Translator>();
-            var translatorValues = translators.Cast<byte>();
-            Assert.That(translatorValues, Is.Unique);
-        }
+        public void TranslatorValuesUniqueTest() => Assert.That(translators.Cast<byte>(), Is.Unique);
     }
 }

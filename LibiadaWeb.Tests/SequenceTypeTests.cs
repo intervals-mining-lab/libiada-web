@@ -22,14 +22,20 @@
         private const int SequenceTypesCount = 12;
 
         /// <summary>
+        /// Array of all sequence types.
+        /// </summary>
+        private readonly SequenceType[] sequenceTypes = EnumExtensions.ToArray<SequenceType>();
+
+        /// <summary>
+        /// Array of all natures.
+        /// </summary>
+        private readonly Nature[] natures = EnumExtensions.ToArray<Nature>();
+
+        /// <summary>
         /// Tests count of sequence types.
         /// </summary>
         [Test]
-        public void SequenceTypeCountTest()
-        {
-            var actualCount = EnumExtensions.ToArray<SequenceType>().Length;
-            Assert.AreEqual(SequenceTypesCount, actualCount);
-        }
+        public void SequenceTypeCountTest() => Assert.AreEqual(SequenceTypesCount, sequenceTypes.Length);
 
         /// <summary>
         /// Tests values of sequence types.
@@ -37,8 +43,6 @@
         [Test]
         public void SequenceTypeValuesTest()
         {
-            var sequenceTypes = EnumExtensions.ToArray<SequenceType>();
-
             for (int i = 1; i <= SequenceTypesCount; i++)
             {
                 Assert.IsTrue(sequenceTypes.Contains((SequenceType)i));
@@ -66,10 +70,7 @@
         [TestCase((SequenceType)10, "Mitochondrion16SRRNA")]
         [TestCase((SequenceType)11, "Plastid")]
         [TestCase((SequenceType)12, "MitochondrialPlasmid")]
-        public void SequenceTypeNamesTest(SequenceType sequenceType, string name)
-        {
-            Assert.AreEqual(name, sequenceType.GetName());
-        }
+        public void SequenceTypeNamesTest(SequenceType sequenceType, string name) => Assert.AreEqual(name, sequenceType.GetName());
 
         /// <summary>
         /// Tests that all sequence types have display value.
@@ -78,10 +79,7 @@
         /// The sequence type.
         /// </param>
         [Test]
-        public void SequenceTypeHasDisplayValueTest([Values]SequenceType sequenceType)
-        {
-            Assert.IsFalse(string.IsNullOrEmpty(sequenceType.GetDisplayValue()));
-        }
+        public void SequenceTypeHasDisplayValueTest([Values]SequenceType sequenceType) => Assert.That(sequenceType.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all sequence types have description.
@@ -90,10 +88,7 @@
         /// The sequence Type.
         /// </param>
         [Test]
-        public void SequenceTypeHasDescriptionTest([Values]SequenceType sequenceType)
-        {
-            Assert.IsFalse(string.IsNullOrEmpty(sequenceType.GetDescription()));
-        }
+        public void SequenceTypeHasDescriptionTest([Values]SequenceType sequenceType) => Assert.That(sequenceType.GetDescription(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all sequence types have valid nature attribute.
@@ -102,21 +97,12 @@
         /// The sequence Type.
         /// </param>
         [Test]
-        public void SequenceTypeHasNatureTest([Values]SequenceType sequenceType)
-        {
-            var natures = EnumExtensions.ToArray<Nature>();
-            Assert.True(natures.Contains(sequenceType.GetNature()));
-        }
+        public void SequenceTypeHasNatureTest([Values]SequenceType sequenceType) => Assert.True(natures.Contains(sequenceType.GetNature()));
 
         /// <summary>
         /// Tests that all sequence types values are unique.
         /// </summary>
         [Test]
-        public void SequenceTypeValuesUniqueTest()
-        {
-            var sequenceTypes = EnumExtensions.ToArray<SequenceType>();
-            var sequenceTypeValues = sequenceTypes.Cast<byte>();
-            Assert.That(sequenceTypeValues, Is.Unique);
-        }
+        public void SequenceTypeValuesUniqueTest() => Assert.That(sequenceTypes.Cast<byte>(), Is.Unique);
     }
 }

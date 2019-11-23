@@ -15,17 +15,18 @@
         /// <summary>
         /// The attributes count.
         /// </summary>
-        private const int AttributesCount = 41;
+        private const int AttributesCount = 44;
+
+        /// <summary>
+        /// Array of all attributes.
+        /// </summary>
+        private readonly Attribute[] attributes = EnumExtensions.ToArray<Attribute>();
 
         /// <summary>
         /// Tests count of attributes.
         /// </summary>
         [Test]
-        public void AttributesCountTest()
-        {
-            var actualCount = EnumExtensions.ToArray<Attribute>().Length;
-            Assert.AreEqual(AttributesCount, actualCount);
-        }
+        public void AttributesCountTest() => Assert.AreEqual(AttributesCount, attributes.Length);
 
         /// <summary>
         /// Tests values of attributes.
@@ -33,7 +34,6 @@
         [Test]
         public void AttributeValuesTest()
         {
-            var attributes = EnumExtensions.ToArray<Attribute>();
             for (int i = 1; i <= AttributesCount; i++)
             {
                 Assert.IsTrue(attributes.Contains((Attribute)i));
@@ -90,20 +90,15 @@
         [TestCase((Attribute)39, "number")]
         [TestCase((Attribute)40, "replace")]
         [TestCase((Attribute)41, "compare")]
-        public void AttributesDisplayValuesTest(Attribute attribute, string name)
-        {
-            Assert.AreEqual(name, attribute.GetDisplayValue());
-        }
+        [TestCase((Attribute)42, "allele")]
+        [TestCase((Attribute)43, "trans_splicing")]
+        [TestCase((Attribute)44, "frequency")]
+        public void AttributesDisplayValuesTest(Attribute attribute, string name) => Assert.AreEqual(name, attribute.GetDisplayValue());
 
         /// <summary>
         /// Tests that all attributes values are unique.
         /// </summary>
         [Test]
-        public void AttributeValuesUniqueTest()
-        {
-            var attributes = EnumExtensions.ToArray<Attribute>();
-            var attributeValues = attributes.Cast<byte>();
-            Assert.That(attributeValues, Is.Unique);
-        }
+        public void AttributeValuesUniqueTest() => Assert.That(attributes.Cast<byte>(), Is.Unique);
     }
 }
