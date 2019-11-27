@@ -1,4 +1,7 @@
-﻿namespace LibiadaWeb.Helpers
+﻿using System.Text.RegularExpressions;
+using Accord.Math;
+
+namespace LibiadaWeb.Helpers
 {
     using System;
     using System.Collections.Generic;
@@ -179,6 +182,35 @@
             }
 
             lastRequestDateTime = DateTimeOffset.Now;
+        }
+
+        public static List<string> GetIdFromFile(string data, int maxLength, int minLength, bool includePartial)
+        {
+            string[] fullText = Regex.Split(data, @"^\r\n", RegexOptions.Multiline);
+            List<string> idList = new List<string>();
+            foreach (var block in fullText)
+            {
+                if (!string.IsNullOrEmpty(block))
+                { 
+                    string[] stringsInBlock =  block.Split('\n');
+                    if (includePartial || !stringsInBlock[0].Contains("partial"))
+                    {
+                        float length = GetLengthFromString(stringsInBlock[1]);
+                        if (length >= minLength && length <= maxLength)
+                        {
+                            string[] idStrings = stringsInBlock[2].Split(' ');
+                            idList.Add(idStrings[0]);
+                        }
+                    }
+                }
+            }
+            return idList;
+        }
+        private static float GetLengthFromString(string stringWithLength)
+        {
+            string[] splitedStringWithLength = stringWithLength.Split(' ');
+            float length =float.Parse(splitedStringWithLength[0]); ;
+            return length;
         }
     }
 }

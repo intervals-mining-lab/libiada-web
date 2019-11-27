@@ -1,0 +1,44 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Accord.Diagnostics;
+using LibiadaWeb.Helpers;
+using NUnit.Framework;
+
+namespace LibiadaWeb.Tests.Helpers
+{
+    [TestFixture(TestOf = typeof(NcbiHelper))]
+
+   public class NcbiHelperTests
+    {
+        public string Text = @"
+1. Tomato yellow leaf curl virus - Israel replication-associated protein gene, partial cds
+600 bp linear DNA 
+AY647456.1 GI:49823161
+
+2. Tomato yellow leaf curl virus - IL [JR:Osaka] DNA, complete genome
+2,781 bp circular DNA 
+LC099965.1 GI:958114347
+
+3. UNVERIFIED: Tomato yellow leaf curl virus isolate YNC AC3 protein-like gene, complete sequence; and AC2 protein-like gene, partial sequence
+505 bp linear DNA 
+KC684958.1 GI:514400153";
+      
+        [Test]
+        public void GetIDFromFileTest()
+        {
+            var txtReader = new StreamReader($"{SystemData.ProjectFolderPathForNcbiHelper}nuccore_result.txt");
+            var textFromFile = txtReader.ReadToEnd();
+            var result = NcbiHelper.GetIdFromFile(textFromFile,700,2,true);
+            foreach (var VARIABLE in result)
+            {
+                System.Diagnostics.Debug.WriteLine(VARIABLE);
+                Console.WriteLine(VARIABLE);
+            }
+          
+        }
+    }
+}
