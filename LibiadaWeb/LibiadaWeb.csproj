@@ -183,6 +183,7 @@
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
     <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="Extensions\TaskTypeExtensions.cs" />
     <Compile Include="Feature.cs" />
     <Compile Include="Extensions\FeatureExtensions.cs" />
     <Compile Include="Fmotif.cs">
