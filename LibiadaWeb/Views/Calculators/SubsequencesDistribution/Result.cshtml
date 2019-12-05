@@ -103,13 +103,18 @@
                                 <br />
                                 <div class="form-group">
                                     <div class="col-md-10">
-                                        <select class="form-control" title="Subsequnce characteristic" ng-model="subsequenceCharacteristic" ng-options="c.Text for c in subsequencesCharacteristicsList" id="subsequenceCharacteristic"></select>
+                                        <select class="form-control" 
+                                                title="Subsequence characteristic" 
+                                                ng-model="subsequenceCharacteristic" 
+                                                ng-options="c.Text for c in subsequencesCharacteristicsList"
+                                                ng-change="redrawGenesMap()"
+                                                id="subsequenceCharacteristic"></select>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-md-10">
                                         <label>
-                                            <input type="checkbox" name="numericXAxis" ng-model="numericXAxis" value="false" />
+                                            <input type="checkbox" name="numericXAxis" ng-model="numericXAxis" ng-change="redrawGenesMap()" value="false" />
                                             Numeric x axis
                                         </label>
                                     </div>
