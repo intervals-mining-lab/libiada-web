@@ -2682,4 +2682,17 @@ END
 $BODY$;
 COMMENT ON FUNCTION db_integrity_test() IS 'Procedure for cheking referential integrity of the database.';
 
+-- 07.12.2019
+-- Add multi-sequence table and referencings columns in mater table.
+
+CREATE TABLE multisequence
+(
+    id serial NOT NULL,
+    name text NOT NULL,
+    nature smallint NOT NULL DEFAULT 1,
+    PRIMARY KEY (id),
+    CONSTRAINT uk_multisequence_name UNIQUE (name)
+
+);
+
 COMMIT;
