@@ -2695,4 +2695,10 @@ CREATE TABLE multisequence
 
 );
 
+COMMENT ON TABLE matter IS 'Table for all research objects, samples, texts, etc.';
+ALTER TABLE matter ADD COLUMN multisequence_id integer;
+ALTER TABLE matter ADD COLUMN multisequence_number smallint;
+ALTER TABLE matter ADD CONSTRAINT fk_matter_multisequence FOREIGN KEY (multisequence_id) REFERENCES multisequence (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE SET NULL;
+ALTER TABLE matter ADD CONSTRAINT chk_multisequence_reference CHECK ((multisequence_id IS NULL AND multisequence_number IS NULL) OR (multisequence_id IS NOT NULL AND multisequence_number IS NOT NULL));
+
 COMMIT;
