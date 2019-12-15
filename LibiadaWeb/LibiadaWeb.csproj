@@ -257,6 +257,9 @@
     <Compile Include="Models\Repositories\Sequences\MeasureRepository.cs" />
     <Compile Include="Models\SelectListItemComparer.cs" />
     <Compile Include="Models\SubsequenceImporter.cs" />
+    <Compile Include="Multisequence.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
     <Compile Include="MusicSequence.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>

@@ -54,5 +54,6 @@ namespace LibiadaWeb
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<CalculationTask> CalculationTask { get; set; }
         public virtual DbSet<SequenceGroup> SequenceGroup { get; set; }
+        public virtual DbSet<Multisequence> Multisequence { get; set; }
     }
 }

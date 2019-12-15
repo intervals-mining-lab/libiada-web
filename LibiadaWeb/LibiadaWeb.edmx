@@ -234,6 +234,8 @@
           <Property Name="modified" Type="timestamptz" Precision="7" Nullable="false" />
           <Property Name="sequence_type" Type="int2" Nullable="false" />
           <Property Name="group" Type="int2" Nullable="false" />
+          <Property Name="multisequence_id" Type="int4" />
+          <Property Name="multisequence_number" Type="int2" />
         </EntityType>
         <EntityType Name="measure">
           <Key>
@@ -251,6 +253,14 @@
           <Property Name="ticks_per_beat" Type="int4" />
           <Property Name="fifths" Type="int4" Nullable="false" />
           <Property Name="major" Type="bool" Nullable="false" />
+        </EntityType>
+        <EntityType Name="multisequence">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="text" Nullable="false" />
+          <Property Name="nature" Type="int2" Nullable="false" />
         </EntityType>
         <EntityType Name="music_chain">
           <Key>
@@ -515,6 +525,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_matter_multisequence">
+          <End Role="multisequence" Type="Self.multisequence" Multiplicity="0..1" />
+          <End Role="matter" Type="Self.matter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="multisequence">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="matter">
+              <PropertyRef Name="multisequence_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_matter_sequence_group">
           <End Role="sequence_group" Type="Self.sequence_group" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -654,6 +676,7 @@
           <EntitySet Name="literature_chain" EntityType="Self.literature_chain" Schema="public" store:Type="Tables" />
           <EntitySet Name="matter" EntityType="Self.matter" Schema="public" store:Type="Tables" />
           <EntitySet Name="measure" EntityType="Self.measure" Schema="public" store:Type="Tables" />
+          <EntitySet Name="multisequence" EntityType="Self.multisequence" Schema="public" store:Type="Tables" />
           <EntitySet Name="music_chain" EntityType="Self.music_chain" Schema="public" store:Type="Tables" />
           <EntitySet Name="note" EntityType="Self.note" Schema="public" store:Type="Tables" />
           <EntitySet Name="note_pitch" EntityType="Self.note_pitch" Schema="public" store:Type="Tables" />
@@ -710,6 +733,10 @@
           <AssociationSet Name="fk_literature_chain_matter" Association="Self.fk_literature_chain_matter">
             <End Role="matter" EntitySet="matter" />
             <End Role="literature_chain" EntitySet="literature_chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_matter_multisequence" Association="Self.fk_matter_multisequence">
+            <End Role="multisequence" EntitySet="multisequence" />
+            <End Role="matter" EntitySet="matter" />
           </AssociationSet>
           <AssociationSet Name="fk_matter_sequence_group" Association="Self.fk_matter_sequence_group">
             <End Role="sequence_group" EntitySet="sequence_group" />
@@ -783,6 +810,8 @@
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUser" />
           <EntitySet Name="CalculationTask" EntityType="Self.CalculationTask" />
           <EntitySet Name="SequenceGroup" EntityType="Self.SequenceGroup" />
+          <EntitySet Name="Multisequence" EntityType="Self.Multisequence" />
+
 
           <AssociationSet Name="fk_binary_characteristic_first_element" Association="Self.fk_binary_characteristic_first_element">
             <End Role="Element" EntitySet="Element" />
@@ -1004,19 +1033,22 @@
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
           </AssociationSet>
 
-          
-
           <AssociationSet Name="sequence_group_matter" Association="Self.sequence_group_matter">
             <End Role="SequenceGroup" EntitySet="SequenceGroup" />
             <End Role="Matter" EntitySet="Matter" />
           </AssociationSet>
-          <AssociationSet Name="fk_sequence_group_creator" Association="LibiadaWebModel.fk_sequence_group_creator">
+          <AssociationSet Name="fk_sequence_group_creator" Association="Self.fk_sequence_group_creator">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="SequenceGroup" EntitySet="SequenceGroup" />
           </AssociationSet>
-          <AssociationSet Name="fk_sequence_group_modifier" Association="LibiadaWebModel.fk_sequence_group_modifier">
+          <AssociationSet Name="fk_sequence_group_modifier" Association="Self.fk_sequence_group_modifier">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="SequenceGroup" EntitySet="SequenceGroup" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_matter_multisequence" Association="Self.fk_matter_multisequence">
+            <End Role="Multisequence" EntitySet="Multisequence" />
+            <End Role="Matter" EntitySet="Matter" />
           </AssociationSet>
 
         </EntityContainer>
@@ -1042,6 +1074,9 @@
         <EnumType Name="FullCharacteristic" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.Characteristics.Calculators.FullCalculators.FullCharacteristic" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="TaskType" UnderlyingType="Byte" a:ExternalTypeName="LibiadaWeb.Tasks.TaskType" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="TaskState" UnderlyingType="Byte" a:ExternalTypeName="LibiadaWeb.Tasks.TaskState" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="ArrangementType" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.ArrangementManagers.ArrangementType" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="SequenceGroupType" UnderlyingType="Int16" a:ExternalTypeName="SequenceGroupType" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="PauseTreatment" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Music.PauseTreatment" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
 
         <EntityType Name="BinaryCharacteristicValue">
           <Key>
@@ -1257,12 +1292,15 @@
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="MultisequenceId" Type="Int32" />
+          <Property Name="MultisequenceNumber" Type="Int16" />
           <NavigationProperty Name="Sequence" Relationship="Self.fk_chain_matter" FromRole="Matter" ToRole="CommonSequence" />
           <NavigationProperty Name="DnaSequence" Relationship="Self.fk_dna_chain_matter" FromRole="Matter" ToRole="DnaSequence" />
           <NavigationProperty Name="LiteratureSequence" Relationship="Self.fk_literature_chain_matter" FromRole="Matter" ToRole="LiteratureSequence" />
           <NavigationProperty Name="MusicSequence" Relationship="Self.fk_music_chain_matter" FromRole="Matter" ToRole="MusicSequence" />
           <NavigationProperty Name="DataSequence" Relationship="Self.fk_data_chain_matter" FromRole="Matter" ToRole="DataSequence" />
           <NavigationProperty Name="SequenceGroup" Relationship="Self.sequence_group_matter" FromRole="Matter" ToRole="SequenceGroup" />
+          <NavigationProperty Name="Multisequence" Relationship="Self.fk_matter_multisequence" FromRole="Matter" ToRole="Multisequence" />
         </EntityType>
 
         <EntityType Name="SequenceAttribute">
@@ -1467,11 +1505,21 @@
           <Property Name="CreatorId" Type="Int32" Nullable="false" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="ModifierId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Matters" Relationship="Self.sequence_group_matter" FromRole="SequenceGroup" ToRole="Matter" />
-          <NavigationProperty Name="Creator" Relationship="LibiadaWebModel.fk_sequence_group_creator" FromRole="SequenceGroup" ToRole="AspNetUser" />
-          <NavigationProperty Name="Modifier" Relationship="LibiadaWebModel.fk_sequence_group_modifier" FromRole="SequenceGroup" ToRole="AspNetUser" />
           <Property Name="Nature" Type="LibiadaWebModel.Nature" Nullable="false" />
           <Property Name="SequenceGroupType" Type="LibiadaWebModel.SequenceGroupType" />
+          <NavigationProperty Name="Matters" Relationship="Self.sequence_group_matter" FromRole="SequenceGroup" ToRole="Matter" />
+          <NavigationProperty Name="Creator" Relationship="Self.fk_sequence_group_creator" FromRole="SequenceGroup" ToRole="AspNetUser" />
+          <NavigationProperty Name="Modifier" Relationship="Self.fk_sequence_group_modifier" FromRole="SequenceGroup" ToRole="AspNetUser" />
+        </EntityType>
+
+        <EntityType Name="Multisequence">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Nature" Type="LibiadaWebModel.Nature" Nullable="false" />
+          <NavigationProperty Name="Matters" Relationship="Self.fk_matter_multisequence" FromRole="Multisequence" ToRole="Matter" />
         </EntityType>
 
         <Association Name="fk_binary_characteristic_chain">
@@ -2080,9 +2128,10 @@
           <End Type="Self.SequenceGroup" Role="SequenceGroup" Multiplicity="*" />
           <End Type="Self.Matter" Role="Matter" Multiplicity="*" />
         </Association>
+        
         <Association Name="fk_sequence_group_creator">
-          <End Type="LibiadaWebModel.AspNetUser" Role="AspNetUser" Multiplicity="1" />
-          <End Type="LibiadaWebModel.SequenceGroup" Role="SequenceGroup" Multiplicity="*" />
+          <End Type="Self.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+          <End Type="Self.SequenceGroup" Role="SequenceGroup" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AspNetUser">
               <PropertyRef Name="Id" />
@@ -2092,9 +2141,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        
         <Association Name="fk_sequence_group_modifier">
-          <End Type="LibiadaWebModel.AspNetUser" Role="AspNetUser" Multiplicity="1" />
-          <End Type="LibiadaWebModel.SequenceGroup" Role="SequenceGroup" Multiplicity="*" />
+          <End Type="Self.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+          <End Type="Self.SequenceGroup" Role="SequenceGroup" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AspNetUser">
               <PropertyRef Name="Id" />
@@ -2104,9 +2154,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EnumType Name="ArrangementType" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.ArrangementManagers.ArrangementType" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-        <EnumType Name="SequenceGroupType" UnderlyingType="Int16" a:ExternalTypeName="SequenceGroupType" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-        <EnumType Name="PauseTreatment" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Music.PauseTreatment" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+
+        <Association Name="fk_matter_multisequence">
+          <End Type="Self.Multisequence" Role="Multisequence" Multiplicity="0..1" />
+          <End Type="Self.Matter" Role="Matter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Multisequence">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Matter">
+              <PropertyRef Name="MultisequenceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
 
       </Schema>
     </edmx:ConceptualModels>
@@ -2300,6 +2360,8 @@
           <EntitySetMapping Name="Matter">
             <EntityTypeMapping TypeName="LibiadaWebModel.Matter">
               <MappingFragment StoreEntitySet="matter">
+                <ScalarProperty Name="MultisequenceNumber" ColumnName="multisequence_number" />
+                <ScalarProperty Name="MultisequenceId" ColumnName="multisequence_id" />
                 <ScalarProperty Name="Id" ColumnName="id" />
                 <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="Nature" ColumnName="nature" />
@@ -2503,6 +2565,16 @@
             </EntityTypeMapping>
           </EntitySetMapping>
 
+          <EntitySetMapping Name="Multisequence">
+            <EntityTypeMapping TypeName="LibiadaWebModel.Multisequence">
+              <MappingFragment StoreEntitySet="multisequence">
+                <ScalarProperty Name="Nature" ColumnName="nature" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+
           <AssociationSetMapping Name="note_pitch" TypeName="LibiadaWebModel.note_pitch" StoreEntitySet="note_pitch">
             <EndProperty Name="Note">
               <ScalarProperty Name="Id" ColumnName="note_id" />
@@ -2521,7 +2593,6 @@
             </EndProperty>
           </AssociationSetMapping>
 
-          
           <AssociationSetMapping Name="sequence_group_matter" TypeName="LibiadaWebModel.sequence_group_matter" StoreEntitySet="sequence_group_matter">
             <EndProperty Name="Matter">
               <ScalarProperty Name="Id" ColumnName="matter_id" />
