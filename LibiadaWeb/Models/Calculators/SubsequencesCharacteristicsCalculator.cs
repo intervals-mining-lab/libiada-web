@@ -15,11 +15,27 @@
     /// </summary>
     public static class SubsequencesCharacteristicsCalculator
     {
+        /// <summary>
+        /// Calculates subsequences characteristics.
+        /// </summary>
+        /// <param name="parentId">
+        /// The parent sequence id.
+        /// </param>
+        /// <param name="characteristicId">
+        /// The id of characteristic type, arrangement type and link as <see cref="FullCharacteristicLink"/>.
+        /// </param>
+        /// <param name="features">
+        /// The  features ids of subsequences to extract.
+        /// </param>
+        /// <param name="filters">
+        /// Textual search filters for subsequences products.
+        /// Null by default.
+        /// </param>
+        /// <returns></returns>
         public static double[] CalculateSubsequencesCharacteristics(long parentId, short characteristicId, Feature[] features, string[] filters = null)
         {
             var characteristicsIds = new[] { characteristicId };
-            var attributes = new List<AttributeValue>();
-            var subsequencesData = CalculateSubsequencesCharacteristics(characteristicsIds, features, parentId, attributes, filters);
+            SubsequenceData[] subsequencesData = CalculateSubsequencesCharacteristics(characteristicsIds, features, parentId, filters);
             return subsequencesData.Select(s => s.CharacteristicsValues[0]).ToArray();
         }
 
@@ -27,16 +43,13 @@
         /// Calculates subsequences characteristics.
         /// </summary>
         /// <param name="characteristicIds">
-        /// The characteristic type link ids.
+        /// The ids of characteristic types, arrangement types and links as <see cref="FullCharacteristicLink"/>.
         /// </param>
         /// <param name="features">
-        /// The features ids.
+        /// The  features ids of subsequences to extract.
         /// </param>
         /// <param name="parentSequenceId">
         /// The parent sequence id.
-        /// </param>
-        /// <param name="attributeValues">
-        /// non-redundant array of all attributes.
         /// </param>
         /// <param name="filters">
         /// Textual search filters for subsequences products.
@@ -48,13 +61,11 @@
             short[] characteristicIds,
             Feature[] features,
             long parentSequenceId,
-            List<AttributeValue> attributeValues,
             string[] filters = null)
         {
-            Chain[] sequences;
+            Dictionary<long, Chain> sequences;
             long[] subsequenceIds;
             SubsequenceData[] subsequenceData;
-            Dictionary<long, AttributeValue[]> subsequencesAttributes;
             Dictionary<long, Dictionary<short, double>> characteristics;
             var calculators = new IFullCalculator[characteristicIds.Length];
             var links = new Link[characteristicIds.Length];
@@ -64,7 +75,6 @@
             using (var db = new LibiadaWebEntities())
             {
                 var subsequenceExtractor = new SubsequenceExtractor(db);
-                var sequenceAttributeRepository = new SequenceAttributeRepository(db);
 
                 Subsequence[] subsequences = filters == null ?
                     subsequenceExtractor.GetSubsequences(parentSequenceId, features) :
@@ -73,10 +83,9 @@
                 subsequenceData = subsequences.Select(s => new SubsequenceData(s)).ToArray();
 
                 // converting to libiada sequences
-                sequences = subsequenceExtractor.ExtractChains(parentSequenceId, subsequences);
-
                 subsequenceIds = subsequences.Select(s => s.Id).ToArray();
-                subsequencesAttributes = sequenceAttributeRepository.GetAttributes(subsequenceIds);
+
+
 
                 characteristics = db.CharacteristicValue
                         .Where(c => characteristicIds.Contains(c.CharacteristicLinkId) && subsequenceIds.Contains(c.SequenceId))
@@ -84,18 +93,20 @@
                         .GroupBy(c => c.SequenceId)
                         .ToDictionary(c => c.Key, c => c.ToDictionary(ct => ct.CharacteristicLinkId, ct => ct.Value));
 
-                var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
-                for (int k = 0; k < characteristicIds.Length; k++)
-                {
-                    short characteristicLinkId = characteristicIds[k];
-                    FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
-                    calculators[k] = FullCalculatorsFactory.CreateCalculator(characteristic);
-                    links[k] = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
-                }
+                sequences = subsequenceExtractor.GetSubsequences(subsequences);
+            }
+
+            var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
+            for (int k = 0; k < characteristicIds.Length; k++)
+            {
+                short characteristicLinkId = characteristicIds[k];
+                FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
+                calculators[k] = FullCalculatorsFactory.CreateCalculator(characteristic);
+                links[k] = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
             }
 
             // cycle through subsequences
-            for (int i = 0; i < sequences.Length; i++)
+            for (int i = 0; i < subsequenceIds.Length; i++)
             {
                 characteristics.TryGetValue(subsequenceIds[i], out Dictionary<short, double> sequenceDbCharacteristics);
                 sequenceDbCharacteristics = sequenceDbCharacteristics ?? new Dictionary<short, double>();
@@ -107,7 +118,7 @@
                     short characteristicLinkId = characteristicIds[j];
                     if (!sequenceDbCharacteristics.TryGetValue(characteristicLinkId, out values[j]))
                     {
-                        values[j] = calculators[j].Calculate(sequences[i], links[j]);
+                        values[j] = calculators[j].Calculate(sequences[subsequenceIds[i]], links[j]);
                         var currentCharacteristic = new CharacteristicValue
                         {
                             SequenceId = subsequenceIds[i],
@@ -120,8 +131,6 @@
                 }
 
                 subsequenceData[i].CharacteristicsValues = values;
-
-                subsequenceData[i].Attributes = FillAttributesIndexes(attributeValues, subsequencesAttributes, subsequenceIds[i]);
             }
 
             using (var db = new LibiadaWebEntities())
@@ -134,38 +143,5 @@
             return subsequenceData;
         }
 
-        /// <summary>
-        /// Gets attributes indexes.
-        /// </summary>
-        /// <param name="attributeValues">
-        /// The attribute values.
-        /// </param>
-        /// <param name="subsequencesAttributes">
-        /// The db subsequences attributes.
-        /// </param>
-        /// <param name="subsequenceId">
-        /// The subsequence id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="T:int[]"/>.
-        /// </returns>
-        private static int[] FillAttributesIndexes(List<AttributeValue> attributeValues, Dictionary<long, AttributeValue[]> subsequencesAttributes, long subsequenceId)
-        {
-            subsequencesAttributes.TryGetValue(subsequenceId, out AttributeValue[] attributes);
-            attributes = attributes ?? new AttributeValue[0];
-
-            var attributesIndexes = new int[attributes.Length];
-            for (int j = 0; j < attributes.Length; j++)
-            {
-                if (!attributeValues.Contains(attributes[j]))
-                {
-                    attributeValues.Add(attributes[j]);
-                }
-
-                attributesIndexes[j] = attributeValues.IndexOf(attributes[j]);
-            }
-
-            return attributesIndexes;
-        }
     }
 }
