@@ -231,6 +231,7 @@
     </Compile>
     <Compile Include="Models\CalculatorsData\ArrangementTypeSelectListItem.cs" />
     <Compile Include="Models\CalculatorsData\AttributeValue.cs" />
+    <Compile Include="Models\CalculatorsData\AttributeValueCacheManager.cs" />
     <Compile Include="Models\CalculatorsData\CongenericSequencesCharacteristics.cs" />
     <Compile Include="Models\CalculatorsData\LocalCharacteristicsData.cs" />
     <Compile Include="Models\CalculatorsData\MattersImportResult.cs" />
