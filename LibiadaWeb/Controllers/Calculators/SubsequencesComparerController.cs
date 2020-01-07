@@ -20,9 +20,9 @@
 
     using Newtonsoft.Json;
 
-    using static LibiadaWeb.Models.Calculators.SubsequencesCharacteristicsCalculator;
-
     using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
+
+    using static LibiadaWeb.Models.Calculators.SubsequencesCharacteristicsCalculator;
 
     /// <summary>
     /// The subsequences comparer controller.
@@ -96,14 +96,11 @@
             {
                 double percentageDifference = double.Parse(maxPercentageDifference, CultureInfo.InvariantCulture) / 100;
 
-                var attributeValues = new List<AttributeValue>();
+                var attributeValuesCache = new AttributeValueCacheManager();
                 var characteristics = new SubsequenceData[matterIds.Length][];
-                string characteristicName;
 
                 long[] parentSequenceIds;
                 var matterNames = new string[matterIds.Length];
-
-                string sequenceCharacteristicName;
 
                 int mattersCount = matterIds.Length;
                 Dictionary<string, object> characteristicsTypesData;
@@ -113,8 +110,6 @@
                     // Sequences characteristic
                     var geneticSequenceRepository = new GeneticSequenceRepository(db);
                     long[] chains = geneticSequenceRepository.GetNucleotideSequenceIds(matterIds);
-                    var fullCharacteristicRepository = FullCharacteristicRepository.Instance;
-                    sequenceCharacteristicName = fullCharacteristicRepository.GetCharacteristicName(characteristicLinkId);
 
                     // Sequences characteristic
                     matterIds = OrderMatterIds(matterIds, characteristicLinkId, chains);
@@ -135,10 +130,13 @@
                         matterNames[n] = parentSequences[parentSequenceIds[n]].MatterName;
                     }
 
-                    characteristicName = fullCharacteristicRepository.GetCharacteristicName(subsequencesCharacteristicLinkId);
                     var viewDataHelper = new ViewDataHelper(db);
                     characteristicsTypesData = viewDataHelper.GetCharacteristicsData(CharacteristicCategory.Full);
                 }
+
+                FullCharacteristicRepository fullCharacteristicRepository = FullCharacteristicRepository.Instance;
+                string sequenceCharacteristicName = fullCharacteristicRepository.GetCharacteristicName(characteristicLinkId);
+                string characteristicName = fullCharacteristicRepository.GetCharacteristicName(subsequencesCharacteristicLinkId);
 
                 var characteristicValueSubsequences = new Dictionary<double, List<(int matterIndex, int subsequenceIndex)>>();
 
@@ -149,10 +147,10 @@
                             new[] { subsequencesCharacteristicLinkId },
                             features,
                             parentSequenceIds[i],
-                            attributeValues,
                             filters);
 
                     characteristics[i] = subsequencesData;
+                    attributeValuesCache.FillAttributeValues(subsequencesData);
 
                     for (int j = 0; j < subsequencesData.Length; j++)
                     {
@@ -177,6 +175,8 @@
 
                 object[,] similarities = Similarities(similarityMatrix, characteristics, mattersCount);
 
+                List<AttributeValue> allAttributeValues = attributeValuesCache.AllAttributeValues;
+
                 var result = new Dictionary<string, object>
                 {
                     { "mattersNames", matterNames },
@@ -184,7 +184,7 @@
                     { "similarities", similarities },
                     { "characteristics", characteristics },
                     { "features", features.ToDictionary(f => (byte)f, f => f.GetDisplayValue()) },
-                    { "attributeValues", attributeValues.Select(sa => new { attribute = sa.AttributeId, value = sa.Value }) },
+                    { "attributeValues", allAttributeValues.Select(sa => new { attribute = sa.AttributeId, value = sa.Value }) },
                     { "attributes", EnumExtensions.ToArray<LibiadaWeb.Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
                     { "maxPercentageDifference", maxPercentageDifference },
                     { "sequenceCharacteristicName", sequenceCharacteristicName },

@@ -2,6 +2,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
 
     using LibiadaCore.Core;
 
@@ -101,6 +102,28 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         public Chain GetLibiadaChain(long sequenceId)
         {
             return new Chain(DbHelper.GetBuilding(Db, sequenceId), GetAlphabet(sequenceId), sequenceId);
+        }
+
+        /// <summary>
+        /// Loads sequence by id from db and converts it to <see cref="BaseChain"/>.
+        /// </summary>
+        /// <param name="sequenceId">
+        /// The sequence id.
+        /// </param>
+        /// <returns>
+        /// The sequence as <see cref="BaseChain"/>.
+        /// </returns>
+        public string GetString(long sequenceId)
+        {
+            var order = DbHelper.GetBuilding(Db, sequenceId);
+            var alphabet = GetAlphabet(sequenceId);
+            var stringBuilder = new StringBuilder(order.Length);
+            foreach (int element in order)
+            {
+                stringBuilder.Append(alphabet[element]);
+            }
+
+            return stringBuilder.ToString();
         }
 
         /// <summary>
