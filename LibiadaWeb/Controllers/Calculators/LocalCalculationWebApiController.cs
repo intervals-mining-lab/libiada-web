@@ -57,7 +57,7 @@
             IFullCalculator calculator;
             Link link;
 
-            using (var context = new LibiadaWebEntities())
+            using (var db = new LibiadaWebEntities())
             {
                 var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
 
@@ -66,11 +66,10 @@
                 calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
                 link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
 
-                var subsequenceExtractor = new SubsequenceExtractor(context);
+                var subsequenceExtractor = new SubsequenceExtractor(db);
 
-                Subsequence subsequence = context.Subsequence.Single(s => s.Id == subsequenceId);
-
-                chain = subsequenceExtractor.ExtractChains(subsequence.SequenceId, new[] { subsequence }).Single();
+                Subsequence subsequence = db.Subsequence.Single(s => s.Id == subsequenceId);
+                chain = subsequenceExtractor.GetSubsequence(subsequence);
             }
 
             CutRule cutRule = new SimpleCutRule(chain.Length, step, windowSize);
@@ -119,24 +118,23 @@
             var characteristics = characteristicsObject["characteristics"];
             LocalCharacteristicsData[] chars = characteristics.ToObject<LocalCharacteristicsData[]>();
 
-            double[][] series = new double[chars.Length][];
+            var series = new double[chars.Length][];
 
             for (int i = 0; i < chars.Length; i++)
             {
                 series[i] = chars[i].fragmentsData.Select(fd => fd.Characteristics[0]).ToArray();
             }
 
-            AlignersFactory alignersFactory = new AlignersFactory();
-            DistanceCalculatorsFactory calculatorsFactory = new DistanceCalculatorsFactory();
-            AggregatorsFactory aggregatorsFactory = new AggregatorsFactory();
+            var alignersFactory = new AlignersFactory();
+            var calculatorsFactory = new DistanceCalculatorsFactory();
+            var aggregatorsFactory = new AggregatorsFactory();
 
-            OneDimensionalTimeSeriesComparer comparer = new OneDimensionalTimeSeriesComparer(
+            var comparer = new OneDimensionalTimeSeriesComparer(
                 alignersFactory.GetAligner(aligner),
                 calculatorsFactory.GetDistanceCalculator(distanceCalculator),
                 aggregatorsFactory.GetAggregator(aggregator));
 
-            //List<double> result = new List<double>();
-            double[,] result = new double[series.Length, series.Length];
+            var result = new double[series.Length, series.Length];
 
             for (int i = 0; i < series.Length - 1; i++)
             {

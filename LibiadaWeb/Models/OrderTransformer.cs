@@ -27,6 +27,7 @@ namespace LibiadaWeb.Models
 
         private void TransformOrders()
         {
+            // TODO: get rid of IndexOf here.
             int[] ordersIds = Orders.Select(o => Orders.IndexOf(o)).ToArray();
             TransformationsData = ordersIds.AsParallel().AsOrdered().Select(el => new OrderTransformationData
             {
