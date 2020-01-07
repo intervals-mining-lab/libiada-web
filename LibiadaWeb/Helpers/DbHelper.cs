@@ -84,6 +84,7 @@
         /// </returns>
         public static List<long> GetElementIds(LibiadaWebEntities db, long sequenceId)
         {
+            // TODO: try to get rid of unnest
             const string Query = "SELECT unnest(alphabet) FROM chain WHERE id = @id";
             return db.Database.SqlQuery<long>(Query, new NpgsqlParameter("@id", sequenceId)).ToList();
         }

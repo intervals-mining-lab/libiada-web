@@ -10,11 +10,12 @@
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
+
+    using static Models.Calculators.SubsequencesCharacteristicsCalculator;
 
     /// <summary>
     /// The alignment controller.
@@ -103,21 +104,21 @@
 
                 string firstMatterName;
                 string secondMatterName;
-                double[] firstSequenceCharacteristics;
-                double[] secondSequenceCharacteristics;
+                long firstParentId;
+                long secondParentId;
                 using (var db = new LibiadaWebEntities())
                 {
                     long firstMatterId = matterIds[0];
                     firstMatterName = db.Matter.Single(m => m.Id == firstMatterId).Name;
-                    long firstParentId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
-                    firstSequenceCharacteristics = SubsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(firstParentId, characteristicLinkId, features);
+                    firstParentId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
 
                     long secondMatterId = matterIds[1];
                     secondMatterName = db.Matter.Single(m => m.Id == firstMatterId).Name;;
-                    long secondParentId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
-                    secondSequenceCharacteristics = SubsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(secondParentId, characteristicLinkId, features);
+                    secondParentId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
                 }
 
+                double[] firstSequenceCharacteristics = CalculateSubsequencesCharacteristics(firstParentId, characteristicLinkId, features);
+                double[] secondSequenceCharacteristics = CalculateSubsequencesCharacteristics(secondParentId, characteristicLinkId, features);
 
                 if (sort)
                 {
@@ -182,26 +183,19 @@
         /// </exception>
         private Func<double, double, double> GetDistanceCalculator(string validationType)
         {
-            Func<double, double, double> distanceCalculator;
             switch (validationType)
             {
                 case "Similarity":
-                    distanceCalculator = (first, second) => Math.Abs(Math.Min(first, second));
-                    break;
+                   return (first, second) => Math.Abs(Math.Min(first, second));
                 case "Difference":
-                    distanceCalculator = (first, second) => -Math.Abs(first - second);
-                    break;
+                    return (first, second) => -Math.Abs(first - second);
                 case "NormalizedDifference":
-                    distanceCalculator = (first, second) => -Math.Abs((first - second) / (first + second));
-                    break;
+                    return (first, second) => -Math.Abs((first - second) / (first + second));
                 case "Equality":
-                    distanceCalculator = (first, second) => Math.Abs(first - second) < (Math.Abs(first + second) / 20) ? 1 : 0;
-                    break;
+                    return (first, second) => Math.Abs(first - second) < (Math.Abs(first + second) / 20) ? 1 : 0;
                 default:
-                    throw new ArgumentException("unknown validation type");
+                    throw new ArgumentException("unknown validation type", nameof(validationType));
             }
-
-            return distanceCalculator;
         }
 
         /// <summary>
