@@ -202,7 +202,7 @@
             FullCharacteristic fullCharacteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
             IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(fullCharacteristic);
             Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
-            Dictionary<long, Chain> sequences = subsequenceExtractor.GetSubsequences(subsequences);
+            Dictionary<long, Chain> sequences = subsequenceExtractor.GetSubsequencesSequences(subsequences);
             for (int i = 0; i < subsequences.Length; i++)
             {
                 long subsequenceId = subsequences[i].Id;
