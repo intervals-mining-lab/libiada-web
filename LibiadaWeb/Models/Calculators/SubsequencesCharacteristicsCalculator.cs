@@ -92,8 +92,14 @@
                         .ToArray()
                         .GroupBy(c => c.SequenceId)
                         .ToDictionary(c => c.Key, c => c.ToDictionary(ct => ct.CharacteristicLinkId, ct => ct.Value));
-
-                sequences = subsequenceExtractor.GetSubsequences(subsequences);
+                if (characteristics.Count == subsequences.Length && characteristics.All(c => c.Value.Count == characteristicIds.Length))
+                {
+                    sequences = new Dictionary<long, Chain>();
+                }
+                else
+                {
+                    sequences = subsequenceExtractor.GetSubsequencesSequences(subsequences);
+                }
             }
 
             var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
