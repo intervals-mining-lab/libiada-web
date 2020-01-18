@@ -27,20 +27,13 @@ namespace LibiadaWeb.Models
 
         private void TransformOrders()
         {
-            // TODO: get rid of IndexOf here.
-            int[] ordersIds = Orders.Select(o => Orders.IndexOf(o)).ToArray();
-            TransformationsData = ordersIds.AsParallel().AsOrdered().Select(el => new OrderTransformationData
+            int[] ordersIds = Enumerable.Range(0, Orders.Count).ToArray();
+            TransformationsData = ordersIds.AsParallel().AsOrdered().Select(orderId => new OrderTransformationData
             {
-                ResultTransformation = EnumExtensions.ToArray<OrderTransformation>().AsParallel().AsOrdered().Select(t => TransformOrder(t, el)).ToArray()
+                ResultTransformation = EnumExtensions.ToArray<OrderTransformation>().AsParallel().AsOrdered().Select(t => TransformOrder(t, orderId)).ToArray()
             }).ToArray();
 
-            List<OrderTransformationData> resultData = ordersIds.AsParallel().AsOrdered().Select(el => new OrderTransformationData
-            {
-                ResultTransformation = TransformationsData[el].ResultTransformation,
-                UniqueFinalOrdersCount = CalculateUniqueOrdersCount(el)
-            }).ToList();
-
-            TransformationsData = resultData.ToArray();
+            ordersIds.AsParallel().ForAll(orderId => TransformationsData[orderId].UniqueFinalOrdersCount = CalculateUniqueOrdersCount(orderId));
         }
 
         private OrderTransformationResult TransformOrder(OrderTransformation transformationType, int id)
