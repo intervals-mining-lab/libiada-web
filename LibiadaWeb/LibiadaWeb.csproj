@@ -241,6 +241,7 @@
     <Compile Include="Models\CalculatorsData\SequenceCharacteristics.cs" />
     <Compile Include="Models\CalculatorsData\SequencePredictionData.cs" />
     <Compile Include="Models\Calculators\CongenericSequencesCharacteristicsCalculator.cs" />
+    <Compile Include="Models\Calculators\CustomSequencesCharacterisitcsCalculator.cs" />
     <Compile Include="Models\Calculators\SequencesCharacteristicsCalculator.cs" />
     <Compile Include="Models\CalculatorsData\FragmentData.cs" />
     <Compile Include="Models\Calculators\SubsequencesCharacteristicsCalculator.cs" />
