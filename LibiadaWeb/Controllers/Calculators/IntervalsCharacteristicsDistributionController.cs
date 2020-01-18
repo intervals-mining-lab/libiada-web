@@ -10,6 +10,7 @@ namespace LibiadaWeb.Controllers.Calculators
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
     using LibiadaCore.Extensions;
     using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Tasks;
@@ -88,43 +89,28 @@ namespace LibiadaWeb.Controllers.Calculators
                         break;
                     default: throw new ArgumentException("Invalid type of generate");
                 }
-
-                var characteristics = new double[orders.Count][];
+                var calculator = new CustomSequencesCharacterisitcsCalculator(characteristicLinkIds);
+                var characteristics = calculator.Calculate(orders.Select(order => new Chain(order))).ToList();
                 var sequencesCharacteristics = new List<SequenceCharacteristics>();
                 for (int i = 0; i < orders.Count; i++)
                 {
-                    sequencesCharacteristics.Add(new SequenceCharacteristics());
-                }
-                for (int j = 0; j < orders.Count; j++)
-                {
-                    var sequence = new Chain(orders[j]);
-                    sequence.FillIntervalManagers();
-                    characteristics[j] = new double[characteristicLinkIds.Length];
-                    for (int k = 0; k < characteristicLinkIds.Length; k++)
+                    sequencesCharacteristics.Add(new SequenceCharacteristics
                     {
-
-                        Link characteristicLink = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkIds[k]);
-                        FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkIds[k]);
-                        IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
-
-                        characteristics[j][k] = calculator.Calculate(sequence, characteristicLink);
-                    }
-
-                    sequencesCharacteristics[j] = new SequenceCharacteristics
-                    {
-                        MatterName = String.Join(",", orders[j].Select(n => n.ToString()).ToArray()),
-                        Characteristics = characteristics[j]
-                    };
+                        MatterName = String.Join(",", orders[i].Select(n => n.ToString()).ToArray()),
+                        Characteristics = characteristics[i]
+                    });
                 }
+
                 sequencesCharacteristics.RemoveAll(el => el.Characteristics.Any(v => Double.IsInfinity(v) ||
-                                                                                           Double.IsNaN(v) ||
-                                                                                           Double.IsNegativeInfinity(v) ||
-                                                                                           Double.IsPositiveInfinity(v)));
+                                                                                        Double.IsNaN(v) ||
+                                                                                        Double.IsNegativeInfinity(v) ||
+                                                                                        Double.IsPositiveInfinity(v)));
 
 
 
                 var characteristicNames = new string[characteristicLinkIds.Length];
                 var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
+
                 for (int k = 0; k < characteristicLinkIds.Length; k++)
                 {
                     characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[k]);
@@ -135,11 +121,8 @@ namespace LibiadaWeb.Controllers.Calculators
                         Selected = false
                     };
                 }
-                var index = new int[characteristicsList.Length];
-                for (int i = 0; i < index.Length; i++)
-                {
-                    index[i] = i;
-                }
+
+                var index = Enumerable.Range(0, characteristicLinkIds.Length);
 
                 var resultIntervals = new Dictionary<string, Dictionary<IntervalsDistribution, Dictionary<int[], SequenceCharacteristics>>>();
                 foreach (var link in EnumExtensions.ToArray<Link>())

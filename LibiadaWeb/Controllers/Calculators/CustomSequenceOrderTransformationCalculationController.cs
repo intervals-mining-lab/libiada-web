@@ -16,6 +16,7 @@
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Tasks;
@@ -114,34 +115,25 @@
                     }
                 }
 
-                var sequencesCharacteristics = new SequenceCharacteristics[sequences.Length];
-                for (int j = 0; j < sequences.Length; j++)
+
+                var calculator = new CustomSequencesCharacterisitcsCalculator(characteristicLinkIds);
+                var sequencesCharacteristics = new List<SequenceCharacteristics>();
+                for (int i = 0; i < sequences.Length; i++)
                 {
-                    var characteristics = new double[characteristicLinkIds.Length];
-                    for (int k = 0; k < characteristicLinkIds.Length; k++)
+                    var sequence = new Chain(sequences[i]);
+                    for (int l = 0; l < iterationsCount; l++)
                     {
-                        var sequence = new Chain(sequences[j]);
-                        for (int l = 0; l < iterationsCount; l++)
+                        for (int w = 0; w < transformationsSequence.Length; w++)
                         {
-                            for (int w = 0; w < transformationsSequence.Length; w++)
-                            {
-                                sequence = transformationsSequence[w] == OrderTransformation.Dissimilar ? DissimilarChainFactory.Create(sequence)
-                                                                     : HighOrderFactory.Create(sequence, EnumExtensions.GetLink(transformationsSequence[w]));
-                            }
+                            sequence = transformationsSequence[w] == OrderTransformation.Dissimilar ? DissimilarChainFactory.Create(sequence)
+                                                                 : HighOrderFactory.Create(sequence, EnumExtensions.GetLink(transformationsSequence[w]));
                         }
-
-                        Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkIds[k]);
-                        FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkIds[k]);
-                        IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
-
-                        characteristics[k] = calculator.Calculate(sequence, link);
                     }
-
-                    sequencesCharacteristics[j] = new SequenceCharacteristics
-                                                      {
-                                                          MatterName = sequencesNames[j],
-                                                          Characteristics = characteristics
-                                                      };
+                    sequencesCharacteristics.Add(new SequenceCharacteristics
+                    {
+                        MatterName = sequencesNames[i],
+                        Characteristics = calculator.Calculate(sequence)
+                    });
                 }
 
                 string[] characteristicNames = characteristicLinkIds.Select(c => characteristicTypeLinkRepository.GetCharacteristicName(c)).ToArray();

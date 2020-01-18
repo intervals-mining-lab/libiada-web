@@ -16,6 +16,7 @@
     using LibiadaCore.Images;
 
     using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Tasks;
@@ -171,27 +172,18 @@
                         }
                     }
 
-                    var sequencesCharacteristics = new SequenceCharacteristics[sequences.Length];
-                    for (int j = 0; j < sequences.Length; j++)
+                    var calculator = new CustomSequencesCharacterisitcsCalculator(characteristicLinkIds);
+                    var characteristics = calculator.Calculate(sequences).ToList();
+                    var sequencesCharacteristics = new List<SequenceCharacteristics>();
+                    for (int i = 0; i < sequences.Length; i++)
                     {
-                        var characteristics = new double[characteristicLinkIds.Length];
-                        for (int k = 0; k < characteristicLinkIds.Length; k++)
+                        sequencesCharacteristics.Add(new SequenceCharacteristics
                         {
-                            sequences[j].FillIntervalManagers();
-
-                            Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkIds[k]);
-                            FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkIds[k]);
-                            IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
-
-                            characteristics[k] = calculator.Calculate(sequences[j], link);
-                        }
-
-                        sequencesCharacteristics[j] = new SequenceCharacteristics
-                        {
-                            MatterName = sequencesNames[j],
-                            Characteristics = characteristics
-                        };
+                            MatterName = sequencesNames[i],
+                            Characteristics = characteristics[i]
+                        });
                     }
+
 
                     var characteristicNames = new string[characteristicLinkIds.Length];
                     var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
