@@ -38,6 +38,11 @@
                         <br />
                         {{(value.formula3 * 100).toFixed(3)}}%
                     </td>
+                    <td title="{{mattersNames[$index]}}">{{$index + 1}}</td>
+                </tr>
+                <tr>
+                    <td />
+                    <td ng-repeat="matterName in mattersNames" title="{{matterName}}">{{$index + 1}}</td>
                 </tr>
             </tbody>
         </table>

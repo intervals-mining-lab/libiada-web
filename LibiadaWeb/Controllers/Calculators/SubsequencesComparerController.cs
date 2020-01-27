@@ -351,7 +351,7 @@
             Dictionary<double, List<(int matterId, int subsequenceIndex)>> characteristicValueSubsequences,
             double percentageDifference)
         {
-            var similarPairs = new List<List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)>>();
+            var similarPairs = new List<List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)>>(characteristicValueSubsequences.Count);
             foreach (double key in characteristicValueSubsequences.Keys)
             {
                 similarPairs.Add(ExtractAllPossiblePairs(characteristicValueSubsequences[key]));
