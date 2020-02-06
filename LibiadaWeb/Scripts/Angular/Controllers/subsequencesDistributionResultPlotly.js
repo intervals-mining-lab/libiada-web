@@ -179,7 +179,7 @@
 
             $scope.tooltipVisible = true;
             $scope.tooltipElements.length = 0;
-
+            var matterName = $scope.matters.find(value => value.id === selectedPoint.matterId).name;
             $scope.tooltipElements.push(fillPointTooltip(selectedPoint, matterName, $scope.pointsSimilarity.same));
             var similarPoints = [];
 
@@ -195,7 +195,7 @@
                         if (similar) {
                             var point = $scope.visiblePoints[i][j];
                             similarPoints.push(point);
-                            var matterName = $scope.matters[i].name;
+                            matterName = $scope.matters[i].name;
                             $scope.tooltipElements.push(fillPointTooltip(point, matterName, $scope.dotsSimilar(point, selectedPoint)));
                         }
                     }
@@ -224,7 +224,7 @@
             var update = {
                 "marker.symbol": $scope.visiblePoints.map(points => points.map(point => point === selectedPoint || similarPoints.includes(point) ? "diamond-wide" : "circle-open")),
                 "marker.size": $scope.visiblePoints.map(points => points.map(point => point === selectedPoint || similarPoints.includes(point) ? 15 : 6))
-            }
+            };
 
             Plotly.restyle($scope.plot, update);
 
@@ -291,16 +291,16 @@
                         text: $scope.sequenceCharacteristicName,
                         font: {
                             family: 'Courier New, monospace',
-                            size: 12,
+                            size: 12
                         }
-                    },
+                    }
                 },
                 yaxis: {
                     title: {
                         text: $scope.subsequenceCharacteristic.Text,
                         font: {
                             family: 'Courier New, monospace',
-                            size: 12,
+                            size: 12
                         }
                     }
                 }
@@ -318,12 +318,15 @@
             var visibleMattersPoints = $scope.visiblePoints[$scope.selectedMatterIndex];
 
             if ($scope.selectedPointIndex >= 0) {
+                var characteristic;
+                var firstPointCharacteristic;
+                var secondPointCharacteristic;
                 switch (keyCode) {
                     case 38: // up
                         for (var i = $scope.selectedPointIndex + 1; i < visibleMattersPoints.length; i++) {
-                            var characteristic = $scope.subsequenceCharacteristic.Value;
-                            var firstPointCharacteristic = visibleMattersPoints[$scope.selectedPointIndex].subsequenceCharacteristics[characteristic];
-                            var secondPointCharacteristic = visibleMattersPoints[i].subsequenceCharacteristics[characteristic];
+                            characteristic = $scope.subsequenceCharacteristic.Value;
+                            firstPointCharacteristic = visibleMattersPoints[$scope.selectedPointIndex].subsequenceCharacteristics[characteristic];
+                            secondPointCharacteristic = visibleMattersPoints[i].subsequenceCharacteristics[characteristic];
 
                             if (firstPointCharacteristic !== secondPointCharacteristic) {
                                 nextPointIndex = i;
@@ -333,9 +336,9 @@
                         break;
                     case 40: // down
                         for (var j = $scope.selectedPointIndex - 1; j >= 0; j--) {
-                            var characteristic = $scope.subsequenceCharacteristic.Value;
-                            var firstPointCharacteristic = visibleMattersPoints[$scope.selectedPointIndex].subsequenceCharacteristics[characteristic];
-                            var secondPointCharacteristic = visibleMattersPoints[j].subsequenceCharacteristics[characteristic];
+                            characteristic = $scope.subsequenceCharacteristic.Value;
+                            firstPointCharacteristic = visibleMattersPoints[$scope.selectedPointIndex].subsequenceCharacteristics[characteristic];
+                            secondPointCharacteristic = visibleMattersPoints[j].subsequenceCharacteristics[characteristic];
 
                             if (firstPointCharacteristic !== secondPointCharacteristic) {
                                 nextPointIndex = j;
@@ -368,7 +371,7 @@
                     marker: { opacity: 0.5, symbol: "circle-open", color: $scope.colorScale(index) },
                     name: $scope.matters[index].name,
 
-                }
+                };
             });
 
             Plotly.newPlot($scope.plot, data, $scope.layout, { responsive: true });
@@ -382,8 +385,6 @@
         }
 
         function legendClick(legendItem) {
-            //legendItem.visible = !legendItem.visible;
-
                 for (var j = 0; j < $scope.points[legendItem.index].length; j++) {
                     var point = $scope.points[legendItem.index][j];
                     point.legendVisible = !point.legendVisible;
@@ -454,12 +455,9 @@
             const drag = (e) => {
                 document.selection ? document.selection.empty() : window.getSelection().removeAllRanges();
                 var chart_width = main.style.width = (e.pageX - bar.offsetWidth / 2) + 'px';
-                console.log(chart_width)
 
-                Plotly.relayout('chart', {
-                    autosize: true
-                })
-            }
+                Plotly.relayout('chart', { autosize: true });
+            };
 
             bar.addEventListener('mousedown', () => {
                 document.addEventListener('mousemove', drag);
