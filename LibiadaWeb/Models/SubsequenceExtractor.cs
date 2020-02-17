@@ -51,7 +51,7 @@
         /// <returns>
         /// The <see cref="List{Chain}"/>.
         /// </returns>
-        public Dictionary<long, Chain> GetSubsequences(Subsequence[] subsequences)
+        public Dictionary<long, Chain> GetSubsequencesSequences(Subsequence[] subsequences)
         {
             long[] distinctIds = subsequences.Select(s => s.SequenceId).Distinct().ToArray();
             if (distinctIds.Length == 1)
@@ -80,7 +80,7 @@
         /// Subsequence to be extracted from database.
         /// </param>
         /// <returns></returns>
-        public Chain GetSubsequence(Subsequence subsequence)
+        public Chain GetSubsequenceSequence(Subsequence subsequence)
         {
             Sequence sourceSequence = GetDotNetBioSequence(subsequence.SequenceId);
             return GetSequence(sourceSequence, subsequence);
@@ -100,24 +100,24 @@
         /// </returns>
         public Subsequence[] GetSubsequences(long sequenceId, IReadOnlyList<Feature> features)
         {
-            //Feature[] allFeatures = EnumExtensions.ToArray<Feature>();
-            //if (allFeatures.Length == features.Count)
-            //{
-            //    return db.Subsequence.Where(s => s.SequenceId == sequenceId)
-            //        .Include(s => s.Position)
-            //        .Include(s => s.SequenceAttribute)
-            //        .ToArray();
-            //}
+            Feature[] allFeatures = EnumExtensions.ToArray<Feature>();
+            if (allFeatures.Length == features.Count)
+            {
+                return db.Subsequence.Where(s => s.SequenceId == sequenceId)
+                    .Include(s => s.Position)
+                    .Include(s => s.SequenceAttribute)
+                    .ToArray();
+            }
 
-            //if (allFeatures.Length - 1 == features.Count)
-            //{
-            //    Feature exceptFeature = allFeatures.Except(features).Single();
+            if (allFeatures.Length - 1 == features.Count)
+            {
+                Feature exceptFeature = allFeatures.Except(features).Single();
 
-            //    return db.Subsequence.Where(s => s.SequenceId == sequenceId && s.Feature != exceptFeature)
-            //        .Include(s => s.Position)
-            //        .Include(s => s.SequenceAttribute)
-            //        .ToArray();
-            //}
+                return db.Subsequence.Where(s => s.SequenceId == sequenceId && s.Feature != exceptFeature)
+                    .Include(s => s.Position)
+                    .Include(s => s.SequenceAttribute)
+                    .ToArray();
+            }
 
             return db.Subsequence.Where(s => s.SequenceId == sequenceId && features.Contains(s.Feature))
                                  .Include(s => s.Position)

@@ -115,8 +115,8 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public string GetString(long sequenceId)
         {
-            var order = DbHelper.GetBuilding(Db, sequenceId);
-            var alphabet = GetAlphabet(sequenceId);
+            int[] order = DbHelper.GetBuilding(Db, sequenceId);
+            Alphabet alphabet = GetAlphabet(sequenceId);
             var stringBuilder = new StringBuilder(order.Length);
             foreach (int element in order)
             {
