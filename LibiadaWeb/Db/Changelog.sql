@@ -2442,7 +2442,7 @@ IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
 	IF first_element_in_alphabet AND second_element_in_alphabet THEN
 		RETURN NEW;
 	ELSE 
-		RAISE EXCEPTION 'New characteristic is referencing element not present in sequence alphabet.';
+		RAISE EXCEPTION 'New characteristic is referencing element or elements (first_id = %, second_id = %) not present in sequence (id = %) alphabet.', NEW.first_element_id, NEW.second_element_id, NEW.chain_id;
 	END IF;
 ELSE
 	RAISE EXCEPTION 'Unknown operation. This trigger shoud be used only in insert and update operation on tables with chain_id, first_element_id, second_element_id.';
@@ -2457,12 +2457,12 @@ $BODY$
 DECLARE
 element_in_alphabet bool;
 BEGIN
-IF TG_OP = 'INSERT' OR TG_OP == 'UPDATE' THEN
+IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
 	element_in_alphabet := check_element_in_alphabet(NEW.chain_id, NEW.element_id);
 	IF element_in_alphabet THEN
 		RETURN NEW;
 	ELSE 
-		RAISE EXCEPTION 'New characteristic is referencing element not present in sequence alphabet.';
+		RAISE EXCEPTION 'New characteristic is referencing element (id = %) not present in sequence (id = %) alphabet.', NEW.element_id, NEW.chain_id;
 	END IF;
 ELSE
 	RAISE EXCEPTION 'Unknown operation. This trigger shoud be used only in insert and update operation on tables with chain_id, element_id.';
@@ -2519,18 +2519,21 @@ $BODY$
 DECLARE
 max_value integer;
 BEGIN
-IF TG_OP = 'INSERT' THEN
+IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
+	IF NEW.building[1] != 1 THEN
+		RAISE EXCEPTION  'First order value is not 1. Actual value %.', NEW.building[1];
+	END IF;
 	max_value := 0;
 	FOR i IN array_lower(NEW.building, 1)..array_upper(NEW.building, 1) LOOP
 		IF NEW.building[i] > (max_value + 1) THEN
 			RAISE EXCEPTION  'Order is incorrect starting from % position.', i ;
-		ELSE IF NEW.building[i] = max_value + 1) THEN
+		END IF;
+		IF NEW.building[i] = (max_value + 1) THEN
 			max_value := NEW.building[i];
 		END IF;
-		END IF;
 	END LOOP;
-	IF max != array_length(NEW.alphabet, 1) THEN
-		RAISE EXCEPTION  'Alphabet size is not equal to the order maximum value. Alphabet elements count %, and order max value %', array_length(NEW.alphabet, 1), max;
+	IF max_value != array_length(NEW.alphabet, 1) THEN
+		RAISE EXCEPTION  'Alphabet size is not equal to the order maximum value. Alphabet elements count %, and order max value %.', array_length(NEW.alphabet, 1), max_value;
 	END IF;
 	RETURN NEW;
 ELSE
@@ -2688,7 +2691,7 @@ $BODY$;
 COMMENT ON FUNCTION db_integrity_test() IS 'Procedure for cheking referential integrity of the database.';
 
 -- 07.12.2019
--- Add multi-sequence table and referencings columns in mater table.
+-- Add multi-sequence table and reference columns in mater table.
 
 CREATE TABLE multisequence
 (
@@ -2824,5 +2827,129 @@ COMMENT ON TRIGGER tgu_literature_chain_characteristics_delete ON literature_cha
 DROP TRIGGER tgu_music_chain_characteristics ON music_chain;
 CREATE TRIGGER tgu_music_chain_characteristics_delete AFTER UPDATE OF alphabet, building ON music_chain FOR EACH ROW EXECUTE PROCEDURE trigger_delete_chain_characteristics();
 COMMENT ON TRIGGER tgu_music_chain_characteristics_delete ON music_chain IS 'Trigger deleting all characteristics of sequences that has been updated.';
+
+DROP TRIGGER tgu_subsequence_characteristics ON subsequence;
+CREATE TRIGGER tgu_subsequence_characteristics_delete AFTER UPDATE OF start, length, chain_id ON subsequence FOR EACH ROW EXECUTE PROCEDURE trigger_delete_chain_characteristics();
+COMMENT ON TRIGGER tgu_subsequence_characteristics_delete ON subsequence IS 'Trigger deleting all characteristics of subsequences that has been updated.';
+
+DROP TRIGGER tgi_chain_building_check ON chain;
+CREATE TRIGGER tgiu_chain_building_check  BEFORE INSERT OR UPDATE OF alphabet, building ON chain FOR EACH ROW EXECUTE PROCEDURE trigger_building_check();
+COMMENT ON TRIGGER tgiu_chain_building_check ON chain IS 'Validates order of the sequence and checks its consistency with the alphabet.';
+
+DROP TRIGGER tgi_data_chain_building_check ON data_chain;
+CREATE TRIGGER tgiu_data_chain_building_check  BEFORE INSERT OR UPDATE OF alphabet, building ON data_chain FOR EACH ROW EXECUTE PROCEDURE trigger_building_check();
+COMMENT ON TRIGGER tgiu_data_chain_building_check ON data_chain IS 'Validates order of the sequence and checks its consistency with the alphabet.';
+
+DROP TRIGGER tgi_dna_chain_building_check ON dna_chain;
+CREATE TRIGGER tgiu_dna_chain_building_check  BEFORE INSERT OR UPDATE OF alphabet, building ON dna_chain FOR EACH ROW EXECUTE PROCEDURE trigger_building_check();
+COMMENT ON TRIGGER tgiu_dna_chain_building_check ON dna_chain IS 'Validates order of the sequence and checks its consistency with the alphabet.';
+
+DROP TRIGGER tgi_fmotif_building_check ON fmotif;
+CREATE TRIGGER tgiu_fmotif_building_check  BEFORE INSERT OR UPDATE OF alphabet, building ON fmotif FOR EACH ROW EXECUTE PROCEDURE trigger_building_check();
+COMMENT ON TRIGGER tgiu_fmotif_building_check ON fmotif IS 'Validates order of the sequence and checks its consistency with the alphabet.';
+
+DROP TRIGGER tgi_literature_chain_building_check ON literature_chain;
+CREATE TRIGGER tgiu_literature_chain_building_check  BEFORE INSERT OR UPDATE OF alphabet, building ON literature_chain FOR EACH ROW EXECUTE PROCEDURE trigger_building_check();
+COMMENT ON TRIGGER tgiu_literature_chain_building_check ON literature_chain IS 'Validates order of the sequence and checks its consistency with the alphabet.';
+
+DROP TRIGGER tgi_measure_building_check ON measure;
+CREATE TRIGGER tgiu_measure_building_check  BEFORE INSERT OR UPDATE OF alphabet, building ON measure FOR EACH ROW EXECUTE PROCEDURE trigger_building_check();
+COMMENT ON TRIGGER tgiu_measure_building_check ON measure IS 'Validates order of the sequence and checks its consistency with the alphabet.';
+
+DROP TRIGGER tgi_music_chain_building_check ON music_chain;
+CREATE TRIGGER tgiu_music_chain_building_check  BEFORE INSERT OR UPDATE OF alphabet, building ON music_chain FOR EACH ROW EXECUTE PROCEDURE trigger_building_check();
+COMMENT ON TRIGGER tgiu_music_chain_building_check ON music_chain IS 'Validates order of the sequence and checks its consistency with the alphabet.';
+
+CREATE OR REPLACE FUNCTION public.check_element_in_alphabet(chain_id bigint,element_id bigint) RETURNS boolean
+LANGUAGE 'plpgsql'
+VOLATILE PARALLEL UNSAFE AS 
+$BODY$
+BEGIN
+RETURN (SELECT count(*) = 1 
+		FROM (SELECT alphabet a 
+			  FROM chain 
+			  WHERE id = chain_id) c 
+		WHERE c.a @> ARRAY[element_id]);
+END
+$BODY$;
+
+CREATE OR REPLACE FUNCTION trigger_element_key_insert() RETURNS trigger
+LANGUAGE 'plpgsql'
+VOLATILE AS
+$BODY$
+DECLARE
+elements_with_id_count bool;
+BEGIN
+IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
+	SELECT count(*) INTO elements_with_id_count FROM element WHERE id = NEW.id;
+	IF elements_with_id_count = 1 THEN
+		RETURN NEW;
+	ELSE IF elements_with_id_count = 0 THEN
+		RAISE EXCEPTION 'New record in table element_key cannot be addded because there is no elements with given id = %.', NEW.id;
+	END IF;
+		RAISE EXCEPTION 'New record in table element_key cannot be addded because there more than one elements with given id = %.', NEW.id;
+	END IF;
+	RAISE EXCEPTION 'Cannot add record into element_key before adding record into element table or its child.';
+END IF;
+RAISE EXCEPTION 'Unknown operation. This trigger only works on insert into table with id field.';
+END
+$BODY$;
+
+ALTER FUNCTION trigger_chain_key_insert() RENAME TO trigger_chain_key_unique_check;
+CREATE OR REPLACE FUNCTION trigger_chain_key_unique_check() RETURNS trigger
+LANGUAGE 'plpgsql'
+VOLATILE AS 
+$BODY$
+DECLARE
+sequence_with_id_count integer;
+BEGIN
+IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
+	SELECT count(*) INTO sequence_with_id_count FROM(SELECT id FROM chain WHERE id = NEW.id UNION ALL SELECT id FROM subsequence WHERE id = NEW.id) s;
+	IF sequence_with_id_count = 1 THEN
+		RETURN NEW;
+	ELSE IF sequence_with_id_count = 0 THEN
+		RAISE EXCEPTION 'New record in table chain_key cannot be addded because there is no sequences with given id.';
+	END IF;
+		RAISE EXCEPTION 'New record in table chain_key cannot be addded because there more than one sequences with given id. Sequences count = %', sequence_with_id_count;
+	END IF;
+ELSE	
+	RAISE EXCEPTION 'Unknown operation. This trigger only operates on INSERT operation on tables with id column.';
+END IF;
+END
+$BODY$;
+
+CREATE FUNCTION trigger_check_notes_alphabet() RETURNS trigger
+LANGUAGE 'plpgsql'
+VOLATILE NOT LEAKPROOF AS
+$BODY$
+DECLARE
+	orphaned_elements integer;
+	alphabet_elemnts_not_unique bool;
+BEGIN
+	IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
+		SELECT a.dc != a.ec INTO alphabet_elemnts_not_unique FROM (SELECT COUNT(DISTINCT e) dc, COUNT(e) ec FROM unnest(NEW.alphabet) e) a;
+		IF alphabet_elemnts_not_unique THEN
+			RAISE EXCEPTION 'Alphabet notes are not unique. Alphabet %', NEW.alphabet ;
+		END IF;
+		
+		SELECT count(1) INTO orphaned_elements result FROM unnest(NEW.alphabet) a LEFT OUTER JOIN note e ON e.id = a WHERE e.id IS NULL;
+		IF orphaned_elements != 0 THEN 
+			RAISE EXCEPTION 'There are % notes of the alphabet missing in database.', orphaned_elements;
+		END IF;
+		
+		RETURN NEW;
+	END IF;
+    RAISE EXCEPTION 'Unknown operation. This trigger only operates on INSERT and UPDATE operation on tables with alphabet column (of array type).';
+END;
+$BODY$;
+COMMENT ON FUNCTION trigger_check_notes_alphabet() IS 'Trigger function checking that all alphabet notes of the music sequences are in database.';
+
+DROP TRIGGER tgiu_measure_alphabet_check ON measure;
+CREATE TRIGGER tgiu_measure_alphabet_check BEFORE INSERT OR UPDATE OF alphabet ON measure FOR EACH ROW EXECUTE PROCEDURE trigger_check_notes_alphabet();
+COMMENT ON TRIGGER tgiu_measure_alphabet_check ON measure IS 'Checks that all alphabet elements are present in database.';
+
+DROP TRIGGER tgiu_fmotif_alphabet_check ON fmotif;
+CREATE TRIGGER tgiu_fmotif_alphabet_check BEFORE INSERT OR UPDATE OF alphabet ON fmotif FOR EACH ROW EXECUTE PROCEDURE trigger_check_notes_alphabet();
+COMMENT ON TRIGGER tgiu_fmotif_alphabet_check ON fmotif IS 'Checks that all alphabet elements are present in database.';
 
 COMMIT;
