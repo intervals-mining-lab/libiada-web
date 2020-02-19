@@ -2878,7 +2878,7 @@ LANGUAGE 'plpgsql'
 VOLATILE AS
 $BODY$
 DECLARE
-elements_with_id_count bool;
+elements_with_id_count integer;
 BEGIN
 IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
 	SELECT count(*) INTO elements_with_id_count FROM element WHERE id = NEW.id;
@@ -2887,7 +2887,7 @@ IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
 	ELSE IF elements_with_id_count = 0 THEN
 		RAISE EXCEPTION 'New record in table element_key cannot be addded because there is no elements with given id = %.', NEW.id;
 	END IF;
-		RAISE EXCEPTION 'New record in table element_key cannot be addded because there more than one elements with given id = %.', NEW.id;
+		RAISE EXCEPTION 'New record in table element_key cannot be addded because there is more than one element with given id = %.', NEW.id;
 	END IF;
 	RAISE EXCEPTION 'Cannot add record into element_key before adding record into element table or its child.';
 END IF;
