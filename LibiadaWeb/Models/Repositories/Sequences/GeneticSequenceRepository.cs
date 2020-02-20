@@ -84,7 +84,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 throw new Exception("At least one element of new sequence is invalid (not A, C, T, G or U).");
             }
 
-            MatterRepository.CreateMatterFromSequence(sequence);
+            MatterRepository.CreateOrExctractExistingMatterForSequence(sequence);
 
             long[] alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.Notation, false);
             Create(sequence, partial, alphabet, chain.Building);

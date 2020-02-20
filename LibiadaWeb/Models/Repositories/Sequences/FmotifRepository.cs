@@ -88,7 +88,7 @@
                     }
                 }
             }
-            
+
             return Create(fmotif, notes, fmotifChain.Building);
         }
 
@@ -167,7 +167,7 @@
                 {
                     ParameterName = "notation",
                     NpgsqlDbType = NpgsqlDbType.Smallint,
-                    Value = Notation.FormalMotifs
+                    Value = (byte)Notation.FormalMotifs
                 },
                 new NpgsqlParameter
                 {
@@ -185,7 +185,7 @@
                 {
                     ParameterName = "fmotif_type",
                     NpgsqlDbType = NpgsqlDbType.Smallint,
-                    Value = fmotif.Type
+                    Value = (byte)fmotif.Type
                 }
             };
             return parameters;

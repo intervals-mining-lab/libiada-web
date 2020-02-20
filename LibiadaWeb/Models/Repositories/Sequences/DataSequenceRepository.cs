@@ -65,7 +65,7 @@
 
             var chain = new BaseChain(elements);
 
-            MatterRepository.CreateMatterFromSequence(sequence);
+            MatterRepository.CreateOrExctractExistingMatterForSequence(sequence);
 
             long[] alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.Notation, true);
             Create(sequence, alphabet, chain.Building);

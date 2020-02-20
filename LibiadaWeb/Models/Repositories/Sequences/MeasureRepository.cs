@@ -60,7 +60,7 @@
         /// </returns>
         public long CreateMeasure(Measure measure)
         {
-            var measureChain= new BaseChain(measure.NoteList.Cast<IBaseObject>().ToList());
+            var measureChain = new BaseChain(measure.NoteList.Cast<IBaseObject>().ToList());
             long[] notes = new ElementRepository(db).GetOrCreateNotesInDb(measureChain.Alphabet);
 
             string localMeasureHash = BitConverter.ToString(measure.GetMD5HashCode()).Replace("-", string.Empty);
@@ -175,7 +175,7 @@
                 {
                     ParameterName = "notation",
                     NpgsqlDbType = NpgsqlDbType.Smallint,
-                    Value = Notation.Measures
+                    Value = (byte)Notation.Measures
                 },
                 new NpgsqlParameter
                 {

@@ -67,7 +67,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 chain = new BaseChain(text.Select(e => (ValueString)e).Cast<IBaseObject>().ToList());
             }
 
-            MatterRepository.CreateMatterFromSequence(commonSequence);
+            MatterRepository.CreateOrExctractExistingMatterForSequence(commonSequence);
 
             long[] alphabet = ElementRepository.ToDbElements(chain.Alphabet, commonSequence.Notation, true);
             Create(commonSequence, original, language, translator, alphabet, chain.Building);
@@ -108,14 +108,14 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             {
                 ParameterName = "language",
                 NpgsqlDbType = NpgsqlDbType.Smallint,
-                Value = language
+                Value = (byte)language
             });
 
             parameters.Add(new NpgsqlParameter
             {
                 ParameterName = "translator",
                 NpgsqlDbType = NpgsqlDbType.Smallint,
-                Value = translator
+                Value = (byte)translator
             });
 
             const string Query = @"INSERT INTO literature_chain (
