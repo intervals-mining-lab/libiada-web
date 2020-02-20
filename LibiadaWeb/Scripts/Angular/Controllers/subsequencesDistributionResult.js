@@ -170,12 +170,12 @@
 		// shows tooltip for dot or group of dots
 		function showTooltip(selectedPoints, tooltip, svg) {
 			$scope.clearTooltip(tooltip);
-
 			tooltip.style("opacity", 0.9);
 
 			var tooltipHtml = [];
 
-			tooltip.selectedPoints = selectedPoints;
+            tooltip.selectedPoints = selectedPoints;
+            
 			var point = selectedPoints[0];
 			tooltip.selectedDots = svg.selectAll(".dot")
 				.filter(function (dot) {
@@ -194,15 +194,23 @@
 
 							var tooltipColor = $scope.dotsSimilar(point, dot) ? "text-success" : "text-danger";
 							tooltipHtml.push("<span class='" + tooltipColor + "'>" + $scope.fillPointTooltip(dot) + "</span>");
-
+                            svg.append("line")
+                                .attr("class", "similar-line")
+                                .attr("x1", $scope.xMap(point))
+                                .attr("y1", $scope.yMap(point))
+                                .attr("x2", $scope.xMap(dot))
+                                .attr("y2", $scope.yMap(dot))
+                                .attr("stroke-width", 1)
+                                .attr("opacity", 0.4)
+                                .attr("stroke", $scope.colorMap($scope.cValue(point)));
 							return true;
 						}
 					}
 
 					return false;
 				})
-				.attr("rx", $scope.selectedDotRadius);
-
+                .attr("rx", $scope.selectedDotRadius);
+            tooltip.lines = svg.selectAll(".similar-line");
 			tooltip.html(tooltipHtml.join("</br></br>"));
 
 			var matrix = tooltip.selectedDots.nodes()[0].parentNode.getScreenCTM()
@@ -256,7 +264,10 @@
 
 				if (tooltip.selectedDots) {
 					tooltip.selectedDots.attr("rx", $scope.dotRadius);
-				}
+                }
+                if (tooltip.lines) {
+                    tooltip.lines.remove();
+                }
 			}
 		}
 
@@ -332,8 +343,8 @@
 			$scope.yMap = function (d) { return yScale($scope.yValue(d)); };
 
 			// setup fill color
-			var cValue = function (d) { return d.matterId; };
-			var color = d3.scaleOrdinal(d3.schemeCategory20);
+			$scope.cValue = function (d) { return d.matterId; };
+			$scope.colorMap = d3.scaleOrdinal(d3.schemeCategory20);
 
 			// add the graph canvas to the body of the webpage
 			var svg = d3.select("#chart").append("svg")
@@ -387,8 +398,8 @@
 				.attr("cx", $scope.xMap)
 				.attr("cy", $scope.yMap)
 				.style("fill-opacity", 0.6)
-				.style("fill", function (d) { return color(cValue(d)); })
-				.style("stroke", function (d) { return color(cValue(d)); })
+                .style("fill", function (d) { return $scope.colorMap($scope.cValue(d)); })
+                .style("stroke", function (d) { return $scope.colorMap($scope.cValue(d)); })
 				.attr("visibility", function (dot) {
 					return $scope.dotVisible(dot) ? "visible" : "hidden";
 				});
@@ -419,8 +430,8 @@
 			legend.append("rect")
 				.attr("width", 15)
 				.attr("height", 15)
-				.style("fill", function (d) { return color(d.id); })
-				.style("stroke", function (d) { return color(d.id); })
+                .style("fill", function (d) { return $scope.colorMap(d.id); })
+                .style("stroke", function (d) { return $scope.colorMap(d.id); })
 				.style("stroke-width", 4)
 				.attr("transform", "translate(0, -" + $scope.legendHeight + ")");
 
