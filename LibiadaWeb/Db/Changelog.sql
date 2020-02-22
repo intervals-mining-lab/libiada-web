@@ -2952,4 +2952,23 @@ DROP TRIGGER tgiu_fmotif_alphabet_check ON fmotif;
 CREATE TRIGGER tgiu_fmotif_alphabet_check BEFORE INSERT OR UPDATE OF alphabet ON fmotif FOR EACH ROW EXECUTE PROCEDURE trigger_check_notes_alphabet();
 COMMENT ON TRIGGER tgiu_fmotif_alphabet_check ON fmotif IS 'Checks that all alphabet elements are present in database.';
 
+-- 22.02.2020
+-- Add task results table.
+
+CREATE TABLE task_result
+(
+    id bigserial NOT NULL,
+    task_id bigint NOT NULL,
+    key text NOT NULL,
+    value json NOT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT uk_task_result UNIQUE (task_id, key),
+    CONSTRAINT fk_task_result_task FOREIGN KEY (task_id)
+        REFERENCES public.task (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
+
+COMMENT ON TABLE public.task_result IS 'Table with JSON results of tasks calculation. Results are stored as key/value pairs.';
+
 COMMIT;

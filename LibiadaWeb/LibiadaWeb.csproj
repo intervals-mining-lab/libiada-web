@@ -292,6 +292,9 @@
     <Compile Include="Subsequence.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
+    <Compile Include="TaskResult.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Tasks\Task.cs" />
     <Compile Include="Tasks\TaskData.cs" />
     <Compile Include="Tasks\TaskEvent.cs" />
