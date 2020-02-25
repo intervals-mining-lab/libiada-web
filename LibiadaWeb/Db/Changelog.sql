@@ -2860,7 +2860,7 @@ DROP TRIGGER tgi_music_chain_building_check ON music_chain;
 CREATE TRIGGER tgiu_music_chain_building_check  BEFORE INSERT OR UPDATE OF alphabet, building ON music_chain FOR EACH ROW EXECUTE PROCEDURE trigger_building_check();
 COMMENT ON TRIGGER tgiu_music_chain_building_check ON music_chain IS 'Validates order of the sequence and checks its consistency with the alphabet.';
 
-CREATE OR REPLACE FUNCTION public.check_element_in_alphabet(chain_id bigint,element_id bigint) RETURNS boolean
+CREATE OR REPLACE FUNCTION check_element_in_alphabet(chain_id bigint,element_id bigint) RETURNS boolean
 LANGUAGE 'plpgsql'
 VOLATILE PARALLEL UNSAFE AS 
 $BODY$
@@ -2964,11 +2964,11 @@ CREATE TABLE task_result
     PRIMARY KEY (id),
     CONSTRAINT uk_task_result UNIQUE (task_id, key),
     CONSTRAINT fk_task_result_task FOREIGN KEY (task_id)
-        REFERENCES public.task (id) MATCH SIMPLE
+        REFERENCES task (id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
 
-COMMENT ON TABLE public.task_result IS 'Table with JSON results of tasks calculation. Results are stored as key/value pairs.';
+COMMENT ON TABLE task_result IS 'Table with JSON results of tasks calculation. Results are stored as key/value pairs.';
 
 COMMIT;
