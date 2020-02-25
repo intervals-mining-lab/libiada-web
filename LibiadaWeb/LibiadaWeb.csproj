@@ -163,7 +163,6 @@
     <Compile Include="Controllers\Sequences\OrderTransformationConvergenceController.cs" />
     <Compile Include="Controllers\Sequences\OrderTransformerController.cs" />
     <Compile Include="Controllers\Sequences\SequenceCheckController.cs" />
-    <Compile Include="Controllers\Sequences\SequenceCleanerController.cs" />
     <Compile Include="Controllers\Sequences\SequenceElementsController.cs" />
     <Compile Include="Controllers\Sequences\SequenceGroupsController.cs" />
     <Compile Include="Controllers\Sequences\SequenceMixerController.cs" />
@@ -838,7 +837,6 @@
     <Content Include="Views\Calculators\SubsequencesComparer\Result.cshtml" />
     <Content Include="Views\Partial\_Filters.cshtml" />
     <Content Include="Views\Partial\_LoadingWindow.cshtml" />
-    <Content Include="Views\Sequences\SequenceCleaner\Index.cshtml" />
     <Content Include="Views\Sequences\CommonSequences\Result.cshtml" />
     <Content Include="Views\Calculators\SequencesOrderDistribution\Index.cshtml" />
     <Content Include="Views\Calculators\SequencesOrderDistribution\Result.cshtml" />

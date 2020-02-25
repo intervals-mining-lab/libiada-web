@@ -96,16 +96,16 @@
                                         <label for="{{'matter' + legendItem.id}}" class="monospace">{{legendItem.name}}</label>
                                     </div>
                                 </div>
-                                        
+
                                         <!-- end .roundedOne -->
                             </div>
                             <div role="tabpanel" class="tab-pane" id="characteristic">
                                 <br />
                                 <div class="form-group">
                                     <div class="col-md-10">
-                                        <select class="form-control" 
-                                                title="Subsequence characteristic" 
-                                                ng-model="subsequenceCharacteristic" 
+                                        <select class="form-control"
+                                                title="Subsequence characteristic"
+                                                ng-model="subsequenceCharacteristic"
                                                 ng-options="c.Text for c in subsequencesCharacteristicsList"
                                                 ng-change="redrawGenesMap()"
                                                 id="subsequenceCharacteristic"></select>
@@ -190,7 +190,7 @@
                                         <span ng-if="!tooltipElement.sequenceRemoteId">{{tooltipElement.position}}</span>
                                     </div>
                                     <div>
-                                        Lenght:{{tooltipElement.length}}
+                                        Length:{{tooltipElement.length}}
                                     </div>
                                     <hr />
                                 </div>
