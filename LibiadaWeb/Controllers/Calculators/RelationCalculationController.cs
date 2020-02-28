@@ -222,7 +222,7 @@
 
             if (calculatedCount < alphabetCardinality * alphabetCardinality)
             {
-                List<long> sequenceElements = DbHelper.GetElementIds(db, sequenceId);
+                List<long> sequenceElements = DbHelper.GetAlphabetElementIds(db, sequenceId);
                 for (int i = 0; i < alphabetCardinality; i++)
                 {
                     for (int j = 0; j < alphabetCardinality; j++)
@@ -266,7 +266,7 @@
         /// </param>
         private void FrequencyCharacteristic(short characteristicLinkId, int frequencyCount, Chain chain, long sequenceId, IBinaryCalculator calculator, Link link)
         {
-            List<long> sequenceElements = DbHelper.GetElementIds(db, sequenceId);
+            List<long> sequenceElements = DbHelper.GetAlphabetElementIds(db, sequenceId);
             var newCharacteristics = new List<BinaryCharacteristicValue>();
             BinaryCharacteristicValue[] databaseCharacteristics = db.BinaryCharacteristicValue
                 .Where(b => b.SequenceId == sequenceId && b.CharacteristicLinkId == characteristicLinkId)

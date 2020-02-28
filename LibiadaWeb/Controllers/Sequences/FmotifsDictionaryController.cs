@@ -68,8 +68,8 @@ namespace LibiadaWeb.Controllers.Sequences
                     return HttpNotFound();
                 }
 
-                var musicChainAlphabet = DbHelper.GetMusicChainAlphabet(db, musicSequence.Id).Select(el => db.Fmotif.Single(f => f.Id == el)).ToList();
-                var musicChainBuilding = DbHelper.GetMusicChainBuilding(db, musicSequence.Id);
+                var musicChainAlphabet = DbHelper.GetAlphabetElementIds(db, musicSequence.Id).Select(el => db.Fmotif.Single(f => f.Id == el)).ToList();
+                var musicChainBuilding = DbHelper.GetSequenceBuilding(db, musicSequence.Id);
                 var sortedFmotifs = new Dictionary<LibiadaWeb.Fmotif, int>();
                 for (int i = 0; i < musicChainAlphabet.Count; i++)
                 {
@@ -81,8 +81,8 @@ namespace LibiadaWeb.Controllers.Sequences
                 var fmotifsChain = new List<Fmotif>();
                 foreach (var fmotif in sortedFmotifs.Keys)
                 {
-                    var newFmotif = new Fmotif(fmotif.FmotifType, 
-                                              (PauseTreatment) musicSequence.PauseTreatment, 
+                    var newFmotif = new Fmotif(fmotif.FmotifType,
+                                              (PauseTreatment) musicSequence.PauseTreatment,
                                                fmotif.Id);
 
                     var fmotifAlphabet = DbHelper.GetFmotifAlphabet(db, fmotif.Id);
