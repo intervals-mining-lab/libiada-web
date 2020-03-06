@@ -177,7 +177,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <returns>
         /// The <see cref="Alphabet"/>.
         /// </returns>
-        public Alphabet ToLibiadaAlphabet(List<long> elementIds)
+        public Alphabet ToLibiadaAlphabet(long[] elementIds)
         {
             var alphabet = new Alphabet { NullValue.Instance() };
             List<Element> elements = GetElements(elementIds);
@@ -197,12 +197,12 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// The element ids.
         /// </param>
         /// <returns>
-        /// The <see cref="List{Element}"/>.
+        /// The <see cref="IReadOnlyList{Element}"/>.
         /// </returns>
-        public List<Element> GetElements(List<long> elementIds) => db.Element
+        public List<Element> GetElements(long[] elementIds) => db.Element
                                                                      .Where(e => elementIds.Contains(e.Id))
                                                                      .ToList()
-                                                                     .OrderBy(e => elementIds.IndexOf(e.Id))
+                                                                     .OrderBy(e => Array.IndexOf(elementIds, e.Id))
                                                                      .ToList();
 
         /// <summary>

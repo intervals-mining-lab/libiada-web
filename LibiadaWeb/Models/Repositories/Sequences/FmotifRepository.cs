@@ -88,7 +88,7 @@
                     }
                 }
             }
-            
+
             return Create(fmotif, notes, fmotifChain.Building);
         }
 
@@ -109,7 +109,7 @@
         /// </returns>
         public long Create(Fmotif fmotif, long[] alphabet, int[] building)
         {
-            List<object> parameters = FillParams(fmotif, alphabet, building);
+            List<NpgsqlParameter> parameters = FillParams(fmotif, alphabet, building);
 
             const string Query = @"INSERT INTO fmotif (
                                         id,
@@ -145,48 +145,18 @@
         /// <returns>
         /// The <see cref="List{Object}"/>.
         /// </returns>
-        protected List<object> FillParams(Fmotif fmotif, long[] alphabet, int[] building)
+        protected List<NpgsqlParameter> FillParams(Fmotif fmotif, long[] alphabet, int[] building)
         {
             fmotif.Id = DbHelper.GetNewElementId(db);
-
-            var parameters = new List<object>
+            var fmotivValue = BitConverter.ToString(fmotif.GetMD5HashCode()).Replace("-", string.Empty);
+            var parameters = new List<NpgsqlParameter>
             {
-                new NpgsqlParameter
-                {
-                    ParameterName = "id",
-                    NpgsqlDbType = NpgsqlDbType.Bigint,
-                    Value = fmotif.Id
-                },
-                new NpgsqlParameter
-                {
-                    ParameterName = "value",
-                    NpgsqlDbType = NpgsqlDbType.Varchar,
-                    Value = BitConverter.ToString(fmotif.GetMD5HashCode()).Replace("-", string.Empty)
-                },
-                new NpgsqlParameter
-                {
-                    ParameterName = "notation",
-                    NpgsqlDbType = NpgsqlDbType.Smallint,
-                    Value = Notation.FormalMotifs
-                },
-                new NpgsqlParameter
-                {
-                    ParameterName = "alphabet",
-                    NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Bigint,
-                    Value = alphabet
-                },
-                new NpgsqlParameter
-                {
-                    ParameterName = "building",
-                    NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Integer,
-                    Value = building
-                },
-                new NpgsqlParameter
-                {
-                    ParameterName = "fmotif_type",
-                    NpgsqlDbType = NpgsqlDbType.Smallint,
-                    Value = fmotif.Type
-                }
+                new NpgsqlParameter<long>("id", NpgsqlDbType.Bigint) { TypedValue = fmotif.Id },
+                new NpgsqlParameter<string>("value", NpgsqlDbType.Varchar) { TypedValue = fmotivValue },
+                new NpgsqlParameter<byte>("notation", NpgsqlDbType.Smallint) { TypedValue = (byte)Notation.FormalMotifs },
+                new NpgsqlParameter<long[]>("alphabet", NpgsqlDbType.Array | NpgsqlDbType.Bigint) { TypedValue = alphabet },
+                new NpgsqlParameter<int[]>("building", NpgsqlDbType.Array | NpgsqlDbType.Integer) { TypedValue = building },
+                new NpgsqlParameter<byte>("fmotif_type", NpgsqlDbType.Smallint) { TypedValue = (byte)fmotif.Type }
             };
             return parameters;
         }

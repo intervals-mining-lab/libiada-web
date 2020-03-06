@@ -84,7 +84,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 throw new Exception("At least one element of new sequence is invalid (not A, C, T, G or U).");
             }
 
-            MatterRepository.CreateMatterFromSequence(sequence);
+            MatterRepository.CreateOrExctractExistingMatterForSequence(sequence);
 
             long[] alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.Notation, false);
             Create(sequence, partial, alphabet, chain.Building);
@@ -107,14 +107,8 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </param>
         public void Create(CommonSequence sequence, bool partial, long[] alphabet, int[] building)
         {
-            List<object> parameters = FillParams(sequence, alphabet, building);
-
-            parameters.Add(new NpgsqlParameter
-            {
-                ParameterName = "partial",
-                NpgsqlDbType = NpgsqlDbType.Boolean,
-                Value = partial
-            });
+            List<NpgsqlParameter> parameters = FillParams(sequence, alphabet, building);
+            parameters.Add(new NpgsqlParameter<bool>("partial", NpgsqlDbType.Boolean) { TypedValue = partial });
 
             const string Query = @"INSERT INTO dna_chain (
                                         id,

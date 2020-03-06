@@ -138,6 +138,10 @@
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_sequence_group_modifier" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.FullCharacteristicLink" Width="2" PointX="6.875" PointY="14.375" />
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_full_characteristic_link" />
+        <edmx:EntityTypeShape EntityType="LibiadaWebModel.multisequence" Width="1.5" PointX="7" PointY="1" />
+        <edmx:AssociationConnector Association="LibiadaWebModel.fk_matter_multisequence" />
+        <edmx:EntityTypeShape EntityType="LibiadaWebModel.task_result" Width="1.5" PointX="8.375" PointY="7.125" />
+        <edmx:AssociationConnector Association="LibiadaWebModel.fk_task_result_task" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
