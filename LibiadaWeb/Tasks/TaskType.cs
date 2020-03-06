@@ -247,6 +247,13 @@
         /// </summary>
         [Display(Name = "Calculate characteristics of intervals distributions")]
         [TaskClass(typeof(IntervalsCharacteristicsDistributionController))]
-        IntervalsCharacteristicsDistribution = 34
+        IntervalsCharacteristicsDistribution = 34,
+
+        /// <summary>
+        /// Unites matters with similar names into multisequences.
+        /// </summary>
+        [Display(Name = "Multisequence grouping")]
+        [TaskClass(typeof(SequenceConcatenatorController))]
+        SequenceConcatenator = 35
     }
 }
