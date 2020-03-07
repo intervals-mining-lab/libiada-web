@@ -2,13 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using Accord;
-using Accord.Diagnostics;
-using Accord.Math;
-using Bio.Util.Logging;
-using LibiadaCore.Extensions;
 using LibiadaWeb.Models.CalculatorsData;
 using LibiadaWeb.Models.Repositories.Sequences;
 using LibiadaWeb.Tasks;
@@ -103,6 +97,9 @@ namespace LibiadaWeb.Controllers.Sequences
             var refArray = tempRefArray.Select(MultisequenceRepository.GetMatterNameSplit).ToList();
             var notRefArray = tempNotRefArray.Select(MultisequenceRepository.GetMatterNameSplit).ToList();
 
+
+
+            //Dictionary<string, long[]> refMultisequenceMatterNames = refArray.GroupBy(mn => mn.)
 
             Dictionary<string, long[]> multisequencesMatters = mattersNames.GroupBy(mn => mn.Item2)
                 .ToDictionary(mn => mn.Key, mn => mn.Select(m => m.Item1).ToArray());

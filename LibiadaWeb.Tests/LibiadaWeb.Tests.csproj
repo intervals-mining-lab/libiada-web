@@ -61,6 +61,7 @@
     <Compile Include="NotationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoteDbTests.cs" />
+    <Compile Include="SequenceRepositoryTests.cs" />
     <Compile Include="SequenceTypeTests.cs" />
     <Compile Include="Tasks\TaskStateTests.cs" />
     <Compile Include="Tasks\TaskTypeTests.cs" />
