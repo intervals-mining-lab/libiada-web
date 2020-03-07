@@ -30,7 +30,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="number">
         /// Number to convert.
         /// </param>
-        /// <returns></returns>
+        /// <returns>
+        /// Returns arabic number.
+        /// </returns>
         public static int ToArabic(string number) => number.Length == 0 ? 0 :
             RomanDigits
                 .Where(d => number.StartsWith(d.Value))
@@ -43,7 +45,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="matterName">
         /// The matter name.
         /// </param>
-        /// <returns></returns>
+        /// <returns>
+        /// Returns chain number.
+        /// </returns>
         public static int GetSequenceNumber(string matterName)
         {
             var refSplitArray = matterName.Split(' ').ToList();
@@ -121,12 +125,14 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         }
 
         /// <summary>
-        /// Returns matter id.
+        /// Discards excess parts.
         /// </summary>
         /// <param name="matterName">
         /// The matter name.
         /// </param>
-        /// <returns></returns>
+        /// <returns>
+        /// Returns matter name without excess parts.
+        /// </returns>
         public static string GetMatterNameSplit(string matterName)
         {
             if (matterName.Split('|').Length > 2)
