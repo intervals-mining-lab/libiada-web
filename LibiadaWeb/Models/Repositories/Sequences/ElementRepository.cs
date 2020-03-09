@@ -92,8 +92,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                     if (note.Triplet != result[i].Triplet
                      || note.Duration.Denominator != result[i].Denominator
                      || note.Duration.Numerator != result[i].Numerator
-                     || note.Duration.OriginalDenominator != result[i].Odenominator
-                     || note.Duration.OriginalNumerator != result[i].Onumerator
                      || note.Tie != result[i].Tie)
                     {
                         throw new Exception("Found in db note is not equal to local note.");
@@ -107,8 +105,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                         Triplet = note.Triplet,
                         Denominator = note.Duration.Denominator,
                         Numerator = note.Duration.Numerator,
-                        Onumerator = note.Duration.OriginalNumerator,
-                        Odenominator = note.Duration.OriginalDenominator,
                         Tie = note.Tie,
                         Pitch = db.Pitch.Where(p => pitches.Contains(p.Id)).ToList(),
                         Notation = Notation.Notes

@@ -323,7 +323,7 @@
         /// <summary>
         /// Gets or sets the midinumber.
         /// </summary>
-        [Display(Name = "Уникальный номер ноты по миди стандарту")]
+        [Display(Name = " Note hight as midinumber standard")]
         public int Midinumber { get; set; }
 
         /// <summary>

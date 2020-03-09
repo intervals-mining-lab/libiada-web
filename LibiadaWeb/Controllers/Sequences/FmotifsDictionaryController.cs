@@ -94,10 +94,7 @@
                         }
 
                         var newNote = new ValueNote(newPitches,
-                                                    new Duration(dbNote.Numerator,
-                                                                 dbNote.Denominator,
-                                                                 dbNote.Onumerator,
-                                                                 dbNote.Odenominator),
+                                                    new Duration(dbNote.Numerator, dbNote.Denominator),
                                                     dbNote.Triplet,
                                                     dbNote.Tie);
                         newNote.Id = dbNote.Id;
