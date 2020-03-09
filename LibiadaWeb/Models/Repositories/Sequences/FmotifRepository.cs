@@ -66,7 +66,7 @@
             var fmotifChain = new BaseChain(fmotif.NoteList.Cast<IBaseObject>().ToList());
             long[] notes = new ElementRepository(db).GetOrCreateNotesInDb(fmotifChain.Alphabet);
 
-            string localFmotifHash = BitConverter.ToString(fmotif.GetMD5HashCode()).Replace("-", string.Empty);
+            string localFmotifHash = fmotif.GetHashCode().ToString();
             var dbFmotifs = db.Fmotif.Where(f => f.Value == localFmotifHash).ToList();
             if (dbFmotifs.Count > 0)
             {
@@ -148,7 +148,7 @@
         protected List<NpgsqlParameter> FillParams(Fmotif fmotif, long[] alphabet, int[] building)
         {
             fmotif.Id = DbHelper.GetNewElementId(db);
-            var fmotivValue = BitConverter.ToString(fmotif.GetMD5HashCode()).Replace("-", string.Empty);
+            var fmotivValue = fmotif.GetHashCode().ToString();
             var parameters = new List<NpgsqlParameter>
             {
                 new NpgsqlParameter<long>("id", NpgsqlDbType.Bigint) { TypedValue = fmotif.Id },

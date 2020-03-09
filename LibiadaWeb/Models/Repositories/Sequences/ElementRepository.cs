@@ -85,7 +85,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 var note = (ValueNote)alphabet[i];
                 int[] pitches = GetOrCreatePitchesInDb(note.Pitches);
 
-                string localNoteHash = BitConverter.ToString(note.GetMD5HashCode()).Replace("-", string.Empty);
+                string localNoteHash = note.GetHashCode().ToString();
                 if (db.Note.Any(n => n.Value == localNoteHash))
                 {
                     result[i] = db.Note.Single(n => n.Value == localNoteHash);
@@ -103,7 +103,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 {
                     result[i] = new Note
                     {
-                        Value = BitConverter.ToString(note.GetMD5HashCode()).Replace("-", string.Empty),
+                        Value = note.GetHashCode().ToString(),
                         Triplet = note.Triplet,
                         Denominator = note.Duration.Denominator,
                         Numerator = note.Duration.Numerator,
