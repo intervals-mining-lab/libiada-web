@@ -56,5 +56,6 @@ namespace LibiadaWeb
         public virtual DbSet<SequenceGroup> SequenceGroup { get; set; }
         public virtual DbSet<Multisequence> Multisequence { get; set; }
         public virtual DbSet<TaskResult> TaskResult { get; set; }
+        public virtual DbSet<ImageSequence> ImageSequences { get; set; }
     }
 }

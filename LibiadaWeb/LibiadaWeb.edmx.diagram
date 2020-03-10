@@ -142,6 +142,8 @@
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_matter_multisequence" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.task_result" Width="1.5" PointX="8.375" PointY="7.125" />
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_task_result_task" />
+        <edmx:EntityTypeShape EntityType="LibiadaWebModel.ImageSequence" Width="1.5" PointX="5.875" PointY="21.75" />
+        <edmx:AssociationConnector Association="LibiadaWebModel.fk_image_sequence_matter" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
