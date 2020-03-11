@@ -70,7 +70,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 throw new Exception("Track contains more then one or zero congeneric score tracks (parts).");
             }
 
-            MatterRepository.CreateOrExctractExistingMatterForSequence(sequence);
+            MatterRepository.CreateOrExtractExistingMatterForSequence(sequence);
 
             BaseChain notesSequence = ConvertCongenericScoreTrackToNotesBaseChain(tempTrack.CongenericScoreTracks[0]);
             long[] notesAlphabet = ElementRepository.GetOrCreateNotesInDb(notesSequence.Alphabet);

@@ -34,6 +34,13 @@
         /// </summary>
         [Display(Name = "Measurement data")]
         [Description("Ordered arrays of measurement data, numbers, etc.")]
-        MeasurementData = 4
+        MeasurementData = 4,
+
+        /// <summary>
+        /// Images.
+        /// </summary>
+        [Display(Name = "Image")]
+        [Description("Image.")]
+        Image = 5,
     }
 }

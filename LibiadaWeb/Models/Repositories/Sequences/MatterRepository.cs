@@ -108,7 +108,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="commonSequence">
         /// The common sequence to be used for matter creation or extraction.
         /// </param>
-        public void CreateOrExctractExistingMatterForSequence(CommonSequence commonSequence)
+        public void CreateOrExtractExistingMatterForSequence(CommonSequence commonSequence)
         {
             Matter matter = commonSequence.Matter;
             if (matter != null)
@@ -184,6 +184,22 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             FillGroupAndSequenceType(matter);
 
             return matter;
+        }
+
+        /// <summary>
+        /// Adds given matter to database.
+        /// </summary>
+        /// <param name="matter">
+        /// The matter.
+        /// </param>
+        /// <returns>
+        /// The <see cref="long"/>.
+        /// </returns>
+        public long CreateMatter(Matter matter)
+        {
+            db.Matter.Add(matter);
+            db.SaveChanges();
+            return matter.Id;
         }
 
         /// <summary>
@@ -268,22 +284,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 Group = m.Group.GetDisplayValue(),
                 m.Nature
             });
-        }
-
-        /// <summary>
-        /// The create matter.
-        /// </summary>
-        /// <param name="matter">
-        /// The matter.
-        /// </param>
-        /// <returns>
-        /// The <see cref="long"/>.
-        /// </returns>
-        private long CreateMatter(Matter matter)
-        {
-            db.Matter.Add(matter);
-            db.SaveChanges();
-            return matter.Id;
         }
     }
 }
