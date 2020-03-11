@@ -18,7 +18,7 @@
                             #
                         </th>
                         <th>
-                            Sequence name
+                            Multisequence name
                         </th>
                         <th>
                             Result
@@ -26,12 +26,25 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="matter in result" ng-class="calculateStatusClass(matter.Status)">
+                    <tr ng-repeat="multisequence in result" >
                         <td ng-bind="$index + 1" />
-                        <td ng-bind="matter.MatterName" />
-                        <td ng-bind="matter.Group" />
-                        <td ng-bind="matter.SequenceType" />
-                        <td ng-bind="matter.Result" />
+                        <td>
+                            <label>
+                                <input type="checkbox"
+                                       ng-model="multisequence.Selected"
+                                       name="multisequenceName"
+                                       ng-value="multisequence.Value"
+                                       ng-disabled="multisequence.matterIds.length <= 1" />
+
+                                {{multisequence.name}}
+                            </label>
+                        </td>
+                        <td>
+                            <div ng-repeat="matterId in multisequence.matterIds">
+                                {{matters[matterId].Name}}
+                                <br/>
+                            </div>
+                        <td/>
                     </tr>
                 </tbody>
             </table>
