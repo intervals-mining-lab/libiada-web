@@ -103,12 +103,12 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         }
 
         /// <summary>
-        /// The create matter.
+        /// Creates new matter or extracts existing matter from database.
         /// </summary>
         /// <param name="commonSequence">
-        /// The common sequence.
+        /// The common sequence to be used for matter creation or extraction.
         /// </param>
-        public void CreateMatterFromSequence(CommonSequence commonSequence)
+        public void CreateOrExctractExistingMatterForSequence(CommonSequence commonSequence)
         {
             Matter matter = commonSequence.Matter;
             if (matter != null)

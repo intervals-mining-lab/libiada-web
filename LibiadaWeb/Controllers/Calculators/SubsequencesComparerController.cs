@@ -167,7 +167,7 @@
                     }
                 }
 
-                List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> similarPairs =
+                List<List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)>> similarPairs =
                     ExtractSimilarPairs(characteristicValueSubsequences, percentageDifference);
 
                 List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>[,] similarityMatrix =
@@ -347,14 +347,14 @@
         /// <returns>
         /// The <see cref="T:List{((int, int), (int, int), double)}"/>.
         /// </returns>
-        private List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> ExtractSimilarPairs(
+        private List<List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)>> ExtractSimilarPairs(
             Dictionary<double, List<(int matterId, int subsequenceIndex)>> characteristicValueSubsequences,
             double percentageDifference)
         {
-            var similarPairs = new List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)>();
+            var similarPairs = new List<List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)>>(characteristicValueSubsequences.Count);
             foreach (double key in characteristicValueSubsequences.Keys)
             {
-                similarPairs.AddRange(ExtractAllPossiblePairs(characteristicValueSubsequences[key]));
+                similarPairs.Add(ExtractAllPossiblePairs(characteristicValueSubsequences[key]));
             }
 
             double[] orderedCharacteristicValue = characteristicValueSubsequences.Keys.OrderBy(v => v).ToArray();
@@ -366,7 +366,7 @@
                 {
                     List<(int matterIndex, int subsequenceIndex)> firstComponentIndex = characteristicValueSubsequences[orderedCharacteristicValue[i]];
                     List<(int matterIndex, int subsequenceIndex)> secondComponentIndex = characteristicValueSubsequences[orderedCharacteristicValue[j]];
-                    similarPairs.AddRange(ExtractAllPossiblePairs(firstComponentIndex, secondComponentIndex, difference));
+                    similarPairs.Add(ExtractAllPossiblePairs(firstComponentIndex, secondComponentIndex, difference));
 
                     j++;
                     if (j == orderedCharacteristicValue.Length) break;
@@ -472,7 +472,7 @@
         /// </returns>
         private List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>[,] FillSimilarityMatrix(
             int mattersCount,
-            List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> similarPairs)
+            List<List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)>> similarPairs)
         {
             var similarityMatrix = new List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>[mattersCount, mattersCount];
             for (int i = 0; i < mattersCount; i++)
@@ -482,19 +482,21 @@
                     similarityMatrix[i, j] = new List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>();
                 }
             }
-
-            foreach (((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference) in similarPairs)
+            foreach (var similarPairsList in similarPairs)
             {
-                (int firstMatter, int firstSubsequence) = firstSequence;
-                (int secondMatter, int secondSubsequence) = secondSequence;
+                foreach (((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference) in similarPairsList)
+                {
+                    (int firstMatter, int firstSubsequence) = firstSequence;
+                    (int secondMatter, int secondSubsequence) = secondSequence;
 
-                (int firstSubsequenceIndex, int secondSubsequenceIndex, double difference) similarityData = (firstSubsequence, secondSubsequence, difference);
-                similarityMatrix[firstMatter, secondMatter].Add(similarityData);
+                    (int firstSubsequenceIndex, int secondSubsequenceIndex, double difference) similarityData = (firstSubsequence, secondSubsequence, difference);
+                    similarityMatrix[firstMatter, secondMatter].Add(similarityData);
 
-                (int firstSubsequenceIndex, int secondSubsequenceIndex, double difference) symmetricalSimilarityData = (secondSubsequence, firstSubsequence, difference);
-                similarityMatrix[secondMatter, firstMatter].Add(symmetricalSimilarityData);
+                    //  TODO: get rid of duplicate data
+                    (int firstSubsequenceIndex, int secondSubsequenceIndex, double difference) symmetricalSimilarityData = (secondSubsequence, firstSubsequence, difference);
+                    similarityMatrix[secondMatter, firstMatter].Add(symmetricalSimilarityData);
+                }
             }
-
             return similarityMatrix;
         }
     }

@@ -39,6 +39,9 @@
             bundles.Add(new ScriptBundle("~/bundles/d3js").Include(
                         "~/Scripts/d3/d3.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/plotlyjs").Include(
+                        "~/Scripts/plotly/plotly.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/slider").Include(
                         "~/Scripts/jQAllRangeSliders-withRuler-min.js",
                         "~/Scripts/jquery.mousewheel.js"));
@@ -161,6 +164,9 @@
             bundles.Add(new ScriptBundle("~/bundles/controllers/SubsequencesDistributionResultController").Include(
                         "~/Scripts/Angular/Controllers/subsequencesDistributionResult.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/controllers/SubsequencesDistributionResultPlotlyController").Include(
+                        "~/Scripts/Angular/Controllers/subsequencesDistributionResultPlotly.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/controllers/TaskManagerController").Include(
                         "~/Scripts/jquery.signalR-{version}.js",
                         "~/Scripts/Angular/Controllers/taskManager.js"));
@@ -188,6 +194,8 @@
                         "~/Content/site.css",
                         "~/Content/scrollUpDown.css"));
 
+            bundles.Add(new StyleBundle("~/Content/genesMap").Include(
+                        "~/Content/GenesMap.css"));
             bundles.Add(new ScriptBundle("~/bundles/midijs").Include(
                         "~/Scripts/midijs/inc/shim/Base64.js",
                         "~/Scripts/midijs/inc/shim/Base64binary.js",

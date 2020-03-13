@@ -5,6 +5,7 @@
     using System.Linq;
 
     using Npgsql;
+    using NpgsqlTypes;
 
     /// <summary>
     /// The helper for database functions.
@@ -67,11 +68,11 @@
         /// </returns>
         public static long GetNewElementId(LibiadaWebEntities db)
         {
-            return db.Database.SqlQuery<long>("SELECT nextval('elements_id_seq');").First();
+            return db.Database.SqlQuery<long>("SELECT nextval('elements_id_seq');").Single();
         }
 
         /// <summary>
-        /// The get element ids.
+        /// TExtracts alphabet elements ids for given sequence.
         /// </summary>
         /// <param name="db">
         /// Database connection.
@@ -80,13 +81,31 @@
         /// The sequence id.
         /// </param>
         /// <returns>
-        /// The <see cref="List{Int64}"/>.
+        /// The <see cref="long[]"/>.
         /// </returns>
-        public static List<long> GetElementIds(LibiadaWebEntities db, long sequenceId)
+        public static long[] GetAlphabetElementIds(LibiadaWebEntities db, long sequenceId)
         {
-            // TODO: try to get rid of unnest
-            const string Query = "SELECT unnest(alphabet) FROM chain WHERE id = @id";
-            return db.Database.SqlQuery<long>(Query, new NpgsqlParameter("@id", sequenceId)).ToList();
+            var dbConnection = (NpgsqlConnection)db.Database.Connection;
+            const string Query = "SELECT alphabet FROM chain WHERE id = @id";
+            var id = new NpgsqlParameter<long>("id", NpgsqlDbType.Bigint) { TypedValue = sequenceId };
+            long[] result;
+            dbConnection.Open();
+            using (var command = new NpgsqlCommand(Query, dbConnection))
+            {
+                command.Parameters.Add(id);
+                using (NpgsqlDataReader reader = command.ExecuteReader())
+                {
+                    if (!reader.Read())
+                    {
+                        dbConnection.Close();
+                        throw new ArgumentException($"sequence id {sequenceId} does not exist", nameof(sequenceId));
+                    }
+
+                    result = (long[])reader[0];
+                }
+            }
+            dbConnection.Close();
+            return result;
         }
 
         /// <summary>
@@ -101,10 +120,29 @@
         /// <returns>
         /// The <see cref="T:int[]"/>.
         /// </returns>
-        public static int[] GetBuilding(LibiadaWebEntities db, long sequenceId)
+        public static int[] GetSequenceBuilding(LibiadaWebEntities db, long sequenceId)
         {
-            const string Query = "SELECT unnest(building) FROM chain WHERE id = @id";
-            return db.Database.SqlQuery<int>(Query, new NpgsqlParameter("@id", sequenceId)).ToArray();
+            var dbConnection = (NpgsqlConnection)db.Database.Connection;
+            const string Query = "SELECT building FROM chain WHERE id = @id";
+            var id = new NpgsqlParameter<long>("id", NpgsqlDbType.Bigint) { TypedValue = sequenceId };
+            int[] result;
+            dbConnection.Open();
+            using (var command = new NpgsqlCommand(Query, dbConnection))
+            {
+                command.Parameters.Add(id);
+                using (NpgsqlDataReader reader = command.ExecuteReader())
+                {
+                    if (!reader.Read())
+                    {
+                        dbConnection.Close();
+                        throw new ArgumentException($"sequence id {sequenceId} does not exist", nameof(sequenceId));
+                    }
+
+                    result = (int[])reader[0];
+                }
+            }
+            dbConnection.Close();
+            return result;
         }
 
         /// <summary>
@@ -119,10 +157,29 @@
         /// <returns>
         /// The <see cref="List{Int64}"/>.
         /// </returns>
-        public static List<long> GetFmotifAlphabet(LibiadaWebEntities db, long fmotifId)
+        public static long[] GetFmotifAlphabet(LibiadaWebEntities db, long fmotifId)
         {
-            const string Query = "SELECT unnest(alphabet) FROM fmotif WHERE id = @id";
-            return db.Database.SqlQuery<long>(Query, new NpgsqlParameter("@id", fmotifId)).ToList();
+            var dbConnection = (NpgsqlConnection)db.Database.Connection;
+            const string Query = "SELECT alphabet FROM fmotif WHERE id = @id";
+            var id = new NpgsqlParameter<long>("id", NpgsqlDbType.Bigint) { TypedValue = fmotifId };
+            long[] result;
+            dbConnection.Open();
+            using (var command = new NpgsqlCommand(Query, dbConnection))
+            {
+                command.Parameters.Add(id);
+                using (NpgsqlDataReader reader = command.ExecuteReader())
+                {
+                    if (!reader.Read())
+                    {
+                        dbConnection.Close();
+                        throw new ArgumentException($"sequence id {fmotifId} does not exist", nameof(fmotifId));
+                    }
+
+                    result = (long[])reader[0];
+                }
+            }
+            dbConnection.Close();
+            return result;
         }
 
         /// <summary>
@@ -139,8 +196,27 @@
         /// </returns>
         public static int[] GetFmotifBuilding(LibiadaWebEntities db, long fmotifId)
         {
-            const string Query = "SELECT unnest(building) FROM fmotif WHERE id = @id";
-            return db.Database.SqlQuery<int>(Query, new NpgsqlParameter("@id", fmotifId)).ToArray();
+            var dbConnection = (NpgsqlConnection)db.Database.Connection;
+            const string Query = "SELECT building FROM fmotif WHERE id = @id";
+            var id = new NpgsqlParameter<long>("id", NpgsqlDbType.Bigint) { TypedValue = fmotifId };
+            int[] result;
+            dbConnection.Open();
+            using (var command = new NpgsqlCommand(Query, dbConnection))
+            {
+                command.Parameters.Add(id);
+                using (NpgsqlDataReader reader = command.ExecuteReader())
+                {
+                    if (!reader.Read())
+                    {
+                        dbConnection.Close();
+                        throw new ArgumentException($"sequence id {fmotifId} does not exist", nameof(fmotifId));
+                    }
+
+                    result = (int[])reader[0];
+                }
+            }
+            dbConnection.Close();
+            return result;
         }
 
         /// <summary>
@@ -155,10 +231,29 @@
         /// <returns>
         /// The <see cref="List{Int64}"/>.
         /// </returns>
-        public static List<long> GetMeasureAlphabet(LibiadaWebEntities db, long measureId)
+        public static long[] GetMeasureAlphabet(LibiadaWebEntities db, long measureId)
         {
-            const string Query = "SELECT unnest(alphabet) FROM measure WHERE id = @id";
-            return db.Database.SqlQuery<long>(Query, new NpgsqlParameter("@id", measureId)).ToList();
+            var dbConnection = (NpgsqlConnection)db.Database.Connection;
+            const string Query = "SELECT alphabet FROM measure WHERE id = @id";
+            var id = new NpgsqlParameter<long>("id", NpgsqlDbType.Bigint) { TypedValue = measureId };
+            long[] result;
+            dbConnection.Open();
+            using (var command = new NpgsqlCommand(Query, dbConnection))
+            {
+                command.Parameters.Add(id);
+                using (NpgsqlDataReader reader = command.ExecuteReader())
+                {
+                    if (!reader.Read())
+                    {
+                        dbConnection.Close();
+                        throw new ArgumentException($"sequence id {measureId} does not exist", nameof(measureId));
+                    }
+
+                    result = (long[])reader[0];
+                }
+            }
+            dbConnection.Close();
+            return result;
         }
 
         /// <summary>
@@ -175,44 +270,27 @@
         /// </returns>
         public static int[] GetMeasureBuilding(LibiadaWebEntities db, long measureId)
         {
-            const string Query = "SELECT unnest(building) FROM measure WHERE id = @id";
-            return db.Database.SqlQuery<int>(Query, new NpgsqlParameter("@id", measureId)).ToArray();
-        }
+            var dbConnection = (NpgsqlConnection)db.Database.Connection;
+            const string Query = "SELECT building FROM measure WHERE id = @id";
+            var id = new NpgsqlParameter<long>("id", NpgsqlDbType.Bigint) { TypedValue = measureId };
+            int[] result;
+            dbConnection.Open();
+            using (var command = new NpgsqlCommand(Query, dbConnection))
+            {
+                command.Parameters.Add(id);
+                using (NpgsqlDataReader reader = command.ExecuteReader())
+                {
+                    if (!reader.Read())
+                    {
+                        dbConnection.Close();
+                        throw new ArgumentException($"sequence id {measureId} does not exist", nameof(measureId));
+                    }
 
-        /// <summary>
-        /// Gets music chain's alphabet ids.
-        /// </summary>
-        /// <param name="db">
-        /// Database connection.
-        /// </param>
-        /// <param name="musicChainId">
-        /// The fmotif id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="List{Int64}"/>.
-        /// </returns>
-        public static List<long> GetMusicChainAlphabet(LibiadaWebEntities db, long musicChainId)
-        {
-            const string Query = "SELECT unnest(alphabet) FROM music_chain WHERE id = @id";
-            return db.Database.SqlQuery<long>(Query, new NpgsqlParameter("@id", musicChainId)).ToList();
-        }
-
-        /// <summary>
-        /// Gets building of music chain by id.
-        /// </summary>
-        /// <param name="db">
-        /// Database connection.
-        /// </param>
-        /// <param name="musicChainId">
-        /// The fmotif id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="T:int[]"/>.
-        /// </returns>
-        public static int[] GetMusicChainBuilding(LibiadaWebEntities db, long musicChainId)
-        {
-            const string Query = "SELECT unnest(building) FROM music_chain WHERE id = @id";
-            return db.Database.SqlQuery<int>(Query, new NpgsqlParameter("@id", musicChainId)).ToArray();
+                    result = (int[])reader[0];
+                }
+            }
+            dbConnection.Close();
+            return result;
         }
 
         /// <summary>
@@ -227,7 +305,7 @@
         /// <param name="parameters">
         /// The parameters.
         /// </param>
-        public static void ExecuteCommand(LibiadaWebEntities db, string query, object[] parameters)
+        public static void ExecuteCommand(LibiadaWebEntities db, string query, params NpgsqlParameter[] parameters)
         {
             db.Database.ExecuteSqlCommand(query, parameters);
         }
@@ -246,8 +324,9 @@
         /// </returns>
         public static int GetSequenceLength(LibiadaWebEntities db, long sequenceId)
         {
-            const string Query = "SELECT array_length(building, 1) FROM chain WHERE id = @id";
-            return db.Database.SqlQuery<int>(Query, new NpgsqlParameter("@id", sequenceId)).First();
+            const string Query = "SELECT cardinality(building) FROM chain WHERE id = @id";
+            var id = new NpgsqlParameter<long>("id", NpgsqlDbType.Bigint) { TypedValue = sequenceId };
+            return db.Database.SqlQuery<int>(Query, id).First();
         }
     }
 }

@@ -18,6 +18,13 @@ namespace LibiadaWeb.Controllers.Sequences
             return View();
         }
 
+        /// <summary>
+        /// Gets genetic matters names and ids from database.
+        /// </summary>
+        /// <param name="excludeMatterIds"></param>
+        /// <returns>
+        /// Returns multisequences with sequences included in them.
+        /// </returns>
         [HttpPost]
         public ActionResult Index(long[] excludeMatterIds)
         {
@@ -27,32 +34,6 @@ namespace LibiadaWeb.Controllers.Sequences
                 {
                     List<Matter> matters = db.Matter.ToList();
                     var multisequences = GeneticMattersGenerator(matters);
-                    //var importResults = new List<MatterImportResult>(multisequences.Count);
-                    //foreach (var multisequence in multisequences)
-                    //{
-                    //    var importResult = new MatterImportResult();
-                    //    try
-                    //    {
-                    //        importResult.MatterName = multisequence.Name;
-                    //        db.Multisequence.Add(multisequence);
-                    //        db.SaveChanges();
-                    //        importResult.Status = "Success";
-                    //        importResult.Result =
-                    //            $"Successfully created multisequence with {multisequence.Matters.Count} matters";
-                    //    }
-                    //    catch (Exception exception)
-                    //    {
-                    //        importResult.Status = "Error";
-                    //        importResult.Result = $"Error: {exception.Message}";
-                    //    }
-                    //    finally
-                    //    {
-                    //        importResults.Add(importResult);
-                    //    }
-                    //}
-
-                    //var result = db.Multisequence.Where(ms => multisequences.Select(m => m.Id).Contains(ms.Id))
-                    //    .Include(ms => ms.Matters).ToList();
                     var result = multisequences.Select(m => new {name = m.Key, matterIds = m.Value}).ToArray();
                     var groupingResult = new Dictionary<string, object>
                     {
@@ -68,6 +49,15 @@ namespace LibiadaWeb.Controllers.Sequences
             }); 
         }
 
+        /// <summary>
+        /// Divides matters into reference and not reference and groups them.
+        /// </summary>
+        /// <param name="matters">
+        /// List of matters.
+        /// </param>
+        /// <returns>
+        /// Returns grouped matters.
+        /// </returns>
         private Dictionary<string, long[]> GeneticMattersGenerator(List<Matter> matters)
         {
             matters = matters.Where(m => m.Nature == Nature.Genetic).ToList();
@@ -81,7 +71,6 @@ namespace LibiadaWeb.Controllers.Sequences
                 {
                     throw new Exception();
                 }
-
                 tempArray.Add(matter.Name.Split('|').Last().Trim());
             }
 
@@ -100,12 +89,6 @@ namespace LibiadaWeb.Controllers.Sequences
                 }
             }
 
-          
-
-
-
-            //Dictionary<string, long[]> refMultisequenceMatterNames = refArray.GroupBy(mn => mn.)
-
             Dictionary<string, long[]> multisequencesRefMatters = refArray.GroupBy(mn => mn.Item2)
                 .ToDictionary(mn => mn.Key, mn => mn.Select(m => m.Item1).ToArray());
 
@@ -116,21 +99,6 @@ namespace LibiadaWeb.Controllers.Sequences
             {
                 result.Add(multisequencesNotRefMatter.Key, multisequencesNotRefMatter.Value);
             }
-            // List<Multisequence> result = new List<Multisequence>(multisequencesMatters.Count);
-            /* foreach (var (matterName, matterIds) in multisequencesMatters)
-             {
-                 if (matterIds.Length > 1)
-                 {
-                     var concatenatedMatters = matters.Where(m => matterIds.Contains(m.Id)).ToArray();
-                     result.Add(new Multisequence()
-                     {
-                         Name = matterName,
-                         Matters = concatenatedMatters,
-                         Nature = Nature.Genetic
-                     });
-                 }
-             }
-             */
             return result;
             
         }
