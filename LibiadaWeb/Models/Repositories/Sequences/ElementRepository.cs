@@ -8,6 +8,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using LibiadaCore.Core;
     using LibiadaCore.Core.SimpleTypes;
 
+
     /// <summary>
     /// The element repository.
     /// </summary>
@@ -80,15 +81,19 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         {
             var newNotes = new List<Note>();
             var result = new Note[alphabet.Cardinality];
-            for (int i = 0; i < alphabet.Cardinality; i++)
+            ValueNote[] notesAlphabet = alphabet.Cast<ValueNote>().ToArray();
+            string[] stringNotes = notesAlphabet.Select(n => n.ToString()).ToArray();
+            Dictionary<string, Note> existingNotes = db.Note.Where(n => stringNotes.Contains(n.Value))
+                                                            .ToDictionary(n => n.Value);
+            for (int i = 0; i < notesAlphabet.Length; i++)
             {
-                var note = (ValueNote)alphabet[i];
+                ValueNote note = notesAlphabet[i];
                 int[] pitches = GetOrCreatePitchesInDb(note.Pitches);
+                string localStringNote = stringNotes[i];
 
-                string localNoteHash = note.GetHashCode().ToString();
-                if (db.Note.Any(n => n.Value == localNoteHash))
+                if (existingNotes.ContainsKey(localStringNote))
                 {
-                    result[i] = db.Note.Single(n => n.Value == localNoteHash);
+                    result[i] = existingNotes[localStringNote];
                     if (note.Triplet != result[i].Triplet
                      || note.Duration.Denominator != result[i].Denominator
                      || note.Duration.Numerator != result[i].Numerator
@@ -101,7 +106,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 {
                     result[i] = new Note
                     {
-                        Value = note.GetHashCode().ToString(),
+                        Value = localStringNote,
                         Triplet = note.Triplet,
                         Denominator = note.Duration.Denominator,
                         Numerator = note.Duration.Numerator,
@@ -244,14 +249,16 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         {
             var newPitches = new List<LibiadaWeb.Pitch>();
             var result = new LibiadaWeb.Pitch[pitches.Count];
-
+            int[] midiNumbers = pitches.Select(p => p.MidiNumber).ToArray();
+            Dictionary<int, LibiadaWeb.Pitch> existingPitches = db.Pitch.Where(p => midiNumbers.Contains(p.Midinumber))
+                                                                        .ToDictionary(p => p.Midinumber);
             for (int i = 0; i < pitches.Count; i++)
             {
                 Pitch pitch = pitches[i];
 
-                if (db.Pitch.Any(p => p.Midinumber == pitch.MidiNumber))
+                if (existingPitches.ContainsKey(pitch.MidiNumber))
                 {
-                    result[i] = db.Pitch.Single(p => p.Midinumber == pitch.MidiNumber);
+                    result[i] = existingPitches[pitch.MidiNumber];
 
                     if (pitch.Alter != result[i].Accidental
                      || pitch.Step != result[i].NoteSymbol

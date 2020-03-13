@@ -66,16 +66,16 @@
             var fmotifChain = new BaseChain(fmotif.NoteList.Cast<IBaseObject>().ToList());
             long[] notes = new ElementRepository(db).GetOrCreateNotesInDb(fmotifChain.Alphabet);
 
-            string localFmotifHash = fmotif.GetHashCode().ToString();
+            var localFmotifHash = fmotif.GetHashCode().ToString();
             var dbFmotifs = db.Fmotif.Where(f => f.Value == localFmotifHash).ToList();
             if (dbFmotifs.Count > 0)
             {
                 foreach (var dbFmotif in dbFmotifs)
                 {
-                    var dbAlphabet = DbHelper.GetFmotifAlphabet(db, dbFmotif.Id);
+                    long[] dbAlphabet = DbHelper.GetFmotifAlphabet(db, dbFmotif.Id);
                     if (notes.SequenceEqual(dbAlphabet))
                     {
-                        var dbBuilding = DbHelper.GetFmotifBuilding(db, dbFmotif.Id);
+                        int[] dbBuilding = DbHelper.GetFmotifBuilding(db, dbFmotif.Id);
                         if (fmotifChain.Building.SequenceEqual(dbBuilding))
                         {
                             if (fmotif.Type != dbFmotif.FmotifType)

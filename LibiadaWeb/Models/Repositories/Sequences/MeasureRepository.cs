@@ -69,10 +69,10 @@
             {
                 foreach (var dbMeasure in dbMeasures)
                 {
-                    var dbAlphabet = DbHelper.GetMeasureAlphabet(db, dbMeasure.Id);
+                    long[] dbAlphabet = DbHelper.GetMeasureAlphabet(db, dbMeasure.Id);
                     if (notes.SequenceEqual(dbAlphabet))
                     {
-                        var dbBuilding = DbHelper.GetMeasureBuilding(db, dbMeasure.Id);
+                        int[] dbBuilding = DbHelper.GetMeasureBuilding(db, dbMeasure.Id);
                         if (measureChain.Building.SequenceEqual(dbBuilding))
                         {
                             if (measure.Attributes.Key.Fifths != dbMeasure.Fifths
