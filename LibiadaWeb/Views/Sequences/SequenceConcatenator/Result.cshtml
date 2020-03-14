@@ -26,7 +26,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="multisequence in result" >
+                    <tr ng-repeat="multisequence in result">
                         <td ng-bind="$index + 1" />
                         <td>
                             <label>
@@ -34,8 +34,8 @@
                                        ng-model="multisequence.Selected"
                                        name="multisequenceName"
                                        ng-value="multisequence.Value"
-                                       ng-disabled="multisequence.matterIds.length <= 1" 
-                                       ng-checked="::multisequence.matterIds.length > 1"/>
+                                       ng-disabled="multisequence.matterIds.length <= 1"
+                                       ng-checked="::multisequence.matterIds.length > 1" />
 
                                 {{multisequence.name}}
                             </label>
@@ -47,7 +47,38 @@
                                 <br />
                             </div>
                         </td>
-                    </tr>
+                </tr>
+                </tbody>
+            </table>
+            <br />
+            <hr />
+            <br />
+            <h3> Ungrouped matters</h3>
+            <table class="table table-bordered table-hover" ng-cloak>
+                <thead>
+                <tr>
+                    <th>
+                        #
+                    </th>
+                    <th>
+                        Matter name
+                    </th>
+                    <th>
+                        Group
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="matter in ungroupedMatters">
+                    <td ng-bind="$index + 1" />
+                    <td>
+                        <label>
+                            {{matter.Name}}
+                        </label>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>

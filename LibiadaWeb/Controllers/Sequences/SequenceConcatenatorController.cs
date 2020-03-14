@@ -35,10 +35,13 @@ namespace LibiadaWeb.Controllers.Sequences
                     List<Matter> matters = db.Matter.ToList();
                     var multisequences = GeneticMattersGenerator(matters);
                     var result = multisequences.Select(m => new {name = m.Key, matterIds = m.Value}).ToArray();
+                    var matterIds = result.SelectMany(r => r.matterIds);
+                    matters = matters.Where(m => matterIds.Contains(m.Id)).ToList();
                     var groupingResult = new Dictionary<string, object>
                     {
                         {"result", result},
-                        { "matters", matters.ToDictionary(m => m.Id, m => new StringedMatter(m, 0)) }
+                        { "matters", matters.ToDictionary(m => m.Id, m => new StringedMatter(m, 0)) },
+                        { "ungroupedMatters", db.Matter.Where(m => m.Nature == Nature.Genetic && !matterIds.Contains(m.Id)).ToArray() }
                     };
 
                     return new Dictionary<string, object>

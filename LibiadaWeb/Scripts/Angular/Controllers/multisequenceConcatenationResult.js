@@ -5,6 +5,7 @@
 
         function unboundMatter(multiSequence, matterId) {
             multiSequence.matterIds.splice(multiSequence.matterIds.indexOf(matterId), 1);
+            $scope.ungroupedMatters.push($scope.matters[matterId]);
         }
 
         $scope.unboundMatter = unboundMatter;
