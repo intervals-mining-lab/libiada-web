@@ -16,7 +16,7 @@
     <AssemblyName>LibiadaWeb</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -300,6 +300,9 @@
     <Compile Include="Subsequence.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
+    <Compile Include="TaskResult.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Tasks\Task.cs" />
     <Compile Include="Tasks\TaskData.cs" />
     <Compile Include="Tasks\TaskEvent.cs" />
@@ -452,6 +455,7 @@
     <Content Include="Scripts\Angular\Controllers\fmotifsDictionary.js" />
     <Content Include="Scripts\Angular\Controllers\localCalculationResult.js" />
     <Content Include="Scripts\Angular\Controllers\matterEdit.js" />
+    <Content Include="Scripts\Angular\Controllers\multisequenceConcatenationResult.js" />
     <Content Include="Scripts\Angular\Controllers\musicFilesResult.js" />
     <Content Include="Scripts\Angular\Controllers\orderCalculation.js" />
     <Content Include="Scripts\Angular\Controllers\intervalsCharacteristicsDistribution.js" />

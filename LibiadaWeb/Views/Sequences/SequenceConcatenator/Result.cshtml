@@ -1,14 +1,14 @@
 ﻿@{
-    ViewBag.Title = "Batch sequences import result";
+    ViewBag.Title = "Multisequence grouping result";
 }
 @Scripts.Render("~/bundles/loadingWindow")
 <h2>@ViewBag.Title</h2>
 
 @if (ViewBag.Error == null)
 {
-    @Html.Partial("_AngularControllerInitializer", "BatchSequenceImportResultController")
+    @Html.Partial("_AngularControllerInitializer", "MultiSequenceConcatenationResultController")
 
-    <div ng-controller="BatchSequenceImportResultCtrl">
+    <div ng-controller="MultiSequenceConcatenationResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <div ng-disabled="loading">
             <table class="table table-bordered table-hover" ng-cloak>
@@ -34,7 +34,8 @@
                                        ng-model="multisequence.Selected"
                                        name="multisequenceName"
                                        ng-value="multisequence.Value"
-                                       ng-disabled="multisequence.matterIds.length <= 1" />
+                                       ng-disabled="multisequence.matterIds.length <= 1" 
+                                       ng-checked="::multisequence.matterIds.length > 1"/>
 
                                 {{multisequence.name}}
                             </label>
@@ -42,9 +43,10 @@
                         <td>
                             <div ng-repeat="matterId in multisequence.matterIds">
                                 {{matters[matterId].Name}}
-                                <br/>
+                                <button type="button" class="btn btn-danger btn-xs" ng-click="unboundMatter(multisequence, matterId)">X</button>
+                                <br />
                             </div>
-                        <td/>
+                        </td>
                     </tr>
                 </tbody>
             </table>

@@ -96,6 +96,9 @@
             bundles.Add(new ScriptBundle("~/bundles/controllers/MatterSequenceCreateController").Include(
                         "~/Scripts/Angular/Controllers/matterSequenceCreate.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/controllers/MultiSequenceConcatenationResultController").Include(
+                "~/Scripts/Angular/Controllers/multiSequenceConcatenationResult.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/controllers/MusicFilesResultController").Include(
                         "~/Scripts/Angular/Controllers/musicFilesResult.js"));
 
