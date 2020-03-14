@@ -67,7 +67,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 chain = new BaseChain(text.Select(e => (ValueString)e).Cast<IBaseObject>().ToList());
             }
 
-            MatterRepository.CreateOrExctractExistingMatterForSequence(commonSequence);
+            MatterRepository.CreateOrExtractExistingMatterForSequence(commonSequence);
 
             long[] alphabet = ElementRepository.ToDbElements(chain.Alphabet, commonSequence.Notation, true);
             Create(commonSequence, original, language, translator, alphabet, chain.Building);

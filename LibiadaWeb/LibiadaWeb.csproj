@@ -198,6 +198,11 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Group.cs" />
+    <Compile Include="ImageMatrixTransformer.cs" />
+    <Compile Include="ImageOrderExtractor.cs" />
+    <Compile Include="ImageSequence.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
     <Compile Include="ImageTransformer.cs" />
     <Compile Include="Language.cs" />
     <Compile Include="Helpers\AccountHelper.cs" />

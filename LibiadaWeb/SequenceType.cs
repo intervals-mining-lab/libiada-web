@@ -104,6 +104,14 @@
         [Display(Name = "Mitochondrial plasmid")]
         [Description("Complete mitochondrial plasmid sequence")]
         [Nature(Nature.Genetic)]
-        MitochondrialPlasmid = 12
+        MitochondrialPlasmid = 12,
+
+        /// <summary>
+        /// Complete image.
+        /// </summary>
+        [Display(Name = "Complete image")]
+        [Description("Complete image")]
+        [Nature(Nature.Image)]
+        CompleteImage = 13
     }
 }
