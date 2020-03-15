@@ -27,8 +27,6 @@ namespace LibiadaWeb
         public System.DateTimeOffset Created { get; set; }
         public int Numerator { get; set; }
         public int Denominator { get; set; }
-        public int Onumerator { get; set; }
-        public int Odenominator { get; set; }
         public bool Triplet { get; set; }
         public LibiadaCore.Core.SimpleTypes.Tie Tie { get; set; }
         public System.DateTimeOffset Modified { get; set; }

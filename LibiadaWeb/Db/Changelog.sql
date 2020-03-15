@@ -2971,6 +2971,9 @@ CREATE TABLE task_result
 
 COMMENT ON TABLE task_result IS 'Table with JSON results of tasks calculation. Results are stored as key/value pairs.';
 
+-- 11.03.2020
+-- Add images table.
+
 ALTER TABLE matter ADD COLUMN source bytea;
 
 CREATE TABLE image_sequence
@@ -2996,10 +2999,16 @@ CREATE TABLE image_sequence
         ON UPDATE CASCADE
         ON DELETE NO ACTION,
     CONSTRAINT chk_remote_id CHECK (remote_db IS NULL AND remote_id IS NULL OR remote_db IS NOT NULL AND remote_id IS NOT NULL)
-)
+);
 COMMENT ON TABLE image_sequence IS 'Table with information on image transformations and order extraction. Does not store an actual order of image and used for reference by characteristics tables.';
 CREATE INDEX ix_image_sequence_matter_id  ON image_sequence USING btree (matter_id);
 CREATE TRIGGER tgiu_image_sequence_modified  BEFORE INSERT OR UPDATE ON image_sequence FOR EACH ROW EXECUTE PROCEDURE trigger_set_modified();
 CREATE TRIGGER tgiud_image_sequence_chain_key_bound AFTER INSERT OR DELETE OR UPDATE OF id ON image_sequence FOR EACH ROW EXECUTE PROCEDURE trigger_chain_key_bound();
+
+-- 15.03.2020
+-- Remove redundant columns in note and measure tables.
+
+ALTER TABLE note DROP COLUMN onumerator;
+ALTER TABLE note DROP COLUMN odenominator;
 
 COMMIT;
