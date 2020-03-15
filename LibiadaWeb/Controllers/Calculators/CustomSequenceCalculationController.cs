@@ -177,8 +177,6 @@
                         var characteristics = new double[characteristicLinkIds.Length];
                         for (int k = 0; k < characteristicLinkIds.Length; k++)
                         {
-                            sequences[j].FillIntervalManagers();
-
                             Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkIds[k]);
                             FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkIds[k]);
                             IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);

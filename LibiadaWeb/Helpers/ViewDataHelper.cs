@@ -263,7 +263,7 @@
 
             data.Add("submitName", submitName);
             data.Add("notations", geneticNotations.ToSelectListWithNature());
-            data.Add("nature", (byte)Nature.Genetic);
+            data.Add("nature", ((byte)Nature.Genetic).ToString());
             data.Add("features", features.ToSelectListWithNature(selectedFeatures));
             data.Add("sequenceTypes", sequenceTypes.ToSelectListWithNature(true));
             data.Add("groups", groups.ToSelectListWithNature(true));

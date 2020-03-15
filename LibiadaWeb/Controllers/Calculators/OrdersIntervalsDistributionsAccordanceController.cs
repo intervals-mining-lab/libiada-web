@@ -82,7 +82,6 @@ namespace LibiadaWeb.Controllers.Calculators
                     foreach (var order in orders)
                     {
                         var sequence = new Chain(order.Select(Convert.ToInt16).ToArray());
-                        sequence.FillIntervalManagers();
                         var fullIntervals = new Dictionary<int, int>();
                         foreach (var el in sequence.Alphabet.ToList())
                         {
