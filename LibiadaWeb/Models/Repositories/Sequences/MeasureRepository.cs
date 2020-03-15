@@ -63,22 +63,21 @@
             var measureChain = new BaseChain(measure.NoteList.Cast<IBaseObject>().ToList());
             long[] notes = new ElementRepository(db).GetOrCreateNotesInDb(measureChain.Alphabet);
 
-            string localMeasureHash = BitConverter.ToString(measure.GetMD5HashCode()).Replace("-", string.Empty);
+            string localMeasureHash = measure.GetHashCode().ToString();
             var dbMeasures = db.Measure.Where(m => m.Value == localMeasureHash).ToList();
             if (dbMeasures.Count > 0)
             {
                 foreach (var dbMeasure in dbMeasures)
                 {
-                    var dbAlphabet = DbHelper.GetMeasureAlphabet(db, dbMeasure.Id);
+                    long[] dbAlphabet = DbHelper.GetMeasureAlphabet(db, dbMeasure.Id);
                     if (notes.SequenceEqual(dbAlphabet))
                     {
-                        var dbBuilding = DbHelper.GetMeasureBuilding(db, dbMeasure.Id);
+                        int[] dbBuilding = DbHelper.GetMeasureBuilding(db, dbMeasure.Id);
                         if (measureChain.Building.SequenceEqual(dbBuilding))
                         {
                             if (measure.Attributes.Key.Fifths != dbMeasure.Fifths
                                 || measure.Attributes.Size.BeatBase != dbMeasure.Beatbase
-                                || measure.Attributes.Size.BeatBase != dbMeasure.Beats
-                                || measure.Attributes.Size.TicksPerBeat != dbMeasure.TicksPerBeat)
+                                || measure.Attributes.Size.Beats != dbMeasure.Beats)
                             {
                                 throw new Exception("Found in db measure is not equal to local measure.");
                             }
@@ -119,7 +118,6 @@
                                         building,
                                         beats,
                                         beatbase,
-                                        ticks_per_beat,
                                         fifths,
                                         major
                                     ) VALUES (
@@ -130,7 +128,6 @@
                                         @building,
                                         @beats,
                                         @beatbase,
-                                        @ticks_per_beat,
                                         @fifths,
                                         @major
                                     );";
@@ -156,7 +153,7 @@
         protected List<NpgsqlParameter> FillParams(Measure measure, long[] alphabet, int[] building)
         {
             measure.Id = DbHelper.GetNewElementId(db);
-            var measureValue = BitConverter.ToString(measure.GetMD5HashCode()).Replace("-", string.Empty);
+            var measureValue = measure.GetHashCode().ToString();
             var mode = measure.Attributes.Key.Mode;
 
             var parameters = new List<NpgsqlParameter>
@@ -168,7 +165,6 @@
                 new NpgsqlParameter<int[]>("building", NpgsqlDbType.Array | NpgsqlDbType.Integer) { TypedValue =  building },
                 new NpgsqlParameter<int>("beats", NpgsqlDbType.Integer) { TypedValue =  measure.Attributes.Size.Beats },
                 new NpgsqlParameter<int>("beatbase", NpgsqlDbType.Integer) { TypedValue =  measure.Attributes.Size.BeatBase },
-                new NpgsqlParameter<int>("ticks_per_beat", NpgsqlDbType.Integer) { TypedValue =  measure.Attributes.Size.TicksPerBeat },
                 new NpgsqlParameter<int>("fifths", NpgsqlDbType.Integer) { TypedValue =  measure.Attributes.Key.Fifths },
                 new NpgsqlParameter<bool>("major", NpgsqlDbType.Boolean) { TypedValue =  (mode.Equals("major") || mode.Equals(null)) }
             };

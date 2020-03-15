@@ -251,7 +251,7 @@
                     default: break;
                 }
             }
-            if (note.Duration.OriginalDenominator === 1 || note.Duration.OriginalDenominator === 2) {
+            if (note.Duration.Denominator === 1 || note.Duration.Denominator === 2) {
                 group.append("ellipse")
                     .attr("rx", 7)
                     .attr("ry", 5)
@@ -291,7 +291,7 @@
 
         // draws pause
         function drawPause(group, note, x) {
-            switch (note.Duration.OriginalDenominator) {
+            switch (note.Duration.Denominator) {
                 case 1:
                     group.append("rect")
                         .attr("width", 10)
@@ -394,7 +394,7 @@
                     .attr("height", 100)
                     .style("display", "block")
                     .style("margin", "auto");
-                drawKeyboard();   
+                drawKeyboard();
                 drawStaff();
                 var min = 9;
                 for (var j = 0; j < fmotif.NoteList.length; j++) {
@@ -429,7 +429,7 @@
                             drawNote(chord, note, currentOctave, k, x, y);
                         }
                         var flagx, flagy;
-                        if (!lineUp && note.Duration.OriginalDenominator > 1) {
+                        if (!lineUp && note.Duration.Denominator > 1) {
                             flagx = x - 6;
                             flagy = maxy + 48;
                             chord.append("line")
@@ -440,7 +440,7 @@
                                 .style("stroke", "black")
                                 .style("stroke-width", 2);
                         }
-                        else if (lineUp && note.Duration.OriginalDenominator > 1) {
+                        else if (lineUp && note.Duration.Denominator > 1) {
                             flagx = x + 6;
                             flagy = miny - 48;
                             chord.append("line")
@@ -452,7 +452,7 @@
                                 .style("stroke-width", 2);
                         }
                         var flags = 0;
-                        switch (note.Duration.OriginalDenominator) {
+                        switch (note.Duration.Denominator) {
                             case 8: flags = 1; break;
                             case 16: flags = 2; break;
                             case 32: flags = 3; break;
