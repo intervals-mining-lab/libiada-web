@@ -139,9 +139,7 @@
                 }
 
                 Chain firstChain = commonSequenceRepository.GetLibiadaChain(firstSequenceId);
-                firstChain.FillIntervalManagers();
                 Chain secondChain = commonSequenceRepository.GetLibiadaChain(secondSequenceId);
-                secondChain.FillIntervalManagers();
 
                 AccordanceCharacteristic accordanceCharacteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
                 IAccordanceCalculator calculator = AccordanceCalculatorsFactory.CreateCalculator(accordanceCharacteristic);
