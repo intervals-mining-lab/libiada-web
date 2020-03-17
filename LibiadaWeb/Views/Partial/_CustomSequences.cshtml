@@ -61,5 +61,31 @@
         </div>
     </div>
 </div>
+<div ng-if="fileType=='text'">
+    <br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <label>
+                <input type="checkbox" name="toLower" ng-model="toLower" value="true" />
+                <input type="hidden" name="toLower" value="false" />
+                Convert to lower case
+            </label>
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <label>
+                <input type="checkbox" name="removePunctuation" ng-model="removePunctuation" value="true" />
+                <input type="hidden" name="removePunctuation" value="false" />
+                Remove punctuation
+            </label>
+        </div>
+    </div>
+
+    <hr />
+    <br />
+</div>
+
 @Html.Partial("_ImageTransformers")
 <hr />
