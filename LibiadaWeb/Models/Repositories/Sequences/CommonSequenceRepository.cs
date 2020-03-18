@@ -5,6 +5,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using System.Text;
 
     using LibiadaCore.Core;
+    using LibiadaCore.Music;
 
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
@@ -141,10 +142,16 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="translators">
         /// The translators ids.
         /// </param>
+        /// <param name="pauseTreatments">
+        /// Pause treatment parameters of music sequences.
+        /// </param>
+        /// <param name="sequentialTransfers">
+        /// Sequential transfer flag used in music sequences.
+        /// </param>
         /// <returns>
         /// The sequences ids as <see cref="T:long[][]"/>.
         /// </returns>
-        public long[][] GetSequenceIds(long[] matterIds, Notation[] notations, Language[] languages, Translator?[] translators)
+        public long[][] GetSequenceIds(long[] matterIds, Notation[] notations, Language[] languages, Translator?[] translators, PauseTreatment[] pauseTreatments, bool[] sequentialTransfers)
         {
             var sequenceIds = new long[matterIds.Length][];
 
@@ -157,20 +164,29 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 {
                     Notation notation = notations[j];
 
-                    if (notation.GetNature() == Nature.Literature)
+                    switch (notation.GetNature())
                     {
-                        Language language = languages[j];
-                        Translator translator = translators[j] ?? Translator.NoneOrManual;
+                        case Nature.Literature:
+                            Language language = languages[j];
+                            Translator translator = translators[j] ?? Translator.NoneOrManual;
+                            sequenceIds[i][j] = Db.LiteratureSequence.Single(l => l.MatterId == matterId
+                                                                                  && l.Notation == notation
+                                                                                  && l.Language == language
+                                                                                  && l.Translator == translator).Id;
+                            break;
+                        case Nature.Music:
+                            PauseTreatment pauseTreatment = pauseTreatments[j];
+                            bool sequentialTransfer = sequentialTransfers[j];
+                            sequenceIds[i][j] = Db.MusicSequence.Single(m => m.MatterId == matterId
+                                                                          && m.Notation == notation
+                                                                          && m.PauseTreatment == pauseTreatment
+                                                                          && m.SequentialTransfer == sequentialTransfer).Id;
+                            break;
+                        default:
+                            sequenceIds[i][j] = Db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
+                            break;
+                    }
 
-                        sequenceIds[i][j] = Db.LiteratureSequence.Single(l => l.MatterId == matterId
-                                                                           && l.Notation == notation
-                                                                           && l.Language == language
-                                                                           && l.Translator == translator).Id;
-                    }
-                    else
-                    {
-                        sequenceIds[i][j] = Db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
-                    }
                 }
             }
 
