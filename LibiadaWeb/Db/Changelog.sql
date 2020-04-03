@@ -2991,7 +2991,7 @@ CREATE TABLE image_sequence
     CONSTRAINT pk_image_sequence PRIMARY KEY (id),
     CONSTRAINT fk_image_sequence_chain_key FOREIGN KEY (id)
         REFERENCES chain_key (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
+        ON UPDATE CASCADE
         ON DELETE NO ACTION
         DEFERRABLE INITIALLY DEFERRED,
     CONSTRAINT fk_image_sequence_matter FOREIGN KEY (matter_id)
