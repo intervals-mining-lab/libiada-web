@@ -8,7 +8,32 @@
             ctrl.showRefSeqOnly = true;
             ctrl.checkboxes = ctrl.maximumSelectedMatters > 1;
             ctrl.selectedMatters = 0;
+
+            if (ctrl.checkboxes) {
+                ctrl.mattersInputName = "matterIds";
+                ctrl.mattersInputType = "checkbox";
+            } else {
+                ctrl.mattersInputName = "matterId";
+                ctrl.mattersInputType = "radio";
+            }
         }
+
+        ctrl.toogleMattersVisibility = function (isNewNature) {
+            if (isNewNature) {
+                ctrl.matters.forEach(m => m.Selecded = false);
+            }
+
+            ctrl.matters.forEach(m => ctrl.setMatterVisibility(m));
+        }
+
+        ctrl.setMatterVisibility = function (matter) {
+            matter.Visible = matter.Selected || (ctrl.searchMatterText.length >= 4
+                          && matter.Nature == ctrl.nature
+                          && matter.Group.includes(ctrl.group || "")
+                          && matter.SequenceType.includes(ctrl.sequenceType || "")
+                          && matter.Text.toUpperCase().includes(ctrl.searchMatterText.toUpperCase())
+                          && (ctrl.nature !== ctrl.geneticNature || !ctrl.showRefSeqOnly || ctrl.isRefSeq(matter)));
+        };
 
         ctrl.isRefSeq = function (matter) {
             return matter.Text.split("|").slice(-1)[0].indexOf("_") !== -1;
@@ -23,19 +48,11 @@
         }
 
         ctrl.getVisibleMatters = function () {
-            var visibleMatters = ctrl.matters;
-            visibleMatters = filterFilter(visibleMatters, { Text: ctrl.searchMatter });
-            visibleMatters = filterFilter(visibleMatters, { Group: ctrl.group || "" });
-            visibleMatters = filterFilter(visibleMatters, { SequenceType: ctrl.sequenceType || "" });
-            visibleMatters = filterFilter(visibleMatters, function (matter) {
-                return ctrl.nature !== "1" || !ctrl.showRefSeqOnly || ctrl.isRefSeq(matter);
-            });
-
-            return visibleMatters;
+            return ctrl.matters.filter(m => m.Visible);
         }
 
         ctrl.selectAllVisibleMatters = function () {
-            ctrl.getVisibleMatters().forEach(function (matter) {
+            ctrl.matters.filter(m => m.Visible).forEach(function (matter) {
                 if (!matter.Selected && (ctrl.selectedMatters < ctrl.maximumSelectedMatters)) {
                     matter.Selected = true;
                     ctrl.selectedMatters++;
@@ -44,13 +61,13 @@
         }
 
         ctrl.unselectAllVisibleMatters = function () {
-            ctrl.getVisibleMatters().forEach(function (matter) {
-                if (matter.Selected) {
-                    matter.Selected = false;
-                    ctrl.selectedMatters--;
-                }
+            ctrl.matters.filter(m => m.Selected).forEach(function (matter) {
+                matter.Selected = false;
+                ctrl.selectedMatters--;
+                ctrl.setMatterVisibility(matter);
             });
         }
+
     }
 
     angular.module("libiada").component("mattersTable", {
