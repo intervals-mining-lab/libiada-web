@@ -194,7 +194,7 @@
 
                 string characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
 
-                return new Dictionary<string, object>
+                var result = new Dictionary<string, object>
                 {
                     { "characteristics", characteristics },
                     { "isFilter", filter },
@@ -207,6 +207,11 @@
                     { "matterName", db.CommonSequence.Single(m => m.Id == sequenceId).Matter.Name },
                     { "notationName", db.CommonSequence.Single(c => c.Id == sequenceId).Notation.GetDisplayValue() }
                 };
+
+                return new Dictionary<string, object>
+                           {
+                               { "data", JsonConvert.SerializeObject(result) }
+                           };
             });
         }
 
