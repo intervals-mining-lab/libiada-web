@@ -8,9 +8,13 @@
             $scope.ungroupedMatters.push($scope.matters[matterId]);
         }
 
+        function distributeMatters(multiSequence, matterId) {
+            $scope.result.push($scope.matters[matterId]);
+        }
+
         $scope.unboundMatter = unboundMatter;
 
-        $scope.loadingScreenHeader = "Loading import results";
+        $scope.loadingScreenHeader = "Loading grouping results";
 
         var location = window.location.href.split("/");
         $scope.taskId = location[location.length - 1];
@@ -23,7 +27,7 @@
                     $scope.loading = false;
                 },
                 function() {
-                    alert("Failed loading import results");
+                    alert("Failed loading grouping results");
                     $scope.loading = false;
                 });
     }

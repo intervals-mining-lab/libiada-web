@@ -47,40 +47,51 @@
                                 <br />
                             </div>
                         </td>
-                </tr>
+                    </tr>
                 </tbody>
             </table>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-success" />
+            </div>
             <br />
             <hr />
             <br />
             <h3> Ungrouped matters</h3>
             <table class="table table-bordered table-hover" ng-cloak>
                 <thead>
-                <tr>
-                    <th>
-                        #
-                    </th>
-                    <th>
-                        Matter name
-                    </th>
-                    <th>
-                        Group
-                    </th>
-                </tr>
+                    <tr>
+                        <th>
+                            #
+                        </th>
+                        <th>
+                            Matter name
+                        </th>
+                        <th>
+                            Group
+                        </th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="matter in ungroupedMatters">
-                    <td ng-bind="$index + 1" />
-                    <td>
-                        <label>
-                            {{matter.Name}}
-                        </label>
-                    </td>
-                    <td>
-                    </td>
-                </tr>
+                    <tr ng-repeat="matter in ungroupedMatters">
+                        <td ng-bind="$index + 1" />
+                        <td>
+                            <label>
+                                {{matter.Name}}
+                            </label>
+                        </td>
+                        <td>
+                            <mat-form-field placeholder="Multisequence" >
+                                <select matNativeControl required>
+                                    <option value="multisequence.name" ng-repeat="multisequence in result">{{multisequence.name}}</option>
+                                </select>
+                            </mat-form-field>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
+            <div class="form-group">
+                <button type="button" class="btn btn-default btn-xs" ng-click="distributeMatters(multisequence, matterId)">Distribute</button>
+            </div>
         </div>
     </div>
 }
