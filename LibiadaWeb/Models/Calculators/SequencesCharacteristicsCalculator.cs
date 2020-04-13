@@ -80,7 +80,6 @@
                     if (characteristics.Count < sequenceCharacteristicLinkIds.Length)
                     {
                         Chain sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
-                        sequence.FillIntervalManagers();
 
                         foreach (short sequenceCharacteristicLinkId in sequenceCharacteristicLinkIds)
                         {
@@ -203,8 +202,6 @@
                         List<IBaseObject> newSequence = building.Select(t => new ValueInt(t)).ToList<IBaseObject>();
                         sequence = new Chain(newSequence);
                     }
-
-                    sequence.FillIntervalManagers();
 
                     characteristics[i][j] = calculators[j].Calculate(sequence, links[j]);
                 }

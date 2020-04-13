@@ -34,7 +34,8 @@
                 // if notation is part of characterisitcs
                 notation: ctrl.hideNotation ? 0 : filterFilter(ctrl.notations, { Nature: ctrl.nature })[0],
                 language: ctrl.languages ? ctrl.languages[0] : null,
-                translator: ctrl.translators ? ctrl.translators[0] : null
+                translator: ctrl.translators ? ctrl.translators[0] : null,
+                pauseTreatment: ctrl.pauseTreatments ? ctrl.pauseTreatments[0] : null
             });
         };
 
@@ -62,6 +63,7 @@
             notations: "<",
             languages: "<",
             translators: "<",
+            pauseTreatments: "<",
             characteristicsDictionary: "<",
             hideNotation: "@"
         }

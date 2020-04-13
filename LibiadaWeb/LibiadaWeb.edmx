@@ -264,7 +264,6 @@
           <Property Name="modified" Type="timestamptz" Precision="7" Nullable="false" />
           <Property Name="beats" Type="int4" Nullable="false" />
           <Property Name="beatbase" Type="int4" Nullable="false" />
-          <Property Name="ticks_per_beat" Type="int4" />
           <Property Name="fifths" Type="int4" Nullable="false" />
           <Property Name="major" Type="bool" Nullable="false" />
         </EntityType>
@@ -304,8 +303,6 @@
           <Property Name="modified" Type="timestamptz" Precision="7" Nullable="false" />
           <Property Name="numerator" Type="int4" Nullable="false" />
           <Property Name="denominator" Type="int4" Nullable="false" />
-          <Property Name="onumerator" Type="int4" Nullable="false" />
-          <Property Name="odenominator" Type="int4" Nullable="false" />
           <Property Name="triplet" Type="bool" Nullable="false" />
           <Property Name="tie" Type="int2" Nullable="false" />
         </EntityType>
@@ -1422,7 +1419,6 @@
           <Property Name="Name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Beats" Type="Int32" Nullable="false" />
           <Property Name="Beatbase" Type="Int32" Nullable="false" />
-          <Property Name="TicksPerBeat" Type="Int32" />
           <Property Name="Fifths" Type="Int32" Nullable="false" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="major" Type="Boolean" Nullable="false" />
@@ -1481,8 +1477,6 @@
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="Numerator" Type="Int32" Nullable="false" />
           <Property Name="Denominator" Type="Int32" Nullable="false" />
-          <Property Name="Onumerator" Type="Int32" Nullable="false" />
-          <Property Name="Odenominator" Type="Int32" Nullable="false" />
           <Property Name="Triplet" Type="Boolean" Nullable="false" />
           <Property Name="Tie" Type="LibiadaWebModel.Tie" Nullable="false" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
@@ -2546,7 +2540,6 @@
                 <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="Beats" ColumnName="beats" />
                 <ScalarProperty Name="Beatbase" ColumnName="beatbase" />
-                <ScalarProperty Name="TicksPerBeat" ColumnName="ticks_per_beat" />
                 <ScalarProperty Name="Fifths" ColumnName="fifths" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
               </MappingFragment>
@@ -2596,8 +2589,6 @@
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="Numerator" ColumnName="numerator" />
                 <ScalarProperty Name="Denominator" ColumnName="denominator" />
-                <ScalarProperty Name="Onumerator" ColumnName="onumerator" />
-                <ScalarProperty Name="Odenominator" ColumnName="odenominator" />
                 <ScalarProperty Name="Triplet" ColumnName="triplet" />
                 <ScalarProperty Name="Tie" ColumnName="tie" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />

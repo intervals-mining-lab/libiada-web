@@ -203,20 +203,14 @@
         /// <summary>
         /// Gets or sets the beats.
         /// </summary>
-        [Display(Name = "? я чото п")]
+        [Display(Name = "Numerator of measure duration")]
         public int Beats { get; set; }
 
         /// <summary>
         /// Gets or sets the beatbase.
         /// </summary>
-        [Display(Name = "? я чото п")]
+        [Display(Name = "Denominator of measure duration")]
         public int Beatbase { get; set; }
-
-        /// <summary>
-        /// Gets or sets the ticks_per_beat.
-        /// </summary>
-        [Display(Name = "? я чото п")]
-        public int TicksPerBeat { get; set; }
 
         /// <summary>
         /// Gets or sets the fifths.
@@ -329,7 +323,7 @@
         /// <summary>
         /// Gets or sets the midinumber.
         /// </summary>
-        [Display(Name = "Уникальный номер ноты по миди стандарту")]
+        [Display(Name = " Note hight as midinumber standard")]
         public int Midinumber { get; set; }
 
         /// <summary>

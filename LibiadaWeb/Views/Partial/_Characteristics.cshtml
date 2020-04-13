@@ -45,13 +45,13 @@
                         ng-model="characteristic.notation"
                         ng-options="n.Text for n in $ctrl.notations | filter:{ Nature: $ctrl.nature }"
                         id="notation"></select>
+                <input type="hidden" name="notations" ng-value="characteristic.notation.Value" />
             </div>
         </div>
     }
     <input type="hidden"
            name="characteristicLinkIds"
            ng-value="$ctrl.characteristicsDictionary['(' + characteristic.characteristicType.Value + ', ' + characteristic.link.Value + ', ' + characteristic.arrangementType.Value + ')']" />
-    <input type="hidden" name="notations" ng-value="characteristic.notation.Value" />
 
     <div ng-switch="$ctrl.nature">
         <div ng-switch-when="@((byte)Nature.Literature)">
@@ -81,6 +81,24 @@
         <div ng-switch-when="@((byte)Nature.Genetic)">
         </div>
         <div ng-switch-when="@((byte)Nature.Music)">
+            <div class="form-group">
+                <label class="control-label col-md-2" for="pauseTreatment">Pause treatment:</label>
+                <div class="col-md-10">
+                    <select class="form-control"
+                            title="PauseTreatment"
+                            ng-model="characteristic.pauseTreatment"
+                            ng-options="t.Text for t in $ctrl.pauseTreatments"
+                            id="pauseTreatment"></select>
+                    <input type="hidden" name="pauseTreatments" ng-value="characteristic.pauseTreatment.Value" />
+                </div>
+            </div>
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="checkbox" name="sequentialTransfers" ng-model="sequentialTransfer" value="true" />
+                    <input type="hidden" name="sequentialTransfers" value="false" />
+                    Sequential transfer
+                </label>
+            </div>
         </div>
         <div ng-switch-when="@((byte)Nature.MeasurementData)">
         </div>

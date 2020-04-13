@@ -8,6 +8,7 @@
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
     using LibiadaCore.DataTransformers;
     using LibiadaCore.Extensions;
+    using LibiadaCore.Music;
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Catalogs;
@@ -73,6 +74,12 @@
         /// <param name="translator">
         /// The translator ids.
         /// </param>
+        /// <param name="pauseTreatment">
+        /// Pause treatment parameters of music sequences.
+        /// </param>
+        /// <param name="sequentialTransfer">
+        /// Sequential transfer flag used in music sequences.
+        /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
@@ -85,7 +92,9 @@
             short characteristicLinkId,
             Notation notation,
             Language? language,
-            Translator? translator)
+            Translator? translator,
+            PauseTreatment pauseTreatment,
+            bool sequentialTransfer)
         {
             return CreateTask(() =>
             {
@@ -100,16 +109,23 @@
                 {
                     long matterId = matterIds[i];
                     long sequenceId;
-                    if (matters[matterId].Nature == Nature.Literature)
+                    switch (matters[matterId].Nature)
                     {
-                        sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId &&
-                                                                       l.Notation == notation
-                                                                       && l.Language == language
-                                                                       && translator == l.Translator).Id;
-                    }
-                    else
-                    {
-                        sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
+                        case Nature.Literature:
+                            sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId
+                                                                           && l.Notation == notation
+                                                                           && l.Language == language
+                                                                           && l.Translator == translator).Id;
+                            break;
+                        case Nature.Music:
+                            sequenceId = db.MusicSequence.Single(m => m.MatterId == matterId
+                                                                      && m.Notation == notation
+                                                                      && m.PauseTreatment == pauseTreatment
+                                                                      && m.SequentialTransfer == sequentialTransfer).Id;
+                            break;
+                        default:
+                            sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
+                            break;
                     }
 
                     Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
@@ -132,7 +148,7 @@
                     mattersCharacteristics[i] = new { matterName = matters[matterId].Name, characteristics };
                 }
 
-                var characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
+                string characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
 
 
                 var result = new Dictionary<string, object>

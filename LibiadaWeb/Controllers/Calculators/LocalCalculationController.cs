@@ -9,6 +9,7 @@
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
     using LibiadaCore.Extensions;
     using LibiadaCore.Iterators;
+    using LibiadaCore.Music;
     using LibiadaCore.TimeSeries.Aggregators;
     using LibiadaCore.TimeSeries.Aligners;
     using LibiadaCore.TimeSeries.OneDimensional.DistanceCalculators;
@@ -104,6 +105,12 @@
         /// <param name="autocorrelation">
         /// The is auto correlation.
         /// </param>
+        /// <param name="pauseTreatment">
+        /// Pause treatment parameters of music sequences.
+        /// </param>
+        /// <param name="sequentialTransfer">
+        /// Sequential transfer flag used in music sequences.
+        /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
@@ -120,7 +127,9 @@
             bool delta,
             bool fourier,
             bool growingWindow,
-            bool autocorrelation)
+            bool autocorrelation,
+            PauseTreatment pauseTreatment,
+            bool sequentialTransfer)
         {
             return CreateTask(() =>
             {
@@ -149,6 +158,12 @@
                                                                         && l.Notation == notation
                                                                         && l.Language == language
                                                                         && l.Translator == translator).Id;
+                            break;
+                        case Nature.Music:
+                            sequenceId = db.MusicSequence.Single(m => m.MatterId == matterId
+                                                                      && m.Notation == notation
+                                                                      && m.PauseTreatment == pauseTreatment
+                                                                      && m.SequentialTransfer == sequentialTransfer).Id;
                             break;
                         default:
                             sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId
