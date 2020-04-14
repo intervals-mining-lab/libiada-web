@@ -1,81 +1,74 @@
 ﻿@{
     ViewBag.Title = "Relation characteristic calculation results";
 }
-
+@Scripts.Render("~/bundles/loadingWindow")
 <h2>@ViewBag.Title</h2>
 
 @if (ViewBag.Error == null)
 {
-    <h2>@ViewBag.matterName</h2>
-    <h2>@ViewBag.characteristicName</h2>
-    <h2>@ViewBag.notationName</h2>
+    @Html.Partial("_AngularControllerInitializer", "CalculationResultController")
+    <div ng-controller="CalculationResultCtrl">
+        <h2>{{matterName}}</h2>
+        <h2>{{characteristicName}}</h2>
+        <h2>{{notationName}}</h2>
 
-    if (!ViewBag.isFilter)
-    {
-        <table class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>
-                        First element\Second element
-                    </th>
-                    @for (int k = 0; k < ViewBag.elements.Count; k++)
-                    {
+        <div ng-if="!isFilter">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
                         <th>
-                            @ViewBag.elements[k].Name
+                            First element\Second element
                         </th>
-                    }
-                </tr>
-            </thead>
-            <tbody>
-                @for (int i = 0; i < ViewBag.elements.Count; i++)
-                {
-                    <tr>
-                        <td>
-                            @ViewBag.elements[i].Name
-                        </td>
-                        @for (int j = 0; j < ViewBag.elements.Count; j++)
-                        {
-                            <td>
-                                @ViewBag.characteristics[i * ViewBag.elements.Count + j].Value 
-                            </td>
-                        }
+                        <th ng-repeat="element in elements">
+                            {{element.Name}}
+                        </th>
                     </tr>
-                }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        First element
-                    </th>
-                    <th>
-                        Second element
-                    </th>
-                    <th>
-                        @ViewBag.characteristicName
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (int l = 0; l < ViewBag.filteredResult.Count; l++)
-                {
-                    <tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="element in elements">
                         <td>
-                            @ViewBag.firstElements[l].Value
+                            {{element.Name}}
                         </td>
-                        <td>
-                            @ViewBag.secondElements[l].Value
-                        </td>
-                        <td>
-                            @ViewBag.filteredResult[l].Value
+                        <td ng-repeat="element in elements">
+                            {{characteristics[$parent.$index * elements.length + $index}}
                         </td>
                     </tr>
-                }
-            </tbody>
-        </table>
-    }
+                </tbody>
+            </table>
+        </div>
+        <div ng-if="isFilter">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            First element
+                        </th>
+                        <th>
+                            Second element
+                        </th>
+                        <th>
+                            {{characteristicName}}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="result in filteredResult">
+                        <td>
+                            {{firstElements[$index].Value}}
+                        </td>
+                        <td>
+                            {{secondElements[$index].Value}}
+                        </td>
+                        <td>
+                            {{filteredResult[$index].Value}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/d3js")
 }

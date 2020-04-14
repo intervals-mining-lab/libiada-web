@@ -1,21 +1,23 @@
 ﻿@{
     ViewBag.Title = "Subsequences similarity";
 }
-
+@Scripts.Render("~/bundles/loadingWindow")
 <h2>@ViewBag.Title</h2>
 
 @if (ViewBag.Error == null)
 {
+    @Html.Partial("_AngularControllerInitializer", "CalculationResultController")
+<div ng-controller="CalculationResultCtrl">
     <h3>
-        @ViewBag.firstSequenceName and @ViewBag.secondSequenceName using @ViewBag.characteristicName
+        {{firstSequenceName}} and {{secondSequenceName}} using {{characteristicName}}
     </h3>
     <br />
     <div>
-        @ViewBag.similarity % of subsequences are similar:
+        {{similarity}} % of subsequences are similar:
         <br />
-        @ViewBag.firstSequenceSimilarity % of first sequence.
+        {{firstSequenceSimilarity}} % of first sequence.
         <br />
-        @ViewBag.secondSequenceSimilarity % of second sequence.
+        {{secondSequenceSimilarity}} % of second sequence.
     </div>
     <br />
     <table class="table table-bordered table-hover">
@@ -48,76 +50,70 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var similarSubsequence in ViewBag.similarSubsequences)
-            {
-                var first = ViewBag.firstSequenceSubsequences[similarSubsequence.First];
-                var second = ViewBag.secondSequenceSubsequences[similarSubsequence.Second];
-                <tr>
+                <tr ng-repeat="similarSubsequence in similarSubsequences" ng-init="first = firstSequenceSubsequences[similarSubsequence.First]; second = secondSequenceSubsequences[similarSubsequence.Second]">
                     <td>
-                        @first.Feature
+                        {{first.Feature}}
                     </td>
                     <td>
-                        @foreach (var attribute in ViewBag.firstSequenceAttributes[similarSubsequence.First])
-                        {
-                            @attribute
-                            <br />
-                        } 
+                        <ul class="list-unstyled">
+                            <li ng-repeat="attribute in firstSequenceAttributes[similarSubsequence.First]">
+                                {{attribute}}
+                            </li>
+                        </ul>
                     </td>
                     <td>
-                        @first.Start
+                        {{first.Start}}
                         <br />
-
-                        @foreach (var position in first.Position)
-                        {
-                            @position.Start
-                            <br />
-                        }
+                        <ul class="list-unstyled">
+                            <li ng-repeat="position in first.Position">
+                                {{position.Start}}
+                            </li>
+                        </ul>
                     </td>
                     <td>
-                        @first.Length
+                        {{first.Length}}
                         <br />
-
-                        @foreach (var position in first.Position)
-                        {
-                            @position.Length
-                            <br />
-                        }
+                        <ul class="list-unstyled">
+                            <li ng-repeat="position in first.Position">
+                                {{position.Length}}
+                            </li>
+                        </ul>
                     </td>
                     <td>
-                        @second.Feature
+                        {{second.Feature}}
                     </td>
                     <td>
-                        @foreach (var attribute in ViewBag.secondSequenceAttributes[similarSubsequence.Second])
-                        {
-                            @attribute
-                            <br />
-                        } 
+                        <ul class="list-unstyled">
+                            <li ng-repeat="attribute in secondSequenceAttributes[similarSubsequence.Second]">
+                                {{attribute}}
+                            </li>
+                        </ul>
                     </td>
                     <td>
-                        @second.Start
+                        {{second.Start}}
                         <br />
-
-                        @foreach (var position in second.Position)
-                        {
-                            @position.Start
-                        }
+                        <ul class="list-unstyled">
+                            <li ng-repeat="position in second.Position">
+                                {{position.Start}}
+                            </li>
+                        </ul>
                     </td>
                     <td>
-                        @second.Length
+                        {{second.Length}}
                         <br />
-
-                        @foreach (var position in second.Position)
-                        {
-                            @position.Length
-                            <br />
-                        }
+                        <ul class="list-unstyled">
+                            <li ng-repeat="position in second.Position">
+                                {{position.Length}}
+                            </li>
+                        </ul>
                     </td>
                 </tr>
-            }
         </tbody>
     </table>
+</div>
+}
 
-    @section Scripts {
-        @Scripts.Render("~/bundles/jqueryui")
-    }
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/d3js")
 }

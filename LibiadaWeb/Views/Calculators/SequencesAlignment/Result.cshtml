@@ -1,60 +1,64 @@
 ﻿@{
     ViewBag.Title = "Sequences alignment";
 }
-
+@Scripts.Render("~/bundles/loadingWindow")
 <h2>@ViewBag.Title</h2>
 
 @if (ViewBag.Error == null)
 {
-    <div>
-        Alignment type: @ViewBag.validationType
-    </div>
-
-    <div>
-        Optimal shift: @ViewBag.optimalRotation
-    </div>
-    if (ViewBag.sort)
-    {
+    @Html.Partial("_AngularControllerInitializer", "CalculationResultController")
+    <div ng-controller="CalculationResultCtrl">
         <div>
+            Alignment type: {{validationType}}
+        </div>
+
+        <div>
+            Optimal shift: {{optimalRotation}}
+        </div>
+
+        <div ng-if="sort">
             Characteristics sorted descending
         </div>
-    }
-    if (ViewBag.cyclicShift)
-    {
-        <div>
+
+        <div ng-if="cyclicShift">
             Cyclic shift is used
         </div>
-    }
 
-    @ViewBag.firstSequenceName
-    <br />
-    @ViewBag.secondSequenceName
-    <br />
-    @ViewBag.characteristicName
-    <table class="table table-bordered table-hover">
-        <thead>
-            <tr>
-                <th>
-                    Distances
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var distance in ViewBag.distances)
-            {
+        {{firstSequenceName}}
+        <br />
+        {{secondSequenceName}}
+        <br />
+        {{characteristicName}}
+        <table class="table table-bordered table-hover">
+            <thead>
                 <tr>
-
-                    <td>
-                        @distance
-                    </td>
-
+                    <th>
+                        Distances
+                    </th>
                 </tr>
-            }
-        </tbody>
-    </table>
-
-    @section Scripts {
-        @Scripts.Render("~/bundles/jqueryui")
-        @Scripts.Render("~/bundles/slider")
-    }
+            </thead>
+            <tbody>
+                <tr ng-repeat="distance in distances">
+                    <td>
+                        {{distance}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 }
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/slider")
+    @Scripts.Render("~/bundles/d3js")
+}
+
+
+
+
+
+
+
+
+
