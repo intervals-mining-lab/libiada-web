@@ -213,7 +213,10 @@
                         throw new ArgumentException("Calculation type is not implemented", nameof(calculationType));
                 }
 
-                return result;
+                return new Dictionary<string, object>
+                           {
+                               { "data", JsonConvert.SerializeObject(result) }
+                           };
             });
         }
     }

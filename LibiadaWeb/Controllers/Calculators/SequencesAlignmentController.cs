@@ -154,7 +154,7 @@
 
                 string characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
 
-                return new Dictionary<string, object>
+                var result = new Dictionary<string, object>
                 {
                     { "firstSequenceName", firstMatterName },
                     { "secondSequenceName", secondMatterName },
@@ -166,6 +166,11 @@
                     { "cyclicShift", cyclicShift },
                     { "sort", sort }
                 };
+
+                return new Dictionary<string, object>
+                           {
+                               { "data", JsonConvert.SerializeObject(result) }
+                           };
             });
         }
 
