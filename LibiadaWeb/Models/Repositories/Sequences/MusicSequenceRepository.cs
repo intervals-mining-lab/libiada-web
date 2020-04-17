@@ -136,7 +136,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         @pause_treatment,
                                         @sequential_transfer
                                     );";
-            DbHelper.ExecuteCommand(Db, Query, parameters.ToArray());
+            Db.ExecuteCommand(Query, parameters.ToArray());
         }
 
         /// <summary>
