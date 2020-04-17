@@ -18,15 +18,22 @@
             }
         }
 
+        ctrl.$onChanges = function (changes) {
+            if (changes.nature) {
+                ctrl.toogleMattersVisibility(true);
+            }
+        };
+
         ctrl.toogleMattersVisibility = function (isNewNature) {
             if (isNewNature) {
-                ctrl.matters.forEach(m => m.Selecded = false);
+                ctrl.matters.forEach(m => m.Selected = false);
             }
 
             ctrl.matters.forEach(m => ctrl.setMatterVisibility(m));
         }
 
         ctrl.setMatterVisibility = function (matter) {
+            ctrl.searchMatterText = ctrl.searchMatterText || "";
             matter.Visible = matter.Selected || (ctrl.searchMatterText.length >= 4
                           && matter.Nature == ctrl.nature
                           && matter.Group.includes(ctrl.group || "")
@@ -63,9 +70,11 @@
         ctrl.unselectAllVisibleMatters = function () {
             ctrl.matters.filter(m => m.Selected).forEach(function (matter) {
                 matter.Selected = false;
-                ctrl.selectedMatters--;
+
                 ctrl.setMatterVisibility(matter);
             });
+
+            ctrl.selectedMatters = 0;
         }
 
     }
