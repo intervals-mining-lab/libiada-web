@@ -72,10 +72,10 @@
             {
                 foreach (var dbFmotif in dbFmotifs)
                 {
-                    long[] dbAlphabet = DbHelper.GetFmotifAlphabet(db, dbFmotif.Id);
+                    long[] dbAlphabet = db.GetFmotifAlphabet(dbFmotif.Id);
                     if (notes.SequenceEqual(dbAlphabet))
                     {
-                        int[] dbBuilding = DbHelper.GetFmotifBuilding(db, dbFmotif.Id);
+                        int[] dbBuilding = db.GetFmotifBuilding(dbFmotif.Id);
                         if (fmotifChain.Building.SequenceEqual(dbBuilding))
                         {
                             if (fmotif.Type != dbFmotif.FmotifType)
@@ -126,7 +126,7 @@
                                         @building,
                                         @fmotif_type
                                     );";
-            DbHelper.ExecuteCommand(db, Query, parameters.ToArray());
+            db.ExecuteCommand(Query, parameters.ToArray());
             return fmotif.Id;
         }
 
@@ -147,7 +147,7 @@
         /// </returns>
         protected List<NpgsqlParameter> FillParams(Fmotif fmotif, long[] alphabet, int[] building)
         {
-            fmotif.Id = DbHelper.GetNewElementId(db);
+            fmotif.Id = db.GetNewElementId();
             var fmotivValue = fmotif.GetHashCode().ToString();
             var parameters = new List<NpgsqlParameter>
             {

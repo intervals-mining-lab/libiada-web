@@ -72,7 +72,7 @@
                     {
                         newSubsequences[j] = new Subsequence
                                                  {
-                                                     Id = DbHelper.GetNewElementId(db),
+                                                     Id = db.GetNewElementId(),
                                                      Feature = subsequences[j].Feature,
                                                      SequenceId = newSequence.Id,
                                                      Start = subsequences[j].Start,

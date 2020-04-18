@@ -125,7 +125,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         @translator
                                     );";
 
-            DbHelper.ExecuteCommand(Db, Query, parameters.ToArray());
+            Db.ExecuteCommand(Query, parameters.ToArray());
         }
 
         /// <summary>

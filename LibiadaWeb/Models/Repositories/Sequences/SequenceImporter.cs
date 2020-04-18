@@ -61,7 +61,7 @@
         {
             if (commonSequence.Id == default)
             {
-                commonSequence.Id = DbHelper.GetNewElementId(Db);
+                commonSequence.Id = Db.GetNewElementId();
             }
 
             var parameters = new List<NpgsqlParameter>

@@ -111,8 +111,8 @@
             Notation notation,
             Language? language,
             Translator? translator,
-            PauseTreatment pauseTreatment,
-            bool sequentialTransfer,
+            PauseTreatment? pauseTreatment,
+            bool? sequentialTransfer,
             int filterSize,
             bool filter,
             bool frequencyFilter,
@@ -120,8 +120,8 @@
         {
             return CreateTask(() =>
             {
-                var characteristics = new List<BinaryCharacteristicValue>();
-                var elements = new List<Element>();
+                var characteristics = new Dictionary<long, Dictionary<long, double>>();
+                Element[] elements = null;
                 List<BinaryCharacteristicValue> filteredResult = null;
                 var firstElements = new List<Element>();
                 var secondElements = new List<Element>();
@@ -132,15 +132,15 @@
                 {
                     case Nature.Literature:
                         sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId
-                                                                       && l.Notation == notation
-                                                                       && l.Language == language
-                                                                       && l.Translator == translator).Id;
+                                                                    && l.Notation == notation
+                                                                    && l.Language == language
+                                                                    && l.Translator == translator).Id;
                         break;
                     case Nature.Music:
                         sequenceId = db.MusicSequence.Single(m => m.MatterId == matterId
-                                                                  && m.Notation == notation
-                                                                  && m.PauseTreatment == pauseTreatment
-                                                                  && m.SequentialTransfer == sequentialTransfer).Id;
+                                                               && m.Notation == notation
+                                                               && m.PauseTreatment == pauseTreatment
+                                                               && m.SequentialTransfer == sequentialTransfer).Id;
                         break;
                     default:
                         sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
@@ -182,14 +182,12 @@
                 }
                 else
                 {
-                    characteristics = db.BinaryCharacteristicValue.Where(b => b.SequenceId == sequenceId && b.CharacteristicLinkId == characteristicLinkId)
-                        .OrderBy(b => b.SecondElementId).ThenBy(b => b.FirstElementId).ToList();
-
-                    for (int m = 0; m < Math.Sqrt(characteristics.Count); m++)
-                    {
-                        long firstElementId = characteristics[m].FirstElementId;
-                        elements.Add(db.Element.Single(e => e.Id == firstElementId));
-                    }
+                    characteristics = db.BinaryCharacteristicValue
+                                        .Where(b => b.SequenceId == sequenceId && b.CharacteristicLinkId == characteristicLinkId)
+                                        .GroupBy(b => b.FirstElementId)
+                                        .ToDictionary(b => b.Key, b => b.ToDictionary(bb => bb.SecondElementId, bb => bb.Value));
+                    var elementsIds = db.GetAlphabetElementIds(sequenceId);
+                    elements = db.Element.Where(e => elementsIds.Contains(e.Id)).OrderBy(e => e.Id).ToArray();
                 }
 
                 string characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
@@ -244,13 +242,13 @@
 
             if (calculatedCount < alphabetCardinality * alphabetCardinality)
             {
-                long[] sequenceElements = DbHelper.GetAlphabetElementIds(db, sequenceId);
+                long[] sequenceElements = db.GetAlphabetElementIds(sequenceId);
                 for (int i = 0; i < alphabetCardinality; i++)
                 {
                     for (int j = 0; j < alphabetCardinality; j++)
                     {
                         long firstElementId = sequenceElements[i];
-                        long secondElementId = sequenceElements[i];
+                        long secondElementId = sequenceElements[j];
                         if (i != j && !databaseCharacteristics.Any(b => b.FirstElementId == firstElementId && b.SecondElementId == secondElementId))
                         {
                             double result = calculator.Calculate(chain.GetRelationIntervalsManager(i + 1, j + 1), link);
@@ -288,7 +286,7 @@
         /// </param>
         private void FrequencyCharacteristic(short characteristicLinkId, int frequencyCount, Chain chain, long sequenceId, IBinaryCalculator calculator, Link link)
         {
-            long[] sequenceElements = DbHelper.GetAlphabetElementIds(db, sequenceId);
+            long[] sequenceElements = db.GetAlphabetElementIds(sequenceId);
             var newCharacteristics = new List<BinaryCharacteristicValue>();
             BinaryCharacteristicValue[] databaseCharacteristics = db.BinaryCharacteristicValue
                 .Where(b => b.SequenceId == sequenceId && b.CharacteristicLinkId == characteristicLinkId)

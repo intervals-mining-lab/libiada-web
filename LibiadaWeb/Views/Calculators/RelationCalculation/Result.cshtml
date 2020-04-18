@@ -62,6 +62,12 @@
                         <td>
                             {{filteredResult[$index].Value}}
                         </td>
+                        @for (int j = 0; j < ViewBag.elements.Length; j++)
+                        {
+                            <td>
+                                @if (i != j) { <span>@ViewBag.characteristics[ViewBag.elements[i].Id][ViewBag.elements[j].Id]</span> }
+                            </td>
+                        }
                     </tr>
                 </tbody>
             </table>

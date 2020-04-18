@@ -93,8 +93,8 @@
             Notation notation,
             Language? language,
             Translator? translator,
-            PauseTreatment pauseTreatment,
-            bool sequentialTransfer)
+            PauseTreatment? pauseTreatment,
+            bool? sequentialTransfer)
         {
             return CreateTask(() =>
             {
@@ -113,15 +113,15 @@
                     {
                         case Nature.Literature:
                             sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId
-                                                                           && l.Notation == notation
-                                                                           && l.Language == language
-                                                                           && l.Translator == translator).Id;
+                                                                        && l.Notation == notation
+                                                                        && l.Language == language
+                                                                        && l.Translator == translator).Id;
                             break;
                         case Nature.Music:
                             sequenceId = db.MusicSequence.Single(m => m.MatterId == matterId
-                                                                      && m.Notation == notation
-                                                                      && m.PauseTreatment == pauseTreatment
-                                                                      && m.SequentialTransfer == sequentialTransfer).Id;
+                                                                   && m.Notation == notation
+                                                                   && m.PauseTreatment == pauseTreatment
+                                                                   && m.SequentialTransfer == sequentialTransfer).Id;
                             break;
                         default:
                             sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
