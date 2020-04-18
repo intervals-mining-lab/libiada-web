@@ -4,10 +4,12 @@
     using System.ComponentModel.DataAnnotations;
 
     using LibiadaWeb.Attributes;
-
+    using Newtonsoft.Json.Converters;
+    using Newtonsoft.Json;
     /// <summary>
     /// The feature.
     /// </summary>
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum Feature : byte
     {
         /// <summary>

@@ -113,7 +113,7 @@
                     firstParentId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
 
                     long secondMatterId = matterIds[1];
-                    secondMatterName = db.Matter.Single(m => m.Id == firstMatterId).Name;;
+                    secondMatterName = db.Matter.Single(m => m.Id == secondMatterId).Name;;
                     secondParentId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
                 }
 
@@ -161,7 +161,7 @@
                     { "characteristicName", characteristicName },
                     { "features", features.ConvertAll(p => p.GetDisplayValue()) },
                     { "optimalRotation", optimalRotation },
-                    { "distances", distances },
+                    { "distances", distances.Select(el => new{value = el}) },
                     { "validationType", validationType },
                     { "cyclicShift", cyclicShift },
                     { "sort", sort }

@@ -165,7 +165,7 @@
                 var firstSequenceSimilarity = similarSubsequences.Count * 100d / firstSequenceSubsequences.Length;
 
                 var secondSequenceSimilarity = similarSubsequences.Count * 100d / secondSequenceSubsequences.Length;
-
+                
                 var result = new Dictionary<string, object>
                 {
                     { "firstSequenceName", db.Matter.Single(m => m.Id == firstMatterId).Name },
@@ -181,9 +181,14 @@
                     { "secondSequenceAttributes", secondSequenceAttributes }
                 };
 
-                return new Dictionary<string, object>
+            string json = JsonConvert.SerializeObject(result, new JsonSerializerSettings()
+            { 
+                ContractResolver = new ShouldSerializeContractResolver(new[] { "DnaSequence", "SequenceAttribute" }) 
+            });
+
+            return new Dictionary<string, object>
                            {
-                               { "data", JsonConvert.SerializeObject(result) }
+                               { "data", json }
                            };
             });
         }
