@@ -57,57 +57,22 @@
         /// <returns>
         /// The <see cref="List{Object}"/>.
         /// </returns>
-        protected List<object> FillParams(CommonSequence commonSequence, long[] alphabet, int[] building)
+        protected List<NpgsqlParameter> FillParams(CommonSequence commonSequence, long[] alphabet, int[] building)
         {
-            if (commonSequence.Id == default(long))
+            if (commonSequence.Id == default)
             {
-                commonSequence.Id = DbHelper.GetNewElementId(Db);
+                commonSequence.Id = Db.GetNewElementId();
             }
 
-            var parameters = new List<object>
+            var parameters = new List<NpgsqlParameter>
             {
-                new NpgsqlParameter
-                {
-                    ParameterName = "id",
-                    NpgsqlDbType = NpgsqlDbType.Bigint,
-                    Value = commonSequence.Id
-                },
-                new NpgsqlParameter
-                {
-                    ParameterName = "notation",
-                    NpgsqlDbType = NpgsqlDbType.Smallint,
-                    Value = commonSequence.Notation
-                },
-                new NpgsqlParameter
-                {
-                    ParameterName = "matter_id",
-                    NpgsqlDbType = NpgsqlDbType.Bigint,
-                    Value = commonSequence.MatterId
-                },
-                new NpgsqlParameter
-                {
-                    ParameterName = "alphabet",
-                    NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Bigint,
-                    Value = alphabet
-                },
-                new NpgsqlParameter
-                {
-                    ParameterName = "building",
-                    NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Integer,
-                    Value = building
-                },
-                new NpgsqlParameter
-                {
-                    ParameterName = "remote_id",
-                    NpgsqlDbType = NpgsqlDbType.Varchar,
-                    Value = (object)commonSequence.RemoteId ?? DBNull.Value
-                },
-                new NpgsqlParameter
-                {
-                    ParameterName = "remote_db",
-                    NpgsqlDbType = NpgsqlDbType.Smallint,
-                    Value = (object)commonSequence.RemoteDb ?? DBNull.Value
-                }
+                new NpgsqlParameter<long>("id", NpgsqlDbType.Bigint) { TypedValue = commonSequence.Id },
+                new NpgsqlParameter<byte>("notation", NpgsqlDbType.Smallint){ TypedValue = (byte)commonSequence.Notation },
+                new NpgsqlParameter<long>("matter_id", NpgsqlDbType.Bigint){ TypedValue = commonSequence.MatterId },
+                new NpgsqlParameter<long[]>("alphabet", NpgsqlDbType.Array | NpgsqlDbType.Bigint){ TypedValue = alphabet },
+                new NpgsqlParameter<int[]>("building", NpgsqlDbType.Array | NpgsqlDbType.Integer){ TypedValue = building },
+                new NpgsqlParameter<string>("remote_id", NpgsqlDbType.Varchar){ TypedValue = commonSequence.RemoteId  },
+                new NpgsqlParameter("remote_db", NpgsqlDbType.Smallint){ Value = (object)((byte?)commonSequence.RemoteDb) ?? DBNull.Value },
             };
             return parameters;
         }

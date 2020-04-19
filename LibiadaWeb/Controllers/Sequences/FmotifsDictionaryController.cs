@@ -1,20 +1,16 @@
-﻿using Bio.Util;
-
-namespace LibiadaWeb.Controllers.Sequences
+﻿namespace LibiadaWeb.Controllers.Sequences
 {
     using System.Data.Entity;
     using System.Linq;
     using System.Net;
     using System.Threading.Tasks;
     using System.Web.Mvc;
-    using System.Web.Mvc.Html;
     using System.Collections.Generic;
 
     using LibiadaWeb.Tasks;
     using LibiadaWeb.Helpers;
     using Newtonsoft.Json;
     using LibiadaCore.Core.SimpleTypes;
-    using LibiadaCore.Music;
 
     /// <summary>
     /// The Fmotifs dictionary controller.
@@ -68,8 +64,10 @@ namespace LibiadaWeb.Controllers.Sequences
                     return HttpNotFound();
                 }
 
-                var musicChainAlphabet = DbHelper.GetMusicChainAlphabet(db, musicSequence.Id).Select(el => db.Fmotif.Single(f => f.Id == el)).ToList();
-                var musicChainBuilding = DbHelper.GetMusicChainBuilding(db, musicSequence.Id);
+                var musicChainAlphabet = db.GetAlphabetElementIds(musicSequence.Id)
+                                                           .Select(el => db.Fmotif.Single(f => f.Id == el))
+                                                           .ToList();
+                var musicChainBuilding = db.GetSequenceBuilding(musicSequence.Id);
                 var sortedFmotifs = new Dictionary<LibiadaWeb.Fmotif, int>();
                 for (int i = 0; i < musicChainAlphabet.Count; i++)
                 {
@@ -81,12 +79,10 @@ namespace LibiadaWeb.Controllers.Sequences
                 var fmotifsChain = new List<Fmotif>();
                 foreach (var fmotif in sortedFmotifs.Keys)
                 {
-                    var newFmotif = new Fmotif(fmotif.FmotifType, 
-                                              (PauseTreatment) musicSequence.PauseTreatment, 
-                                               fmotif.Id);
+                    var newFmotif = new Fmotif(fmotif.FmotifType, musicSequence.PauseTreatment, fmotif.Id);
 
-                    var fmotifAlphabet = DbHelper.GetFmotifAlphabet(db, fmotif.Id);
-                    var fmotifBuilding = DbHelper.GetFmotifBuilding(db, fmotif.Id);
+                    var fmotifAlphabet = db.GetFmotifAlphabet(fmotif.Id);
+                    var fmotifBuilding = db.GetFmotifBuilding(fmotif.Id);
                     foreach (var position in fmotifBuilding)
                     {
                         var dbNoteId = fmotifAlphabet.ElementAt(position - 1);
@@ -98,10 +94,7 @@ namespace LibiadaWeb.Controllers.Sequences
                         }
 
                         var newNote = new ValueNote(newPitches,
-                                                    new Duration(dbNote.Numerator,
-                                                                 dbNote.Denominator,
-                                                                 dbNote.Onumerator,
-                                                                 dbNote.Odenominator, 1),
+                                                    new Duration(dbNote.Numerator, dbNote.Denominator),
                                                     dbNote.Triplet,
                                                     dbNote.Tie);
                         newNote.Id = dbNote.Id;

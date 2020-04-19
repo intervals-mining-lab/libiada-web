@@ -14,6 +14,11 @@ namespace LibiadaWeb
     
     public partial class CalculationTask
     {
+        public CalculationTask()
+        {
+            TaskResult = new HashSet<TaskResult>();
+        }
+    
         public long Id { get; set; }
         public LibiadaWeb.Tasks.TaskType TaskType { get; set; }
         public string Description { get; set; }
@@ -26,5 +31,6 @@ namespace LibiadaWeb
         public Nullable<System.DateTimeOffset> Completed { get; set; }
     
         public virtual AspNetUser AspNetUser { get; set; }
+        public virtual ICollection<TaskResult> TaskResult { get; set; }
     }
 }

@@ -2311,9 +2311,704 @@ ALTER TABLE music_chain DROP CONSTRAINT uk_music_chain;
 ALTER TABLE music_chain ADD CONSTRAINT uk_music_chain UNIQUE (matter_id, notation, pause_treatment, sequential_transfer);
 ALTER TABLE music_chain ADD CONSTRAINT chk_pause_treatment_and_sequential_transfer CHECK ((notation = 6 AND pause_treatment != 0) OR ((notation = 7 OR notation = 8) AND pause_treatment = 0 AND NOT sequential_transfer));
 
---03.06.2019
+-- 03.06.2019
 -- Delete priority from notes.
 
 ALTER TABLE note DROP COLUMN priority;
+
+-- 23.11.2019
+-- Replace plv8js procedures with pl/pgsql procedures.
+
+CREATE OR REPLACE FUNCTION trigger_element_update_alphabet() RETURNS trigger
+LANGUAGE 'plpgsql' VOLATILE AS
+$BODY$
+BEGIN
+IF TG_OP = 'UPDATE' THEN
+	UPDATE chain SET alphabet = c1.alphabet FROM (SELECT c1.id, array_replace(c1.alphabet, OLD.id, NEW.id) alphabet FROM chain c1 WHERE alphabet @> ARRAY[OLD.id]) c1 WHERE chain.id = c1.id;
+	RETURN NEW;
+END IF; 
+	RAISE EXCEPTION 'Unknown operation. This trigger is only meat for update operations on tables with alphabet field';
+END
+$BODY$;
+COMMENT ON FUNCTION trigger_element_update_alphabet() IS 'Automaticly updates elements ids in sequences alphabet when ids are changed in element table.';
+
+CREATE OR REPLACE FUNCTION trigger_element_key_insert() RETURNS trigger
+LANGUAGE 'plpgsql' VOLATILE AS
+$BODY$
+DECLARE
+element_exists bool;
+BEGIN
+IF TG_OP = 'INSERT' THEN
+	SELECT count(*) = 1 INTO element_exists FROM element WHERE id = NEW.id;
+	IF element_exists THEN
+		RETURN NEW;
+	END IF;
+	RAISE EXCEPTION 'Cannot add record into element_key before adding record into element table or its child.';
+END IF;
+RAISE EXCEPTION 'Unknown operation. This trigger only works on insert into table with id field.';
+END
+$BODY$;
+COMMENT ON FUNCTION trigger_element_key_insert() IS 'Adds new element id into element_key table.';
+
+CREATE OR REPLACE FUNCTION trigger_element_key_bound() RETURNS trigger
+LANGUAGE 'plpgsql' VOLATILE AS
+$BODY$
+BEGIN
+IF TG_OP = 'INSERT' THEN
+	INSERT INTO element_key VALUES (NEW.id);
+	return NEW;
+ELSE IF TG_OP = 'UPDATE' AND NEW.id != OLD.id THEN
+	UPDATE element_key SET id = NEW.id WHERE id = OLD.id;
+	return NEW;
+ELSE IF TG_OP = 'DELETE' THEN
+	DELETE FROM element_key WHERE id = OLD.id;
+	return OLD;
+END IF;
+END IF;
+END IF;
+END
+$BODY$;
+COMMENT ON FUNCTION trigger_element_key_bound() IS 'Links insert, update and delete actions on element tables with element_key table.';
+
+CREATE OR REPLACE FUNCTION trigger_element_delete_alphabet_bound() RETURNS trigger
+LANGUAGE 'plpgsql' VOLATILE AS 
+$BODY$
+DECLARE
+element_used bool;
+BEGIN
+IF TG_OP = 'DELETE' THEN
+	SELECT count(*) > 0 INTO element_used FROM (SELECT DISTINCT unnest(alphabet) a FROM chain) c WHERE c.a = OLD.id;
+	IF element_used THEN
+		return OLD;
+	ELSE
+		RAISE EXCEPTION  'Cannot delete element, because it still is in some of the cequences alphabets.';
+	END IF;
+	
+ELSE
+	RAISE EXCEPTION  'Unknown operation. This trigger shoud be used only in delete operation on tables with id field.';
+END IF;
+END
+$BODY$;
+COMMENT ON FUNCTION trigger_element_delete_alphabet_bound() IS 'Checks if there is still seqiences with element to be deleted, and if there are such sequences it raises exception.';
+
+CREATE OR REPLACE FUNCTION trigger_delete_chain_characteristics() RETURNS trigger
+LANGUAGE 'plpgsql' VOLATILE AS 
+$BODY$
+BEGIN
+IF TG_OP = 'UPDATE' THEN
+	DELETE FROM full_characteristic WHERE full_characteristic.chain_id = OLD.id;
+	DELETE FROM binary_characteristic WHERE binary_characteristic.chain_id = OLD.id;
+	DELETE FROM congeneric_characteristic WHERE congeneric_characteristic.chain_id = OLD.id;
+	DELETE FROM accordance_characteristic WHERE accordance_characteristic.first_chain_id = OLD.id OR accordance_characteristic.second_chain_id = OLD.id;
+	RETURN NEW;
+ELSE
+	RAISE EXCEPTION 'Unknown operation. This trigger only works on UPDATE operation.';
+END IF;
+END;
+$BODY$;
+
+CREATE OR REPLACE FUNCTION trigger_check_elements_in_alphabets() RETURNS trigger
+LANGUAGE 'plpgsql' VOLATILE AS
+$BODY$
+DECLARE
+first_element_in_alphabet bool;
+second_element_in_alphabet bool;
+BEGIN
+IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
+	first_element_in_alphabet := check_element_in_alphabet(NEW.first_chain_id, NEW.first_element_id);
+	second_element_in_alphabet := check_element_in_alphabet(NEW.second_chain_id, NEW.second_element_id);
+	IF first_element_in_alphabet AND second_element_in_alphabet THEN
+		RETURN NEW;
+	ELSE 
+		RAISE EXCEPTION 'New characteristic is referencing element not present in sequence alphabet.';
+	END IF;
+ELSE
+	RAISE EXCEPTION 'Unknown operation. This trigger shoud be used only in insert and update operation on tables with first_chain_id, second_chain_id, first_element_id, second_element_id.';
+END IF;
+END
+$BODY$;
+COMMENT ON FUNCTION trigger_check_elements_in_alphabets() IS 'Checks if elements of accordance characteristics are present in alphabets of corresponding sequences. Essentialy this function serves as foregin key referencing alphabet of sequence.';
+
+CREATE OR REPLACE FUNCTION trigger_check_elements_in_alphabet() RETURNS trigger
+LANGUAGE 'plpgsql' VOLATILE AS
+$BODY$
+DECLARE
+first_element_in_alphabet bool;
+second_element_in_alphabet bool;
+BEGIN
+IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
+	first_element_in_alphabet := check_element_in_alphabet(NEW.chain_id, NEW.first_element_id);
+	second_element_in_alphabet := check_element_in_alphabet(NEW.chain_id, NEW.second_element_id);
+	IF first_element_in_alphabet AND second_element_in_alphabet THEN
+		RETURN NEW;
+	ELSE 
+		RAISE EXCEPTION 'New characteristic is referencing element or elements (first_id = %, second_id = %) not present in sequence (id = %) alphabet.', NEW.first_element_id, NEW.second_element_id, NEW.chain_id;
+	END IF;
+ELSE
+	RAISE EXCEPTION 'Unknown operation. This trigger shoud be used only in insert and update operation on tables with chain_id, first_element_id, second_element_id.';
+END IF;
+END
+$BODY$;
+COMMENT ON FUNCTION trigger_check_elements_in_alphabet() IS 'Checks if elements of binary characteristic are present in alphabet of corresponding sequence. Essentialy this function serves as foregin key referencing alphabet of sequence.';
+
+CREATE OR REPLACE FUNCTION trigger_check_element_in_alphabet() RETURNS trigger
+LANGUAGE 'plpgsql' VOLATILE AS
+$BODY$
+DECLARE
+element_in_alphabet bool;
+BEGIN
+IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
+	element_in_alphabet := check_element_in_alphabet(NEW.chain_id, NEW.element_id);
+	IF element_in_alphabet THEN
+		RETURN NEW;
+	ELSE 
+		RAISE EXCEPTION 'New characteristic is referencing element (id = %) not present in sequence (id = %) alphabet.', NEW.element_id, NEW.chain_id;
+	END IF;
+ELSE
+	RAISE EXCEPTION 'Unknown operation. This trigger shoud be used only in insert and update operation on tables with chain_id, element_id.';
+END IF;
+END
+$BODY$;
+COMMENT ON FUNCTION trigger_check_element_in_alphabet() IS 'Checks if element of congeneric characteristic is present in alphabet of corresponding sequence. Essentialy this function serves as foregin key referencing alphabet of sequence.';
+
+CREATE OR REPLACE FUNCTION trigger_chain_key_insert() RETURNS trigger
+LANGUAGE 'plpgsql' VOLATILE AS
+$BODY$
+DECLARE
+sequence_with_id_count integer;
+BEGIN
+IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
+	SELECT count(*) INTO sequence_with_id_count FROM(SELECT id FROM chain WHERE id = NEW.id UNION ALL SELECT id FROM subsequence WHERE id = NEW.id) s;
+	IF sequence_with_id_count = 1 THEN
+		RETURN NEW;
+	ELSE IF sequence_with_id_count = 0 THEN
+		RAISE EXCEPTION 'New record in table chain_key cannot be addded because there is no sequences with given id.';
+	END IF;
+		RAISE EXCEPTION 'New record in table chain_key cannot be addded because there more than one sequences with given id.';
+	END IF;
+ELSE	
+	RAISE EXCEPTION 'Unknown operation. This trigger only operates on INSERT operation on tables with id column.';
+END IF;
+END
+$BODY$;
+COMMENT ON FUNCTION trigger_chain_key_insert() IS 'Checks that there is one and only one sequence with the given id.';
+
+CREATE OR REPLACE FUNCTION trigger_chain_key_bound() RETURNS trigger
+LANGUAGE 'plpgsql' VOLATILE AS
+$BODY$
+BEGIN
+IF TG_OP = 'INSERT' THEN
+	INSERT INTO chain_key VALUES (NEW.id);
+	return NEW;
+ELSE IF TG_OP = 'UPDATE' AND NEW.id != OLD.id THEN
+	UPDATE chain_key SET id = NEW.id WHERE id = OLD.id;
+	return NEW;
+ELSE IF TG_OP = 'DELETE' THEN
+	DELETE FROM chain_key WHERE id = OLD.id;
+	return OLD;
+END IF;
+END IF;
+END IF;
+END
+$BODY$;
+COMMENT ON FUNCTION trigger_chain_key_bound() IS 'Links insert, update and delete operations on sequences tables with chain_key table.';
+
+CREATE OR REPLACE FUNCTION trigger_building_check() RETURNS trigger
+LANGUAGE 'plpgsql' VOLATILE AS
+$BODY$
+DECLARE
+max_value integer;
+BEGIN
+IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
+	IF NEW.building[1] != 1 THEN
+		RAISE EXCEPTION  'First order value is not 1. Actual value %.', NEW.building[1];
+	END IF;
+	max_value := 0;
+	FOR i IN array_lower(NEW.building, 1)..array_upper(NEW.building, 1) LOOP
+		IF NEW.building[i] > (max_value + 1) THEN
+			RAISE EXCEPTION  'Order is incorrect starting from % position.', i ;
+		END IF;
+		IF NEW.building[i] = (max_value + 1) THEN
+			max_value := NEW.building[i];
+		END IF;
+	END LOOP;
+	IF max_value != array_length(NEW.alphabet, 1) THEN
+		RAISE EXCEPTION  'Alphabet size is not equal to the order maximum value. Alphabet elements count %, and order max value %.', array_length(NEW.alphabet, 1), max_value;
+	END IF;
+	RETURN NEW;
+ELSE
+	RAISE EXCEPTION  'Unknown operation. This trigger only operates on INSERT operation on tables with building column.';
+END IF;
+END
+$BODY$;
+COMMENT ON FUNCTION trigger_building_check() IS 'Validates inner consistency of the order of given sequence.';
+
+CREATE OR REPLACE FUNCTION trigger_set_modified() RETURNS trigger
+LANGUAGE 'plpgsql'
+VOLATILE AS
+$BODY$
+BEGIN
+NEW.modified := now();
+IF TG_OP = 'INSERT' THEN
+	NEW.created := now();
+	RETURN NEW;
+END IF;
+IF TG_OP = 'UPDATE' THEN
+	NEW.created := OLD.created;
+	RETURN NEW;
+END IF;
+	RAISE EXCEPTION 'Unknown operation. This trigger only operates on INSERT and UPDATE operation on tables with modified and created columns.';
+END;
+$BODY$;
+COMMENT ON FUNCTION trigger_set_modified() IS 'Rewrites created and modified columns with current values.';
+
+CREATE OR REPLACE FUNCTION check_element_in_alphabet(chain_id bigint,element_id bigint) RETURNS boolean
+LANGUAGE 'plpgsql' VOLATILE
+PARALLEL UNSAFE AS
+$BODY$
+BEGIN
+RETURN (SELECT count(*) = 1 FROM (SELECT unnest(alphabet) a FROM chain WHERE id = chain_id) c WHERE c.a = element_id);
+END
+$BODY$;
+COMMENT ON FUNCTION check_element_in_alphabet(bigint, bigint) IS 'Checks if element with given id is present in alphabet of given sequence.';
+
+CREATE OR REPLACE FUNCTION db_integrity_test() RETURNS void
+LANGUAGE 'plpgsql' VOLATILE
+PARALLEL UNSAFE AS
+$BODY$
+DECLARE
+sequence_ids_count bigint;
+distincs_sequence_ids_count bigint;
+sequences_keys_disproportion integer;
+elements_ids_count integer;
+distinct_elements_count integer;
+element_key_disproportion integer;
+orphaned_elements_count integer;
+orphaned_congeneric_characteristics integer;
+orphaned_binary_characteristics integer;
+orphaned_accordance_characteristics integer;
+BEGIN
+RAISE INFO 'Checking referential integrity of the database.';
+
+RAISE INFO 'Checking "sequence" table and its children.';
+SELECT COUNT(s.id) INTO sequence_ids_count FROM (SELECT id FROM chain UNION ALL SELECT id FROM subsequence) s;
+SELECT COUNT(DISTINCT s.id) INTO distincs_sequence_ids_count FROM (SELECT id FROM chain UNION SELECT id FROM subsequence) s;
+IF sequence_ids_count != distincs_sequence_ids_count THEN
+	RAISE EXCEPTION  'Ids in "sequence" table and/or its cildren are not unique.';
+ELSE
+	RAISE INFO 'All sequence ids are unique.';
+END IF;
+
+RAISE INFO 'Checking accordance of records in "sequence" table and its children to the records in sequence_key table.';
+SELECT COUNT(*) INTO sequences_keys_disproportion 
+	FROM (SELECT id FROM chain UNION ALL SELECT id FROM subsequence) s 
+	FULL OUTER JOIN chain_key sk ON sk.id = s.id 
+	WHERE s.id IS NULL OR sk.id IS NULL;
+IF sequences_keys_disproportion > 0 THEN
+	RAISE EXCEPTION 'Number of records in sequence_key is not equal to number of records in sequence table and its children.';
+ELSE
+	RAISE INFO 'sequence_key is in sync with sequence table and its children.';
+END IF;
+
+RAISE INFO 'Sequences tables are all checked.';
+
+RAISE INFO 'Checking "element" table and its children.';
+SELECT COUNT(id) INTO elements_ids_count FROM element;
+SELECT COUNT(DISTINCT id) INTO distinct_elements_count FROM element;
+IF elements_ids_count != distinct_elements_count THEN
+	RAISE EXCEPTION 'ids in "element" table and/or its cildren are not unique.';
+ELSE
+	RAISE INFO 'All element ids are unique.';
+END IF;
+
+RAISE INFO 'Checking accordance of records in "element" table and its children to the records in element_key table.';
+SELECT COUNT (*) INTO element_key_disproportion 
+	FROM (SELECT e.id, ek.id  FROM element e 
+		  FULL OUTER JOIN element_key ek 
+		  ON ek.id = e.id 
+		  WHERE e.id IS NULL OR ek.id IS NULL) ec;
+IF element_key_disproportion > 0 THEN
+	RAISE EXCEPTION 'Number of records in element_key is not equal to number of records in element and its children.';
+ELSE
+	RAISE INFO 'element_key is in sync with element and its children.';
+END IF;
+
+RAISE INFO 'Elements tables are all checked.';
+
+RAISE INFO 'Checking alphabets of all sequences.';
+SELECT COUNT(c.a) INTO orphaned_elements_count 
+	FROM (SELECT DISTINCT unnest(alphabet) a FROM chain) c 
+		  LEFT OUTER JOIN element_key e 
+		  ON e.id = c.a 
+		  WHERE e.id IS NULL;
+IF orphaned_elements_count > 0 THEN 
+	RAISE EXCEPTION 'There are % missing elements of alphabet.', orphaned_elements_count;
+ELSE
+	RAISE INFO 'All alphabets elements are present in element_key table.';
+END IF;
+
+SELECT COUNT(cc.id) INTO orphaned_congeneric_characteristics
+	FROM congeneric_characteristic cc 
+	LEFT OUTER JOIN
+		(SELECT unnest(alphabet) a, id FROM chain) c 
+	ON c.id = cc.chain_id AND c.a = cc.element_id 
+	WHERE c.a IS NULL;
+IF orphaned_congeneric_characteristics > 0 THEN
+	RAISE EXCEPTION 'There are % orphaned congeneric characteristics without according elements in alphabets.', orphaned_congeneric_characteristics;
+ELSE
+	RAISE INFO 'All congeneric characteristics have corresponding elements in alphabets.';
+END IF;
+
+SELECT COUNT(bc.id) INTO orphaned_binary_characteristics
+	FROM binary_characteristic bc 
+	LEFT OUTER JOIN 
+		(SELECT unnest(alphabet) a, id FROM chain) c 
+	ON c.id = bc.chain_id AND (c.a = bc.first_element_id OR c.a = bc.second_element_id)
+	WHERE c.a IS NULL;
+IF orphaned_binary_characteristics > 0 THEN
+	RAISE EXCEPTION 'There are % orphaned binary characteristics without according elements in alphabets.', orphaned_binary_characteristics;
+ELSE
+	RAISE INFO 'All binary characteristics have corresponding elements in alphabets.';
+END IF;
+
+SELECT COUNT(ac.id) INTO orphaned_accordance_characteristics
+	FROM accordance_characteristic ac 
+	LEFT OUTER JOIN 
+		(SELECT unnest(alphabet) a, id FROM chain) c 
+	ON (c.id = ac.first_chain_id AND c.a = ac.first_element_id) OR(c.id = ac.second_chain_id AND c.a = ac.second_element_id)
+	WHERE c.a IS NULL;
+IF orphaned_accordance_characteristics > 0 THEN
+	RAISE EXCEPTION 'There are % orphaned accordance characteristics without according elements in alphabets.', orphaned_accordance_characteristics;
+ELSE
+	RAISE INFO 'All accordance characteristics have corresponding elements in alphabets.';
+END IF;
+
+RAISE INFO 'All alphabets are checked.';
+
+RAISE INFO 'Referential integrity of database is successfully checked.';
+END
+$BODY$;
+COMMENT ON FUNCTION db_integrity_test() IS 'Procedure for cheking referential integrity of the database.';
+
+-- 07.12.2019
+-- Add multi-sequence table and reference columns in mater table.
+
+CREATE TABLE multisequence
+(
+    id serial NOT NULL,
+    name text NOT NULL,
+    nature smallint NOT NULL DEFAULT 1,
+    PRIMARY KEY (id),
+    CONSTRAINT uk_multisequence_name UNIQUE (name)
+
+);
+
+COMMENT ON TABLE matter IS 'Table for all research objects, samples, texts, etc.';
+ALTER TABLE matter ADD COLUMN multisequence_id integer;
+ALTER TABLE matter ADD COLUMN multisequence_number smallint;
+ALTER TABLE matter ADD CONSTRAINT fk_matter_multisequence FOREIGN KEY (multisequence_id) REFERENCES multisequence (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE SET NULL;
+ALTER TABLE matter ADD CONSTRAINT chk_multisequence_reference CHECK ((multisequence_id IS NULL AND multisequence_number IS NULL) OR (multisequence_id IS NOT NULL AND multisequence_number IS NOT NULL));
+
+-- 14.12.2019
+-- Update and fix trigger procedures.
+
+CREATE OR REPLACE FUNCTION trigger_check_alphabet() RETURNS trigger
+LANGUAGE 'plpgsql'
+VOLATILE AS
+$BODY$
+DECLARE
+	orphaned_elements integer;
+	alphabet_elemnts_not_unique bool;
+BEGIN
+	IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
+		SELECT a.dc != a.ec INTO alphabet_elemnts_not_unique FROM (SELECT COUNT(DISTINCT e) dc, COUNT(e) ec FROM unnest(NEW.alphabet) e) a;
+		IF alphabet_elemnts_not_unique THEN
+			RAISE EXCEPTION 'Alphabet elements are not unique. Alphabet %', NEW.alphabet ;
+		END IF;
+		
+		SELECT count(1) INTO orphaned_elements result FROM unnest(NEW.alphabet) a LEFT OUTER JOIN element_key e ON e.id = a WHERE e.id IS NULL;
+		IF orphaned_elements != 0 THEN 
+			RAISE EXCEPTION 'There are % elements of the alphabet missing in database.', orphaned_elements;
+		END IF;
+		
+		RETURN NEW;
+	END IF;
+    RAISE EXCEPTION 'Unknown operation. This trigger only operates on INSERT and UPDATE operation on tables with alphabet column (of array type).';
+END;
+$BODY$;
+COMMENT ON FUNCTION trigger_check_alphabet() IS 'Trigger function checking that all alphabet elements of the sequencs are in database.';
+
+DROP TRIGGER tgiu_chain_alphabet ON chain;
+CREATE TRIGGER tgiu_chain_alphabet_check BEFORE INSERT OR UPDATE OF alphabet ON chain FOR EACH ROW EXECUTE PROCEDURE trigger_check_alphabet();
+COMMENT ON TRIGGER tgiu_chain_alphabet_check ON chain IS 'Checks that all alphabet elements are present in database.';
+
+DROP TRIGGER tgiu_data_chain_alphabet ON data_chain;
+CREATE TRIGGER tgiu_data_chain_alphabet_check BEFORE INSERT OR UPDATE OF alphabet ON data_chain FOR EACH ROW EXECUTE PROCEDURE trigger_check_alphabet();
+COMMENT ON TRIGGER tgiu_data_chain_alphabet_check ON data_chain IS 'Checks that all alphabet elements are present in database.';
+
+DROP TRIGGER tgiu_dna_chain_alphabet ON dna_chain;
+CREATE TRIGGER tgiu_dna_chain_alphabet_check BEFORE INSERT OR UPDATE OF alphabet ON dna_chain FOR EACH ROW EXECUTE PROCEDURE trigger_check_alphabet();
+COMMENT ON TRIGGER tgiu_dna_chain_alphabet_check ON dna_chain IS 'Checks that all alphabet elements are present in database.';
+
+DROP TRIGGER tgiu_fmotif_alphabet ON fmotif;
+CREATE TRIGGER tgiu_fmotif_alphabet_check BEFORE INSERT OR UPDATE OF alphabet ON fmotif FOR EACH ROW EXECUTE PROCEDURE trigger_check_alphabet();
+COMMENT ON TRIGGER tgiu_fmotif_alphabet_check ON fmotif IS 'Checks that all alphabet elements are present in database.';
+
+DROP TRIGGER tgiu_literature_chain_alphabet ON literature_chain;
+CREATE TRIGGER tgiu_literature_chain_alphabet_check BEFORE INSERT OR UPDATE OF alphabet ON literature_chain FOR EACH ROW EXECUTE PROCEDURE trigger_check_alphabet();
+COMMENT ON TRIGGER tgiu_literature_chain_alphabet_check ON literature_chain IS 'Checks that all alphabet elements are present in database.';
+
+DROP TRIGGER tgiu_measure_alphabet ON measure;
+CREATE TRIGGER tgiu_measure_alphabet_check BEFORE INSERT OR UPDATE OF alphabet ON measure FOR EACH ROW EXECUTE PROCEDURE trigger_check_alphabet();
+COMMENT ON TRIGGER tgiu_measure_alphabet_check ON measure IS 'Checks that all alphabet elements are present in database.';
+
+DROP TRIGGER tgiu_music_chain_alphabet ON music_chain;
+CREATE TRIGGER tgiu_music_chain_alphabet_check BEFORE INSERT OR UPDATE OF alphabet ON music_chain FOR EACH ROW EXECUTE PROCEDURE trigger_check_alphabet();
+COMMENT ON TRIGGER tgiu_music_chain_alphabet_check ON music_chain IS 'Checks that all alphabet elements are present in database.';
+
+CREATE OR REPLACE FUNCTION trigger_element_delete_alphabet_bound() RETURNS trigger
+LANGUAGE 'plpgsql'
+VOLATILE AS
+$BODY$
+DECLARE
+element_used bool;
+BEGIN
+IF TG_OP = 'DELETE' THEN
+	SELECT count(*) > 0 INTO element_used 
+	FROM (SELECT DISTINCT unnest(alphabet) a 
+		  FROM (SELECT alphabet FROM chain 
+				UNION SELECT alphabet FROM fmotif 
+				UNION SELECT alphabet FROM measure) c
+		  WHERE c.alphabet @> ARRAY[OLD.id]) s;
+	IF element_used THEN
+		RAISE EXCEPTION 'Cannot delete element, because it still is in some of the sequences alphabets.';
+	ELSE
+		return OLD;
+	END IF;
+END IF;
+RAISE EXCEPTION 'Unknown operation. This trigger shoud be used only in delete operation on tables with id field.';
+END
+$BODY$;
+COMMENT ON FUNCTION trigger_element_delete_alphabet_bound() IS 'Checks if there is still sequences with element to be deleted, and if there are such sequences it raises exception.';
+
+CREATE OR REPLACE FUNCTION trigger_element_update_alphabet() RETURNS trigger
+LANGUAGE 'plpgsql'
+VOLATILE AS
+$BODY$
+BEGIN
+IF TG_OP = 'UPDATE' THEN
+	UPDATE chain SET alphabet = c1.alphabet FROM (SELECT c1.id, array_replace(c1.alphabet, OLD.id, NEW.id) alphabet FROM chain c1 WHERE alphabet @> ARRAY[OLD.id]) c1 WHERE chain.id = c1.id;
+	UPDATE fmotif SET alphabet = c1.alphabet FROM (SELECT c1.id, array_replace(c1.alphabet, OLD.id, NEW.id) alphabet FROM fmotif c1 WHERE alphabet @> ARRAY[OLD.id]) c1 WHERE fmotif.id = c1.id;
+	UPDATE measure SET alphabet = c1.alphabet FROM (SELECT c1.id, array_replace(c1.alphabet, OLD.id, NEW.id) alphabet FROM measure c1 WHERE alphabet @> ARRAY[OLD.id]) c1 WHERE measure.id = c1.id;
+	
+	RETURN NEW;
+END IF; 
+RAISE EXCEPTION 'Unknown operation. This trigger is only meat for update operations on tables with alphabet field';
+END
+$BODY$;
+COMMENT ON FUNCTION trigger_element_update_alphabet() IS 'Automaticly updates elements ids in sequences alphabet when ids are changed in element table.';
+
+DROP TRIGGER tgu_chain_characteristics ON chain;
+CREATE TRIGGER tgu_chain_characteristics_delete AFTER UPDATE OF alphabet, building ON chain FOR EACH ROW EXECUTE PROCEDURE trigger_delete_chain_characteristics();
+COMMENT ON TRIGGER tgu_chain_characteristics_delete ON chain IS 'Trigger deleting all characteristics of sequences that has been updated.';
+
+DROP TRIGGER tgu_data_chain_characteristics ON data_chain;
+CREATE TRIGGER tgu_data_chain_characteristics_delete AFTER UPDATE OF alphabet, building ON data_chain FOR EACH ROW EXECUTE PROCEDURE trigger_delete_chain_characteristics();
+COMMENT ON TRIGGER tgu_data_chain_characteristics_delete ON data_chain IS 'Trigger deleting all characteristics of sequences that has been updated.';
+
+DROP TRIGGER tgu_dna_chain_characteristics ON dna_chain;
+CREATE TRIGGER tgu_dna_chain_characteristics_delete AFTER UPDATE OF alphabet, building ON dna_chain FOR EACH ROW EXECUTE PROCEDURE trigger_delete_chain_characteristics();
+COMMENT ON TRIGGER tgu_dna_chain_characteristics_delete ON dna_chain IS 'Trigger deleting all characteristics of sequences that has been updated.';
+
+DROP TRIGGER tgu_literature_chain_characteristics ON literature_chain;
+CREATE TRIGGER tgu_literature_chain_characteristics_delete AFTER UPDATE OF alphabet, building ON literature_chain FOR EACH ROW EXECUTE PROCEDURE trigger_delete_chain_characteristics();
+COMMENT ON TRIGGER tgu_literature_chain_characteristics_delete ON literature_chain IS 'Trigger deleting all characteristics of sequences that has been updated.';
+
+DROP TRIGGER tgu_music_chain_characteristics ON music_chain;
+CREATE TRIGGER tgu_music_chain_characteristics_delete AFTER UPDATE OF alphabet, building ON music_chain FOR EACH ROW EXECUTE PROCEDURE trigger_delete_chain_characteristics();
+COMMENT ON TRIGGER tgu_music_chain_characteristics_delete ON music_chain IS 'Trigger deleting all characteristics of sequences that has been updated.';
+
+DROP TRIGGER tgu_subsequence_characteristics ON subsequence;
+CREATE TRIGGER tgu_subsequence_characteristics_delete AFTER UPDATE OF start, length, chain_id ON subsequence FOR EACH ROW EXECUTE PROCEDURE trigger_delete_chain_characteristics();
+COMMENT ON TRIGGER tgu_subsequence_characteristics_delete ON subsequence IS 'Trigger deleting all characteristics of subsequences that has been updated.';
+
+DROP TRIGGER tgi_chain_building_check ON chain;
+CREATE TRIGGER tgiu_chain_building_check  BEFORE INSERT OR UPDATE OF alphabet, building ON chain FOR EACH ROW EXECUTE PROCEDURE trigger_building_check();
+COMMENT ON TRIGGER tgiu_chain_building_check ON chain IS 'Validates order of the sequence and checks its consistency with the alphabet.';
+
+DROP TRIGGER tgi_data_chain_building_check ON data_chain;
+CREATE TRIGGER tgiu_data_chain_building_check  BEFORE INSERT OR UPDATE OF alphabet, building ON data_chain FOR EACH ROW EXECUTE PROCEDURE trigger_building_check();
+COMMENT ON TRIGGER tgiu_data_chain_building_check ON data_chain IS 'Validates order of the sequence and checks its consistency with the alphabet.';
+
+DROP TRIGGER tgi_dna_chain_building_check ON dna_chain;
+CREATE TRIGGER tgiu_dna_chain_building_check  BEFORE INSERT OR UPDATE OF alphabet, building ON dna_chain FOR EACH ROW EXECUTE PROCEDURE trigger_building_check();
+COMMENT ON TRIGGER tgiu_dna_chain_building_check ON dna_chain IS 'Validates order of the sequence and checks its consistency with the alphabet.';
+
+DROP TRIGGER tgi_fmotif_building_check ON fmotif;
+CREATE TRIGGER tgiu_fmotif_building_check  BEFORE INSERT OR UPDATE OF alphabet, building ON fmotif FOR EACH ROW EXECUTE PROCEDURE trigger_building_check();
+COMMENT ON TRIGGER tgiu_fmotif_building_check ON fmotif IS 'Validates order of the sequence and checks its consistency with the alphabet.';
+
+DROP TRIGGER tgi_literature_chain_building_check ON literature_chain;
+CREATE TRIGGER tgiu_literature_chain_building_check  BEFORE INSERT OR UPDATE OF alphabet, building ON literature_chain FOR EACH ROW EXECUTE PROCEDURE trigger_building_check();
+COMMENT ON TRIGGER tgiu_literature_chain_building_check ON literature_chain IS 'Validates order of the sequence and checks its consistency with the alphabet.';
+
+DROP TRIGGER tgi_measure_building_check ON measure;
+CREATE TRIGGER tgiu_measure_building_check  BEFORE INSERT OR UPDATE OF alphabet, building ON measure FOR EACH ROW EXECUTE PROCEDURE trigger_building_check();
+COMMENT ON TRIGGER tgiu_measure_building_check ON measure IS 'Validates order of the sequence and checks its consistency with the alphabet.';
+
+DROP TRIGGER tgi_music_chain_building_check ON music_chain;
+CREATE TRIGGER tgiu_music_chain_building_check  BEFORE INSERT OR UPDATE OF alphabet, building ON music_chain FOR EACH ROW EXECUTE PROCEDURE trigger_building_check();
+COMMENT ON TRIGGER tgiu_music_chain_building_check ON music_chain IS 'Validates order of the sequence and checks its consistency with the alphabet.';
+
+CREATE OR REPLACE FUNCTION check_element_in_alphabet(chain_id bigint,element_id bigint) RETURNS boolean
+LANGUAGE 'plpgsql'
+VOLATILE PARALLEL UNSAFE AS 
+$BODY$
+BEGIN
+RETURN (SELECT count(*) = 1 
+		FROM (SELECT alphabet a 
+			  FROM chain 
+			  WHERE id = chain_id) c 
+		WHERE c.a @> ARRAY[element_id]);
+END
+$BODY$;
+
+CREATE OR REPLACE FUNCTION trigger_element_key_insert() RETURNS trigger
+LANGUAGE 'plpgsql'
+VOLATILE AS
+$BODY$
+DECLARE
+elements_with_id_count integer;
+BEGIN
+IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
+	SELECT count(*) INTO elements_with_id_count FROM element WHERE id = NEW.id;
+	IF elements_with_id_count = 1 THEN
+		RETURN NEW;
+	ELSE IF elements_with_id_count = 0 THEN
+		RAISE EXCEPTION 'New record in table element_key cannot be addded because there is no elements with given id = %.', NEW.id;
+	END IF;
+		RAISE EXCEPTION 'New record in table element_key cannot be addded because there is more than one element with given id = %.', NEW.id;
+	END IF;
+	RAISE EXCEPTION 'Cannot add record into element_key before adding record into element table or its child.';
+END IF;
+RAISE EXCEPTION 'Unknown operation. This trigger only works on insert into table with id field.';
+END
+$BODY$;
+
+ALTER FUNCTION trigger_chain_key_insert() RENAME TO trigger_chain_key_unique_check;
+CREATE OR REPLACE FUNCTION trigger_chain_key_unique_check() RETURNS trigger
+LANGUAGE 'plpgsql'
+VOLATILE AS 
+$BODY$
+DECLARE
+sequence_with_id_count integer;
+BEGIN
+IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
+	SELECT count(*) INTO sequence_with_id_count FROM(SELECT id FROM chain WHERE id = NEW.id UNION ALL SELECT id FROM subsequence WHERE id = NEW.id) s;
+	IF sequence_with_id_count = 1 THEN
+		RETURN NEW;
+	ELSE IF sequence_with_id_count = 0 THEN
+		RAISE EXCEPTION 'New record in table chain_key cannot be addded because there is no sequences with given id.';
+	END IF;
+		RAISE EXCEPTION 'New record in table chain_key cannot be addded because there more than one sequences with given id. Sequences count = %', sequence_with_id_count;
+	END IF;
+ELSE	
+	RAISE EXCEPTION 'Unknown operation. This trigger only operates on INSERT operation on tables with id column.';
+END IF;
+END
+$BODY$;
+
+CREATE FUNCTION trigger_check_notes_alphabet() RETURNS trigger
+LANGUAGE 'plpgsql'
+VOLATILE NOT LEAKPROOF AS
+$BODY$
+DECLARE
+	orphaned_elements integer;
+	alphabet_elemnts_not_unique bool;
+BEGIN
+	IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
+		SELECT a.dc != a.ec INTO alphabet_elemnts_not_unique FROM (SELECT COUNT(DISTINCT e) dc, COUNT(e) ec FROM unnest(NEW.alphabet) e) a;
+		IF alphabet_elemnts_not_unique THEN
+			RAISE EXCEPTION 'Alphabet notes are not unique. Alphabet %', NEW.alphabet ;
+		END IF;
+		
+		SELECT count(1) INTO orphaned_elements result FROM unnest(NEW.alphabet) a LEFT OUTER JOIN note e ON e.id = a WHERE e.id IS NULL;
+		IF orphaned_elements != 0 THEN 
+			RAISE EXCEPTION 'There are % notes of the alphabet missing in database.', orphaned_elements;
+		END IF;
+		
+		RETURN NEW;
+	END IF;
+    RAISE EXCEPTION 'Unknown operation. This trigger only operates on INSERT and UPDATE operation on tables with alphabet column (of array type).';
+END;
+$BODY$;
+COMMENT ON FUNCTION trigger_check_notes_alphabet() IS 'Trigger function checking that all alphabet notes of the music sequences are in database.';
+
+DROP TRIGGER tgiu_measure_alphabet_check ON measure;
+CREATE TRIGGER tgiu_measure_alphabet_check BEFORE INSERT OR UPDATE OF alphabet ON measure FOR EACH ROW EXECUTE PROCEDURE trigger_check_notes_alphabet();
+COMMENT ON TRIGGER tgiu_measure_alphabet_check ON measure IS 'Checks that all alphabet elements are present in database.';
+
+DROP TRIGGER tgiu_fmotif_alphabet_check ON fmotif;
+CREATE TRIGGER tgiu_fmotif_alphabet_check BEFORE INSERT OR UPDATE OF alphabet ON fmotif FOR EACH ROW EXECUTE PROCEDURE trigger_check_notes_alphabet();
+COMMENT ON TRIGGER tgiu_fmotif_alphabet_check ON fmotif IS 'Checks that all alphabet elements are present in database.';
+
+-- 22.02.2020
+-- Add task results table.
+
+CREATE TABLE task_result
+(
+    id bigserial NOT NULL,
+    task_id bigint NOT NULL,
+    key text NOT NULL,
+    value json NOT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT uk_task_result UNIQUE (task_id, key),
+    CONSTRAINT fk_task_result_task FOREIGN KEY (task_id)
+        REFERENCES task (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
+
+COMMENT ON TABLE task_result IS 'Table with JSON results of tasks calculation. Results are stored as key/value pairs.';
+
+-- 11.03.2020
+-- Add images table.
+
+ALTER TABLE matter ADD COLUMN source bytea;
+
+CREATE TABLE image_sequence
+(
+    id bigint NOT NULL DEFAULT nextval('elements_id_seq'::regclass),
+    notation smallint NOT NULL,
+    order_extractor smallint NOT NULL,
+	image_transformations smallint[] NOT NULL,
+	matrix_transformations smallint[] NOT NULL,
+    matter_id bigint NOT NULL,
+    remote_id text,
+    remote_db smallint,
+	created timestamp with time zone NOT NULL DEFAULT now(),
+    modified timestamp with time zone NOT NULL DEFAULT now(),
+    CONSTRAINT pk_image_sequence PRIMARY KEY (id),
+    CONSTRAINT fk_image_sequence_chain_key FOREIGN KEY (id)
+        REFERENCES chain_key (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        DEFERRABLE INITIALLY DEFERRED,
+    CONSTRAINT fk_image_sequence_matter FOREIGN KEY (matter_id)
+        REFERENCES matter (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE NO ACTION,
+    CONSTRAINT chk_remote_id CHECK (remote_db IS NULL AND remote_id IS NULL OR remote_db IS NOT NULL AND remote_id IS NOT NULL)
+);
+COMMENT ON TABLE image_sequence IS 'Table with information on image transformations and order extraction. Does not store an actual order of image and used for reference by characteristics tables.';
+CREATE INDEX ix_image_sequence_matter_id  ON image_sequence USING btree (matter_id);
+CREATE TRIGGER tgiu_image_sequence_modified  BEFORE INSERT OR UPDATE ON image_sequence FOR EACH ROW EXECUTE PROCEDURE trigger_set_modified();
+CREATE TRIGGER tgiud_image_sequence_chain_key_bound AFTER INSERT OR DELETE OR UPDATE OF id ON image_sequence FOR EACH ROW EXECUTE PROCEDURE trigger_chain_key_bound();
+
+-- 15.03.2020
+-- Remove redundant columns in note and measure tables.
+
+ALTER TABLE note DROP COLUMN onumerator;
+ALTER TABLE note DROP COLUMN odenominator;
 
 COMMIT;

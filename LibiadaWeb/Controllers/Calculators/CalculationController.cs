@@ -4,6 +4,8 @@
     using System.Linq;
     using System.Web.Mvc;
 
+    using LibiadaCore.Music;
+
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.CalculatorsData;
@@ -62,6 +64,12 @@
         /// <param name="translators">
         /// The translators ids.
         /// </param>
+        /// <param name="pauseTreatments">
+        /// Pause treatment parameters of music sequences.
+        /// </param>
+        /// <param name="sequentialTransfers">
+        /// Sequential transfer flag used in music sequences.
+        /// </param>
         /// <param name="rotate">
         /// Rotation flag.
         /// </param>
@@ -82,6 +90,8 @@
             Notation[] notations,
             Language[] languages,
             Translator?[] translators,
+            PauseTreatment[] pauseTreatments,
+            bool[] sequentialTransfers,
             bool rotate,
             bool complementary,
             uint? rotationLength)
@@ -93,7 +103,7 @@
                 using (var db = new LibiadaWebEntities())
                 {
                     var commonSequenceRepository = new CommonSequenceRepository(db);
-                    sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds, notations, languages, translators);
+                    sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds, notations, languages, translators, pauseTreatments, sequentialTransfers);
                     mattersNames = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
                 }
 
