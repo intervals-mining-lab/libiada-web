@@ -247,6 +247,14 @@
         /// </summary>
         [Display(Name = "Calculate characteristics of intervals distributions")]
         [TaskClass(typeof(IntervalsCharacteristicsDistributionController))]
-        IntervalsCharacteristicsDistribution = 34
+        IntervalsCharacteristicsDistribution = 34,
+
+        /// <summary>
+        /// Imports genetic sequences and their annotations 
+        /// using genbank search results file.
+        /// </summary>
+        [Display(Name = "Batch genetic import from GenBank search file")]
+        [TaskClass(typeof(BatchGeneticImportFromGenBankSearchFileController))]
+        BatchGeneticImportFromGenBankSearchFile = 35
     }
 }

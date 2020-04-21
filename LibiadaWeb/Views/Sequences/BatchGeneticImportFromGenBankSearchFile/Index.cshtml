@@ -1,0 +1,36 @@
+﻿@{
+    ViewBag.Title = "Batch sequences import";
+}
+
+@Html.Partial("_AngularControllerInitializer", "BatchGeneticImportFromGenBankSearchFileController")
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal" ng-controller="BatchGeneticImportFromGenBankSearchFileCtrl">
+    <div class="form-group">
+        <label class="control-label col-md-2" for="file">GenBank search results file:</label>
+        <div class="col-md-10">
+            <input type="file" name="file" id="file" onchange="angular.element(this).scope().fileChanged(this)"/>
+            @Html.ValidationMessage("file", "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <label>
+                <input type="checkbox" name="importGenes" value="true" checked />
+                <input type="hidden" name="importGenes" value="false" />
+                Also import genes
+            </label>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default" ng-disabled="!fileSelected.value"/>
+        </div>
+    </div>
+</div>
+}
