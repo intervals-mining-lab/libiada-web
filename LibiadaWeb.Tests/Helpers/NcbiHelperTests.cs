@@ -32,13 +32,7 @@ KC684958.1 GI:514400153";
         {
             var txtReader = new StreamReader($"{SystemData.ProjectFolderPathForNcbiHelper}nuccore_result.txt");
             var textFromFile = txtReader.ReadToEnd();
-            var result = NcbiHelper.GetIdFromFile(textFromFile,700,2,true);
-            foreach (var VARIABLE in result)
-            {
-                System.Diagnostics.Debug.WriteLine(VARIABLE);
-                Console.WriteLine(VARIABLE);
-            }
-          
+            var result = NcbiHelper.GetIdFromFile(textFromFile, true, 2, 700); 
         }
     }
 }

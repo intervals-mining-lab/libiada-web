@@ -5,6 +5,7 @@ namespace LibiadaWeb.Helpers
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Net;
     using System.Threading;
@@ -184,32 +185,38 @@ namespace LibiadaWeb.Helpers
             lastRequestDateTime = DateTimeOffset.Now;
         }
 
-        public static List<string> GetIdFromFile(string data, int maxLength, int minLength, bool includePartial)
+        public static string[] GetIdFromFile(string data, bool includePartial, int minLength = 1, int maxLength = int.MaxValue)
         {
             string[] fullText = Regex.Split(data, @"^\r\n", RegexOptions.Multiline);
             List<string> idList = new List<string>();
+            int gensName = 0;
+            int numberStrWithId = 2;
+            int firstId = 0;
             foreach (var block in fullText)
             {
                 if (!string.IsNullOrEmpty(block))
                 { 
                     string[] stringsInBlock =  block.Split('\n');
-                    if (includePartial || !stringsInBlock[0].Contains("partial"))
+                    if (includePartial || !stringsInBlock[gensName].Contains("partial"))
                     {
-                        float length = GetLengthFromString(stringsInBlock[1]);
+                        int length = GetLengthFromString(stringsInBlock[1]);
                         if (length >= minLength && length <= maxLength)
                         {
-                            string[] idStrings = stringsInBlock[2].Split(' ');
-                            idList.Add(idStrings[0]);
+                            string[] idStrings = stringsInBlock[numberStrWithId].Split(' ');
+                            idList.Add(idStrings[firstId]);
                         }
                     }
                 }
             }
-            return idList;
+            return idList.ToArray();
         }
-        private static float GetLengthFromString(string stringWithLength)
+        
+        private static int GetLengthFromString(string stringLength)
         {
-            string[] splitedStringWithLength = stringWithLength.Split(' ');
-            float length =float.Parse(splitedStringWithLength[0]); ;
+            //TODO: check why int is not parsed using culture info
+            string StringLength = stringLength.Split(' ')[0];
+           // CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
+            int length = int.Parse(StringLength.Replace(",","")); 
             return length;
         }
     }

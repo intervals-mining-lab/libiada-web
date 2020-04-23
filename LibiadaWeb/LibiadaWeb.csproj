@@ -885,6 +885,7 @@
     <Content Include="Views\Calculators\IntervalsCharacteristicsDistribution\Index.cshtml" />
     <Content Include="Views\Calculators\IntervalsCharacteristicsDistribution\Result.cshtml" />
     <Content Include="Views\Sequences\BatchGeneticImportFromGenBankSearchFile\Index.cshtml" />
+    <Content Include="Views\Sequences\BatchGeneticImportFromGenBankSearchFile\Result.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
