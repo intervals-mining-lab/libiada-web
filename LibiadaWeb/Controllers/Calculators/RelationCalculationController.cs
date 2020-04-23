@@ -13,6 +13,7 @@
     using LibiadaCore.Extensions;
     using LibiadaCore.Music;
 
+    using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Sequences;
     using LibiadaWeb.Tasks;
 
@@ -205,10 +206,20 @@
                     { "matterName", db.CommonSequence.Single(m => m.Id == sequenceId).Matter.Name },
                     { "notationName", db.CommonSequence.Single(c => c.Id == sequenceId).Notation.GetDisplayValue() }
                 };
+               
+                            string json = JsonConvert.SerializeObject(result, new JsonSerializerSettings()
+                            {
+                                ContractResolver = new ShouldSerializeContractResolver(new[] 
+                                { 
+                                    "FirstElementBinaryCharacteristic", 
+                                    "SecondElementBinaryCharacteristic",
+                                    "Sequence"
+                                })
+                            });
 
                 return new Dictionary<string, object>
                            {
-                               { "data", JsonConvert.SerializeObject(result) }
+                               { "data", json }
                            };
             });
         }

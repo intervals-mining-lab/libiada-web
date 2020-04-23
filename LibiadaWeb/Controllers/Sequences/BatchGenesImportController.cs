@@ -8,6 +8,7 @@
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
+    using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
@@ -69,8 +70,8 @@
             return CreateTask(() =>
                 {
                     string[] matterNames;
-                    var results = new string[matterIds.Length];
-                    var statuses = new string[matterIds.Length];
+                    var importResults = new List<MatterImportResult>();
+
                     using (var db = new LibiadaWebEntities())
                     {
                         matterNames = db.Matter
@@ -85,6 +86,11 @@
 
                         for (int i = 0; i < parentSequences.Length; i++)
                         {
+                            var importResult = new MatterImportResult()
+                            {
+                                MatterName = matterNames[i]
+                            };
+
                             try
                             {
                                 DnaSequence parentSequence = parentSequences[i];
@@ -98,29 +104,31 @@
                                 int nonCodingCount = db.Subsequence.Count(s => s.SequenceId == parentSequence.Id
                                                                             && s.Feature == Feature.NonCodingSequence);
 
-                                statuses[i] = "Success";
-                                results[i] = $"Successfully imported {featuresCount} features and {nonCodingCount} non coding subsequences";
+                                importResult.Status = "Success";
+                                importResult.Result = $"Successfully imported {featuresCount} features and {nonCodingCount} non coding subsequences";
+                                importResults.Add(importResult);
                             }
                             catch (Exception exception)
                             {
-                                statuses[i] = "Error";
-                                results[i] = exception.Message;
+                                importResult.Status = "Error";
+                                importResult.Result = exception.Message;
                                 while (exception.InnerException != null)
                                 {
-                                    results[i] += $" {exception.InnerException.Message}";
+                                    importResult.Result += $" {exception.InnerException.Message}";
 
                                     exception = exception.InnerException;
                                 }
+                                importResults.Add(importResult);
                             }
                         }
                     }
 
+                    var data = new Dictionary<string, object> { { "result", importResults } };
+
                     return new Dictionary<string, object>
-                           {
-                               { "matterNames", matterNames },
-                               { "results", results },
-                               { "status", statuses }
-                           };
+                    {
+                        {"data", JsonConvert.SerializeObject(data)}
+                    };
                 });
         }
     }

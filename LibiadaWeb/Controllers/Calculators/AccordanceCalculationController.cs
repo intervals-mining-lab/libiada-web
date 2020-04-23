@@ -109,7 +109,7 @@
                     throw new ArgumentException("Number of selected matters must be 2.", nameof(matterIds));
                 }
 
-                var characteristics = new List<List<double>>();
+                var characteristics = new Dictionary<int, Dictionary<int, double>>();
                 string characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
                 var result = new Dictionary<string, object>
                                  {
@@ -168,8 +168,8 @@
                             throw new Exception("Alphabets of sequences are not equal.");
                         }
 
-                        characteristics.Add(new List<double>());
-                        characteristics.Add(new List<double>());
+                        characteristics.Add(0, new Dictionary<int, double>());
+                        characteristics.Add(1, new Dictionary<int, double>());
                         var alphabet = new List<string>();
 
                         for (int i = 0; i < firstChainAlphabet.Cardinality; i++)
@@ -181,10 +181,10 @@
                             CongenericChain secondCongenericChain = secondChain.CongenericChain(element);
 
                             double characteristicValue = calculator.Calculate(firstCongenericChain, secondCongenericChain, link);
-                            characteristics[0].Add(characteristicValue);
+                            characteristics[0].Add(i, characteristicValue);
 
                             characteristicValue = calculator.Calculate(secondCongenericChain, firstCongenericChain, link);
-                            characteristics[1].Add(characteristicValue);
+                            characteristics[1].Add(i, characteristicValue);
                         }
 
                         result.Add("alphabet", alphabet);
@@ -194,7 +194,7 @@
                         var firstAlphabet = new List<string>();
                         for (int i = 0; i < firstChain.Alphabet.Cardinality; i++)
                         {
-                            characteristics.Add(new List<double>());
+                            characteristics.Add(i, new Dictionary<int, double>());
                             IBaseObject firstElement = firstChainAlphabet[i];
                             firstAlphabet.Add(firstElement.ToString());
                             for (int j = 0; j < secondChainAlphabet.Cardinality; j++)
@@ -205,7 +205,7 @@
                                 var secondCongenericChain = secondChain.CongenericChain(secondElement);
 
                                 var characteristicValue = calculator.Calculate(firstCongenericChain, secondCongenericChain, link);
-                                characteristics[i].Add(characteristicValue);
+                                characteristics[i].Add(j, characteristicValue);
                             }
                         }
 
