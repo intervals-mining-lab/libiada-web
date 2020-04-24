@@ -32,7 +32,31 @@ KC684958.1 GI:514400153";
         {
             var txtReader = new StreamReader($"{SystemData.ProjectFolderPathForNcbiHelper}nuccore_result.txt");
             var textFromFile = txtReader.ReadToEnd();
-            var result = NcbiHelper.GetIdFromFile(textFromFile, true, 2, 700); 
+            var result = NcbiHelper.GetIdFromFile(textFromFile, true);
+            int expectedCountOfSequences = 2111;
+            Assert.AreEqual(expectedCountOfSequences, result.Length);
+        }
+
+        [Test]
+        public void IncludePartialInGetIdFromFileTest()
+        {
+            var txtReader = new StreamReader($"{SystemData.ProjectFolderPathForNcbiHelper}nuccore_result2.txt");
+            var textFromFile = txtReader.ReadToEnd();
+            var result = NcbiHelper.GetIdFromFile(textFromFile, false);
+            int expectedCountOfSequences = 1447;
+            int partialSequences = 823;
+            expectedCountOfSequences = expectedCountOfSequences - partialSequences;
+            Assert.AreEqual(expectedCountOfSequences, result.Length);
+        }
+
+        [Test]
+        public void LengthInGetIdFromFileTest()
+        {
+            var txtReader = new StreamReader($"{SystemData.ProjectFolderPathForNcbiHelper}nuccore_result2.txt");
+            var textFromFile = txtReader.ReadToEnd();
+            var result = NcbiHelper.GetIdFromFile(textFromFile, true,5000,100000);
+            int expectedCountOfSequences = 122;
+            Assert.AreEqual(expectedCountOfSequences, result.Length);
         }
     }
 }

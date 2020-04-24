@@ -185,7 +185,11 @@ namespace LibiadaWeb.Helpers
             lastRequestDateTime = DateTimeOffset.Now;
         }
 
-        public static string[] GetIdFromFile(string data, bool includePartial, int minLength = 1, int maxLength = int.MaxValue)
+        public static string[] GetIdFromFile(
+            string data,
+            bool includePartial, 
+            int minLength = 1,
+            int maxLength = int.MaxValue)
         {
             string[] fullText = Regex.Split(data, @"^\r\n", RegexOptions.Multiline);
             List<string> idList = new List<string>();
@@ -213,10 +217,10 @@ namespace LibiadaWeb.Helpers
         
         private static int GetLengthFromString(string stringLength)
         {
-            //TODO: check why int is not parsed using culture info
-            string StringLength = stringLength.Split(' ')[0];
-           // CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
-            int length = int.Parse(StringLength.Replace(",","")); 
+            stringLength = stringLength.Split(' ')[0];
+            IFormatProvider provider = CultureInfo.CreateSpecificCulture("en-US");
+            int length = int.Parse(stringLength, NumberStyles.Integer | 
+                NumberStyles.AllowThousands,provider);
             return length;
         }
     }
