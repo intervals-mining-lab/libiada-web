@@ -8,10 +8,12 @@
             $scope.ungroupedMatters.push($scope.matters[matterId]);
         }
 
-        function distributeMatters(multiSequence, matterId) {
-            $scope.result.push($scope.matters[matterId]);
+        function distributeMatter(multiSequence, matterId) {
+            multiSequence.matterIds.push(matterId);
+            $scope.ungroupedMatters.splice($scope.ungroupedMatters.indexOf(matterId), 1);
         }
 
+        $scope.distributeMatter = distributeMatter;
         $scope.unboundMatter = unboundMatter;
 
         $scope.loadingScreenHeader = "Loading grouping results";

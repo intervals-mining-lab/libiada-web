@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
+using Accord.Math;
+using Bio.Extensions;
 using LibiadaWeb.Models.CalculatorsData;
 using LibiadaWeb.Models.Repositories.Sequences;
 using LibiadaWeb.Tasks;
@@ -34,7 +37,7 @@ namespace LibiadaWeb.Controllers.Sequences
                 {
                     List<Matter> matters = db.Matter.ToList();
                     var multisequences = GeneticMattersGenerator(matters);
-                    var result = multisequences.Select(m => new {name = m.Key, matterIds = m.Value}).ToArray();
+                    var result = multisequences.Select(m => new { name = m.Key, matterIds = m.Value }).ToArray();
                     var matterIds = result.SelectMany(r => r.matterIds);
                     matters = matters.Where(m => matterIds.Contains(m.Id)).ToList();
                     var groupingResult = new Dictionary<string, object>
@@ -50,6 +53,64 @@ namespace LibiadaWeb.Controllers.Sequences
                     };
                 }
             }); 
+        }
+
+        [HttpPost]
+        public void Result(Dictionary<string, long[]> multisequenceMatters, string[] multisequencesNames)
+        {
+            using (var db = new LibiadaWebEntities())
+            {
+                db.Database.ExecuteSqlCommand("DELETE FROM multisequence");
+                Multisequence[] multisequences = new Multisequence[multisequencesNames.Length];
+
+                for (int i = 0; i < multisequencesNames.Length; i++)
+                {
+                    /*try
+                    {*/
+                        multisequences[i] = new Multisequence();
+                        multisequences[i].Name = multisequencesNames[i];
+                        multisequences[i].Nature = Nature.Genetic;
+
+                    /*multisequences[i].Matters = matters
+                        .Where(m => multisequenceMatters[multisequences[i].Name].Contains(m.Id)).ToArray();*/
+                    /*}
+                    catch (Exception e)
+                    {
+                        notFoundKeys.Add(multisequencesNames[i]);
+                    }*/
+                }
+
+                multisequences = multisequences.Where(ms => ms != null).ToArray();
+                db.Multisequence.AddRange(multisequences);
+                
+
+                var notFoundKeys = new List<string>();
+
+                var matters = db.Matter.ToList();
+                for (int i = 0; i < multisequences.Length; i++)
+                {
+                    try
+                    {
+                        var matterIds = multisequenceMatters[multisequences[i].Name];
+                        foreach (var matterId in matterIds)
+                        {
+                            db.Entry(matters[Convert.ToInt32(matterId)]).State = EntityState.Modified;
+                            matters[Convert.ToInt32(matterId)].MultisequenceId = multisequences[i].Id;
+                            matters[Convert.ToInt32(matterId)].MultisequenceNumber =
+                                Convert.ToInt16(MultisequenceRepository.GetSequenceNumber(matters[Convert.ToInt32(matterId)].Name));
+                            //db.Matter.Find(matterId).MultisequenceId = multisequences[i].Id;
+                            //db.Matter.Find(matterId).MultisequenceNumber = Convert.ToInt16(MultisequenceRepository.GetSequenceNumber(db.Matter.Find(matterId).Name));
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        notFoundKeys.Add(multisequences[i].Name);
+                    }
+                    
+                }
+
+                db.SaveChanges();
+            }
         }
 
         /// <summary>
@@ -82,7 +143,7 @@ namespace LibiadaWeb.Controllers.Sequences
 
             for (int i = 0; i < mattersNames.Length; i++)
             {
-                if (tempArray[i].Contains('_'))
+                if (Enumerable.Contains(tempArray[i], '_'))
                 {
                     refArray.Add(mattersNames[i]);
                 }
@@ -93,10 +154,10 @@ namespace LibiadaWeb.Controllers.Sequences
             }
 
             Dictionary<string, long[]> multisequencesRefMatters = refArray.GroupBy(mn => mn.Item2)
-                .ToDictionary(mn => mn.Key, mn => mn.Select(m => m.Item1).ToArray());
+                .ToDictionary(mn => mn.Key + " ref", mn => mn.Select(m => m.Item1).ToArray());
 
             Dictionary<string, long[]> multisequencesNotRefMatters = notRefArray.GroupBy(mn => mn.Item2)
-                .ToDictionary(mn => mn.Key + " not ref", mn => mn.Select(m => m.Item1).ToArray());
+                .ToDictionary(mn => mn.Key, mn => mn.Select(m => m.Item1).ToArray());
             var result = multisequencesRefMatters;
             foreach (var multisequencesNotRefMatter in multisequencesNotRefMatters)
             {
