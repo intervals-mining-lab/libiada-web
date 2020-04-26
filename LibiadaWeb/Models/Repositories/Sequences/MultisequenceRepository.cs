@@ -145,54 +145,33 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             return result;
         }
 
+        /// <summary>
+        /// Sets multisequence numbers to matter array.
+        /// </summary>
+        /// <param name="matters">
+        /// The array of matters.
+        /// </param>
         public static void SetSequenceNumbers(Matter[] matters)
         {
+            var sequenceTypes = new SequenceType[]
+            {
+                SequenceType.CompleteGenome,
+                SequenceType.MitochondrionGenome,
+                SequenceType.ChloroplastGenome,
+                SequenceType.Plasmid,
+                SequenceType.Plastid,
+                SequenceType.MitochondrialPlasmid
+            };
             short counter = 1;
-            for (int i = 0; i < matters.Length; i++)
-            {
-                if (matters[i].SequenceType == SequenceType.CompleteGenome)
-                {
-                    matters[i].MultisequenceNumber = counter++;
-                }
-            }
 
-            for (int i = 0; i < matters.Length; i++)
+            foreach (var type in sequenceTypes)
             {
-                if (matters[i].SequenceType == SequenceType.MitochondrionGenome)
+                for (int i = 0; i < matters.Length; i++)
                 {
-                    matters[i].MultisequenceNumber = counter++;
-                }
-            }
-
-            for (int i = 0; i < matters.Length; i++)
-            {
-                if (matters[i].SequenceType == SequenceType.ChloroplastGenome)
-                {
-                    matters[i].MultisequenceNumber = counter++;
-                }
-            }
-
-            for (int i = 0; i < matters.Length; i++)
-            {
-                if (matters[i].SequenceType == SequenceType.Plasmid)
-                {
-                    matters[i].MultisequenceNumber = counter++;
-                }
-            }
-
-            for (int i = 0; i < matters.Length; i++)
-            {
-                if (matters[i].SequenceType == SequenceType.Plastid)
-                {
-                    matters[i].MultisequenceNumber = counter++;
-                }
-            }
-
-            for (int i = 0; i < matters.Length; i++)
-            {
-                if (matters[i].SequenceType == SequenceType.MitochondrialPlasmid)
-                {
-                    matters[i].MultisequenceNumber = counter++;
+                    if (matters[i].SequenceType == type)
+                    {
+                        matters[i].MultisequenceNumber = counter++;
+                    }
                 }
             }
         }
