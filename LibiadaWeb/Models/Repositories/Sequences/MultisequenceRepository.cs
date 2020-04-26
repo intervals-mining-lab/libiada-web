@@ -40,6 +40,27 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 .FirstOrDefault();
 
         /// <summary>
+        /// Discards excess parts.
+        /// </summary>
+        /// <param name="matterName">
+        /// The matter name.
+        /// </param>
+        /// <returns>
+        /// Returns matter name without excess parts.
+        /// </returns>
+        public static string GetMatterNameSplit(string matterName)
+        {
+            if (matterName.Split('|').Length > 2)
+            {
+                return matterName.Split('|')[1].Trim();
+            }
+            else
+            {
+                return matterName.Split('|')[0].Trim();
+            }
+        }
+
+        /// <summary>
         /// Identifies chain number.
         /// </summary>
         /// <param name="matterName">
@@ -48,7 +69,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <returns>
         /// Returns chain number.
         /// </returns>
-        public static int GetSequenceNumber(string matterName)
+        public static int GetSequenceNumberByName(string matterName)
         {
             var refSplitArray = matterName.Split(' ').ToList();
             int result = 0;
@@ -124,24 +145,55 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             return result;
         }
 
-        /// <summary>
-        /// Discards excess parts.
-        /// </summary>
-        /// <param name="matterName">
-        /// The matter name.
-        /// </param>
-        /// <returns>
-        /// Returns matter name without excess parts.
-        /// </returns>
-        public static string GetMatterNameSplit(string matterName)
+        public static void SetSequenceNumbers(Matter[] matters)
         {
-            if (matterName.Split('|').Length > 2)
+            short counter = 1;
+            for (int i = 0; i < matters.Length; i++)
             {
-                return matterName.Split('|')[1].Trim();
+                if (matters[i].SequenceType == SequenceType.CompleteGenome)
+                {
+                    matters[i].MultisequenceNumber = counter++;
+                }
             }
-            else
+
+            for (int i = 0; i < matters.Length; i++)
             {
-                return matterName.Split('|')[0].Trim();
+                if (matters[i].SequenceType == SequenceType.MitochondrionGenome)
+                {
+                    matters[i].MultisequenceNumber = counter++;
+                }
+            }
+
+            for (int i = 0; i < matters.Length; i++)
+            {
+                if (matters[i].SequenceType == SequenceType.ChloroplastGenome)
+                {
+                    matters[i].MultisequenceNumber = counter++;
+                }
+            }
+
+            for (int i = 0; i < matters.Length; i++)
+            {
+                if (matters[i].SequenceType == SequenceType.Plasmid)
+                {
+                    matters[i].MultisequenceNumber = counter++;
+                }
+            }
+
+            for (int i = 0; i < matters.Length; i++)
+            {
+                if (matters[i].SequenceType == SequenceType.Plastid)
+                {
+                    matters[i].MultisequenceNumber = counter++;
+                }
+            }
+
+            for (int i = 0; i < matters.Length; i++)
+            {
+                if (matters[i].SequenceType == SequenceType.MitochondrialPlasmid)
+                {
+                    matters[i].MultisequenceNumber = counter++;
+                }
             }
         }
     }
