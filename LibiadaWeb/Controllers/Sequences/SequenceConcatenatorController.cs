@@ -172,7 +172,7 @@ namespace LibiadaWeb.Controllers.Sequences
 
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Multisequence");
         }
     }
 }

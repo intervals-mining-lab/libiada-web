@@ -1,0 +1,25 @@
+﻿@using LibiadaCore.Extensions
+@using LibiadaWeb.Helpers
+@model IEnumerable<Multisequence>
+
+@{
+    ViewBag.Title = "Multisequences List";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<table class="table table-bordered table-hover">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+        </tr>
+    }
+</table>
