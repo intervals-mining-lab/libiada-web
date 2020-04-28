@@ -4,10 +4,14 @@
     function taskManager($scope) {
         function onStateChange(change) {
             if (change.newState === $.signalR.connectionState.disconnected)
-                if (confirm('Connection lost. Refresh page?')) {
-                    location.reload(true);
-                }
-        };
+                alertify.confirm('Connection lost', 'Connection lost. Refresh page?',
+                    () => {
+                        location.reload(true);
+                    },
+                    () => {
+                    }
+                );
+            };
 
         function onHubStart(data) {
             $scope.$apply();
@@ -77,14 +81,25 @@
         }
 
         function deleteAllTasks() {
-            if (confirm('Are you sure you want to delete all tasks?')) {
-                $scope.tasksHub.server.deleteAllTasks();
-            }
+            alertify.confirm('Confirm the action', 'Are you sure you want to delete all tasks?',
+                () => {
+                    $scope.tasksHub.server.deleteAllTasks();
+                    alertify.success('All tasks have been deleted.');
+                },
+                () => {
+                }
+            );
         }
-        function deleteTask(id) {
-            if (confirm('Are you sure you want to delete this task?')) {
-                $scope.tasksHub.server.deleteTask(id);
-            }
+        function deleteTask(id)
+        {
+            alertify.confirm('Confirm the action', 'Are you sure you want to delete this task?',
+                () => {
+                    $scope.tasksHub.server.deleteTask(id);
+                    alertify.success('The task has been deleted.');
+                },
+                () => {
+                }
+            );
         }
 
         function tryRedirectToResult(task) {
