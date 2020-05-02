@@ -6,7 +6,7 @@
             if (change.newState === $.signalR.connectionState.disconnected)
                 alertify.confirm('Connection lost', 'Connection lost. Refresh page?',
                     () => {
-                        location.reload(true);
+                        window.location.reload(true);
                     },
                     () => {
                     }
@@ -80,6 +80,11 @@
             return "glyphicon " + icon;
         }
 
+        function calculateTaskCountWithState(state) {
+            var count = $scope.tasks.filter(task => task.TaskState === state).length;
+            return count;
+        }
+
         function deleteAllTasks() {
             alertify.confirm('Confirm the action', 'Are you sure you want to delete all tasks?',
                 () => {
@@ -90,6 +95,18 @@
                 }
             );
         }
+
+        function deleteTasksWithState(taskState) {
+            alertify.confirm('Confirm the action', 'Are you sure you want to delete all tasks with state "' + taskState + '"?',
+                () => {                    
+                    $scope.tasksHub.server.deleteTasksWithState(taskState);
+                    alertify.success('All tasks with state "' + taskState + '" have been deleted.');
+                },
+                () => {
+                }
+            );
+        }
+
         function deleteTask(id)
         {
             alertify.confirm('Confirm the action', 'Are you sure you want to delete this task?',
@@ -115,7 +132,9 @@
         $scope.taskEvent = taskEvent;
         $scope.calculateStatusClass = calculateStatusClass;
         $scope.calculateStatusGlyphicon = calculateStatusGlyphicon;
+        $scope.calculateTaskCountWithState = calculateTaskCountWithState;
         $scope.deleteAllTasks = deleteAllTasks;
+        $scope.deleteTasksWithState = deleteTasksWithState;
         $scope.deleteTask = deleteTask;
         $scope.tryRedirectToResult = tryRedirectToResult;
 

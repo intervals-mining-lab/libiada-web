@@ -140,6 +140,22 @@
         }
 
         /// <summary>
+        /// Deletes tasks with the specified state.
+        /// </summary>
+        /// <param name="taskState">
+        /// The task state.
+        /// </param>
+        public void DeleteTasksWithState(TaskState taskState)
+        {
+            List<Task> tasksToDelete = GetUserTasksWithState(taskState);
+
+            for (int i = tasksToDelete.Count - 1; i >= 0; i--)
+            {
+                DeleteTask(tasksToDelete[i].TaskData.Id);
+            }
+        }
+
+        /// <summary>
         /// Deletes the task by id.
         /// </summary>
         /// <param name="id">
@@ -234,6 +250,22 @@
                     result = result.Where(t => t.TaskData.UserId == userId).ToList();
                 }
 
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Gets tasks available to user with the specified state.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="T:List{Task}"/>.
+        /// </returns>
+        private List<Task> GetUserTasksWithState(TaskState taskState)
+        {
+            List<Task> result = GetUserTasks();
+            lock (tasks)
+            {
+                result = result.Where(t => t.TaskData.TaskState == taskState).ToList();
                 return result;
             }
         }
@@ -354,6 +386,10 @@
                     signalrHub.Send(TaskEvent.ChangeStatus, task.TaskData);
                 }
             }
+            catch (ThreadAbortException e)
+            {
+                Console.WriteLine("Thread has been aborted: {0}", e.Message);
+            }
             catch (Exception e)
             {
                 string errorMessage = e.Message;
@@ -391,8 +427,10 @@
                     signalrHub.Send(TaskEvent.ChangeStatus, task.TaskData);
                 }
             }
-
-            ManageTasks();
+            finally
+            {
+                ManageTasks();
+            }        
         }
 
         /// <summary>

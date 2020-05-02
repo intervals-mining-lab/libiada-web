@@ -136,6 +136,27 @@
         }
 
         /// <summary>
+        /// Delete tasks with the specified state.
+        /// </summary>
+        /// <param name="taskState">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        public void DeleteTasksWithState(TaskState taskState)
+        {
+            try
+            {
+                TaskManager.Instance.DeleteTasksWithState(taskState);
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Unable to delete tasks with state '{taskState}'", e);
+            }
+        }
+
+        /// <summary>
         /// Delete all tasks.
         /// </summary>
         /// <returns>
