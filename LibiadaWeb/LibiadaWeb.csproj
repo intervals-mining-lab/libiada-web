@@ -154,6 +154,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\Sequences\BatchGenesImportController.cs" />
     <Compile Include="Controllers\Sequences\BatchGeneticImportFromGenBankSearchFileController.cs" />
+    <Compile Include="Controllers\Sequences\BatchGeneticImportFromGenBankSearchQueryController.cs" />
     <Compile Include="Controllers\Sequences\BatchMusicImportController.cs" />
     <Compile Include="Controllers\Sequences\BatchPoemsImportController.cs" />
     <Compile Include="Controllers\Sequences\BatchSequenceImportController.cs" />
@@ -890,6 +891,8 @@
     <Content Include="Views\Calculators\IntervalsCharacteristicsDistribution\Result.cshtml" />
     <Content Include="Views\Sequences\BatchGeneticImportFromGenBankSearchFile\Index.cshtml" />
     <Content Include="Views\Sequences\BatchGeneticImportFromGenBankSearchFile\Result.cshtml" />
+    <Content Include="Views\Sequences\BatchGeneticImportFromGenBankSearchQuery\Result.cshtml" />
+    <Content Include="Views\Sequences\BatchGeneticImportFromGenBankSearchQuery\Index.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
