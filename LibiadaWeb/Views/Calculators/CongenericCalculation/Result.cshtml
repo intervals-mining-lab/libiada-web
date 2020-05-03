@@ -17,17 +17,13 @@
                     <th>
                         Element
                     </th>
-                    <th ng-repeat="characteristicName in characteristicNames">
-                        {{ characteristicName }}
-                    </th>
+                    <th ng-repeat="characteristicName in characteristicNames" ng-bind="characteristicName" />
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="characteristics[$index][0]">
+                <tr ng-repeat="ch in characteristics[$index][0]">
                     <td ng-bind="elementNames[$parent.$index][$index]" />
-                    <td ng-repeat="characteristic in characteristics[$parent.$index]">
-                        {{ characteristic[$index].Value }}
-                    </td>
+                    <td ng-repeat="characteristic in characteristics[$parent.$index]" ng-bind="characteristic[$index].Value" />
                 </tr>
             </tbody>
         </table>

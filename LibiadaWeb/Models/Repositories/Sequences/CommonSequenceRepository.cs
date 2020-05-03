@@ -59,7 +59,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         @remote_db
                                     );";
 
-            DbHelper.ExecuteCommand(Db, Query, parameters.ToArray());
+            Db.ExecuteCommand(Query, parameters.ToArray());
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public List<Element> GetElements(long sequenceId)
         {
-            long[] elementIds = DbHelper.GetAlphabetElementIds(Db, sequenceId);
+            long[] elementIds = Db.GetAlphabetElementIds(sequenceId);
             return ElementRepository.GetElements(elementIds);
         }
 
@@ -88,7 +88,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public BaseChain GetLibiadaBaseChain(long sequenceId)
         {
-            return new BaseChain(DbHelper.GetSequenceBuilding(Db, sequenceId), GetAlphabet(sequenceId), sequenceId);
+            return new BaseChain(Db.GetSequenceBuilding(sequenceId), GetAlphabet(sequenceId), sequenceId);
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public Chain GetLibiadaChain(long sequenceId)
         {
-            return new Chain(DbHelper.GetSequenceBuilding(Db, sequenceId), GetAlphabet(sequenceId), sequenceId);
+            return new Chain(Db.GetSequenceBuilding(sequenceId), GetAlphabet(sequenceId), sequenceId);
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public string GetString(long sequenceId)
         {
-            int[] order = DbHelper.GetSequenceBuilding(Db, sequenceId);
+            int[] order = Db.GetSequenceBuilding(sequenceId);
             Alphabet alphabet = GetAlphabet(sequenceId);
             var stringBuilder = new StringBuilder(order.Length);
             foreach (int element in order)
@@ -211,7 +211,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         private Alphabet GetAlphabet(long sequenceId)
         {
-            long[] elements = DbHelper.GetAlphabetElementIds(Db, sequenceId);
+            long[] elements = Db.GetAlphabetElementIds(sequenceId);
             return ElementRepository.ToLibiadaAlphabet(elements);
         }
     }

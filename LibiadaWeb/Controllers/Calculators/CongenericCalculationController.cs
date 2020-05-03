@@ -215,7 +215,7 @@
                 //        CongenericCharacteristic congenericCharacteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
                 //        ICongenericCalculator calculator = CongenericCalculatorsFactory.CreateCalculator(congenericCharacteristic);
                 //        Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
-                //        List<long> sequenceElements = DbHelper.GetElementIds(db, sequenceId);
+                //        List<long> sequenceElements = db.GetElementIds(sequenceId);
                 //        int calculated = db.CongenericCharacteristicValue.Count(c => c.SequenceId == sequenceId && c.CharacteristicLinkId == characteristicLinkId);
                 //        if (calculated < chain.Alphabet.Cardinality)
                 //        {

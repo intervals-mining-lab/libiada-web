@@ -122,9 +122,9 @@
                                   Notation notation,
                                   Language? language,
                                   Translator? translator,
-                                  int scrambling,
-                                  PauseTreatment pauseTreatment,
-                                  bool sequentialTransfer)
+                                  PauseTreatment? pauseTreatment,
+                                  bool? sequentialTransfer,
+                                  int scrambling)
         {
             Matter matter = db.Matter.Single(m => m.Id == matterId);
             long sequenceId;

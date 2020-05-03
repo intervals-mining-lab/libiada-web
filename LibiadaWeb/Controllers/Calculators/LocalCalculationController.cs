@@ -119,17 +119,17 @@
         public ActionResult Index(
             long[] matterIds,
             short[] characteristicLinkIds,
-            Language? language,
-            Translator? translator,
-            Notation notation,
             int length,
             int step,
             bool delta,
             bool fourier,
             bool growingWindow,
             bool autocorrelation,
-            PauseTreatment pauseTreatment,
-            bool sequentialTransfer)
+            Notation notation,
+            Language? language,
+            Translator? translator,
+            PauseTreatment? pauseTreatment,
+            bool? sequentialTransfer)
         {
             return CreateTask(() =>
             {

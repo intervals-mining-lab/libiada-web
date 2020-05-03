@@ -161,7 +161,7 @@
                     { "characteristicName", characteristicName },
                     { "features", features.ConvertAll(p => p.GetDisplayValue()) },
                     { "optimalRotation", optimalRotation },
-                    { "distances", distances.Select(el => new{value = el}) },
+                    { "distances", distances.Select(el => new {Value = el}) },
                     { "validationType", validationType },
                     { "cyclicShift", cyclicShift },
                     { "sort", sort }

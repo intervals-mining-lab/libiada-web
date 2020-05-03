@@ -7,7 +7,7 @@
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.AccordanceCalculators;
-
+    using LibiadaCore.Music;
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Catalogs;
@@ -98,6 +98,8 @@
             Notation notation,
             Language? language,
             Translator? translator,
+            PauseTreatment? pauseTreatment,
+            bool? sequentialTransfer,
             string calculationType)
         {
             return CreateTask(() =>
@@ -107,7 +109,7 @@
                     throw new ArgumentException("Number of selected matters must be 2.", nameof(matterIds));
                 }
 
-                var characteristics = new List<List<double>>();
+                var characteristics = new Dictionary<int, Dictionary<int, double>>();
                 string characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
                 var result = new Dictionary<string, object>
                                  {
@@ -121,21 +123,32 @@
                 long secondMatterId = matterIds[1];
                 long firstSequenceId;
                 long secondSequenceId;
-                if (notation.GetNature() == Nature.Literature)
+                switch (notation.GetNature())
                 {
-                    firstSequenceId = db.LiteratureSequence.Single(l => l.MatterId == firstMatterId
-                                                                     && l.Notation == notation
-                                                                     && l.Language == language
-                                                                     && l.Translator == translator).Id;
-                    secondSequenceId = db.LiteratureSequence.Single(l => l.MatterId == secondMatterId
-                                                                      && l.Notation == notation
-                                                                      && l.Language == language
-                                                                      && l.Translator == translator).Id;
-                }
-                else
-                {
-                    firstSequenceId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
-                    secondSequenceId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
+                    case Nature.Literature:
+                        firstSequenceId = db.LiteratureSequence.Single(l => l.MatterId == firstMatterId
+                                                                         && l.Notation == notation
+                                                                         && l.Language == language
+                                                                         && l.Translator == translator).Id;
+                        secondSequenceId = db.LiteratureSequence.Single(l => l.MatterId == secondMatterId
+                                                                          && l.Notation == notation
+                                                                          && l.Language == language
+                                                                          && l.Translator == translator).Id;
+                        break;
+                    case Nature.Music:
+                        firstSequenceId = db.MusicSequence.Single(m => m.MatterId == firstMatterId
+                                                                    && m.Notation == notation
+                                                                    && m.PauseTreatment == pauseTreatment
+                                                                    && m.SequentialTransfer == sequentialTransfer).Id;
+                        secondSequenceId = db.MusicSequence.Single(m => m.MatterId == secondMatterId
+                                                                     && m.Notation == notation
+                                                                     && m.PauseTreatment == pauseTreatment
+                                                                     && m.SequentialTransfer == sequentialTransfer).Id;
+                        break;
+                    default:
+                        firstSequenceId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
+                        secondSequenceId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
+                        break;
                 }
 
                 Chain firstChain = commonSequenceRepository.GetLibiadaChain(firstSequenceId);
@@ -155,8 +168,8 @@
                             throw new Exception("Alphabets of sequences are not equal.");
                         }
 
-                        characteristics.Add(new List<double>());
-                        characteristics.Add(new List<double>());
+                        characteristics.Add(0, new Dictionary<int, double>());
+                        characteristics.Add(1, new Dictionary<int, double>());
                         var alphabet = new List<string>();
 
                         for (int i = 0; i < firstChainAlphabet.Cardinality; i++)
@@ -168,10 +181,10 @@
                             CongenericChain secondCongenericChain = secondChain.CongenericChain(element);
 
                             double characteristicValue = calculator.Calculate(firstCongenericChain, secondCongenericChain, link);
-                            characteristics[0].Add(characteristicValue);
+                            characteristics[0].Add(i, characteristicValue);
 
                             characteristicValue = calculator.Calculate(secondCongenericChain, firstCongenericChain, link);
-                            characteristics[1].Add(characteristicValue);
+                            characteristics[1].Add(i, characteristicValue);
                         }
 
                         result.Add("alphabet", alphabet);
@@ -181,7 +194,7 @@
                         var firstAlphabet = new List<string>();
                         for (int i = 0; i < firstChain.Alphabet.Cardinality; i++)
                         {
-                            characteristics.Add(new List<double>());
+                            characteristics.Add(i, new Dictionary<int, double>());
                             IBaseObject firstElement = firstChainAlphabet[i];
                             firstAlphabet.Add(firstElement.ToString());
                             for (int j = 0; j < secondChainAlphabet.Cardinality; j++)
@@ -192,7 +205,7 @@
                                 var secondCongenericChain = secondChain.CongenericChain(secondElement);
 
                                 var characteristicValue = calculator.Calculate(firstCongenericChain, secondCongenericChain, link);
-                                characteristics[i].Add(characteristicValue);
+                                characteristics[i].Add(j, characteristicValue);
                             }
                         }
 

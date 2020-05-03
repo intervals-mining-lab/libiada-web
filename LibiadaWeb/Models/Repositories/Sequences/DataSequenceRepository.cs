@@ -106,7 +106,7 @@
                                         @remote_db
                                     );";
 
-            DbHelper.ExecuteCommand(Db, Query, parameters.ToArray());
+            Db.ExecuteCommand(Query, parameters.ToArray());
         }
     }
 }

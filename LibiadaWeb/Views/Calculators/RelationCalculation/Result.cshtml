@@ -7,66 +7,51 @@
 @if (ViewBag.Error == null)
 {
     @Html.Partial("_AngularControllerInitializer", "CalculationResultController")
-    <div ng-controller="CalculationResultCtrl">
-        <h2>{{matterName}}</h2>
-        <h2>{{characteristicName}}</h2>
-        <h2>{{notationName}}</h2>
-
-        <div ng-if="!isFilter">
-            <table class="table table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th>
-                            First element\Second element
-                        </th>
-                        <th ng-repeat="element in elements">
-                            {{element.Name}}
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="element in elements">
-                        <td>
-                            {{element.Name}}
-                        </td>
-                        <td ng-repeat="element in elements">
-                            {{characteristics[$parent.$index * elements.length + $index}}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div ng-if="isFilter">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            First element
-                        </th>
-                        <th>
-                            Second element
-                        </th>
-                        <th>
-                            {{characteristicName}}
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="result in filteredResult">
-                        <td>
-                            {{firstElements[$index].Value}}
-                        </td>
-                        <td>
-                            {{secondElements[$index].Value}}
-                        </td>
-                        <td>
-                            {{filteredResult[$index].Value}}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+<div ng-controller="CalculationResultCtrl">
+    <h2>{{matterName}}</h2>
+    <h2>{{characteristicName}}</h2>
+    <h2>{{notationName}}</h2>
+    <div ng-if="!isFilter">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        First element\Second element
+                    </th>
+                    <th ng-repeat="element in elements" ng-bind="element.Name ? element.Name : element.Value" />
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="element in elements">
+                    <td ng-bind="element.Name ? element.Name : element.Value" />
+                    <td ng-repeat="element in elements" ng-bind="characteristics[elements[$parent.$index].Id][elements[$index].Id]" />
+                </tr>   
+            </tbody>
+        </table>
     </div>
+    <div ng-if="isFilter">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        First element
+                    </th>
+                    <th>
+                        Second element
+                    </th>
+                    <th ng-bind="characteristicName" />
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="result in filteredResult">
+                    <td ng-bind="firstElements[$index].Value" />
+                    <td ng-bind="secondElements[$index].Value" />
+                    <td ng-bind="filteredResult[$index].Value" />
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 }
 
 @section Scripts {

@@ -46,6 +46,9 @@
                         "~/Scripts/jQAllRangeSliders-withRuler-min.js",
                         "~/Scripts/jquery.mousewheel.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/alertify").Include(
+                        "~/Scripts/alertify.min.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/controllers/AccordanceController").Include(
                         "~/Scripts/Angular/Controllers/accordance.js",
                         "~/Scripts/Angular/Components/mattersTable.js"));
@@ -192,7 +195,10 @@
             bundles.Add(new StyleBundle("~/Content/css").Include(
                         "~/Content/bootstrap.css",
                         "~/Content/site.css",
-                        "~/Content/scrollUpDown.css"));
+                        "~/Content/scrollUpDown.css",
+                        "~/Content/alertify.min.css",
+                        "~/Content/themes/default.min.css"
+                        ));
 
             bundles.Add(new StyleBundle("~/Content/genesMap").Include(
                         "~/Content/GenesMap.css"));

@@ -8,52 +8,55 @@
 {
     @Html.Partial("_AngularControllerInitializer", "CalculationResultController")
 
-    <div ng-controller="CalculationResultCtlr">
-        <div ng-switch="calculationType">
-            <div ng-switch-when="Equality">
-                <table class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th>
-                                Element name
-                            </th>
-                            <th ng-bind="characteristicName" />
-                            <th ng-bind="characteristicName">
-                                <br />
-                                Reverse order
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="characteristic in characteristics[0]">
-                            <td ng-bind="alphabet[$index]" />
-                            <td ng-bind="characteristics[0][$index]" />
-                            <td ng-bind="characteristics[1][$index]" />
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div ng-switch-when="All">
-                <div ng-bind="characteristicName" />
-                <table class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th>
-                                Element name
-                            </th>
-                            <th ng-repeat="characteristic in characteristics[0]" />
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="characteristic in characteristics">
-                            <td ng-bind="firstAlphabet[$index]" />
-                            <td ng-repeat="characteristic in characteristics[$index]" ng-bind="characteristics[$parent.index][$index]" />
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+<div ng-controller="CalculationResultCtrl">
+    {{ matterNames[0] }}
+    <br />
+    {{ matterNames[1] }}
+    <div ng-switch="calculationType">
+        <div ng-switch-when="Equality">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            Element name
+                        </th>
+                        <th ng-bind="characteristicName" />
+                        <th ng-bind="characteristicName">
+                            <br />
+                            Reverse order
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="characteristic in characteristics[0]">
+                        <td ng-bind="alphabet[$index]" />
+                        <td ng-bind="characteristics[0][$index]" />
+                        <td ng-bind="characteristics[1][$index]" />
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div ng-switch-when="All">
+            {{ characteristicName }}
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            Element name
+                        </th>
+                        <th ng-repeat="characteristic in characteristics[0]" ng-bind="secondAlphabet[$index]" />
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="characteristic in characteristics">
+                        <td ng-bind="firstAlphabet[$index]" />
+                        <td ng-repeat="characteristic in characteristics[$index]" ng-bind="characteristics[$parent.$index][$index]" />
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
+</div>
 }
 
 @section Scripts {
