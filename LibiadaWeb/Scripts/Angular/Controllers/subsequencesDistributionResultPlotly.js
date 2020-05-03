@@ -90,7 +90,7 @@
                 var sequenceData = $scope.result[i];
                 $scope.matters.push({ id: sequenceData.MatterId, name: sequenceData.MatterName, visible: true, index: i, color: $scope.colorScale(i) });
                 // hack for legend dot color
-                document.styleSheets[0].insertRule(".legend" + sequenceData.MatterId + ":after { background:" + $scope.colorScale(i)+"}");
+                document.styleSheets[0].insertRule(".legend" + sequenceData.MatterId + ":after { background:" + $scope.colorScale(i) + "}");
                 $scope.points.push([]);
                 $scope.visiblePoints.push([]);
                 for (var j = 0; j < sequenceData.SubsequencesData.length; j++) {
@@ -284,34 +284,8 @@
 
         // main drawing method
         function drawGenesMap() {
-
-            $scope.layout = {
-                showlegend: false,
-                hovermode: "closest",
-                xaxis: {
-                    title: {
-                        text: $scope.sequenceCharacteristicName,
-                        font: {
-                            family: 'Courier New, monospace',
-                            size: 12
-                        }
-                    }
-                },
-                yaxis: {
-                    title: {
-                        text: $scope.subsequenceCharacteristic.Text,
-                        font: {
-                            family: 'Courier New, monospace',
-                            size: 12
-                        }
-                    }
-                }
-            };
-
             $scope.plot = document.getElementById("chart");
-
-        //    while ($scope.plot.firstChild) $scope.plot.removeChild($scope.plot.firstChild);
-
+            //    while ($scope.plot.firstChild) $scope.plot.removeChild($scope.plot.firstChild);
             $scope.redrawGenesMap();
         }
 
@@ -358,9 +332,28 @@
         }
 
         function redrawGenesMap() {
-
-            $scope.fillVisiblePoints();
-            $scope.selectedPointIndex = -1;
+            $scope.layout = {
+                showlegend: false,
+                hovermode: "closest",
+                xaxis: {
+                    title: {
+                        text: $scope.sequenceCharacteristicName,
+                        font: {
+                            family: 'Courier New, monospace',
+                            size: 12
+                        }
+                    }
+                },
+                yaxis: {
+                    title: {
+                        text: $scope.subsequenceCharacteristic.Text,
+                        font: {
+                            family: 'Courier New, monospace',
+                            size: 12
+                        }
+                    }
+                }
+            };
 
             var data = $scope.visiblePoints.map(function (points, index) {
                 return {
@@ -372,7 +365,6 @@
                     mode: "markers",
                     marker: { opacity: 0.5, symbol: "circle-open", color: $scope.colorScale(index) },
                     name: $scope.matters[index].name,
-
                 };
             });
 
@@ -387,10 +379,10 @@
         }
 
         function legendClick(legendItem) {
-                for (var j = 0; j < $scope.points[legendItem.index].length; j++) {
-                    var point = $scope.points[legendItem.index][j];
-                    point.legendVisible = !point.legendVisible;
-                }
+            for (var j = 0; j < $scope.points[legendItem.index].length; j++) {
+                var point = $scope.points[legendItem.index][j];
+                point.legendVisible = !point.legendVisible;
+            }
 
             $scope.redrawGenesMap();
         }
