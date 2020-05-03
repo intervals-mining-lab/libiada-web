@@ -108,6 +108,7 @@
                         numericX: i + 1,
                         x: sequenceData.Characteristic,
                         subsequenceCharacteristics: subsequenceData.CharacteristicsValues,
+                        //subsequenceText: subsequenceCharacteristic.Text, //added
                         featureVisible: true,
                         legendVisible: true,
                         filtersVisible: []
@@ -243,7 +244,8 @@
                 feature: $scope.features[point.featureId].Text,
                 attributes: $scope.getAttributesText(point.attributes),
                 partial: point.partial,
-                color: color
+                color: color,
+                characteristics: point.subsequenceCharacteristics,
             };
 
             if (point.subsequenceRemoteId) {
