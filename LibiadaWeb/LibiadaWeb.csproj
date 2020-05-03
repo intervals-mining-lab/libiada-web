@@ -263,6 +263,10 @@
     <Compile Include="Models\Repositories\Sequences\IMeasureRepsitory.cs" />
     <Compile Include="Models\Repositories\Sequences\MeasureRepository.cs" />
     <Compile Include="Models\SelectListItemComparer.cs" />
+    <Compile Include="Models\SequencesData\ESearchResult.cs" />
+    <Compile Include="Models\SequencesData\NcbiWebEnvironment.cs" />
+    <Compile Include="Models\SequencesData\NcbiXmlDataAnnotations.cs" />
+    <Compile Include="Models\SequencesData\NuccoreObject.cs" />
     <Compile Include="Models\SubsequenceImporter.cs" />
     <Compile Include="Multisequence.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>

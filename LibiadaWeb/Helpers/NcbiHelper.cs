@@ -15,6 +15,10 @@ namespace LibiadaWeb.Helpers
     using Bio.IO.FastA;
     using Bio.IO.GenBank;
 
+    using System.Xml.Serialization;
+    using Newtonsoft.Json;
+    using LibiadaWeb.Models.SequencesData;
+
     /// <summary>
     /// The ncbi helper.
     /// </summary>
@@ -187,7 +191,7 @@ namespace LibiadaWeb.Helpers
 
         public static string[] GetIdFromFile(
             string data,
-            bool includePartial, 
+            bool includePartial,
             int minLength = 1,
             int maxLength = int.MaxValue)
         {
@@ -199,8 +203,8 @@ namespace LibiadaWeb.Helpers
             foreach (var block in fullText)
             {
                 if (!string.IsNullOrEmpty(block))
-                { 
-                    string[] stringsInBlock =  block.Split('\n');
+                {
+                    string[] stringsInBlock = block.Split('\n');
                     if (includePartial || !stringsInBlock[gensName].Contains("partial"))
                     {
                         int length = GetLengthFromString(stringsInBlock[1]);
@@ -214,14 +218,74 @@ namespace LibiadaWeb.Helpers
             }
             return idList.ToArray();
         }
-        
+
         private static int GetLengthFromString(string stringLength)
         {
             stringLength = stringLength.Split(' ')[0];
             IFormatProvider provider = CultureInfo.CreateSpecificCulture("en-US");
-            int length = int.Parse(stringLength, NumberStyles.Integer | 
-                NumberStyles.AllowThousands,provider);
+            int length = int.Parse(stringLength, NumberStyles.Integer |
+                NumberStyles.AllowThousands, provider);
             return length;
+        }
+        public static List<NuccoreObject> DeserializeQueryObject(string DataBaseName, string searchTerm)
+        {
+            int retstart = 0;
+            var urlEsearch = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=" +
+                DataBaseName + "&term=" + searchTerm + "&usehistory=y&retmode=json";
+            var esearchResponse = GetAnswer(urlEsearch);
+            ESearchResult WebEnv = JsonConvert.DeserializeObject<ESearchResult>(esearchResponse);
+            List<NuccoreObject> nuccoreObjects = new List<NuccoreObject>();
+
+            int ElementCount;
+            do
+            {
+                var urlEsummary = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db="
+                    + DataBaseName + "&term=" + searchTerm + "&usehistory=y&WebEnv=" + WebEnv.Response.WebEnvironment
+                    + "&query_key=1&retmode=text&rettype=docsum&retmax=500&restart=" + retstart;//Paste ur url here  
+                var esummaryResponse = GetAnswer(urlEsummary);
+                //      Console.WriteLine(answer);
+                XmlSerializer serializer = new XmlSerializer(typeof(eSummaryResult));
+                ElementCount = WebEnv.Response.Count;
+                eSummaryResult DeserializeResult;
+                using (TextReader reader = new StringReader(esummaryResponse))
+                {
+                    DeserializeResult = (eSummaryResult)serializer.Deserialize(reader);
+                }
+
+                foreach (var element in DeserializeResult.DocSum)
+                {
+                    NuccoreObject nuccoreObject = new NuccoreObject();
+                    nuccoreObject.Id = element.Id;
+                    nuccoreObject.Name = element.Item[1].Value;
+                    nuccoreObject.Accession = element.Item[0].Value;
+                    nuccoreObject.Length = element.Item[8].Value;
+                    nuccoreObjects.Add(nuccoreObject);
+                }
+                retstart++;
+            } while (nuccoreObjects.Count < ElementCount);
+            return nuccoreObjects;
+        }
+            
+        
+
+        public static string FormatTermString(string searchTerm, int? minLength = null, int? maxLength = null)
+        {
+            if (minLength != null && maxLength != null)
+            {
+                searchTerm +=  $"[All Fields] AND (\"{minLength}\"[SLEN] : \"{maxLength}\"[SLEN])";
+            }
+              return searchTerm; 
+        }
+        public static string GetAnswer(string url)
+        {
+            WebRequest request = WebRequest.Create(url);
+
+            WebResponse response = request.GetResponse();
+            StreamReader reader = new StreamReader(response.GetResponseStream());
+
+            string responseText = reader.ReadToEnd();
+
+            return responseText;
         }
     }
 }
