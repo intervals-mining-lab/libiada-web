@@ -11,6 +11,7 @@ using LibiadaWeb.Helpers;
 using LibiadaWeb.Models;
 using LibiadaWeb.Models.CalculatorsData;
 using LibiadaWeb.Models.Repositories.Sequences;
+using LibiadaWeb.Models.SequencesData;
 using LibiadaWeb.Tasks;
 using Newtonsoft.Json;
 
@@ -30,6 +31,7 @@ namespace LibiadaWeb.Controllers.Sequences
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Index(
+            string searchQuery,
             bool importGenes,
             bool importPartial,
             bool filterMinLength,
@@ -39,31 +41,34 @@ namespace LibiadaWeb.Controllers.Sequences
         {
             return CreateTask(() =>
             {
-                var genBankSearchResultsStream = FileHelper.GetFileStream(Request.Files[0]);
-                string searchResults = FileHelper.ReadSequenceFromStream(genBankSearchResultsStream);
+                string searchResults;
                 string[] accessions;
+                List<NuccoreObject> nuccoreObjects;
+
                 if (filterMinLength)
                 {
                     if (filterMaxLength)
                     {
-                        accessions = NcbiHelper.GetIdFromFile(searchResults, importPartial, minLength, maxLength);
+                        searchResults = NcbiHelper.FormatTermString(searchQuery, minLength, maxLength);
                     }
                     else
                     {
-                        accessions = NcbiHelper.GetIdFromFile(searchResults, importPartial, minLength);
+                        searchResults = NcbiHelper.FormatTermString(searchQuery, minLength);
                     }
                 }
                 else
                 {
                     if (filterMaxLength)
                     {
-                        accessions = NcbiHelper.GetIdFromFile(searchResults, importPartial, 1, maxLength);
+                        searchResults = NcbiHelper.FormatTermString(searchQuery, minLength: 1, maxLength);
                     }
                     else
                     {
-                        accessions = NcbiHelper.GetIdFromFile(searchResults, importPartial);
+                        searchResults = NcbiHelper.FormatTermString(searchQuery);
                     }
                 }
+                nuccoreObjects = NcbiHelper.DeserializeQueryObject("nuccore", searchResults, importPartial);
+                accessions = NcbiHelper.GetAccesionsFromEsummaryResult(nuccoreObjects);
                 accessions = accessions.Distinct().Select(a => a.Split('.')[0]).ToArray();
                 var importResults = new List<MatterImportResult>(accessions.Length);
 

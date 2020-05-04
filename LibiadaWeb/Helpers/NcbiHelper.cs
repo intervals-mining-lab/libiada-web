@@ -18,6 +18,8 @@ namespace LibiadaWeb.Helpers
     using System.Xml.Serialization;
     using Newtonsoft.Json;
     using LibiadaWeb.Models.SequencesData;
+    using System.Text;
+    using System.Linq;
 
     /// <summary>
     /// The ncbi helper.
@@ -227,7 +229,8 @@ namespace LibiadaWeb.Helpers
                 NumberStyles.AllowThousands, provider);
             return length;
         }
-        public static List<NuccoreObject> DeserializeQueryObject(string DataBaseName, string searchTerm)
+
+        public static List<NuccoreObject> DeserializeQueryObject(string DataBaseName, string searchTerm, bool includePartial)
         {
             int retstart = 0;
             var urlEsearch = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=" +
@@ -254,19 +257,25 @@ namespace LibiadaWeb.Helpers
 
                 foreach (var element in DeserializeResult.DocSum)
                 {
-                    NuccoreObject nuccoreObject = new NuccoreObject();
-                    nuccoreObject.Id = element.Id;
-                    nuccoreObject.Name = element.Item[1].Value;
-                    nuccoreObject.Accession = element.Item[0].Value;
-                    nuccoreObject.Length = element.Item[8].Value;
-                    nuccoreObjects.Add(nuccoreObject);
+                    if (includePartial || !element.Item[1].Value.Contains("partial")) 
+                    {
+                        NuccoreObject nuccoreObject = new NuccoreObject();
+                        nuccoreObject.Id = element.Id;
+                        nuccoreObject.Name = element.Item[1].Value;
+                        nuccoreObject.Accession = element.Item[0].Value;
+                        nuccoreObject.Length = element.Item[8].Value;
+                        nuccoreObjects.Add(nuccoreObject);
+                    }
                 }
                 retstart++;
             } while (nuccoreObjects.Count < ElementCount);
             return nuccoreObjects;
         }
-            
-        
+
+        public static string[] GetAccesionsFromEsummaryResult(List<NuccoreObject> nuccoreObjects) 
+        {
+            return nuccoreObjects.Select(no => no.Accession).ToArray();
+        }
 
         public static string FormatTermString(string searchTerm, int? minLength = null, int? maxLength = null)
         {
