@@ -5,6 +5,7 @@ namespace LibiadaWeb.Helpers
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Net;
     using System.Threading;
@@ -13,6 +14,12 @@ namespace LibiadaWeb.Helpers
     using Bio.IO;
     using Bio.IO.FastA;
     using Bio.IO.GenBank;
+
+    using System.Xml.Serialization;
+    using Newtonsoft.Json;
+    using LibiadaWeb.Models.SequencesData;
+    using System.Text;
+    using System.Linq;
 
     /// <summary>
     /// The ncbi helper.
@@ -184,33 +191,110 @@ namespace LibiadaWeb.Helpers
             lastRequestDateTime = DateTimeOffset.Now;
         }
 
-        public static List<string> GetIdFromFile(string data, int maxLength, int minLength, bool includePartial)
+        public static string[] GetIdFromFile(
+            string data,
+            bool includePartial,
+            int minLength = 1,
+            int maxLength = int.MaxValue)
         {
             string[] fullText = Regex.Split(data, @"^\r\n", RegexOptions.Multiline);
             List<string> idList = new List<string>();
+            int gensName = 0;
+            int numberStrWithId = 2;
+            int firstId = 0;
             foreach (var block in fullText)
             {
                 if (!string.IsNullOrEmpty(block))
-                { 
-                    string[] stringsInBlock =  block.Split('\n');
-                    if (includePartial || !stringsInBlock[0].Contains("partial"))
+                {
+                    string[] stringsInBlock = block.Split('\n');
+                    if (includePartial || !stringsInBlock[gensName].Contains("partial"))
                     {
-                        float length = GetLengthFromString(stringsInBlock[1]);
+                        int length = GetLengthFromString(stringsInBlock[1]);
                         if (length >= minLength && length <= maxLength)
                         {
-                            string[] idStrings = stringsInBlock[2].Split(' ');
-                            idList.Add(idStrings[0]);
+                            string[] idStrings = stringsInBlock[numberStrWithId].Split(' ');
+                            idList.Add(idStrings[firstId]);
                         }
                     }
                 }
             }
-            return idList;
+            return idList.ToArray();
         }
-        private static float GetLengthFromString(string stringWithLength)
+
+        private static int GetLengthFromString(string stringLength)
         {
-            string[] splitedStringWithLength = stringWithLength.Split(' ');
-            float length =float.Parse(splitedStringWithLength[0]); ;
+            stringLength = stringLength.Split(' ')[0];
+            IFormatProvider provider = CultureInfo.CreateSpecificCulture("en-US");
+            int length = int.Parse(stringLength, NumberStyles.Integer |
+                NumberStyles.AllowThousands, provider);
             return length;
+        }
+
+        public static List<NuccoreObject> DeserializeQueryObject(string DataBaseName, string searchTerm, bool includePartial)
+        {
+            int retstart = 0;
+            var urlEsearch = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=" +
+                DataBaseName + "&term=" + searchTerm + "&usehistory=y&retmode=json";
+            var esearchResponse = GetAnswer(urlEsearch);
+            ESearchResult WebEnv = JsonConvert.DeserializeObject<ESearchResult>(esearchResponse);
+            List<NuccoreObject> nuccoreObjects = new List<NuccoreObject>();
+
+            int ElementCount;
+            do
+            {
+                var urlEsummary = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db="
+                    + DataBaseName + "&term=" + searchTerm + "&usehistory=y&WebEnv=" + WebEnv.Response.WebEnvironment
+                    + "&query_key=1&retmode=text&rettype=docsum&retmax=500&restart=" + retstart;//Paste ur url here  
+                var esummaryResponse = GetAnswer(urlEsummary);
+                //      Console.WriteLine(answer);
+                XmlSerializer serializer = new XmlSerializer(typeof(eSummaryResult));
+                ElementCount = WebEnv.Response.Count;
+                eSummaryResult DeserializeResult;
+                using (TextReader reader = new StringReader(esummaryResponse))
+                {
+                    DeserializeResult = (eSummaryResult)serializer.Deserialize(reader);
+                }
+
+                foreach (var element in DeserializeResult.DocSum)
+                {
+                    if (includePartial || !element.Item[1].Value.Contains("partial")) 
+                    {
+                        NuccoreObject nuccoreObject = new NuccoreObject();
+                        nuccoreObject.Id = element.Id;
+                        nuccoreObject.Name = element.Item[1].Value;
+                        nuccoreObject.Accession = element.Item[0].Value;
+                        nuccoreObject.Length = element.Item[8].Value;
+                        nuccoreObjects.Add(nuccoreObject);
+                    }
+                }
+                retstart++;
+            } while (nuccoreObjects.Count < ElementCount);
+            return nuccoreObjects;
+        }
+
+        public static string[] GetAccesionsFromEsummaryResult(List<NuccoreObject> nuccoreObjects) 
+        {
+            return nuccoreObjects.Select(no => no.Accession).ToArray();
+        }
+
+        public static string FormatTermString(string searchTerm, int? minLength = null, int? maxLength = null)
+        {
+            if (minLength != null && maxLength != null)
+            {
+                searchTerm +=  $"[All Fields] AND (\"{minLength}\"[SLEN] : \"{maxLength}\"[SLEN])";
+            }
+              return searchTerm; 
+        }
+        public static string GetAnswer(string url)
+        {
+            WebRequest request = WebRequest.Create(url);
+
+            WebResponse response = request.GetResponse();
+            StreamReader reader = new StreamReader(response.GetResponseStream());
+
+            string responseText = reader.ReadToEnd();
+
+            return responseText;
         }
     }
 }
