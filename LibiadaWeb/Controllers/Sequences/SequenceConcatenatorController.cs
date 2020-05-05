@@ -21,6 +21,16 @@ namespace LibiadaWeb.Controllers.Sequences
 
         }
 
+        private SequenceType[] sequenceTypeFilter = new SequenceType[]
+        {
+            SequenceType.ChloroplastGenome,
+            SequenceType.CompleteGenome,
+            SequenceType.MitochondrialPlasmid,
+            SequenceType.MitochondrionGenome,
+            SequenceType.Plasmid,
+            SequenceType.Plastid
+        };
+
         /// <summary>
         /// Divides matters into reference and not reference and groups them.
         /// </summary>
@@ -32,15 +42,7 @@ namespace LibiadaWeb.Controllers.Sequences
         /// </returns>
         private Dictionary<string, long[]> GeneticMattersGenerator(List<Matter> matters)
         {
-            var sequenceTypeFilter = new SequenceType[]
-            {
-                SequenceType.ChloroplastGenome,
-                SequenceType.CompleteGenome,
-                SequenceType.MitochondrialPlasmid,
-                SequenceType.MitochondrionGenome,
-                SequenceType.Plasmid,
-                SequenceType.Plastid
-            };
+            
             matters = matters.Where(m => m.Nature == Nature.Genetic && sequenceTypeFilter.Contains(m.SequenceType)).ToList();
             var matterNameSpliters = new[] { "|", "chromosome", "plasmid", "segment" };
             var mattersNames = matters.Select(m => (m.Id, m.Name.Split(matterNameSpliters, StringSplitOptions.RemoveEmptyEntries)[0].Trim())).ToArray();
@@ -104,7 +106,7 @@ namespace LibiadaWeb.Controllers.Sequences
             {
                 using (var db = new LibiadaWebEntities())
                 {
-                    List<Matter> matters = db.Matter.ToList();
+                    List<Matter> matters = db.Matter.Where(m => sequenceTypeFilter.Contains(m.SequenceType)).ToList();
                     var multisequences = GeneticMattersGenerator(matters);
                     var result = multisequences.Select(m => new { name = m.Key, matterIds = m.Value }).ToArray();
                     var matterIds = result.SelectMany(r => r.matterIds);
@@ -124,6 +126,16 @@ namespace LibiadaWeb.Controllers.Sequences
             }); 
         }
 
+        /// <summary>
+        /// Writes multisequences data into database.
+        /// </summary>
+        /// <param name="multisequenceMatters">
+        /// Dictionary of multisequences with matters.
+        /// </param>
+        /// <param name="multisequencesNames">
+        /// Multisequence names list.
+        /// </param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Result(Dictionary<string, long[]> multisequenceMatters, string[] multisequencesNames)
         {

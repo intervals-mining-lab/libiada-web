@@ -38,7 +38,7 @@ namespace LibiadaWeb.Tests
             string expected = "116";
             foreach (var record in segmentTestData)
             {
-                result += MultisequenceRepository.GetSequenceNumber(MultisequenceRepository.GetMatterNameSplit(record));
+                result += MultisequenceRepository.GetSequenceNumberByName(MultisequenceRepository.GetMatterNameSplit(record));
             }
             Assert.AreEqual(expected, result);
         }
@@ -50,7 +50,7 @@ namespace LibiadaWeb.Tests
             string expected = "120";
             foreach (var record in chromosomeTestData)
             {
-                result += MultisequenceRepository.GetSequenceNumber(MultisequenceRepository.GetMatterNameSplit(record));
+                result += MultisequenceRepository.GetSequenceNumberByName(MultisequenceRepository.GetMatterNameSplit(record));
             }
             Assert.AreEqual(expected, result);
         }
@@ -62,7 +62,7 @@ namespace LibiadaWeb.Tests
             string expected = "111";
             foreach (var record in plasmidTestData)
             {
-                result += MultisequenceRepository.GetSequenceNumber(MultisequenceRepository.GetMatterNameSplit(record));
+                result += MultisequenceRepository.GetSequenceNumberByName(MultisequenceRepository.GetMatterNameSplit(record));
             }
             Assert.AreEqual(expected, result);
         }
