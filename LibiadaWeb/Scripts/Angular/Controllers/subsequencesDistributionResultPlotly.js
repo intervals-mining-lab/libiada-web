@@ -386,7 +386,6 @@
                 point.legendVisible = !point.legendVisible;
             }
             $scope.redrawGenesMap();
-
         }
 
         function legendShowAll(matters) {
@@ -398,9 +397,14 @@
                     }
                 }
             }
-            $scope.redrawGenesMap();
 
+            for (var k = 0; k < $scope.matters.length; k++) {
+                $scope.matters[k].visible = true;
+            }
+
+            $scope.redrawGenesMap();
         }
+
         function legendHideAll(matters) {
             for (var i = 0; i < matters.length; i++) {
                 for (var j = 0; j < $scope.points[matters[i].index].length; j++) {
@@ -410,6 +414,11 @@
                     }
                 }
             }
+
+            for (var k = 0; k < $scope.matters.length; k++) {
+                $scope.matters[k].visible = false;
+            }
+
             $scope.redrawGenesMap();
         }
 

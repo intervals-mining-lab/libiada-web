@@ -89,22 +89,12 @@
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane" id="legend">
                                 <!-- .roundedOne -->
-                                <div class="col-sm-2">
-                                    <button type="button" id="btn-on" class="btn btn-success" ng-click="legendShowAll(matters)" ng-class="'legend'" style="margin-top: 5px;"> Show all </button>
+                                <div class="col-md-3">
+                                    <button type="button" id="btn-on" class="btn btn-default" ng-click="legendShowAll(matters)" ng-class="'legend'" style="margin-top: 5px;"> Show all </button>
                                 </div>
-                                <div class="col-sm-2">
-                                    <button type="button" id="btn-off" class="btn btn-success" ng-click="legendHideAll(matters)" ng-class="'legend'" style="margin-top: 5px; margin-bottom: 20px;"> Hide all </button>
+                                <div class="col-md-3">
+                                    <button type="button" id="btn-off" class="btn btn-default" ng-click="legendHideAll(matters)" ng-class="'legend'" style="margin-top: 5px; margin-bottom: 20px;"> Hide all </button>
                                 </div>
-                                
-                                    <script>
-                                        $('#btn-on').click(function () {
-                                            $('#legend input:checkbox').prop('checked', true);
-                                        });
-                                        $('#btn-off').click(function () {
-                                            $('#legend input:checkbox').prop('checked', false);
-                                        });
-                                    </script>
-                                
                                 <div ng-repeat="legendItem in matters">
                                     <div class="roundedOne">
                                         <input type="checkbox" ng-click="legendClick(legendItem)" ng-model="legendItem.visible" id="{{'matter' + legendItem.id}}" name="check" checked />
@@ -214,13 +204,13 @@
                                         </div>
                                         <div class="panel-collapse collapse" id="additionalActions{{$index + 1}}">
                                             <div class="panel-body">
-                                                <div class="col-sm-4">
+                                                <div class="col-md-4">
                                                     Сharacteristic:
                                                     <div ng-repeat="characteristicComparer in subsequencesCharacteristicsList">
                                                         {{characteristicComparer.Text}}
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-4">
+                                                <div class="col-md-4">
                                                     Value:
                                                     <div ng-repeat="characteristic in tooltipElement.characteristics">
                                                         {{characteristic}}
