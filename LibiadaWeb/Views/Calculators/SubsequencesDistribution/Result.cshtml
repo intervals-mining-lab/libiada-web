@@ -89,14 +89,29 @@
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane" id="legend">
                                 <!-- .roundedOne -->
+                                <div class="col-sm-2">
+                                    <button type="button" id="btn-on" class="btn btn-success" ng-click="legendShowAll(matters)" ng-class="'legend'" style="margin-top: 5px;"> Show all </button>
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="button" id="btn-off" class="btn btn-success" ng-click="legendHideAll(matters)" ng-class="'legend'" style="margin-top: 5px; margin-bottom: 20px;"> Hide all </button>
+                                </div>
+                                
+                                    <script>
+                                        $('#btn-on').click(function () {
+                                            $('#legend input:checkbox').prop('checked', true);
+                                        });
+                                        $('#btn-off').click(function () {
+                                            $('#legend input:checkbox').prop('checked', false);
+                                        });
+                                    </script>
+                                
                                 <div ng-repeat="legendItem in matters">
                                     <div class="roundedOne">
-                                        <input type="checkbox" ng-change="legendClick(legendItem)" ng-model="legendItem.visible" id="{{'matter' + legendItem.id}}" name="check" checked />
+                                        <input type="checkbox" ng-click="legendClick(legendItem)" ng-model="legendItem.visible" id="{{'matter' + legendItem.id}}" name="check" checked />
                                         <label for="{{'matter' + legendItem.id}}" ng-class="'legend' + legendItem.id" style="margin-right: 5px;"></label>
                                         <label for="{{'matter' + legendItem.id}}" class="monospace">{{legendItem.name}}</label>
                                     </div>
                                 </div>
-
                                 <!-- end .roundedOne -->
                             </div>
                             <div role="tabpanel" class="tab-pane" id="characteristic">

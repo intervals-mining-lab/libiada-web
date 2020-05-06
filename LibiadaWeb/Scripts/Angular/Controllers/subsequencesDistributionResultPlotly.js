@@ -332,6 +332,8 @@
         }
 
         function redrawGenesMap() {
+            $scope.fillVisiblePoints();
+            $scope.selectedPointIndex = -1;
             $scope.layout = {
                 showlegend: false,
                 hovermode: "closest",
@@ -383,13 +385,35 @@
                 var point = $scope.points[legendItem.index][j];
                 point.legendVisible = !point.legendVisible;
             }
+            $scope.redrawGenesMap();
 
+        }
+
+        function legendShowAll(matters) {
+            for (var i = 0; i < matters.length; i++) {
+                for (var j = 0; j < $scope.points[matters[i].index].length; j++) {
+                    var point = $scope.points[matters[i].index][j];
+                    if (!point.legendVisible) {
+                        point.legendVisible = true;
+                    }
+                }
+            }
+            $scope.redrawGenesMap();
+
+        }
+        function legendHideAll(matters) {
+            for (var i = 0; i < matters.length; i++) {
+                for (var j = 0; j < $scope.points[matters[i].index].length; j++) {
+                    var point = $scope.points[matters[i].index][j];
+                    if (point.legendVisible) {
+                        point.legendVisible = false;
+                    }
+                }
+            }
             $scope.redrawGenesMap();
         }
 
-
         $scope.setCheckBoxesState = SetCheckBoxesState;
-
         $scope.drawGenesMap = drawGenesMap;
         $scope.redrawGenesMap = redrawGenesMap;
         $scope.dotVisible = dotVisible;
@@ -397,6 +421,8 @@
         $scope.fillVisiblePoints = fillVisiblePoints;
         $scope.filterByFeature = filterByFeature;
         $scope.legendClick = legendClick;
+        $scope.legendShowAll = legendShowAll;
+        $scope.legendHideAll = legendHideAll;
         $scope.fillPoints = fillPoints;
         $scope.getAttributesText = getAttributesText;
         $scope.fillPointTooltip = fillPointTooltip;
