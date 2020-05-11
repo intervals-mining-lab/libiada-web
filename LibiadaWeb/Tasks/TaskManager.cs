@@ -12,6 +12,8 @@
 
     using Newtonsoft.Json;
 
+    using SystemTask = System.Threading.Tasks;
+
     /// <summary>
     /// The task manager.
     /// </summary>
@@ -26,11 +28,6 @@
         /// The instance.
         /// </summary>
         private static volatile TaskManager instance;
-
-        /// <summary>
-        /// Machine cores count.
-        /// </summary>
-        private readonly int coresCount = Environment.ProcessorCount;
 
         /// <summary>
         /// Gets the tasks.
@@ -121,7 +118,6 @@
                     signalrHub.Send(TaskEvent.AddTask, task.TaskData);
                 }
             }
-            
             ManageTasks();
             return task.TaskData.Id;
         }
@@ -170,9 +166,10 @@
                 {
                     lock (task)
                     {
-                        if (task.Thread != null && task.Thread.IsAlive)
+                        if (!task.SystemTask.IsCompleted)
                         {
-                            task.Thread.Abort();
+                            CancellationTokenSource cancellationTokenSource = task.CancellationTokenSource;
+                            cancellationTokenSource.Cancel();
                         }
 
                         tasks.Remove(task);
@@ -288,42 +285,46 @@
         }
 
         /// <summary>
-        /// The manage tasks.
+        /// Initializes new tasks and runs tasks scheduling it
+        /// for execution to the current TaskScheduler.
         /// </summary>
         private void ManageTasks()
         {
             lock (tasks)
             {
-                int activeTasks = 0;
-                foreach (Task task in tasks)
+                List<Task> tasksToStart = tasks.FindAll(t => t.TaskData.TaskState == TaskState.InQueue);
+                if (tasksToStart.Count != 0)
                 {
-                    lock (task)
-                    {
-                        if (task.TaskData.TaskState == TaskState.InProgress)
-                        {
-                            activeTasks++;
-                        }
-                    }
-                }
-
-                while (activeTasks < coresCount)
-                {
-                    activeTasks++;
-                    Task taskToStart = tasks.FirstOrDefault(t => t.TaskData.TaskState == TaskState.InQueue);
-                    if (taskToStart != null)
+                    foreach (Task taskToStart in tasksToStart)
                     {
                         lock (taskToStart)
                         {
-                            taskToStart.TaskData.TaskState = TaskState.InProgress;
-                            StartTask(taskToStart.TaskData.Id);
+                            Task task = tasks.Single(t => t.TaskData.Id == taskToStart.TaskData.Id);
+                            task.TaskData.TaskState = TaskState.InProgress;
+                            CancellationTokenSource cts = new CancellationTokenSource();
+                            CancellationToken token = cts.Token;
+                            task.CancellationTokenSource = cts;
+                            SystemTask.Task systemTask = new SystemTask.Task(() =>
+                            {
+                                try
+                                {
+                                    using (cts.Token.Register(Thread.CurrentThread.Abort))
+                                    {
+                                        ExecuteTaskAction(task);
+                                    }
+                                }
+                                finally
+                                {
+                                    cts.Dispose();
+                                }
+                            }, token);
+
+                            task.SystemTask = systemTask;
+                            systemTask.Start();
                         }
                     }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }
+                }   
+            }   
         }
 
         /// <summary>
@@ -388,7 +389,7 @@
             }
             catch (ThreadAbortException e)
             {
-                Console.WriteLine("Thread has been aborted: {0}", e.Message);
+                // TODO: implement an exception handling/logging
             }
             catch (Exception e)
             {
@@ -430,26 +431,7 @@
             finally
             {
                 ManageTasks();
-            }        
-        }
-
-        /// <summary>
-        /// The start task.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        private void StartTask(long id)
-        {
-            Task taskToStart;
-            lock (tasks)
-            {
-                taskToStart = tasks.Single(t => t.TaskData.Id == id);
             }
-
-            var thread = new Thread(() => ExecuteTaskAction(taskToStart));
-            taskToStart.Thread = thread;
-            thread.Start();
         }
     }
 }
