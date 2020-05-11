@@ -6,6 +6,8 @@
 
     using Newtonsoft.Json;
 
+    using SystemTask = System.Threading.Tasks;
+
     /// <summary>
     /// The task.
     /// </summary>
@@ -27,9 +29,14 @@
         public Dictionary<string, object> Result;
 
         /// <summary>
-        /// The thread.
+        /// The cancellation token source to delete the task.
         /// </summary>
-        public Thread Thread;
+        public CancellationTokenSource CancellationTokenSource;
+
+        /// <summary>
+        /// The system task that executes asynchronously on a thread pool.
+        /// </summary>
+        public SystemTask.Task SystemTask;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Task"/> class.
@@ -84,12 +91,12 @@
         /// <param name="thread">
         /// The thread.
         /// </param>
-        private Task(Func<Dictionary<string, object>> action, TaskData taskData, Dictionary<string, object> result, Thread thread)
+        private Task(Func<Dictionary<string, object>> action, TaskData taskData, Dictionary<string, object> result, SystemTask.Task systemTask)
         {
             Action = action;
             TaskData = taskData.Clone();
             Result = result;
-            Thread = thread;
+            SystemTask = systemTask;
         }
 
         /// <summary>
@@ -100,7 +107,7 @@
         /// </returns>
         public Task Clone()
         {
-            return new Task(Action, TaskData, Result, Thread);
+            return new Task(Action, TaskData, Result, SystemTask);
         }
     }
 }
