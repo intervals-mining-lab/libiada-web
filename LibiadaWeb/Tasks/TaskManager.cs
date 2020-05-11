@@ -166,7 +166,7 @@
                 {
                     lock (task)
                     {
-                        if (!task.SystemTask.IsCompleted)
+                        if ((task.SystemTask != null) && (task.SystemTask.IsCompleted))
                         {
                             CancellationTokenSource cancellationTokenSource = task.CancellationTokenSource;
                             cancellationTokenSource.Cancel();
