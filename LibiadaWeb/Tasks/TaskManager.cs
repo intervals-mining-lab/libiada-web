@@ -166,10 +166,11 @@
                 {
                     lock (task)
                     {
-                        if (!task.SystemTask.IsCompleted)
+                        if ((task.SystemTask != null) && (!task.SystemTask.IsCompleted))
                         {
                             CancellationTokenSource cancellationTokenSource = task.CancellationTokenSource;
                             cancellationTokenSource.Cancel();
+                            cancellationTokenSource.Dispose();
                         }
 
                         tasks.Remove(task);
@@ -306,25 +307,25 @@
                             task.CancellationTokenSource = cts;
                             SystemTask.Task systemTask = new SystemTask.Task(() =>
                             {
-                                try
+                                using (cts.Token.Register(Thread.CurrentThread.Abort))
                                 {
-                                    using (cts.Token.Register(Thread.CurrentThread.Abort))
-                                    {
-                                        ExecuteTaskAction(task);
-                                    }
+                                    ExecuteTaskAction(task);
                                 }
-                                finally
-                                {
-                                    cts.Dispose();
-                                }
+
                             }, token);
+                                
+                            SystemTask.Task disposeTask = systemTask.ContinueWith((SystemTask.Task t) =>
+                            {
+                                cts.Dispose();
+                            }); 
 
                             task.SystemTask = systemTask;
                             systemTask.Start();
+
                         }
                     }
-                }   
-            }   
+                }
+            }
         }
 
         /// <summary>
