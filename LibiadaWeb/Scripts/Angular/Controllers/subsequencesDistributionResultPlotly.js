@@ -108,7 +108,6 @@
                         numericX: i + 1,
                         x: sequenceData.Characteristic,
                         subsequenceCharacteristics: subsequenceData.CharacteristicsValues,
-                        //subsequenceText: subsequenceCharacteristic.Text, //added
                         featureVisible: true,
                         legendVisible: true,
                         filtersVisible: []
@@ -338,6 +337,7 @@
                 showlegend: false,
                 hovermode: "closest",
                 xaxis: {
+                    type: $scope.plotTypeX ? 'log' : '',
                     title: {
                         text: $scope.sequenceCharacteristicName,
                         font: {
@@ -347,6 +347,7 @@
                     }
                 },
                 yaxis: {
+                    type: $scope.plotTypeY ? 'log' : '',
                     title: {
                         text: $scope.subsequenceCharacteristic.Text,
                         font: {
@@ -385,6 +386,7 @@
                 var point = $scope.points[legendItem.index][j];
                 point.legendVisible = !point.legendVisible;
             }
+
             $scope.redrawGenesMap();
         }
 
@@ -425,6 +427,8 @@
         $scope.setCheckBoxesState = SetCheckBoxesState;
         $scope.drawGenesMap = drawGenesMap;
         $scope.redrawGenesMap = redrawGenesMap;
+        $scope.plotTypeX = '';
+        $scope.plotTypeY = '';
         $scope.dotVisible = dotVisible;
         $scope.dotsSimilar = dotsSimilar;
         $scope.fillVisiblePoints = fillVisiblePoints;

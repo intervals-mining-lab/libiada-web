@@ -119,8 +119,20 @@
                                 <div class="form-group">
                                     <div class="col-md-10">
                                         <label>
-                                            <input type="checkbox" name="numericXAxis" ng-model="numericXAxis" ng-change="redrawGenesMap()" value="false" />
-                                            Numeric x axis
+                                            <input type="checkbox" name="numericXAxis" ng-model="numericXAxis" ng-change="redrawGenesMap()" value="false"/>
+                                            Numeric X axis
+                                        </label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <label>
+                                            <input type="checkbox" name="LogX" ng-model="plotTypeX" ng-change="redrawGenesMap()" value="false"/>
+                                            Logarithmic scale for X axis
+                                        </label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <label>
+                                            <input type="checkbox" name="LogY" ng-model="plotTypeY" ng-change="redrawGenesMap()" value="false" />
+                                            Logarithmic scale for Y axis
                                         </label>
                                     </div>
                                 </div>
