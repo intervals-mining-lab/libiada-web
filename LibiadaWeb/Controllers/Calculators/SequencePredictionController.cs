@@ -87,7 +87,7 @@
                 using (var db = new LibiadaWebEntities())
                 {
                     var commonSequenceRepository = new CommonSequenceRepository(db);
-                    mattersName = db.Matter.Single(m => matterId == m.Id).Name;
+                    mattersName = Cache.GetInstance().Matters.Single(m => matterId == m.Id).Name;
                     var sequenceId = db.CommonSequence.Single(c => matterId == c.MatterId && c.Notation == notation).Id;
                     sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
 

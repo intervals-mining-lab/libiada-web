@@ -127,7 +127,7 @@
                 var firstElements = new List<Element>();
                 var secondElements = new List<Element>();
 
-                Matter matter = db.Matter.Single(m => m.Id == matterId);
+                Matter matter = Cache.GetInstance().Matters.Single(m => m.Id == matterId);
                 long sequenceId;
                 switch (matter.Nature)
                 {

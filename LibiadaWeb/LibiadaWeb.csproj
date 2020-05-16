@@ -108,6 +108,7 @@
     <Compile Include="BinaryCharacteristicValue.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Cache.cs" />
     <Compile Include="CalculationTask.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>

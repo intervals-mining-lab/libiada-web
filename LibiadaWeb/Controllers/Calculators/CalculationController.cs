@@ -104,7 +104,7 @@
                 {
                     var commonSequenceRepository = new CommonSequenceRepository(db);
                     sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds, notations, languages, translators, pauseTreatments, sequentialTransfers);
-                    mattersNames = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
+                    mattersNames = Cache.GetInstance().Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
                 }
 
                 double[][] characteristics;
