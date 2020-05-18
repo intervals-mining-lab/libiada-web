@@ -206,6 +206,7 @@
                 Matter matter = await db.Matter.FindAsync(id);
                 db.Matter.Remove(matter);
                 await db.SaveChangesAsync();
+                Cache.Clear();
                 return RedirectToAction("Index");
             }
         }

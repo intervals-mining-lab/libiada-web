@@ -129,7 +129,7 @@
                 var mattersCharacteristics = new object[matterIds.Length];
                 var characteristics = new double[matterIds.Length][];
                 matterIds = matterIds.OrderBy(m => m).ToArray();
-                Dictionary<long, string> matters = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
+                Dictionary<long, string> matters = Cache.GetInstance().Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
 
                 for (int j = 0; j < matterIds.Length; j++)
                 {

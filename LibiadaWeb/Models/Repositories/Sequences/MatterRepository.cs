@@ -199,6 +199,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         {
             db.Matter.Add(matter);
             db.SaveChanges();
+            Cache.Clear();
             return matter.Id;
         }
 

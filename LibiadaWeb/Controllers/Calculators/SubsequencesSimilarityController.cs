@@ -168,8 +168,8 @@
                 
                 var result = new Dictionary<string, object>
                 {
-                    { "firstSequenceName", db.Matter.Single(m => m.Id == firstMatterId).Name },
-                    { "secondSequenceName", db.Matter.Single(m => m.Id == secondMatterId).Name },
+                    { "firstSequenceName", Cache.GetInstance().Matters.Single(m => m.Id == firstMatterId).Name },
+                    { "secondSequenceName", Cache.GetInstance().Matters.Single(m => m.Id == secondMatterId).Name },
                     { "characteristicName", characteristicName },
                     { "similarSubsequences", similarSubsequences },
                     { "similarity", similarity },

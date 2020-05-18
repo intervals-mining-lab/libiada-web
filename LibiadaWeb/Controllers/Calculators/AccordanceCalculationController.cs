@@ -114,7 +114,7 @@
                 var result = new Dictionary<string, object>
                                  {
                                      { "characteristics", characteristics },
-                                     { "matterNames", db.Matter.Where(m => matterIds.Contains(m.Id)).Select(m => m.Name).ToList() },
+                                     { "matterNames", Cache.GetInstance().Matters.Where(m => matterIds.Contains(m.Id)).Select(m => m.Name).ToList() },
                                      { "characteristicName", characteristicName },
                                      { "calculationType", calculationType }
                                  };

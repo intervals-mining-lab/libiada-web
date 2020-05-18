@@ -197,7 +197,7 @@
                         "~/Content/site.css",
                         "~/Content/scrollUpDown.css",
                         "~/Content/alertify.min.css",
-                        "~/Content/themes/default.min.css"
+                        "~/Content/themes/alertify-bootstrap.min.css"
                         ));
 
             bundles.Add(new StyleBundle("~/Content/genesMap").Include(

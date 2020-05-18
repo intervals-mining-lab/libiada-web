@@ -100,7 +100,7 @@
             {
                 sequenceGroup.CreatorId = AccountHelper.GetUserId();
                 sequenceGroup.ModifierId = AccountHelper.GetUserId();
-                var matters = db.Matter.Where(m => matterIds.Contains(m.Id)).ToArray();
+                var matters = Cache.GetInstance().Matters.Where(m => matterIds.Contains(m.Id)).ToArray();
                 foreach (var matter in matters)
                 {
                     sequenceGroup.Matters.Add(matter);
@@ -174,7 +174,7 @@
                 originalSequenceGroup.Nature = sequenceGroup.Nature;
                 originalSequenceGroup.SequenceGroupType = sequenceGroup.SequenceGroupType;
                 originalSequenceGroup.ModifierId = AccountHelper.GetUserId();
-                var matters = db.Matter.Where(m => matterIds.Contains(m.Id)).ToArray();
+                var matters = Cache.GetInstance().Matters.Where(m => matterIds.Contains(m.Id)).ToArray();
                 originalSequenceGroup.Matters.Clear();
                 foreach (var matter in matters)
                 {

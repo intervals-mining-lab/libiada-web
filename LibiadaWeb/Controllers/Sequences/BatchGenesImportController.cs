@@ -74,11 +74,11 @@
 
                     using (var db = new LibiadaWebEntities())
                     {
-                        matterNames = db.Matter
-                                        .Where(m => matterIds.Contains(m.Id))
-                                        .OrderBy(m => m.Id)
-                                        .Select(m => m.Name)
-                                        .ToArray();
+                        matterNames = Cache.GetInstance().Matters
+                                                         .Where(m => matterIds.Contains(m.Id))
+                                                         .OrderBy(m => m.Id)
+                                                         .Select(m => m.Name)
+                                                         .ToArray();
                         var parentSequences = db.DnaSequence
                                                 .Where(c => matterIds.Contains(c.MatterId))
                                                 .OrderBy(c => c.MatterId)

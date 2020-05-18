@@ -83,7 +83,7 @@
                     }
 
                     var features = EnumExtensions.ToArray<Feature>().ToDictionary(f => (byte)f, f => f.GetDisplayValue());
-                    string matterName = db.Matter.Single(m => m.Id == matterId).Name;
+                    string matterName = Cache.GetInstance().Matters.Single(m => m.Id == matterId).Name;
                     SubsequenceData[] sequenceSubsequences = db.Subsequence
                         .Where(s => s.SequenceId == parentSequence.Id)
                         .Include(s => s.Position)
