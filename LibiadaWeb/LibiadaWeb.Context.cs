@@ -57,5 +57,6 @@ namespace LibiadaWeb
         public virtual DbSet<Multisequence> Multisequence { get; set; }
         public virtual DbSet<TaskResult> TaskResult { get; set; }
         public virtual DbSet<ImageSequence> ImageSequences { get; set; }
+        public virtual DbSet<AspNetPushNotificationSubscriber> AspNetPushNotificationSubscribers { get; set; }
     }
 }
