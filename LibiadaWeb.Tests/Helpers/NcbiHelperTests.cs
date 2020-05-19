@@ -79,5 +79,14 @@
             int expectedCountOfSequences = 115;
             Assert.AreEqual(expectedCountOfSequences, result.Length);
         }
+        [Test]
+        public void MinLengthPartialFalseInGetIdFromFileTest()
+        {
+            var txtReader = new StreamReader($"{SystemData.ProjectFolderPathForNcbiHelper}nuccore_result2.txt");
+            var textFromFile = txtReader.ReadToEnd();
+            var result = NcbiHelper.GetIdFromFile(textFromFile, false, minLength: 1000);
+            int expectedCountOfSequences = 415;
+            Assert.AreEqual(expectedCountOfSequences, result.Length);
+        }
     }
 }
