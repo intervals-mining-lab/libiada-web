@@ -119,13 +119,13 @@
                                 <div class="form-group">
                                     <div class="col-md-10">
                                         <label>
-                                            <input type="checkbox" name="numericXAxis" ng-model="numericXAxis" ng-change="redrawGenesMap()" value="false"/>
+                                            <input type="checkbox" name="numericXAxis" ng-model="numericXAxis" ng-change="redrawGenesMap()" value="false" />
                                             Numeric X axis
                                         </label>
                                     </div>
                                     <div class="col-md-10">
                                         <label>
-                                            <input type="checkbox" name="LogX" ng-model="plotTypeX" ng-change="redrawGenesMap()" value="false"/>
+                                            <input type="checkbox" name="LogX" ng-model="plotTypeX" ng-change="redrawGenesMap()" value="false" />
                                             Logarithmic scale for X axis
                                         </label>
                                     </div>
@@ -212,23 +212,17 @@
                                     <hr />
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
-                                            <button type="button" class="btn btn-default btn-xs" data-toggle="collapse" data-target="#additionalActions{{$index + 1}}" aria-expanded="false" aria-controls="additionalActions{{$index + 1}}">Other charachteristics</button>
+                                            <button type="button" class="btn btn-default btn-xs" data-toggle="collapse" data-target="#additionalActions{{$index + 1}}" aria-expanded="false" aria-controls="additionalActions{{$index + 1}}">Other characteristics</button>
                                         </div>
                                         <div class="panel-collapse collapse" id="additionalActions{{$index + 1}}">
-                                            <div class="panel-body">
-                                                <div class="col-md-4">
-                                                    Сharacteristic:
-                                                    <div ng-repeat="characteristicComparer in subsequencesCharacteristicsList">
-                                                        {{characteristicComparer.Text}}
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    Value:
-                                                    <div ng-repeat="characteristic in tooltipElement.characteristics">
-                                                        {{characteristic}}
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <table class="table table-bordered" style="font-size:14px;">
+                                                <thead ng-repeat="(key,value) in tooltipElement.charmap">
+                                                    <tr>
+                                                        <td align=center scope="col">{{key}}</td>
+                                                        <td scope="col">{{value}}</td>
+                                                    </tr>
+                                                </thead>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>

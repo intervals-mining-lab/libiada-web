@@ -95,6 +95,10 @@
                 $scope.visiblePoints.push([]);
                 for (var j = 0; j < sequenceData.SubsequencesData.length; j++) {
                     var subsequenceData = sequenceData.SubsequencesData[j];
+                    var charMap = {};
+                    for (var z = 0; z < subsequenceData.CharacteristicsValues.length; z++) {
+                        charMap[$scope.subsequencesCharacteristicsNames[z]] = subsequenceData.CharacteristicsValues[z];
+                    }
                     var point = {
                         id: id,
                         matterId: sequenceData.MatterId,
@@ -110,7 +114,8 @@
                         subsequenceCharacteristics: subsequenceData.CharacteristicsValues,
                         featureVisible: true,
                         legendVisible: true,
-                        filtersVisible: []
+                        filtersVisible: [],
+                        subChars: charMap
                     };
                     $scope.points[i].push(point);
                     $scope.visiblePoints[i].push(point);
@@ -244,6 +249,7 @@
                 attributes: $scope.getAttributesText(point.attributes),
                 partial: point.partial,
                 color: color,
+                charmap: point.subChars,
                 characteristics: point.subsequenceCharacteristics,
             };
 
