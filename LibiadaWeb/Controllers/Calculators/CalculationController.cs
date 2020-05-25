@@ -1,11 +1,12 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
     using System.Collections.Generic;
+    using System.Data.Entity.Core.Common.CommandTrees;
     using System.Linq;
     using System.Web.Mvc;
 
     using LibiadaCore.Music;
-
+    using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.CalculatorsData;
@@ -15,6 +16,7 @@
     using Models.Repositories.Catalogs;
 
     using Newtonsoft.Json;
+    using SixLabors.ImageSharp;
 
     /// <summary>
     /// The calculation controller.
@@ -99,11 +101,35 @@
             return CreateTask(() =>
             {
                 Dictionary<long, string> mattersNames;
+
                 long[][] sequenceIds;
                 using (var db = new LibiadaWebEntities())
                 {
+                    if (notations[0].GetNature() == Nature.Image)
+                    {
+                        var existingSequences = db.ImageSequences.Where(s => matterIds.Contains(s.MatterId))
+                        .ToArray();
+                        ImageSequenceRepository imageSequenceRepository = new ImageSequenceRepository();
+                        for (int i = 0; i < matterIds.Length; i++)
+                        {
+                            for (int j = 0; j < notations.Length; j++)
+                            {
+                                if (!existingSequences.Any(s => s.MatterId == matterIds[i] && s.Notation == notations[j]))
+                                {
+                                    var newImageSequence = new ImageSequence()
+                                    {
+                                        MatterId = matterIds[i],
+                                        Notation = notations[j],
+                                        OrderExtractor = ImageOrderExtractor.LineLeftToRightTopToBottom
+                                    };
+                                    imageSequenceRepository.Create(newImageSequence, db);
+                                }
+                            }
+                        }
+                        db.SaveChanges();
+                    }
                     var commonSequenceRepository = new CommonSequenceRepository(db);
-                    sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds, notations, languages, translators, pauseTreatments, sequentialTransfers);
+                    sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds, notations, languages, translators, pauseTreatments, sequentialTransfers, ImageOrderExtractor.LineLeftToRightTopToBottom);
                     mattersNames = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
                 }
 
@@ -134,11 +160,11 @@
                 {
                     characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[k], notations[k]);
                     characteristicsList[k] = new SelectListItem
-                                                 {
-                                                     Value = k.ToString(),
-                                                     Text = characteristicNames[k],
-                                                     Selected = false
-                                                 };
+                    {
+                        Value = k.ToString(),
+                        Text = characteristicNames[k],
+                        Selected = false
+                    };
                 }
 
                 var result = new Dictionary<string, object>

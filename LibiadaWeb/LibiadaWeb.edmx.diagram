@@ -2,7 +2,7 @@
 <edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
   <edmx:Designer>
     <edmx:Diagrams>
-      <edmx:Diagram DiagramId="eac4ed14a17c421fa3feaade14594258" Name="Diagram1" ZoomLevel="100">
+      <edmx:Diagram DiagramId="eac4ed14a17c421fa3feaade14594258" Name="Diagram1" ZoomLevel="94">
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.BinaryCharacteristic" Width="2" PointX="14.375" PointY="30.5" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.AccordanceCharacteristic" Width="2" PointX="13.5" PointY="40.125" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.CommonSequence" Width="1.75" PointX="5.25" PointY="30" IsExpanded="true" />
