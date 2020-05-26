@@ -52,10 +52,11 @@
 }
 
 label {
-    cursor : pointer;
+    cursor: pointer;
 }
+
 .roundedOne label:after {
-    cursor : pointer;
+    cursor: pointer;
     content: "";
     width: 20px;
     height: 20px;
@@ -65,14 +66,14 @@ label {
     box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
-    .roundedOne label:hover::after {
-        opacity: 0.3;
-    }
+.roundedOne label:hover::after {
+    opacity: 0.3;
+}
 
-    .roundedOne input[type=checkbox] {
-        visibility: hidden;
-    }
+.roundedOne input[type=checkbox] {
+    visibility: hidden;
+}
 
-        .roundedOne input[type=checkbox]:checked + label:after {
-            opacity: 1;
-        }
+    .roundedOne input[type=checkbox]:checked + label:after {
+        opacity: 1;
+    }

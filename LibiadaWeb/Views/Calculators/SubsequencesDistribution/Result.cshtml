@@ -88,24 +88,29 @@
                         </ul>
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane" id="legend">
-                                    <!-- .roundedOne -->
+                                <!-- .roundedOne -->
+                                <div class="col-md-3">
+                                    <button type="button" id="btn-on" class="btn btn-default" ng-click="legendShowAll(matters)" ng-class="'legend'" style="margin-top: 5px;"> Show all </button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" id="btn-off" class="btn btn-default" ng-click="legendHideAll(matters)" ng-class="'legend'" style="margin-top: 5px; margin-bottom: 20px;"> Hide all </button>
+                                </div>
                                 <div ng-repeat="legendItem in matters">
-                                    <div  class="roundedOne">
-                                        <input  type="checkbox" ng-change="legendClick(legendItem)" ng-model="legendItem.visible" id="{{'matter' + legendItem.id}}" name="check" checked />
+                                    <div class="roundedOne">
+                                        <input type="checkbox" ng-click="legendClick(legendItem)" ng-model="legendItem.visible" id="{{'matter' + legendItem.id}}" name="check" checked />
                                         <label for="{{'matter' + legendItem.id}}" ng-class="'legend' + legendItem.id" style="margin-right: 5px;"></label>
                                         <label for="{{'matter' + legendItem.id}}" class="monospace">{{legendItem.name}}</label>
                                     </div>
                                 </div>
-                                        
-                                        <!-- end .roundedOne -->
+                                <!-- end .roundedOne -->
                             </div>
                             <div role="tabpanel" class="tab-pane" id="characteristic">
                                 <br />
                                 <div class="form-group">
                                     <div class="col-md-10">
-                                        <select class="form-control" 
-                                                title="Subsequence characteristic" 
-                                                ng-model="subsequenceCharacteristic" 
+                                        <select class="form-control"
+                                                title="Subsequence characteristic"
+                                                ng-model="subsequenceCharacteristic"
                                                 ng-options="c.Text for c in subsequencesCharacteristicsList"
                                                 ng-change="redrawGenesMap()"
                                                 id="subsequenceCharacteristic"></select>
@@ -115,7 +120,19 @@
                                     <div class="col-md-10">
                                         <label>
                                             <input type="checkbox" name="numericXAxis" ng-model="numericXAxis" ng-change="redrawGenesMap()" value="false" />
-                                            Numeric x axis
+                                            Numeric X axis
+                                        </label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <label>
+                                            <input type="checkbox" name="LogX" ng-model="plotTypeX" ng-change="redrawGenesMap()" value="false" />
+                                            Logarithmic scale for X axis
+                                        </label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <label>
+                                            <input type="checkbox" name="LogY" ng-model="plotTypeY" ng-change="redrawGenesMap()" value="false" />
+                                            Logarithmic scale for Y axis
                                         </label>
                                     </div>
                                 </div>
@@ -190,9 +207,24 @@
                                         <span ng-if="!tooltipElement.sequenceRemoteId">{{tooltipElement.position}}</span>
                                     </div>
                                     <div>
-                                        Lenght:{{tooltipElement.length}}
+                                        Length:{{tooltipElement.length}}
                                     </div>
                                     <hr />
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <button type="button" class="btn btn-default btn-xs" data-toggle="collapse" data-target="#additionalActions{{$index + 1}}" aria-expanded="false" aria-controls="additionalActions{{$index + 1}}">Other characteristics</button>
+                                        </div>
+                                        <div class="panel-collapse collapse" id="additionalActions{{$index + 1}}">
+                                            <table class="table table-bordered" style="font-size:14px;">
+                                                <thead ng-repeat="(key,value) in tooltipElement.charmap">
+                                                    <tr>
+                                                        <td align=center scope="col">{{key}}</td>
+                                                        <td scope="col">{{value}}</td>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
