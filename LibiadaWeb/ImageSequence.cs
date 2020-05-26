@@ -15,7 +15,7 @@ namespace LibiadaWeb
     public partial class ImageSequence
     {
         public long Id { get; set; }
-        public short Notation { get; set; }
+        public Notation Notation { get; set; }
         public LibiadaWeb.ImageOrderExtractor OrderExtractor { get; set; }
         public long MatterId { get; set; }
         public string RemoteId { get; set; }

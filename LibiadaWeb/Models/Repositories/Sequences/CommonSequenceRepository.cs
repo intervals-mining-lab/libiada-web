@@ -1,6 +1,8 @@
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
     using System.Collections.Generic;
+    using System.Data.Entity;
+    using SixLabors.ImageSharp;
     using System.Linq;
     using System.Text;
 
@@ -9,6 +11,10 @@ namespace LibiadaWeb.Models.Repositories.Sequences
 
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
+    using LibiadaCore.Images;
+    using LibiadaCore.Core.SimpleTypes;
+    using System;
+
 
     /// <summary>
     /// The sequence repository.
@@ -102,9 +108,29 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public Chain GetLibiadaChain(long sequenceId)
         {
-            return new Chain(Db.GetSequenceBuilding(sequenceId), GetAlphabet(sequenceId), sequenceId);
-        }
+           
+            if (Db.CommonSequence.Any(s => s.Id == sequenceId))
+            {
+                var matter = Db.CommonSequence.Include(s => s.Matter).Single(s => s.Id == sequenceId).Matter;
+                return new Chain(Db.GetSequenceBuilding(sequenceId), GetAlphabet(sequenceId), sequenceId);
+            }
+            var imageMatter = Db.ImageSequences.Include(s => s.Matter).Single(s => s.Id == sequenceId).Matter;
+            if (imageMatter.Nature == Nature.Image)
+            {
+                var image = Image.Load(imageMatter.Source);
+                var sequence = ImageProcessor.ProcessImage(image, new IImageTransformer[0], new IMatrixTransformer[0], new LineOrderExtractor());
+                var alphabet = new Alphabet { NullValue.Instance() };
+                var incompleteAlphabet = sequence.Alphabet;
+                for (int j = 0; j < incompleteAlphabet.Cardinality; j++)
+                {
+                    alphabet.Add(incompleteAlphabet[j]);
+                }
 
+                return new Chain(sequence.Building, alphabet);
+            }
+            throw new Exception("Cannot find sequence to return");
+        }
+        
         /// <summary>
         /// Loads sequence by id from db and converts it to <see cref="BaseChain"/>.
         /// </summary>
@@ -151,7 +177,14 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <returns>
         /// The sequences ids as <see cref="T:long[][]"/>.
         /// </returns>
-        public long[][] GetSequenceIds(long[] matterIds, Notation[] notations, Language[] languages, Translator?[] translators, PauseTreatment[] pauseTreatments, bool[] sequentialTransfers)
+        public long[][] GetSequenceIds(
+            long[] matterIds,
+            Notation[] notations,
+            Language[] languages,
+            Translator?[] translators,
+            PauseTreatment[] pauseTreatments,
+            bool[] sequentialTransfers,
+            ImageOrderExtractor imageOrderExtractor)
         {
             var sequenceIds = new long[matterIds.Length][];
 
@@ -181,6 +214,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                                                           && m.Notation == notation
                                                                           && m.PauseTreatment == pauseTreatment
                                                                           && m.SequentialTransfer == sequentialTransfer).Id;
+                            break;
+                        case Nature.Image:
+                            sequenceIds[i][j] = Db.ImageSequences.Single(c => c.MatterId == matterId && c.Notation == notation && c.OrderExtractor == imageOrderExtractor).Id;
                             break;
                         default:
                             sequenceIds[i][j] = Db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
