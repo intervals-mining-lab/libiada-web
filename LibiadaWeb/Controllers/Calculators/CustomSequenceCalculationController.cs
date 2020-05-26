@@ -24,6 +24,7 @@
     using Newtonsoft.Json;
 
     using SixLabors.ImageSharp;
+    using SixLabors.ImageSharp.PixelFormats;
 
     /// <summary>
     /// The quick calculation controller.
@@ -117,7 +118,7 @@
                                     }
                                     break;
                                 case "image":
-                                    var image = Image.Load(sequenceStream);
+                                    var image = Image.Load<Rgba32>(sequenceStream);
                                     var sequence = ImageProcessor.ProcessImage(image, new IImageTransformer[0], new IMatrixTransformer[0], new LineOrderExtractor());
                                     var alphabet = new Alphabet { NullValue.Instance() };
                                     var incompleteAlphabet = sequence.Alphabet;
