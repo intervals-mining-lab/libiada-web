@@ -18,7 +18,8 @@
                 link: ctrl.characteristicTypes[0].Links[0],
                 arrangementType: ctrl.characteristicTypes[0].ArrangementTypes[0],
                 language: ctrl.languages ? ctrl.languages[0] : null,
-                translator: ctrl.translators ? ctrl.translators[0] : null
+                translator: ctrl.translators ? ctrl.translators[0] : null,
+                pauseTreatment: ctrl.pauseTreatments ? ctrl.pauseTreatments[0] : null
             });
         };
 
@@ -41,6 +42,7 @@
             characteristicTypes: "<",
             languages: "<",
             translators: "<",
+            pauseTreatments: "<",
             characteristicsDictionary: "<",
             hideNotation: "@"
         }

@@ -108,13 +108,13 @@
             {
                 if (matterIds.Length != 2)
                 {
-                    throw new ArgumentException("Count of selected matters must be 2.", "matterIds");
+                    throw new ArgumentException("Count of selected matters must be 2.", nameof(matterIds));
                 }
 
                 long firstMatterId = matterIds[0];
                 long firstParentSequenceId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
                 Subsequence[] firstSequenceSubsequences = subsequenceExtractor.GetSubsequences(firstParentSequenceId, features);
-                List<double> firstSequenceCharacteristics = CalculateCharacteristic(characteristicLinkId, firstParentSequenceId, firstSequenceSubsequences);
+                List<double> firstSequenceCharacteristics = CalculateCharacteristic(characteristicLinkId, firstSequenceSubsequences);
                 Dictionary<long, AttributeValue[]> firstDbSubsequencesAttributes = sequenceAttributeRepository.GetAttributes(firstSequenceSubsequences.Select(s => s.Id));
                 var firstSequenceAttributes = new List<AttributeValue[]>();
                 foreach (Subsequence subsequence in firstSequenceSubsequences)
@@ -127,7 +127,7 @@
                 long secondMatterId = matterIds[1];
                 long secondParentSequenceId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
                 Subsequence[] secondSequenceSubsequences = subsequenceExtractor.GetSubsequences(secondParentSequenceId, features);
-                List<double> secondSequenceCharacteristics = CalculateCharacteristic(characteristicLinkId, secondParentSequenceId, secondSequenceSubsequences);
+                List<double> secondSequenceCharacteristics = CalculateCharacteristic(characteristicLinkId, secondSequenceSubsequences);
                 Dictionary<long, AttributeValue[]> secondDbSubsequencesAttributes = sequenceAttributeRepository.GetAttributes(secondSequenceSubsequences.Select(s => s.Id));
                 var secondSequenceAttributes = new List<AttributeValue[]>();
                 foreach (Subsequence subsequence in secondSequenceSubsequences)
@@ -189,50 +189,46 @@
         /// <param name="characteristicLinkId">
         /// The characteristic type and link id.
         /// </param>
-        /// <param name="sequenceId">
-        /// Db sequence id.
-        /// </param>
         /// <param name="subsequences">
         /// The subsequences.
         /// </param>
         /// <returns>
         /// The <see cref="List{Subsequence}"/>.
         /// </returns>
-        private List<double> CalculateCharacteristic(short characteristicLinkId, long sequenceId, Subsequence[] subsequences)
+        private List<double> CalculateCharacteristic(short characteristicLinkId, Subsequence[] subsequences)
         {
             var characteristics = new List<double>();
             var newCharacteristics = new List<CharacteristicValue>();
             FullCharacteristic fullCharacteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
             IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(fullCharacteristic);
             Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
-            Chain[] sequences = subsequenceExtractor.ExtractChains(sequenceId, subsequences);
-            for (int j = 0; j < sequences.Length; j++)
+            var subsequenceIds = subsequences.Select(s => s.Id);
+            var existingCharacteristics = db.CharacteristicValue
+                                            .Where(cv => cv.CharacteristicLinkId == characteristicLinkId && subsequenceIds.Contains(cv.SequenceId))
+                                            .ToDictionary(cv=> cv.SequenceId);
+            Dictionary<long, Chain> sequences = subsequenceExtractor.GetSubsequencesSequences(subsequences);
+            for (int i = 0; i < subsequences.Length; i++)
             {
-                long subsequenceId = subsequences[j].Id;
-
-                if (!db.CharacteristicValue.Any(c => c.SequenceId == subsequenceId && c.CharacteristicLinkId == characteristicLinkId))
+                if (existingCharacteristics.ContainsKey(subsequences[i].Id))
                 {
-                    double value = calculator.Calculate(sequences[j], link);
+                    characteristics.Add(existingCharacteristics[subsequences[i].Id].Value);
+                }
+                else
+                {
+                    double value = calculator.Calculate(sequences[subsequences[i].Id], link);
                     var currentCharacteristic = new CharacteristicValue
                     {
-                        SequenceId = subsequenceId,
+                        SequenceId = subsequences[i].Id,
                         CharacteristicLinkId = characteristicLinkId,
                         Value = value
                     };
                     newCharacteristics.Add(currentCharacteristic);
+                    characteristics.Add(value);
                 }
             }
 
             db.CharacteristicValue.AddRange(newCharacteristics);
             db.SaveChanges();
-
-            for (int d = 0; d < sequences.Length; d++)
-            {
-                long subsequenceId = subsequences[d].Id;
-                double characteristic = db.CharacteristicValue.Single(c => c.SequenceId == subsequenceId && c.CharacteristicLinkId == characteristicLinkId).Value;
-
-                characteristics.Add(characteristic);
-            }
 
             return characteristics;
         }

@@ -362,7 +362,7 @@
                 while (e.InnerException != null)
                 {
                     e = e.InnerException;
-                    errorMessage += $"<br/> {e.Message}";
+                    errorMessage += $"{Environment.NewLine} {e.Message}";
                 }
 
                 lock (task)

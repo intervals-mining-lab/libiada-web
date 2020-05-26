@@ -20,9 +20,9 @@
 
     using Newtonsoft.Json;
 
-    using static LibiadaWeb.Models.Calculators.SubsequencesCharacteristicsCalculator;
-
     using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
+
+    using static LibiadaWeb.Models.Calculators.SubsequencesCharacteristicsCalculator;
 
     /// <summary>
     /// The subsequences comparer controller.
@@ -96,14 +96,11 @@
             {
                 double percentageDifference = double.Parse(maxPercentageDifference, CultureInfo.InvariantCulture) / 100;
 
-                var attributeValues = new List<AttributeValue>();
+                var attributeValuesCache = new AttributeValueCacheManager();
                 var characteristics = new SubsequenceData[matterIds.Length][];
-                string characteristicName;
 
                 long[] parentSequenceIds;
                 var matterNames = new string[matterIds.Length];
-
-                string sequenceCharacteristicName;
 
                 int mattersCount = matterIds.Length;
                 Dictionary<string, object> characteristicsTypesData;
@@ -113,8 +110,6 @@
                     // Sequences characteristic
                     var geneticSequenceRepository = new GeneticSequenceRepository(db);
                     long[] chains = geneticSequenceRepository.GetNucleotideSequenceIds(matterIds);
-                    var fullCharacteristicRepository = FullCharacteristicRepository.Instance;
-                    sequenceCharacteristicName = fullCharacteristicRepository.GetCharacteristicName(characteristicLinkId);
 
                     // Sequences characteristic
                     matterIds = OrderMatterIds(matterIds, characteristicLinkId, chains);
@@ -135,10 +130,13 @@
                         matterNames[n] = parentSequences[parentSequenceIds[n]].MatterName;
                     }
 
-                    characteristicName = fullCharacteristicRepository.GetCharacteristicName(subsequencesCharacteristicLinkId);
                     var viewDataHelper = new ViewDataHelper(db);
                     characteristicsTypesData = viewDataHelper.GetCharacteristicsData(CharacteristicCategory.Full);
                 }
+
+                FullCharacteristicRepository fullCharacteristicRepository = FullCharacteristicRepository.Instance;
+                string sequenceCharacteristicName = fullCharacteristicRepository.GetCharacteristicName(characteristicLinkId);
+                string characteristicName = fullCharacteristicRepository.GetCharacteristicName(subsequencesCharacteristicLinkId);
 
                 var characteristicValueSubsequences = new Dictionary<double, List<(int matterIndex, int subsequenceIndex)>>();
 
@@ -149,10 +147,10 @@
                             new[] { subsequencesCharacteristicLinkId },
                             features,
                             parentSequenceIds[i],
-                            attributeValues,
                             filters);
 
                     characteristics[i] = subsequencesData;
+                    attributeValuesCache.FillAttributeValues(subsequencesData);
 
                     for (int j = 0; j < subsequencesData.Length; j++)
                     {
@@ -169,13 +167,15 @@
                     }
                 }
 
-                List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> similarPairs =
+                List<List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)>> similarPairs =
                     ExtractSimilarPairs(characteristicValueSubsequences, percentageDifference);
 
                 List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>[,] similarityMatrix =
                     FillSimilarityMatrix(mattersCount, similarPairs);
 
                 object[,] similarities = Similarities(similarityMatrix, characteristics, mattersCount);
+
+                List<AttributeValue> allAttributeValues = attributeValuesCache.AllAttributeValues;
 
                 var result = new Dictionary<string, object>
                 {
@@ -184,7 +184,7 @@
                     { "similarities", similarities },
                     { "characteristics", characteristics },
                     { "features", features.ToDictionary(f => (byte)f, f => f.GetDisplayValue()) },
-                    { "attributeValues", attributeValues.Select(sa => new { attribute = sa.AttributeId, value = sa.Value }) },
+                    { "attributeValues", allAttributeValues.Select(sa => new { attribute = sa.AttributeId, value = sa.Value }) },
                     { "attributes", EnumExtensions.ToArray<LibiadaWeb.Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
                     { "maxPercentageDifference", maxPercentageDifference },
                     { "sequenceCharacteristicName", sequenceCharacteristicName },
@@ -347,14 +347,14 @@
         /// <returns>
         /// The <see cref="T:List{((int, int), (int, int), double)}"/>.
         /// </returns>
-        private List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> ExtractSimilarPairs(
+        private List<List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)>> ExtractSimilarPairs(
             Dictionary<double, List<(int matterId, int subsequenceIndex)>> characteristicValueSubsequences,
             double percentageDifference)
         {
-            var similarPairs = new List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)>();
+            var similarPairs = new List<List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)>>(characteristicValueSubsequences.Count);
             foreach (double key in characteristicValueSubsequences.Keys)
             {
-                similarPairs.AddRange(ExtractAllPossiblePairs(characteristicValueSubsequences[key]));
+                similarPairs.Add(ExtractAllPossiblePairs(characteristicValueSubsequences[key]));
             }
 
             double[] orderedCharacteristicValue = characteristicValueSubsequences.Keys.OrderBy(v => v).ToArray();
@@ -366,7 +366,7 @@
                 {
                     List<(int matterIndex, int subsequenceIndex)> firstComponentIndex = characteristicValueSubsequences[orderedCharacteristicValue[i]];
                     List<(int matterIndex, int subsequenceIndex)> secondComponentIndex = characteristicValueSubsequences[orderedCharacteristicValue[j]];
-                    similarPairs.AddRange(ExtractAllPossiblePairs(firstComponentIndex, secondComponentIndex, difference));
+                    similarPairs.Add(ExtractAllPossiblePairs(firstComponentIndex, secondComponentIndex, difference));
 
                     j++;
                     if (j == orderedCharacteristicValue.Length) break;
@@ -472,7 +472,7 @@
         /// </returns>
         private List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>[,] FillSimilarityMatrix(
             int mattersCount,
-            List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> similarPairs)
+            List<List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)>> similarPairs)
         {
             var similarityMatrix = new List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>[mattersCount, mattersCount];
             for (int i = 0; i < mattersCount; i++)
@@ -482,19 +482,21 @@
                     similarityMatrix[i, j] = new List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>();
                 }
             }
-
-            foreach (((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference) in similarPairs)
+            foreach (var similarPairsList in similarPairs)
             {
-                (int firstMatter, int firstSubsequence) = firstSequence;
-                (int secondMatter, int secondSubsequence) = secondSequence;
+                foreach (((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference) in similarPairsList)
+                {
+                    (int firstMatter, int firstSubsequence) = firstSequence;
+                    (int secondMatter, int secondSubsequence) = secondSequence;
 
-                (int firstSubsequenceIndex, int secondSubsequenceIndex, double difference) similarityData = (firstSubsequence, secondSubsequence, difference);
-                similarityMatrix[firstMatter, secondMatter].Add(similarityData);
+                    (int firstSubsequenceIndex, int secondSubsequenceIndex, double difference) similarityData = (firstSubsequence, secondSubsequence, difference);
+                    similarityMatrix[firstMatter, secondMatter].Add(similarityData);
 
-                (int firstSubsequenceIndex, int secondSubsequenceIndex, double difference) symmetricalSimilarityData = (secondSubsequence, firstSubsequence, difference);
-                similarityMatrix[secondMatter, firstMatter].Add(symmetricalSimilarityData);
+                    //  TODO: get rid of duplicate data
+                    (int firstSubsequenceIndex, int secondSubsequenceIndex, double difference) symmetricalSimilarityData = (secondSubsequence, firstSubsequence, difference);
+                    similarityMatrix[secondMatter, firstMatter].Add(symmetricalSimilarityData);
+                }
             }
-
             return similarityMatrix;
         }
     }
