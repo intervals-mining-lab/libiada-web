@@ -16,7 +16,7 @@
     <AssemblyName>LibiadaWeb</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -154,6 +154,7 @@
     <Compile Include="Controllers\PartialController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\Sequences\BatchGenesImportController.cs" />
+    <Compile Include="Controllers\Sequences\BatchImagesImportController.cs" />
     <Compile Include="Controllers\Sequences\BatchMusicImportController.cs" />
     <Compile Include="Controllers\Sequences\BatchPoemsImportController.cs" />
     <Compile Include="Controllers\Sequences\BatchSequenceImportController.cs" />
@@ -880,10 +881,12 @@
     <Content Include="Views\Calculators\OrdersIntervalsDistributionsAccordance\Result.cshtml" />
     <Content Include="Views\Calculators\IntervalsCharacteristicsDistribution\Index.cshtml" />
     <Content Include="Views\Calculators\IntervalsCharacteristicsDistribution\Result.cshtml" />
+    <Content Include="Views\Sequences\BatchImagesImport\Result.cshtml" />
+    <Content Include="Views\Sequences\BatchImagesImport\Index.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
-	<None Include="ConnectionStrings.config">
+    <None Include="ConnectionStrings.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>

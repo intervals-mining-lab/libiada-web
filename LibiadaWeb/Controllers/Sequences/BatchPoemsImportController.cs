@@ -1,15 +1,15 @@
-﻿namespace LibiadaWeb.Controllers.Sequences
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
-    using LibiadaWeb.Extensions;
-    using LibiadaWeb.Models.CalculatorsData;
-    using LibiadaWeb.Models.Repositories.Sequences;
-    using LibiadaWeb.Tasks;
-    using Newtonsoft.Json;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+using LibiadaWeb.Extensions;
+using LibiadaWeb.Models.CalculatorsData;
+using LibiadaWeb.Models.Repositories.Sequences;
+using LibiadaWeb.Tasks;
+using Newtonsoft.Json;
 
+namespace LibiadaWeb.Controllers.Sequences
+{
     [Authorize(Roles = "Admin")]
     public class BatchPoemsImportController : AbstractResultController
     {
@@ -17,7 +17,6 @@
         {
         }
 
-        // GET: BatchPoemsImport
         public ActionResult Index()
         {
             var viewData = new Dictionary<string, object>
@@ -48,7 +47,6 @@
                                                {
                                                    MatterName = sequenceName
                                                };
-
 
                         try
                         {
