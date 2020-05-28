@@ -36,7 +36,7 @@
         </div>
     </div>
     <div ng-app="libiada">
-         <scroll-jumper></scroll-jumper>
+        <scroll-jumper></scroll-jumper>
         <div class="container body-content">
             @RenderBody()
             <br />
@@ -45,13 +45,13 @@
                 if (AccountHelper.IsAdmin())
                 {
                     <div class="error-message">
-                        @Html.Raw(ViewBag.ErrorMessage.Replace(Environment.NewLine,"<br/><br/>"))
+                        @Html.Raw(ViewBag.ErrorMessage.Replace(Environment.NewLine, "<br/><br/>"))
                     </div>
                     <br />
                     if (ViewBag.StackTrace != null)
                     {
                         <div class="stack-trace">
-                            @Html.Raw(ViewBag.StackTrace.Replace(Environment.NewLine,"<br/><br/>"))
+                            @Html.Raw(ViewBag.StackTrace.Replace(Environment.NewLine, "<br/><br/>"))
                         </div>
                     }
                 }
@@ -82,5 +82,6 @@
             <p>&copy; @DateTime.Now.Year - foarLab.org</p>
         </div>
     </footer>
+    @RenderSection("endscripts", required: false)
 </body>
 </html>

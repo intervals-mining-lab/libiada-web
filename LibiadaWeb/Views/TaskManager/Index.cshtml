@@ -3,19 +3,38 @@
 @{
     ViewBag.Title = "Libiada task manager";
 }
+
+@section EndScripts {
+    <script src="~/Scripts/push-notification.js" async></script>
+}
+
 @Scripts.Render("~/bundles/loadingWindow")
 
 @Html.Partial("_AngularControllerInitializer", "TaskManagerController")
+
 <script src="~/signalr/hubs"></script>
 <h2>@ViewBag.Title</h2>
 
 <div ng-controller="TaskManagerCtrl">
     <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
-    <div class="form-group" ng-show="RedirectTaskId">
-        <label>
-            <input type="checkbox" id="AutoRedirect" ng-model="autoRedirect" /> Auto redirect to result page
-        </label>
+
+
+    <div class="form">
+        <div class="form-group" ng-show="RedirectTaskId">
+            <label>
+                <input type="checkbox" id="AutoRedirect" ng-model="autoRedirect" /> Auto redirect to result page
+            </label>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <button class="btn btn-info btn-push-notification hidden"></button>
+            </div>
+        </div>
     </div>
+    <br />
+    <br />
+
+
     <table ng-cloak st-table="tasks" class="table table-bordered table-hover">
         <thead>
             <tr>
@@ -84,7 +103,7 @@
         </tbody>
     </table>
 
-    <br />
+
     <div class="form-inline">
         <div class="form-group" ng-hide="tasks.length <= 1">
             <div class="col-md-10">
