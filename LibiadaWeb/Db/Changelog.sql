@@ -3065,4 +3065,17 @@ CREATE TABLE dbo."AspNetPushNotificationSubscribers"
 COMMENT ON TABLE dbo."AspNetPushNotificationSubscribers"
     IS 'Table for storing data about devices that are subscribers to push notifications.';
 
+-- 28.05.2020
+-- Add auto increment for primary key of notification subscribers table.
+
+CREATE SEQUENCE dbo."AspNetPushNotificationSubscribers_Id_seq"
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    CACHE 1;
+
+ALTER TABLE dbo."AspNetPushNotificationSubscribers" ALTER COLUMN "Id"
+SET DEFAULT nextval('dbo."AspNetPushNotificationSubscribers_Id_seq"'::regclass)
+
 COMMIT;

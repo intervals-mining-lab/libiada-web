@@ -9,7 +9,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int4" Nullable="false" />
+          <Property Name="Id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="UserId" Type="int4" Nullable="false" />
           <Property Name="Endpoint" Type="text" Nullable="false" />
           <Property Name="P256dh" Type="text" Nullable="false" />
@@ -1148,8 +1148,8 @@
             <End Role="Matter" EntitySet="Matter" />
             <End Role="ImageSequence" EntitySet="ImageSequences" />
           </AssociationSet>
-          <EntitySet Name="AspNetPushNotificationSubscribers" EntityType="LibiadaWebModel.AspNetPushNotificationSubscriber" />
-          <AssociationSet Name="FK_dbo_AspNetPushNotificationSubscribers_dbo_AspNetUsers_UserId" Association="LibiadaWebModel.FK_dbo_AspNetPushNotificationSubscribers_dbo_AspNetUsers_UserId">
+          <EntitySet Name="AspNetPushNotificationSubscribers" EntityType="Self.AspNetPushNotificationSubscriber" />
+          <AssociationSet Name="FK_dbo_AspNetPushNotificationSubscribers_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetPushNotificationSubscribers_dbo_AspNetUsers_UserId">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="AspNetPushNotificationSubscriber" EntitySet="AspNetPushNotificationSubscribers" />
           </AssociationSet>
@@ -1582,7 +1582,7 @@
           <NavigationProperty Name="AspNetUserLogins" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
           <NavigationProperty Name="Tasks" Relationship="Self.fk_task_user" FromRole="AspNetUser" ToRole="CalculationTask" />
           <NavigationProperty Name="AspNetRoles" Relationship="Self.AspNetUserRoles" FromRole="AspNetUser" ToRole="AspNetRole" />
-          <NavigationProperty Name="AspNetPushNotificationSubscribers" Relationship="LibiadaWebModel.FK_dbo_AspNetPushNotificationSubscribers_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetPushNotificationSubscriber" />
+          <NavigationProperty Name="AspNetPushNotificationSubscribers" Relationship="Self.FK_dbo_AspNetPushNotificationSubscribers_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetPushNotificationSubscriber" />
         </EntityType>
 
         <EntityType Name="CalculationTask">
@@ -2333,18 +2333,18 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UserId" Type="Int32" Nullable="false" />
           <Property Name="Endpoint" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="P256dh" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Auth" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="AspNetUser" Relationship="LibiadaWebModel.FK_dbo_AspNetPushNotificationSubscribers_dbo_AspNetUsers_UserId" FromRole="AspNetPushNotificationSubscriber" ToRole="AspNetUser" />
+          <NavigationProperty Name="AspNetUser" Relationship="Self.FK_dbo_AspNetPushNotificationSubscribers_dbo_AspNetUsers_UserId" FromRole="AspNetPushNotificationSubscriber" ToRole="AspNetUser" />
         </EntityType>
         <Association Name="FK_dbo_AspNetPushNotificationSubscribers_dbo_AspNetUsers_UserId">
-          <End Type="LibiadaWebModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+          <End Type="Self.AspNetUser" Role="AspNetUser" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="LibiadaWebModel.AspNetPushNotificationSubscriber" Role="AspNetPushNotificationSubscriber" Multiplicity="*" />
+          <End Type="Self.AspNetPushNotificationSubscriber" Role="AspNetPushNotificationSubscriber" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AspNetUser">
               <PropertyRef Name="Id" />
