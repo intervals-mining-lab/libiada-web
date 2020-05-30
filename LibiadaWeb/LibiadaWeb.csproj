@@ -85,6 +85,9 @@
     <Compile Include="App_Start\SmsService.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="AspNetPushNotificationSubscriber.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
     <Compile Include="AspNetRole.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
@@ -153,6 +156,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\PartialController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\PushNotificationController.cs" />
     <Compile Include="Controllers\Sequences\BatchGenesImportController.cs" />
     <Compile Include="Controllers\Sequences\BatchMusicImportController.cs" />
     <Compile Include="Controllers\Sequences\BatchPoemsImportController.cs" />
@@ -197,6 +201,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Group.cs" />
+    <Compile Include="Helpers\PushNotificationHelper.cs" />
     <Compile Include="ImageMatrixTransformer.cs" />
     <Compile Include="ImageOrderExtractor.cs" />
     <Compile Include="ImageSequence.cs">
@@ -742,6 +747,7 @@
     <Content Include="Scripts\Angular\Components\loadingWindow.js" />
     <Content Include="Scripts\plotly\plotly.js" />
     <Content Include="Scripts\plotly\plotly.min.js" />
+    <Content Include="Scripts\push-notification.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
@@ -756,6 +762,7 @@
     <Content Include="Scripts\midijs\inc\jasmid\LICENSE" />
     <Content Include="Scripts\midijs\inc\tuna\README.md" />
     <None Include="Scripts\_references.js" />
+    <Content Include="sw-push-notification.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -894,6 +901,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\PushNotification\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -985,6 +993,9 @@
     <PackageReference Include="Microsoft.AspNet.WebPages">
       <Version>3.2.7</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.Configuration.ConfigurationBuilders.UserSecrets">
+      <Version>2.0.0</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.jQuery.Unobtrusive.Validation">
       <Version>3.2.11</Version>
     </PackageReference>
@@ -1041,6 +1052,9 @@
     </PackageReference>
     <PackageReference Include="WebGrease">
       <Version>1.6.0</Version>
+    </PackageReference>
+    <PackageReference Include="WebPush">
+      <Version>1.0.11</Version>
     </PackageReference>
   </ItemGroup>
   <PropertyGroup>

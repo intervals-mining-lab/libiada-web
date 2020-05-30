@@ -4,7 +4,17 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="LibiadaWebModel.Store" Provider="Npgsql" ProviderManifestToken="9.5.0" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="LibiadaWebModel.Store" Provider="Npgsql" ProviderManifestToken="12.2" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AspNetPushNotificationSubscribers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="int4" Nullable="false" />
+          <Property Name="Endpoint" Type="text" Nullable="false" />
+          <Property Name="P256dh" Type="text" Nullable="false" />
+          <Property Name="Auth" Type="text" Nullable="false" />
+        </EntityType>
         <EntityType Name="AspNetRoles">
           <Key>
             <PropertyRef Name="Id" />
@@ -455,6 +465,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_dbo_AspNetPushNotificationSubscribers_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetPushNotificationSubscribers" Type="Self.AspNetPushNotificationSubscribers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetPushNotificationSubscribers">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -702,6 +726,7 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="LibiadaWebModelStoreContainer">
+          <EntitySet Name="AspNetPushNotificationSubscribers" EntityType="Self.AspNetPushNotificationSubscribers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
@@ -755,6 +780,10 @@
           <AssociationSet Name="fk_data_chain_matter" Association="Self.fk_data_chain_matter">
             <End Role="matter" EntitySet="matter" />
             <End Role="data_chain" EntitySet="data_chain" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetPushNotificationSubscribers_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetPushNotificationSubscribers_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetPushNotificationSubscribers" EntitySet="AspNetPushNotificationSubscribers" />
           </AssociationSet>
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
@@ -1118,6 +1147,11 @@
           <AssociationSet Name="fk_image_sequence_matter" Association="Self.fk_image_sequence_matter">
             <End Role="Matter" EntitySet="Matter" />
             <End Role="ImageSequence" EntitySet="ImageSequences" />
+          </AssociationSet>
+          <EntitySet Name="AspNetPushNotificationSubscribers" EntityType="Self.AspNetPushNotificationSubscriber" />
+          <AssociationSet Name="FK_dbo_AspNetPushNotificationSubscribers_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetPushNotificationSubscribers_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="AspNetPushNotificationSubscriber" EntitySet="AspNetPushNotificationSubscribers" />
           </AssociationSet>
 
         </EntityContainer>
@@ -1548,6 +1582,7 @@
           <NavigationProperty Name="AspNetUserLogins" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
           <NavigationProperty Name="Tasks" Relationship="Self.fk_task_user" FromRole="AspNetUser" ToRole="CalculationTask" />
           <NavigationProperty Name="AspNetRoles" Relationship="Self.AspNetUserRoles" FromRole="AspNetUser" ToRole="AspNetRole" />
+          <NavigationProperty Name="AspNetPushNotificationSubscribers" Relationship="Self.FK_dbo_AspNetPushNotificationSubscribers_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetPushNotificationSubscriber" />
         </EntityType>
 
         <EntityType Name="CalculationTask">
@@ -2294,6 +2329,31 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="AspNetPushNotificationSubscriber">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="Endpoint" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="P256dh" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Auth" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="Self.FK_dbo_AspNetPushNotificationSubscribers_dbo_AspNetUsers_UserId" FromRole="AspNetPushNotificationSubscriber" ToRole="AspNetUser" />
+        </EntityType>
+        <Association Name="FK_dbo_AspNetPushNotificationSubscribers_dbo_AspNetUsers_UserId">
+          <End Type="Self.AspNetUser" Role="AspNetUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Self.AspNetPushNotificationSubscriber" Role="AspNetPushNotificationSubscriber" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetPushNotificationSubscriber">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
 
       </Schema>
     </edmx:ConceptualModels>
@@ -2751,6 +2811,17 @@
               <ScalarProperty Name="Id" ColumnName="RoleId" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="AspNetPushNotificationSubscribers">
+            <EntityTypeMapping TypeName="LibiadaWebModel.AspNetPushNotificationSubscriber">
+              <MappingFragment StoreEntitySet="AspNetPushNotificationSubscribers">
+                <ScalarProperty Name="Auth" ColumnName="Auth" />
+                <ScalarProperty Name="P256dh" ColumnName="P256dh" />
+                <ScalarProperty Name="Endpoint" ColumnName="Endpoint" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
 
         </EntityContainerMapping>
       </Mapping>

@@ -5,7 +5,6 @@
     using System.Data.Entity;
     using System.Linq;
     using System.Threading;
-
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Helpers;
@@ -56,6 +55,7 @@
                     }
                 }
             }
+            
         }
 
         /// <summary>
@@ -314,10 +314,19 @@
 
                             }, token);
                                 
-                            SystemTask.Task disposeTask = systemTask.ContinueWith((SystemTask.Task t) =>
+                            SystemTask.Task notificationTask = systemTask.ContinueWith((SystemTask.Task t) =>
                             {
                                 cts.Dispose();
-                            }); 
+
+                                var data = new Dictionary<string, string>
+                                {
+                                    { "title", $"Task has been completed" },
+                                    { "body", $"Task type: { task.TaskData.TaskType } \nExecution time: { task.TaskData.ExecutionTime }" },
+                                    { "icon", "/Content/themes/base/images/DNA.jpg" },
+                                    { "tag", $"/{ task.TaskData.TaskType }/Result/{ task.TaskData.Id }" }
+                                };
+                                PushNotificationHelper.Send(task.TaskData.UserId, data);
+                            });
 
                             task.SystemTask = systemTask;
                             systemTask.Start();

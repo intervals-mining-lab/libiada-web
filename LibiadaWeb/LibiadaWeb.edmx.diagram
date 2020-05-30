@@ -144,6 +144,8 @@
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_task_result_task" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.ImageSequence" Width="1.5" PointX="5.875" PointY="21.75" />
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_image_sequence_matter" />
+        <edmx:EntityTypeShape EntityType="LibiadaWebModel.AspNetPushNotificationSubscriber" Width="1.5" PointX="5.625" PointY="0.75" />
+        <edmx:AssociationConnector Association="LibiadaWebModel.FK_dbo_AspNetPushNotificationSubscribers_dbo_AspNetUsers_UserId" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

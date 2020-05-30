@@ -3011,4 +3011,71 @@ CREATE TRIGGER tgiud_image_sequence_chain_key_bound AFTER INSERT OR DELETE OR UP
 ALTER TABLE note DROP COLUMN onumerator;
 ALTER TABLE note DROP COLUMN odenominator;
 
+-- 17.05.2020
+-- Fix chain_key check trigger.
+
+CREATE OR REPLACE FUNCTION trigger_chain_key_unique_check()
+    RETURNS trigger
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE NOT LEAKPROOF
+AS $BODY$
+DECLARE
+sequence_with_id_count integer;
+BEGIN
+IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
+	SELECT count(*) INTO sequence_with_id_count FROM(
+		SELECT id FROM chain WHERE id = NEW.id 
+		UNION ALL 
+		SELECT id FROM subsequence WHERE id = NEW.id
+		UNION ALL 
+		SELECT id FROM image_sequence WHERE id = NEW.id) s;
+	IF sequence_with_id_count = 1 THEN
+		RETURN NEW;
+	ELSE IF sequence_with_id_count = 0 THEN
+		RAISE EXCEPTION 'New record in table chain_key cannot be addded because there is no sequences with given id.';
+	END IF;
+		RAISE EXCEPTION 'New record in table chain_key cannot be addded because there more than one sequences with given id. Sequences count = %', sequence_with_id_count;
+	END IF;
+ELSE	
+	RAISE EXCEPTION 'Unknown operation. This trigger only operates on INSERT operation on tables with id column.';
+END IF;
+END
+$BODY$;
+
+ALTER FUNCTION trigger_chain_key_unique_check() OWNER TO postgres;
+COMMENT ON FUNCTION trigger_chain_key_unique_check() IS 'Checks that there is one and only one sequence with the given id.';
+
+-- 18.05.2020
+-- Add push notification subscribers table.
+
+CREATE TABLE dbo."AspNetPushNotificationSubscribers"
+(
+    "Id" integer NOT NULL,
+    "UserId" integer NOT NULL DEFAULT 0,
+    "Endpoint" text NOT NULL,
+    "P256dh" text NOT NULL,
+    "Auth" text NOT NULL,
+    CONSTRAINT "PK_dbo.AspNetPushNotificationSubscribers" PRIMARY KEY ("Id"),
+    CONSTRAINT "FK_dbo.AspNetPushNotificationSubscribers_dbo.AspNetUsers_UserId" FOREIGN KEY ("UserId")
+        REFERENCES dbo."AspNetUsers" ("Id") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+);
+COMMENT ON TABLE dbo."AspNetPushNotificationSubscribers"
+    IS 'Table for storing data about devices that are subscribers to push notifications.';
+
+-- 28.05.2020
+-- Add auto increment for primary key of notification subscribers table.
+
+CREATE SEQUENCE dbo."AspNetPushNotificationSubscribers_Id_seq"
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    CACHE 1;
+
+ALTER TABLE dbo."AspNetPushNotificationSubscribers" ALTER COLUMN "Id"
+SET DEFAULT nextval('dbo."AspNetPushNotificationSubscribers_Id_seq"'::regclass)
+
 COMMIT;
