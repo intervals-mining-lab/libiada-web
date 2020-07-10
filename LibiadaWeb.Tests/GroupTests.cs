@@ -19,7 +19,7 @@
         /// <summary>
         /// The groups count.
         /// </summary>
-        private const int GroupsCount = 6;
+        private const int GroupsCount = 8;
 
         /// <summary>
         /// Array of all groups.
@@ -64,6 +64,8 @@
         [TestCase((Group)4, "ObservationData")]
         [TestCase((Group)5, "Virus")]
         [TestCase((Group)6, "Eucariote")]
+        [TestCase((Group)7, "Picture")]
+        [TestCase((Group)8, "Photo")]
         public void GroupNamesTest(Group group, string name) => Assert.AreEqual(name, @group.GetName());
 
         /// <summary>

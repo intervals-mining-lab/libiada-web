@@ -21,7 +21,7 @@
         public void InvalidNatureValueTest()
         {
             Assert.Throws<ArgumentException>(() => new NatureAttribute((Nature)10));
-            Assert.Throws<ArgumentException>(() => new NatureAttribute((Nature)5));
+            Assert.Throws<ArgumentException>(() => new NatureAttribute((Nature)0));
         }
 
         /// <summary>

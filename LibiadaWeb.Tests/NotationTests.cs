@@ -19,7 +19,7 @@
         /// <summary>
         /// The notations count.
         /// </summary>
-        private const int NotationsCount = 12;
+        private const int NotationsCount = 13;
 
         /// <summary>
         /// Array of all notations.
@@ -70,6 +70,7 @@
         [TestCase((Notation)10, "IntegerValues")]
         [TestCase((Notation)11, "Consonance")]
         [TestCase((Notation)12, "Phonemes")]
+        [TestCase((Notation)13, "Pixels")]
         public void NotationNamesTest(Notation notation, string name) => Assert.AreEqual(name, notation.GetName());
 
         /// <summary>
