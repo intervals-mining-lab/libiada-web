@@ -16,6 +16,7 @@ using Newtonsoft.Json;
 
 namespace LibiadaWeb.Controllers.Sequences
 {
+    [Authorize(Roles = "Admin")]
     public class BatchGeneticImportFromGenBankSearchFileController : AbstractResultController
     {
         public BatchGeneticImportFromGenBankSearchFileController() : base(TaskType.BatchGeneticImportFromGenBankSearchFile)
@@ -45,25 +46,15 @@ namespace LibiadaWeb.Controllers.Sequences
                 string[] accessions;
                 if (filterMinLength)
                 {
-                    if (filterMaxLength)
-                    {
-                        accessions = NcbiHelper.GetIdFromFile(searchResults, importPartial, minLength, maxLength);
-                    }
-                    else
-                    {
-                        accessions = NcbiHelper.GetIdFromFile(searchResults, importPartial, minLength);
-                    }
+                    accessions = filterMaxLength ?
+                        NcbiHelper.GetIdsFromNcbiSearchResults(searchResults, importPartial, minLength, maxLength) :
+                        NcbiHelper.GetIdsFromNcbiSearchResults(searchResults, importPartial, minLength);
                 }
                 else
                 {
-                    if (filterMaxLength)
-                    {
-                        accessions = NcbiHelper.GetIdFromFile(searchResults, importPartial, 1, maxLength);
-                    }
-                    else
-                    {
-                        accessions = NcbiHelper.GetIdFromFile(searchResults, importPartial);
-                    }
+                    accessions = filterMaxLength ?
+                        NcbiHelper.GetIdsFromNcbiSearchResults(searchResults, importPartial, 1, maxLength) :
+                        NcbiHelper.GetIdsFromNcbiSearchResults(searchResults, importPartial);
                 }
                 accessions = accessions.Distinct().Select(a => a.Split('.')[0]).ToArray();
                 var importResults = new List<MatterImportResult>(accessions.Length);

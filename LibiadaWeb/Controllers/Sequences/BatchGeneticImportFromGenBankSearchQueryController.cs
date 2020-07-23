@@ -10,13 +10,14 @@ using LibiadaCore.Extensions;
 using LibiadaWeb.Helpers;
 using LibiadaWeb.Models;
 using LibiadaWeb.Models.CalculatorsData;
+using LibiadaWeb.Models.NcbiSequencesData;
 using LibiadaWeb.Models.Repositories.Sequences;
-using LibiadaWeb.Models.SequencesData;
 using LibiadaWeb.Tasks;
 using Newtonsoft.Json;
 
 namespace LibiadaWeb.Controllers.Sequences
 {
+    [Authorize(Roles = "Admin")]
     public class BatchGeneticImportFromGenBankSearchQueryController : AbstractResultController
     {
         public BatchGeneticImportFromGenBankSearchQueryController() : base(TaskType.BatchGeneticImportFromGenBankSearchQuery)
@@ -47,29 +48,18 @@ namespace LibiadaWeb.Controllers.Sequences
 
                 if (filterMinLength)
                 {
-                    if (filterMaxLength)
-                    {
-                        searchResults = NcbiHelper.FormatTermString(searchQuery, minLength, maxLength);
-                    }
-                    else
-                    {
-                        searchResults = NcbiHelper.FormatTermString(searchQuery, minLength);
-                    }
+                    searchResults = filterMaxLength ?
+                        NcbiHelper.FormatNcbiSearchTerm(searchQuery, minLength, maxLength) :
+                        NcbiHelper.FormatNcbiSearchTerm(searchQuery, minLength);
                 }
                 else
                 {
-                    if (filterMaxLength)
-                    {
-                        searchResults = NcbiHelper.FormatTermString(searchQuery, minLength: 1, maxLength);
-                    }
-                    else
-                    {
-                        searchResults = NcbiHelper.FormatTermString(searchQuery);
-                    }
+                    searchResults = filterMaxLength ?
+                        NcbiHelper.FormatNcbiSearchTerm(searchQuery, minLength: 1, maxLength):
+                        NcbiHelper.FormatNcbiSearchTerm(searchQuery);
                 }
-                nuccoreObjects = NcbiHelper.DeserializeQueryObject("nuccore", searchResults, importPartial);
-                accessions = NcbiHelper.GetAccesionsFromEsummaryResult(nuccoreObjects);
-                accessions = accessions.Distinct().Select(a => a.Split('.')[0]).ToArray();
+                nuccoreObjects = NcbiHelper.SearchInNuccoreDb(searchResults, importPartial);
+                accessions = nuccoreObjects.Select(no => no.Accession.Split('.')[0]).Distinct().ToArray();
                 var importResults = new List<MatterImportResult>(accessions.Length);
 
                 using (var db = new LibiadaWebEntities())

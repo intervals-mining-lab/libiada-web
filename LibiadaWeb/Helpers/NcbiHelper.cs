@@ -17,9 +17,7 @@ namespace LibiadaWeb.Helpers
 
     using System.Xml.Serialization;
     using Newtonsoft.Json;
-    using LibiadaWeb.Models.SequencesData;
-    using System.Text;
-    using System.Linq;
+    using LibiadaWeb.Models.NcbiSequencesData;
 
     /// <summary>
     /// The ncbi helper.
@@ -27,7 +25,7 @@ namespace LibiadaWeb.Helpers
     public static class NcbiHelper
     {
         /// <summary>
-        /// The base url.
+        /// The base url for all eutils.
         /// </summary>
         private const string BaseUrl = @"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/";
 
@@ -44,15 +42,15 @@ namespace LibiadaWeb.Helpers
         /// <summary>
         /// Extracts features from genBank file downloaded from ncbi.
         /// </summary>
-        /// <param name="id">
+        /// <param name="accession">
         /// Accession id of the sequence in ncbi (remote id).
         /// </param>
         /// <returns>
         /// The <see cref="List{FeatureItem}"/>.
         /// </returns>
-        public static List<FeatureItem> GetFeatures(string id)
+        public static List<FeatureItem> GetFeatures(string accession)
         {
-            GenBankMetadata metadata = GetMetadata(DownloadGenBankSequence(id));
+            GenBankMetadata metadata = GetMetadata(DownloadGenBankSequence(accession));
             return metadata.Features.All;
         }
 
@@ -98,32 +96,162 @@ namespace LibiadaWeb.Helpers
         /// <summary>
         /// The get file.
         /// </summary>
-        /// <param name="id">
+        /// <param name="acceccion">
         /// Accession id of the sequence in ncbi (remote id).
         /// </param>
         /// <returns>
         /// The <see cref="Stream"/>.
         /// </returns>
-        public static Stream GetFastaFileStream(string id)
+        public static Stream GetFastaFileStream(string acceccion)
         {
-            return GetResponseStream(GetEfetchParamsString("fasta") + id);
+            return GetResponseStream(GetEfetchParamsString("fasta") + acceccion);
         }
 
         /// <summary>
         /// Extracts sequence from genbank file.
         /// </summary>
-        /// <param name="id">
+        /// <param name="accession">
         /// Accession id of the sequence in ncbi (remote id).
         /// </param>
         /// <returns>
         /// The <see cref="Stream"/>.
         /// </returns>
-        public static ISequence DownloadGenBankSequence(string id)
+        public static ISequence DownloadGenBankSequence(string accession)
         {
             ISequenceParser parser = new GenBankParser();
-            string url = GetEfetchParamsString("gbwithparts") + id;
+            string url = GetEfetchParamsString("gbwithparts") + accession;
             Stream dataStream = GetResponseStream(url);
             return parser.ParseOne(dataStream);
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="includePartial"></param>
+        /// <param name="minLength"></param>
+        /// <param name="maxLength"></param>
+        /// <returns></returns>
+        public static string[] GetIdsFromNcbiSearchResults(
+            string data,
+            bool includePartial,
+            int minLength = 1,
+            int maxLength = int.MaxValue)
+        {
+            string[] searchResults = Regex.Split(data, @"^\r\n", RegexOptions.Multiline);
+            List<string> accessions = new List<string>();
+
+            foreach (string block in searchResults)
+            {
+                if (!string.IsNullOrEmpty(block))
+                {
+                    string[] blockLines = block.Split('\n');
+                    string seqenceName = blockLines[0];
+                    string sequenceLength = blockLines[1];
+                    string accession = blockLines[2];
+
+                    if (includePartial || !seqenceName.Contains("partial"))
+                    {
+                        int length = GetLengthFromString(sequenceLength);
+                        if (length >= minLength && length <= maxLength)
+                        {
+                            string[] idStrings = accession.Split(' ');
+                            accessions.Add(idStrings[0]);
+                        }
+                    }
+                }
+            }
+            return accessions.ToArray();
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="searchTerm"></param>
+        /// <param name="includePartial"></param>
+        /// <returns></returns>
+        public static List<NuccoreObject> SearchInNuccoreDb(string searchTerm, bool includePartial)
+        {
+            int retstart = 0;
+            var urlEsearch = $"esearch.fcgi?db=nuccore&term={searchTerm}&usehistory=y&retmode=json";
+            var esearchResponseString = GetResponceString(urlEsearch);
+            ESearchResult eSearchResult = JsonConvert.DeserializeObject<ESearchResponce>(esearchResponseString).ESearchResult;
+            var nuccoreObjects = new List<NuccoreObject>();
+
+            int ElementCount;
+            do
+            {
+                var urlEsummary = $"esummary.fcgi?db=nuccore" +
+                                  $"&term={searchTerm}" +
+                                  $"&usehistory=y&WebEnv={eSearchResult.NcbiWebEnvironment}" +
+                                  $"&query_key=1&retmode=text&rettype=docsum&retmax=500&restart={retstart}";
+                var esummaryResponse = GetResponceString(urlEsummary);
+                retstart++;
+
+                XmlSerializer serializer = new XmlSerializer(typeof(eSummaryResult));
+                ElementCount = eSearchResult.Count;
+                eSummaryResult DeserializeResult;
+                using (TextReader reader = new StringReader(esummaryResponse))
+                {
+                    DeserializeResult = (eSummaryResult)serializer.Deserialize(reader);
+                }
+
+                foreach (ESummaryResultDocumentSummary element in DeserializeResult.DocumentSummary)
+                {
+                    if (includePartial || !element.Items[1].Value.Contains("partial"))
+                    {
+                        NuccoreObject nuccoreObject = new NuccoreObject();
+                        nuccoreObject.Id = element.Id;
+                        nuccoreObject.Name = element.Items[1].Value;
+                        nuccoreObject.Accession = element.Items[0].Value;
+                        nuccoreObject.Length = element.Items[8].Value;
+                        nuccoreObjects.Add(nuccoreObject);
+                    }
+                }
+            } while (nuccoreObjects.Count < ElementCount);
+            return nuccoreObjects;
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="searchTerm"></param>
+        /// <param name="minLength"></param>
+        /// <param name="maxLength"></param>
+        /// <returns></returns>
+        public static string FormatNcbiSearchTerm(string searchTerm, int? minLength = null, int? maxLength = null)
+        {
+            if (minLength != null && maxLength != null)
+            {
+                searchTerm +=  $"[All Fields] AND (\"{minLength}\"[SLEN] : \"{maxLength}\"[SLEN])";
+            }
+              return searchTerm;
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="stringLength"></param>
+        /// <returns></returns>
+        private static int GetLengthFromString(string stringLength)
+        {
+            stringLength = stringLength.Split(' ')[0];
+            IFormatProvider provider = CultureInfo.CreateSpecificCulture("en-US");
+            return int.Parse(stringLength, NumberStyles.Integer | NumberStyles.AllowThousands, provider);
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        private static string GetResponceString(string url)
+        {
+            var response = GetResponseStream(url);
+            StreamReader reader = new StreamReader(response);
+            string responseText = reader.ReadToEnd();
+
+            return responseText;
         }
 
         /// <summary>
@@ -189,112 +317,6 @@ namespace LibiadaWeb.Helpers
             }
 
             lastRequestDateTime = DateTimeOffset.Now;
-        }
-
-        public static string[] GetIdFromFile(
-            string data,
-            bool includePartial,
-            int minLength = 1,
-            int maxLength = int.MaxValue)
-        {
-            string[] fullText = Regex.Split(data, @"^\r\n", RegexOptions.Multiline);
-            List<string> idList = new List<string>();
-            int gensName = 0;
-            int numberStrWithId = 2;
-            int firstId = 0;
-            foreach (var block in fullText)
-            {
-                if (!string.IsNullOrEmpty(block))
-                {
-                    string[] stringsInBlock = block.Split('\n');
-                    if (includePartial || !stringsInBlock[gensName].Contains("partial"))
-                    {
-                        int length = GetLengthFromString(stringsInBlock[1]);
-                        if (length >= minLength && length <= maxLength)
-                        {
-                            string[] idStrings = stringsInBlock[numberStrWithId].Split(' ');
-                            idList.Add(idStrings[firstId]);
-                        }
-                    }
-                }
-            }
-            return idList.ToArray();
-        }
-
-        private static int GetLengthFromString(string stringLength)
-        {
-            stringLength = stringLength.Split(' ')[0];
-            IFormatProvider provider = CultureInfo.CreateSpecificCulture("en-US");
-            int length = int.Parse(stringLength, NumberStyles.Integer |
-                NumberStyles.AllowThousands, provider);
-            return length;
-        }
-
-        public static List<NuccoreObject> DeserializeQueryObject(string DataBaseName, string searchTerm, bool includePartial)
-        {
-            int retstart = 0;
-            var urlEsearch = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=" +
-                DataBaseName + "&term=" + searchTerm + "&usehistory=y&retmode=json";
-            var esearchResponse = GetAnswer(urlEsearch);
-            ESearchResult WebEnv = JsonConvert.DeserializeObject<ESearchResult>(esearchResponse);
-            List<NuccoreObject> nuccoreObjects = new List<NuccoreObject>();
-
-            int ElementCount;
-            do
-            {
-                var urlEsummary = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db="
-                    + DataBaseName + "&term=" + searchTerm + "&usehistory=y&WebEnv=" + WebEnv.Response.WebEnvironment
-                    + "&query_key=1&retmode=text&rettype=docsum&retmax=500&restart=" + retstart;//Paste ur url here  
-                var esummaryResponse = GetAnswer(urlEsummary);
-                //      Console.WriteLine(answer);
-                XmlSerializer serializer = new XmlSerializer(typeof(eSummaryResult));
-                ElementCount = WebEnv.Response.Count;
-                eSummaryResult DeserializeResult;
-                using (TextReader reader = new StringReader(esummaryResponse))
-                {
-                    DeserializeResult = (eSummaryResult)serializer.Deserialize(reader);
-                }
-
-                foreach (var element in DeserializeResult.DocSum)
-                {
-                    if (includePartial || !element.Item[1].Value.Contains("partial")) 
-                    {
-                        NuccoreObject nuccoreObject = new NuccoreObject();
-                        nuccoreObject.Id = element.Id;
-                        nuccoreObject.Name = element.Item[1].Value;
-                        nuccoreObject.Accession = element.Item[0].Value;
-                        nuccoreObject.Length = element.Item[8].Value;
-                        nuccoreObjects.Add(nuccoreObject);
-                    }
-                }
-                retstart++;
-            } while (nuccoreObjects.Count < ElementCount);
-            return nuccoreObjects;
-        }
-
-        public static string[] GetAccesionsFromEsummaryResult(List<NuccoreObject> nuccoreObjects) 
-        {
-            return nuccoreObjects.Select(no => no.Accession).ToArray();
-        }
-
-        public static string FormatTermString(string searchTerm, int? minLength = null, int? maxLength = null)
-        {
-            if (minLength != null && maxLength != null)
-            {
-                searchTerm +=  $"[All Fields] AND (\"{minLength}\"[SLEN] : \"{maxLength}\"[SLEN])";
-            }
-              return searchTerm; 
-        }
-        public static string GetAnswer(string url)
-        {
-            WebRequest request = WebRequest.Create(url);
-
-            WebResponse response = request.GetResponse();
-            StreamReader reader = new StreamReader(response.GetResponseStream());
-
-            string responseText = reader.ReadToEnd();
-
-            return responseText;
         }
     }
 }

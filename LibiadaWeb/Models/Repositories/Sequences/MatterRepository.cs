@@ -91,7 +91,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                     }
                     else
                     {
-                        matter.Group = name.Contains("virus") || name.Contains("viroid") || name.Contains("virophage") ?
+                        matter.Group = name.Contains("virus") || name.Contains("viroid") || name.Contains("phage") ?
                                            Group.Virus : Group.Bacteria;
                         matter.SequenceType = SequenceType.CompleteGenome;
                     }
@@ -261,7 +261,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 return $"{species} | {definition}";
             }
 
-            throw new Exception($"Sequences names are not equal. CommonName = {commonName }, Species = {species}, Definition = {definition}");
+            throw new Exception($"Sequences names are not equal. CommonName = {commonName}, Species = {species}, Definition = {definition}");
         }
 
         /// <summary>

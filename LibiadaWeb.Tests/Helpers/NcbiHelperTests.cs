@@ -1,9 +1,9 @@
-﻿namespace LibiadaWeb.Tests.Helpers
-{
-    using System.IO;
-    using LibiadaWeb.Helpers;
-    using NUnit.Framework;
+﻿using System.IO;
+using LibiadaWeb.Helpers;
+using NUnit.Framework;
 
+namespace LibiadaWeb.Tests.Helpers
+{
     [TestFixture(TestOf = typeof(NcbiHelper))]
     public class NcbiHelperTests
     {
@@ -13,9 +13,9 @@
         {
             var txtReader = new StreamReader($"{SystemData.ProjectFolderPathForNcbiHelper}nuccore_result.txt");
             var textFromFile = txtReader.ReadToEnd();
-            var result = NcbiHelper.GetIdFromFile(textFromFile, true);
-            int expectedCountOfSequences = 2111;
-            Assert.AreEqual(expectedCountOfSequences, result.Length);
+            var result = NcbiHelper.GetIdsFromNcbiSearchResults(textFromFile, true);
+            int expectedSequencesCount = 2111;
+            Assert.AreEqual(expectedSequencesCount, result.Length);
         }
 
         [Test]
@@ -23,11 +23,11 @@
         {
             var txtReader = new StreamReader($"{SystemData.ProjectFolderPathForNcbiHelper}nuccore_result2.txt");
             var textFromFile = txtReader.ReadToEnd();
-            var result = NcbiHelper.GetIdFromFile(textFromFile, false);
-            int expectedCountOfSequences = 1447;
+            var result = NcbiHelper.GetIdsFromNcbiSearchResults(textFromFile, false);
+            int expectedSequencesCount = 1447;
             int partialSequences = 823;
-            expectedCountOfSequences = expectedCountOfSequences - partialSequences;
-            Assert.AreEqual(expectedCountOfSequences, result.Length);
+            expectedSequencesCount -= partialSequences;
+            Assert.AreEqual(expectedSequencesCount, result.Length);
         }
 
         [Test]
@@ -35,9 +35,9 @@
         {
             var txtReader = new StreamReader($"{SystemData.ProjectFolderPathForNcbiHelper}nuccore_result2.txt");
             var textFromFile = txtReader.ReadToEnd();
-            var result = NcbiHelper.GetIdFromFile(textFromFile, true, 5000, 100000);
-            int expectedCountOfSequences = 122;
-            Assert.AreEqual(expectedCountOfSequences, result.Length);
+            var result = NcbiHelper.GetIdsFromNcbiSearchResults(textFromFile, true, 5000, 100000);
+            int expectedSequencesCount = 122;
+            Assert.AreEqual(expectedSequencesCount, result.Length);
         }
 
         [Test]
@@ -45,9 +45,9 @@
         {
             var txtReader = new StreamReader($"{SystemData.ProjectFolderPathForNcbiHelper}nuccore_result2.txt");
             var textFromFile = txtReader.ReadToEnd();
-            var result = NcbiHelper.GetIdFromFile(textFromFile, false, 5000, 100000);
-            int expectedCountOfSequences = 121;
-            Assert.AreEqual(expectedCountOfSequences, result.Length);
+            var result = NcbiHelper.GetIdsFromNcbiSearchResults(textFromFile, false, 5000, 100000);
+            int expectedSequencesCount = 121;
+            Assert.AreEqual(expectedSequencesCount, result.Length);
         }
 
         [Test]
@@ -55,9 +55,9 @@
         {
             var txtReader = new StreamReader($"{SystemData.ProjectFolderPathForNcbiHelper}nuccore_result2.txt");
             var textFromFile = txtReader.ReadToEnd();
-            var result = NcbiHelper.GetIdFromFile(textFromFile, false, maxLength: 10000);
-            int expectedCountOfSequences = 507;
-            Assert.AreEqual(expectedCountOfSequences, result.Length);
+            var result = NcbiHelper.GetIdsFromNcbiSearchResults(textFromFile, false, maxLength: 10000);
+            int expectedSequencesCount = 507;
+            Assert.AreEqual(expectedSequencesCount, result.Length);
         }
 
         [Test]
@@ -65,9 +65,9 @@
         {
             var txtReader = new StreamReader($"{SystemData.ProjectFolderPathForNcbiHelper}nuccore_result2.txt");
             var textFromFile = txtReader.ReadToEnd();
-            var result = NcbiHelper.GetIdFromFile(textFromFile, true, maxLength: 10000);
-            int expectedCountOfSequences = 1330;
-            Assert.AreEqual(expectedCountOfSequences, result.Length);
+            var result = NcbiHelper.GetIdsFromNcbiSearchResults(textFromFile, true, maxLength: 10000);
+            int expectedSequencesCount = 1330;
+            Assert.AreEqual(expectedSequencesCount, result.Length);
         }
 
         [Test]
@@ -75,18 +75,18 @@
         {
             var txtReader = new StreamReader($"{SystemData.ProjectFolderPathForNcbiHelper}nuccore_result2.txt");
             var textFromFile = txtReader.ReadToEnd();
-            var result = NcbiHelper.GetIdFromFile(textFromFile, true, minLength: 30000);
-            int expectedCountOfSequences = 115;
-            Assert.AreEqual(expectedCountOfSequences, result.Length);
+            var result = NcbiHelper.GetIdsFromNcbiSearchResults(textFromFile, true, minLength: 30000);
+            int expectedSequencesCount = 115;
+            Assert.AreEqual(expectedSequencesCount, result.Length);
         }
         [Test]
         public void MinLengthPartialFalseInGetIdFromFileTest()
         {
             var txtReader = new StreamReader($"{SystemData.ProjectFolderPathForNcbiHelper}nuccore_result2.txt");
             var textFromFile = txtReader.ReadToEnd();
-            var result = NcbiHelper.GetIdFromFile(textFromFile, false, minLength: 1000);
-            int expectedCountOfSequences = 415;
-            Assert.AreEqual(expectedCountOfSequences, result.Length);
+            var result = NcbiHelper.GetIdsFromNcbiSearchResults(textFromFile, false, minLength: 1000);
+            int expectedSequencesCount = 415;
+            Assert.AreEqual(expectedSequencesCount, result.Length);
         }
     }
 }

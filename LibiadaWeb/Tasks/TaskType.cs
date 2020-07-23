@@ -250,7 +250,7 @@
         IntervalsCharacteristicsDistribution = 34,
 
         /// <summary>
-        /// Imports genetic sequences and their annotations 
+        /// Imports genetic sequences and their annotations
         /// using genbank search results file.
         /// </summary>
         [Display(Name = "Batch genetic import from GenBank search file")]
@@ -258,11 +258,20 @@
         BatchGeneticImportFromGenBankSearchFile = 35,
 
         /// <summary>
-        /// Imports genetic sequences and their annotations 
+        /// Imports genetic sequences and their annotations
         /// using genbank search results query.
         /// </summary>
         [Display(Name = "Batch genetic import from GenBank search query")]
         [TaskClass(typeof(BatchGeneticImportFromGenBankSearchQueryController))]
-        BatchGeneticImportFromGenBankSearchQuery = 36
+        BatchGeneticImportFromGenBankSearchQuery = 36,
+
+        /// <summary>
+        /// Searches genbank nuccore database as in
+        /// <see cref="TaskType.BatchGeneticImportFromGenBankSearchQuery"/>
+        /// and displays results in tabular form.
+        /// </summary>
+        [Display(Name = "Ncbi nuccore search")]
+        [TaskClass(typeof(NcbiNuccoreSearchController))]
+        NcbiNuccoreSearch = 37
     }
 }

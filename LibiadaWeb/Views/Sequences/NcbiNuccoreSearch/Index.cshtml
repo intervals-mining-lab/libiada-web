@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Batch sequences import";
+    ViewBag.Title = "Genbank nicleotide database search";
 }
 
 @Html.Partial("_AngularControllerInitializer", "BatchGeneticImportFromGenBankSearchFileController")
@@ -20,18 +20,9 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <label>
-                    <input type="checkbox" name="importGenes" value="true" checked />
-                    <input type="hidden" name="importGenes" value="false" />
-                    Also import genes
-                </label>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <label>
                     <input type="checkbox" name="importPartial" value="true" />
                     <input type="hidden" name="importPartial" value="false" />
-                    Import partial sequences
+                    Include partial sequences
                 </label>
             </div>
         </div>
@@ -70,7 +61,7 @@
         <hr />
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" ng-disabled="!searchQuery" />
+                <input type="submit" value="Find" class="btn btn-default" ng-disabled="!searchQuery" />
             </div>
         </div>
     </div>
