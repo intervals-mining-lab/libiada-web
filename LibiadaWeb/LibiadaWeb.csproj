@@ -917,7 +917,7 @@
       <Version>6.2.2</Version>
     </PackageReference>
     <PackageReference Include="bootstrap">
-      <Version>3.3.7</Version>
+      <Version>3.4.1</Version>
     </PackageReference>
     <PackageReference Include="d3">
       <Version>4.13.0</Version>
