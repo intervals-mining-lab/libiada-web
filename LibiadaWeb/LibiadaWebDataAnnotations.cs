@@ -1,5 +1,6 @@
 ﻿namespace LibiadaWeb
 {
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
     /// <summary>
@@ -215,7 +216,8 @@
         /// <summary>
         /// Gets or sets the fifths.
         /// </summary>
-        [Display(Name = "? я чото п")]
+        [Display(Name = "Clef of the measure")]
+        [Description("Negative numbers represent flats (lower) and positive vaues represet sharps (higher).")]
         public int Fifths { get; set; }
     }
 
@@ -273,29 +275,17 @@
         /// <summary>
         /// Gets or sets the numerator.
         /// </summary>
-        [Display(Name = "Числитель в дроби доли")]
+        [Display(Name = "Note duration fraction numerator")]
         public int Numerator { get; set; }
 
         /// <summary>
         /// Gets or sets the denominator.
         /// </summary>
-        [Display(Name = "Знаменатель в дроби доли")]
+        [Display(Name = "Note duration fraction denominator")]
         public int Denominator { get; set; }
 
         /// <summary>
-        /// Gets or sets the onumerator.
-        /// </summary>
-        [Display(Name = "Оригинальный числитель в дроби доли")]
-        public int Onumerator { get; set; }
-
-        /// <summary>
-        /// Gets or sets the odenominator.
-        /// </summary>
-        [Display(Name = "Оригинальный знаменатель в дроби доли")]
-        public int Odenominator { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether triplet.
+        /// Gets or sets a value indicating triplet note.
         /// </summary>
         [Display(Name = "Триоль")]
         public bool Triplet { get; set; }
@@ -317,7 +307,7 @@
         /// <summary>
         /// Gets or sets the octave.
         /// </summary>
-        [Display(Name = "Номер октавы")]
+        [Display(Name = "Octave nuber (starting from 0?)")]
         public int Octave { get; set; }
 
         /// <summary>
