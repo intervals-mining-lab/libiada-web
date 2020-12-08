@@ -24,9 +24,7 @@
                        selected-matters="selectedMatters">
         </matters-table>
         <characteristics-without-notation characteristic-types="characteristicTypes"
-                                          characteristics-dictionary="characteristicsDictionary"
-                                          languages="languages"
-                                          translators="translators">
+                                          characteristics-dictionary="characteristicsDictionary">
         </characteristics-without-notation>
         @if (AccountHelper.IsAdmin())
         {
@@ -60,6 +58,24 @@
                 <div ng-switch-when="@((byte)Nature.Genetic)">
                 </div>
                 <div ng-switch-when="@((byte)Nature.Music)">
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="pauseTreatment">Pause treatment:</label>
+                        <div class="col-md-10">
+                            <select class="form-control"
+                                    title="PauseTreatment"
+                                    ng-model="pauseTreatment"
+                                    ng-options="t.Text for t in pauseTreatments"
+                                    id="pauseTreatment"></select>
+                            <input type="hidden" name="pauseTreatment" ng-value="pauseTreatment.Value" />
+                        </div>
+                    </div>
+                    <div class="col-md-offset-2 col-md-10">
+                        <label>
+                            <input type="checkbox" name="sequentialTransfer" ng-model="sequentialTransfer" value="true" />
+                            <input type="hidden" name="sequentialTransfer" value="false" />
+                            Sequential transfer
+                        </label>
+                    </div>
                 </div>
                 <div ng-switch-when="@((byte)Nature.MeasurementData)">
                 </div>

@@ -22,6 +22,7 @@ namespace LibiadaWeb
             MusicSequence = new HashSet<MusicSequence>();
             DataSequence = new HashSet<DataSequence>();
             SequenceGroup = new HashSet<SequenceGroup>();
+            ImageSequence = new HashSet<ImageSequence>();
         }
     
         public long Id { get; set; }
@@ -32,6 +33,9 @@ namespace LibiadaWeb
         public string Description { get; set; }
         public System.DateTimeOffset Created { get; set; }
         public System.DateTimeOffset Modified { get; set; }
+        public Nullable<int> MultisequenceId { get; set; }
+        public Nullable<short> MultisequenceNumber { get; set; }
+        public byte[] Source { get; set; }
     
         public virtual ICollection<CommonSequence> Sequence { get; set; }
         public virtual ICollection<DnaSequence> DnaSequence { get; set; }
@@ -39,5 +43,7 @@ namespace LibiadaWeb
         public virtual ICollection<MusicSequence> MusicSequence { get; set; }
         public virtual ICollection<DataSequence> DataSequence { get; set; }
         public virtual ICollection<SequenceGroup> SequenceGroup { get; set; }
+        public virtual Multisequence Multisequence { get; set; }
+        public virtual ICollection<ImageSequence> ImageSequence { get; set; }
     }
 }

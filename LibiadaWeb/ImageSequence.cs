@@ -12,25 +12,17 @@ namespace LibiadaWeb
     using System;
     using System.Collections.Generic;
     
-    public partial class Note
+    public partial class ImageSequence
     {
-        public Note()
-        {
-            Pitch = new HashSet<Pitch>();
-        }
-    
         public long Id { get; set; }
-        public string Value { get; set; }
-        public string Description { get; set; }
-        public string Name { get; set; }
         public Notation Notation { get; set; }
+        public LibiadaWeb.ImageOrderExtractor OrderExtractor { get; set; }
+        public long MatterId { get; set; }
+        public string RemoteId { get; set; }
+        public Nullable<short> RemoteDb { get; set; }
         public System.DateTimeOffset Created { get; set; }
-        public int Numerator { get; set; }
-        public int Denominator { get; set; }
-        public bool Triplet { get; set; }
-        public LibiadaCore.Core.SimpleTypes.Tie Tie { get; set; }
         public System.DateTimeOffset Modified { get; set; }
     
-        public virtual ICollection<Pitch> Pitch { get; set; }
+        public virtual Matter Matter { get; set; }
     }
 }

@@ -36,6 +36,7 @@
         [TestCase("rf4hurccjke", Nature.Literature, Group.ClassicalLiterature, SequenceType.CompleteText)]
         [TestCase("rf4hurccjke", Nature.Music, Group.ClassicalMusic, SequenceType.CompleteMusicalComposition)]
         [TestCase("rf4hurccjke", Nature.MeasurementData, Group.ObservationData, SequenceType.CompleteNumericSequence)]
+        [TestCase("rf4hurccjke", Nature.Image, Group.Picture, SequenceType.CompleteImage)]
         public void FillGroupAndSequenceTypeTest(string name, Nature nature, Group group, SequenceType sequenceType)
         {
             var matter = new Matter

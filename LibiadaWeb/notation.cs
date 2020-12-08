@@ -105,5 +105,13 @@
         [Description("Literature texts and poems segmented into phonemes")]
         [Nature(Nature.Literature)]
         Phonemes = 12,
+
+        /// <summary>
+        /// The image pixels notation.
+        /// </summary>
+        [Display(Name = "Pixels")]
+        [Description("Images' pixels")]
+        [Nature(Nature.Image)]
+        Pixels = 13,
     }
 }

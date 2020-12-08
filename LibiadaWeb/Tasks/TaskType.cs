@@ -247,6 +247,13 @@
         /// </summary>
         [Display(Name = "Calculate characteristics of intervals distributions")]
         [TaskClass(typeof(IntervalsCharacteristicsDistributionController))]
-        IntervalsCharacteristicsDistribution = 34
+        IntervalsCharacteristicsDistribution = 34,
+
+        /// <summary>
+        /// Batch images import.
+        /// </summary>
+        [Display(Name = "Batch images import")]
+        [TaskClass(typeof(BatchImagesImportController))]
+        BatchImagesImport = 35
     }
 }
