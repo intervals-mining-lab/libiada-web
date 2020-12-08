@@ -2971,4 +2971,79 @@ CREATE TABLE task_result
 
 COMMENT ON TABLE task_result IS 'Table with JSON results of tasks calculation. Results are stored as key/value pairs.';
 
+-- 11.03.2020
+-- Add images table.
+
+ALTER TABLE matter ADD COLUMN source bytea;
+
+CREATE TABLE image_sequence
+(
+    id bigint NOT NULL DEFAULT nextval('elements_id_seq'::regclass),
+    notation smallint NOT NULL,
+    order_extractor smallint NOT NULL,
+	image_transformations smallint[] NOT NULL,
+	matrix_transformations smallint[] NOT NULL,
+    matter_id bigint NOT NULL,
+    remote_id text,
+    remote_db smallint,
+	created timestamp with time zone NOT NULL DEFAULT now(),
+    modified timestamp with time zone NOT NULL DEFAULT now(),
+    CONSTRAINT pk_image_sequence PRIMARY KEY (id),
+    CONSTRAINT fk_image_sequence_chain_key FOREIGN KEY (id)
+        REFERENCES chain_key (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE NO ACTION
+        DEFERRABLE INITIALLY DEFERRED,
+    CONSTRAINT fk_image_sequence_matter FOREIGN KEY (matter_id)
+        REFERENCES matter (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE NO ACTION,
+    CONSTRAINT chk_remote_id CHECK (remote_db IS NULL AND remote_id IS NULL OR remote_db IS NOT NULL AND remote_id IS NOT NULL)
+);
+COMMENT ON TABLE image_sequence IS 'Table with information on image transformations and order extraction. Does not store an actual order of image and used for reference by characteristics tables.';
+CREATE INDEX ix_image_sequence_matter_id  ON image_sequence USING btree (matter_id);
+CREATE TRIGGER tgiu_image_sequence_modified  BEFORE INSERT OR UPDATE ON image_sequence FOR EACH ROW EXECUTE PROCEDURE trigger_set_modified();
+CREATE TRIGGER tgiud_image_sequence_chain_key_bound AFTER INSERT OR DELETE OR UPDATE OF id ON image_sequence FOR EACH ROW EXECUTE PROCEDURE trigger_chain_key_bound();
+
+-- 15.03.2020
+-- Remove redundant columns in note and measure tables.
+
+ALTER TABLE note DROP COLUMN onumerator;
+ALTER TABLE note DROP COLUMN odenominator;
+
+-- 17.05.2020
+-- Fix chain_key check trigger.
+
+CREATE OR REPLACE FUNCTION trigger_chain_key_unique_check()
+    RETURNS trigger
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE NOT LEAKPROOF
+AS $BODY$
+DECLARE
+sequence_with_id_count integer;
+BEGIN
+IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
+	SELECT count(*) INTO sequence_with_id_count FROM(
+		SELECT id FROM chain WHERE id = NEW.id 
+		UNION ALL 
+		SELECT id FROM subsequence WHERE id = NEW.id
+		UNION ALL 
+		SELECT id FROM image_sequence WHERE id = NEW.id) s;
+	IF sequence_with_id_count = 1 THEN
+		RETURN NEW;
+	ELSE IF sequence_with_id_count = 0 THEN
+		RAISE EXCEPTION 'New record in table chain_key cannot be addded because there is no sequences with given id.';
+	END IF;
+		RAISE EXCEPTION 'New record in table chain_key cannot be addded because there more than one sequences with given id. Sequences count = %', sequence_with_id_count;
+	END IF;
+ELSE	
+	RAISE EXCEPTION 'Unknown operation. This trigger only operates on INSERT operation on tables with id column.';
+END IF;
+END
+$BODY$;
+
+ALTER FUNCTION trigger_chain_key_unique_check() OWNER TO postgres;
+COMMENT ON FUNCTION trigger_chain_key_unique_check() IS 'Checks that there is one and only one sequence with the given id.';
+
 COMMIT;

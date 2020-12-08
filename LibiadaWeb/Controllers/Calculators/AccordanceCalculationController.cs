@@ -7,7 +7,7 @@
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.AccordanceCalculators;
-
+    using LibiadaCore.Music;
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Catalogs;
@@ -98,6 +98,8 @@
             Notation notation,
             Language? language,
             Translator? translator,
+            PauseTreatment? pauseTreatment,
+            bool? sequentialTransfer,
             string calculationType)
         {
             return CreateTask(() =>
@@ -121,21 +123,32 @@
                 long secondMatterId = matterIds[1];
                 long firstSequenceId;
                 long secondSequenceId;
-                if (notation.GetNature() == Nature.Literature)
+                switch (notation.GetNature())
                 {
-                    firstSequenceId = db.LiteratureSequence.Single(l => l.MatterId == firstMatterId
-                                                                     && l.Notation == notation
-                                                                     && l.Language == language
-                                                                     && l.Translator == translator).Id;
-                    secondSequenceId = db.LiteratureSequence.Single(l => l.MatterId == secondMatterId
-                                                                      && l.Notation == notation
-                                                                      && l.Language == language
-                                                                      && l.Translator == translator).Id;
-                }
-                else
-                {
-                    firstSequenceId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
-                    secondSequenceId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
+                    case Nature.Literature:
+                        firstSequenceId = db.LiteratureSequence.Single(l => l.MatterId == firstMatterId
+                                                                         && l.Notation == notation
+                                                                         && l.Language == language
+                                                                         && l.Translator == translator).Id;
+                        secondSequenceId = db.LiteratureSequence.Single(l => l.MatterId == secondMatterId
+                                                                          && l.Notation == notation
+                                                                          && l.Language == language
+                                                                          && l.Translator == translator).Id;
+                        break;
+                    case Nature.Music:
+                        firstSequenceId = db.MusicSequence.Single(m => m.MatterId == firstMatterId
+                                                                    && m.Notation == notation
+                                                                    && m.PauseTreatment == pauseTreatment
+                                                                    && m.SequentialTransfer == sequentialTransfer).Id;
+                        secondSequenceId = db.MusicSequence.Single(m => m.MatterId == secondMatterId
+                                                                     && m.Notation == notation
+                                                                     && m.PauseTreatment == pauseTreatment
+                                                                     && m.SequentialTransfer == sequentialTransfer).Id;
+                        break;
+                    default:
+                        firstSequenceId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
+                        secondSequenceId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
+                        break;
                 }
 
                 Chain firstChain = commonSequenceRepository.GetLibiadaChain(firstSequenceId);

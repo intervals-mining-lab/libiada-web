@@ -8,6 +8,7 @@
     using System.Web.Mvc.Html;
 
     using LibiadaCore.Extensions;
+    using LibiadaCore.Music;
 
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Models.CalculatorsData;
@@ -132,6 +133,7 @@
             data.Add("notations", notations.ToSelectListWithNature());
             data.Add("languages", EnumHelper.GetSelectList(typeof(Language)));
             data.Add("translators", EnumHelper.GetSelectList(typeof(Translator)));
+            data.Add("pauseTreatments", EnumHelper.GetSelectList(typeof(PauseTreatment)));
             data.Add("sequenceTypes", sequenceTypes.ToSelectListWithNature(true));
             data.Add("groups", groups.ToSelectListWithNature(true));
 

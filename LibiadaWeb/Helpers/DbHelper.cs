@@ -50,9 +50,16 @@
         {
             get
             {
-                using (var db = new LibiadaWebEntities())
+                try
                 {
-                    return db.Database.Exists();
+                    using (var db = new LibiadaWebEntities())
+                    {
+                        return db.Database.Exists();
+                    }
+                }
+                catch
+                {
+                    return false;
                 }
             }
         }
@@ -66,7 +73,7 @@
         /// <returns>
         /// The <see cref="long"/> value of new id.
         /// </returns>
-        public static long GetNewElementId(LibiadaWebEntities db)
+        public static long GetNewElementId(this LibiadaWebEntities db)
         {
             return db.Database.SqlQuery<long>("SELECT nextval('elements_id_seq');").Single();
         }
@@ -83,7 +90,7 @@
         /// <returns>
         /// The <see cref="long[]"/>.
         /// </returns>
-        public static long[] GetAlphabetElementIds(LibiadaWebEntities db, long sequenceId)
+        public static long[] GetAlphabetElementIds(this LibiadaWebEntities db, long sequenceId)
         {
             var dbConnection = (NpgsqlConnection)db.Database.Connection;
             const string Query = "SELECT alphabet FROM chain WHERE id = @id";
@@ -120,7 +127,7 @@
         /// <returns>
         /// The <see cref="T:int[]"/>.
         /// </returns>
-        public static int[] GetSequenceBuilding(LibiadaWebEntities db, long sequenceId)
+        public static int[] GetSequenceBuilding(this LibiadaWebEntities db, long sequenceId)
         {
             var dbConnection = (NpgsqlConnection)db.Database.Connection;
             const string Query = "SELECT building FROM chain WHERE id = @id";
@@ -157,7 +164,7 @@
         /// <returns>
         /// The <see cref="List{Int64}"/>.
         /// </returns>
-        public static long[] GetFmotifAlphabet(LibiadaWebEntities db, long fmotifId)
+        public static long[] GetFmotifAlphabet(this LibiadaWebEntities db, long fmotifId)
         {
             var dbConnection = (NpgsqlConnection)db.Database.Connection;
             const string Query = "SELECT alphabet FROM fmotif WHERE id = @id";
@@ -194,7 +201,7 @@
         /// <returns>
         /// The <see cref="T:int[]"/>.
         /// </returns>
-        public static int[] GetFmotifBuilding(LibiadaWebEntities db, long fmotifId)
+        public static int[] GetFmotifBuilding(this LibiadaWebEntities db, long fmotifId)
         {
             var dbConnection = (NpgsqlConnection)db.Database.Connection;
             const string Query = "SELECT building FROM fmotif WHERE id = @id";
@@ -231,7 +238,7 @@
         /// <returns>
         /// The <see cref="List{Int64}"/>.
         /// </returns>
-        public static long[] GetMeasureAlphabet(LibiadaWebEntities db, long measureId)
+        public static long[] GetMeasureAlphabet(this LibiadaWebEntities db, long measureId)
         {
             var dbConnection = (NpgsqlConnection)db.Database.Connection;
             const string Query = "SELECT alphabet FROM measure WHERE id = @id";
@@ -268,7 +275,7 @@
         /// <returns>
         /// The <see cref="T:int[]"/>.
         /// </returns>
-        public static int[] GetMeasureBuilding(LibiadaWebEntities db, long measureId)
+        public static int[] GetMeasureBuilding(this LibiadaWebEntities db, long measureId)
         {
             var dbConnection = (NpgsqlConnection)db.Database.Connection;
             const string Query = "SELECT building FROM measure WHERE id = @id";
@@ -305,8 +312,9 @@
         /// <param name="parameters">
         /// The parameters.
         /// </param>
-        public static void ExecuteCommand(LibiadaWebEntities db, string query, params NpgsqlParameter[] parameters)
+        public static void ExecuteCommand(this LibiadaWebEntities db, string query, params NpgsqlParameter[] parameters)
         {
+            // TODO: check if this is the optimal way
             db.Database.ExecuteSqlCommand(query, parameters);
         }
 
@@ -322,7 +330,7 @@
         /// <returns>
         /// The <see cref="int"/>.
         /// </returns>
-        public static int GetSequenceLength(LibiadaWebEntities db, long sequenceId)
+        public static int GetSequenceLength(this LibiadaWebEntities db, long sequenceId)
         {
             const string Query = "SELECT cardinality(building) FROM chain WHERE id = @id";
             var id = new NpgsqlParameter<long>("id", NpgsqlDbType.Bigint) { TypedValue = sequenceId };

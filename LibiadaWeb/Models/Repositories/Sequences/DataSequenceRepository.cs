@@ -66,7 +66,7 @@
 
             var chain = new BaseChain(elements);
 
-            MatterRepository.CreateOrExctractExistingMatterForSequence(sequence);
+            MatterRepository.CreateOrExtractExistingMatterForSequence(sequence);
 
             long[] alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.Notation, true);
             Create(sequence, alphabet, chain.Building);
@@ -106,7 +106,7 @@
                                         @remote_db
                                     );";
 
-            DbHelper.ExecuteCommand(Db, Query, parameters.ToArray());
+            Db.ExecuteCommand(Query, parameters.ToArray());
         }
     }
 }

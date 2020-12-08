@@ -12,6 +12,7 @@
             ctrl.characteristic.link = ctrl.characteristicTypes[0].Links[0];
             ctrl.characteristic.arrangementType = ctrl.characteristicTypes[0].ArrangementTypes[0];
             ctrl.characteristic.notation = filterFilter(ctrl.notations, { Nature: ctrl.nature })[0];
+            ctrl.characteristic.pauseTreatment = ctrl.pauseTreatments ? ctrl.pauseTreatments[0] : null;
         };
 
         ctrl.$onChanges = function (changes) {
@@ -39,6 +40,7 @@
             notations: "<",
             languages: "<",
             translators: "<",
+            pauseTreatments: "<",
             characteristicsDictionary: "<",
             characteristicName: "@",
             title: "@"

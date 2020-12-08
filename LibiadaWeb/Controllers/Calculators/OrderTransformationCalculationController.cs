@@ -8,6 +8,7 @@
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
     using LibiadaCore.DataTransformers;
     using LibiadaCore.Extensions;
+    using LibiadaCore.Music;
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Catalogs;
@@ -73,6 +74,12 @@
         /// <param name="translators">
         /// The translator ids.
         /// </param>
+        /// <param name="pauseTreatments">
+        /// Pause treatment parameters of music sequences.
+        /// </param>
+        /// <param name="sequentialTransfers">
+        /// Sequential transfer flag used in music sequences.
+        /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
@@ -85,7 +92,9 @@
             short[] characteristicLinkIds,
             Notation[] notations,
             Language[] languages,
-            Translator?[] translators)
+            Translator?[] translators,
+            PauseTreatment[] pauseTreatments,
+            bool[] sequentialTransfers)
         {
             return CreateTask(() =>
             {
@@ -104,19 +113,27 @@
                     {
                         Notation notation = notations[k];
                         long sequenceId;
-                        if (matters[matterId].Nature == Nature.Literature)
+                        switch (matters[matterId].Nature)
                         {
-                            Language language = languages[k];
-                            Translator? translator = translators[k];
-
-                            sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId &&
-                                                                           l.Notation == notation
-                                                                           && l.Language == language
-                                                                           && translator == l.Translator).Id;
-                        }
-                        else
-                        {
-                            sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
+                            case Nature.Literature:
+                                Language language = languages[k];
+                                Translator translator = translators[k] ?? Translator.NoneOrManual;
+                                sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId
+                                                                               && l.Notation == notation
+                                                                               && l.Language == language
+                                                                               && l.Translator == translator).Id;
+                                break;
+                            case Nature.Music:
+                                PauseTreatment pauseTreatment = pauseTreatments[k];
+                                bool sequentialTransfer = sequentialTransfers[k];
+                                sequenceId = db.MusicSequence.Single(m => m.MatterId == matterId
+                                                                          && m.Notation == notation
+                                                                          && m.PauseTreatment == pauseTreatment
+                                                                          && m.SequentialTransfer == sequentialTransfer).Id;
+                                break;
+                            default:
+                                sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
+                                break;
                         }
 
                         Chain sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);

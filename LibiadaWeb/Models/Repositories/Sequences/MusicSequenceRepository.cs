@@ -70,7 +70,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 throw new Exception("Track contains more then one or zero congeneric score tracks (parts).");
             }
 
-            MatterRepository.CreateOrExctractExistingMatterForSequence(sequence);
+            MatterRepository.CreateOrExtractExistingMatterForSequence(sequence);
 
             BaseChain notesSequence = ConvertCongenericScoreTrackToNotesBaseChain(tempTrack.CongenericScoreTracks[0]);
             long[] notesAlphabet = ElementRepository.GetOrCreateNotesInDb(notesSequence.Alphabet);
@@ -87,15 +87,15 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             var pauseTreatments = EnumExtensions.ToArray<PauseTreatment>().Where(pt => pt != PauseTreatment.NotApplicable);
             foreach (PauseTreatment pauseTreatment in pauseTreatments)
             {
-                BaseChain fmotifsSecuence = ConvertCongenericScoreTrackToFormalMotifsBaseChain(tempTrack.CongenericScoreTracks[0], pauseTreatment, false);
-                long[] fmotifsAlphabet = FmotifRepository.GetOrCreateFmotifsInDb(fmotifsSecuence.Alphabet);
+                BaseChain fmotifsSequence = ConvertCongenericScoreTrackToFormalMotifsBaseChain(tempTrack.CongenericScoreTracks[0], pauseTreatment, false);
+                long[] fmotifsAlphabet = FmotifRepository.GetOrCreateFmotifsInDb(fmotifsSequence.Alphabet);
                 sequence.Id = default;
-                Create(sequence, fmotifsAlphabet, fmotifsSecuence.Building, pauseTreatment, false);
+                Create(sequence, fmotifsAlphabet, fmotifsSequence.Building, pauseTreatment, false);
 
-                fmotifsSecuence = ConvertCongenericScoreTrackToFormalMotifsBaseChain(tempTrack.CongenericScoreTracks[0], pauseTreatment, true);
-                fmotifsAlphabet = FmotifRepository.GetOrCreateFmotifsInDb(fmotifsSecuence.Alphabet);
+                fmotifsSequence = ConvertCongenericScoreTrackToFormalMotifsBaseChain(tempTrack.CongenericScoreTracks[0], pauseTreatment, true);
+                fmotifsAlphabet = FmotifRepository.GetOrCreateFmotifsInDb(fmotifsSequence.Alphabet);
                 sequence.Id = default;
-                Create(sequence, fmotifsAlphabet, fmotifsSecuence.Building, pauseTreatment, true);
+                Create(sequence, fmotifsAlphabet, fmotifsSequence.Building, pauseTreatment, true);
             }
         }
 
@@ -136,7 +136,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         @pause_treatment,
                                         @sequential_transfer
                                     );";
-            DbHelper.ExecuteCommand(Db, Query, parameters.ToArray());
+            Db.ExecuteCommand(Query, parameters.ToArray());
         }
 
         /// <summary>

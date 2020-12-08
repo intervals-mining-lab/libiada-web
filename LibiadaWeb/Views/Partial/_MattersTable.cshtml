@@ -1,15 +1,18 @@
 ﻿@model IEnumerable<Matter>
 
-<br />
-<div class="form-group" ng-if="$ctrl.nature==@((byte)Nature.Genetic)">
+<div class="form-group" ng-init="$ctrl.geneticNature = @((byte)Nature.Genetic)" ng-show="$ctrl.nature == $ctrl.geneticNature">
     <div class="col-md-offset-2 col-md-10">
         <label>
-            <input type="checkbox" name="showRefSeqOnly" checked="checked" ng-model="$ctrl.showRefSeqOnly" />
+            <input type="checkbox"
+                   name="showRefSeqOnly"
+                   checked="checked"
+                   ng-model="$ctrl.showRefSeqOnly"
+                   ng-change="$ctrl.toogleMattersVisibility()" />
             Show only reference sequences
         </label>
     </div>
 </div>
-<div class="form-group" ng-if="$ctrl.checkboxes">
+<div class="form-group" ng-if="::$ctrl.checkboxes">
     <div class="col-md-offset-2 col-md-10">
         <input type="button" class="btn btn-success" ng-click="$ctrl.selectAllVisibleMatters()" value="Select all visible sequences" />
         <input type="button" class="btn btn-default" ng-click="$ctrl.unselectAllVisibleMatters()" value="Unselect all visible sequences" />
@@ -22,15 +25,26 @@
             <th>
             </th>
             <th>
-                <input type="text" class="form-control" placeholder="Filter by name" ng-model="$ctrl.searchMatter" />
+                <input type="text"
+                       class="form-control"
+                       placeholder="Start typing name to see results"
+                       ng-model="$ctrl.searchMatterText"
+                       ng-init="$ctrl.searchMatterText=''"
+                       ng-change="$ctrl.toogleMattersVisibility()" />
             </th>
             <th>
-                <select class="form-control" ng-model="$ctrl.group" ng-options="g.Value as g.Text for g in $ctrl.groups | filter:{ Nature: $ctrl.nature }">
+                <select class="form-control"
+                        ng-model="$ctrl.group"
+                        ng-options="g.Value as g.Text for g in $ctrl.groups | filter:{ Nature: $ctrl.nature }"
+                        ng-change="$ctrl.toogleMattersVisibility()">
                     <option value="">-- All groups --</option>
                 </select>
             </th>
             <th>
-                <select class="form-control" ng-model="$ctrl.sequenceType" ng-options="s.Value as s.Text for s in $ctrl.sequenceTypes | filter:{ Nature: $ctrl.nature }">
+                <select class="form-control"
+                        ng-model="$ctrl.sequenceType"
+                        ng-options="s.Value as s.Text for s in $ctrl.sequenceTypes | filter:{ Nature: $ctrl.nature }"
+                        ng-change="$ctrl.toogleMattersVisibility()">
                     <option value="">-- All sequence types --</option>
                 </select>
             </th>
@@ -51,24 +65,22 @@
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="matter in $ctrl.matters | filter:{ Nature: $ctrl.nature }"
-            ng-show="([matter] | filter:{ Text: $ctrl.searchMatter } | filter: { Group: $ctrl.group || '' } | filter: { SequenceType: $ctrl.sequenceType || '' }).length > 0 && ($ctrl.nature!=@((byte)Nature.Genetic) || !$ctrl.showRefSeqOnly || $ctrl.isRefSeq(matter))"
-            ng-cloak>
+        <tr ng-repeat="matter in $ctrl.matters | filter: { Visible: true } track by matter.Value " ng-cloak>
             <td ng-bind="$index + 1" />
             <td>
                 <label>
-                    <input type="{{$ctrl.checkboxes ? 'checkbox' : 'radio'}}"
+                    <input type="{{::$ctrl.mattersInputType}}"
                            ng-model="matter.Selected"
-                           name="{{$ctrl.checkboxes ? 'matterIds' : 'matterId'}}"
-                           ng-value="matter.Value"
+                           name="{{::$ctrl.mattersInputName}}"
+                           ng-value="::matter.Value"
                            ng-change="$ctrl.matterSelectChange(matter)"
                            ng-disabled="$ctrl.checkboxes && !matter.Selected && ($ctrl.selectedMatters >= $ctrl.maximumSelectedMatters)"/>
 
-                    {{matter.Text}}
+                    {{::matter.Text}}
                 </label>
             </td>
-            <td ng-bind="matter.Group" />
-            <td ng-bind="matter.SequenceType" />
+            <td ng-bind="::matter.Group" />
+            <td ng-bind="::matter.SequenceType" />
         </tr>
     </tbody>
 </table>

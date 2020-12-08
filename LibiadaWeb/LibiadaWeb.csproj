@@ -35,6 +35,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -153,6 +154,7 @@
     <Compile Include="Controllers\PartialController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\Sequences\BatchGenesImportController.cs" />
+    <Compile Include="Controllers\Sequences\BatchImagesImportController.cs" />
     <Compile Include="Controllers\Sequences\BatchMusicImportController.cs" />
     <Compile Include="Controllers\Sequences\BatchPoemsImportController.cs" />
     <Compile Include="Controllers\Sequences\BatchSequenceImportController.cs" />
@@ -195,6 +197,11 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Group.cs" />
+    <Compile Include="ImageMatrixTransformer.cs" />
+    <Compile Include="ImageOrderExtractor.cs" />
+    <Compile Include="ImageSequence.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
     <Compile Include="ImageTransformer.cs" />
     <Compile Include="Language.cs" />
     <Compile Include="Helpers\AccountHelper.cs" />
@@ -254,6 +261,7 @@
     <Compile Include="Models\Repositories\Sequences\GeneticSequenceRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\IFmotifRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\IGeneticSequenceRepository.cs" />
+    <Compile Include="Models\Repositories\Sequences\ImageSequenceRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\IMeasureRepsitory.cs" />
     <Compile Include="Models\Repositories\Sequences\MeasureRepository.cs" />
     <Compile Include="Models\SelectListItemComparer.cs" />
@@ -358,10 +366,6 @@
     <Compile Include="Translator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ConnectionStrings.config">
-      <DependentUpon>Web.config</DependentUpon>
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -876,7 +880,12 @@
     <Content Include="Views\Calculators\OrdersIntervalsDistributionsAccordance\Result.cshtml" />
     <Content Include="Views\Calculators\IntervalsCharacteristicsDistribution\Index.cshtml" />
     <Content Include="Views\Calculators\IntervalsCharacteristicsDistribution\Result.cshtml" />
+    <Content Include="Views\Sequences\BatchImagesImport\Result.cshtml" />
+    <Content Include="Views\Sequences\BatchImagesImport\Index.cshtml" />
     <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="ConnectionStrings.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
@@ -908,7 +917,7 @@
       <Version>6.2.2</Version>
     </PackageReference>
     <PackageReference Include="bootstrap">
-      <Version>3.3.7</Version>
+      <Version>3.4.1</Version>
     </PackageReference>
     <PackageReference Include="d3">
       <Version>4.13.0</Version>
@@ -1031,6 +1040,14 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\</OutputPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />

@@ -206,6 +206,19 @@
           <Property Name="link" Type="int2" Nullable="false" />
           <Property Name="arrangement_type" Type="int2" Nullable="false" />
         </EntityType>
+        <EntityType Name="image_sequence">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int8" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="notation" Type="int2" Nullable="false" />
+          <Property Name="order_extractor" Type="int2" Nullable="false" />
+          <Property Name="matter_id" Type="int8" Nullable="false" />
+          <Property Name="remote_id" Type="text" />
+          <Property Name="remote_db" Type="int2" />
+          <Property Name="created" Type="timestamptz" Precision="7" Nullable="false" />
+          <Property Name="modified" Type="timestamptz" Precision="7" Nullable="false" />
+        </EntityType>
         <EntityType Name="literature_chain">
           <Key>
             <PropertyRef Name="id" />
@@ -236,6 +249,7 @@
           <Property Name="group" Type="int2" Nullable="false" />
           <Property Name="multisequence_id" Type="int4" />
           <Property Name="multisequence_number" Type="int2" />
+          <Property Name="source" Type="bytea" />
         </EntityType>
         <EntityType Name="measure">
           <Key>
@@ -250,7 +264,6 @@
           <Property Name="modified" Type="timestamptz" Precision="7" Nullable="false" />
           <Property Name="beats" Type="int4" Nullable="false" />
           <Property Name="beatbase" Type="int4" Nullable="false" />
-          <Property Name="ticks_per_beat" Type="int4" />
           <Property Name="fifths" Type="int4" Nullable="false" />
           <Property Name="major" Type="bool" Nullable="false" />
         </EntityType>
@@ -290,8 +303,6 @@
           <Property Name="modified" Type="timestamptz" Precision="7" Nullable="false" />
           <Property Name="numerator" Type="int4" Nullable="false" />
           <Property Name="denominator" Type="int4" Nullable="false" />
-          <Property Name="onumerator" Type="int4" Nullable="false" />
-          <Property Name="odenominator" Type="int4" Nullable="false" />
           <Property Name="triplet" Type="bool" Nullable="false" />
           <Property Name="tie" Type="int2" Nullable="false" />
         </EntityType>
@@ -524,6 +535,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_image_sequence_matter">
+          <End Role="matter" Type="Self.matter" Multiplicity="1" />
+          <End Role="image_sequence" Type="Self.image_sequence" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="matter">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="image_sequence">
+              <PropertyRef Name="matter_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_literature_chain_matter">
           <End Role="matter" Type="Self.matter" Multiplicity="1" />
           <End Role="literature_chain" Type="Self.literature_chain" Multiplicity="*" />
@@ -698,6 +721,7 @@
           <EntitySet Name="fmotif" EntityType="Self.fmotif" Schema="public" store:Type="Tables" />
           <EntitySet Name="full_characteristic" EntityType="Self.full_characteristic" Schema="public" store:Type="Tables" />
           <EntitySet Name="full_characteristic_link" EntityType="Self.full_characteristic_link" Schema="public" store:Type="Tables" />
+          <EntitySet Name="image_sequence" EntityType="Self.image_sequence" Schema="public" store:Type="Tables" />
           <EntitySet Name="literature_chain" EntityType="Self.literature_chain" Schema="public" store:Type="Tables" />
           <EntitySet Name="matter" EntityType="Self.matter" Schema="public" store:Type="Tables" />
           <EntitySet Name="measure" EntityType="Self.measure" Schema="public" store:Type="Tables" />
@@ -755,6 +779,10 @@
           <AssociationSet Name="fk_full_characteristic_link" Association="Self.fk_full_characteristic_link">
             <End Role="full_characteristic_link" EntitySet="full_characteristic_link" />
             <End Role="full_characteristic" EntitySet="full_characteristic" />
+          </AssociationSet>
+          <AssociationSet Name="fk_image_sequence_matter" Association="Self.fk_image_sequence_matter">
+            <End Role="matter" EntitySet="matter" />
+            <End Role="image_sequence" EntitySet="image_sequence" />
           </AssociationSet>
           <AssociationSet Name="fk_literature_chain_matter" Association="Self.fk_literature_chain_matter">
             <End Role="matter" EntitySet="matter" />
@@ -1086,6 +1114,11 @@
             <End Role="CalculationTask" EntitySet="CalculationTask" />
             <End Role="TaskResult" EntitySet="TaskResult" />
           </AssociationSet>
+          <EntitySet Name="ImageSequences" EntityType="Self.ImageSequence" />
+          <AssociationSet Name="fk_image_sequence_matter" Association="Self.fk_image_sequence_matter">
+            <End Role="Matter" EntitySet="Matter" />
+            <End Role="ImageSequence" EntitySet="ImageSequences" />
+          </AssociationSet>
 
         </EntityContainer>
 
@@ -1113,6 +1146,10 @@
         <EnumType Name="ArrangementType" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.ArrangementManagers.ArrangementType" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="SequenceGroupType" UnderlyingType="Int16" a:ExternalTypeName="SequenceGroupType" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="PauseTreatment" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Music.PauseTreatment" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="ImageMatrixTransformer" UnderlyingType="Byte" a:ExternalTypeName="LibiadaWeb.ImageMatrixTransformer" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="ImageOrderExtractor" UnderlyingType="Byte" a:ExternalTypeName="LibiadaWeb.ImageOrderExtractor" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="ImageTransformer" UnderlyingType="Byte" a:ExternalTypeName="LibiadaWeb.ImageTransformer" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+
 
         <EntityType Name="BinaryCharacteristicValue">
           <Key>
@@ -1330,6 +1367,7 @@
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="MultisequenceId" Type="Int32" />
           <Property Name="MultisequenceNumber" Type="Int16" />
+          <Property Name="Source" Type="Binary" MaxLength="2147483647" FixedLength="false" />
           <NavigationProperty Name="Sequence" Relationship="Self.fk_chain_matter" FromRole="Matter" ToRole="CommonSequence" />
           <NavigationProperty Name="DnaSequence" Relationship="Self.fk_dna_chain_matter" FromRole="Matter" ToRole="DnaSequence" />
           <NavigationProperty Name="LiteratureSequence" Relationship="Self.fk_literature_chain_matter" FromRole="Matter" ToRole="LiteratureSequence" />
@@ -1337,6 +1375,7 @@
           <NavigationProperty Name="DataSequence" Relationship="Self.fk_data_chain_matter" FromRole="Matter" ToRole="DataSequence" />
           <NavigationProperty Name="SequenceGroup" Relationship="Self.sequence_group_matter" FromRole="Matter" ToRole="SequenceGroup" />
           <NavigationProperty Name="Multisequence" Relationship="Self.fk_matter_multisequence" FromRole="Matter" ToRole="Multisequence" />
+          <NavigationProperty Name="ImageSequence" Relationship="Self.fk_image_sequence_matter" FromRole="Matter" ToRole="ImageSequence" />
         </EntityType>
 
         <EntityType Name="SequenceAttribute">
@@ -1380,7 +1419,6 @@
           <Property Name="Name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Beats" Type="Int32" Nullable="false" />
           <Property Name="Beatbase" Type="Int32" Nullable="false" />
-          <Property Name="TicksPerBeat" Type="Int32" />
           <Property Name="Fifths" Type="Int32" Nullable="false" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="major" Type="Boolean" Nullable="false" />
@@ -1439,8 +1477,6 @@
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="Numerator" Type="Int32" Nullable="false" />
           <Property Name="Denominator" Type="Int32" Nullable="false" />
-          <Property Name="Onumerator" Type="Int32" Nullable="false" />
-          <Property Name="Odenominator" Type="Int32" Nullable="false" />
           <Property Name="Triplet" Type="Boolean" Nullable="false" />
           <Property Name="Tie" Type="LibiadaWebModel.Tie" Nullable="false" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
@@ -1568,6 +1604,21 @@
           <Property Name="Key" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Value" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Task" Relationship="Self.fk_task_result_task" FromRole="TaskResult" ToRole="CalculationTask" />
+        </EntityType>
+
+        <EntityType Name="ImageSequence">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Notation" Type="LibiadaWebModel.Notation" Nullable="false" />
+          <Property Name="OrderExtractor" Type="LibiadaWebModel.ImageOrderExtractor" Nullable="false" />
+          <Property Name="MatterId" Type="Int64" Nullable="false" />
+          <Property Name="RemoteId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="RemoteDb" Type="Int16" />
+          <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <NavigationProperty Name="Matter" Relationship="Self.fk_image_sequence_matter" FromRole="ImageSequence" ToRole="Matter" />
         </EntityType>
 
         <Association Name="fk_binary_characteristic_chain">
@@ -2230,6 +2281,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        
+        <Association Name="fk_image_sequence_matter">
+          <End Type="Self.Matter" Role="Matter" Multiplicity="1" />
+          <End Type="Self.ImageSequence" Role="ImageSequence" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Matter">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ImageSequence">
+              <PropertyRef Name="MatterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
 
       </Schema>
     </edmx:ConceptualModels>
@@ -2423,6 +2487,7 @@
           <EntitySetMapping Name="Matter">
             <EntityTypeMapping TypeName="LibiadaWebModel.Matter">
               <MappingFragment StoreEntitySet="matter">
+                <ScalarProperty Name="Source" ColumnName="source" />
                 <ScalarProperty Name="MultisequenceNumber" ColumnName="multisequence_number" />
                 <ScalarProperty Name="MultisequenceId" ColumnName="multisequence_id" />
                 <ScalarProperty Name="Id" ColumnName="id" />
@@ -2475,7 +2540,6 @@
                 <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="Beats" ColumnName="beats" />
                 <ScalarProperty Name="Beatbase" ColumnName="beatbase" />
-                <ScalarProperty Name="TicksPerBeat" ColumnName="ticks_per_beat" />
                 <ScalarProperty Name="Fifths" ColumnName="fifths" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
               </MappingFragment>
@@ -2525,8 +2589,6 @@
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="Numerator" ColumnName="numerator" />
                 <ScalarProperty Name="Denominator" ColumnName="denominator" />
-                <ScalarProperty Name="Onumerator" ColumnName="onumerator" />
-                <ScalarProperty Name="Odenominator" ColumnName="odenominator" />
                 <ScalarProperty Name="Triplet" ColumnName="triplet" />
                 <ScalarProperty Name="Tie" ColumnName="tie" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
@@ -2649,6 +2711,29 @@
             </EntityTypeMapping>
           </EntitySetMapping>
 
+          <AssociationSetMapping Name="sequence_group_matter" TypeName="LibiadaWebModel.sequence_group_matter" StoreEntitySet="sequence_group_matter">
+            <EndProperty Name="Matter">
+              <ScalarProperty Name="Id" ColumnName="matter_id" />
+            </EndProperty>
+            <EndProperty Name="SequenceGroup">
+              <ScalarProperty Name="Id" ColumnName="group_id" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <EntitySetMapping Name="ImageSequences">
+            <EntityTypeMapping TypeName="LibiadaWebModel.ImageSequence">
+              <MappingFragment StoreEntitySet="image_sequence">
+                <ScalarProperty Name="Modified" ColumnName="modified" />
+                <ScalarProperty Name="Created" ColumnName="created" />
+                <ScalarProperty Name="RemoteDb" ColumnName="remote_db" />
+                <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
+                <ScalarProperty Name="MatterId" ColumnName="matter_id" />
+                <ScalarProperty Name="OrderExtractor" ColumnName="order_extractor" />
+                <ScalarProperty Name="Notation" ColumnName="notation" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+
           <AssociationSetMapping Name="note_pitch" TypeName="LibiadaWebModel.note_pitch" StoreEntitySet="note_pitch">
             <EndProperty Name="Note">
               <ScalarProperty Name="Id" ColumnName="note_id" />
@@ -2664,15 +2749,6 @@
             </EndProperty>
             <EndProperty Name="AspNetRole">
               <ScalarProperty Name="Id" ColumnName="RoleId" />
-            </EndProperty>
-          </AssociationSetMapping>
-
-          <AssociationSetMapping Name="sequence_group_matter" TypeName="LibiadaWebModel.sequence_group_matter" StoreEntitySet="sequence_group_matter">
-            <EndProperty Name="Matter">
-              <ScalarProperty Name="Id" ColumnName="matter_id" />
-            </EndProperty>
-            <EndProperty Name="SequenceGroup">
-              <ScalarProperty Name="Id" ColumnName="group_id" />
             </EndProperty>
           </AssociationSetMapping>
 

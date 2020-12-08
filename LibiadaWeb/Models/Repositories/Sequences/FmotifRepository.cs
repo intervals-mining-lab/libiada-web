@@ -66,16 +66,16 @@
             var fmotifChain = new BaseChain(fmotif.NoteList.Cast<IBaseObject>().ToList());
             long[] notes = new ElementRepository(db).GetOrCreateNotesInDb(fmotifChain.Alphabet);
 
-            string localFmotifHash = BitConverter.ToString(fmotif.GetMD5HashCode()).Replace("-", string.Empty);
+            var localFmotifHash = fmotif.GetHashCode().ToString();
             var dbFmotifs = db.Fmotif.Where(f => f.Value == localFmotifHash).ToList();
             if (dbFmotifs.Count > 0)
             {
                 foreach (var dbFmotif in dbFmotifs)
                 {
-                    var dbAlphabet = DbHelper.GetFmotifAlphabet(db, dbFmotif.Id);
+                    long[] dbAlphabet = db.GetFmotifAlphabet(dbFmotif.Id);
                     if (notes.SequenceEqual(dbAlphabet))
                     {
-                        var dbBuilding = DbHelper.GetFmotifBuilding(db, dbFmotif.Id);
+                        int[] dbBuilding = db.GetFmotifBuilding(dbFmotif.Id);
                         if (fmotifChain.Building.SequenceEqual(dbBuilding))
                         {
                             if (fmotif.Type != dbFmotif.FmotifType)
@@ -126,7 +126,7 @@
                                         @building,
                                         @fmotif_type
                                     );";
-            DbHelper.ExecuteCommand(db, Query, parameters.ToArray());
+            db.ExecuteCommand(Query, parameters.ToArray());
             return fmotif.Id;
         }
 
@@ -147,8 +147,8 @@
         /// </returns>
         protected List<NpgsqlParameter> FillParams(Fmotif fmotif, long[] alphabet, int[] building)
         {
-            fmotif.Id = DbHelper.GetNewElementId(db);
-            var fmotivValue = BitConverter.ToString(fmotif.GetMD5HashCode()).Replace("-", string.Empty);
+            fmotif.Id = db.GetNewElementId();
+            var fmotivValue = fmotif.GetHashCode().ToString();
             var parameters = new List<NpgsqlParameter>
             {
                 new NpgsqlParameter<long>("id", NpgsqlDbType.Bigint) { TypedValue = fmotif.Id },

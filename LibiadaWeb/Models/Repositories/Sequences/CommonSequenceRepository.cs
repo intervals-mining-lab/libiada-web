@@ -1,13 +1,20 @@
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
     using System.Collections.Generic;
+    using System.Data.Entity;
+    using SixLabors.ImageSharp;
     using System.Linq;
     using System.Text;
 
     using LibiadaCore.Core;
+    using LibiadaCore.Music;
 
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
+    using LibiadaCore.Images;
+    using LibiadaCore.Core.SimpleTypes;
+    using System;
+
 
     /// <summary>
     /// The sequence repository.
@@ -58,7 +65,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         @remote_db
                                     );";
 
-            DbHelper.ExecuteCommand(Db, Query, parameters.ToArray());
+            Db.ExecuteCommand(Query, parameters.ToArray());
         }
 
         /// <summary>
@@ -72,7 +79,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public List<Element> GetElements(long sequenceId)
         {
-            long[] elementIds = DbHelper.GetAlphabetElementIds(Db, sequenceId);
+            long[] elementIds = Db.GetAlphabetElementIds(sequenceId);
             return ElementRepository.GetElements(elementIds);
         }
 
@@ -87,7 +94,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public BaseChain GetLibiadaBaseChain(long sequenceId)
         {
-            return new BaseChain(DbHelper.GetSequenceBuilding(Db, sequenceId), GetAlphabet(sequenceId), sequenceId);
+            return new BaseChain(Db.GetSequenceBuilding(sequenceId), GetAlphabet(sequenceId), sequenceId);
         }
 
         /// <summary>
@@ -101,9 +108,32 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public Chain GetLibiadaChain(long sequenceId)
         {
-            return new Chain(DbHelper.GetSequenceBuilding(Db, sequenceId), GetAlphabet(sequenceId), sequenceId);
-        }
+           
+            if (Db.CommonSequence.Any(s => s.Id == sequenceId))
+            {
+                var matter = Db.CommonSequence.Include(s => s.Matter).Single(s => s.Id == sequenceId).Matter;
+                return new Chain(Db.GetSequenceBuilding(sequenceId), GetAlphabet(sequenceId), sequenceId);
+            }
 
+            // if it is not "real" sequence , then it must be image "sequence" 
+            var imageMatter = Db.ImageSequences.Include(s => s.Matter).Single(s => s.Id == sequenceId).Matter;
+            if (imageMatter.Nature != Nature.Image)
+            {
+                throw new Exception("Cannot find sequence to return");
+            }
+
+            var image = Image.Load(imageMatter.Source);
+            var sequence = ImageProcessor.ProcessImage(image, new IImageTransformer[0], new IMatrixTransformer[0], new LineOrderExtractor());
+            var alphabet = new Alphabet { NullValue.Instance() };
+            var incompleteAlphabet = sequence.Alphabet;
+            for (int j = 0; j < incompleteAlphabet.Cardinality; j++)
+            {
+                alphabet.Add(incompleteAlphabet[j]);
+            }
+
+            return new Chain(sequence.Building, alphabet);
+        }
+        
         /// <summary>
         /// Loads sequence by id from db and converts it to <see cref="BaseChain"/>.
         /// </summary>
@@ -115,7 +145,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public string GetString(long sequenceId)
         {
-            int[] order = DbHelper.GetSequenceBuilding(Db, sequenceId);
+            int[] order = Db.GetSequenceBuilding(sequenceId);
             Alphabet alphabet = GetAlphabet(sequenceId);
             var stringBuilder = new StringBuilder(order.Length);
             foreach (int element in order)
@@ -141,10 +171,23 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="translators">
         /// The translators ids.
         /// </param>
+        /// <param name="pauseTreatments">
+        /// Pause treatment parameters of music sequences.
+        /// </param>
+        /// <param name="sequentialTransfers">
+        /// Sequential transfer flag used in music sequences.
+        /// </param>
         /// <returns>
         /// The sequences ids as <see cref="T:long[][]"/>.
         /// </returns>
-        public long[][] GetSequenceIds(long[] matterIds, Notation[] notations, Language[] languages, Translator?[] translators)
+        public long[][] GetSequenceIds(
+            long[] matterIds,
+            Notation[] notations,
+            Language[] languages,
+            Translator?[] translators,
+            PauseTreatment[] pauseTreatments,
+            bool[] sequentialTransfers,
+            ImageOrderExtractor imageOrderExtractor)
         {
             var sequenceIds = new long[matterIds.Length][];
 
@@ -157,20 +200,32 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 {
                     Notation notation = notations[j];
 
-                    if (notation.GetNature() == Nature.Literature)
+                    switch (notation.GetNature())
                     {
-                        Language language = languages[j];
-                        Translator translator = translators[j] ?? Translator.NoneOrManual;
+                        case Nature.Literature:
+                            Language language = languages[j];
+                            Translator translator = translators[j] ?? Translator.NoneOrManual;
+                            sequenceIds[i][j] = Db.LiteratureSequence.Single(l => l.MatterId == matterId
+                                                                                  && l.Notation == notation
+                                                                                  && l.Language == language
+                                                                                  && l.Translator == translator).Id;
+                            break;
+                        case Nature.Music:
+                            PauseTreatment pauseTreatment = pauseTreatments[j];
+                            bool sequentialTransfer = sequentialTransfers[j];
+                            sequenceIds[i][j] = Db.MusicSequence.Single(m => m.MatterId == matterId
+                                                                          && m.Notation == notation
+                                                                          && m.PauseTreatment == pauseTreatment
+                                                                          && m.SequentialTransfer == sequentialTransfer).Id;
+                            break;
+                        case Nature.Image:
+                            sequenceIds[i][j] = Db.ImageSequences.Single(c => c.MatterId == matterId && c.Notation == notation && c.OrderExtractor == imageOrderExtractor).Id;
+                            break;
+                        default:
+                            sequenceIds[i][j] = Db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
+                            break;
+                    }
 
-                        sequenceIds[i][j] = Db.LiteratureSequence.Single(l => l.MatterId == matterId
-                                                                           && l.Notation == notation
-                                                                           && l.Language == language
-                                                                           && l.Translator == translator).Id;
-                    }
-                    else
-                    {
-                        sequenceIds[i][j] = Db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
-                    }
                 }
             }
 
@@ -195,7 +250,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         private Alphabet GetAlphabet(long sequenceId)
         {
-            long[] elements = DbHelper.GetAlphabetElementIds(Db, sequenceId);
+            long[] elements = Db.GetAlphabetElementIds(sequenceId);
             return ElementRepository.ToLibiadaAlphabet(elements);
         }
     }

@@ -46,6 +46,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="translator">
         /// The translator id.
         /// </param>
+        /// <param name="dropPunctuation">
+        /// Flag indicating if punctuation should be removed from text.
+        /// </param>
         public void Create(CommonSequence commonSequence, Stream sequenceStream, Language language, bool original, Translator translator, bool dropPunctuation = false)
         {
             string stringSequence = FileHelper.ReadSequenceFromStream(sequenceStream);
@@ -67,7 +70,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 chain = new BaseChain(text.Select(e => (ValueString)e).Cast<IBaseObject>().ToList());
             }
 
-            MatterRepository.CreateOrExctractExistingMatterForSequence(commonSequence);
+            MatterRepository.CreateOrExtractExistingMatterForSequence(commonSequence);
 
             long[] alphabet = ElementRepository.ToDbElements(chain.Alphabet, commonSequence.Notation, true);
             Create(commonSequence, original, language, translator, alphabet, chain.Building);
@@ -125,7 +128,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         @translator
                                     );";
 
-            DbHelper.ExecuteCommand(Db, Query, parameters.ToArray());
+            Db.ExecuteCommand(Query, parameters.ToArray());
         }
 
         /// <summary>
