@@ -1,7 +1,6 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
     using System.Collections.Generic;
-    using System.Data.Entity.Core.Common.CommandTrees;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -16,7 +15,6 @@
     using Models.Repositories.Catalogs;
 
     using Newtonsoft.Json;
-    using SixLabors.ImageSharp;
 
     /// <summary>
     /// The calculation controller.

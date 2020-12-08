@@ -1,13 +1,10 @@
-﻿using LibiadaWeb.Helpers;
-using Npgsql;
-using NpgsqlTypes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace LibiadaWeb.Models.Repositories.Sequences
+﻿namespace LibiadaWeb.Models.Repositories.Sequences
 {
+    using LibiadaWeb.Helpers;
+    using Npgsql;
+    using NpgsqlTypes;
+    using System.Collections.Generic;
+
     public class ImageSequenceRepository
     {
         public void Create(ImageSequence sequence, LibiadaWebEntities db)

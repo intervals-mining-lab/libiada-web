@@ -114,21 +114,24 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 var matter = Db.CommonSequence.Include(s => s.Matter).Single(s => s.Id == sequenceId).Matter;
                 return new Chain(Db.GetSequenceBuilding(sequenceId), GetAlphabet(sequenceId), sequenceId);
             }
-            var imageMatter = Db.ImageSequences.Include(s => s.Matter).Single(s => s.Id == sequenceId).Matter;
-            if (imageMatter.Nature == Nature.Image)
-            {
-                var image = Image.Load(imageMatter.Source);
-                var sequence = ImageProcessor.ProcessImage(image, new IImageTransformer[0], new IMatrixTransformer[0], new LineOrderExtractor());
-                var alphabet = new Alphabet { NullValue.Instance() };
-                var incompleteAlphabet = sequence.Alphabet;
-                for (int j = 0; j < incompleteAlphabet.Cardinality; j++)
-                {
-                    alphabet.Add(incompleteAlphabet[j]);
-                }
 
-                return new Chain(sequence.Building, alphabet);
+            // if it is not "real" sequence , then it must be image "sequence" 
+            var imageMatter = Db.ImageSequences.Include(s => s.Matter).Single(s => s.Id == sequenceId).Matter;
+            if (imageMatter.Nature != Nature.Image)
+            {
+                throw new Exception("Cannot find sequence to return");
             }
-            throw new Exception("Cannot find sequence to return");
+
+            var image = Image.Load(imageMatter.Source);
+            var sequence = ImageProcessor.ProcessImage(image, new IImageTransformer[0], new IMatrixTransformer[0], new LineOrderExtractor());
+            var alphabet = new Alphabet { NullValue.Instance() };
+            var incompleteAlphabet = sequence.Alphabet;
+            for (int j = 0; j < incompleteAlphabet.Cardinality; j++)
+            {
+                alphabet.Add(incompleteAlphabet[j]);
+            }
+
+            return new Chain(sequence.Building, alphabet);
         }
         
         /// <summary>

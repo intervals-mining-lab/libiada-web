@@ -5,9 +5,7 @@
     using System.Web.Mvc;
 
     using Clusterizator;
-
-    using LibiadaCore.Core;
-    using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
+    
     using LibiadaCore.Music;
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
