@@ -41,13 +41,13 @@ namespace LibiadaWeb.Controllers.Sequences
                 if (filterMinLength)
                 {
                     searchQuery = filterMaxLength ?
-                        NcbiHelper.FormatNcbiSearchTerm(searchQuery, minLength, maxLength) :
+                        NcbiHelper.FormatNcbiSearchTerm(searchQuery, minLength, maxLength: maxLength) :
                         NcbiHelper.FormatNcbiSearchTerm(searchQuery, minLength);
                 }
                 else
                 {
                     searchQuery = filterMaxLength ?
-                        NcbiHelper.FormatNcbiSearchTerm(searchQuery, minLength: 1, maxLength) :
+                        NcbiHelper.FormatNcbiSearchTerm(searchQuery, minLength: 1, maxLength: maxLength) :
                         NcbiHelper.FormatNcbiSearchTerm(searchQuery);
                 }
 

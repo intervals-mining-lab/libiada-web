@@ -91,7 +91,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(short[] characteristicLinkIds, string[] customSequences, bool localFile, string fileType, bool toLower, bool removePunctuation)
+        public ActionResult Index(short[] characteristicLinkIds, string[] customSequences, bool localFile, string fileType, bool? toLower, bool? removePunctuation)
         {
             return CreateTask(() =>
                 {
@@ -112,8 +112,8 @@
                                     using (var sr = new StreamReader(sequenceStream))
                                     {
                                         string stringTextSequence = sr.ReadToEnd();
-                                        if (toLower) stringTextSequence = stringTextSequence.ToLower();
-                                        if (removePunctuation) stringTextSequence = Regex.Replace(stringTextSequence, @"[^\w\s]", "");
+                                        if ((bool)toLower) stringTextSequence = stringTextSequence.ToLower();
+                                        if ((bool)removePunctuation) stringTextSequence = Regex.Replace(stringTextSequence, @"[^\w\s]", "");
                                         sequences[i] = new Chain(stringTextSequence);
                                     }
                                     break;

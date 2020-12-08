@@ -49,13 +49,13 @@ namespace LibiadaWeb.Controllers.Sequences
                 if (filterMinLength)
                 {
                     searchResults = filterMaxLength ?
-                        NcbiHelper.FormatNcbiSearchTerm(searchQuery, minLength, maxLength) :
+                        NcbiHelper.FormatNcbiSearchTerm(searchQuery, minLength, maxLength: maxLength) :
                         NcbiHelper.FormatNcbiSearchTerm(searchQuery, minLength);
                 }
                 else
                 {
                     searchResults = filterMaxLength ?
-                        NcbiHelper.FormatNcbiSearchTerm(searchQuery, minLength: 1, maxLength):
+                        NcbiHelper.FormatNcbiSearchTerm(searchQuery, minLength: 1, maxLength: maxLength):
                         NcbiHelper.FormatNcbiSearchTerm(searchQuery);
                 }
                 nuccoreObjects = NcbiHelper.SearchInNuccoreDb(searchResults, importPartial);

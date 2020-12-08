@@ -1611,7 +1611,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Notation" Type="Int16" Nullable="false" />
+          <Property Name="Notation" Type="LibiadaWebModel.Notation" Nullable="false" />
           <Property Name="OrderExtractor" Type="LibiadaWebModel.ImageOrderExtractor" Nullable="false" />
           <Property Name="MatterId" Type="Int64" Nullable="false" />
           <Property Name="RemoteId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />

@@ -250,12 +250,18 @@
         IntervalsCharacteristicsDistribution = 34,
 
         /// <summary>
+        /// Batch images import.
+        /// </summary>
+        [Display(Name = "Batch images import")]
+        [TaskClass(typeof(BatchImagesImportController))]
+        BatchImagesImport = 35,
+
         /// Imports genetic sequences and their annotations
         /// using genbank search results file.
         /// </summary>
         [Display(Name = "Batch genetic import from GenBank search file")]
         [TaskClass(typeof(BatchGeneticImportFromGenBankSearchFileController))]
-        BatchGeneticImportFromGenBankSearchFile = 35,
+        BatchGeneticImportFromGenBankSearchFile = 36,
 
         /// <summary>
         /// Imports genetic sequences and their annotations
@@ -263,7 +269,7 @@
         /// </summary>
         [Display(Name = "Batch genetic import from GenBank search query")]
         [TaskClass(typeof(BatchGeneticImportFromGenBankSearchQueryController))]
-        BatchGeneticImportFromGenBankSearchQuery = 36,
+        BatchGeneticImportFromGenBankSearchQuery = 37,
 
         /// <summary>
         /// Searches genbank nuccore database as in
@@ -272,6 +278,6 @@
         /// </summary>
         [Display(Name = "Ncbi nuccore search")]
         [TaskClass(typeof(NcbiNuccoreSearchController))]
-        NcbiNuccoreSearch = 37
+        NcbiNuccoreSearch = 38
     }
 }
