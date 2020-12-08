@@ -61,10 +61,10 @@
         /// <summary>
         /// The Picture.
         /// </summary>
-        [Display(Name = "Picture")]
-        [Description("Picture")]
+        [Display(Name = "Painting")]
+        [Description("Painting")]
         [Nature(Nature.Image)]
-        Picture = 7,
+        Painting = 7,
 
         /// <summary>
         /// The Photo.
@@ -73,5 +73,13 @@
         [Description("Photo")]
         [Nature(Nature.Image)]
         Photo = 8,
+
+        /// <summary>
+        /// The Photo.
+        /// </summary>
+        [Display(Name = "Picture")]
+        [Description("Picture")]
+        [Nature(Nature.Image)]
+        Picture = 9
     }
 }

@@ -17,7 +17,6 @@
         {
         }
 
-        // GET: BatchPoemsImport
         public ActionResult Index()
         {
             var viewData = new Dictionary<string, object>
@@ -48,7 +47,6 @@
                                                {
                                                    MatterName = sequenceName
                                                };
-
 
                         try
                         {
