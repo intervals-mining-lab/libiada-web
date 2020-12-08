@@ -109,9 +109,18 @@
         /// <summary>
         /// Complete poem text.
         /// </summary>
+        [Display(Name = "Complete image")]
+        [Description("Complete image")]
+        [Nature(Nature.Image)]
+        CompleteImage = 13,
+
+        /// <summary>
+        /// Complete poem text.
+        /// </summary>
         [Display(Name = "Complete Poem")]
         [Description("Complete poem text")]
         [Nature(Nature.Literature)]
-        CompletePoem = 13
+        CompletePoem = 14
+
     }
 }

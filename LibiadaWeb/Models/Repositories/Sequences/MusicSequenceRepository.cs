@@ -14,6 +14,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using Helpers;
     using Npgsql;
     using NpgsqlTypes;
+    using LibiadaCore.Extensions;
 
     /// <summary>
     /// The music sequence repository.
@@ -69,28 +70,32 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 throw new Exception("Track contains more then one or zero congeneric score tracks (parts).");
             }
 
-            MatterRepository.CreateMatterFromSequence(sequence);
+            MatterRepository.CreateOrExtractExistingMatterForSequence(sequence);
 
             BaseChain notesSequence = ConvertCongenericScoreTrackToNotesBaseChain(tempTrack.CongenericScoreTracks[0]);
             long[] notesAlphabet = ElementRepository.GetOrCreateNotesInDb(notesSequence.Alphabet);
-            Create(sequence, notesAlphabet, notesSequence.Building, Notation.Notes);
+            sequence.Notation = Notation.Notes;
+            Create(sequence, notesAlphabet, notesSequence.Building);
 
             BaseChain measuresSequence = ConvertCongenericScoreTrackToMeasuresBaseChain(tempTrack.CongenericScoreTracks[0]);
             long[] measuresAlphabet = MeasureRepository.GetOrCreateMeasuresInDb(measuresSequence.Alphabet);
-            Create(sequence, measuresAlphabet, measuresSequence.Building, Notation.Measures);
+            sequence.Notation = Notation.Measures;
+            sequence.Id = default;
+            Create(sequence, measuresAlphabet, measuresSequence.Building);
 
-            foreach (PauseTreatment pauseTreatment in Enum.GetValues(typeof(PauseTreatment)))
+            sequence.Notation = Notation.FormalMotifs;
+            var pauseTreatments = EnumExtensions.ToArray<PauseTreatment>().Where(pt => pt != PauseTreatment.NotApplicable);
+            foreach (PauseTreatment pauseTreatment in pauseTreatments)
             {
-                if (pauseTreatment != PauseTreatment.NotApplicable)
-                {
-                    BaseChain fmotifsSecuence = ConvertCongenericScoreTrackToFormalMotifsBaseChain(tempTrack.CongenericScoreTracks[0], pauseTreatment, false);
-                    long[] fmotifsAlphabet = FmotifRepository.GetOrCreateFmotifsInDb(fmotifsSecuence.Alphabet);
-                    Create(sequence, fmotifsAlphabet, fmotifsSecuence.Building, Notation.FormalMotifs, pauseTreatment, false);
+                BaseChain fmotifsSequence = ConvertCongenericScoreTrackToFormalMotifsBaseChain(tempTrack.CongenericScoreTracks[0], pauseTreatment, false);
+                long[] fmotifsAlphabet = FmotifRepository.GetOrCreateFmotifsInDb(fmotifsSequence.Alphabet);
+                sequence.Id = default;
+                Create(sequence, fmotifsAlphabet, fmotifsSequence.Building, pauseTreatment, false);
 
-                    fmotifsSecuence = ConvertCongenericScoreTrackToFormalMotifsBaseChain(tempTrack.CongenericScoreTracks[0], pauseTreatment, true);
-                    fmotifsAlphabet = FmotifRepository.GetOrCreateFmotifsInDb(fmotifsSecuence.Alphabet);
-                    Create(sequence, fmotifsAlphabet, fmotifsSecuence.Building, Notation.FormalMotifs, pauseTreatment, true);
-                }
+                fmotifsSequence = ConvertCongenericScoreTrackToFormalMotifsBaseChain(tempTrack.CongenericScoreTracks[0], pauseTreatment, true);
+                fmotifsAlphabet = FmotifRepository.GetOrCreateFmotifsInDb(fmotifsSequence.Alphabet);
+                sequence.Id = default;
+                Create(sequence, fmotifsAlphabet, fmotifsSequence.Building, pauseTreatment, true);
             }
         }
 
@@ -106,9 +111,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="building">
         /// The building.
         /// </param>
-        public void Create(CommonSequence commonSequence, long[] alphabet, int[] building, Notation notation, PauseTreatment pauseTreatment = PauseTreatment.NotApplicable, bool sequentialTransfer = false)
+        public void Create(CommonSequence commonSequence, long[] alphabet, int[] building, PauseTreatment pauseTreatment = PauseTreatment.NotApplicable, bool sequentialTransfer = false)
         {
-            List<object> parameters = FillParams(commonSequence, alphabet, building, notation, pauseTreatment, sequentialTransfer);
+            List<NpgsqlParameter> parameters = FillParams(commonSequence, alphabet, building, pauseTreatment, sequentialTransfer);
 
             const string Query = @"INSERT INTO music_chain (
                                         id,
@@ -131,7 +136,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         @pause_treatment,
                                         @sequential_transfer
                                     );";
-            DbHelper.ExecuteCommand(Db, Query, parameters.ToArray());
+            Db.ExecuteCommand(Query, parameters.ToArray());
         }
 
         /// <summary>
@@ -149,69 +154,16 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <returns>
         /// The <see cref="List{Object}"/>.
         /// </returns>
-        private List<object> FillParams(CommonSequence commonSequence, long[] alphabet, int[] building, Notation notation, PauseTreatment pauseTreatment, bool sequentialTransfer)
+        private List<NpgsqlParameter> FillParams(CommonSequence commonSequence, long[] alphabet, int[] building, PauseTreatment pauseTreatment, bool sequentialTransfer)
         {
-            commonSequence.Id = DbHelper.GetNewElementId(Db);
+            var parameters = FillParams(commonSequence, alphabet, building);
 
-            var parameters = new List<object>
-            {
-                new NpgsqlParameter
-                {
-                    ParameterName = "id",
-                    NpgsqlDbType = NpgsqlDbType.Bigint,
-                    Value = commonSequence.Id
-                },
-                new NpgsqlParameter
-                {
-                    ParameterName = "notation",
-                    NpgsqlDbType = NpgsqlDbType.Smallint,
-                    Value = notation
-                },
-                new NpgsqlParameter
-                {
-                    ParameterName = "matter_id",
-                    NpgsqlDbType = NpgsqlDbType.Bigint,
-                    Value = commonSequence.MatterId
-                },
-                new NpgsqlParameter
-                {
-                    ParameterName = "alphabet",
-                    NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Bigint,
-                    Value = alphabet
-                },
-                new NpgsqlParameter
-                {
-                    ParameterName = "building",
-                    NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Integer,
-                    Value = building
-                },
-                new NpgsqlParameter
-                {
-                    ParameterName = "remote_id",
-                    NpgsqlDbType = NpgsqlDbType.Varchar,
-                    Value = (object)commonSequence.RemoteId ?? DBNull.Value
-                },
-                new NpgsqlParameter
-                {
-                    ParameterName = "remote_db",
-                    NpgsqlDbType = NpgsqlDbType.Smallint,
-                    Value = (object)commonSequence.RemoteDb ?? DBNull.Value
-                },
-                new NpgsqlParameter
-                {
-                    ParameterName = "pause_treatment",
-                    NpgsqlDbType = NpgsqlDbType.Smallint,
-                    Value = pauseTreatment
-                },new NpgsqlParameter
-                {
-                    ParameterName = "sequential_transfer",
-                    NpgsqlDbType = NpgsqlDbType.Boolean,
-                    Value = sequentialTransfer
-                }
-            };
+            parameters.Add(new NpgsqlParameter<byte>("pause_treatment", NpgsqlDbType.Smallint) {  TypedValue = (byte)pauseTreatment });
+            parameters.Add(new NpgsqlParameter<bool>("sequential_transfer", NpgsqlDbType.Boolean) { TypedValue = sequentialTransfer });
+
             return parameters;
         }
-  
+
         /// <summary>
         /// The dispose.
         /// </summary>

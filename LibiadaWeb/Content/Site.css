@@ -83,3 +83,9 @@ input[type="checkbox"].input-validation-error {
 #chart, .monospace {
   font-family: monospace;
 }
+
+.responsive-chart {
+    margin: 0 auto;
+    height: 85vh;
+    min-height: 300px;
+}

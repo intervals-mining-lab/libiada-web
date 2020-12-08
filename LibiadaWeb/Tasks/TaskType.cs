@@ -251,11 +251,11 @@
         IntervalsCharacteristicsDistribution = 34,
 
         /// <summary>
-        /// Segmentation task.
+        /// Batch images import.
         /// </summary>
-        [Display(Name = "Segmentation")]
-        [TaskClass(typeof(CustomSequenceSegmentationController))]
-        Segmentation = 35,
+        [Display(Name = "Batch images import")]
+        [TaskClass(typeof(BatchImagesImportController))]
+        BatchImagesImport = 35,
 
         /// <summary>
         /// Segmentation task.

@@ -98,7 +98,6 @@ namespace LibiadaWeb.Controllers.Calculators
                 for (int j = 0; j < orders.Count; j++)
                 {
                     var sequence = new Chain(orders[j].Select(Convert.ToInt16).ToArray());
-                    sequence.FillIntervalManagers();
                     characteristics[j] = new double[characteristicLinkIds.Length];
                     for (int k = 0; k < characteristicLinkIds.Length; k++)
                     {
@@ -153,7 +152,6 @@ namespace LibiadaWeb.Controllers.Calculators
                     {
                         var order = orders[j];
                         var sequence = new Chain(order.Select(Convert.ToInt16).ToArray());
-                        sequence.FillIntervalManagers();
                         var fullIntervals = new Dictionary<int, int>();
                         foreach (var el in sequence.Alphabet.ToList())
                         {

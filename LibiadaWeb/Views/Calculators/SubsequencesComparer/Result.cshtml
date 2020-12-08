@@ -38,6 +38,11 @@
                         <br />
                         {{(value.formula3 * 100).toFixed(3)}}%
                     </td>
+                    <td title="{{mattersNames[$index]}}">{{$index + 1}}</td>
+                </tr>
+                <tr>
+                    <td />
+                    <td ng-repeat="matterName in mattersNames" title="{{matterName}}">{{$index + 1}}</td>
                 </tr>
             </tbody>
         </table>
@@ -123,7 +128,8 @@
                                                     nature="nature"
                                                     notations="notations"
                                                     characteristic="characteristic"
-                                                    title="Local characteristic">
+                                                    title="Local characteristic"
+                                                    pause-treatments="pauseTreatments">
                                     </characteristic>
                                     <div class="form-group">
                                         <label class="control-label col-md-2" for="windowSize">Window size:</label>

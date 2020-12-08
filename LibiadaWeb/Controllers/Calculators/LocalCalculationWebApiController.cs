@@ -1,11 +1,8 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Http;
-
-    using Accord.IO;
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
@@ -21,7 +18,6 @@
     using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// The local calculation web api controller.
@@ -69,7 +65,7 @@
                 var subsequenceExtractor = new SubsequenceExtractor(db);
 
                 Subsequence subsequence = db.Subsequence.Single(s => s.Id == subsequenceId);
-                chain = subsequenceExtractor.GetSubsequence(subsequence);
+                chain = subsequenceExtractor.GetSubsequenceSequence(subsequence);
             }
 
             CutRule cutRule = new SimpleCutRule(chain.Length, step, windowSize);

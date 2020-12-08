@@ -1,4 +1,6 @@
-﻿namespace LibiadaWeb.Controllers.Sequences
+﻿using Accord.Math;
+
+namespace LibiadaWeb.Controllers.Sequences
 {
     using System;
     using System.Collections.Generic;
@@ -128,6 +130,21 @@
                         case Nature.MeasurementData:
                             var dataSequenceRepository = new DataSequenceRepository(db);
                             dataSequenceRepository.Create(commonSequence, sequenceStream, precision ?? 0);
+                            break;
+                        case Nature.Image:
+                            var matterRepository = new MatterRepository(db);
+                            int fileSize = Request.Files[0].ContentLength;
+                            var file = new byte[fileSize];
+                            Request.Files[0].InputStream.Read(file, 0 , fileSize);
+                            var matter = new Matter
+                            {
+                                Nature = Nature.Image,
+                                SequenceType = commonSequence.Matter.SequenceType,
+                                Name = commonSequence.Matter.Name,
+                                Source = file,
+                                Group = commonSequence.Matter.Group
+                            };
+                            matterRepository.CreateMatter(matter);
                             break;
                         default:
                             throw new InvalidEnumArgumentException(nameof(nature), (int)nature, typeof(Nature));

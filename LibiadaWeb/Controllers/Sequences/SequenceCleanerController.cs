@@ -52,7 +52,7 @@
                                           };
                     var chain = commonSequenceRepository.GetLibiadaChain(sequences[i].Id);
 
-                    matterRepository.CreateMatterFromSequence(newSequence);
+                    matterRepository.CreateOrExtractExistingMatterForSequence(newSequence);
                     dnaSequenceRepository.Create(newSequence, false, elementRepository.ToDbElements(chain.Alphabet, Notation.Nucleotides, false), chain.Building);
                     var sequenceId = sequences[i].Id;
                     var subsequences = db.Subsequence.Include(s => s.Position).Include(s => s.SequenceAttribute).Where(s => s.SequenceId == sequenceId).ToList();
@@ -72,7 +72,7 @@
                     {
                         newSubsequences[j] = new Subsequence
                                                  {
-                                                     Id = DbHelper.GetNewElementId(db),
+                                                     Id = db.GetNewElementId(),
                                                      Feature = subsequences[j].Feature,
                                                      SequenceId = newSequence.Id,
                                                      Start = subsequences[j].Start,

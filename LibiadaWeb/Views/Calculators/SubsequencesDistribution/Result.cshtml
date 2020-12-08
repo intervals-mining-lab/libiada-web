@@ -1,91 +1,233 @@
-﻿@{
-    ViewBag.Title = "Subsequences characteristics distributions";
+﻿@using LibiadaWeb.Helpers
+@{
+    Layout = null;
 }
-@Scripts.Render("~/bundles/loadingWindow")
-<h2>@ViewBag.Title</h2>
 
-@if (ViewBag.Error == null)
-{
-    @Html.Partial("_AngularControllerInitializer", "SubsequencesDistributionResultController")
-    <div class="form-horizontal" ng-controller="SubsequencesDistributionResultCtrl">
-        <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
-        <div ng-disabled="loading" ng-cloack>
-            <div class="form-group">
-                <label class="control-label col-md-2" for="subsequenceCharacteristic">Second characteristic:</label>
-                <div class="col-md-10">
-                    <select class="form-control" title="Subsequnce characteristic" ng-model="subsequenceCharacteristic" ng-options="c.Text for c in subsequencesCharacteristicsList" id="subsequenceCharacteristic"></select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-md-2" for="height">Height:</label>
-                <div class="col-md-10">
-                    <input class="form-control" name="height" id="height" type="number" min="{{500 + legendHeight}}" step="20" ng-model="height" />
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-md-2" for="width">Width:</label>
-                <div class="col-md-10">
-                    <input class="form-control" name="width" id="width" type="number" min="400" step="20" ng-model="width" />
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="checkbox" name="numericXAxis" ng-model="numericXAxis" value="false" />
-                        Numeric x axis
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="button" class="btn btn-default" ng-click="drawGenesMap()" value="Draw" />
-                </div>
-            </div>
-            <hr />
-            @Html.Partial("_FeaturesSelect")
-            <hr />
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="checkbox" name="highlight" ng-model="highlight" value="false" />
-                        Highlight similar subsequences
-                    </label>
-                </div>
-            </div>
-            <div ng-show="highlight">
-                <div ng-repeat="characteristicComparer in characteristicComparers">
-                    <div class="form-group">
-                        <label class="control-label col-md-2" for="characteristic">Characteristic:</label>
-                        <div class="col-md-10">
-                            <select class="form-control" ng-model="characteristicComparer.characteristic" ng-options="c.Text for c in subsequencesCharacteristicsList" id="characteristic" title="Characteristic"></select>
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    @{
+        ViewBag.Title = "Subsequences characteristics distributions";
+    }
+    <title>@ViewBag.Title - FOA Research Lab</title>
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/genesMap")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/angularjs")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/d3js")
+    @Scripts.Render("~/bundles/plotlyjs")
+
+</head>
+<body>
+
+
+    @*<h2>@ViewBag.Title</h2>*@
+
+    @if (ViewBag.Error == null)
+    {
+        <div ng-app="libiada">
+
+            @Html.Partial("_AngularControllerInitializer", "SubsequencesDistributionResultPlotlyController")
+            @Scripts.Render("~/bundles/loadingWindow")
+            <div class="form-horizontal" ng-controller="SubsequencesDistributionResultPlotlyCtrl">
+                <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
+                <div id="container" ng-disabled="loading" ng-cloack>
+
+                    <div id="main">
+                        <div id="chart" class="responsive-chart"></div>
+                    </div>
+                    <div id="dragbar" ng-mousedown="dragbarMouseDown()"></div>
+                    <div id="sidebar">
+                        <ul id='nav' class="nav nav-tabs" role="tablist">
+                            <li role="presentation" data-trigger="hover" data-toggle="tooltip" data-placement="bottom" title="Legend">
+                                <a href="#legend" aria-controls="Legend" role="tab" data-toggle="tab">
+                                    <big>
+                                        <span class="glyphicon glyphicon-list" aria-label="Legend" aria-hidden="true"></span>
+                                    </big>
+                                </a>
+                            </li>
+                            <li role="presentation" data-trigger="hover" data-toggle="tooltip" data-placement="bottom" title="Display settings">
+                                <a href="#characteristic" aria-controls="Characteristic" role="tab" data-toggle="tab">
+                                    <big>
+                                        <span class="glyphicon glyphicon-equalizer" aria-label="Display settings" aria-hidden="true"></span>
+                                    </big>
+                                </a>
+                            </li>
+                            <li role="presentation" data-trigger="hover" data-toggle="tooltip" data-placement="bottom" title="Similar sequences">
+                                <a href="#similar-sequences" aria-controls="Similar-Sequences" role="tab" data-toggle="tab">
+                                    <big>
+                                        <span class="glyphicon glyphicon-link" aria-label="Similar sequences" aria-hidden="true"></span>
+                                    </big>
+                                </a>
+                            </li>
+                            <li role="presentation" data-trigger="hover" data-toggle="tooltip" data-placement="bottom" title="Find by product">
+                                <a href="#filter" aria-controls="Filter" role="tab" data-toggle="tab">
+                                    <big>
+                                        <span class="glyphicon glyphicon-search" aria-label="Find by product" aria-hidden="true"></span>
+                                    </big>
+                                </a>
+                            </li>
+                            <li role="presentation" data-trigger="hover" data-toggle="tooltip" data-placement="bottom" title="Features select">
+                                <a href="#features" aria-controls="Features" role="tab" data-toggle="tab">
+                                    <big>
+                                        <span class="glyphicon glyphicon-filter" aria-label="Features select" aria-hidden="true"></span>
+                                    </big>
+                                </a>
+                            </li>
+                            <li role="presentation" data-trigger="hover" data-toggle="tooltip" data-placement="bottom" title="Tooltip">
+                                <a href="#tooltip" aria-controls="Tooltip" role="tab" data-toggle="tab" data-target="#tooltip">
+                                    <big>
+                                        <span class="glyphicon glyphicon-info-sign" aria-label="Tooltip" aria-hidden="true"></span>
+                                    </big>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane" id="legend">
+                                    <!-- .roundedOne -->
+                                <div ng-repeat="legendItem in matters">
+                                    <div  class="roundedOne">
+                                        <input  type="checkbox" ng-change="legendClick(legendItem)" ng-model="legendItem.visible" id="{{'matter' + legendItem.id}}" name="check" checked />
+                                        <label for="{{'matter' + legendItem.id}}" ng-class="'legend' + legendItem.id" style="margin-right: 5px;"></label>
+                                        <label for="{{'matter' + legendItem.id}}" class="monospace">{{legendItem.name}}</label>
+                                    </div>
+                                </div>
+                                        
+                                        <!-- end .roundedOne -->
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="characteristic">
+                                <br />
+                                <div class="form-group">
+                                    <div class="col-md-10">
+                                        <select class="form-control" 
+                                                title="Subsequence characteristic" 
+                                                ng-model="subsequenceCharacteristic" 
+                                                ng-options="c.Text for c in subsequencesCharacteristicsList"
+                                                ng-change="redrawGenesMap()"
+                                                id="subsequenceCharacteristic"></select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-10">
+                                        <label>
+                                            <input type="checkbox" name="numericXAxis" ng-model="numericXAxis" ng-change="redrawGenesMap()" value="false" />
+                                            Numeric x axis
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="similar-sequences">
+                                <br />
+                                <div class="form-group">
+                                    <div class="col-md-10">
+                                        <label>
+                                            <input type="checkbox" name="highlight" ng-model="highlight" value="false" />
+                                            Highlight similar subsequences
+                                        </label>
+                                    </div>
+                                </div>
+                                <div ng-show="highlight">
+                                    <div ng-repeat="characteristicComparer in characteristicComparers">
+                                        <div class="form-group">
+                                            <div class="col-md-10">
+                                                <select class="form-control" ng-model="characteristicComparer.characteristic" ng-options="c.Text for c in subsequencesCharacteristicsList" id="characteristic" title="Characteristic"></select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-10" for="precision">Precision of characteristic comparison:</label>
+                                            <div class="col-md-10">
+                                                <input class="form-control" ng-model="characteristicComparer.precision" type="number" value="0" step="any" min="0" id="precision" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-10">
+                                                <button type="button" style="margin-top: 15px;" class="btn btn-danger col-md-10" ng-click="deleteCharacteristicComparer(characteristicComparer)" ng-disabled="characteristicComparers.length <= 1">Delete characteristic comparer</button>
+                                            </div>
+                                        </div>
+                                        <br />
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-10">
+                                            <button type="button" class="btn btn-success col-md-10" ng-click="addCharacteristicComparer()">Add characteristic comparer</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="filter">
+                                @Html.Partial("_Filters")
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="features">
+                                @Html.Partial("_FeaturesSelect")
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="tooltip">
+                                <div ng-repeat="tooltipElement in tooltipElements" ng-class="tooltipElement.color" class="monospace">
+                                    <a target="_blank" rel="noopener" ng-if="tooltipElement.sequenceRemoteId"
+                                       ng-href="https://www.ncbi.nlm.nih.gov/nuccore/{{tooltipElement.sequenceRemoteId}}">
+                                        {{tooltipElement.name}}
+                                    </a>
+                                    <span ng-if="!tooltipElement.sequenceRemoteId">{{tooltipElement.name}}</span>
+                                    <br />
+                                    <a target="_blank" rel="noopener" ng-if="tooltipElement.remoteId" ng-href="https://www.ncbi.nlm.nih.gov/nuccore/{{tooltipElement.remoteId}}">
+                                        Peptide ncbi page
+                                    </a>
+                                    <div>
+                                        {{tooltipElement.feature}}
+                                    </div>
+                                    <div ng-repeat="attribute in tooltipElement.attributes">
+                                        {{attribute}}
+                                    </div>
+                                    <div ng-if="tooltipElement.partial">Partial</div>
+                                    <div>
+                                        Position:
+                                        <a target="_blank" rel="noopener" ng-if="tooltipElement.sequenceRemoteId"
+                                           ng-href="https://www.ncbi.nlm.nih.gov/nuccore/{{tooltipElement.sequenceRemoteId}}?from={{tooltipElement.positions[0]+1}}&to={{tooltipElement.positions[0]+tooltipElement.lengths[0]}}">
+                                            {{tooltipElement.position}}
+                                        </a>
+                                        <span ng-if="!tooltipElement.sequenceRemoteId">{{tooltipElement.position}}</span>
+                                    </div>
+                                    <div>
+                                        Lenght:{{tooltipElement.length}}
+                                    </div>
+                                    <hr />
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-2" for="precision">Precision of characteristic comparison:</label>
-                        <div class="col-md-10">
-                            <input class="form-control" ng-model="characteristicComparer.precision" type="number" value="0" step="any" min="0" id="precision" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <button type="button" class="btn btn-danger" ng-click="deleteCharacteristicComparer(characteristicComparer)" ng-disabled="characteristicComparers.length <= 1">Delete characteristic comparer</button>
-                        </div>
-                    </div>
-                    <br />
                 </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <button type="button" class="btn btn-success" ng-click="addCharacteristicComparer()">Add characteristic comparer</button>
-                    </div>
-                </div>
-            </div>
-            @Html.Partial("_Filters")
-            <div id="chart">
             </div>
         </div>
-    </div>
-
-    @section Scripts {
-        @Scripts.Render("~/bundles/d3js")
     }
-}
+    else
+    {
+        if (AccountHelper.IsAdmin())
+        {
+            <div class="error-message">
+                @Html.Raw(ViewBag.ErrorMessage)
+            </div>
+            <br />
+            if (ViewBag.StackTrace != null)
+            {
+                <div class="stack-trace">
+                    @Html.Raw(ViewBag.StackTrace)
+                </div>
+            }
+        }
+        else
+        {
+            <h1 class="text-danger">Error.</h1>
+            <h2 class="text-danger">An error occurred while processing your request.</h2>
+
+            if (ViewBag.UserError != null)
+            {
+                <div class="error-message">
+                    @ViewBag.UserError
+                </div>
+            }
+        }
+    }
+</body>
+</html>

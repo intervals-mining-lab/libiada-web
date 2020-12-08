@@ -2,7 +2,7 @@
 <edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
   <edmx:Designer>
     <edmx:Diagrams>
-      <edmx:Diagram DiagramId="eac4ed14a17c421fa3feaade14594258" Name="Diagram1" ZoomLevel="100">
+      <edmx:Diagram DiagramId="eac4ed14a17c421fa3feaade14594258" Name="Diagram1" ZoomLevel="94">
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.BinaryCharacteristic" Width="2" PointX="14.375" PointY="30.5" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.AccordanceCharacteristic" Width="2" PointX="13.5" PointY="40.125" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.CommonSequence" Width="1.75" PointX="5.25" PointY="30" IsExpanded="true" />
@@ -138,6 +138,12 @@
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_sequence_group_modifier" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.FullCharacteristicLink" Width="2" PointX="6.875" PointY="14.375" />
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_full_characteristic_link" />
+        <edmx:EntityTypeShape EntityType="LibiadaWebModel.multisequence" Width="1.5" PointX="7" PointY="1" />
+        <edmx:AssociationConnector Association="LibiadaWebModel.fk_matter_multisequence" />
+        <edmx:EntityTypeShape EntityType="LibiadaWebModel.task_result" Width="1.5" PointX="8.375" PointY="7.125" />
+        <edmx:AssociationConnector Association="LibiadaWebModel.fk_task_result_task" />
+        <edmx:EntityTypeShape EntityType="LibiadaWebModel.ImageSequence" Width="1.5" PointX="5.875" PointY="21.75" />
+        <edmx:AssociationConnector Association="LibiadaWebModel.fk_image_sequence_matter" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

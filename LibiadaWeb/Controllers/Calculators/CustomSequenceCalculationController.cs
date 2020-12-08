@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Text.RegularExpressions;
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
 
@@ -23,6 +24,7 @@
     using Newtonsoft.Json;
 
     using SixLabors.ImageSharp;
+    using SixLabors.ImageSharp.PixelFormats;
 
     /// <summary>
     /// The quick calculation controller.
@@ -78,15 +80,18 @@
         /// <param name="fileType">
         /// Uploaded files type.
         /// </param>
-        /// <param name="delimiter">
-        /// Delimiter of components in the sequence.
+        /// <param name="toLower">
+        /// Flag indicating that texts should be converted to lower case.
+        /// </param>
+        /// <param name="removePunctuation">
+        /// Flag indicating that punctuations marks should be excluded from texts.
         /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(short[] characteristicLinkIds, string[] customSequences, bool localFile, string fileType, char[] delimiter)
+        public ActionResult Index(short[] characteristicLinkIds, string[] customSequences, bool localFile, string fileType, bool? toLower, bool? removePunctuation, char delimiter)
         {
             return CreateTask(() =>
                 {
@@ -99,19 +104,23 @@
                         {
 
                             Stream sequenceStream = FileHelper.GetFileStream(Request.Files[i]);
+                            sequencesNames[i] = Request.Files[i].FileName;
+
                             switch (fileType)
                             {
                                 case "literature":
                                     throw new NotImplementedException();
                                 case "text":
-                                    sequencesNames[i] = Request.Files[i].FileName;
                                     using (var sr = new StreamReader(sequenceStream))
                                     {
-                                        sequences[i] = new Chain(sr.ReadToEnd());
+                                        string stringTextSequence = sr.ReadToEnd();
+                                        if ((bool)toLower) stringTextSequence = stringTextSequence.ToLower();
+                                        if ((bool)removePunctuation) stringTextSequence = Regex.Replace(stringTextSequence, @"[^\w\s]", "");
+                                        sequences[i] = new Chain(stringTextSequence);
                                     }
                                     break;
                                 case "image":
-                                    var image = Image.Load(sequenceStream);
+                                    var image = Image.Load<Rgba32>(sequenceStream);
                                     var sequence = ImageProcessor.ProcessImage(image, new IImageTransformer[0], new IMatrixTransformer[0], new LineOrderExtractor());
                                     var alphabet = new Alphabet { NullValue.Instance() };
                                     var incompleteAlphabet = sequence.Alphabet;
@@ -121,7 +130,6 @@
                                     }
 
                                     sequences[i] = new Chain(sequence.Building, alphabet);
-                                    sequencesNames[i] = Request.Files[i].FileName;
                                     break;
                                 case "genetic":
                                     ISequence fastaSequence = NcbiHelper.GetFastaSequence(sequenceStream);
@@ -153,7 +161,6 @@
 
                                     int dataID = reader.ReadInt32();
                                     int dataSize = reader.ReadInt32();
-                                    sequencesNames[i] = Request.Files[i].FileName;
                                     byte[] byteArray = reader.ReadBytes(dataSize);
                                     var shortArray = new short[byteArray.Length / 2];
                                     Buffer.BlockCopy(byteArray, 0, shortArray, 0, byteArray.Length);
@@ -182,8 +189,6 @@
                         var characteristics = new double[characteristicLinkIds.Length];
                         for (int k = 0; k < characteristicLinkIds.Length; k++)
                         {
-                            sequences[j].FillIntervalManagers();
-
                             Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkIds[k]);
                             FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkIds[k]);
                             IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
