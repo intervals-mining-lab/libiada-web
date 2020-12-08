@@ -69,10 +69,10 @@
             {
                 foreach (var dbMeasure in dbMeasures)
                 {
-                    long[] dbAlphabet = DbHelper.GetMeasureAlphabet(db, dbMeasure.Id);
+                    long[] dbAlphabet = db.GetMeasureAlphabet(dbMeasure.Id);
                     if (notes.SequenceEqual(dbAlphabet))
                     {
-                        int[] dbBuilding = DbHelper.GetMeasureBuilding(db, dbMeasure.Id);
+                        int[] dbBuilding = db.GetMeasureBuilding(dbMeasure.Id);
                         if (measureChain.Building.SequenceEqual(dbBuilding))
                         {
                             if (measure.Attributes.Key.Fifths != dbMeasure.Fifths
@@ -131,7 +131,7 @@
                                         @fifths,
                                         @major
                                     );";
-            DbHelper.ExecuteCommand(db, Query, parameters.ToArray());
+            db.ExecuteCommand(Query, parameters.ToArray());
             return measure.Id;
         }
 
@@ -152,7 +152,7 @@
         /// </returns>
         protected List<NpgsqlParameter> FillParams(Measure measure, long[] alphabet, int[] building)
         {
-            measure.Id = DbHelper.GetNewElementId(db);
+            measure.Id = db.GetNewElementId();
             var measureValue = measure.GetHashCode().ToString();
             var mode = measure.Attributes.Key.Mode;
 

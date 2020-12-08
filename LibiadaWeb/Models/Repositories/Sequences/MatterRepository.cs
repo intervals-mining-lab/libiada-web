@@ -56,6 +56,12 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                     matter.Group = Group.ObservationData;
                     matter.SequenceType = SequenceType.CompleteNumericSequence;
                     break;
+                case Nature.Image:
+                    // TODO: add distinction between photo and picture, painting and photo
+                    matter.Group = Group.Picture;
+                    matter.SequenceType = SequenceType.CompleteImage;
+                    break;
+
                 case Nature.Genetic:
                     if (name.Contains("mitochondrion") || name.Contains("mitochondrial"))
                     {

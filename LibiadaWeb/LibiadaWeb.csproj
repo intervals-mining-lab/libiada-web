@@ -1,0 +1,1091 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{47FAD378-F2BC-4470-AE1A-F497D698600C}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LibiadaWeb</RootNamespace>
+    <AssemblyName>LibiadaWeb</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>false</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <TargetFrameworkProfile />
+    <UseGlobalApplicationHostFile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <Use64BitIISExpress />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AccordanceCharacteristicLink.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AccordanceCharacteristicValue.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="App_Start\ApplicationSignInManager.cs" />
+    <Compile Include="App_Start\ApplicationUserManager.cs" />
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\EmailService.cs" />
+    <Compile Include="App_Start\LibiadaRazorViewEngine.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\SmsService.cs" />
+    <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="AspNetRole.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AspNetUser.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AspNetUserClaim.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AspNetUserLogin.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Attribute.cs" />
+    <Compile Include="Attributes\GenBankFeatureNameAttribute.cs" />
+    <Compile Include="Attributes\SequenceGroupTypeAttribute.cs" />
+    <Compile Include="Attributes\ImageTransformerTypeAttribute.cs" />
+    <Compile Include="Attributes\TaskClassAttribute.cs" />
+    <Compile Include="BinaryCharacteristicLink.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BinaryCharacteristicValue.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CalculationTask.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CharacteristicCategory.cs" />
+    <Compile Include="CharacteristicValue.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CommonSequence.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CongenericCharacteristicLink.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CongenericCharacteristicValue.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\AbstractResultController.cs" />
+    <Compile Include="Controllers\Calculators\AccordanceCalculationController.cs" />
+    <Compile Include="Controllers\Calculators\ChartsController.cs" />
+    <Compile Include="Controllers\Calculators\CustomSequenceOrderTransformationCalculationController.cs" />
+    <Compile Include="Controllers\Calculators\LocalCalculationWebApiController.cs" />
+    <Compile Include="Controllers\Calculators\MusicFilesController.cs" />
+    <Compile Include="Controllers\Calculators\IntervalsCharacteristicsDistributionController.cs" />
+    <Compile Include="Controllers\Calculators\OrderTransformationCalculationController.cs" />
+    <Compile Include="Controllers\Calculators\OrderTransformationCharacteristicsDynamicVisualizationController.cs" />
+    <Compile Include="Controllers\Calculators\OrderTransformationVizualizationController.cs" />
+    <Compile Include="Controllers\Calculators\SequencePredictionController.cs" />
+    <Compile Include="Controllers\Calculators\SequencesAlignmentController.cs" />
+    <Compile Include="Controllers\Calculators\CalculationController.cs" />
+    <Compile Include="Controllers\Calculators\ClusterizationController.cs" />
+    <Compile Include="Controllers\Calculators\CongenericCalculationController.cs" />
+    <Compile Include="Controllers\Calculators\OrderCalculationController.cs" />
+    <Compile Include="Controllers\Calculators\OrdersIntervalsDistributionsAccordanceController.cs" />
+    <Compile Include="Controllers\Calculators\SequencesOrderDistributionController.cs" />
+    <Compile Include="Controllers\Calculators\SubsequencesComparerController.cs" />
+    <Compile Include="Controllers\Calculators\SubsequencesCalculationController.cs" />
+    <Compile Include="Controllers\Calculators\SubsequencesDistributionController.cs" />
+    <Compile Include="Controllers\Calculators\SubsequencesSimilarityController.cs" />
+    <Compile Include="Controllers\Calculators\LocalCalculationController.cs" />
+    <Compile Include="Controllers\Calculators\CustomSequenceCalculationController.cs" />
+    <Compile Include="Controllers\Calculators\RelationCalculationController.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\PartialController.cs" />
+    <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\Sequences\BatchGenesImportController.cs" />
+    <Compile Include="Controllers\Sequences\BatchImagesImportController.cs" />
+    <Compile Include="Controllers\Sequences\BatchMusicImportController.cs" />
+    <Compile Include="Controllers\Sequences\BatchPoemsImportController.cs" />
+    <Compile Include="Controllers\Sequences\BatchSequenceImportController.cs" />
+    <Compile Include="Controllers\Sequences\CommonSequencesController.cs" />
+    <Compile Include="Controllers\Sequences\CustomSequenceOrderTransformerController.cs" />
+    <Compile Include="Controllers\Sequences\FmotifsDictionaryController.cs" />
+    <Compile Include="Controllers\Sequences\MattersController.cs" />
+    <Compile Include="Controllers\Sequences\OrderTransformationConvergenceController.cs" />
+    <Compile Include="Controllers\Sequences\OrderTransformerController.cs" />
+    <Compile Include="Controllers\Sequences\SequenceCheckController.cs" />
+    <Compile Include="Controllers\Sequences\SequenceCleanerController.cs" />
+    <Compile Include="Controllers\Sequences\SequenceElementsController.cs" />
+    <Compile Include="Controllers\Sequences\SequenceGroupsController.cs" />
+    <Compile Include="Controllers\Sequences\SequenceMixerController.cs" />
+    <Compile Include="Controllers\Sequences\SequencesMattersController.cs" />
+    <Compile Include="Controllers\Sequences\SequenceTransformerController.cs" />
+    <Compile Include="Controllers\Sequences\GenesImportController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\TaskManagerController.cs" />
+    <Compile Include="Controllers\TaskManagerWebApiController.cs" />
+    <Compile Include="DataSequence.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DnaSequence.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Element.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="Extensions\TaskTypeExtensions.cs" />
+    <Compile Include="Feature.cs" />
+    <Compile Include="Extensions\FeatureExtensions.cs" />
+    <Compile Include="Fmotif.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FullCharacteristicLink.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Group.cs" />
+    <Compile Include="ImageMatrixTransformer.cs" />
+    <Compile Include="ImageOrderExtractor.cs" />
+    <Compile Include="ImageSequence.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ImageTransformer.cs" />
+    <Compile Include="Language.cs" />
+    <Compile Include="Helpers\AccountHelper.cs" />
+    <Compile Include="Helpers\ViewDataHelper.cs" />
+    <Compile Include="Helpers\DataTransformers.cs" />
+    <Compile Include="Helpers\DbHelper.cs" />
+    <Compile Include="Helpers\FileHelper.cs" />
+    <Compile Include="Helpers\NcbiHelper.cs" />
+    <Compile Include="LibiadaWeb.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LibiadaWeb.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LibiadaWeb.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LibiadaWeb.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LibiadaWeb.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="LibiadaWebDataAnnotations.cs" />
+    <Compile Include="LiteratureSequence.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Matter.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Measure.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CalculatorsData\ArrangementTypeSelectListItem.cs" />
+    <Compile Include="Models\CalculatorsData\AttributeValue.cs" />
+    <Compile Include="Models\CalculatorsData\AttributeValueCacheManager.cs" />
+    <Compile Include="Models\CalculatorsData\CongenericSequencesCharacteristics.cs" />
+    <Compile Include="Models\CalculatorsData\LocalCharacteristicsData.cs" />
+    <Compile Include="Models\CalculatorsData\MattersImportResult.cs" />
+    <Compile Include="Models\CalculatorsData\MattersTableRow.cs" />
+    <Compile Include="Models\CalculatorsData\OrderTransformationData.cs" />
+    <Compile Include="Models\CalculatorsData\OrderTransformationResult.cs" />
+    <Compile Include="Models\CalculatorsData\SequenceCharacteristics.cs" />
+    <Compile Include="Models\CalculatorsData\SequencePredictionData.cs" />
+    <Compile Include="Models\Calculators\CongenericSequencesCharacteristicsCalculator.cs" />
+    <Compile Include="Models\Calculators\SequencesCharacteristicsCalculator.cs" />
+    <Compile Include="Models\CalculatorsData\FragmentData.cs" />
+    <Compile Include="Models\Calculators\SubsequencesCharacteristicsCalculator.cs" />
+    <Compile Include="Models\CalculatorsData\SelectListItemWithNature.cs" />
+    <Compile Include="Models\OrderTransformer.cs" />
+    <Compile Include="Models\Repositories\Catalogs\AccordanceCharacteristicRepository.cs" />
+    <Compile Include="Models\Repositories\Catalogs\BinaryCharacteristicRepository.cs" />
+    <Compile Include="Models\Repositories\Catalogs\CongenericCharacteristicRepository.cs" />
+    <Compile Include="Models\Repositories\Catalogs\FullCharacteristicRepository.cs" />
+    <Compile Include="Models\Repositories\Sequences\FmotifRepository.cs" />
+    <Compile Include="Models\Repositories\Sequences\GeneticSequenceRepository.cs" />
+    <Compile Include="Models\Repositories\Sequences\IFmotifRepository.cs" />
+    <Compile Include="Models\Repositories\Sequences\IGeneticSequenceRepository.cs" />
+    <Compile Include="Models\Repositories\Sequences\ImageSequenceRepository.cs" />
+    <Compile Include="Models\Repositories\Sequences\IMeasureRepsitory.cs" />
+    <Compile Include="Models\Repositories\Sequences\MeasureRepository.cs" />
+    <Compile Include="Models\Repositories\Sequences\MultisequenceRepository.cs" />
+    <Compile Include="Models\SelectListItemComparer.cs" />
+    <Compile Include="Models\SubsequenceImporter.cs" />
+    <Compile Include="Multisequence.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MusicSequence.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Nature.cs" />
+    <Compile Include="Models\OutputFormats.cs" />
+    <Compile Include="Models\Repositories\Calculators\CharacteristicRepository.cs" />
+    <Compile Include="Models\Repositories\Calculators\ICharacteristicRepository.cs" />
+    <Compile Include="Attributes\NatureAttribute.cs" />
+    <Compile Include="Notation.cs" />
+    <Compile Include="Note.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OrderTransformation.cs" />
+    <Compile Include="Pitch.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Position.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RemoteDb.cs" />
+    <Compile Include="SequenceAttribute.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SequenceGroup.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SequenceGroupType.cs" />
+    <Compile Include="SequenceType.cs" />
+    <Compile Include="Subsequence.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TaskResult.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\Task.cs" />
+    <Compile Include="Tasks\TaskData.cs" />
+    <Compile Include="Tasks\TaskEvent.cs" />
+    <Compile Include="Tasks\TaskManager.cs" />
+    <Compile Include="Tasks\TasksManagerHub.cs" />
+    <Compile Include="Tasks\TaskState.cs" />
+    <Compile Include="Math\AutoCorelation.cs" />
+    <Compile Include="Math\FastFourierTransform.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Account\AddPhoneNumberViewModel.cs" />
+    <Compile Include="Models\Account\ApplicationDbContext.cs" />
+    <Compile Include="Models\Account\ChangePasswordViewModel.cs" />
+    <Compile Include="Models\Account\FactorViewModel.cs" />
+    <Compile Include="Models\Account\ForgotPasswordViewModel.cs" />
+    <Compile Include="Models\Account\ExternalLoginConfirmationViewModel.cs" />
+    <Compile Include="Models\Account\ExternalLoginListViewModel.cs" />
+    <Compile Include="Models\Account\ForgotViewModel.cs" />
+    <Compile Include="Models\Account\ApplicationUser.cs" />
+    <Compile Include="Models\Account\IndexViewModel.cs" />
+    <Compile Include="Models\Account\LibiadaRole.cs" />
+    <Compile Include="Models\Account\LibiadaRoleStore.cs" />
+    <Compile Include="Models\Account\LibiadaUserClaim.cs" />
+    <Compile Include="Models\Account\LibiadaUserLogin.cs" />
+    <Compile Include="Models\Account\LibiadaUserRole.cs" />
+    <Compile Include="Models\Account\LibiadaUserStore.cs" />
+    <Compile Include="Models\Account\LoginViewModel.cs" />
+    <Compile Include="Models\Account\ManageLoginsViewModel.cs" />
+    <Compile Include="Models\Account\ConfigureTwoFactorViewModel.cs" />
+    <Compile Include="Models\Account\RegisterViewModel.cs" />
+    <Compile Include="Models\Account\ResetPasswordViewModel.cs" />
+    <Compile Include="Models\Account\SendCodeViewModel.cs" />
+    <Compile Include="Models\Account\SetPasswordViewModel.cs" />
+    <Compile Include="Models\Account\VerifyCodeViewModel.cs" />
+    <Compile Include="Models\Account\VerifyPhoneNumberViewModel.cs" />
+    <Compile Include="Models\Aliases.cs" />
+    <Compile Include="Models\CalculatorsData\CharacteristicSelectListItem.cs" />
+    <Compile Include="Models\CalculatorsData\LinkSelectListItem.cs" />
+    <Compile Include="Models\CalculatorsData\SubsequenceData.cs" />
+    <Compile Include="Models\CalculatorsData\SequenceData.cs" />
+    <Compile Include="Models\CalculatorsData\IntPair.cs" />
+    <Compile Include="Models\Repositories\Catalogs\AttributeRepository.cs" />
+    <Compile Include="Models\Repositories\Catalogs\ISequenceAttributeRepository.cs" />
+    <Compile Include="Models\Repositories\Catalogs\FeatureRepository.cs" />
+    <Compile Include="Models\Repositories\Catalogs\SequenceAttributeRepository.cs" />
+    <Compile Include="Models\Repositories\Sequences\DataSequenceRepository.cs" />
+    <Compile Include="Models\Repositories\Sequences\SequenceImporter.cs" />
+    <Compile Include="Models\Repositories\Sequences\CommonSequenceRepository.cs" />
+    <Compile Include="Models\Repositories\Sequences\ICommonSequenceRepository.cs" />
+    <Compile Include="Models\Repositories\Sequences\ILiteratureSequenceRepository.cs" />
+    <Compile Include="Models\Repositories\Sequences\IMatterRepository.cs" />
+    <Compile Include="Models\Repositories\Sequences\IMusicSequenceRepository.cs" />
+    <Compile Include="Models\Repositories\Sequences\LiteratureSequenceRepository.cs" />
+    <Compile Include="Models\Repositories\Sequences\MatterRepository.cs" />
+    <Compile Include="Models\Repositories\Sequences\MusicSequenceRepository.cs" />
+    <Compile Include="Models\Repositories\Sequences\ElementRepository.cs" />
+    <Compile Include="Models\Repositories\Sequences\IElementRepository.cs" />
+    <Compile Include="Models\SubsequenceExtractor.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Startup.cs" />
+    <Compile Include="Tasks\TaskType.cs" />
+    <Compile Include="Translator.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\GenesMap.css" />
+    <Content Include="Content\ScrollUpDown.css" />
+    <Content Include="Content\themes\base\accordion.css" />
+    <Content Include="Content\themes\base\all.css" />
+    <Content Include="Content\themes\base\autocomplete.css" />
+    <Content Include="Content\themes\base\base.css" />
+    <Content Include="Content\themes\base\button.css" />
+    <Content Include="Content\themes\base\core.css" />
+    <Content Include="Content\themes\base\datepicker.css" />
+    <Content Include="Content\themes\base\dialog.css" />
+    <Content Include="Content\themes\base\draggable.css" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_444444_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_555555_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_777620_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_777777_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cc0000_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\themes\base\jquery-ui.css" />
+    <Content Include="Content\themes\base\jquery-ui.min.css" />
+    <Content Include="Content\themes\base\menu.css" />
+    <Content Include="Content\themes\base\progressbar.css" />
+    <Content Include="Content\themes\base\resizable.css" />
+    <Content Include="Content\themes\base\selectable.css" />
+    <Content Include="Content\themes\base\selectmenu.css" />
+    <Content Include="Content\themes\base\slider.css" />
+    <Content Include="Content\themes\base\sortable.css" />
+    <Content Include="Content\themes\base\spinner.css" />
+    <Content Include="Content\themes\base\tabs.css" />
+    <Content Include="Content\themes\base\theme.css" />
+    <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="Content\themes\JQAllRange\iThing-min.css" />
+    <Content Include="Content\themes\JQAllRange\iThing.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <EntityDeploy Include="LibiadaWeb.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>LibiadaWeb.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="LibiadaWeb.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>LibiadaWeb.Context.cs</LastGenOutput>
+      <DependentUpon>LibiadaWeb.edmx</DependentUpon>
+    </Content>
+    <Content Include="LibiadaWeb.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>LibiadaWeb.cs</LastGenOutput>
+      <DependentUpon>LibiadaWeb.edmx</DependentUpon>
+    </Content>
+    <Content Include="Scripts\angular-mocks.js" />
+    <Content Include="Scripts\angular.js" />
+    <Content Include="Scripts\angular.min.js" />
+    <Content Include="Scripts\Angular\Components\characteristic.js" />
+    <Content Include="Scripts\Angular\Components\characteristics.js" />
+    <Content Include="Scripts\Angular\Components\characteristicsWithoutNotation.js" />
+    <Content Include="Scripts\Angular\Components\mattersTable.js" />
+    <Content Include="Scripts\Angular\Components\orderTransformations.js" />
+    <Content Include="Scripts\Angular\Components\scrollJumper.js" />
+    <Content Include="Scripts\Angular\Controllers\accordance.js" />
+    <Content Include="Scripts\Angular\Controllers\batchMusicImport.js" />
+    <Content Include="Scripts\Angular\Controllers\batchPoemsImport.js" />
+    <Content Include="Scripts\Angular\Controllers\batchSequenceImport.js" />
+    <Content Include="Scripts\Angular\Controllers\batchSequenceImportResult.js" />
+    <Content Include="Scripts\Angular\Controllers\calculationResult.js" />
+    <Content Include="Scripts\Angular\Controllers\charts.js" />
+    <Content Include="Scripts\Angular\Controllers\fmotifsDictionary.js" />
+    <Content Include="Scripts\Angular\Controllers\localCalculationResult.js" />
+    <Content Include="Scripts\Angular\Controllers\matterEdit.js" />
+    <Content Include="Scripts\Angular\Controllers\musicFilesResult.js" />
+    <Content Include="Scripts\Angular\Controllers\orderCalculation.js" />
+    <Content Include="Scripts\Angular\Controllers\intervalsCharacteristicsDistribution.js" />
+    <Content Include="Scripts\Angular\Controllers\intervalsCharacteristicsDistributionResult.js" />
+    <Content Include="Scripts\Angular\Controllers\orderTransformationCharacteristicsDynamicVisualizationResult.js" />
+    <Content Include="Scripts\Angular\Controllers\orderTransformationResult.js" />
+    <Content Include="Scripts\Angular\Controllers\orderTransformer.js" />
+    <Content Include="Scripts\Angular\Controllers\sequenceGroups.js" />
+    <Content Include="Scripts\Angular\Controllers\sequencePredictionResult.js" />
+    <Content Include="Scripts\Angular\Controllers\sequencesAlignment.js" />
+    <Content Include="Scripts\Angular\Controllers\buildingsSimilarity.js" />
+    <Content Include="Scripts\Angular\Controllers\customCalculation.js" />
+    <Content Include="Scripts\Angular\Controllers\orderTransformationVisualization.js" />
+    <Content Include="Scripts\Angular\Controllers\ordersIntervalsDistributionsAccordance.js" />
+    <Content Include="Scripts\Angular\Controllers\sequencesOrderDistribution.js" />
+    <Content Include="Scripts\Angular\Controllers\orderTransformationVisualizationResult.js" />
+    <Content Include="Scripts\Angular\Controllers\ordersIntervalsDistributionsAccordanceResult.js" />
+    <Content Include="Scripts\Angular\Controllers\sequencesOrderDistributionResult.js" />
+    <Content Include="Scripts\Angular\Controllers\subsequencesCalculationResult.js" />
+    <Content Include="Scripts\Angular\Controllers\subsequencesComparerResult.js" />
+    <Content Include="Scripts\Angular\Controllers\subsequencesDistribution.js" />
+    <Content Include="Scripts\Angular\Controllers\genesImport.js" />
+    <Content Include="Scripts\Angular\Controllers\calculation.js" />
+    <Content Include="Scripts\Angular\Controllers\subsequencesCalculation.js" />
+    <Content Include="Scripts\Angular\Controllers\matterSequenceCreate.js" />
+    <Content Include="Scripts\Angular\Controllers\subsequencesDistributionResultPlotly.js" />
+    <Content Include="Scripts\Angular\Controllers\subsequencesDistributionResult.js" />
+    <Content Include="Scripts\Angular\Controllers\taskManager.js" />
+    <Content Include="Scripts\Angular\Directives\tableParse.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\d3\d3.js" />
+    <Content Include="Scripts\d3\d3.min.js" />
+    <Content Include="Scripts\jQAllRangeSliders-withRuler-min.js" />
+    <Content Include="LibiadaWeb.edmx.diagram">
+      <DependentUpon>LibiadaWeb.edmx</DependentUpon>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap-theme.min.css.map" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <None Include="Properties\PublishProfiles\Release.pubxml" />
+    <Content Include="Scripts\angular.min.js.map" />
+    <Content Include="Scripts\d3\README.md" />
+    <Content Include="Scripts\d3\LICENSE" />
+    <Content Include="Scripts\d3\CHANGES.md" />
+    <Content Include="Scripts\d3\API.md" />
+    <None Include="Scripts\jquery-3.1.1.intellisense.js" />
+    <Content Include="Scripts\jquery-3.1.1.js" />
+    <Content Include="Scripts\jquery-3.1.1.min.js" />
+    <Content Include="Scripts\jquery-3.1.1.slim.js" />
+    <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
+    <Content Include="Scripts\jquery-ui-1.12.1.js" />
+    <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
+    <Content Include="Scripts\jquery.mousewheel.js" />
+    <Content Include="Scripts\jquery.mousewheel.min.js" />
+    <Content Include="Scripts\jquery-3.1.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.1.1.min.map" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.2.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.2.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\midijs\build\MIDI.js" />
+    <Content Include="Scripts\midijs\build\MIDI.min.js" />
+    <Content Include="Scripts\midijs\generator\nodejs\packageWAVs.js" />
+    <Content Include="Scripts\midijs\Gruntfile.js" />
+    <Content Include="Scripts\midijs\inc\jasmid\midifile.js" />
+    <Content Include="Scripts\midijs\inc\jasmid\replayer.js" />
+    <Content Include="Scripts\midijs\inc\jasmid\stream.js" />
+    <Content Include="Scripts\midijs\inc\shim\Base64.js" />
+    <Content Include="Scripts\midijs\inc\shim\Base64binary.js" />
+    <Content Include="Scripts\midijs\inc\shim\WebAudioAPI.js" />
+    <Content Include="Scripts\midijs\inc\shim\WebMIDIAPI.js" />
+    <Content Include="Scripts\midijs\inc\tuna\impulses\impulse_guitar.wav" />
+    <Content Include="Scripts\midijs\inc\tuna\impulses\impulse_rev.wav" />
+    <Content Include="Scripts\midijs\inc\tuna\impulses\ir_rev_short.wav" />
+    <Content Include="Scripts\midijs\inc\tuna\impulses\Sweetspot1M.wav" />
+    <Content Include="Scripts\midijs\inc\tuna\tuna.js" />
+    <Content Include="Scripts\midijs\js\midi\audioDetect.js" />
+    <Content Include="Scripts\midijs\js\midi\gm.js" />
+    <Content Include="Scripts\midijs\js\midi\loader.js" />
+    <Content Include="Scripts\midijs\js\midi\player.js" />
+    <Content Include="Scripts\midijs\js\midi\plugin.audiotag.js" />
+    <Content Include="Scripts\midijs\js\midi\plugin.webaudio.js" />
+    <Content Include="Scripts\midijs\js\midi\plugin.webmidi.js" />
+    <Content Include="Scripts\midijs\js\midi\synesthesia.js" />
+    <Content Include="Scripts\midijs\js\util\dom_request_script.js" />
+    <Content Include="Scripts\midijs\js\util\dom_request_xhr.js" />
+    <Content Include="Scripts\midijs\LICENSE.txt" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3.js" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\A0.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\A1.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\A2.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\A3.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\A4.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\A5.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\A6.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\A7.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Ab1.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Ab2.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Ab3.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Ab4.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Ab5.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Ab6.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Ab7.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\B0.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\B1.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\B2.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\B3.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\B4.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\B5.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\B6.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\B7.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Bb0.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Bb1.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Bb2.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Bb3.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Bb4.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Bb5.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Bb6.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Bb7.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\C1.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\C2.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\C3.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\C4.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\C5.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\C6.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\C7.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\C8.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\D1.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\D2.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\D3.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\D4.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\D5.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\D6.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\D7.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Db1.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Db2.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Db3.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Db4.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Db5.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Db6.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Db7.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Db8.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\E1.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\E2.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\E3.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\E4.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\E5.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\E6.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\E7.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Eb1.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Eb2.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Eb3.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Eb4.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Eb5.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Eb6.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Eb7.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\F1.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\F2.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\F3.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\F4.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\F5.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\F6.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\F7.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\G1.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\G2.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\G3.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\G4.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\G5.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\G6.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\G7.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Gb1.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Gb2.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Gb3.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Gb4.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Gb5.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Gb6.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-mp3\Gb7.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_grand_piano-ogg.js" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3.js" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\A0.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\A1.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\A2.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\A3.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\A4.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\A5.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\A6.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\A7.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Ab1.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Ab2.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Ab3.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Ab4.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Ab5.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Ab6.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Ab7.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\B0.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\B1.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\B2.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\B3.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\B4.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\B5.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\B6.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\B7.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Bb0.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Bb1.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Bb2.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Bb3.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Bb4.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Bb5.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Bb6.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Bb7.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\C1.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\C2.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\C3.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\C4.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\C5.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\C6.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\C7.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\C8.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\D1.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\D2.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\D3.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\D4.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\D5.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\D6.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\D7.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Db1.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Db2.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Db3.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Db4.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Db5.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Db6.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Db7.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\E1.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\E2.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\E3.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\E4.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\E5.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\E6.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\E7.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Eb1.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Eb2.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Eb3.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Eb4.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Eb5.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Eb6.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Eb7.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\F1.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\F2.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\F3.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\F4.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\F5.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\F6.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\F7.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\G1.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\G2.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\G3.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\G4.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\G5.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\G6.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\G7.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Gb1.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Gb2.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Gb3.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Gb4.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Gb5.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Gb6.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-mp3\Gb7.mp3" />
+    <Content Include="Scripts\midijs\soundfont\acoustic_guitar_steel-ogg.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\Angular\functions.js" />
+    <Content Include="Scripts\Angular\Components\loadingWindow.js" />
+    <Content Include="Scripts\plotly\plotly.js" />
+    <Content Include="Scripts\plotly\plotly.min.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.matchmedia.addListener.js" />
+    <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\smart-table.js" />
+    <Content Include="Scripts\smart-table.min.js" />
+    <Content Include="Scripts\smart-table.min.js.map" />
+    <Content Include="Scripts\midijs\package.json" />
+    <Content Include="Scripts\midijs\README.md" />
+    <Content Include="Scripts\midijs\TODO" />
+    <Content Include="Scripts\midijs\generator\ruby\soundfont_builder.rb" />
+    <Content Include="Scripts\midijs\inc\jasmid\LICENSE" />
+    <Content Include="Scripts\midijs\inc\tuna\README.md" />
+    <None Include="Scripts\_references.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Sequences\CommonSequences\Create.cshtml" />
+    <Content Include="Views\Calculators\RelationCalculation\Index.cshtml" />
+    <Content Include="Views\Calculators\RelationCalculation\Result.cshtml" />
+    <Content Include="Views\Calculators\Calculation\Index.cshtml" />
+    <Content Include="Views\Calculators\Calculation\Result.cshtml" />
+    <Content Include="Views\Calculators\Clusterization\Index.cshtml" />
+    <Content Include="Views\Calculators\Clusterization\Result.cshtml" />
+    <Content Include="Views\Calculators\CongenericCalculation\Index.cshtml" />
+    <Content Include="Views\Calculators\CongenericCalculation\Result.cshtml" />
+    <Content Include="Views\Calculators\SubsequencesCalculation\Index.cshtml" />
+    <Content Include="Views\Calculators\LocalCalculation\Index.cshtml" />
+    <Content Include="Views\Calculators\LocalCalculation\Result.cshtml" />
+    <Content Include="Views\Calculators\CustomSequenceCalculation\Index.cshtml" />
+    <Content Include="Views\Calculators\CustomSequenceCalculation\Result.cshtml" />
+    <Content Include="Views\Sequences\SequenceTransformer\Index.cshtml" />
+    <Content Include="Views\Calculators\SubsequencesCalculation\Result.cshtml" />
+    <Content Include="Views\Sequences\SequenceCheck\Index.cshtml" />
+    <Content Include="Views\Sequences\SequenceCheck\Result.cshtml" />
+    <Content Include="Views\Sequences\SequenceMixer\Index.cshtml" />
+    <Content Include="Views\Sequences\GenesImport\Index.cshtml" />
+    <Content Include="Views\Calculators\SequencesAlignment\Index.cshtml" />
+    <Content Include="Views\Calculators\SequencesAlignment\Result.cshtml" />
+    <Content Include="Views\TaskManager\Index.cshtml" />
+    <Content Include="Views\Sequences\CommonSequences\Delete.cshtml" />
+    <Content Include="Views\Sequences\CommonSequences\Details.cshtml" />
+    <Content Include="Views\Sequences\CommonSequences\Edit.cshtml" />
+    <Content Include="Views\Sequences\CommonSequences\Index.cshtml" />
+    <Content Include="Views\Sequences\Matters\Create.cshtml" />
+    <Content Include="Views\Sequences\Matters\Delete.cshtml" />
+    <Content Include="Views\Sequences\Matters\Details.cshtml" />
+    <Content Include="Views\Sequences\Matters\Edit.cshtml" />
+    <Content Include="Views\Sequences\Matters\Index.cshtml" />
+    <Content Include="Views\Account\ConfirmEmail.cshtml" />
+    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
+    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\SendCode.cshtml" />
+    <Content Include="Views\Account\VerifyCode.cshtml" />
+    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
+    <Content Include="Views\Calculators\AccordanceCalculation\Index.cshtml" />
+    <Content Include="Views\Partial\_Characteristic.cshtml" />
+    <Content Include="Views\Partial\_Characteristics.cshtml" />
+    <Content Include="Views\Partial\_NatureSelect.cshtml" />
+    <Content Include="Views\Partial\_FeaturesSelect.cshtml" />
+    <Content Include="Views\Calculators\AccordanceCalculation\Result.cshtml" />
+    <Content Include="Views\Partial\_MattersSubmit.cshtml" />
+    <Content Include="Views\Calculators\Charts\Index.cshtml" />
+    <Content Include="Views\Calculators\SubsequencesDistribution\Index.cshtml" />
+    <Content Include="Views\Calculators\SubsequencesDistribution\OldResult.cshtml" />
+    <Content Include="Views\Partial\_LocalFile.cshtml" />
+    <Content Include="Views\Sequences\GenesImport\Result.cshtml" />
+    <Content Include="Views\Calculators\SubsequencesSimilarity\Result.cshtml" />
+    <Content Include="Views\Calculators\SubsequencesSimilarity\Index.cshtml" />
+    <Content Include="Views\Partial\_MattersTable.cshtml" />
+    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
+    <Content Include="Views\Manage\ChangePassword.cshtml" />
+    <Content Include="Views\Manage\Index.cshtml" />
+    <Content Include="Views\Manage\ManageLogins.cshtml" />
+    <Content Include="Views\Manage\SetPassword.cshtml" />
+    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
+    <Content Include="Views\Shared\Lockout.cshtml" />
+    <Content Include="Views\Sequences\Matters\Result.cshtml" />
+    <Content Include="Views\Sequences\OrderTransformer\Index.cshtml" />
+    <Content Include="Views\Sequences\OrderTransformer\Result.cshtml" />
+    <Content Include="Views\Partial\_AngularControllerInitializer.cshtml" />
+    <Content Include="Views\Partial\_CharacteristicNatureParams.cshtml" />
+    <Content Include="Views\Calculators\OrderTransformationCalculation\Result.cshtml" />
+    <Content Include="Views\Calculators\OrderTransformationCalculation\Index.cshtml" />
+    <Content Include="Views\Partial\_OrderTransformations.cshtml" />
+    <Content Include="Views\Sequences\BatchGenesImport\Index.cshtml" />
+    <Content Include="Views\Sequences\BatchGenesImport\Result.cshtml" />
+    <Content Include="App_Code\Helpers.cshtml" />
+    <Content Include="Views\Sequences\BatchSequenceImport\Index.cshtml" />
+    <Content Include="Views\Sequences\BatchSequenceImport\Result.cshtml" />
+    <Content Include="Views\Calculators\SubsequencesComparer\Index.cshtml" />
+    <Content Include="Views\Calculators\CustomSequenceOrderTransformationCalculation\Result.cshtml" />
+    <Content Include="Views\Calculators\CustomSequenceOrderTransformationCalculation\Index.cshtml" />
+    <Content Include="Views\Sequences\CustomSequenceOrderTransformer\Index.cshtml" />
+    <Content Include="Views\Sequences\CustomSequenceOrderTransformer\Result.cshtml" />
+    <Content Include="Views\Partial\_CustomSequences.cshtml" />
+    <Content Include="Views\Partial\_CharacteristicsWithoutNotation.cshtml" />
+    <Content Include="Views\Calculators\SubsequencesComparer\Result.cshtml" />
+    <Content Include="Views\Partial\_Filters.cshtml" />
+    <Content Include="Views\Partial\_LoadingWindow.cshtml" />
+    <Content Include="Views\Sequences\SequenceCleaner\Index.cshtml" />
+    <Content Include="Views\Sequences\CommonSequences\Result.cshtml" />
+    <Content Include="Views\Calculators\SequencesOrderDistribution\Index.cshtml" />
+    <Content Include="Views\Calculators\SequencesOrderDistribution\Result.cshtml" />
+    <Content Include="Views\Calculators\MusicFiles\Result.cshtml" />
+    <Content Include="Views\Calculators\MusicFiles\Index.cshtml" />
+    <Content Include="Views\Partial\_ImageTransformers.cshtml" />
+    <Content Include="Views\Partial\_ScrollJumper.cshtml" />
+    <Content Include="Views\Sequences\SequenceGroups\Create.cshtml" />
+    <Content Include="Views\Sequences\SequenceGroups\Delete.cshtml" />
+    <Content Include="Views\Sequences\SequenceGroups\Details.cshtml" />
+    <Content Include="Views\Sequences\SequenceGroups\Edit.cshtml" />
+    <Content Include="Views\Sequences\SequenceGroups\Index.cshtml" />
+    <Content Include="Views\Calculators\SequencePrediction\Index.cshtml" />
+    <Content Include="Views\Calculators\SequencePrediction\Result.cshtml" />
+    <Content Include="Views\Sequences\BatchPoemsImport\Index.cshtml" />
+    <Content Include="Views\Sequences\BatchPoemsImport\Result.cshtml" />
+    <Content Include="Views\Calculators\OrderCalculation\Index.cshtml" />
+    <Content Include="Views\Calculators\OrderCalculation\Result.cshtml" />
+    <Content Include="Views\Calculators\OrderTransformationVisualization\Index.cshtml" />
+    <Content Include="Views\Calculators\OrderTransformationVisualization\Result.cshtml" />
+    <Content Include="Views\Sequences\OrderTransformationConvergence\Index.cshtml" />
+    <Content Include="Views\Sequences\OrderTransformationConvergence\Result.cshtml" />
+    <Content Include="Views\Calculators\SubsequencesDistribution\Result.cshtml" />
+    <Content Include="Views\Sequences\BatchMusicImport\Index.cshtml" />
+    <Content Include="Views\Sequences\BatchMusicImport\Result.cshtml" />
+    <Content Include="Views\Sequences\FmotifsDictionary\Index.cshtml" />
+    <Content Include="Views\Calculators\OrderTransformationCharacteristicsDynamicVisualization\Index.cshtml" />
+    <Content Include="Views\Calculators\OrderTransformationCharacteristicsDynamicVisualization\Result.cshtml" />
+    <Content Include="Views\Sequences\FmotifsDictionary\Details.cshtml" />
+    <Content Include="Views\Calculators\OrdersIntervalsDistributionsAccordance\Index.cshtml" />
+    <Content Include="Views\Calculators\OrdersIntervalsDistributionsAccordance\Result.cshtml" />
+    <Content Include="Views\Calculators\IntervalsCharacteristicsDistribution\Index.cshtml" />
+    <Content Include="Views\Calculators\IntervalsCharacteristicsDistribution\Result.cshtml" />
+    <Content Include="Views\Sequences\BatchImagesImport\Result.cshtml" />
+    <Content Include="Views\Sequences\BatchImagesImport\Index.cshtml" />
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="ConnectionStrings.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\libiada-core\Clusterizator\Clusterizator.csproj">
+      <Project>{b69abc4e-1c8d-4e9f-929f-a915add21b81}</Project>
+      <Name>Clusterizator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\libiada-core\LibiadaCore\LibiadaCore.csproj">
+      <Project>{791da20b-3149-4bb0-9aff-6ced1a94d828}</Project>
+      <Name>LibiadaCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\libiada-core\SequenceGenerator\SequenceGenerator.csproj">
+      <Project>{C65C1903-8A6A-43CC-BB08-4107DE51C8ED}</Project>
+      <Name>SequenceGenerator</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Antlr">
+      <Version>3.5.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="AutoMapper">
+      <Version>6.2.2</Version>
+    </PackageReference>
+    <PackageReference Include="bootstrap">
+      <Version>3.4.1</Version>
+    </PackageReference>
+    <PackageReference Include="d3">
+      <Version>4.13.0</Version>
+    </PackageReference>
+    <PackageReference Include="EntityFramework">
+      <Version>6.4.0</Version>
+    </PackageReference>
+    <PackageReference Include="EntityFramework6.Npgsql">
+      <Version>6.4.1</Version>
+    </PackageReference>
+    <PackageReference Include="jQuery">
+      <Version>3.4.1</Version>
+    </PackageReference>
+    <PackageReference Include="jQuery.UI.Combined">
+      <Version>1.12.1</Version>
+    </PackageReference>
+    <PackageReference Include="jQuery.Validation">
+      <Version>1.19.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.Identity.Core">
+      <Version>2.2.2</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <Version>2.2.2</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.Identity.Owin">
+      <Version>2.2.2</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.Mvc">
+      <Version>5.2.7</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.Razor">
+      <Version>3.2.7</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.SignalR.Core">
+      <Version>2.4.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.SignalR.JS">
+      <Version>2.4.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.SignalR.SystemWeb">
+      <Version>2.4.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.Web.Optimization">
+      <Version>1.1.3</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.WebApi">
+      <Version>5.2.7</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client">
+      <Version>5.2.7</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core">
+      <Version>5.2.7</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.WebApi.WebHost">
+      <Version>5.2.7</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.WebPages">
+      <Version>3.2.7</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.jQuery.Unobtrusive.Validation">
+      <Version>3.2.11</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Owin">
+      <Version>4.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Owin.Host.SystemWeb">
+      <Version>4.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Owin.Security">
+      <Version>4.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Owin.Security.Cookies">
+      <Version>4.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Owin.Security.Facebook">
+      <Version>4.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Owin.Security.Google">
+      <Version>4.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Owin.Security.MicrosoftAccount">
+      <Version>4.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Owin.Security.OAuth">
+      <Version>4.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Owin.Security.Twitter">
+      <Version>4.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Web.Infrastructure">
+      <Version>1.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="Modernizr">
+      <Version>2.8.3</Version>
+    </PackageReference>
+    <PackageReference Include="NETBioCore.PCL">
+      <Version>2.0.150722</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="Npgsql">
+      <Version>4.1.3</Version>
+    </PackageReference>
+    <PackageReference Include="Owin">
+      <Version>1.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="Respond">
+      <Version>1.4.2</Version>
+    </PackageReference>
+    <PackageReference Include="System.Threading.Tasks.Extensions">
+      <Version>4.5.3</Version>
+    </PackageReference>
+    <PackageReference Include="WebGrease">
+      <Version>1.6.0</Version>
+    </PackageReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>28103</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:8081/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

@@ -86,6 +86,9 @@
         /// <param name="pauseTreatments">
         /// Pause treatment parameters of music sequences.
         /// </param>
+        /// <param name="imageOrderExtractor">
+        /// Image order extractor of image sequences.
+        /// </param>
         /// <param name="sequentialTransfers">
         /// Sequential transfer flag used in music sequences.
         /// </param>
@@ -107,6 +110,7 @@
             Language[] languages,
             Translator?[] translators,
             PauseTreatment[] pauseTreatments,
+            ImageOrderExtractor imageOrderExtractor,
             bool[] sequentialTransfers,
             bool sort,
             bool theoretical)
@@ -124,7 +128,7 @@
                     mattersNames = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
 
                     var commonSequenceRepository = new CommonSequenceRepository(db);
-                    sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds, notations, languages, translators, pauseTreatments, sequentialTransfers);
+                    sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds, notations, languages, translators, pauseTreatments, sequentialTransfers, imageOrderExtractor);
 
                     var congenericCharacteristicRepository = CongenericCharacteristicRepository.Instance;
                     for (int k = 0; k < characteristicLinkIds.Length; k++)
@@ -215,7 +219,7 @@
                 //        CongenericCharacteristic congenericCharacteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
                 //        ICongenericCalculator calculator = CongenericCalculatorsFactory.CreateCalculator(congenericCharacteristic);
                 //        Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
-                //        List<long> sequenceElements = DbHelper.GetElementIds(db, sequenceId);
+                //        List<long> sequenceElements = db.GetElementIds(sequenceId);
                 //        int calculated = db.CongenericCharacteristicValue.Count(c => c.SequenceId == sequenceId && c.CharacteristicLinkId == characteristicLinkId);
                 //        if (calculated < chain.Alphabet.Cardinality)
                 //        {

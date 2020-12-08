@@ -85,7 +85,7 @@
                                                .Select(f => f.Location.GetLeafLocations())
                                                .ToArray();
 
-            int parentLength = DbHelper.GetSequenceLength(db, sequenceId);
+            int parentLength = db.GetSequenceLength(sequenceId);
             int sourceLength = features[0].Location.LocationEnd;
             positionsMap = new bool[parentLength];
 
@@ -286,7 +286,7 @@
 
                 var subsequence = new Subsequence
                 {
-                    Id = DbHelper.GetNewElementId(db),
+                    Id = db.GetNewElementId(),
                     Feature = subsequenceFeature,
                     Partial = partial,
                     SequenceId = sequenceId,
@@ -355,7 +355,7 @@
             List<NonCodingPosition> positions = ExtractNonCodingSubsequencesPositions();
             return positions.ConvertAll(p => new Subsequence
                                                  {
-                                                     Id = DbHelper.GetNewElementId(db),
+                                                     Id = db.GetNewElementId(),
                                                      Feature = Feature.NonCodingSequence,
                                                      Partial = false,
                                                      SequenceId = sequenceId,

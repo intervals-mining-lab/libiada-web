@@ -250,10 +250,10 @@
         IntervalsCharacteristicsDistribution = 34,
 
         /// <summary>
-        /// Unites matters with similar names into multisequences.
+        /// Batch images import.
         /// </summary>
-        [Display(Name = "Multisequence grouping")]
-        [TaskClass(typeof(SequenceConcatenatorController))]
-        SequenceConcatenator = 35
+        [Display(Name = "Batch images import")]
+        [TaskClass(typeof(BatchImagesImportController))]
+        BatchImagesImport = 35
     }
 }
