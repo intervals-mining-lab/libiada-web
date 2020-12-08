@@ -56,6 +56,30 @@
         [Display(Name = "Eucariote")]
         [Description("Eucariote")]
         [Nature(Nature.Genetic)]
-        Eucariote = 6
+        Eucariote = 6,
+
+        /// <summary>
+        /// The Picture.
+        /// </summary>
+        [Display(Name = "Painting")]
+        [Description("Painting")]
+        [Nature(Nature.Image)]
+        Painting = 7,
+
+        /// <summary>
+        /// The Photo.
+        /// </summary>
+        [Display(Name = "Photo")]
+        [Description("Photo")]
+        [Nature(Nature.Image)]
+        Photo = 8,
+
+        /// <summary>
+        /// The Photo.
+        /// </summary>
+        [Display(Name = "Picture")]
+        [Description("Picture")]
+        [Nature(Nature.Image)]
+        Picture = 9
     }
 }

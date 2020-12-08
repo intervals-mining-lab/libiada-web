@@ -63,22 +63,21 @@
             var measureChain = new BaseChain(measure.NoteList.Cast<IBaseObject>().ToList());
             long[] notes = new ElementRepository(db).GetOrCreateNotesInDb(measureChain.Alphabet);
 
-            string localMeasureHash = BitConverter.ToString(measure.GetMD5HashCode()).Replace("-", string.Empty);
+            string localMeasureHash = measure.GetHashCode().ToString();
             var dbMeasures = db.Measure.Where(m => m.Value == localMeasureHash).ToList();
             if (dbMeasures.Count > 0)
             {
                 foreach (var dbMeasure in dbMeasures)
                 {
-                    var dbAlphabet = DbHelper.GetMeasureAlphabet(db, dbMeasure.Id);
+                    long[] dbAlphabet = db.GetMeasureAlphabet(dbMeasure.Id);
                     if (notes.SequenceEqual(dbAlphabet))
                     {
-                        var dbBuilding = DbHelper.GetMeasureBuilding(db, dbMeasure.Id);
+                        int[] dbBuilding = db.GetMeasureBuilding(dbMeasure.Id);
                         if (measureChain.Building.SequenceEqual(dbBuilding))
                         {
                             if (measure.Attributes.Key.Fifths != dbMeasure.Fifths
                                 || measure.Attributes.Size.BeatBase != dbMeasure.Beatbase
-                                || measure.Attributes.Size.BeatBase != dbMeasure.Beats
-                                || measure.Attributes.Size.TicksPerBeat != dbMeasure.TicksPerBeat)
+                                || measure.Attributes.Size.Beats != dbMeasure.Beats)
                             {
                                 throw new Exception("Found in db measure is not equal to local measure.");
                             }
@@ -109,7 +108,7 @@
         /// </returns>
         public long Create(Measure measure, long[] alphabet, int[] building)
         {
-            List<object> parameters = FillParams(measure, alphabet, building);
+            List<NpgsqlParameter> parameters = FillParams(measure, alphabet, building);
 
             const string Query = @"INSERT INTO measure (
                                         id,
@@ -119,7 +118,6 @@
                                         building,
                                         beats,
                                         beatbase,
-                                        ticks_per_beat,
                                         fifths,
                                         major
                                     ) VALUES (
@@ -130,11 +128,10 @@
                                         @building,
                                         @beats,
                                         @beatbase,
-                                        @ticks_per_beat,
                                         @fifths,
                                         @major
                                     );";
-            DbHelper.ExecuteCommand(db, Query, parameters.ToArray());
+            db.ExecuteCommand(Query, parameters.ToArray());
             return measure.Id;
         }
 
@@ -153,72 +150,23 @@
         /// <returns>
         /// The <see cref="List{Object}"/>.
         /// </returns>
-        protected List<object> FillParams(Measure measure, long[] alphabet, int[] building)
+        protected List<NpgsqlParameter> FillParams(Measure measure, long[] alphabet, int[] building)
         {
-            measure.Id = DbHelper.GetNewElementId(db);
+            measure.Id = db.GetNewElementId();
+            var measureValue = measure.GetHashCode().ToString();
+            var mode = measure.Attributes.Key.Mode;
 
-            var parameters = new List<object>
+            var parameters = new List<NpgsqlParameter>
             {
-                new NpgsqlParameter
-                {
-                    ParameterName = "id",
-                    NpgsqlDbType = NpgsqlDbType.Bigint,
-                    Value = measure.Id
-                },
-                new NpgsqlParameter
-                {
-                    ParameterName = "value",
-                    NpgsqlDbType = NpgsqlDbType.Varchar,
-                    Value = BitConverter.ToString(measure.GetMD5HashCode()).Replace("-", string.Empty)
-                },
-                new NpgsqlParameter
-                {
-                    ParameterName = "notation",
-                    NpgsqlDbType = NpgsqlDbType.Smallint,
-                    Value = (byte)Notation.Measures
-                },
-                new NpgsqlParameter
-                {
-                    ParameterName = "alphabet",
-                    NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Bigint,
-                    Value = alphabet
-                },
-                new NpgsqlParameter
-                {
-                    ParameterName = "building",
-                    NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Integer,
-                    Value = building
-                },
-                new NpgsqlParameter
-                {
-                    ParameterName = "beats",
-                    NpgsqlDbType = NpgsqlDbType.Integer,
-                    Value = measure.Attributes.Size.Beats
-                },
-                new NpgsqlParameter
-                {
-                    ParameterName = "beatbase",
-                    NpgsqlDbType = NpgsqlDbType.Integer,
-                    Value = measure.Attributes.Size.BeatBase
-                },
-                new NpgsqlParameter
-                {
-                    ParameterName = "ticks_per_beat",
-                    NpgsqlDbType = NpgsqlDbType.Integer,
-                    Value = measure.Attributes.Size.TicksPerBeat
-                },
-                new NpgsqlParameter
-                {
-                    ParameterName = "fifths",
-                    NpgsqlDbType = NpgsqlDbType.Integer,
-                    Value = measure.Attributes.Key.Fifths
-                },
-                new NpgsqlParameter
-                {
-                    ParameterName = "major",
-                    NpgsqlDbType = NpgsqlDbType.Boolean,
-                    Value = (measure.Attributes.Key.Mode.Equals("major") || measure.Attributes.Key.Mode.Equals(null)) ? true : false
-                }
+                new NpgsqlParameter<long>("id", NpgsqlDbType.Bigint) { TypedValue =  measure.Id },
+                new NpgsqlParameter<string>("value", NpgsqlDbType.Varchar) { TypedValue =  measureValue },
+                new NpgsqlParameter<byte>("notation", NpgsqlDbType.Smallint) { TypedValue =  (byte)Notation.Measures },
+                new NpgsqlParameter<long[]>("alphabet", NpgsqlDbType.Array | NpgsqlDbType.Bigint) { TypedValue =  alphabet },
+                new NpgsqlParameter<int[]>("building", NpgsqlDbType.Array | NpgsqlDbType.Integer) { TypedValue =  building },
+                new NpgsqlParameter<int>("beats", NpgsqlDbType.Integer) { TypedValue =  measure.Attributes.Size.Beats },
+                new NpgsqlParameter<int>("beatbase", NpgsqlDbType.Integer) { TypedValue =  measure.Attributes.Size.BeatBase },
+                new NpgsqlParameter<int>("fifths", NpgsqlDbType.Integer) { TypedValue =  measure.Attributes.Key.Fifths },
+                new NpgsqlParameter<bool>("major", NpgsqlDbType.Boolean) { TypedValue =  (mode.Equals("major") || mode.Equals(null)) }
             };
             return parameters;
         }

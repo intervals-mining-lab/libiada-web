@@ -70,7 +70,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 throw new Exception("Track contains more then one or zero congeneric score tracks (parts).");
             }
 
-            MatterRepository.CreateOrExctractExistingMatterForSequence(sequence);
+            MatterRepository.CreateOrExtractExistingMatterForSequence(sequence);
 
             BaseChain notesSequence = ConvertCongenericScoreTrackToNotesBaseChain(tempTrack.CongenericScoreTracks[0]);
             long[] notesAlphabet = ElementRepository.GetOrCreateNotesInDb(notesSequence.Alphabet);
@@ -87,15 +87,15 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             var pauseTreatments = EnumExtensions.ToArray<PauseTreatment>().Where(pt => pt != PauseTreatment.NotApplicable);
             foreach (PauseTreatment pauseTreatment in pauseTreatments)
             {
-                BaseChain fmotifsSecuence = ConvertCongenericScoreTrackToFormalMotifsBaseChain(tempTrack.CongenericScoreTracks[0], pauseTreatment, false);
-                long[] fmotifsAlphabet = FmotifRepository.GetOrCreateFmotifsInDb(fmotifsSecuence.Alphabet);
+                BaseChain fmotifsSequence = ConvertCongenericScoreTrackToFormalMotifsBaseChain(tempTrack.CongenericScoreTracks[0], pauseTreatment, false);
+                long[] fmotifsAlphabet = FmotifRepository.GetOrCreateFmotifsInDb(fmotifsSequence.Alphabet);
                 sequence.Id = default;
-                Create(sequence, fmotifsAlphabet, fmotifsSecuence.Building, pauseTreatment, false);
+                Create(sequence, fmotifsAlphabet, fmotifsSequence.Building, pauseTreatment, false);
 
-                fmotifsSecuence = ConvertCongenericScoreTrackToFormalMotifsBaseChain(tempTrack.CongenericScoreTracks[0], pauseTreatment, true);
-                fmotifsAlphabet = FmotifRepository.GetOrCreateFmotifsInDb(fmotifsSecuence.Alphabet);
+                fmotifsSequence = ConvertCongenericScoreTrackToFormalMotifsBaseChain(tempTrack.CongenericScoreTracks[0], pauseTreatment, true);
+                fmotifsAlphabet = FmotifRepository.GetOrCreateFmotifsInDb(fmotifsSequence.Alphabet);
                 sequence.Id = default;
-                Create(sequence, fmotifsAlphabet, fmotifsSecuence.Building, pauseTreatment, true);
+                Create(sequence, fmotifsAlphabet, fmotifsSequence.Building, pauseTreatment, true);
             }
         }
 
@@ -113,7 +113,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </param>
         public void Create(CommonSequence commonSequence, long[] alphabet, int[] building, PauseTreatment pauseTreatment = PauseTreatment.NotApplicable, bool sequentialTransfer = false)
         {
-            List<object> parameters = FillParams(commonSequence, alphabet, building, pauseTreatment, sequentialTransfer);
+            List<NpgsqlParameter> parameters = FillParams(commonSequence, alphabet, building, pauseTreatment, sequentialTransfer);
 
             const string Query = @"INSERT INTO music_chain (
                                         id,
@@ -136,7 +136,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         @pause_treatment,
                                         @sequential_transfer
                                     );";
-            DbHelper.ExecuteCommand(Db, Query, parameters.ToArray());
+            Db.ExecuteCommand(Query, parameters.ToArray());
         }
 
         /// <summary>
@@ -154,22 +154,12 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <returns>
         /// The <see cref="List{Object}"/>.
         /// </returns>
-        private List<object> FillParams(CommonSequence commonSequence, long[] alphabet, int[] building, PauseTreatment pauseTreatment, bool sequentialTransfer)
+        private List<NpgsqlParameter> FillParams(CommonSequence commonSequence, long[] alphabet, int[] building, PauseTreatment pauseTreatment, bool sequentialTransfer)
         {
             var parameters = FillParams(commonSequence, alphabet, building);
 
-            parameters.Add(new NpgsqlParameter
-            {
-                ParameterName = "pause_treatment",
-                NpgsqlDbType = NpgsqlDbType.Smallint,
-                Value = (byte)pauseTreatment
-            });
-            parameters.Add(new NpgsqlParameter
-            {
-                ParameterName = "sequential_transfer",
-                NpgsqlDbType = NpgsqlDbType.Boolean,
-                Value = sequentialTransfer
-            });
+            parameters.Add(new NpgsqlParameter<byte>("pause_treatment", NpgsqlDbType.Smallint) {  TypedValue = (byte)pauseTreatment });
+            parameters.Add(new NpgsqlParameter<bool>("sequential_transfer", NpgsqlDbType.Boolean) { TypedValue = sequentialTransfer });
 
             return parameters;
         }

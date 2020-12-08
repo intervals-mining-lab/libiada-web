@@ -17,7 +17,7 @@
         /// <summary>
         /// The natures count.
         /// </summary>
-        private const int NaturesCount = 4;
+        private const int NaturesCount = 5;
 
         /// <summary>
         /// Array of all natures.
@@ -55,6 +55,7 @@
         [TestCase((Nature)2, "Music")]
         [TestCase((Nature)3, "Literature")]
         [TestCase((Nature)4, "MeasurementData")]
+        [TestCase((Nature)5, "Image")]
         public void NatureNamesTest(Nature nature, string name) => Assert.AreEqual(name, nature.GetName());
 
         /// <summary>

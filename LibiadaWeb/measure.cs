@@ -29,7 +29,6 @@ namespace LibiadaWeb
         public string Name { get; set; }
         public int Beats { get; set; }
         public int Beatbase { get; set; }
-        public Nullable<int> TicksPerBeat { get; set; }
         public int Fifths { get; set; }
         public System.DateTimeOffset Modified { get; set; }
         public bool major { get; set; }

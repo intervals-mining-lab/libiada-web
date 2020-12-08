@@ -9,6 +9,7 @@
     using LibiadaCore.Core.SimpleTypes;
 
     using LibiadaWeb.Helpers;
+    using Npgsql;
 
     /// <summary>
     /// The data sequence repository.
@@ -65,7 +66,7 @@
 
             var chain = new BaseChain(elements);
 
-            MatterRepository.CreateOrExctractExistingMatterForSequence(sequence);
+            MatterRepository.CreateOrExtractExistingMatterForSequence(sequence);
 
             long[] alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.Notation, true);
             Create(sequence, alphabet, chain.Building);
@@ -85,7 +86,7 @@
         /// </param>
         public void Create(CommonSequence sequence, long[] alphabet, int[] building)
         {
-            List<object> parameters = FillParams(sequence, alphabet, building);
+            List<NpgsqlParameter> parameters = FillParams(sequence, alphabet, building);
 
             const string Query = @"INSERT INTO data_chain (
                                         id,
@@ -105,7 +106,7 @@
                                         @remote_db
                                     );";
 
-            DbHelper.ExecuteCommand(Db, Query, parameters.ToArray());
+            Db.ExecuteCommand(Query, parameters.ToArray());
         }
     }
 }

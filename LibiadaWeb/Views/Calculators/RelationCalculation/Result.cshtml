@@ -10,41 +10,7 @@
     <h2>@ViewBag.characteristicName</h2>
     <h2>@ViewBag.notationName</h2>
 
-    if (!ViewBag.isFilter)
-    {
-        <table class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>
-                        First element\Second element
-                    </th>
-                    @for (int k = 0; k < ViewBag.elements.Count; k++)
-                    {
-                        <th>
-                            @ViewBag.elements[k].Name
-                        </th>
-                    }
-                </tr>
-            </thead>
-            <tbody>
-                @for (int i = 0; i < ViewBag.elements.Count; i++)
-                {
-                    <tr>
-                        <td>
-                            @ViewBag.elements[i].Name
-                        </td>
-                        @for (int j = 0; j < ViewBag.elements.Count; j++)
-                        {
-                            <td>
-                                @ViewBag.characteristics[i * ViewBag.elements.Count + j].Value 
-                            </td>
-                        }
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-    else
+    if (ViewBag.isFilter)
     {
         <table class="table">
             <thead>
@@ -73,6 +39,47 @@
                         <td>
                             @ViewBag.filteredResult[l].Value
                         </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    }
+    else
+    {
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        First element\Second element
+                    </th>
+                    @for (int k = 0; k < ViewBag.elements.Length; k++)
+                    {
+                        <th>
+                            @{
+                                var name = string.IsNullOrEmpty(ViewBag.elements[k].Name) ? ViewBag.elements[k].Value : ViewBag.elements[k].Name;
+                            }
+                            @name
+                        </th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < ViewBag.elements.Length; i++)
+                {
+                    <tr>
+                        <td>
+                            @{
+                                var name = string.IsNullOrEmpty(ViewBag.elements[i].Name) ? ViewBag.elements[i].Value : ViewBag.elements[i].Name;
+                            }
+                            @name
+                        </td>
+                        @for (int j = 0; j < ViewBag.elements.Length; j++)
+                        {
+                            <td>
+                                @if (i != j) { <span>@ViewBag.characteristics[ViewBag.elements[i].Id][ViewBag.elements[j].Id]</span> }
+                            </td>
+                        }
                     </tr>
                 }
             </tbody>

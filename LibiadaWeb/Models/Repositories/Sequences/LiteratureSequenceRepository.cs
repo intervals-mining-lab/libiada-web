@@ -46,6 +46,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="translator">
         /// The translator id.
         /// </param>
+        /// <param name="dropPunctuation">
+        /// Flag indicating if punctuation should be removed from text.
+        /// </param>
         public void Create(CommonSequence commonSequence, Stream sequenceStream, Language language, bool original, Translator translator, bool dropPunctuation = false)
         {
             string stringSequence = FileHelper.ReadSequenceFromStream(sequenceStream);
@@ -67,7 +70,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 chain = new BaseChain(text.Select(e => (ValueString)e).Cast<IBaseObject>().ToList());
             }
 
-            MatterRepository.CreateOrExctractExistingMatterForSequence(commonSequence);
+            MatterRepository.CreateOrExtractExistingMatterForSequence(commonSequence);
 
             long[] alphabet = ElementRepository.ToDbElements(chain.Alphabet, commonSequence.Notation, true);
             Create(commonSequence, original, language, translator, alphabet, chain.Building);
@@ -96,27 +99,10 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </param>
         public void Create(CommonSequence sequence, bool original, Language language, Translator translator, long[] alphabet, int[] building)
         {
-            List<object> parameters = FillParams(sequence, alphabet, building);
-
-            parameters.Add(new NpgsqlParameter
-            {
-                ParameterName = "original",
-                NpgsqlDbType = NpgsqlDbType.Boolean,
-                Value = original
-            });
-            parameters.Add(new NpgsqlParameter
-            {
-                ParameterName = "language",
-                NpgsqlDbType = NpgsqlDbType.Smallint,
-                Value = (byte)language
-            });
-
-            parameters.Add(new NpgsqlParameter
-            {
-                ParameterName = "translator",
-                NpgsqlDbType = NpgsqlDbType.Smallint,
-                Value = (byte)translator
-            });
+            List<NpgsqlParameter> parameters = FillParams(sequence, alphabet, building);
+            parameters.Add(new NpgsqlParameter<bool>("original", NpgsqlDbType.Boolean) { TypedValue = original });
+            parameters.Add(new NpgsqlParameter<byte>("language", NpgsqlDbType.Smallint) { TypedValue = (byte)language });
+            parameters.Add(new NpgsqlParameter<byte>("translator", NpgsqlDbType.Smallint) { TypedValue = (byte)translator });
 
             const string Query = @"INSERT INTO literature_chain (
                                         id,
@@ -142,7 +128,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         @translator
                                     );";
 
-            DbHelper.ExecuteCommand(Db, Query, parameters.ToArray());
+            Db.ExecuteCommand(Query, parameters.ToArray());
         }
 
         /// <summary>
