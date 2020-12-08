@@ -24,6 +24,7 @@
     using Newtonsoft.Json;
 
     using SixLabors.ImageSharp;
+    using SixLabors.ImageSharp.PixelFormats;
 
     /// <summary>
     /// The quick calculation controller.
@@ -90,7 +91,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(short[] characteristicLinkIds, string[] customSequences, bool localFile, string fileType, bool toLower, bool removePunctuation)
+        public ActionResult Index(short[] characteristicLinkIds, string[] customSequences, bool localFile, string fileType, bool? toLower, bool? removePunctuation)
         {
             return CreateTask(() =>
                 {
@@ -111,13 +112,13 @@
                                     using (var sr = new StreamReader(sequenceStream))
                                     {
                                         string stringTextSequence = sr.ReadToEnd();
-                                        if (toLower) stringTextSequence = stringTextSequence.ToLower();
-                                        if (removePunctuation) stringTextSequence = Regex.Replace(stringTextSequence, @"[^\w\s]", "");
+                                        if ((bool)toLower) stringTextSequence = stringTextSequence.ToLower();
+                                        if ((bool)removePunctuation) stringTextSequence = Regex.Replace(stringTextSequence, @"[^\w\s]", "");
                                         sequences[i] = new Chain(stringTextSequence);
                                     }
                                     break;
                                 case "image":
-                                    var image = Image.Load(sequenceStream);
+                                    var image = Image.Load<Rgba32>(sequenceStream);
                                     var sequence = ImageProcessor.ProcessImage(image, new IImageTransformer[0], new IMatrixTransformer[0], new LineOrderExtractor());
                                     var alphabet = new Alphabet { NullValue.Instance() };
                                     var incompleteAlphabet = sequence.Alphabet;

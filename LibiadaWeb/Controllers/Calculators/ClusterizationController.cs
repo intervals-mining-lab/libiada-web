@@ -5,12 +5,11 @@
     using System.Web.Mvc;
 
     using Clusterizator;
-
-    using LibiadaCore.Core;
-    using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
-
+    
+    using LibiadaCore.Music;
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.Repositories.Sequences;
     using LibiadaWeb.Tasks;
 
@@ -115,6 +114,9 @@
             short[] characteristicLinkIds,
             Notation[] notations,
             Language[] languages,
+            Translator?[] translators,
+            PauseTreatment[] pauseTreatments,
+            bool[] sequentialTransfers,
             int clustersCount,
             ClusterizationType clusterizationType,
             double equipotencyWeight = 1,
@@ -125,43 +127,44 @@
         {
             return CreateTask(() =>
             {
-                var characteristicNames = new string[characteristicLinkIds.Length];
-                var mattersCharacteristics = new object[matterIds.Length];
-                var characteristics = new double[matterIds.Length][];
-                matterIds = matterIds.OrderBy(m => m).ToArray();
+                Dictionary<long, string> mattersNames;
                 Dictionary<long, string> matters = Cache.GetInstance().Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
 
-                for (int j = 0; j < matterIds.Length; j++)
+                long[][] sequenceIds;
+                using (var db = new LibiadaWebEntities())
                 {
-                    long matterId = matterIds[j];
-                    characteristics[j] = new double[characteristicLinkIds.Length];
-                    for (int i = 0; i < characteristicLinkIds.Length; i++)
+                    if (notations[0].GetNature() == Nature.Image)
                     {
-                        Notation notation = notations[i];
-                        long sequenceId = db.Matter.Single(m => m.Id == matterId).Sequence.Single(c => c.Notation == notation).Id;
-
-                        int characteristicLinkId = characteristicLinkIds[i];
-                        if (db.CharacteristicValue.Any(c => c.SequenceId == sequenceId && c.CharacteristicLinkId == characteristicLinkId))
+                        var existingSequences = db.ImageSequences.Where(s => matterIds.Contains(s.MatterId))
+                        .ToArray();
+                        ImageSequenceRepository imageSequenceRepository = new ImageSequenceRepository();
+                        for (int i = 0; i < matterIds.Length; i++)
                         {
-                            characteristics[j][i] = db.CharacteristicValue.Single(c => c.SequenceId == sequenceId && c.CharacteristicLinkId == characteristicLinkId).Value;
+                            for (int j = 0; j < notations.Length; j++)
+                            {
+                                if (!existingSequences.Any(s => s.MatterId == matterIds[i] && s.Notation == notations[j]))
+                                {
+                                    var newImageSequence = new ImageSequence()
+                                    {
+                                        MatterId = matterIds[i],
+                                        Notation = notations[j],
+                                        OrderExtractor = ImageOrderExtractor.LineLeftToRightTopToBottom
+                                    };
+                                    imageSequenceRepository.Create(newImageSequence, db);
+                                }
+                            }
                         }
-                        else
-                        {
-                            Chain tempChain = commonSequenceRepository.GetLibiadaChain(sequenceId);
-
-                            Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
-                            FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
-                            IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
-                            characteristics[j][i] = calculator.Calculate(tempChain, link);
-                        }
+                        db.SaveChanges();
                     }
+                    var commonSequenceRepository = new CommonSequenceRepository(db);
+                    sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds, notations, languages, translators, pauseTreatments, sequentialTransfers, ImageOrderExtractor.LineLeftToRightTopToBottom);
+                    mattersNames = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
                 }
 
-                for (int k = 0; k < characteristicLinkIds.Length; k++)
-                {
-                    characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[k], notations[k]);
-                }
-
+                double[][] characteristics;
+                
+                    characteristics = SequencesCharacteristicsCalculator.Calculate(sequenceIds, characteristicLinkIds);
+                
                 var clusterizationParams = new Dictionary<string, double>
                 {
                     { "clustersCount", clustersCount },
@@ -174,23 +177,27 @@
 
                 IClusterizator clusterizator = ClusterizatorsFactory.CreateClusterizator(clusterizationType, clusterizationParams);
                 int[] clusterizationResult = clusterizator.Cluster(clustersCount, characteristics);
+                var mattersCharacteristics = new object[matterIds.Length];
                 for (int i = 0; i < clusterizationResult.Length; i++)
                 {
                     mattersCharacteristics[i] = new
                     {
-                        MatterName = matters[matterIds[i]],
+                        MatterName = mattersNames[matterIds[i]],
                         cluster = clusterizationResult[i] + 1,
                         Characteristics = characteristics[i]
                     };
                 }
 
+                var characteristicNames = new string[characteristicLinkIds.Length];
                 var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
-                for (int i = 0; i < characteristicNames.Length; i++)
+                var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
+                for (int k = 0; k < characteristicLinkIds.Length; k++)
                 {
-                    characteristicsList[i] = new SelectListItem
+                    characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[k], notations[k]);
+                    characteristicsList[k] = new SelectListItem
                     {
-                        Value = i.ToString(),
-                        Text = characteristicNames[i],
+                        Value = k.ToString(),
+                        Text = characteristicNames[k],
                         Selected = false
                     };
                 }
