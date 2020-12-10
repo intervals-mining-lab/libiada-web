@@ -480,7 +480,6 @@
     <Content Include="Scripts\Angular\Controllers\calculation.js" />
     <Content Include="Scripts\Angular\Controllers\subsequencesCalculation.js" />
     <Content Include="Scripts\Angular\Controllers\matterSequenceCreate.js" />
-    <Content Include="Scripts\Angular\Controllers\subsequencesDistributionResultPlotly.js" />
     <Content Include="Scripts\Angular\Controllers\subsequencesDistributionResult.js" />
     <Content Include="Scripts\Angular\Controllers\taskManager.js" />
     <Content Include="Scripts\Angular\Directives\tableParse.js" />
@@ -814,7 +813,6 @@
     <Content Include="Views\Partial\_MattersSubmit.cshtml" />
     <Content Include="Views\Calculators\Charts\Index.cshtml" />
     <Content Include="Views\Calculators\SubsequencesDistribution\Index.cshtml" />
-    <Content Include="Views\Calculators\SubsequencesDistribution\OldResult.cshtml" />
     <Content Include="Views\Partial\_LocalFile.cshtml" />
     <Content Include="Views\Sequences\GenesImport\Result.cshtml" />
     <Content Include="Views\Calculators\SubsequencesSimilarity\Result.cshtml" />

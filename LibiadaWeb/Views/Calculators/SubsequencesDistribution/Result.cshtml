@@ -9,7 +9,7 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     @{
-        ViewBag.Title = "Subsequences characteristics distributions";
+        ViewBag.Title = "Map of genes";
     }
     <title>@ViewBag.Title - FOA Research Lab</title>
     @Styles.Render("~/Content/css")
@@ -23,17 +23,13 @@
 
 </head>
 <body>
-
-
-    @*<h2>@ViewBag.Title</h2>*@
-
     @if (ViewBag.Error == null)
     {
         <div ng-app="libiada">
 
-            @Html.Partial("_AngularControllerInitializer", "SubsequencesDistributionResultPlotlyController")
+            @Html.Partial("_AngularControllerInitializer", "SubsequencesDistributionResultController")
             @Scripts.Render("~/bundles/loadingWindow")
-            <div class="form-horizontal" ng-controller="SubsequencesDistributionResultPlotlyCtrl">
+            <div class="form-horizontal" ng-controller="SubsequencesDistributionResultCtrl">
                 <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
                 <div id="container" ng-disabled="loading" ng-cloack>
 
@@ -212,13 +208,13 @@
                                     <hr />
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
-                                            <button type="button" class="btn btn-default btn-xs" data-toggle="collapse" data-target="#additionalActions{{$index + 1}}" aria-expanded="false" aria-controls="additionalActions{{$index + 1}}">Other characteristics</button>
+                                            <button type="button" class="btn btn-default btn-sm" data-toggle="collapse" data-target="#subsequenceCharacteristics{{$index + 1}}" aria-expanded="false" aria-controls="subsequenceCharacteristics{{$index + 1}}">Numeric characteristics</button>
                                         </div>
-                                        <div class="panel-collapse collapse" id="additionalActions{{$index + 1}}">
+                                        <div class="panel-collapse collapse" id="subsequenceCharacteristics{{$index + 1}}">
                                             <table class="table table-bordered" style="font-size:14px;">
-                                                <thead ng-repeat="(key,value) in tooltipElement.charmap">
+                                                <thead ng-repeat="value in tooltipElement.characteristics">
                                                     <tr>
-                                                        <td align=center scope="col">{{key}}</td>
+                                                        <td align=center scope="col">{{subsequencesCharacteristicsNames[$index]}}</td>
                                                         <td scope="col">{{value}}</td>
                                                     </tr>
                                                 </thead>
