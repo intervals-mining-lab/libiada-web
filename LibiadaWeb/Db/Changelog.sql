@@ -3051,7 +3051,7 @@ COMMENT ON FUNCTION trigger_chain_key_unique_check() IS 'Checks that there is on
 
 CREATE TABLE dbo."AspNetPushNotificationSubscribers"
 (
-    "Id" integer NOT NULL,
+    "Id" serial NOT NULL,
     "UserId" integer NOT NULL DEFAULT 0,
     "Endpoint" text NOT NULL,
     "P256dh" text NOT NULL,
@@ -3062,20 +3062,6 @@ CREATE TABLE dbo."AspNetPushNotificationSubscribers"
         ON UPDATE NO ACTION
         ON DELETE CASCADE
 );
-COMMENT ON TABLE dbo."AspNetPushNotificationSubscribers"
-    IS 'Table for storing data about devices that are subscribers to push notifications.';
-
--- 28.05.2020
--- Add auto increment for primary key of notification subscribers table.
-
-CREATE SEQUENCE dbo."AspNetPushNotificationSubscribers_Id_seq"
-    INCREMENT 1
-    START 1
-    MINVALUE 1
-    MAXVALUE 9223372036854775807
-    CACHE 1;
-
-ALTER TABLE dbo."AspNetPushNotificationSubscribers" ALTER COLUMN "Id"
-SET DEFAULT nextval('dbo."AspNetPushNotificationSubscribers_Id_seq"'::regclass)
+COMMENT ON TABLE dbo."AspNetPushNotificationSubscribers" IS 'Table for storing data about devices that are subscribers to push notifications.';
 
 COMMIT;

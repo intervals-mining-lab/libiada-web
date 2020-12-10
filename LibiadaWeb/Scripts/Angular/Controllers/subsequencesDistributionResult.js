@@ -1,570 +1,533 @@
 ﻿function SubsequencesDistributionResultController() {
-	"use strict";
+    "use strict";
 
-	function subsequencesDistributionResult($scope, $http) {
+    function subsequencesDistributionResult($scope, $http) {
 
-		// adds new characteristics value based filter
-		function addCharacteristicComparer() {
-			$scope.characteristicComparers.push({ characteristic: $scope.subsequencesCharacteristicsList[0], precision: 0 });
-		}
+        function onInit() {
+            $scope.dotRadius = 4;
+            $scope.selectedDotRadius = $scope.dotRadius * 3;
 
-		// deletes given characteristics filter
-		function deleteCharacteristicComparer(characteristicComparer) {
-			$scope.characteristicComparers.splice($scope.characteristicComparers.indexOf(characteristicComparer), 1);
-		}
+            $scope.points = [];
+            $scope.visiblePoints = [];
+            $scope.matters = [];
+            $scope.legend = [];
+            $scope.characteristicComparers = [];
+            $scope.filters = [];
+            $scope.plotTypeX = "";
+            $scope.plotTypeY = "";
+            $scope.productFilter = "";
+            $scope.tooltipVisible = false;
+            $scope.tooltipElements = [];
+            $scope.pointsSimilarity = Object.freeze({ "same": 0, "similar": 1, "different": 2 });
 
-		// fills array of currently visible points
-		function fillVisiblePoints() {
-			$scope.visiblePoints = [];
-			for (var i = 0; i < $scope.points.length; i++) {
-				if ($scope.dotVisible($scope.points[i])) {
-					$scope.visiblePoints.push($scope.points[i]);
-				}
-			}
-		}
+            $('[data-toggle="tooltip"]').tooltip();
 
-		// returns attribute index by its name if any
-		function getAttributeIdByName(dot, attributeName) {
-			return dot.attributes.find(function (a) {
-				return $scope.attributes[$scope.attributeValues[a].attribute] === attributeName;
-			});
-		}
+            // preventing scroll in key up and key down
+            window.addEventListener("keydown", function (e) {
+                if ($scope.isKeyUpOrDown(e.keyCode)) {
+                    e.preventDefault();
+                    $scope.keyUpDownPress(e.keyCode);
+                }
+            }, false);
 
-		// returns true if dot has given attribute and its value equal to the given value
-		function isAttributeEqual(dot, attributeName, expectedValue) {
-			var attributeId = $scope.getAttributeIdByName(dot, attributeName);
-			if (attributeId) {
-				var product = $scope.attributeValues[attributeId].value.toUpperCase();
-				return product.indexOf(expectedValue) !== -1;
-			}
+            $scope.loadingScreenHeader = "Loading genes map data";
+            $scope.loading = true;
 
-			return false;
-		}
+            var location = window.location.href.split("/");
+            $scope.taskId = location[location.length - 1];
 
-		// adds and applies new filter
-		function addFilter() {
-			if ($scope.newFilter.length > 0) {
-				$scope.filters.push({ value: $scope.newFilter });
+            $http.get("/api/TaskManagerWebApi/" + $scope.taskId)
+                .then(function (data) {
+                    MapModelFromJson($scope, JSON.parse(data.data));
+                    $scope.plot = document.getElementById("chart");
+                    $scope.subsequenceCharacteristic = $scope.subsequencesCharacteristicsList[0];
 
-				d3.selectAll(".dot")
-					.attr("visibility", function (d) {
-						var filterValue = $scope.newFilter.toUpperCase();
-						var visible = $scope.isAttributeEqual(d, "product", filterValue);
-						visible = visible || $scope.isAttributeEqual(d, "locus_tag", filterValue);
-						d.filtersVisible.push(visible);
-						return $scope.dotVisible(d) ? "visible" : "hidden";
-					});
+                    $scope.fillPoints();
 
-				$scope.fillVisiblePoints();
-				$scope.newFilter = "";
-			}
-			// todo: add error message if filter is empty
-		}
+                    var comparer = (first, second) =>
+                        first.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value] - second.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value];
 
-		// deletes given filter
-		function deleteFilter(filter) {
-			d3.selectAll(".dot")
-				.attr("visibility", function (d) {
-					d.filtersVisible.splice($scope.filters.indexOf(filter), 1);
-					return $scope.dotVisible(d) ? "visible" : "hidden";
-				});
-			$scope.filters.splice($scope.filters.indexOf(filter), 1);
-			$scope.fillVisiblePoints();
-		}
+                    $scope.points = $scope.points.map(points => points.sort(comparer));
+                    $scope.visiblePoints = $scope.visiblePoints.map(points => points.sort(comparer));
 
-		// initializes data for genes map
-		function fillPoints() {
-			var id = 0;
-			for (var i = 0; i < $scope.result.length; i++) {
-				var sequenceData = $scope.result[i];
-				$scope.matters.push({ id: sequenceData.MatterId, name: sequenceData.MatterName, visible: true });
+                    $scope.addCharacteristicComparer();
 
-				for (var j = 0; j < sequenceData.SubsequencesData.length; j++) {
-					var subsequenceData = sequenceData.SubsequencesData[j];
-					var point = {
-						id: id,
-						matterId: sequenceData.MatterId,
-						sequenceRemoteId: sequenceData.RemoteId,
-						attributes: subsequenceData.Attributes,
-						partial: subsequenceData.Partial,
-						featureId: subsequenceData.FeatureId,
-						positions: subsequenceData.Starts,
-						lengths: subsequenceData.Lengths,
-						subsequenceRemoteId: subsequenceData.RemoteId,
-						numericX: i + 1,
-						x: sequenceData.Characteristic,
-						subsequenceCharacteristics: subsequenceData.CharacteristicsValues,
-						featureVisible: true,
-						matterVisible: true,
-						filtersVisible: []
-					};
-					$scope.points.push(point);
-					$scope.visiblePoints.push(point);
-					id++;
-				}
-			}
-		}
+                    $scope.redrawGenesMap();
+                    $scope.loading = false;
+                }, function () {
+                    alert("Failed loading genes map data");
 
-		// filters dots by subsequences feature
-		function filterByFeature(feature) {
-			d3.selectAll(".dot")
-				.filter(function (dot) {
-					return dot.featureId === parseInt(feature.Value);
-				})
-				.attr("visibility", function (d) {
-					d.featureVisible = feature.Selected;
-					return $scope.dotVisible(d) ? "visible" : "hidden";
-				});
+                    $scope.loading = false;
+                });
+        }
 
-			for (var i = 0; i < $scope.points.length; i++) {
-				if ($scope.points[i].featureId === parseInt(feature.Value)) {
-					$scope.points[i].featureVisible = feature.Selected;
-				}
-			}
+        // adds new characteristics value based filter
+        function addCharacteristicComparer() {
+            $scope.characteristicComparers.push({ characteristic: $scope.subsequencesCharacteristicsList[0], precision: 0 });
+        }
 
-			// optimize this method calls
-			$scope.fillVisiblePoints();
-		}
+        // deletes given characteristics filter
+        function deleteCharacteristicComparer(characteristicComparer) {
+            $scope.characteristicComparers.splice($scope.characteristicComparers.indexOf(characteristicComparer), 1);
+        }
 
-		// checks if dot is visible
-		function dotVisible(dot) {
-			var filterVisible = dot.filtersVisible.length === 0 || dot.filtersVisible.some(function (element) {
-				return element;
-			});
+        // fills array of currently visible points
+        function fillVisiblePoints() {
+            $scope.visiblePoints = [];
+            for (var i = 0; i < $scope.points.length; i++) {
+                $scope.visiblePoints[i] = [];
+                for (var j = 0; j < $scope.points[i].length; j++) {
+                    if ($scope.dotVisible($scope.points[i][j])) {
+                        $scope.visiblePoints[i].push($scope.points[i][j]);
+                    }
+                }
+            }
+        }
 
-			return dot.featureVisible && dot.matterVisible && filterVisible;
-		}
+        // returns attribute index by its name if any
+        function getAttributeIdByName(dot, attributeName) {
+            return dot.attributes.find(function (a) {
+                return $scope.attributes[$scope.attributeValues[a].attribute] === attributeName;
+            });
+        }
 
-		// determines if dots are similar by product
-		function dotsSimilar(d, dot) {
-			if (d.featureId !== dot.featureId) {
-				return false;
-			}
+        // returns true if dot has given attribute and its value equal to the given value
+        function isAttributeEqual(dot, attributeName, expectedValue) {
+            var attributeId = $scope.getAttributeIdByName(dot, attributeName);
+            if (attributeId) {
+                var product = $scope.attributeValues[attributeId].value.toUpperCase();
+                return product.indexOf(expectedValue) !== -1;
+            }
 
-			switch (d.featureId) {
-				case 1: // CDS
-				case 2: // RRNA
-				case 3: // TRNA
-					var firstProductId = $scope.getAttributeIdByName(d, "product");
-					var secondProductId = $scope.getAttributeIdByName(dot, "product");
-					if ($scope.attributeValues[firstProductId].value.toUpperCase() !== $scope.attributeValues[secondProductId].value.toUpperCase()) {
-						return false;
-					}
-					break;
-			}
+            return false;
+        }
 
-			return true;
-		}
+        // adds and applies new filter
+        function addFilter() {
+            if ($scope.newFilter.length > 0) {
+                $scope.filters.push({ value: $scope.newFilter });
 
-		// gets attributes text for given subsequence
-		function getAttributesText(attributes) {
-			var attributesText = [];
-			for (var i = 0; i < attributes.length; i++) {
-				var attributeValue = $scope.attributeValues[attributes[i]];
-				attributesText.push($scope.attributes[attributeValue.attribute] + (attributeValue.value === "" ? "" : " = " + attributeValue.value));
-			}
+                var filterValue = $scope.filters[$scope.filters.length - 1].value.toUpperCase();
 
-			return attributesText.join("<br/>");
-		}
+                for (var i = 0; i < $scope.points.length; i++) {
+                    for (var j = 0; j < $scope.points[i].length; j++) {
+                        var point = $scope.points[i][j];
+                        var visible = $scope.isAttributeEqual(point, "product", filterValue);
+                        visible = visible || $scope.isAttributeEqual(point, "locus_tag", filterValue);
+                        point.filtersVisible.push(visible);
+                        point.visible = $scope.dotVisible(point);
+                    }
+                }
 
-		// shows tooltip for dot or group of dots
-		function showTooltip(selectedPoints, tooltip, svg) {
-			$scope.clearTooltip(tooltip);
-			tooltip.style("opacity", 0.9);
+                $scope.redrawGenesMap();
 
-			var tooltipHtml = [];
+                $scope.newFilter = "";
+            }
+            // todo: add error message if filter is empty
+        }
 
-            tooltip.selectedPoints = selectedPoints;
+        // deletes given filter
+        function deleteFilter(filter) {
+            for (var i = 0; i < $scope.points.length; i++) {
+                for (var j = 0; j < $scope.points[i].length; j++) {
+                    var point = $scope.points[i][j];
+
+                    point.filtersVisible.splice($scope.filters.indexOf(filter), 1);
+                    point.visible = $scope.dotVisible(point);
+                }
+            }
+
+            $scope.filters.splice($scope.filters.indexOf(filter), 1);
+            $scope.redrawGenesMap();
+        }
+
+        // initializes data for genes map
+        function fillPoints() {
+            var id = 0;
+            for (var i = 0; i < $scope.result.length; i++) {
+                var sequenceData = $scope.result[i];
+                $scope.matters.push({ id: sequenceData.MatterId, name: sequenceData.MatterName, visible: true, index: i, color: $scope.colorScale(i) });
+                // hack for legend dot color
+                document.styleSheets[0].insertRule(".legend" + sequenceData.MatterId + ":after { background:" + $scope.colorScale(i) + "}");
+                $scope.points.push([]);
+                $scope.visiblePoints.push([]);
+                for (var j = 0; j < sequenceData.SubsequencesData.length; j++) {
+                    var subsequenceData = sequenceData.SubsequencesData[j];
+
+                    var point = {
+                        id: id,
+                        matterId: sequenceData.MatterId,
+                        sequenceRemoteId: sequenceData.RemoteId,
+                        attributes: subsequenceData.Attributes,
+                        partial: subsequenceData.Partial,
+                        featureId: subsequenceData.FeatureId,
+                        positions: subsequenceData.Starts,
+                        lengths: subsequenceData.Lengths,
+                        subsequenceRemoteId: subsequenceData.RemoteId,
+                        numericX: i + 1,
+                        x: sequenceData.Characteristic,
+                        subsequenceCharacteristics: subsequenceData.CharacteristicsValues,
+                        featureVisible: true,
+                        legendVisible: true,
+                        filtersVisible: [],
+                    };
+                    $scope.points[i].push(point);
+                    $scope.visiblePoints[i].push(point);
+                    id++;
+                }
+            }
+        }
+
+        // filters dots by subsequences feature
+        function filterByFeature(feature) {
+            for (var i = 0; i < $scope.points.length; i++) {
+                for (var j = 0; j < $scope.points[i].length; j++) {
+                    var point = $scope.points[i][j];
+
+                    if (point.featureId === parseInt(feature.Value)) {
+                        point.featureVisible = feature.Selected;
+                        point.visible = $scope.dotVisible(point);
+                    }
+                }
+            }
+
+            $scope.redrawGenesMap();
+        }
+
+        // checks if dot is visible
+        function dotVisible(dot) {
+            var filterVisible = dot.filtersVisible.length === 0 || dot.filtersVisible.some(fv => fv);
+            return dot.legendVisible && dot.featureVisible && filterVisible;
+        }
+
+        // determines if dots are similar by product
+        function dotsSimilar(d, dot) {
+            if (d.featureId !== dot.featureId) {
+                return false;
+            }
+
+            switch (d.featureId) {
+                case 1: // CDS
+                case 2: // RRNA
+                case 3: // TRNA
+                    var firstProductId = $scope.getAttributeIdByName(d, "product");
+                    var secondProductId = $scope.getAttributeIdByName(dot, "product");
+                    if ($scope.attributeValues[firstProductId].value.toUpperCase() !== $scope.attributeValues[secondProductId].value.toUpperCase()) {
+                        return $scope.pointsSimilarity.different;
+                    }
+                    break;
+            }
+
+            return $scope.pointsSimilarity.similar;
+        }
+
+        // gets attributes text for given subsequence
+        function getAttributesText(attributes) {
+            var attributesText = [];
+            for (var i = 0; i < attributes.length; i++) {
+                var attributeValue = $scope.attributeValues[attributes[i]];
+                attributesText.push($scope.attributes[attributeValue.attribute] + (attributeValue.value === "" ? "" : " = " + attributeValue.value));
+            }
+
+            return attributesText;
+        }
+
+        // shows tooltip for dot or group of dots
+        function showTooltip(selectedPoint) {
+            $("a[href='#tooltip']").tab("show");
+
+            $scope.tooltipVisible = true;
+            $scope.tooltipElements.length = 0;
+            var matterName = $scope.matters.find(value => value.id === selectedPoint.matterId).name;
+            $scope.tooltipElements.push(fillPointTooltip(selectedPoint, matterName, $scope.pointsSimilarity.same));
+            var similarPoints = [];
+
+            for (var i = 0; i < $scope.visiblePoints.length; i++) {
+                for (var j = 0; j < $scope.visiblePoints[i].length; j++) {
+                    if (selectedPoint !== $scope.visiblePoints[i][j] && $scope.highlight) {
+                        var similar = $scope.characteristicComparers.every(function (filter) {
+                            var selectedPointValue = selectedPoint.subsequenceCharacteristics[filter.characteristic.Value];
+                            var anotherPointValue = $scope.visiblePoints[i][j].subsequenceCharacteristics[filter.characteristic.Value];
+                            return Math.abs(selectedPointValue - anotherPointValue) <= filter.precision;
+                        });
+
+                        if (similar) {
+                            var point = $scope.visiblePoints[i][j];
+                            similarPoints.push(point);
+                            matterName = $scope.matters[i].name;
+                            $scope.tooltipElements.push(fillPointTooltip(point, matterName, $scope.dotsSimilar(point, selectedPoint)));
+                        }
+                    }
+                }
+            }
+
+
+            //                svg.append("line")
+            //                    .attr("class", "similar-line")
+            //                    .attr("x1", $scope.xMap(point))
+            //                    .attr("y1", $scope.yMap(point))
+            //                    .attr("x2", $scope.xMap(dot))
+            //                    .attr("y2", $scope.yMap(dot))
+            //                    .attr("stroke-width", 1)
+            //                    .attr("opacity", 0.4)
+            //                    .attr("stroke", $scope.colorMap($scope.cValue(point)));
+            //                return true;
+            //            }
+            //        }
+
+            //        return false;
+            //    })
+            //    .attr("rx", $scope.selectedDotRadius);
+            //tooltip.lines = svg.selectAll(".similar-line");
+
+            var update = {
+                "marker.symbol": $scope.visiblePoints.map(points => points.map(point => point === selectedPoint || similarPoints.includes(point) ? "diamond-wide" : "circle-open")),
+                "marker.size": $scope.visiblePoints.map(points => points.map(point => point === selectedPoint || similarPoints.includes(point) ? 15 : 6))
+            };
+
+            Plotly.restyle($scope.plot, update);
+
+            $scope.$apply();
+        }
+
+        // constructs string representing tooltip text (inner html)
+        function fillPointTooltip(point, matterName, similarity) {
+            var color = similarity === $scope.pointsSimilarity.same ? "default"
+                      : similarity === $scope.pointsSimilarity.similar ? "success"
+                      : similarity === $scope.pointsSimilarity.different ? "danger" : "danger";
+
+            var tooltipElement = {
+                name: matterName,
+                sequenceRemoteId: point.sequenceRemoteId,
+                feature: $scope.features[point.featureId].Text,
+                attributes: $scope.getAttributesText(point.attributes),
+                partial: point.partial,
+                color: color,
+                characteristics: point.subsequenceCharacteristics,
+            };
+
+            if (point.subsequenceRemoteId) {
+                tooltipElement.remoteId = point.subsequenceRemoteId;
+            }
+
+            tooltipElement.position = "(";
+            tooltipElement.length = 0;
+            tooltipElement.positions = point.positions;
+            tooltipElement.lengths = point.lengths;
+
+            for (var i = 0; i < point.positions.length; i++) {
+                tooltipElement.position += point.positions[i] + 1;
+                tooltipElement.position += "..";
+                tooltipElement.position += point.positions[i] + point.lengths[i];
+                tooltipElement.length += point.lengths[i];
+                if (i !== point.positions.length - 1) {
+                    tooltipElement.position += ", ";
+                }
+            }
+
+            tooltipElement.position += ")";
             
-			var point = selectedPoints[0];
-			tooltip.selectedDots = svg.selectAll(".dot")
-				.filter(function (dot) {
-					if ($scope.dotVisible(dot)) {
-						if (dot.matterId === point.matterId && $scope.yValue(dot) === $scope.yValue(point)) { // if dots are in the same position
-							tooltipHtml.push($scope.fillPointTooltip(dot));
-							return true;
-						} else if ($scope.highlight) { // if similar dot are highlighted
-							for (var i = 0; i < $scope.characteristicComparers.length; i++) {
-								var dotValue = dot.subsequenceCharacteristics[$scope.characteristicComparers[i].characteristic.Value];
-								var dValue = point.subsequenceCharacteristics[$scope.characteristicComparers[i].characteristic.Value];
-								if (Math.abs(dotValue - dValue) > $scope.characteristicComparers[i].precision) { // if dValue is out of range for any comparer
-									return false;
-								}
-							}
+            return tooltipElement;
+        }
 
-							var tooltipColor = $scope.dotsSimilar(point, dot) ? "text-success" : "text-danger";
-							tooltipHtml.push("<span class='" + tooltipColor + "'>" + $scope.fillPointTooltip(dot) + "</span>");
-                            svg.append("line")
-                                .attr("class", "similar-line")
-                                .attr("x1", $scope.xMap(point))
-                                .attr("y1", $scope.yMap(point))
-                                .attr("x2", $scope.xMap(dot))
-                                .attr("y2", $scope.yMap(dot))
-                                .attr("stroke-width", 1)
-                                .attr("opacity", 0.4)
-                                .attr("stroke", $scope.colorMap($scope.cValue(point)));
-							return true;
-						}
-					}
+        function isKeyUpOrDown(keyCode) {
+            return keyCode === 40 || keyCode === 38;
+        }
 
-					return false;
-				})
-                .attr("rx", $scope.selectedDotRadius);
-            tooltip.lines = svg.selectAll(".similar-line");
-			tooltip.html(tooltipHtml.join("</br></br>"));
+        function cText(points, index) {
+            return points.map(function (d) { return $scope.matters[index].name; });
+        }
 
-			var matrix = tooltip.selectedDots.nodes()[0].parentNode.getScreenCTM()
-				.translate($scope.xMap(point), $scope.yMap(point));
+        // selects nearest diffieret point of the same organism when "up" or "down" key pressed 
+        function keyUpDownPress(keyCode) {
+            var nextPointIndex = -1;
+            var visibleMattersPoints = $scope.visiblePoints[$scope.selectedMatterIndex];
 
-			tooltip.style("background", "#eee")
-				.style("color", "#000")
-				.style("border-radius", "5px")
-				.style("font-family", "monospace")
-				.style("padding", "5px")
-				.style("left", (window.pageXOffset + matrix.e + 15) + "px")
-				.style("top", (window.pageYOffset + matrix.f + 15) + "px");
-		}
+            if ($scope.selectedPointIndex >= 0) {
+                var characteristic;
+                var firstPointCharacteristic;
+                var secondPointCharacteristic;
+                switch (keyCode) {
+                    case 38: // up
+                        for (var i = $scope.selectedPointIndex + 1; i < visibleMattersPoints.length; i++) {
+                            characteristic = $scope.subsequenceCharacteristic.Value;
+                            firstPointCharacteristic = visibleMattersPoints[$scope.selectedPointIndex].subsequenceCharacteristics[characteristic];
+                            secondPointCharacteristic = visibleMattersPoints[i].subsequenceCharacteristics[characteristic];
 
-		// constructs string representing tooltip text (inner html)
-		function fillPointTooltip(d) {
-			var tooltipContent = [];
-			var genBankLink = "<a target='_blank' rel='noopener' href='https://www.ncbi.nlm.nih.gov/nuccore/";
-			var name = $scope.matters.find(function (m) { return m.id === d.matterId; }).name;
-			var header = d.sequenceRemoteId ? genBankLink + d.sequenceRemoteId + "'>" + name + "</a>" : name;
-			tooltipContent.push(header);
+                            if (firstPointCharacteristic !== secondPointCharacteristic) {
+                                nextPointIndex = i;
+                                break;
+                            }
+                        }
+                        break;
+                    case 40: // down
+                        for (var j = $scope.selectedPointIndex - 1; j >= 0; j--) {
+                            characteristic = $scope.subsequenceCharacteristic.Value;
+                            firstPointCharacteristic = visibleMattersPoints[$scope.selectedPointIndex].subsequenceCharacteristics[characteristic];
+                            secondPointCharacteristic = visibleMattersPoints[j].subsequenceCharacteristics[characteristic];
 
-			if (d.subsequenceRemoteId) {
-				var peptideGenbankLink = genBankLink + d.subsequenceRemoteId + "'>Peptide ncbi page</a>";
-				tooltipContent.push(peptideGenbankLink);
-			}
-
-			tooltipContent.push($scope.features[d.featureId].Text);
-			tooltipContent.push($scope.getAttributesText(d.attributes));
-
-			if (d.partial) {
-				tooltipContent.push("partial");
-			}
-
-			var start = d.positions[0] + 1;
-			var end = d.positions[0] + d.lengths[0];
-			var positionGenbankLink = d.sequenceRemoteId ?
-				genBankLink + d.sequenceRemoteId + "?from=" + start + "&to=" + end + "'>" + d.positions.join(", ") + "</a>" :
-				d.positions.join(", ");
-			tooltipContent.push("Position: " + positionGenbankLink);
-			tooltipContent.push("Length: " + d.lengths.join(", "));
-			tooltipContent.push("(" + d.x + ", " + $scope.yValue(d) + ")");
-
-			return tooltipContent.join("</br>");
-		}
-
-		// clears tooltip and unselects dots
-		function clearTooltip(tooltip) {
-			if (tooltip) {
-				tooltip.html("").style("opacity", 0);
-
-				if (tooltip.selectedDots) {
-					tooltip.selectedDots.attr("rx", $scope.dotRadius);
+                            if (firstPointCharacteristic !== secondPointCharacteristic) {
+                                nextPointIndex = j;
+                                break;
+                            }
+                        }
+                        break;
                 }
-                if (tooltip.lines) {
-                    tooltip.lines.remove();
+            }
+
+            if (nextPointIndex >= 0) {
+                $scope.showTooltip(visibleMattersPoints[nextPointIndex]);
+                $scope.selectedPointIndex = nextPointIndex;
+            }
+        }
+
+        // main drawing method
+        function redrawGenesMap() {
+            $scope.fillVisiblePoints();
+            $scope.selectedPointIndex = -1;
+            $scope.layout = {
+                showlegend: false,
+                hovermode: "closest",
+                xaxis: {
+                    type: $scope.plotTypeX ? 'log' : '',
+                    title: {
+                        text: $scope.sequenceCharacteristicName,
+                        font: {
+                            family: 'Courier New, monospace',
+                            size: 12
+                        }
+                    }
+                },
+                yaxis: {
+                    type: $scope.plotTypeY ? 'log' : '',
+                    title: {
+                        text: $scope.subsequenceCharacteristic.Text,
+                        font: {
+                            family: 'Courier New, monospace',
+                            size: 12
+                        }
+                    }
                 }
-			}
-		}
+            };
 
-		function isKeyUpOrDown(keyCode) {
-			return keyCode === 40 || keyCode === 38;
-		}
+            var data = $scope.visiblePoints.map(function (points, index) {
+                return {
+                    hoverinfo: 'text+x+y',
+                    type: 'scattergl',
+                    x: points.map(p => $scope.numericXAxis ? p.numericX : p.x),
+                    y: points.map(p => p.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value]),
+                    text: cText(points, index),
+                    mode: "markers",
+                    marker: { opacity: 0.5, symbol: "circle-open", color: $scope.colorScale(index) },
+                    name: $scope.matters[index].name,
+                };
+            });
 
-		function xValue(d) {
-			return $scope.numericXAxis ? d.numericX : d.x;
-		}
+            Plotly.newPlot($scope.plot, data, $scope.layout, { responsive: true });
 
-		function yValue(d) {
-			return d.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value];
-		}
+            $scope.plot.on("plotly_click", data => {
+                $scope.selectedPointIndex = data.points[0].pointNumber;
+                $scope.selectedMatterIndex = data.points[0].curveNumber;
+                var selectedPoint = $scope.visiblePoints[data.points[0].curveNumber][data.points[0].pointNumber];
+                $scope.showTooltip(selectedPoint);
+            });
+        }
 
-		// main drawing method
-		function drawGenesMap() {
-			$scope.loading = true;
-			$scope.loadingScreenHeader = "Drawing...";
-			// removing previous chart and tooltip if any
-			d3.select(".tooltip").remove();
-			d3.select(".genes-map-svg").remove();
+        // hides or shows selected organism on genes map
+        function legendClick(legendItem) {
+            for (var j = 0; j < $scope.points[legendItem.index].length; j++) {
+                var point = $scope.points[legendItem.index][j];
+                point.legendVisible = !point.legendVisible;
+            }
 
-			// sorting points by selected characteristic
-			$scope.points.sort(function (first, second) {
-				return $scope.yValue(second) - $scope.yValue(first);
-			});
-			$scope.visiblePoints.sort(function (first, second) {
-				return $scope.yValue(second) - $scope.yValue(first);
-			});
+            $scope.redrawGenesMap();
+        }
 
-			// all organisms are visible after redrawing
-			$scope.points.forEach(function (point) {
-				point.matterVisible = true;
-				point.featureVisible = $scope.features[point.featureId].Selected;
-			});
+        function legendShowAll(matters) {
+            for (var i = 0; i < matters.length; i++) {
+                for (var j = 0; j < $scope.points[matters[i].index].length; j++) {
+                    var point = $scope.points[matters[i].index][j];
+                    if (!point.legendVisible) {
+                        point.legendVisible = true;
+                    }
+                }
+            }
 
-			// chart size and margin settings
-			var margin = { top: 30 + $scope.legendHeight, right: 30, bottom: 30, left: 60 };
-			var width = $scope.width - margin.left - margin.right;
-			var height = $scope.height - margin.top - margin.bottom;
+            for (var k = 0; k < $scope.matters.length; k++) {
+                $scope.matters[k].visible = true;
+            }
 
-			// setup x
-			// calculating margins for dots
-			var xMin = d3.min($scope.points, $scope.xValue);
-			var xMax = d3.max($scope.points, $scope.xValue);
-			var xMargin = (xMax - xMin) * 0.05;
+            $scope.redrawGenesMap();
+        }
 
-			var xScale = d3.scaleLinear()
-				.domain([xMin - xMargin, xMax + xMargin])
-				.range([0, width]);
-			var xAxis = d3.axisBottom(xScale)
-				.tickSizeInner(-height)
-				.tickSizeOuter(0)
-				.tickPadding(10);
+        function legendHideAll(matters) {
+            for (var i = 0; i < matters.length; i++) {
+                for (var j = 0; j < $scope.points[matters[i].index].length; j++) {
+                    var point = $scope.points[matters[i].index][j];
+                    if (point.legendVisible) {
+                        point.legendVisible = false;
+                    }
+                }
+            }
 
-			$scope.xMap = function (d) { return xScale($scope.xValue(d)); };
+            for (var k = 0; k < $scope.matters.length; k++) {
+                $scope.matters[k].visible = false;
+            }
 
-			// setup y
-			// calculating margins for dots
-			var yMax = d3.max($scope.points, $scope.yValue);
-			var yMin = d3.min($scope.points, $scope.yValue);
-			var yMargin = (yMax - yMin) * 0.05;
+            $scope.redrawGenesMap();
+        }
 
-			var yScale = d3.scaleLinear()
-				.domain([yMin - yMargin, yMax + yMargin])
-				.range([height, 0]);
-			var yAxis = d3.axisLeft(yScale)
-				.tickSizeInner(-width)
-				.tickSizeOuter(0)
-				.tickPadding(10);
+        // dragbar
+        function dragbarMouseDown() {
+            var main = document.getElementById('main');
+            var right = document.getElementById('sidebar');
+            var bar = document.getElementById('dragbar');
 
-			$scope.yMap = function (d) { return yScale($scope.yValue(d)); };
+            const drag = (e) => {
+                document.selection ? document.selection.empty() : window.getSelection().removeAllRanges();
+                var chart_width = main.style.width = (e.pageX - bar.offsetWidth / 2) + 'px';
 
-			// setup fill color
-			$scope.cValue = function (d) { return d.matterId; };
-			$scope.colorMap = d3.scaleOrdinal(d3.schemeCategory20);
+                Plotly.relayout('chart', { autosize: true });
+            };
 
-			// add the graph canvas to the body of the webpage
-			var svg = d3.select("#chart").append("svg")
-				.attr("width", $scope.width)
-				.attr("height", $scope.height)
-				.attr("class", "genes-map-svg")
-				.append("g")
-				.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            bar.addEventListener('mousedown', () => {
+                document.addEventListener('mousemove', drag);
+            });
 
-			// add the tooltip area to the webpage
-			var tooltip = d3.select("#chart").append("div")
-				.attr("class", "tooltip")
-				.style("opacity", 0);
+            bar.addEventListener('mouseup', () => {
+                document.removeEventListener('mousemove', drag);
+            });
 
-			// x-axis
-			svg.append("g")
-				.attr("class", "x axis")
-				.attr("transform", "translate(0," + height + ")")
-				.call(xAxis);
+        }
 
-			svg.append("text")
-				.attr("class", "label")
-				.attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top - $scope.legendHeight) + ")")
-				.style("text-anchor", "middle")
-				.text($scope.sequenceCharacteristicName)
-				.style("font-size", "12pt");
+        $scope.onInit = onInit;
+        $scope.setCheckBoxesState = SetCheckBoxesState;
+        $scope.redrawGenesMap = redrawGenesMap;
+        $scope.dotVisible = dotVisible;
+        $scope.dotsSimilar = dotsSimilar;
+        $scope.fillVisiblePoints = fillVisiblePoints;
+        $scope.filterByFeature = filterByFeature;
+        $scope.legendClick = legendClick;
+        $scope.legendShowAll = legendShowAll;
+        $scope.legendHideAll = legendHideAll;
+        $scope.fillPoints = fillPoints;
+        $scope.getAttributesText = getAttributesText;
+        $scope.fillPointTooltip = fillPointTooltip;
+        $scope.showTooltip = showTooltip;
+        $scope.isKeyUpOrDown = isKeyUpOrDown;
+        $scope.addCharacteristicComparer = addCharacteristicComparer;
+        $scope.deleteCharacteristicComparer = deleteCharacteristicComparer;
+        $scope.addFilter = addFilter;
+        $scope.deleteFilter = deleteFilter;
+        $scope.getAttributeIdByName = getAttributeIdByName;
+        $scope.isAttributeEqual = isAttributeEqual;
+        $scope.dragbarMouseDown = dragbarMouseDown;
+        $scope.keyUpDownPress = keyUpDownPress;
+        $scope.colorScale = d3.scaleOrdinal(d3.schemeCategory20);
 
-			// y-axis
-			svg.append("g")
-				.attr("class", "y axis")
-				.call(yAxis);
+        $scope.onInit();
+    }
 
-			svg.append("text")
-				.attr("class", "label")
-				.attr("transform", "rotate(-90)")
-				.attr("y", 0 - margin.left)
-				.attr("x", 0 - (height / 2))
-				.attr("dy", ".71em")
-				.style("text-anchor", "middle")
-				.text($scope.subsequenceCharacteristic.Text)
-				.style("font-size", "12pt");
+    angular.module("libiada", []).controller("SubsequencesDistributionResultCtrl", ["$scope", "$http", subsequencesDistributionResult]);
 
-			// draw dots
-			svg.selectAll(".dot")
-				.data($scope.points)
-				.enter()
-				.append("ellipse")
-				.attr("class", "dot")
-				.attr("rx", $scope.dotRadius)
-				.attr("ry", $scope.dotRadius)
-				.attr("cx", $scope.xMap)
-				.attr("cy", $scope.yMap)
-				.style("fill-opacity", 0.6)
-                .style("fill", function (d) { return $scope.colorMap($scope.cValue(d)); })
-                .style("stroke", function (d) { return $scope.colorMap($scope.cValue(d)); })
-				.attr("visibility", function (dot) {
-					return $scope.dotVisible(dot) ? "visible" : "hidden";
-				});
-
-			// draw legend
-			var legend = svg.selectAll(".legend")
-				.data($scope.matters)
-				.enter().append("g")
-				.attr("class", "legend")
-				.attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; })
-				.on("click", function (d) {
-					d.visible = !d.visible;
-					var legendEntry = d3.select(this);
-					legendEntry.select("text")
-						.style("opacity", function () { return d.visible ? 1 : 0.5; });
-					legendEntry.select("rect")
-						.style("fill-opacity", function () { return d.visible ? 1 : 0; });
-
-					svg.selectAll(".dot")
-						.filter(function (dot) { return dot.matterId === d.id; })
-						.attr("visibility", function (dot) {
-							dot.matterVisible = d.visible;
-							return $scope.dotVisible(dot) ? "visible" : "hidden";
-						});
-				});
-
-			// draw legend colored rectangles
-			legend.append("rect")
-				.attr("width", 15)
-				.attr("height", 15)
-                .style("fill", function (d) { return $scope.colorMap(d.id); })
-                .style("stroke", function (d) { return $scope.colorMap(d.id); })
-				.style("stroke-width", 4)
-				.attr("transform", "translate(0, -" + $scope.legendHeight + ")");
-
-			// draw legend text
-			legend.append("text")
-				.attr("x", 24)
-				.attr("y", 9)
-				.attr("dy", ".35em")
-				.attr("transform", "translate(0, -" + $scope.legendHeight + ")")
-				.text(function (d) { return d.name; })
-				.style("font-size", "9pt");
-
-			// tooltip event bind
-			d3.select("body").on("click", function () {
-				var selectedPoints = svg.selectAll(".dot").filter(function () {
-					return this === d3.event.target;
-				}).data();
-
-				if (selectedPoints.length === 0) {
-					$scope.clearTooltip(tooltip);
-				} else {
-					$scope.showTooltip(selectedPoints, tooltip, svg);
-				}
-			});
-
-			// tooltip show on key up or key down
-			d3.select("body")
-				.on("keydown", function () {
-					var keyCode = d3.event.keyCode;
-					if (tooltip.selectedPoints && $scope.isKeyUpOrDown(keyCode)) {
-						var nextPoint;
-						var selectedPoint = tooltip.selectedPoints[0];
-						var indexOfPoint = $scope.visiblePoints.indexOf(selectedPoint);
-						$scope.clearTooltip(tooltip);
-
-						switch (keyCode) {
-							case 40: // down
-								for (var i = indexOfPoint + 1; i < $scope.visiblePoints.length; i++) {
-									if ($scope.visiblePoints[i].matterId === selectedPoint.matterId
-										&& $scope.yValue($scope.visiblePoints[i]) !== $scope.yValue(selectedPoint)) {
-										nextPoint = $scope.visiblePoints[i];
-										break;
-									}
-								}
-								break;
-							case 38: // up
-								for (var j = indexOfPoint - 1; j >= 0; j--) {
-									if ($scope.visiblePoints[j].matterId === selectedPoint.matterId
-										&& $scope.yValue($scope.visiblePoints[j]) !== $scope.yValue(selectedPoint)) {
-										nextPoint = $scope.visiblePoints[j];
-										break;
-									}
-								}
-								break;
-						}
-
-						if (nextPoint) {
-							var selectedPoints = svg.selectAll(".dot").filter(function (d) {
-								return nextPoint.matterId === d.matterId && $scope.yValue(nextPoint) === $scope.yValue(d);
-							}).data();
-
-							$scope.showTooltip(selectedPoints, tooltip, svg);
-						}
-					}
-				});
-
-			// preventing scroll in key up and key down
-			window.addEventListener("keydown", function (e) {
-				if ($scope.isKeyUpOrDown(e.keyCode)) {
-					e.preventDefault();
-				}
-			}, false);
-
-			$scope.loading = false;
-		}
-
-		$scope.setCheckBoxesState = SetCheckBoxesState;
-
-		$scope.drawGenesMap = drawGenesMap;
-		$scope.dotVisible = dotVisible;
-		$scope.dotsSimilar = dotsSimilar;
-		$scope.fillVisiblePoints = fillVisiblePoints;
-		$scope.filterByFeature = filterByFeature;
-		$scope.fillPoints = fillPoints;
-		$scope.getAttributesText = getAttributesText;
-		$scope.fillPointTooltip = fillPointTooltip;
-		$scope.showTooltip = showTooltip;
-		$scope.clearTooltip = clearTooltip;
-		$scope.isKeyUpOrDown = isKeyUpOrDown;
-		$scope.yValue = yValue;
-		$scope.xValue = xValue;
-		$scope.addCharacteristicComparer = addCharacteristicComparer;
-		$scope.deleteCharacteristicComparer = deleteCharacteristicComparer;
-		$scope.addFilter = addFilter;
-		$scope.deleteFilter = deleteFilter;
-		$scope.getAttributeIdByName = getAttributeIdByName;
-		$scope.isAttributeEqual = isAttributeEqual;
-
-		$scope.dotRadius = 4;
-		$scope.selectedDotRadius = $scope.dotRadius * 3;
-		$scope.points = [];
-		$scope.visiblePoints = [];
-		$scope.matters = [];
-		$scope.characteristicComparers = [];
-		$scope.filters = [];
-		$scope.productFilter = "";
-
-		$scope.loadingScreenHeader = "Loading genes map data";
-
-		var location = window.location.href.split("/");
-		$scope.taskId = location[location.length - 1];
-
-		$scope.loading = true;
-
-		$http.get("/api/TaskManagerWebApi/" + $scope.taskId)
-			.then(function (data) {
-				MapModelFromJson($scope, JSON.parse(data.data));
-
-				$scope.legendHeight = $scope.result.length * 20;
-				$scope.height = 800 + $scope.legendHeight;
-				$scope.width = 800;
-				$scope.subsequenceCharacteristic = $scope.subsequencesCharacteristicsList[0];
-
-				$scope.fillPoints();
-				$scope.addCharacteristicComparer();
-				$scope.loading = false;
-			}, function () {
-				alert("Failed loading genes map data");
-
-				$scope.loading = false;
-			});
-	}
-
-	angular.module("libiada").controller("SubsequencesDistributionResultCtrl", ["$scope", "$http", subsequencesDistributionResult]);
-	
 }
