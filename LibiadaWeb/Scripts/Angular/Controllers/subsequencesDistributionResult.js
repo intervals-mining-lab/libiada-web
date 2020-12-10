@@ -3,6 +3,64 @@
 
     function subsequencesDistributionResult($scope, $http) {
 
+        function onInit() {
+            $scope.dotRadius = 4;
+            $scope.selectedDotRadius = $scope.dotRadius * 3;
+
+            $scope.points = [];
+            $scope.visiblePoints = [];
+            $scope.matters = [];
+            $scope.legend = [];
+            $scope.characteristicComparers = [];
+            $scope.filters = [];
+            $scope.plotTypeX = "";
+            $scope.plotTypeY = "";
+            $scope.productFilter = "";
+            $scope.tooltipVisible = false;
+            $scope.tooltipElements = [];
+            $scope.pointsSimilarity = Object.freeze({ "same": 0, "similar": 1, "different": 2 });
+
+            $('[data-toggle="tooltip"]').tooltip();
+
+            // preventing scroll in key up and key down
+            window.addEventListener("keydown", function (e) {
+                if ($scope.isKeyUpOrDown(e.keyCode)) {
+                    e.preventDefault();
+                    $scope.keyUpDownPress(e.keyCode);
+                }
+            }, false);
+
+            $scope.loadingScreenHeader = "Loading genes map data";
+            $scope.loading = true;
+
+            var location = window.location.href.split("/");
+            $scope.taskId = location[location.length - 1];
+
+            $http.get("/api/TaskManagerWebApi/" + $scope.taskId)
+                .then(function (data) {
+                    MapModelFromJson($scope, JSON.parse(data.data));
+                    $scope.plot = document.getElementById("chart");
+                    $scope.subsequenceCharacteristic = $scope.subsequencesCharacteristicsList[0];
+
+                    $scope.fillPoints();
+
+                    var comparer = (first, second) =>
+                        first.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value] - second.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value];
+
+                    $scope.points = $scope.points.map(points => points.sort(comparer));
+                    $scope.visiblePoints = $scope.visiblePoints.map(points => points.sort(comparer));
+
+                    $scope.addCharacteristicComparer();
+
+                    $scope.redrawGenesMap();
+                    $scope.loading = false;
+                }, function () {
+                    alert("Failed loading genes map data");
+
+                    $scope.loading = false;
+                });
+        }
+
         // adds new characteristics value based filter
         function addCharacteristicComparer() {
             $scope.characteristicComparers.push({ characteristic: $scope.subsequencesCharacteristicsList[0], precision: 0 });
@@ -234,9 +292,9 @@
 
         // constructs string representing tooltip text (inner html)
         function fillPointTooltip(point, matterName, similarity) {
-            var color = similarity === $scope.pointsSimilarity.same ? ""
-                : similarity === $scope.pointsSimilarity.similar ? "bg-success"
-                    : similarity === $scope.pointsSimilarity.different ? "bg-danger" : "bg-danger";
+            var color = similarity === $scope.pointsSimilarity.same ? "default"
+                      : similarity === $scope.pointsSimilarity.similar ? "success"
+                      : similarity === $scope.pointsSimilarity.different ? "danger" : "danger";
 
             var tooltipElement = {
                 name: matterName,
@@ -268,9 +326,7 @@
             }
 
             tooltipElement.position += ")";
-
-            //tooltipContent.push("(" + d.x + ", " + $scope.yValue(d) + ")");
-
+            
             return tooltipElement;
         }
 
@@ -282,13 +338,7 @@
             return points.map(function (d) { return $scope.matters[index].name; });
         }
 
-        // main drawing method
-        function drawGenesMap() {
-            $scope.plot = document.getElementById("chart");
-            //    while ($scope.plot.firstChild) $scope.plot.removeChild($scope.plot.firstChild);
-            $scope.redrawGenesMap();
-        }
-
+        // selects nearest diffieret point of the same organism when "up" or "down" key pressed 
         function keyUpDownPress(keyCode) {
             var nextPointIndex = -1;
             var visibleMattersPoints = $scope.visiblePoints[$scope.selectedMatterIndex];
@@ -331,6 +381,7 @@
             }
         }
 
+        // main drawing method
         function redrawGenesMap() {
             $scope.fillVisiblePoints();
             $scope.selectedPointIndex = -1;
@@ -382,6 +433,7 @@
             });
         }
 
+        // hides or shows selected organism on genes map
         function legendClick(legendItem) {
             for (var j = 0; j < $scope.points[legendItem.index].length; j++) {
                 var point = $scope.points[legendItem.index][j];
@@ -425,61 +477,6 @@
             $scope.redrawGenesMap();
         }
 
-        $scope.setCheckBoxesState = SetCheckBoxesState;
-        $scope.drawGenesMap = drawGenesMap;
-        $scope.redrawGenesMap = redrawGenesMap;
-        $scope.plotTypeX = '';
-        $scope.plotTypeY = '';
-        $scope.dotVisible = dotVisible;
-        $scope.dotsSimilar = dotsSimilar;
-        $scope.fillVisiblePoints = fillVisiblePoints;
-        $scope.filterByFeature = filterByFeature;
-        $scope.legendClick = legendClick;
-        $scope.legendShowAll = legendShowAll;
-        $scope.legendHideAll = legendHideAll;
-        $scope.fillPoints = fillPoints;
-        $scope.getAttributesText = getAttributesText;
-        $scope.fillPointTooltip = fillPointTooltip;
-        $scope.showTooltip = showTooltip;
-        $scope.isKeyUpOrDown = isKeyUpOrDown;
-        $scope.addCharacteristicComparer = addCharacteristicComparer;
-        $scope.deleteCharacteristicComparer = deleteCharacteristicComparer;
-        $scope.addFilter = addFilter;
-        $scope.deleteFilter = deleteFilter;
-        $scope.getAttributeIdByName = getAttributeIdByName;
-        $scope.isAttributeEqual = isAttributeEqual;
-        $scope.dragbarMouseDown = dragbarMouseDown;
-        $scope.keyUpDownPress = keyUpDownPress;
-        $scope.colorScale = d3.scaleOrdinal(d3.schemeCategory20);
-
-        $scope.dotRadius = 4;
-        $scope.selectedDotRadius = $scope.dotRadius * 3;
-        $scope.points = [];
-        $scope.visiblePoints = [];
-        $scope.matters = [];
-        $scope.legend = [];
-        $scope.characteristicComparers = [];
-        $scope.filters = [];
-        $scope.productFilter = "";
-        $scope.tooltipVisible = false;
-        $scope.tooltipElements = [];
-        $scope.pointsSimilarity = Object.freeze({ "same": 0, "similar": 1, "different": 2 });
-
-        $scope.i = 0;
-        $scope.dragging = false;
-
-        $('[data-toggle="tooltip"]').tooltip();
-
-        // preventing scroll in key up and key down
-        window.addEventListener("keydown", function (e) {
-            if ($scope.isKeyUpOrDown(e.keyCode)) {
-                e.preventDefault();
-                $scope.keyUpDownPress(e.keyCode);
-            }
-        }, false);
-
-
-
         // dragbar
         function dragbarMouseDown() {
             var main = document.getElementById('main');
@@ -503,36 +500,32 @@
 
         }
 
-        $scope.loadingScreenHeader = "Loading genes map data";
+        $scope.onInit = onInit;
+        $scope.setCheckBoxesState = SetCheckBoxesState;
+        $scope.redrawGenesMap = redrawGenesMap;
+        $scope.dotVisible = dotVisible;
+        $scope.dotsSimilar = dotsSimilar;
+        $scope.fillVisiblePoints = fillVisiblePoints;
+        $scope.filterByFeature = filterByFeature;
+        $scope.legendClick = legendClick;
+        $scope.legendShowAll = legendShowAll;
+        $scope.legendHideAll = legendHideAll;
+        $scope.fillPoints = fillPoints;
+        $scope.getAttributesText = getAttributesText;
+        $scope.fillPointTooltip = fillPointTooltip;
+        $scope.showTooltip = showTooltip;
+        $scope.isKeyUpOrDown = isKeyUpOrDown;
+        $scope.addCharacteristicComparer = addCharacteristicComparer;
+        $scope.deleteCharacteristicComparer = deleteCharacteristicComparer;
+        $scope.addFilter = addFilter;
+        $scope.deleteFilter = deleteFilter;
+        $scope.getAttributeIdByName = getAttributeIdByName;
+        $scope.isAttributeEqual = isAttributeEqual;
+        $scope.dragbarMouseDown = dragbarMouseDown;
+        $scope.keyUpDownPress = keyUpDownPress;
+        $scope.colorScale = d3.scaleOrdinal(d3.schemeCategory20);
 
-        var location = window.location.href.split("/");
-        $scope.taskId = location[location.length - 1];
-
-        $scope.loading = true;
-
-
-        $http.get("/api/TaskManagerWebApi/" + $scope.taskId)
-            .then(function (data) {
-                MapModelFromJson($scope, JSON.parse(data.data));
-
-                $scope.subsequenceCharacteristic = $scope.subsequencesCharacteristicsList[0];
-
-                $scope.fillPoints();
-
-                var comparer = (first, second) =>
-                    first.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value] - second.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value];
-
-                $scope.points = $scope.points.map(points => points.sort(comparer));
-                $scope.visiblePoints = $scope.visiblePoints.map(points => points.sort(comparer));
-
-                $scope.addCharacteristicComparer();
-                drawGenesMap();
-                $scope.loading = false;
-            }, function () {
-                alert("Failed loading genes map data");
-
-                $scope.loading = false;
-            });
+        $scope.onInit();
     }
 
     angular.module("libiada", []).controller("SubsequencesDistributionResultCtrl", ["$scope", "$http", subsequencesDistributionResult]);

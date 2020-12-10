@@ -177,7 +177,7 @@
                                 @Html.Partial("_FeaturesSelect")
                             </div>
                             <div role="tabpanel" class="tab-pane" id="tooltip">
-                                <div ng-repeat="tooltipElement in tooltipElements" ng-class="tooltipElement.color" class="monospace">
+                                <div ng-repeat="tooltipElement in tooltipElements" ng-class="'bg-' + tooltipElement.color" class="monospace">
                                     <a target="_blank" rel="noopener" ng-if="tooltipElement.sequenceRemoteId"
                                        ng-href="https://www.ncbi.nlm.nih.gov/nuccore/{{tooltipElement.sequenceRemoteId}}">
                                         {{tooltipElement.name}}
@@ -205,15 +205,14 @@
                                     <div>
                                         Length:{{tooltipElement.length}}
                                     </div>
-                                    <hr />
-                                    <div class="panel panel-default">
+                                    <div ng-class="['panel', 'panel-' + tooltipElement.color]">
                                         <div class="panel-heading">
                                             <button type="button" class="btn btn-default btn-sm" data-toggle="collapse" data-target="#subsequenceCharacteristics{{$index + 1}}" aria-expanded="false" aria-controls="subsequenceCharacteristics{{$index + 1}}">Numeric characteristics</button>
                                         </div>
                                         <div class="panel-collapse collapse" id="subsequenceCharacteristics{{$index + 1}}">
                                             <table class="table table-bordered" style="font-size:14px;">
                                                 <thead ng-repeat="value in tooltipElement.characteristics">
-                                                    <tr>
+                                                    <tr ng-class="tooltipElement.color">
                                                         <td align=center scope="col">{{subsequencesCharacteristicsNames[$index]}}</td>
                                                         <td scope="col">{{value}}</td>
                                                     </tr>
@@ -221,6 +220,7 @@
                                             </table>
                                         </div>
                                     </div>
+                                    <hr />
                                 </div>
                             </div>
                         </div>
