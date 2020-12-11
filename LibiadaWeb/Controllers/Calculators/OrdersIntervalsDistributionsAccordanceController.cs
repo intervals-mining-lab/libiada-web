@@ -35,7 +35,6 @@ namespace LibiadaWeb.Controllers.Calculators
         /// </returns>
         public ActionResult Index()
         {
-            ViewBag.data = "{}";
             return View();
         }
 
