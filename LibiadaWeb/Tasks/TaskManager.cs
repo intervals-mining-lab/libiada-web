@@ -102,7 +102,7 @@
                     Created = DateTime.Now,
                     Description = taskType.GetDisplayValue(),
                     Status = TaskState.InQueue,
-                    UserId = Convert.ToInt32(AccountHelper.GetUserId()),
+                    UserId = AccountHelper.GetUserId(),
                     TaskType = taskType
                 };
 
@@ -197,8 +197,7 @@
         /// </returns>
         public IEnumerable<TaskData> GetTasksData()
         {
-            List<Task> result = GetUserTasks();
-            return result.Select(t => t.TaskData.Clone());
+            return GetUserTasks().Select(t => t.TaskData.Clone());
         }
 
         /// <summary>
@@ -270,7 +269,7 @@
         }
 
         /// <summary>
-        /// Removes not finished amd not started tasks from db
+        /// Removes not finished and not started tasks from database
         /// on task manager initialization.
         /// </summary>
         private void RemoveGarbageFromDb()
@@ -278,7 +277,9 @@
             using (var db = new LibiadaWebEntities())
             {
                 var tasksToDelete = db.CalculationTask
-                    .Where(t => (t.Status != TaskState.Completed && t.Status != TaskState.Error) || t.Result == null)
+                    .Where(t => (t.Status != TaskState.Completed 
+                              && t.Status != TaskState.Error) 
+                              || t.Result == null)
                     .ToArray();
 
                 db.CalculationTask.RemoveRange(tasksToDelete);
@@ -303,12 +304,12 @@
                         {
                             Task task = tasks.Single(t => t.TaskData.Id == taskToStart.TaskData.Id);
                             task.TaskData.TaskState = TaskState.InProgress;
-                            CancellationTokenSource cts = new CancellationTokenSource();
-                            CancellationToken token = cts.Token;
-                            task.CancellationTokenSource = cts;
-                            SystemTask systemTask = new SystemTask(() =>
+                            var cancellationTokenSource = new CancellationTokenSource();
+                            CancellationToken token = cancellationTokenSource.Token;
+                            task.CancellationTokenSource = cancellationTokenSource;
+                            var systemTask = new SystemTask(() =>
                             {
-                                using (cts.Token.Register(Thread.CurrentThread.Abort))
+                                using (cancellationTokenSource.Token.Register(Thread.CurrentThread.Abort))
                                 {
                                     ExecuteTaskAction(task);
                                 }
@@ -317,13 +318,13 @@
                                 
                             SystemTask notificationTask = systemTask.ContinueWith((SystemTask t) =>
                             {
-                                cts.Dispose();
+                                cancellationTokenSource.Dispose();
 
                                 var data = new Dictionary<string, string>
                                 {
-                                    { "title", $"Task has been completed" },
-                                    { "body", $"Task type: { task.TaskData.TaskType } \nExecution time: { task.TaskData.ExecutionTime }" },
-                                    { "icon", "/Content/themes/base/images/DNA.jpg" },
+                                    { "title", $"LibiadaWeb: Task completed" },
+                                    { "body", $"Task type: { task.TaskData.TaskType.GetDisplayValue() } \nExecution time: { task.TaskData.ExecutionTime }" },
+                                    { "icon", "/Content/DNA.png" },
                                     { "tag", $"/{ task.TaskData.TaskType }/Result/{ task.TaskData.Id }" }
                                 };
                                 PushNotificationHelper.Send(task.TaskData.UserId, data);

@@ -13,6 +13,8 @@
 
     using Newtonsoft.Json;
 
+    using SystemTask = System.Threading.Tasks.Task;
+
     /// <summary>
     /// SignalR messages hub class.
     /// </summary>
@@ -88,7 +90,7 @@
             return JsonConvert.SerializeObject(tasks.ToArray());
         }
 
-        public override System.Threading.Tasks.Task OnConnected()
+        public override SystemTask OnConnected()
         {
             if (AccountHelper.IsAdmin())
             {
@@ -101,7 +103,7 @@
             return base.OnConnected();
         }
 
-        public override System.Threading.Tasks.Task OnDisconnected(bool stopCalled)
+        public override SystemTask OnDisconnected(bool stopCalled)
         {
             if (AccountHelper.IsAdmin())
             {

@@ -1,4 +1,4 @@
-﻿function TaskManagerController(data) {
+﻿function TaskManagerController() {
     "use strict";
 
     function taskManager($scope) {
@@ -8,7 +8,7 @@
             }         
         };
 
-        function onHubStart(data) {
+        function onHubStart() {
             $scope.$apply();
             $scope.tasksHub.server.getAllTasks().done(function (tasksJson) {
                 var tasks = JSON.parse(tasksJson);
@@ -85,10 +85,7 @@
                 () => {
                     $scope.tasksHub.server.deleteAllTasks();
                     alertify.success('All tasks have been deleted.');
-                },
-                () => {
-                }
-            );
+                }, () => {});
         }
 
         function deleteTasksWithState(taskState) {
@@ -96,10 +93,7 @@
                 () => {                    
                     $scope.tasksHub.server.deleteTasksWithState(taskState);
                     alertify.success('All tasks with state "' + taskState + '" have been deleted.');
-                },
-                () => {
-                }
-            );
+                }, () => {});
         }
 
         function deleteTask(id)
@@ -108,10 +102,7 @@
                 () => {
                     $scope.tasksHub.server.deleteTask(id);
                     alertify.success('The task has been deleted.');
-                },
-                () => {
-                }
-            );
+                }, () => {});
         }
 
         function tryRedirectToResult(task) {
@@ -136,8 +127,8 @@
         $scope.tasksHub = $.connection.tasksManagerHub;
         $scope.tasksHub.client.TaskEvent = taskEvent;
 
-        $.connection.hub.stateChanged(onStateChange);
-        $.connection.hub.start().done(onHubStart);
+        $.connection.hub.stateChanged($scope.onStateChange);
+        $.connection.hub.start().done($scope.onHubStart);
 
         var location = window.location.href.split("/");
         if (location[location.length - 1] != "TaskManager")
