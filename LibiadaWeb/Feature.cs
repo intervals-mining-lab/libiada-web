@@ -6,6 +6,7 @@
     using LibiadaWeb.Attributes;
     using Newtonsoft.Json.Converters;
     using Newtonsoft.Json;
+
     /// <summary>
     /// The feature.
     /// </summary>

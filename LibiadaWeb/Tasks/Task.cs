@@ -6,7 +6,7 @@
 
     using Newtonsoft.Json;
 
-    using SystemTask = System.Threading.Tasks;
+    using SystemTask = System.Threading.Tasks.Task;
 
     /// <summary>
     /// The task.
@@ -36,7 +36,7 @@
         /// <summary>
         /// The system task that executes asynchronously on a thread pool.
         /// </summary>
-        public SystemTask.Task SystemTask;
+        public SystemTask SystemTask;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Task"/> class.
@@ -91,7 +91,7 @@
         /// <param name="thread">
         /// The thread.
         /// </param>
-        private Task(Func<Dictionary<string, object>> action, TaskData taskData, Dictionary<string, object> result, SystemTask.Task systemTask)
+        private Task(Func<Dictionary<string, object>> action, TaskData taskData, Dictionary<string, object> result, SystemTask systemTask)
         {
             Action = action;
             TaskData = taskData.Clone();

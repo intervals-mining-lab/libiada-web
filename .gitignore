@@ -4,6 +4,9 @@
 *.suo
 .vs/
 
+#rider temp files
+.idea/
+
 [Dd]ebug/
 [Rr]elease/
 x64/

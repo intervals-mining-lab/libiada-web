@@ -5,13 +5,14 @@
     using System.Data.Entity;
     using System.Linq;
     using System.Threading;
+
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Helpers;
 
     using Newtonsoft.Json;
 
-    using SystemTask = System.Threading.Tasks;
+    using SystemTask = System.Threading.Tasks.Task;
 
     /// <summary>
     /// The task manager.
@@ -305,7 +306,7 @@
                             CancellationTokenSource cts = new CancellationTokenSource();
                             CancellationToken token = cts.Token;
                             task.CancellationTokenSource = cts;
-                            SystemTask.Task systemTask = new SystemTask.Task(() =>
+                            SystemTask systemTask = new SystemTask(() =>
                             {
                                 using (cts.Token.Register(Thread.CurrentThread.Abort))
                                 {
@@ -314,7 +315,7 @@
 
                             }, token);
                                 
-                            SystemTask.Task notificationTask = systemTask.ContinueWith((SystemTask.Task t) =>
+                            SystemTask notificationTask = systemTask.ContinueWith((SystemTask t) =>
                             {
                                 cts.Dispose();
 

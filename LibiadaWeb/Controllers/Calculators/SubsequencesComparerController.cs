@@ -55,8 +55,7 @@
         }
 
         /// <summary>
-        /// The index.PostgresException: 42703: столбец Extent1.source не существует
-
+        /// The index.
         /// </summary>
         /// <param name="matterIds">
         /// The matter ids.

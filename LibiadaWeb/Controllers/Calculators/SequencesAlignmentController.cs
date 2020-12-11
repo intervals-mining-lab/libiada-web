@@ -113,7 +113,7 @@
                     firstParentId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
 
                     long secondMatterId = matterIds[1];
-                    secondMatterName = Cache.GetInstance().Matters.Single(m => m.Id == secondMatterId).Name;;
+                    secondMatterName = Cache.GetInstance().Matters.Single(m => m.Id == secondMatterId).Name;
                     secondParentId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
                 }
 

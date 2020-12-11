@@ -70,7 +70,7 @@
             return CreateTask(() =>
                 {
                     string[] matterNames;
-                    var importResults = new List<MatterImportResult>();
+                    var importResults = new List<MatterImportResult>(matterIds.Length);
 
                     using (var db = new LibiadaWebEntities())
                     {
