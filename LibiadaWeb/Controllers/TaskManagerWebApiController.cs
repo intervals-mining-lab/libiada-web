@@ -2,8 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Configuration;
+    using System.Linq;
     using System.Web.Http;
 
+    using LibiadaWeb.Helpers;
     using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
@@ -74,6 +77,56 @@
                 ((List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>[,])task.Result["additionalData"])[firstIndex, secondIndex];
 
             return JsonConvert.SerializeObject(result);
+        }
+
+        /// <summary>
+        /// Subscribes a user to receive push notifications.
+        /// </summary>
+        /// <param name="subscriberData">
+        /// Subscriber data that contains endpoint, pubic key and private key. 
+        /// </param>
+        [HttpPost]
+        public void Subscribe(AspNetPushNotificationSubscriber subscriberData)
+        {
+            using (var db = new LibiadaWebEntities())
+            {
+                var subscriber = new AspNetPushNotificationSubscriber
+                {
+                    Auth = subscriberData.Auth,
+                    P256dh = subscriberData.P256dh,
+                    Endpoint = subscriberData.Endpoint,
+                    UserId = AccountHelper.GetUserId()
+                };
+
+                db.AspNetPushNotificationSubscribers.Add(subscriber);
+                db.SaveChanges();
+            }
+        }
+
+        /// <summary>
+        /// Unsubscribes a divice to not receive push notifications.
+        /// </summary>
+        /// <param name="Unsubscribe">
+        /// Endpoint of the user device.
+        /// </param>
+        [HttpPost]
+        public void Unsubscribe(AspNetPushNotificationSubscriber subscriberData)
+        {
+            using (var db = new LibiadaWebEntities())
+            {
+                string endpoint = subscriberData.Endpoint;
+                int userId = AccountHelper.GetUserId();
+                AspNetPushNotificationSubscriber subscriber = db.AspNetPushNotificationSubscribers.Single(s => s.Endpoint == endpoint
+                                                                                                            && s.UserId == userId);
+                db.AspNetPushNotificationSubscribers.Remove(subscriber);
+                db.SaveChanges();
+            }
+        }
+        
+        public string GetApplicationServerKey()
+        {
+            var response = new { applicationServerKey = ConfigurationManager.AppSettings["PublicVapidKey"] };
+            return JsonConvert.SerializeObject(response);
         }
     }
 }

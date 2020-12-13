@@ -18,16 +18,15 @@
 <div ng-controller="TaskManagerCtrl">
     <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
 
-
     <div class="form">
         <div class="form-group" ng-show="RedirectTaskId">
             <label>
-                <input type="checkbox" id="AutoRedirect" ng-model="autoRedirect" /> Auto redirect to result page
+                <input type="checkbox" id="AutoRedirect" ng-model="autoRedirect" /> Autoredirect to result page
             </label>
         </div>
         <div class="form-group">
             <div class="col-md-10">
-                <button class="btn btn-info btn-push-notification hidden"></button>
+                <button id="push-notification-button" class="btn btn-sm hidden" >Disable push notifications</button>
             </div>
         </div>
     </div>

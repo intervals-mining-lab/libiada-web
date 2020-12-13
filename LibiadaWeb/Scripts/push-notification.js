@@ -1,8 +1,8 @@
 ﻿let hasSubscription = false;
-const SUBSCRIBE_URL = "PushNotification/Subscribe";
-const UNSUBSCRIBE_URL = "PushNotification/Unsubscribe";
-const APPLICATION_SERVER_KEY_URL = "PushNotification/GetApplicationServerKey";
-var pushButton = $(".btn-push-notification");
+const SUBSCRIBE_URL = "api/TaskManagerWebApi/Subscribe";
+const UNSUBSCRIBE_URL = "api/TaskManagerWebApi/Unsubscribe";
+const APPLICATION_SERVER_KEY_URL = "api/TaskManagerWebApi/GetApplicationServerKey";
+var pushButton = $("#push-notification-button");
 
 const urlB64ToUint8Array = base64String => {
     const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
@@ -11,14 +11,14 @@ const urlB64ToUint8Array = base64String => {
         .replace(/_/g, "/");
     const rawData = atob(base64);
     const outputArray = new Uint8Array(rawData.length);
-    for (let i = 0; i < rawData.length; ++i) {
+    for (let i = 0; i < rawData.length; i++) {
         outputArray[i] = rawData.charCodeAt(i);
     }
     return outputArray;
 };
 
 const arrayBufferToBase64 = (buffer) => {
-    var binary = '';
+    var binary = "";
     var bytes = new Uint8Array(buffer);
     var len = bytes.byteLength;
     for (var i = 0; i < len; i++) {
@@ -30,8 +30,8 @@ const arrayBufferToBase64 = (buffer) => {
 
 const subscribeDevice = async () => {
     const swRegistration = await navigator.serviceWorker.ready;
-    const response = await fetch(APPLICATION_SERVER_KEY_URL);
-    const body = await response.json();
+    const responseKey = await fetch(APPLICATION_SERVER_KEY_URL);
+    const body = JSON.parse(await responseKey.json());
     const applicationServerKey = body.applicationServerKey;
     
     var options = {
@@ -44,14 +44,13 @@ const subscribeDevice = async () => {
         const response = await fetch(SUBSCRIBE_URL, {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json"
             },
-            body:
-                JSON.stringify({
-                    'endpoint': subscription.endpoint,
-                    'p256dh': arrayBufferToBase64(subscription.getKey("p256dh")),
-                    'auth': arrayBufferToBase64(subscription.getKey("auth"))
-                })
+            body: JSON.stringify({
+                "endpoint": subscription.endpoint,
+                "p256dh": arrayBufferToBase64(subscription.getKey("p256dh")),
+                "auth": arrayBufferToBase64(subscription.getKey("auth"))
+            })
         });
         hasSubscription = true;
         updatePushButton();
@@ -68,14 +67,12 @@ const unsubscribeDevice = async () => {
     if (subscription) {
         try {
             const response = await fetch(UNSUBSCRIBE_URL, {
-                method: "DELETE",
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    "Content-Type": "application/json"
                 },
                 body:
-                    JSON.stringify({
-                        'endpoint': subscription.endpoint
-                    })
+                    JSON.stringify({ endpoint: subscription.endpoint })
 
             });
             const result = await subscription.unsubscribe();
@@ -95,10 +92,10 @@ const initPush = async () => {
     const subscription = await swRegistration.pushManager.getSubscription();
     hasSubscription = !(subscription === null);
 
-    pushButton.removeClass('hidden');
+    pushButton.removeClass("hidden");
     updatePushButton();
 
-    pushButton.on('click', function () {
+    pushButton.on("click", function () {
         if (hasSubscription) {
             unsubscribeDevice();
 
@@ -117,11 +114,11 @@ const updatePushButton = () => {
 }
 
 const check = () => {
-    if (!('serviceWorker' in navigator)) {
-        throw new Error('Service Worker is not supported by your browser!');
+    if (!("serviceWorker" in navigator)) {
+        throw new Error("Service Worker is not supported by your browser!");
     }
-    if (!('PushManager' in window)) {
-        throw new Error('Push API is not supported by your browser!');
+    if (!("PushManager" in window)) {
+        throw new Error("Push API is not supported by your browser!");
     }
 }
     
@@ -133,7 +130,7 @@ const main = async () => {
         await initPush();
     }
     catch {
-        console.log('Service Worker Error');
+        console.log("Service Worker Error");
     }
 };
 main();

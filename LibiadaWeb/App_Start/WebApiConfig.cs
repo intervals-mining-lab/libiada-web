@@ -18,9 +18,15 @@
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
-                name: "DefaultApi",
+                name: "ByIdWebApi",
                 routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional });
+                defaults: new { id = RouteParameter.Optional },
+                constraints: new { id = @"\d+" });
+
+            config.Routes.MapHttpRoute(
+                   name: "WebApi",
+                   routeTemplate: "api/{controller}/{action}/{id}",
+                   defaults: new { id = RouteParameter.Optional });
         }
     }
 }
