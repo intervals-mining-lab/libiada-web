@@ -53,7 +53,6 @@ const subscribeDevice = async () => {
             })
         });
         hasSubscription = true;
-        updatePushButton();
         return response;
     }
     catch {
@@ -77,7 +76,7 @@ const unsubscribeDevice = async () => {
             });
             const result = await subscription.unsubscribe();
             hasSubscription = false;
-            updatePushButton();
+            pushButton.addClass('hidden');
             return response;
         }
         catch {
@@ -91,25 +90,20 @@ const initPush = async () => {
    
     const subscription = await swRegistration.pushManager.getSubscription();
     hasSubscription = !(subscription === null);
-
-    pushButton.removeClass("hidden");
-    updatePushButton();
-
-    pushButton.on("click", function () {
-        if (hasSubscription) {
-            unsubscribeDevice();
-
-        } else {
-            subscribeDevice();
-        }
-    }); 
-}
-
-const updatePushButton = () => {
+    
     if (hasSubscription) {
-        pushButton.text("Disable Push");
-    } else {
-        pushButton.text("Subscribe on Push");
+        pushButton.removeClass('hidden');
+    }
+    else {
+        window.setTimeout(
+            () => alertify.confirm("Push notification subscription", "Would you like to get push notifications about completed tasks?",
+                () => {
+                    subscribeDevice();
+                    hasSubscription = true;
+                    pushButton.removeClass('hidden');
+                    alertify.success("You have been subscribed to push notifications");
+                }, () => { }),
+            5000);
     }
 }
 
