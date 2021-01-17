@@ -78,7 +78,7 @@
                                                                                                   {
                                                                                                       MatterName = existingAccession,
                                                                                                       Result = "Sequence already exists",
-                                                                                                      Status = "Exist"
+                                                                                                      Status = "Exists"
                                                                                                   }));
 
                     foreach (string accession in accessionsToImport)

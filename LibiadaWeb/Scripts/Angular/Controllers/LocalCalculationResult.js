@@ -108,11 +108,14 @@
         }
 
         function calculateLocalCharacteristicsSimilarityMatrix() {
-            $http.get("/api/LocalCalculationWebApi?taskId=" + $scope.taskId
-                    + "&aligner=" + $scope.aligner.Value
-                    + "&distanceCalculator=" + $scope.distanceCalculator.Value
-                    + "&aggregator=" + $scope.aggregator.Value)
-                .then(function (result) {
+			$http.get("/api/LocalCalculationWebApi", {
+				params: {
+					taskId: $scope.taskId,
+					aligner: $scope.aligner.Value,
+					distanceCalculator: $scope.distanceCalculator.Value,
+					aggregator: $scope.aggregator.Value
+				}
+			}).then(function (result) {
                     $scope.comparisonMatrix = JSON.parse(result.data);
                 }, function (error) {
 
@@ -239,6 +242,7 @@
 						.attr('fill', 'none');
 				});
 			}
+
 			// draw dots
 			svg.selectAll(".dot")
 				.data($scope.points)
@@ -321,7 +325,7 @@
 		var location = window.location.href.split("/");
 		$scope.taskId = location[location.length - 1];
 
-		$http.get("/api/TaskManagerWebApi/" + $scope.taskId)
+		$http.get("/api/TaskManagerWebApi/", { params: { id: $scope.taskId } })
 			.then(function (data) {
 				MapModelFromJson($scope, JSON.parse(data.data));
 
