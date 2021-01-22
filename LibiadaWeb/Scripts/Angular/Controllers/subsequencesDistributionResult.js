@@ -18,6 +18,7 @@
             $scope.productFilter = "";
             $scope.tooltipVisible = false;
             $scope.tooltipElements = [];
+            $scope.alignmentInProcess = false;
             $scope.pointsSimilarity = Object.freeze({ "same": 0, "similar": 1, "different": 2 });
 
             $('[data-toggle="tooltip"]').tooltip();
@@ -36,7 +37,7 @@
             var location = window.location.href.split("/");
             $scope.taskId = location[location.length - 1];
 
-            $http.get("/api/TaskManagerWebApi/" + $scope.taskId)
+            $http.get("/api/TaskManagerWebApi/", { params: { id: $scope.taskId } })
                 .then(function (data) {
                     MapModelFromJson($scope, JSON.parse(data.data));
                     $scope.plot = document.getElementById("chart");
@@ -59,6 +60,43 @@
 
                     $scope.loading = false;
                 });
+        }
+
+        // initializes data for genes map
+        function fillPoints() {
+            var id = 0;
+            for (var i = 0; i < $scope.result.length; i++) {
+                var sequenceData = $scope.result[i];
+                $scope.matters.push({ id: sequenceData.MatterId, name: sequenceData.MatterName, visible: true, index: i, color: $scope.colorScale(i) });
+                // hack for legend dot color
+                document.styleSheets[0].insertRule(".legend" + sequenceData.MatterId + ":after { background:" + $scope.colorScale(i) + "}");
+                $scope.points.push([]);
+                $scope.visiblePoints.push([]);
+                for (var j = 0; j < sequenceData.SubsequencesData.length; j++) {
+                    var subsequenceData = sequenceData.SubsequencesData[j];
+
+                    var point = {
+                        id: subsequenceData.Id,
+                        matterId: sequenceData.MatterId,
+                        sequenceRemoteId: sequenceData.RemoteId,
+                        attributes: subsequenceData.Attributes,
+                        partial: subsequenceData.Partial,
+                        featureId: subsequenceData.FeatureId,
+                        positions: subsequenceData.Starts,
+                        lengths: subsequenceData.Lengths,
+                        subsequenceRemoteId: subsequenceData.RemoteId,
+                        numericX: i + 1,
+                        x: sequenceData.Characteristic,
+                        subsequenceCharacteristics: subsequenceData.CharacteristicsValues,
+                        featureVisible: true,
+                        legendVisible: true,
+                        filtersVisible: [],
+                    };
+                    $scope.points[i].push(point);
+                    $scope.visiblePoints[i].push(point);
+                    id++;
+                }
+            }
         }
 
         // adds new characteristics value based filter
@@ -139,43 +177,6 @@
 
             $scope.filters.splice($scope.filters.indexOf(filter), 1);
             $scope.redrawGenesMap();
-        }
-
-        // initializes data for genes map
-        function fillPoints() {
-            var id = 0;
-            for (var i = 0; i < $scope.result.length; i++) {
-                var sequenceData = $scope.result[i];
-                $scope.matters.push({ id: sequenceData.MatterId, name: sequenceData.MatterName, visible: true, index: i, color: $scope.colorScale(i) });
-                // hack for legend dot color
-                document.styleSheets[0].insertRule(".legend" + sequenceData.MatterId + ":after { background:" + $scope.colorScale(i) + "}");
-                $scope.points.push([]);
-                $scope.visiblePoints.push([]);
-                for (var j = 0; j < sequenceData.SubsequencesData.length; j++) {
-                    var subsequenceData = sequenceData.SubsequencesData[j];
-
-                    var point = {
-                        id: id,
-                        matterId: sequenceData.MatterId,
-                        sequenceRemoteId: sequenceData.RemoteId,
-                        attributes: subsequenceData.Attributes,
-                        partial: subsequenceData.Partial,
-                        featureId: subsequenceData.FeatureId,
-                        positions: subsequenceData.Starts,
-                        lengths: subsequenceData.Lengths,
-                        subsequenceRemoteId: subsequenceData.RemoteId,
-                        numericX: i + 1,
-                        x: sequenceData.Characteristic,
-                        subsequenceCharacteristics: subsequenceData.CharacteristicsValues,
-                        featureVisible: true,
-                        legendVisible: true,
-                        filtersVisible: [],
-                    };
-                    $scope.points[i].push(point);
-                    $scope.visiblePoints[i].push(point);
-                    id++;
-                }
-            }
         }
 
         // filters dots by subsequences feature
@@ -297,6 +298,7 @@
                       : similarity === $scope.pointsSimilarity.different ? "danger" : "danger";
 
             var tooltipElement = {
+                id: point.id,
                 name: matterName,
                 sequenceRemoteId: point.sequenceRemoteId,
                 feature: $scope.features[point.featureId].Text,
@@ -304,6 +306,8 @@
                 partial: point.partial,
                 color: color,
                 characteristics: point.subsequenceCharacteristics,
+                similarity: similarity,
+                selectedForAlignment: false
             };
 
             if (point.subsequenceRemoteId) {
@@ -326,7 +330,7 @@
             }
 
             tooltipElement.position += ")";
-            
+
             return tooltipElement;
         }
 
@@ -500,7 +504,51 @@
 
         }
 
+        // opens alignment of given subsequences with clustal on new tab
+        function alignAllWithClustal() {
+            var ids = $scope.tooltipElements.map(te => te.id);
+            alignWithClustal(ids);
+        }
+
+        // opens alignment of given subsequences with clustal on new tab
+        function alignSimilarWithClustal() {
+            var ids = $scope.tooltipElements
+                .filter(te => te.similarity === $scope.pointsSimilarity.same
+                    || te.similarity === $scope.pointsSimilarity.similar)
+                .map(te => te.id);
+            alignWithClustal(ids);
+        }
+
+        // opens alignment of given subsequences with clustal on new tab
+        function alignSelectedWithClustal() {
+            var ids = $scope.tooltipElements
+                .filter(te => te.selectedForAlignment)
+                .map(te => te.id);
+            alignWithClustal(ids);
+        }
+
+        // opens alignment of given subsequences with clustal on new tab
+        function alignWithClustal(subsequencesIds) {
+            $scope.alignmentInProcess = true;
+            $http.get("/SubsequencesDistribution/CreateAlignmentTask/", { params: { subsequencesIds: subsequencesIds } })
+                .then(function (response) {
+                    $scope.alignmentInProcess = false;
+                    var result = response.data;
+                    if (result.Status === "Success") {
+                        window.open("https://www.ebi.ac.uk/Tools/services/web/toolresult.ebi?jobId=" + result.Result, '_blank');
+                    }
+                    else {
+                        alert("Failed to create alignment task", result.Message);
+                        console.log(result.Message);
+                    }
+                }, function () {
+                    alert("Failed to create alignment task");
+                    $scope.alignmentInProcess = false;
+                });
+        }
+
         $scope.onInit = onInit;
+        $scope.fillPoints = fillPoints;
         $scope.setCheckBoxesState = SetCheckBoxesState;
         $scope.redrawGenesMap = redrawGenesMap;
         $scope.dotVisible = dotVisible;
@@ -510,7 +558,6 @@
         $scope.legendClick = legendClick;
         $scope.legendShowAll = legendShowAll;
         $scope.legendHideAll = legendHideAll;
-        $scope.fillPoints = fillPoints;
         $scope.getAttributesText = getAttributesText;
         $scope.fillPointTooltip = fillPointTooltip;
         $scope.showTooltip = showTooltip;
@@ -523,6 +570,10 @@
         $scope.isAttributeEqual = isAttributeEqual;
         $scope.dragbarMouseDown = dragbarMouseDown;
         $scope.keyUpDownPress = keyUpDownPress;
+        $scope.alignWithClustal = alignWithClustal;
+        $scope.alignAllWithClustal = alignAllWithClustal;
+        $scope.alignSimilarWithClustal = alignSimilarWithClustal;
+        $scope.alignSelectedWithClustal = alignSelectedWithClustal;
         $scope.colorScale = d3.scaleOrdinal(d3.schemeCategory20);
 
         $scope.onInit();

@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Attributes\NatureAttributeTests.cs" />
     <Compile Include="AttributeTests.cs" />
+    <Compile Include="Controllers\Calculators\SubsequencesDistributionControllerTests.cs" />
     <Compile Include="Extensions\EnumExtensionsTests.cs" />
     <Compile Include="FeatureTests.cs" />
     <Compile Include="GroupTests.cs" />
