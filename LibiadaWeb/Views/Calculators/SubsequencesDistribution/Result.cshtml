@@ -193,7 +193,7 @@
                                     <button type="button"
                                             class="btn btn-sm"
                                             ng-disabled="alignmentInProcess"
-                                            ng-show="(tooltipElements | filter: {selectedForAlignment: true}).length > 0"
+                                            ng-show="(tooltipElements | filter: {selectedForAlignment: true}).length > 1"
                                             ng-click="alignSelectedWithClustal()">
                                         Align selected subsequences
                                     </button>
@@ -226,6 +226,12 @@
                                     </div>
                                     <div>
                                         Length:{{tooltipElement.length}}
+                                    </div>
+                                    <div ng-show="tooltipElements.length > 1">
+                                        <label>
+                                            <input type="checkbox" name="selectSubsequenceForAlignment" ng-model="tooltipElement.selectedForAlignment" />
+                                            Select sequence for alignment
+                                        </label>
                                     </div>
                                     <div ng-class="['panel', 'panel-' + tooltipElement.color]">
                                         <div class="panel-heading">
