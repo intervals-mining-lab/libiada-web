@@ -98,14 +98,14 @@
         /// <summary>
         /// The subsequences comparer.
         /// </summary>
-        [Display(Name = "Subsequences comparer")]
+        [Display(Name = "Subsequences similarity matrix")]
         [TaskClass(typeof(SubsequencesComparerController))]
         SubsequencesComparer = 13,
 
         /// <summary>
         /// The subsequences distribution.
         /// </summary>
-        [Display(Name = "Subsequences distribution")]
+        [Display(Name = "Map of genes")]
         [TaskClass(typeof(SubsequencesDistributionController))]
         SubsequencesDistribution = 14,
 

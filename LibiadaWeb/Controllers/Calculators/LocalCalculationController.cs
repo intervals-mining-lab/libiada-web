@@ -65,7 +65,8 @@
         public ActionResult Index()
         {
             var viewDataHelper = new ViewDataHelper(db);
-            ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillViewData(CharacteristicCategory.Full, 1, int.MaxValue, "Calculate"));
+            var viewData = viewDataHelper.FillViewData(CharacteristicCategory.Full, 1, int.MaxValue, "Calculate");
+            ViewBag.data = JsonConvert.SerializeObject(viewData);
             return View();
         }
 
@@ -143,12 +144,12 @@
                 var calculators = new IFullCalculator[characteristicLinkIds.Length];
                 var links = new Link[characteristicLinkIds.Length];
                 matterIds = matterIds.OrderBy(m => m).ToArray();
-                Dictionary<long, Matter> matters = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id);
+                Dictionary<long, Matter> matters = Cache.GetInstance().Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id);
 
                 for (int k = 0; k < matterIds.Length; k++)
                 {
                     long matterId = matterIds[k];
-                    Nature nature = db.Matter.Single(m => m.Id == matterId).Nature;
+                    Nature nature = Cache.GetInstance().Matters.Single(m => m.Id == matterId).Nature;
 
                     long sequenceId;
                     switch (nature)

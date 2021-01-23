@@ -21,9 +21,7 @@
                 ViewBag.Error = true;
                 ViewBag.ErrorMessage = ViewBag.UserError = TempData["ErrorMessage"];
             }
-
-            ViewBag.data = "{}";
-
+            
             return View();
         }
     }

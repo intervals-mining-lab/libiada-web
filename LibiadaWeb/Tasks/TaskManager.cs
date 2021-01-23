@@ -12,6 +12,8 @@
 
     using Newtonsoft.Json;
 
+    using SystemTask = System.Threading.Tasks.Task;
+
     /// <summary>
     /// The task manager.
     /// </summary>
@@ -26,11 +28,6 @@
         /// The instance.
         /// </summary>
         private static volatile TaskManager instance;
-
-        /// <summary>
-        /// Machine cores count.
-        /// </summary>
-        private readonly int coresCount = Environment.ProcessorCount;
 
         /// <summary>
         /// Gets the tasks.
@@ -50,7 +47,7 @@
             RemoveGarbageFromDb();
             using (var db = new LibiadaWebEntities())
             {
-                CalculationTask[] databaseTasks = db.CalculationTask.OrderBy(t => t.Created).ToArray();
+                CalculationTask[] databaseTasks = db.CalculationTask.OrderByDescending(t => t.Created).ToArray();
                 lock (tasks)
                 {
                     foreach (CalculationTask task in databaseTasks)
@@ -59,6 +56,7 @@
                     }
                 }
             }
+            
         }
 
         /// <summary>
@@ -104,7 +102,7 @@
                     Created = DateTime.Now,
                     Description = taskType.GetDisplayValue(),
                     Status = TaskState.InQueue,
-                    UserId = Convert.ToInt32(AccountHelper.GetUserId()),
+                    UserId = AccountHelper.GetUserId(),
                     TaskType = taskType
                 };
 
@@ -140,6 +138,22 @@
         }
 
         /// <summary>
+        /// Deletes tasks with the specified state.
+        /// </summary>
+        /// <param name="taskState">
+        /// The task state.
+        /// </param>
+        public void DeleteTasksWithState(TaskState taskState)
+        {
+            List<Task> tasksToDelete = GetUserTasksWithState(taskState);
+
+            for (int i = tasksToDelete.Count - 1; i >= 0; i--)
+            {
+                DeleteTask(tasksToDelete[i].TaskData.Id);
+            }
+        }
+
+        /// <summary>
         /// Deletes the task by id.
         /// </summary>
         /// <param name="id">
@@ -154,9 +168,11 @@
                 {
                     lock (task)
                     {
-                        if (task.Thread != null && task.Thread.IsAlive)
+                        if ((task.SystemTask != null) && (!task.SystemTask.IsCompleted))
                         {
-                            task.Thread.Abort();
+                            CancellationTokenSource cancellationTokenSource = task.CancellationTokenSource;
+                            cancellationTokenSource.Cancel();
+                            cancellationTokenSource.Dispose();
                         }
 
                         tasks.Remove(task);
@@ -182,8 +198,7 @@
         /// </returns>
         public IEnumerable<TaskData> GetTasksData()
         {
-            List<Task> result = GetUserTasks();
-            return result.Select(t => t.TaskData.Clone());
+            return GetUserTasks().Select(t => t.TaskData.Clone());
         }
 
         /// <summary>
@@ -240,7 +255,23 @@
         }
 
         /// <summary>
-        /// Removes not finished amd not started tasks from db
+        /// Gets tasks available to user with the specified state.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="T:List{Task}"/>.
+        /// </returns>
+        private List<Task> GetUserTasksWithState(TaskState taskState)
+        {
+            List<Task> result = GetUserTasks();
+            lock (tasks)
+            {
+                result = result.Where(t => t.TaskData.TaskState == taskState).ToList();
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Removes not finished and not started tasks from database
         /// on task manager initialization.
         /// </summary>
         private void RemoveGarbageFromDb()
@@ -248,7 +279,9 @@
             using (var db = new LibiadaWebEntities())
             {
                 var tasksToDelete = db.CalculationTask
-                    .Where(t => (t.Status != TaskState.Completed && t.Status != TaskState.Error) || t.Result == null)
+                    .Where(t => (t.Status != TaskState.Completed 
+                              && t.Status != TaskState.Error) 
+                              || t.Result == null)
                     .ToArray();
 
                 db.CalculationTask.RemoveRange(tasksToDelete);
@@ -257,39 +290,52 @@
         }
 
         /// <summary>
-        /// The manage tasks.
+        /// Initializes new tasks and runs tasks scheduling it
+        /// for execution to the current TaskScheduler.
         /// </summary>
         private void ManageTasks()
         {
             lock (tasks)
             {
-                int activeTasks = 0;
-                foreach (Task task in tasks)
+                List<Task> tasksToStart = tasks.FindAll(t => t.TaskData.TaskState == TaskState.InQueue);
+                if (tasksToStart.Count != 0)
                 {
-                    lock (task)
-                    {
-                        if (task.TaskData.TaskState == TaskState.InProgress)
-                        {
-                            activeTasks++;
-                        }
-                    }
-                }
-
-                while (activeTasks < coresCount)
-                {
-                    activeTasks++;
-                    Task taskToStart = tasks.FirstOrDefault(t => t.TaskData.TaskState == TaskState.InQueue);
-                    if (taskToStart != null)
+                    foreach (Task taskToStart in tasksToStart)
                     {
                         lock (taskToStart)
                         {
-                            taskToStart.TaskData.TaskState = TaskState.InProgress;
-                            StartTask(taskToStart.TaskData.Id);
+                            Task task = tasks.Single(t => t.TaskData.Id == taskToStart.TaskData.Id);
+                            task.TaskData.TaskState = TaskState.InProgress;
+                            var cancellationTokenSource = new CancellationTokenSource();
+                            CancellationToken token = cancellationTokenSource.Token;
+                            task.CancellationTokenSource = cancellationTokenSource;
+                            var systemTask = new SystemTask(() =>
+                            {
+                                using (cancellationTokenSource.Token.Register(Thread.CurrentThread.Abort))
+                                {
+                                    ExecuteTaskAction(task);
+                                }
+
+                            }, token);
+                                
+                            SystemTask notificationTask = systemTask.ContinueWith((SystemTask t) =>
+                            {
+                                cancellationTokenSource.Dispose();
+
+                                var data = new Dictionary<string, string>
+                                {
+                                    { "title", $"LibiadaWeb: Task completed" },
+                                    { "body", $"Task type: { task.TaskData.TaskType.GetDisplayValue() } \nExecution time: { task.TaskData.ExecutionTime }" },
+                                    { "icon", "/Content/DNA.png" },
+                                    { "tag", $"/{ task.TaskData.TaskType }/Result/{ task.TaskData.Id }" }
+                                };
+                                PushNotificationHelper.Send(task.TaskData.UserId, data);
+                            });
+
+                            task.SystemTask = systemTask;
+                            systemTask.Start();
+
                         }
-                    }
-                    else
-                    {
-                        break;
                     }
                 }
             }
@@ -355,6 +401,10 @@
                     signalrHub.Send(TaskEvent.ChangeStatus, task.TaskData);
                 }
             }
+            catch (ThreadAbortException e)
+            {
+                // TODO: implement an exception handling/logging
+            }
             catch (Exception e)
             {
                 string errorMessage = e.Message;
@@ -392,27 +442,10 @@
                     signalrHub.Send(TaskEvent.ChangeStatus, task.TaskData);
                 }
             }
-
-            ManageTasks();
-        }
-
-        /// <summary>
-        /// The start task.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        private void StartTask(long id)
-        {
-            Task taskToStart;
-            lock (tasks)
+            finally
             {
-                taskToStart = tasks.Single(t => t.TaskData.Id == id);
+                ManageTasks();
             }
-
-            var thread = new Thread(() => ExecuteTaskAction(taskToStart));
-            taskToStart.Thread = thread;
-            thread.Start();
         }
     }
 }

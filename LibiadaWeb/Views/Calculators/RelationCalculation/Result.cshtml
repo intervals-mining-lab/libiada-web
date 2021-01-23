@@ -1,17 +1,35 @@
 ﻿@{
     ViewBag.Title = "Relation characteristic calculation results";
 }
-
+@Scripts.Render("~/bundles/loadingWindow")
 <h2>@ViewBag.Title</h2>
 
 @if (ViewBag.Error == null)
 {
-    <h2>@ViewBag.matterName</h2>
-    <h2>@ViewBag.characteristicName</h2>
-    <h2>@ViewBag.notationName</h2>
-
-    if (ViewBag.isFilter)
-    {
+    @Html.Partial("_AngularControllerInitializer", "CalculationResultController")
+<div ng-controller="CalculationResultCtrl">
+    <h2>{{matterName}}</h2>
+    <h2>{{characteristicName}}</h2>
+    <h2>{{notationName}}</h2>
+    <div ng-if="!isFilter">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        First element\Second element
+                    </th>
+                    <th ng-repeat="element in elements" ng-bind="element.Name ? element.Name : element.Value" />
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="element in elements">
+                    <td ng-bind="element.Name ? element.Name : element.Value" />
+                    <td ng-repeat="element in elements" ng-bind="characteristics[elements[$parent.$index].Id][elements[$index].Id]" />
+                </tr>   
+            </tbody>
+        </table>
+    </div>
+    <div ng-if="isFilter">
         <table class="table">
             <thead>
                 <tr>
@@ -21,68 +39,21 @@
                     <th>
                         Second element
                     </th>
-                    <th>
-                        @ViewBag.characteristicName
-                    </th>
+                    <th ng-bind="characteristicName" />
                 </tr>
             </thead>
             <tbody>
-                @for (int l = 0; l < ViewBag.filteredResult.Count; l++)
-                {
-                    <tr>
-                        <td>
-                            @ViewBag.firstElements[l].Value
-                        </td>
-                        <td>
-                            @ViewBag.secondElements[l].Value
-                        </td>
-                        <td>
-                            @ViewBag.filteredResult[l].Value
-                        </td>
-                    </tr>
-                }
+                <tr ng-repeat="result in filteredResult">
+                    <td ng-bind="firstElements[$index].Value" />
+                    <td ng-bind="secondElements[$index].Value" />
+                    <td ng-bind="filteredResult[$index].Value" />
+                </tr>
             </tbody>
         </table>
+    </div>
+</div>
+}
 
-    }
-    else
-    {
-        <table class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>
-                        First element\Second element
-                    </th>
-                    @for (int k = 0; k < ViewBag.elements.Length; k++)
-                    {
-                        <th>
-                            @{
-                                var name = string.IsNullOrEmpty(ViewBag.elements[k].Name) ? ViewBag.elements[k].Value : ViewBag.elements[k].Name;
-                            }
-                            @name
-                        </th>
-                    }
-                </tr>
-            </thead>
-            <tbody>
-                @for (int i = 0; i < ViewBag.elements.Length; i++)
-                {
-                    <tr>
-                        <td>
-                            @{
-                                var name = string.IsNullOrEmpty(ViewBag.elements[i].Name) ? ViewBag.elements[i].Value : ViewBag.elements[i].Name;
-                            }
-                            @name
-                        </td>
-                        @for (int j = 0; j < ViewBag.elements.Length; j++)
-                        {
-                            <td>
-                                @if (i != j) { <span>@ViewBag.characteristics[ViewBag.elements[i].Id][ViewBag.elements[j].Id]</span> }
-                            </td>
-                        }
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
+@section Scripts {
+    @Scripts.Render("~/bundles/d3js")
 }

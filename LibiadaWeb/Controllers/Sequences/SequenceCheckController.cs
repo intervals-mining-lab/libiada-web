@@ -35,7 +35,7 @@
         {
             using (var db = new LibiadaWebEntities())
             {
-                ViewBag.matterId = new SelectList(db.Matter.ToArray(), "id", "name");
+                ViewBag.matterId = new SelectList(Cache.GetInstance().Matters.ToArray(), "id", "name");
                 return View();
             }
         }

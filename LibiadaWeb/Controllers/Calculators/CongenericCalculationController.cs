@@ -61,7 +61,8 @@
         public ActionResult Index()
         {
             var viewDataHelper = new ViewDataHelper(db);
-            ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillViewData(CharacteristicCategory.Congeneric, 1, int.MaxValue, "Calculate"));
+            var viewData = viewDataHelper.FillViewData(CharacteristicCategory.Congeneric, 1, int.MaxValue, "Calculate");
+            ViewBag.data = JsonConvert.SerializeObject(viewData);
             return View();
         }
 
@@ -125,7 +126,7 @@
 
                 using (var db = new LibiadaWebEntities())
                 {
-                    mattersNames = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
+                    mattersNames = Cache.GetInstance().Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
 
                     var commonSequenceRepository = new CommonSequenceRepository(db);
                     sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds, notations, languages, translators, pauseTreatments, sequentialTransfers, imageOrderExtractor);

@@ -44,7 +44,7 @@
 
                 using (var db = new LibiadaWebEntities())
                 {
-                    Matter[] matters = db.Matter.Where(m => m.Nature == Nature.Music).ToArray();
+                    Matter[] matters = Cache.GetInstance().Matters.Where(m => m.Nature == Nature.Music).ToArray();
 
                     for (int i = 0; i < Request.Files.Count; i++)
                     {

@@ -128,6 +128,7 @@
             return CreateTask(() =>
             {
                 Dictionary<long, string> mattersNames;
+                Dictionary<long, string> matters = Cache.GetInstance().Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
 
                 long[][] sequenceIds;
                 using (var db = new LibiadaWebEntities())

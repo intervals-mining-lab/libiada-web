@@ -1,15 +1,14 @@
-﻿function TaskManagerController(data) {
+﻿function TaskManagerController() {
     "use strict";
 
     function taskManager($scope) {
         function onStateChange(change) {
-            if (change.newState === $.signalR.connectionState.disconnected)
-                if (confirm('Connection lost. Refresh page?')) {
-                    location.reload(true);
-                }
+            if (change.newState === $.signalR.connectionState.disconnected) {
+                alertify.error('Connection lost', 5);
+            }         
         };
 
-        function onHubStart(data) {
+        function onHubStart() {
             $scope.$apply();
             $scope.tasksHub.server.getAllTasks().done(function (tasksJson) {
                 var tasks = JSON.parse(tasksJson);
@@ -76,15 +75,34 @@
             return "glyphicon " + icon;
         }
 
-        function deleteAllTasks() {
-            if (confirm('Are you sure you want to delete all tasks?')) {
-                $scope.tasksHub.server.deleteAllTasks();
-            }
+        function calculateTaskCountWithState(state) {
+            var count = $scope.tasks.filter(task => task.TaskState === state).length;
+            return count;
         }
-        function deleteTask(id) {
-            if (confirm('Are you sure you want to delete this task?')) {
-                $scope.tasksHub.server.deleteTask(id);
-            }
+
+        function deleteAllTasks() {
+            alertify.confirm('Confirm action', 'Are you sure you want to delete all tasks?',
+                () => {
+                    $scope.tasksHub.server.deleteAllTasks();
+                    alertify.success('All tasks have been deleted.');
+                }, () => {});
+        }
+
+        function deleteTasksWithState(taskState) {
+            alertify.confirm('Confirm action', 'Are you sure you want to delete all tasks with state "' + taskState + '"?',
+                () => {                    
+                    $scope.tasksHub.server.deleteTasksWithState(taskState);
+                    alertify.success('All tasks with state "' + taskState + '" have been deleted.');
+                }, () => {});
+        }
+
+        function deleteTask(id)
+        {
+            alertify.confirm('Confirm action', 'Are you sure you want to delete this task?',
+                () => {
+                    $scope.tasksHub.server.deleteTask(id);
+                    alertify.success('The task has been deleted.');
+                }, () => {});
         }
 
         function tryRedirectToResult(task) {
@@ -100,15 +118,17 @@
         $scope.taskEvent = taskEvent;
         $scope.calculateStatusClass = calculateStatusClass;
         $scope.calculateStatusGlyphicon = calculateStatusGlyphicon;
+        $scope.calculateTaskCountWithState = calculateTaskCountWithState;
         $scope.deleteAllTasks = deleteAllTasks;
+        $scope.deleteTasksWithState = deleteTasksWithState;
         $scope.deleteTask = deleteTask;
         $scope.tryRedirectToResult = tryRedirectToResult;
 
         $scope.tasksHub = $.connection.tasksManagerHub;
         $scope.tasksHub.client.TaskEvent = taskEvent;
 
-        $.connection.hub.stateChanged(onStateChange);
-        $.connection.hub.start().done(onHubStart);
+        $.connection.hub.stateChanged($scope.onStateChange);
+        $.connection.hub.start().done($scope.onHubStart);
 
         var location = window.location.href.split("/");
         if (location[location.length - 1] != "TaskManager")
