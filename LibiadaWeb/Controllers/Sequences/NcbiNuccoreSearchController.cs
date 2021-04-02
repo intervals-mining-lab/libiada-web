@@ -57,7 +57,7 @@ namespace LibiadaWeb.Controllers.Sequences
                 string unfilteredSearch = NcbiHelper.FormatNcbiSearchTerm(searchQuery);
                 List<NuccoreObject> unfilteredSearchResults = NcbiHelper.SearchInNuccoreDb(unfilteredSearch, true);
                 List<NuccoreObject> filteresOutSearchResults = unfilteredSearchResults.Except(searchResults).ToList();
-                accessions = searchResults.Select(no => no.Accession.Split('.')[0]).Distinct().ToArray();
+                accessions = searchResults.Select(no => no.AccessionVersion.Split('.')[0]).Distinct().ToArray();
                 var importResults = new List<MatterImportResult>(accessions.Length);
 
                 using (var db = new LibiadaWebEntities())
@@ -78,7 +78,7 @@ namespace LibiadaWeb.Controllers.Sequences
                     {
                         importResults.Add(new MatterImportResult()
                         {
-                            MatterName = searchResult.Name + searchResult.Accession,
+                            MatterName = searchResult.Title + searchResult.AccessionVersion,
                             Status = "Success"
                         });
                     }
@@ -87,7 +87,7 @@ namespace LibiadaWeb.Controllers.Sequences
                     {
                         importResults.Add(new MatterImportResult()
                         {
-                            MatterName = filteresOutSearchResult.Name + filteresOutSearchResult.Accession,
+                            MatterName = filteresOutSearchResult.Title + filteresOutSearchResult.AccessionVersion,
                             Result = "Filtered out",
                             Status = "Error"
                         });
