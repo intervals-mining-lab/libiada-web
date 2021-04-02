@@ -59,7 +59,7 @@ namespace LibiadaWeb.Controllers.Sequences
                         NcbiHelper.FormatNcbiSearchTerm(searchQuery);
                 }
                 nuccoreObjects = NcbiHelper.SearchInNuccoreDb(searchResults, importPartial);
-                accessions = nuccoreObjects.Select(no => no.Accession.Split('.')[0]).Distinct().ToArray();
+                accessions = nuccoreObjects.Select(no => no.AccessionVersion.Split('.')[0]).Distinct().ToArray();
                 var importResults = new List<MatterImportResult>(accessions.Length);
 
                 using (var db = new LibiadaWebEntities())

@@ -262,6 +262,7 @@
     <Compile Include="Models\Calculators\SubsequencesCharacteristicsCalculator.cs" />
     <Compile Include="Models\CalculatorsData\SelectListItemWithNature.cs" />
     <Compile Include="Models\NcbiSequencesData\ESearchResult.cs" />
+    <Compile Include="Models\NcbiSequencesData\ESummaryResult.cs" />
     <Compile Include="Models\OrderTransformer.cs" />
     <Compile Include="Models\Repositories\Catalogs\AccordanceCharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\BinaryCharacteristicRepository.cs" />
@@ -276,9 +277,8 @@
     <Compile Include="Models\Repositories\Sequences\MeasureRepository.cs" />
     <Compile Include="Models\SelectListItemComparer.cs" />
     <Compile Include="Models\NcbiSequencesData\ESearchResponce.cs" />
-    <Compile Include="Models\NcbiSequencesData\NcbiXmlDataAnnotations.cs" />
     <Compile Include="Models\NcbiSequencesData\NuccoreObject.cs" />
-    <Compile Include="Models\ShouldSerializeContractResolver.cs" />
+    <Compile Include="Models\SerializationFilter.cs" />
     <Compile Include="Models\SubsequenceImporter.cs" />
     <Compile Include="Multisequence.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
@@ -353,10 +353,8 @@
     <Compile Include="Models\Account\VerifyPhoneNumberViewModel.cs" />
     <Compile Include="Models\Aliases.cs" />
     <Compile Include="Models\CalculatorsData\CharacteristicSelectListItem.cs" />
-    <Compile Include="Models\CalculatorsData\LinkSelectListItem.cs" />
     <Compile Include="Models\CalculatorsData\SubsequenceData.cs" />
     <Compile Include="Models\CalculatorsData\SequenceData.cs" />
-    <Compile Include="Models\CalculatorsData\IntPair.cs" />
     <Compile Include="Models\Repositories\Catalogs\AttributeRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\ISequenceAttributeRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\FeatureRepository.cs" />

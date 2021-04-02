@@ -1,13 +1,11 @@
-﻿using System.Text.RegularExpressions;
-using Accord.Math;
-
-namespace LibiadaWeb.Helpers
+﻿namespace LibiadaWeb.Helpers
 {
     using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
     using System.Net;
+    using System.Text.RegularExpressions;
     using System.Threading;
 
     using Bio;
@@ -15,9 +13,12 @@ namespace LibiadaWeb.Helpers
     using Bio.IO.FastA;
     using Bio.IO.GenBank;
 
-    using System.Xml.Serialization;
     using Newtonsoft.Json;
+
+    using LibiadaCore.Extensions;
+
     using LibiadaWeb.Models.NcbiSequencesData;
+    using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// The ncbi helper.
@@ -96,15 +97,16 @@ namespace LibiadaWeb.Helpers
         /// <summary>
         /// The get file.
         /// </summary>
-        /// <param name="acceccion">
+        /// <param name="accession">
         /// Accession id of the sequence in ncbi (remote id).
         /// </param>
         /// <returns>
         /// The <see cref="Stream"/>.
         /// </returns>
-        public static Stream GetFastaFileStream(string acceccion)
+        public static Stream GetFastaFileStream(string accession)
         {
-            return GetResponseStream(GetEfetchParamsString("fasta") + acceccion);
+            string url = GetEfetchParamsString("fasta", accession);
+            return GetResponseStream(url);
         }
 
         /// <summary>
@@ -119,7 +121,7 @@ namespace LibiadaWeb.Helpers
         public static ISequence DownloadGenBankSequence(string accession)
         {
             ISequenceParser parser = new GenBankParser();
-            string url = GetEfetchParamsString("gbwithparts") + accession;
+            string url = GetEfetchParamsString("gbwithparts", accession);
             Stream dataStream = GetResponseStream(url);
             return parser.ParseOne(dataStream);
         }
@@ -127,10 +129,18 @@ namespace LibiadaWeb.Helpers
         /// <summary>
         ///
         /// </summary>
-        /// <param name="data"></param>
-        /// <param name="includePartial"></param>
-        /// <param name="minLength"></param>
-        /// <param name="maxLength"></param>
+        /// <param name="data">
+        /// 
+        /// </param>
+        /// <param name="includePartial">
+        /// 
+        /// </param>
+        /// <param name="minLength">
+        /// 
+        /// </param>
+        /// <param name="maxLength">
+        /// 
+        /// </param>
         /// <returns></returns>
         public static string[] GetIdsFromNcbiSearchResults(
             string data,
@@ -167,72 +177,95 @@ namespace LibiadaWeb.Helpers
         /// <summary>
         ///
         /// </summary>
-        /// <param name="searchTerm"></param>
-        /// <param name="includePartial"></param>
-        /// <returns></returns>
+        /// <param name="searchTerm">
+        /// 
+        /// </param>
+        /// <param name="includePartial">
+        /// 
+        /// </param>
+        /// <returns>
+        /// 
+        /// </returns>
         public static List<NuccoreObject> SearchInNuccoreDb(string searchTerm, bool includePartial)
         {
-            int retstart = 0;
+            
             var urlEsearch = $"esearch.fcgi?db=nuccore&term={searchTerm}&usehistory=y&retmode=json";
             var esearchResponseString = GetResponceString(urlEsearch);
             ESearchResult eSearchResult = JsonConvert.DeserializeObject<ESearchResponce>(esearchResponseString).ESearchResult;
             var nuccoreObjects = new List<NuccoreObject>();
-
-            int ElementCount;
+            const short retmax = 500; 
+            int retstart = 0;
+            int resultsCount = eSearchResult.Count;
             do
             {
                 var urlEsummary = $"esummary.fcgi?db=nuccore" +
-                                  $"&term={searchTerm}" +
                                   $"&usehistory=y&WebEnv={eSearchResult.NcbiWebEnvironment}" +
-                                  $"&query_key=1&retmode=text&rettype=docsum&retmax=500&restart={retstart}";
+                                  $"&query_key={eSearchResult.QueryKey}" +
+                                  $"&retmode=json&retmax={retmax}&restart={retstart}";
                 var esummaryResponse = GetResponceString(urlEsummary);
-                retstart++;
+                retstart += retmax;
 
-                XmlSerializer serializer = new XmlSerializer(typeof(eSummaryResult));
-                ElementCount = eSearchResult.Count;
-                eSummaryResult DeserializeResult;
-                using (TextReader reader = new StringReader(esummaryResponse))
-                {
-                    DeserializeResult = (eSummaryResult)serializer.Deserialize(reader);
-                }
+                JObject esummaryResultJObject = (JObject)JObject.Parse(esummaryResponse)["result"];
 
-                foreach (ESummaryResultDocumentSummary element in DeserializeResult.DocumentSummary)
+                esummaryResultJObject.Remove("uids");
+                // IList<JObject> results = esummaryJObject["result"].Children<JProperty>().Where(jp => jp.Name != "uids").Select(jp => (JObject)jp.Value).ToList();
+
+                var eSummaryResults = JsonConvert.DeserializeObject<Dictionary<string, ESummaryResult>>(esummaryResultJObject.ToString());
+
+                foreach ((_, ESummaryResult result) in eSummaryResults)
                 {
-                    if (includePartial || !element.Items[1].Value.Contains("partial"))
+                    bool isPartial = !result.Title.Contains("partial") || !string.IsNullOrEmpty(result.Completeness);
+                    if (includePartial || !isPartial)
                     {
-                        NuccoreObject nuccoreObject = new NuccoreObject();
-                        nuccoreObject.Id = element.Id;
-                        nuccoreObject.Name = element.Items[1].Value;
-                        nuccoreObject.Accession = element.Items[0].Value;
-                        nuccoreObject.Length = element.Items[8].Value;
+                        NuccoreObject nuccoreObject = new NuccoreObject
+                        {
+                            Title = result.Title,
+                            Organism = result.Organism,
+                            AccessionVersion = result.AccessionVersion,
+                            Completeness = result.Completeness,
+                            UpdateDate = result.UpdateDate
+                        };
                         nuccoreObjects.Add(nuccoreObject);
                     }
                 }
-            } while (nuccoreObjects.Count < ElementCount);
+            } while (retstart < resultsCount);
+
             return nuccoreObjects;
         }
 
         /// <summary>
         ///
         /// </summary>
-        /// <param name="searchTerm"></param>
-        /// <param name="minLength"></param>
-        /// <param name="maxLength"></param>
+        /// <param name="searchTerm">
+        /// 
+        /// </param>
+        /// <param name="minLength">
+        /// 
+        /// </param>
+        /// <param name="maxLength">
+        /// 
+        /// </param>
         /// <returns></returns>
         public static string FormatNcbiSearchTerm(string searchTerm, int? minLength = null, int? maxLength = null)
         {
             if (minLength != null && maxLength != null)
             {
-                searchTerm +=  $"[All Fields] AND (\"{minLength}\"[SLEN] : \"{maxLength}\"[SLEN])";
+                // TODO: check if only min or max length can be present.
+                searchTerm += $"[All Fields] AND (\"{minLength}\"[SLEN] : \"{maxLength}\"[SLEN])";
             }
-              return searchTerm;
+
+            return searchTerm;
         }
 
         /// <summary>
         ///
         /// </summary>
-        /// <param name="stringLength"></param>
-        /// <returns></returns>
+        /// <param name="stringLength">
+        /// 
+        /// </param>
+        /// <returns>
+        /// 
+        /// </returns>
         private static int GetLengthFromString(string stringLength)
         {
             stringLength = stringLength.Split(' ')[0];
@@ -243,8 +276,12 @@ namespace LibiadaWeb.Helpers
         /// <summary>
         ///
         /// </summary>
-        /// <param name="url"></param>
-        /// <returns></returns>
+        /// <param name="url">
+        /// 
+        /// </param>
+        /// <returns>
+        /// 
+        /// </returns>
         private static string GetResponceString(string url)
         {
             var response = GetResponseStream(url);
@@ -258,24 +295,27 @@ namespace LibiadaWeb.Helpers
         /// Creates efetch params string with given return type.
         /// </summary>
         /// <param name="retType">
-        /// The return type.
+        /// Response returned type.
+        /// </param>
+        /// <param name="accessions">
+        /// Sequences acessions in genBank.
         /// </param>
         /// <returns>
-        /// The <see cref="string"/>.
+        /// efetch part of url with params as <see cref="string"/>.
         /// </returns>
-        private static string GetEfetchParamsString(string retType)
+        private static string GetEfetchParamsString(string retType, string accessions)
         {
-            return $"efetch.fcgi?db=nuccore&retmode=text&rettype={retType}&id=";
+            return $"efetch.fcgi?db=nuccore&retmode=text&rettype={retType}&id={accessions}";
         }
 
         /// <summary>
-        /// The get response.
+        /// Downloads response from base url with given params.
         /// </summary>
         /// <param name="url">
-        /// The url.
+        /// The params url (without base url).
         /// </param>
         /// <returns>
-        /// The <see cref="Stream"/>.
+        /// The response as <see cref="Stream"/>.
         /// </returns>
         /// <exception cref="Exception">
         /// Thrown if response stream is null.
@@ -306,14 +346,14 @@ namespace LibiadaWeb.Helpers
         }
 
         /// <summary>
-        /// NCBI allows only 3 requests per second.
-        /// So we wait half a second between requests to be sure.
+        /// NCBI allows only 3 (10 for registered users) requests per second.
+        /// So we wait between requests to be sure.
         /// </summary>
         private static void WaitForRequest()
         {
-            if (DateTimeOffset.Now - lastRequestDateTime < new TimeSpan(0, 0, 0, 0, 500))
+            if (DateTimeOffset.Now - lastRequestDateTime < new TimeSpan(0, 0, 0, 0, 334))
             {
-                Thread.Sleep(500);
+                Thread.Sleep(334);
             }
 
             lastRequestDateTime = DateTimeOffset.Now;
