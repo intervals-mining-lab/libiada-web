@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
     using System.Net;
     using System.Text.RegularExpressions;
     using System.Threading;
@@ -171,6 +172,7 @@
                     }
                 }
             }
+
             return accessions.ToArray();
         }
 
@@ -205,14 +207,20 @@
                 var esummaryResponse = GetResponceString(urlEsummary);
                 retstart += retmax;
 
-                JObject esummaryResultJObject = (JObject)JObject.Parse(esummaryResponse)["result"];
+                var esummaryResultJObject = JObject.Parse(esummaryResponse)["result"];
 
-                esummaryResultJObject.Remove("uids");
-                // IList<JObject> results = esummaryJObject["result"].Children<JProperty>().Where(jp => jp.Name != "uids").Select(jp => (JObject)jp.Value).ToList();
+                // removing array of uids because it breakes deserialization
+                var eSummaryResults = esummaryResultJObject
+                                        .Children<JProperty>()
+                                        .Where(j => j.Name != "uids")
+                                        .Select(j => j.Value.ToObject<ESummaryResult>())
+                                        .ToList();
 
-                var eSummaryResults = JsonConvert.DeserializeObject<Dictionary<string, ESummaryResult>>(esummaryResultJObject.ToString());
+                // alternative implementation
+                //((JObject)esummaryResultJObject).Remove("uids");
+                //var eSummaryResults = JsonConvert.DeserializeObject<Dictionary<string, ESummaryResult>>(esummaryResultJObject.ToString()).Values;
 
-                foreach ((_, ESummaryResult result) in eSummaryResults)
+                foreach (ESummaryResult result in eSummaryResults)
                 {
                     bool isPartial = !result.Title.Contains("partial") || !string.IsNullOrEmpty(result.Completeness);
                     if (includePartial || !isPartial)
@@ -234,43 +242,47 @@
         }
 
         /// <summary>
-        ///
+        /// Adds length linitations on sought sequences if any provided.
         /// </summary>
         /// <param name="searchTerm">
-        /// 
+        /// Search term for all fields.
         /// </param>
         /// <param name="minLength">
-        /// 
+        /// Minimal sequence length.
         /// </param>
         /// <param name="maxLength">
-        /// 
+        /// Maximum sequence length.
         /// </param>
-        /// <returns></returns>
+        /// <returns>
+        /// Search term as is or formatet seqrch term with length limitations.
+        /// </returns>
         public static string FormatNcbiSearchTerm(string searchTerm, int? minLength = null, int? maxLength = null)
         {
-            if (minLength != null && maxLength != null)
+            if (minLength == null && maxLength == null)
             {
-                // TODO: check if only min or max length can be present.
-                searchTerm += $"[All Fields] AND (\"{minLength}\"[SLEN] : \"{maxLength}\"[SLEN])";
+                return searchTerm;                
             }
 
-            return searchTerm;
+            return $"{searchTerm}[All Fields] AND (\"{minLength ?? 1}\"[SLEN] : \"{maxLength ?? int.MaxValue}\"[SLEN])";
         }
 
         /// <summary>
-        ///
+        /// Converts string formated in en-US culture into integer.
         /// </summary>
-        /// <param name="stringLength">
-        /// 
+        /// <param name="integer">
+        ///  String containing integer in american format.
         /// </param>
         /// <returns>
-        /// 
+        /// Integer value.
         /// </returns>
-        private static int GetLengthFromString(string stringLength)
+        /// <example>
+        /// (string)"1,111,520" => (int)1111520
+        /// </example>
+        private static int GetLengthFromString(string integer)
         {
-            stringLength = stringLength.Split(' ')[0];
+            integer = integer.Split(' ')[0];
             IFormatProvider provider = CultureInfo.CreateSpecificCulture("en-US");
-            return int.Parse(stringLength, NumberStyles.Integer | NumberStyles.AllowThousands, provider);
+            return int.Parse(integer, NumberStyles.Integer | NumberStyles.AllowThousands, provider);
         }
 
         /// <summary>
