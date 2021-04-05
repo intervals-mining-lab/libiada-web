@@ -141,7 +141,15 @@
                 }
             }
 
-            return JsonConvert.SerializeObject(result);
+            var response = new Dictionary<string, object>
+            {
+                { "aligner", aligner },
+                { "distanceCalculator", distanceCalculator },
+                { "aggregator", aggregator },
+                { "result", result }
+            };
+
+            return JsonConvert.SerializeObject(response);
         }
     }
 }
