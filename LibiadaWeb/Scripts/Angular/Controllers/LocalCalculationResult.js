@@ -118,8 +118,8 @@
 			}).then(function (result) {
 				const response = JSON.parse(result.data)
 				$scope.comparisonMatrix = response.result;
-				$scope.usedAligner = $scope.aligners[response.aligner - 1].Text
-				$scope.usedDistanceCalculator = $scope.distanceCalculators[response.distanceCalculator - 1].Text
+				$scope.usedAligner = $scope.aligners[response.aligner - 1].Text;
+				$scope.usedDistanceCalculator = $scope.distanceCalculators[response.distanceCalculator - 1].Text;
 				$scope.usedAggregator = $scope.aggregators[response.aggregator - 1].Text;
                 }, function (error) {
 					alert("Failed loading alignment data");
