@@ -168,6 +168,7 @@
     <Compile Include="Controllers\Sequences\CommonSequencesController.cs" />
     <Compile Include="Controllers\Sequences\CustomSequenceOrderTransformerController.cs" />
     <Compile Include="Controllers\Sequences\FmotifsDictionaryController.cs" />
+    <Compile Include="Controllers\Sequences\GenBankAccessionVersionUpdateCheckerController.cs" />
     <Compile Include="Controllers\Sequences\MattersController.cs" />
     <Compile Include="Controllers\Sequences\NcbiNuccoreSearchController.cs" />
     <Compile Include="Controllers\Sequences\OrderTransformationConvergenceController.cs" />
@@ -261,6 +262,7 @@
     <Compile Include="Models\CalculatorsData\FragmentData.cs" />
     <Compile Include="Models\Calculators\SubsequencesCharacteristicsCalculator.cs" />
     <Compile Include="Models\CalculatorsData\SelectListItemWithNature.cs" />
+    <Compile Include="Models\NcbiSequencesData\AccessionUpdateSearchResult.cs" />
     <Compile Include="Models\NcbiSequencesData\ESearchResult.cs" />
     <Compile Include="Models\NcbiSequencesData\ESummaryResult.cs" />
     <Compile Include="Models\OrderTransformer.cs" />
@@ -858,6 +860,7 @@
     <Content Include="App_Code\Helpers.cshtml" />
     <Content Include="Views\Sequences\BatchSequenceImport\Index.cshtml" />
     <Content Include="Views\Sequences\BatchSequenceImport\Result.cshtml" />
+    <Content Include="Views\Sequences\GenBankAccessionVersionUpdateChecker\Result.cshtml" />
     <Content Include="Views\Calculators\SubsequencesComparer\Index.cshtml" />
     <Content Include="Views\Calculators\CustomSequenceOrderTransformationCalculation\Result.cshtml" />
     <Content Include="Views\Calculators\CustomSequenceOrderTransformationCalculation\Index.cshtml" />
@@ -908,6 +911,7 @@
     <Content Include="Views\Sequences\BatchGeneticImportFromGenBankSearchQuery\Index.cshtml" />
     <Content Include="Views\Sequences\NcbiNuccoreSearch\Index.cshtml" />
     <Content Include="Views\Sequences\NcbiNuccoreSearch\Result.cshtml" />
+    <Content Include="Views\Sequences\GenBankAccessionVersionUpdateChecker\Index.cshtml" />
     <Content Include="Views\Sequences\BatchImagesImport\Result.cshtml" />
     <Content Include="Views\Sequences\BatchImagesImport\Index.cshtml" />
     <None Include="Web.Release.config">
@@ -920,6 +924,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\PushNotification\" />
+    <Folder Include="Views\Sequences\NcbiNuccoreSearch\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

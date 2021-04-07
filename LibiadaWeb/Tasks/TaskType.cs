@@ -278,6 +278,14 @@
         /// </summary>
         [Display(Name = "Ncbi nuccore search")]
         [TaskClass(typeof(NcbiNuccoreSearchController))]
-        NcbiNuccoreSearch = 38
+        NcbiNuccoreSearch = 38,
+
+        /// <summary>
+        /// Checks if there is GenBank accession versions update 
+        /// and displays results in tabular form.
+        /// </summary>
+        [Display(Name = "GenBank accession versions update check")]
+        [TaskClass(typeof(GenBankAccessionVersionUpdateCheckerController))]
+        GenBankAccessionVersionUpdateChecker = 39
     }
 }
