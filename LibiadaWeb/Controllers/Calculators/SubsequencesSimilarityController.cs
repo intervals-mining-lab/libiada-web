@@ -139,7 +139,7 @@
 
                 double difference = double.Parse(maxDifference, CultureInfo.InvariantCulture);
 
-                var similarSubsequences = new List<IntPair>();
+                var similarSubsequences = new List<(int, int)>();
 
                 for (int i = 0; i < firstSequenceCharacteristics.Count; i++)
                 {
@@ -147,7 +147,7 @@
                     {
                         if (Math.Abs(firstSequenceCharacteristics[i] - secondSequenceCharacteristics[j]) <= difference)
                         {
-                            similarSubsequences.Add(new IntPair(i, j));
+                            similarSubsequences.Add((i, j));
 
                             if (excludeType == "Exclude")
                             {
@@ -183,7 +183,7 @@
 
             string json = JsonConvert.SerializeObject(result, new JsonSerializerSettings()
             { 
-                ContractResolver = new ShouldSerializeContractResolver(new[] { "DnaSequence", "SequenceAttribute" }) 
+                ContractResolver = new SerializationFilter(new[] { "DnaSequence", "SequenceAttribute" }) 
             });
 
             return new Dictionary<string, object>

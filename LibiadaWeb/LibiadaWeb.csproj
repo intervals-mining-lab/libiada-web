@@ -159,6 +159,8 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PushNotificationController.cs" />
     <Compile Include="Controllers\Sequences\BatchGenesImportController.cs" />
+    <Compile Include="Controllers\Sequences\BatchGeneticImportFromGenBankSearchFileController.cs" />
+    <Compile Include="Controllers\Sequences\BatchGeneticImportFromGenBankSearchQueryController.cs" />
     <Compile Include="Controllers\Sequences\BatchImagesImportController.cs" />
     <Compile Include="Controllers\Sequences\BatchMusicImportController.cs" />
     <Compile Include="Controllers\Sequences\BatchPoemsImportController.cs" />
@@ -166,7 +168,9 @@
     <Compile Include="Controllers\Sequences\CommonSequencesController.cs" />
     <Compile Include="Controllers\Sequences\CustomSequenceOrderTransformerController.cs" />
     <Compile Include="Controllers\Sequences\FmotifsDictionaryController.cs" />
+    <Compile Include="Controllers\Sequences\GenBankAccessionVersionUpdateCheckerController.cs" />
     <Compile Include="Controllers\Sequences\MattersController.cs" />
+    <Compile Include="Controllers\Sequences\NcbiNuccoreSearchController.cs" />
     <Compile Include="Controllers\Sequences\OrderTransformationConvergenceController.cs" />
     <Compile Include="Controllers\Sequences\OrderTransformerController.cs" />
     <Compile Include="Controllers\Sequences\SequenceCheckController.cs" />
@@ -258,6 +262,9 @@
     <Compile Include="Models\CalculatorsData\FragmentData.cs" />
     <Compile Include="Models\Calculators\SubsequencesCharacteristicsCalculator.cs" />
     <Compile Include="Models\CalculatorsData\SelectListItemWithNature.cs" />
+    <Compile Include="Models\NcbiSequencesData\AccessionUpdateSearchResult.cs" />
+    <Compile Include="Models\NcbiSequencesData\ESearchResult.cs" />
+    <Compile Include="Models\NcbiSequencesData\ESummaryResult.cs" />
     <Compile Include="Models\OrderTransformer.cs" />
     <Compile Include="Models\Repositories\Catalogs\AccordanceCharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\BinaryCharacteristicRepository.cs" />
@@ -271,7 +278,9 @@
     <Compile Include="Models\Repositories\Sequences\IMeasureRepsitory.cs" />
     <Compile Include="Models\Repositories\Sequences\MeasureRepository.cs" />
     <Compile Include="Models\SelectListItemComparer.cs" />
-    <Compile Include="Models\ShouldSerializeContractResolver.cs" />
+    <Compile Include="Models\NcbiSequencesData\ESearchResponce.cs" />
+    <Compile Include="Models\NcbiSequencesData\NuccoreObject.cs" />
+    <Compile Include="Models\SerializationFilter.cs" />
     <Compile Include="Models\SubsequenceImporter.cs" />
     <Compile Include="Multisequence.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
@@ -346,10 +355,8 @@
     <Compile Include="Models\Account\VerifyPhoneNumberViewModel.cs" />
     <Compile Include="Models\Aliases.cs" />
     <Compile Include="Models\CalculatorsData\CharacteristicSelectListItem.cs" />
-    <Compile Include="Models\CalculatorsData\LinkSelectListItem.cs" />
     <Compile Include="Models\CalculatorsData\SubsequenceData.cs" />
     <Compile Include="Models\CalculatorsData\SequenceData.cs" />
-    <Compile Include="Models\CalculatorsData\IntPair.cs" />
     <Compile Include="Models\Repositories\Catalogs\AttributeRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\ISequenceAttributeRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\FeatureRepository.cs" />
@@ -458,6 +465,7 @@
     <Content Include="Scripts\Angular\Components\orderTransformations.js" />
     <Content Include="Scripts\Angular\Components\scrollJumper.js" />
     <Content Include="Scripts\Angular\Controllers\accordance.js" />
+    <Content Include="Scripts\Angular\Controllers\batchGeneticImportFromGenBankSearchFile.js" />
     <Content Include="Scripts\Angular\Controllers\batchMusicImport.js" />
     <Content Include="Scripts\Angular\Controllers\batchPoemsImport.js" />
     <Content Include="Scripts\Angular\Controllers\batchSequenceImport.js" />
@@ -852,6 +860,7 @@
     <Content Include="App_Code\Helpers.cshtml" />
     <Content Include="Views\Sequences\BatchSequenceImport\Index.cshtml" />
     <Content Include="Views\Sequences\BatchSequenceImport\Result.cshtml" />
+    <Content Include="Views\Sequences\GenBankAccessionVersionUpdateChecker\Result.cshtml" />
     <Content Include="Views\Calculators\SubsequencesComparer\Index.cshtml" />
     <Content Include="Views\Calculators\CustomSequenceOrderTransformationCalculation\Result.cshtml" />
     <Content Include="Views\Calculators\CustomSequenceOrderTransformationCalculation\Index.cshtml" />
@@ -896,6 +905,13 @@
     <Content Include="Views\Calculators\OrdersIntervalsDistributionsAccordance\Result.cshtml" />
     <Content Include="Views\Calculators\IntervalsCharacteristicsDistribution\Index.cshtml" />
     <Content Include="Views\Calculators\IntervalsCharacteristicsDistribution\Result.cshtml" />
+    <Content Include="Views\Sequences\BatchGeneticImportFromGenBankSearchFile\Index.cshtml" />
+    <Content Include="Views\Sequences\BatchGeneticImportFromGenBankSearchFile\Result.cshtml" />
+    <Content Include="Views\Sequences\BatchGeneticImportFromGenBankSearchQuery\Result.cshtml" />
+    <Content Include="Views\Sequences\BatchGeneticImportFromGenBankSearchQuery\Index.cshtml" />
+    <Content Include="Views\Sequences\NcbiNuccoreSearch\Index.cshtml" />
+    <Content Include="Views\Sequences\NcbiNuccoreSearch\Result.cshtml" />
+    <Content Include="Views\Sequences\GenBankAccessionVersionUpdateChecker\Index.cshtml" />
     <Content Include="Views\Sequences\BatchImagesImport\Result.cshtml" />
     <Content Include="Views\Sequences\BatchImagesImport\Index.cshtml" />
     <None Include="Web.Release.config">
@@ -908,6 +924,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\PushNotification\" />
+    <Folder Include="Views\Sequences\NcbiNuccoreSearch\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -1043,9 +1060,6 @@
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>12.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Npgsql">
-      <Version>4.1.3</Version>
     </PackageReference>
     <PackageReference Include="Owin">
       <Version>1.0.0</Version>

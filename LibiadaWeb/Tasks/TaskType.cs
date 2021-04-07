@@ -254,6 +254,38 @@
         /// </summary>
         [Display(Name = "Batch images import")]
         [TaskClass(typeof(BatchImagesImportController))]
-        BatchImagesImport = 35
+        BatchImagesImport = 35,
+
+        /// Imports genetic sequences and their annotations
+        /// using genbank search results file.
+        /// </summary>
+        [Display(Name = "Batch genetic import from GenBank search file")]
+        [TaskClass(typeof(BatchGeneticImportFromGenBankSearchFileController))]
+        BatchGeneticImportFromGenBankSearchFile = 36,
+
+        /// <summary>
+        /// Imports genetic sequences and their annotations
+        /// using genbank search results query.
+        /// </summary>
+        [Display(Name = "Batch genetic import from GenBank search query")]
+        [TaskClass(typeof(BatchGeneticImportFromGenBankSearchQueryController))]
+        BatchGeneticImportFromGenBankSearchQuery = 37,
+
+        /// <summary>
+        /// Searches genbank nuccore database as in
+        /// <see cref="TaskType.BatchGeneticImportFromGenBankSearchQuery"/>
+        /// and displays results in tabular form.
+        /// </summary>
+        [Display(Name = "Ncbi nuccore search")]
+        [TaskClass(typeof(NcbiNuccoreSearchController))]
+        NcbiNuccoreSearch = 38,
+
+        /// <summary>
+        /// Checks if there is GenBank accession versions update 
+        /// and displays results in tabular form.
+        /// </summary>
+        [Display(Name = "GenBank accession versions update check")]
+        [TaskClass(typeof(GenBankAccessionVersionUpdateCheckerController))]
+        GenBankAccessionVersionUpdateChecker = 39
     }
 }

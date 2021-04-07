@@ -14,5 +14,10 @@
         /// The time output format.
         /// </summary>
         public const string TimeFormat = @"hh\:mm\:ss\.FF";
+
+        /// <summary>
+        /// The date time output format.
+        /// </summary>
+        public const string DateFormat = "dd.MM.yyyy";
     }
 }

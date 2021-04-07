@@ -53,6 +53,9 @@
                         "~/Scripts/Angular/Controllers/accordance.js",
                         "~/Scripts/Angular/Components/mattersTable.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/controllers/BatchGeneticImportFromGenBankSearchFileController").Include(
+              "~/Scripts/Angular/Controllers/batchGeneticImportFromGenBankSearchFile.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/controllers/BatchMusicImportController").Include(
                 "~/Scripts/Angular/Controllers/batchMusicImport.js"));
 
