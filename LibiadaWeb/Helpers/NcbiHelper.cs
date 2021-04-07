@@ -222,7 +222,7 @@
 
                 foreach (ESummaryResult result in eSummaryResults)
                 {
-                    bool isPartial = !result.Title.Contains("partial") || !string.IsNullOrEmpty(result.Completeness);
+                    bool isPartial = result.Title.Contains("partial") || string.IsNullOrEmpty(result.Completeness);
                     if (includePartial || !isPartial)
                     {
                         NuccoreObject nuccoreObject = new NuccoreObject
@@ -260,10 +260,10 @@
         {
             if (minLength == null && maxLength == null)
             {
-                return searchTerm;                
+                return $"\"{searchTerm}\"[Organism]";                
             }
 
-            return $"{searchTerm}[All Fields] AND (\"{minLength ?? 1}\"[SLEN] : \"{maxLength ?? int.MaxValue}\"[SLEN])";
+            return $"\"{searchTerm}\"[Organism] AND (\"{minLength ?? 1}\"[SLEN] : \"{maxLength ?? int.MaxValue}\"[SLEN])";
         }
 
         /// <summary>

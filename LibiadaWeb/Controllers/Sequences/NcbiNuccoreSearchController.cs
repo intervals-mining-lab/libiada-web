@@ -1,16 +1,20 @@
-﻿using Bio.Core.Extensions;
-using LibiadaWeb.Helpers;
-using LibiadaWeb.Models.CalculatorsData;
-using LibiadaWeb.Models.NcbiSequencesData;
-using LibiadaWeb.Models.Repositories.Sequences;
-using LibiadaWeb.Tasks;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-
-namespace LibiadaWeb.Controllers.Sequences
+﻿namespace LibiadaWeb.Controllers.Sequences
 {
+    using Bio.Core.Extensions;
+
+    using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models.CalculatorsData;
+    using LibiadaWeb.Models.NcbiSequencesData;
+    using LibiadaWeb.Models.Repositories.Sequences;
+    using LibiadaWeb.Tasks;
+
+    using Newtonsoft.Json;
+
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+
+    [Authorize(Roles = "Admin")]
     public class NcbiNuccoreSearchController : AbstractResultController
     {
         public NcbiNuccoreSearchController() : base(TaskType.NcbiNuccoreSearch)
@@ -35,9 +39,6 @@ namespace LibiadaWeb.Controllers.Sequences
         {
             return CreateTask(() =>
             {
-                string[] accessions;
-                List<NuccoreObject> searchResults;
-
                 if (filterMinLength)
                 {
                     searchQuery = filterMaxLength ?
@@ -47,54 +48,76 @@ namespace LibiadaWeb.Controllers.Sequences
                 else
                 {
                     searchQuery = filterMaxLength ?
-                        NcbiHelper.FormatNcbiSearchTerm(searchQuery, minLength: 1, maxLength: maxLength) :
+                        NcbiHelper.FormatNcbiSearchTerm(searchQuery, maxLength: maxLength) :
                         NcbiHelper.FormatNcbiSearchTerm(searchQuery);
                 }
 
+                List<NuccoreObject> searchResults = NcbiHelper.SearchInNuccoreDb(searchQuery, importPartial);
 
-                searchResults = NcbiHelper.SearchInNuccoreDb(searchQuery, importPartial);
+                List<NuccoreObject> unfilteredSearchResults;
+                List<NuccoreObject> filteresOutSearchResults = searchResults;
+                string[] accessions;
+                if (!importPartial)
+                {
+                    unfilteredSearchResults = NcbiHelper.SearchInNuccoreDb(searchQuery, true);
+                    filteresOutSearchResults = unfilteredSearchResults.Except(searchResults).ToList();
+                    accessions = unfilteredSearchResults.Select(no => no.AccessionVersion.Split('.')[0]).Distinct().ToArray();
+                }
+                else
+                {
+                    accessions = searchResults.Select(no => no.AccessionVersion.Split('.')[0]).Distinct().ToArray();
+                }
 
-                string unfilteredSearch = NcbiHelper.FormatNcbiSearchTerm(searchQuery);
-                List<NuccoreObject> unfilteredSearchResults = NcbiHelper.SearchInNuccoreDb(unfilteredSearch, true);
-                List<NuccoreObject> filteresOutSearchResults = unfilteredSearchResults.Except(searchResults).ToList();
-                accessions = searchResults.Select(no => no.AccessionVersion.Split('.')[0]).Distinct().ToArray();
-                var importResults = new List<MatterImportResult>(accessions.Length);
+                var results = new List<MatterImportResult>(accessions.Length);
+
+                string[] existingAccessions;
 
                 using (var db = new LibiadaWebEntities())
                 {
                     var dnaSequenceRepository = new GeneticSequenceRepository(db);
 
-                    var (existingAccessions, accessionsToImport) = dnaSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
+                    (existingAccessions, _) = dnaSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
+                }
 
-                    importResults.AddRange(existingAccessions.ConvertAll(existingAccession => new MatterImportResult
+                searchResults = searchResults
+                                    .Where(sr => !existingAccessions.Contains(sr.AccessionVersion.Split('.')[0]))
+                                    .ToList();
+                foreach (var searchResult in searchResults)
+                {
+                    results.Add(new MatterImportResult()
                     {
+                        MatterName = $"{searchResult.Title} | {searchResult.AccessionVersion}",
+                        Result = "Found new sequence",
+                        Status = "Success"
+                    });
+                }
 
-                        MatterName = existingAccession,
-                        Result = "Sequence already exists",
-                        Status = "Exist"
-                    }));
+                results.AddRange(existingAccessions.ConvertAll(existingAccession => new MatterImportResult
+                {
+                    MatterName = existingAccession,
+                    Result = "Sequence already exists",
+                    Status = "Exists"
+                }));
 
-                    foreach (var searchResult in searchResults)
-                    {
-                        importResults.Add(new MatterImportResult()
-                        {
-                            MatterName = searchResult.Title + searchResult.AccessionVersion,
-                            Status = "Success"
-                        });
-                    }
-
+                if (!importPartial)
+                {
+                    filteresOutSearchResults = filteresOutSearchResults
+                                            .Where(sr => !existingAccessions.Contains(sr.AccessionVersion.Split('.')[0]))
+                                            .ToList();
                     foreach (var filteresOutSearchResult in filteresOutSearchResults)
                     {
-                        importResults.Add(new MatterImportResult()
+                        results.Add(new MatterImportResult()
                         {
-                            MatterName = filteresOutSearchResult.Title + filteresOutSearchResult.AccessionVersion,
+                            MatterName = $"{filteresOutSearchResult.Title} | {filteresOutSearchResult.AccessionVersion}",
                             Result = "Filtered out",
                             Status = "Error"
                         });
                     }
                 }
 
-                var data = new Dictionary<string, object> { { "result", importResults } };
+                accessions = searchResults.Select(sr => sr.AccessionVersion).ToArray();
+
+                var data = new Dictionary<string, object> { { "result", results }, { "accessions", accessions } };
 
                 return new Dictionary<string, object>
                            {
