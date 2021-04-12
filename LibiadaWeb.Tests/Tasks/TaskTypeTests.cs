@@ -92,7 +92,7 @@
         [TestCase((TaskType)36, "BatchGeneticImportFromGenBankSearchFile")]
         [TestCase((TaskType)37, "BatchGeneticImportFromGenBankSearchQuery")]
         [TestCase((TaskType)38, "NcbiNuccoreSearch")]
-        [TestCase((TaskType)39, "AccessionVersionUpdateCheck")]
+        [TestCase((TaskType)39, "GenBankAccessionVersionUpdateChecker")]
         public void TaskTypeNameTest(TaskType taskType, string name) => Assert.AreEqual(name, taskType.GetName());
 
         /// <summary>

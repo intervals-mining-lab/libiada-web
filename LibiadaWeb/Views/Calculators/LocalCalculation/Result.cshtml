@@ -10,34 +10,36 @@
 
     <div ng-controller="LocalCalculationResultCtrl">
         <div ng-disabled="loading">
+            <input type="button" class="btn btn-default" ng-click="changeCharacteristicsTableVisibility()" value="Show characteristics table" />
+            <br />
             <div ng-repeat="chainsCharacteristics in characteristics">
                 <h3>{{$index+1}}. {{chainsCharacteristics.matterName}}</h3>
-                @*<table st-table="characteristics" class="table table-bordered table-hover" ng-cloak>
-                        <thead>
-                            <tr>
-                                <th>
-                                    Fragment name
-                                </th>
-                                <th>
-                                    Start
-                                </th>
-                                <th>
-                                    Length
-                                </th>
-                                <th ng-repeat="characteristicName in characteristicNames" ng-bind="characteristicName" />
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="fragmentsData in chainsCharacteristics.fragmentsData">
-                                <td ng-bind="fragmentsData.Name" />
-                                <td ng-bind="fragmentsData.Start" />
-                                <td ng-bind="fragmentsData.Length" />
-                                <td ng-repeat="value in fragmentsData.Characteristics" ng-bind="value" />
-                            </tr>
-                        </tbody>
-                    </table>
-                    <br />*@
+                <table ng-if="isCharacteristicsTableVisible" st-table="characteristics" class="table table-bordered table-hover" ng-cloak>
+                    <thead>
+                        <tr>
+                            <th>
+                                Fragment name
+                            </th>
+                            <th>
+                                Start
+                            </th>
+                            <th>
+                                Length
+                            </th>
+                            <th ng-repeat="characteristicName in characteristicNames" ng-bind="characteristicName" />
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="fragmentsData in chainsCharacteristics.fragmentsData">
+                            <td ng-bind="fragmentsData.Name" />
+                            <td ng-bind="fragmentsData.Start" />
+                            <td ng-bind="fragmentsData.Length" />
+                            <td ng-repeat="value in fragmentsData.Characteristics" ng-bind="value" />
+                        </tr>
+                    </tbody>
+                </table>
             </div>
+            <br/>
             <div class="form-group">
                 <label class="control-label col-md-2" for="aligner">Aligner:</label>
                 <div class="col-md-10">
@@ -59,18 +61,19 @@
             <input type="button" class="btn btn-default" ng-click="calculateLocalCharacteristicsSimilarityMatrix()" value="Calculate similarity matrix" />
             <br />
             <table class="table table-bordered" ng-show="comparisonMatrix">
+                <caption>Aligner: {{usedAligner}}, Distances calculator: {{usedDistanceCalculator}}, Aggregator: {{usedAggregator}}</caption>
                 <tbody>
-                <tr>
-                    <td>№</td>
-                    <td ng-repeat="comparisonRaw in comparisonMatrix" title="{{characteristics[$index].matterName}}">{{$index + 1}}</td>
-                </tr>
-                <tr ng-repeat="comparisonRaw in comparisonMatrix">
-                    <td title="{{characteristics[$index].matterName}}">{{$index + 1}}</td>
-                    <td ng-repeat="comparisonValue in comparisonRaw track by $index"
-                        title="{{characteristics[$parent.$index].matterName}} &#13{{characteristics[$index].matterName}}">
-                        {{comparisonValue.toFixed(5)}}
-                    </td>
-                </tr>
+                    <tr>
+                        <td>№</td>
+                        <td ng-repeat="comparisonRaw in comparisonMatrix" title="{{characteristics[$index].matterName}}">{{$index + 1}}</td>
+                    </tr>
+                    <tr ng-repeat="comparisonRaw in comparisonMatrix">
+                        <td title="{{characteristics[$index].matterName}}">{{$index + 1}}</td>
+                        <td ng-repeat="comparisonValue in comparisonRaw track by $index"
+                            title="{{characteristics[$parent.$index].matterName}} &#13{{characteristics[$index].matterName}}">
+                            {{comparisonValue.toFixed(5)}}
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <br />

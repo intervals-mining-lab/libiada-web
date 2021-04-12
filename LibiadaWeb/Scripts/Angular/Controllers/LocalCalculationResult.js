@@ -107,7 +107,7 @@
 			return $scope.lineChart ? d.x : d.y;
         }
 
-        function calculateLocalCharacteristicsSimilarityMatrix() {
+		function calculateLocalCharacteristicsSimilarityMatrix() {
 			$http.get("/api/LocalCalculationWebApi", {
 				params: {
 					taskId: $scope.taskId,
@@ -116,13 +116,21 @@
 					aggregator: $scope.aggregator.Value
 				}
 			}).then(function (result) {
-                    $scope.comparisonMatrix = JSON.parse(result.data);
+				const response = JSON.parse(result.data)
+				$scope.comparisonMatrix = response.result;
+				$scope.usedAligner = $scope.aligners[response.aligner - 1].Text;
+				$scope.usedDistanceCalculator = $scope.distanceCalculators[response.distanceCalculator - 1].Text;
+				$scope.usedAggregator = $scope.aggregators[response.aggregator - 1].Text;
                 }, function (error) {
-
-                    alert("Failed loading alignment data");
-
+					alert("Failed loading alignment data");
                     $scope.loading = false;
                 });
+		}
+
+		$scope.isCharacteristicsTableVisible = false;
+
+		function changeCharacteristicsTableVisibility() {
+			$scope.isCharacteristicsTableVisible = true;
         }
 
         function draw() {
@@ -306,7 +314,8 @@
 				.style("font-size", "9pt");
 		}
 
-        $scope.calculateLocalCharacteristicsSimilarityMatrix = calculateLocalCharacteristicsSimilarityMatrix;
+		$scope.calculateLocalCharacteristicsSimilarityMatrix = calculateLocalCharacteristicsSimilarityMatrix;
+		$scope.changeCharacteristicsTableVisibility = changeCharacteristicsTableVisibility;
 		$scope.draw = draw;
 		$scope.fillPoints = fillPoints;
 		$scope.fillPointTooltip = fillPointTooltip;
