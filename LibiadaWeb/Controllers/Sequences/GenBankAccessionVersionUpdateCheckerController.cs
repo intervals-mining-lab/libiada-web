@@ -61,20 +61,22 @@
                 }
 
                 List<NuccoreObject> searchResults = new List<NuccoreObject>();
-                
+
                 // slicing accessions into chunks to prevent "too long request" error
                 string[] accessions = sequencesData.Keys.ToArray();
-                const int maxChunkSize = 100;
+                const int maxChunkSize = 10000;
+                
                 for (int i = 0; i < accessions.Length; i += maxChunkSize)
                 {
                     int actualChunkSize = Math.Min(maxChunkSize, accessions.Length - i);
                     var accessionsChunk = new string[actualChunkSize];
                     Array.Copy(accessions, i, accessionsChunk, 0, actualChunkSize);
-
-                    searchResults.AddRange(NcbiHelper.SearchInNuccoreDb(string.Join(" ", accessionsChunk), true));
+                    (string ncbiWebEnvironment, string queryKey) = NcbiHelper.ExecuteEPostRequest(string.Join(",", accessionsChunk));
+                    searchResults.AddRange(NcbiHelper.ExecuteESummaryRequest(ncbiWebEnvironment, queryKey, true));
                 }
 
-                for(int i = 0; i < searchResults.Count; i++)
+                
+                for (int i = 0; i < searchResults.Count; i++)
                 {
                     var result = searchResults[i];
                     result.Title = result.Title.TrimEnd(", complete genome")
@@ -94,14 +96,14 @@
                 }
 
 
-                var data = new Dictionary<string, object> 
-                { 
-                    { 
+                var data = new Dictionary<string, object>
+                {
+                    {
                         "results", sequencesData.Values
                                                 .OrderByDescending(r => r.RemoteVersion - r.LocalVersion)
                                                 .ThenBy(r => r.Updated)
-                                                .ThenBy(r => r.NameUpdated) 
-                    } 
+                                                .ThenBy(r => r.NameUpdated)
+                    }
                 };
 
                 return new Dictionary<string, object>

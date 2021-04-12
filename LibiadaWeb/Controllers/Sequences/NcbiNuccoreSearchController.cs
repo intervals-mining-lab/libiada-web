@@ -52,14 +52,14 @@
                         NcbiHelper.FormatNcbiSearchTerm(searchQuery);
                 }
 
-                List<NuccoreObject> searchResults = NcbiHelper.SearchInNuccoreDb(searchQuery, importPartial);
+                List<NuccoreObject> searchResults = NcbiHelper.ExecuteESummaryRequest(searchQuery, importPartial);
 
                 List<NuccoreObject> unfilteredSearchResults;
                 List<NuccoreObject> filteresOutSearchResults = searchResults;
                 string[] accessions;
                 if (!importPartial)
                 {
-                    unfilteredSearchResults = NcbiHelper.SearchInNuccoreDb(searchQuery, true);
+                    unfilteredSearchResults = NcbiHelper.ExecuteESummaryRequest(searchQuery, true);
                     filteresOutSearchResults = unfilteredSearchResults.Except(searchResults).ToList();
                     accessions = unfilteredSearchResults.Select(no => no.AccessionVersion.Split('.')[0]).Distinct().ToArray();
                 }

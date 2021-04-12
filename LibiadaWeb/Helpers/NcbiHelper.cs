@@ -8,6 +8,7 @@
     using System.Net;
     using System.Text.RegularExpressions;
     using System.Threading;
+    using System.Xml;
 
     using Bio;
     using Bio.IO;
@@ -16,10 +17,9 @@
 
     using Newtonsoft.Json;
 
-    using LibiadaCore.Extensions;
-
     using LibiadaWeb.Models.NcbiSequencesData;
     using Newtonsoft.Json.Linq;
+
 
     /// <summary>
     /// The ncbi helper.
@@ -188,57 +188,103 @@
         /// <returns>
         /// 
         /// </returns>
-        public static List<NuccoreObject> SearchInNuccoreDb(string searchTerm, bool includePartial)
+        public static List<NuccoreObject> ExecuteESummaryRequest(string searchTerm, bool includePartial)
         {
-            
-            var urlEsearch = $"esearch.fcgi?db=nuccore&term={searchTerm}&usehistory=y&retmode=json";
-            var esearchResponseString = GetResponceString(urlEsearch);
-            ESearchResult eSearchResult = JsonConvert.DeserializeObject<ESearchResponce>(esearchResponseString).ESearchResult;
+            (string ncbiWebEnvironment, string queryKey) = ExecuteESearchRequest(searchTerm);
+            return ExecuteESummaryRequest(ncbiWebEnvironment, queryKey, includePartial);
+        }
+
+        public static List<NuccoreObject> ExecuteESummaryRequest(string ncbiWebEnvironment, string queryKey, bool includePartial)
+        {
             var nuccoreObjects = new List<NuccoreObject>();
-            const short retmax = 500; 
+            const short retmax = 500;
             int retstart = 0;
-            int resultsCount = eSearchResult.Count;
+            var eSummaryResults = new List<ESummaryResult>();
+
             do
             {
-                var urlEsummary = $"esummary.fcgi?db=nuccore" +
-                                  $"&usehistory=y&WebEnv={eSearchResult.NcbiWebEnvironment}" +
-                                  $"&query_key={eSearchResult.QueryKey}" +
-                                  $"&retmode=json&retmax={retmax}&restart={retstart}";
+                var urlEsummary = $"esummary.fcgi?db=nuccore&retmode=json" +
+                                  $"&WebEnv={ncbiWebEnvironment}" +
+                                  $"&query_key={queryKey}" +
+                                  $"&retmax={retmax}&retstart={retstart}";
                 var esummaryResponse = GetResponceString(urlEsummary);
                 retstart += retmax;
 
                 var esummaryResultJObject = JObject.Parse(esummaryResponse)["result"];
-
-                // removing array of uids because it breakes deserialization
-                var eSummaryResults = esummaryResultJObject
-                                        .Children<JProperty>()
-                                        .Where(j => j.Name != "uids")
-                                        .Select(j => j.Value.ToObject<ESummaryResult>())
-                                        .ToList();
-
-                // alternative implementation
-                //((JObject)esummaryResultJObject).Remove("uids");
-                //var eSummaryResults = JsonConvert.DeserializeObject<Dictionary<string, ESummaryResult>>(esummaryResultJObject.ToString()).Values;
-
-                foreach (ESummaryResult result in eSummaryResults)
+                if (esummaryResultJObject != null)
                 {
-                    bool isPartial = result.Title.Contains("partial") || string.IsNullOrEmpty(result.Completeness);
-                    if (includePartial || !isPartial)
+                    // removing array of uids because it breakes deserialization
+                    eSummaryResults = esummaryResultJObject
+                                            .Children<JProperty>()
+                                            .Where(j => j.Name != "uids")
+                                            .Select(j => j.Value.ToObject<ESummaryResult>())
+                                            .ToList();
+
+                    // alternative implementation
+                    //((JObject)esummaryResultJObject).Remove("uids");
+                    //var eSummaryResults = JsonConvert.DeserializeObject<Dictionary<string, ESummaryResult>>(esummaryResultJObject.ToString()).Values;
+
+                    foreach (ESummaryResult result in eSummaryResults)
                     {
-                        NuccoreObject nuccoreObject = new NuccoreObject
+                        bool isPartial = result.Title.Contains("partial") || string.IsNullOrEmpty(result.Completeness);
+                        if (includePartial || !isPartial)
                         {
-                            Title = result.Title,
-                            Organism = result.Organism,
-                            AccessionVersion = result.AccessionVersion,
-                            Completeness = result.Completeness,
-                            UpdateDate = result.UpdateDate
-                        };
-                        nuccoreObjects.Add(nuccoreObject);
+                            NuccoreObject nuccoreObject = new NuccoreObject
+                            {
+                                Title = result.Title,
+                                Organism = result.Organism,
+                                AccessionVersion = result.AccessionVersion,
+                                Completeness = result.Completeness,
+                                UpdateDate = result.UpdateDate
+                            };
+                            nuccoreObjects.Add(nuccoreObject);
+                        }
                     }
                 }
-            } while (retstart < resultsCount);
+            } while (eSummaryResults.Count == retmax);
 
             return nuccoreObjects;
+        }
+
+        /// <summary>
+        /// Requests web environment and query key from ncbi for given seqrch query.
+        /// </summary>
+        /// <param name="searchTerm">
+        /// Search term of first part of search term.
+        /// </param>
+        /// <returns>
+        /// Tuple of NcbiWebEnvironment and QueryKey <see cref="string"/>s.
+        /// </returns>
+        public static (string, string) ExecuteESearchRequest(string searchTerm)
+        {
+            var urlEsearch = $"esearch.fcgi?db=nuccore&term={searchTerm}&usehistory=y&retmode=json";
+            var esearchResponseString = GetResponceString(urlEsearch);
+            ESearchResult eSearchResult = JsonConvert.DeserializeObject<ESearchResponce>(esearchResponseString).ESearchResult;
+            return (eSearchResult.NcbiWebEnvironment, eSearchResult.QueryKey);
+        }
+
+        /// <summary>
+        /// Execute
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        public static (string, string) ExecuteEPostRequest(string ids)
+        {
+            var urlEPost = $"epost.fcgi";
+            string requestResult;
+            using (var webClient = new WebClient())
+            {
+                webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+                Uri url = new Uri(BaseUrl + urlEPost);
+
+                // TODO: make email global parameter
+                requestResult = webClient.UploadString(url, $"db=nuccore&id={ids}");
+            }
+
+            XmlDocument xmlReader = new XmlDocument();
+            xmlReader.LoadXml(requestResult);
+            var result = xmlReader.LastChild;
+            return (result["WebEnv"].FirstChild.Value, result["QueryKey"].FirstChild.Value);
         }
 
         /// <summary>
@@ -260,7 +306,7 @@
         {
             if (minLength == null && maxLength == null)
             {
-                return $"\"{searchTerm}\"[Organism]";                
+                return $"\"{searchTerm}\"[Organism]";
             }
 
             return $"\"{searchTerm}\"[Organism] AND (\"{minLength ?? 1}\"[SLEN] : \"{maxLength ?? int.MaxValue}\"[SLEN])";
@@ -335,21 +381,23 @@
         private static Stream GetResponseStream(string url)
         {
             string resultUrl = BaseUrl + url;
-            var downloader = new WebClient();
+            
             var memoryStream = new MemoryStream();
 
             lock (SyncRoot)
             {
                 WaitForRequest();
-
-                using (Stream stream = downloader.OpenRead(resultUrl))
+                using(var downloader = new WebClient())
                 {
-                    if (stream == null)
+                    using (Stream stream = downloader.OpenRead(resultUrl))
                     {
-                        throw new Exception("Response stream was null.");
-                    }
+                        if (stream == null)
+                        {
+                            throw new Exception("Response stream was null.");
+                        }
 
-                    stream.CopyTo(memoryStream);
+                        stream.CopyTo(memoryStream);
+                    }
                 }
             }
 

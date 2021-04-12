@@ -194,13 +194,17 @@
                     formatter.Format(stream, bioSequences);
                     fasta = Encoding.ASCII.GetString(stream.ToArray());
                 }
-                
-                var webClient = new WebClient();
-                webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-                Uri url = new Uri("https://www.ebi.ac.uk/Tools/services/rest/clustalo/run");
 
-                // TODO: make email global parameter
-                var result = webClient.UploadString(url, $"email=info@foarlab.org&sequence={fasta}");
+                string result;
+                using (var webClient = new WebClient())
+                {
+                    webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+                    Uri url = new Uri("https://www.ebi.ac.uk/Tools/services/rest/clustalo/run");
+
+                    // TODO: make email global parameter
+                    result = webClient.UploadString(url, $"email=info@foarlab.org&sequence={fasta}");
+                }
+                    
                 return JsonConvert.SerializeObject(new { Status = "Success", Result = result }) ;
             }
             catch (Exception ex)
