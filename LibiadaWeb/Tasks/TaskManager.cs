@@ -119,6 +119,7 @@
                     signalrHub.Send(TaskEvent.AddTask, task.TaskData);
                 }
             }
+
             ManageTasks();
             return task.TaskData.Id;
         }
@@ -214,6 +215,7 @@
             Task result;
             lock (tasks)
             {
+                // TODO: check if task with id exists
                 Task task = tasks.Single(t => t.TaskData.Id == id);
 
                 lock (task)

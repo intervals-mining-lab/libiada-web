@@ -279,7 +279,7 @@
 
 		$scope.loading = true;
 
-		$http.get("/api/TaskManagerWebApi/" + $scope.taskId)
+		$http.get("/api/TaskManagerWebApi/", { params: { id: $scope.taskId } })
 			.then(function (data) {
 				MapModelFromJson($scope, JSON.parse(data.data));
 
@@ -296,10 +296,7 @@
 				alert("Failed loading characteristic data");
 				$scope.loading = false;
 			});
-
-
 	}
 
 	angular.module("libiada").controller("CalculationResultCtrl", ["$scope", "$http", calculationResult]);
-	
 }

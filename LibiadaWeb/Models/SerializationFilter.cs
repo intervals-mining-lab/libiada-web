@@ -1,21 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Newtonsoft.Json.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System.Reflection;
-
-namespace LibiadaWeb.Models
+﻿namespace LibiadaWeb.Models
 {
-    public class ShouldSerializeContractResolver:DefaultContractResolver
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Newtonsoft.Json.Serialization;
+    using Newtonsoft.Json;
+    using System.Reflection;
+
+    public class SerializationFilter : DefaultContractResolver
     {
         private IEnumerable<string> ignoredProperties;
-        public ShouldSerializeContractResolver(IEnumerable<string> propNamesToIgnore)
+
+        public SerializationFilter(IEnumerable<string> propNamesToIgnore)
         {
             ignoredProperties = propNamesToIgnore;
         }
+
         protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
         {
             JsonProperty property = base.CreateProperty(member, memberSerialization);

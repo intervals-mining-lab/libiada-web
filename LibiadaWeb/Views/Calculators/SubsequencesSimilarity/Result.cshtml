@@ -50,13 +50,13 @@
             </tr>
         </thead>
         <tbody>
-                <tr ng-repeat="similarSubsequence in similarSubsequences" ng-init="first = firstSequenceSubsequences[similarSubsequence.First]; second = secondSequenceSubsequences[similarSubsequence.Second]">
+                <tr ng-repeat="similarSubsequence in similarSubsequences" ng-init="first = firstSequenceSubsequences[similarSubsequence.Item1]; second = secondSequenceSubsequences[similarSubsequence.Item2]">
                     <td>
                         {{first.Feature}}
                     </td>
                     <td>
                         <ul class="list-unstyled">
-                            <li ng-repeat="attribute in firstSequenceAttributes[similarSubsequence.First]">
+                            <li ng-repeat="attribute in firstSequenceAttributes[similarSubsequence.Item1]">
                                 {{attribute.Value}}
                             </li>
                         </ul>
@@ -84,7 +84,7 @@
                     </td>
                     <td>
                         <ul class="list-unstyled">
-                            <li ng-repeat="attribute in secondSequenceAttributes[similarSubsequence.Second]">
+                            <li ng-repeat="attribute in secondSequenceAttributes[similarSubsequence.Item2]">
                                 {{attribute.Value}}
                             </li>
                         </ul>

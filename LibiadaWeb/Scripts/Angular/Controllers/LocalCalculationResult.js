@@ -107,19 +107,30 @@
 			return $scope.lineChart ? d.x : d.y;
         }
 
-        function calculateLocalCharacteristicsSimilarityMatrix() {
-            $http.get("/api/LocalCalculationWebApi?taskId=" + $scope.taskId
-                    + "&aligner=" + $scope.aligner.Value
-                    + "&distanceCalculator=" + $scope.distanceCalculator.Value
-                    + "&aggregator=" + $scope.aggregator.Value)
-                .then(function (result) {
-                    $scope.comparisonMatrix = JSON.parse(result.data);
+		function calculateLocalCharacteristicsSimilarityMatrix() {
+			$http.get("/api/LocalCalculationWebApi", {
+				params: {
+					taskId: $scope.taskId,
+					aligner: $scope.aligner.Value,
+					distanceCalculator: $scope.distanceCalculator.Value,
+					aggregator: $scope.aggregator.Value
+				}
+			}).then(function (result) {
+				const response = JSON.parse(result.data)
+				$scope.comparisonMatrix = response.result;
+				$scope.usedAligner = $scope.aligners[response.aligner - 1].Text;
+				$scope.usedDistanceCalculator = $scope.distanceCalculators[response.distanceCalculator - 1].Text;
+				$scope.usedAggregator = $scope.aggregators[response.aggregator - 1].Text;
                 }, function (error) {
-
-                    alert("Failed loading alignment data");
-
+					alert("Failed loading alignment data");
                     $scope.loading = false;
                 });
+		}
+
+		$scope.isCharacteristicsTableVisible = false;
+
+		function changeCharacteristicsTableVisibility() {
+			$scope.isCharacteristicsTableVisible = true;
         }
 
         function draw() {
@@ -239,6 +250,7 @@
 						.attr('fill', 'none');
 				});
 			}
+
 			// draw dots
 			svg.selectAll(".dot")
 				.data($scope.points)
@@ -302,7 +314,8 @@
 				.style("font-size", "9pt");
 		}
 
-        $scope.calculateLocalCharacteristicsSimilarityMatrix = calculateLocalCharacteristicsSimilarityMatrix;
+		$scope.calculateLocalCharacteristicsSimilarityMatrix = calculateLocalCharacteristicsSimilarityMatrix;
+		$scope.changeCharacteristicsTableVisibility = changeCharacteristicsTableVisibility;
 		$scope.draw = draw;
 		$scope.fillPoints = fillPoints;
 		$scope.fillPointTooltip = fillPointTooltip;
@@ -321,7 +334,7 @@
 		var location = window.location.href.split("/");
 		$scope.taskId = location[location.length - 1];
 
-		$http.get("/api/TaskManagerWebApi/" + $scope.taskId)
+		$http.get("/api/TaskManagerWebApi/", { params: { id: $scope.taskId } })
 			.then(function (data) {
 				MapModelFromJson($scope, JSON.parse(data.data));
 

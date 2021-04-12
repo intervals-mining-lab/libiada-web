@@ -1,25 +1,35 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
+    using System;
     using System.Collections.Generic;
     using System.Data.Entity;
+    using System.IO;
     using System.Linq;
+    using System.Net;
+    using System.Text;
     using System.Web.Mvc;
+
+    using Newtonsoft.Json;
 
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models;
     using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
     using LibiadaWeb.Tasks;
 
-    using Newtonsoft.Json;
+    using Bio.IO.FastA;
+    using Bio;
+
+    using static LibiadaWeb.Models.Calculators.SubsequencesCharacteristicsCalculator;
 
     using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
+    using Attribute = LibiadaWeb.Attribute;
 
-    using static Models.Calculators.SubsequencesCharacteristicsCalculator;
 
     /// <summary>
     /// The subsequences distribution controller.
@@ -108,11 +118,11 @@
                     {
                         subsequencesCharacteristicsNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[k]);
                         subsequencesCharacteristicsList[k] = new SelectListItem
-                                                                 {
-                                                                     Value = k.ToString(),
-                                                                     Text = subsequencesCharacteristicsNames[k],
-                                                                     Selected = false
-                                                                 };
+                        {
+                            Value = k.ToString(),
+                            Text = subsequencesCharacteristicsNames[k],
+                            Selected = false
+                        };
                     }
 
                     double[] characteristics = SequencesCharacteristicsCalculator.Calculate(sequenceIds, characteristicLinkId);
@@ -151,6 +161,56 @@
                         { "data", JsonConvert.SerializeObject(resultData) }
                     };
                 });
+        }
+
+
+        /// <summary>
+        /// Creates clustalw alignment job
+        /// and returns it's id.
+        /// </summary>
+        /// <param name="subsequencesIds">
+        /// Ids of subsequences selected for alignment
+        /// </param>
+        /// <returns>
+        /// JSON containing result status (Success / Error)
+        /// and remote job id or errror message.
+        /// </returns>
+        public string  CreateAlignmentTask(long[] subsequencesIds)
+        {
+            try
+            {
+                ISequence[] bioSequences;
+
+                using (var db = new LibiadaWebEntities())
+                {
+                    var subsequenceExtractor = new SubsequenceExtractor(db);
+                    bioSequences = subsequenceExtractor.GetBioSequencesForFastaConverter(subsequencesIds);
+                }
+
+                string fasta;
+                FastAFormatter formatter = new FastAFormatter();
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    formatter.Format(stream, bioSequences);
+                    fasta = Encoding.ASCII.GetString(stream.ToArray());
+                }
+
+                string result;
+                using (var webClient = new WebClient())
+                {
+                    webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+                    Uri url = new Uri("https://www.ebi.ac.uk/Tools/services/rest/clustalo/run");
+
+                    // TODO: make email global parameter
+                    result = webClient.UploadString(url, $"email=info@foarlab.org&sequence={fasta}");
+                }
+                    
+                return JsonConvert.SerializeObject(new { Status = "Success", Result = result }) ;
+            }
+            catch (Exception ex)
+            {
+                return JsonConvert.SerializeObject(new { Status = "Error", ex.Message });
+            }
         }
     }
 }

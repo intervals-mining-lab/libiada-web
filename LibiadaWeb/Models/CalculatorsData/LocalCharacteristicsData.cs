@@ -1,6 +1,5 @@
 ﻿namespace LibiadaWeb.Models.CalculatorsData
 {
-
     public class LocalCharacteristicsData
     {
         public string matterName;

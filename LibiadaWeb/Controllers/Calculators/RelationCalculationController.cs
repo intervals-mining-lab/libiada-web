@@ -209,7 +209,7 @@
                
                             string json = JsonConvert.SerializeObject(result, new JsonSerializerSettings()
                             {
-                                ContractResolver = new ShouldSerializeContractResolver(new[] 
+                                ContractResolver = new SerializationFilter(new[] 
                                 { 
                                     "FirstElementBinaryCharacteristic", 
                                     "SecondElementBinaryCharacteristic",

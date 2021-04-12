@@ -1,0 +1,5788 @@
+
+1. Bovine coronavirus strain Mebus, complete genome
+31,032 bp linear RNA 
+U00735.2 GI:30061510
+
+2. Bovine coronavirus hemagglutinin (HE) gene, complete cds; spike protein S1 subunit (S1) gene, partial cds; and 4.9 kDa putative non-structural protein, 4.8 kDa putative non-structural protein, 12.7 kDa putative non-structural protein, and E small membrane protein genes, complete cds
+4,663 bp linear RNA 
+AH010363.2 GI:1015539456
+
+3. Bovine coronavirus isolate Winter dysentery bovine coronavirus Quebec BCQ.2590 haemagglutinin gene, complete cds; spike protein S1 subunit (S1) gene, partial cds; and 4.9 kDa putative non-structural protein, 4.8 kDa putative non-structural protein, 12.7 kDa putative non-structural protein, and E small membrane protein genes, complete cds
+4,777 bp linear RNA 
+AH010256.4 GI:1015637172
+
+4. Bovine coronavirus isolate RVLC7 spike protein gene, complete cds
+4,092 bp linear RNA 
+KF272919.1 GI:558095274
+
+5. Bovine coronavirus isolate RVLC10 spike protein S1 subunit gene, partial cds
+464 bp linear RNA 
+KF272914.1 GI:558095264
+
+6. Bovine coronavirus isolate RVLC9 spike protein S1 subunit gene, partial cds
+464 bp linear RNA 
+KF272912.1 GI:558095260
+
+7. Bovine coronavirus isolate RVLC7 spike protein S1 subunit gene, partial cds
+464 bp linear RNA 
+KF272910.1 GI:558095256
+
+8. Bovine coronavirus isolate RVLC4 spike protein S1 subunit gene, partial cds
+464 bp linear RNA 
+KF272908.1 GI:558095252
+
+9. Bovine coronavirus gene for S peplomer polypeptide precursor, complete cds
+4,125 bp linear RNA 
+D00662.1 GI:221138
+
+10. Bovine coronavirus strain LY138 hemagglutinin/esterase glycoprotein (HE) gene
+1,304 bp linear RNA 
+M84486.1 GI:323349
+
+11. Bovine coronavirus strain L9 hemagglutinin/esterase glycoprotein (HE) gene
+1,304 bp linear RNA 
+M76372.1 GI:323348
+
+12. Bovine coronavirus isolate Menofyia/2019 nucleocapsid protein (N) gene, partial cds
+234 bp linear RNA 
+MN053321.1 GI:1800245558
+
+13. Bovine coronavirus isolate Ranjbar-Alborz spike glycoprotein (S) gene, partial cds
+997 bp linear RNA 
+MK932866.1 GI:1784269638
+
+14. Bovine coronavirus isolate Ranjbar-Ghoom56 spike glycoprotein (S) gene, partial cds
+997 bp linear RNA 
+MK932865.1 GI:1784269635
+
+15. Bovine coronavirus isolate Ranjbar-Eslamshahr spike glycoprotein (S) gene, partial cds
+997 bp linear RNA 
+MK932864.1 GI:1784269632
+
+16. Bovine coronavirus isolate Ranjbar-Alborz41 spike glycoprotein (S) gene, partial cds
+997 bp linear RNA 
+MK932863.1 GI:1784269629
+
+17. Bovine coronavirus isolate Ranjbar-Ghazvin19 spike glycoprotein (S) gene, partial cds
+1,118 bp linear RNA 
+MK932862.1 GI:1784269626
+
+18. Bovine coronavirus isolate Ranjbar-Alborz nucleocapsid (N) gene, partial cds
+669 bp linear RNA 
+MK932861.1 GI:1784269571
+
+19. Bovine coronavirus strain BCoV-GX-NN190220 nucleocapsid protein gene, partial cds
+730 bp linear RNA 
+MK757494.1 GI:1769008114
+
+20. Bovine coronavirus strain BCoV-GX-HC181120 nucleocapsid protein gene, partial cds
+730 bp linear RNA 
+MK757493.1 GI:1769008112
+
+21. Bovine coronavirus strain BCoV-GX-NN190313 nucleocapsid protein gene, partial cds
+730 bp linear RNA 
+MK757492.1 GI:1769008110
+
+22. Bovine coronavirus isolate 717_S spike protein (S) gene, partial cds
+471 bp linear RNA 
+MK318179.1 GI:1624515953
+
+23. Bovine coronavirus isolate 1837_S spike protein (S) gene, partial cds
+726 bp linear RNA 
+MK318178.1 GI:1624515951
+
+24. Bovine coronavirus isolate 1865_S spike protein (S) gene, partial cds
+726 bp linear RNA 
+MK318177.1 GI:1624515949
+
+25. Bovine coronavirus isolate 1838_S spike protein (S) gene, partial cds
+726 bp linear RNA 
+MK318176.1 GI:1624515947
+
+26. Bovine coronavirus isolate 2682_S spike protein (S) gene, partial cds
+460 bp linear RNA 
+MK318175.1 GI:1624515945
+
+27. Bovine coronavirus isolate 2968_S spike protein (S) gene, partial cds
+457 bp linear RNA 
+MK318174.1 GI:1624515943
+
+28. Bovine coronavirus isolate 3025_S spike protein (S) gene, partial cds
+458 bp linear RNA 
+MK318173.1 GI:1624515941
+
+29. Bovine coronavirus isolate 3030_S spike protein (S) gene, partial cds
+470 bp linear RNA 
+MK318172.1 GI:1624515939
+
+30. Bovine coronavirus isolate 3137_S spike protein (S) gene, partial cds
+459 bp linear RNA 
+MK318171.1 GI:1624515937
+
+31. Bovine coronavirus isolate 3145_S spike protein (S) gene, partial cds
+460 bp linear RNA 
+MK318170.1 GI:1624515935
+
+32. Bovine coronavirus isolate 3338_S spike protein (S) gene, partial cds
+420 bp linear RNA 
+MK318169.1 GI:1624515933
+
+33. Bovine coronavirus isolate 3759_S spike protein (S) gene, partial cds
+457 bp linear RNA 
+MK318168.1 GI:1624515931
+
+34. Bovine coronavirus isolate 3859_S spike protein (S) gene, partial cds
+429 bp linear RNA 
+MK318167.1 GI:1624515929
+
+35. Bovine coronavirus isolate 3974_S spike protein (S) gene, partial cds
+430 bp linear RNA 
+MK318166.1 GI:1624515927
+
+36. Bovine coronavirus isolate 1863_S spike protein (S) gene, partial cds
+726 bp linear RNA 
+MK318165.1 GI:1624515925
+
+37. Bovine coronavirus isolate 1864_S spike protein (S) gene, partial cds
+726 bp linear RNA 
+MK318164.1 GI:1624515923
+
+38. Bovine coronavirus isolate 1866_S spike protein (S) gene, partial cds
+726 bp linear RNA 
+MK318163.1 GI:1624515921
+
+39. Bovine coronavirus isolate 2340_S spike protein (S) gene, partial cds
+726 bp linear RNA 
+MK318162.1 GI:1624515919
+
+40. Bovine coronavirus isolate 2344_S spike protein (S) gene, partial cds
+725 bp linear RNA 
+MK318161.1 GI:1624515917
+
+41. Bovine coronavirus isolate 2628_S spike protein (S) gene, partial cds
+726 bp linear RNA 
+MK318160.1 GI:1624515915
+
+42. Bovine coronavirus isolate 2644_S spike protein (S) gene, partial cds
+726 bp linear RNA 
+MK318159.1 GI:1624515913
+
+43. Bovine coronavirus isolate 2719_S spike protein (S) gene, partial cds
+726 bp linear RNA 
+MK318158.1 GI:1624515911
+
+44. Bovine coronavirus isolate 2967_S spike protein (S) gene, partial cds
+725 bp linear RNA 
+MK318157.1 GI:1624515909
+
+45. Bovine coronavirus isolate 3135_S spike protein (S) gene, partial cds
+726 bp linear RNA 
+MK318156.1 GI:1624515907
+
+46. Bovine coronavirus isolate 3138_S spike protein (S) gene, partial cds
+726 bp linear RNA 
+MK318155.1 GI:1624515905
+
+47. Bovine coronavirus isolate 3290_S spike protein (S) gene, partial cds
+684 bp linear RNA 
+MK318154.1 GI:1624515903
+
+48. Bovine coronavirus isolate 3292_S spike protein (S) gene, partial cds
+696 bp linear RNA 
+MK318153.1 GI:1624515901
+
+49. Bovine coronavirus isolate 3858_S spike protein (S) gene, partial cds
+726 bp linear RNA 
+MK318152.1 GI:1624515899
+
+50. Bovine coronavirus isolate 3897_S spike protein (S) gene, partial cds
+726 bp linear RNA 
+MK318151.1 GI:1624515897
+
+51. Bovine coronavirus isolate 3898_S spike protein (S) gene, partial cds
+725 bp linear RNA 
+MK318150.1 GI:1624515895
+
+52. Bovine coronavirus isolate QHGC1 nucleocapsid protein gene, partial cds
+1,344 bp linear RNA 
+MH475915.1 GI:1583997843
+
+53. Bovine coronavirus isolate QHGC1 hemagglutinin gene, partial cds
+1,272 bp linear RNA 
+MH475914.1 GI:1583997841
+
+54. Bovine coronavirus isolate QHGC1 spike protein gene, partial cds
+774 bp linear RNA 
+MH475913.1 GI:1583997839
+
+55. Bovine coronavirus isolate HT317 spike gene, complete cds
+4,092 bp linear RNA 
+MK046011.1 GI:1583081024
+
+56. Bovine coronavirus isolate HT316 spike gene, complete cds
+4,092 bp linear RNA 
+MK046010.1 GI:1583081022
+
+57. Bovine coronavirus isolate HT315 spike gene, complete cds
+4,092 bp linear RNA 
+MK046009.1 GI:1583081020
+
+58. Bovine coronavirus isolate HCM307 spike gene, complete cds
+4,092 bp linear RNA 
+MK046008.1 GI:1583081018
+
+59. Bovine coronavirus isolate HCM306 spike gene, complete cds
+4,092 bp linear RNA 
+MK046007.1 GI:1583081016
+
+60. Bovine coronavirus isolate HCM305 spike gene, complete cds
+4,092 bp linear RNA 
+MK046006.1 GI:1583081014
+
+61. Bovine coronavirus isolate HCM304 spike gene, complete cds
+4,092 bp linear RNA 
+MK046005.1 GI:1583081012
+
+62. Bovine coronavirus isolate HT293 spike gene, complete cds
+4,092 bp linear RNA 
+MK046004.1 GI:1583081010
+
+63. Bovine coronavirus isolate NA226 spike gene, complete cds
+4,092 bp linear RNA 
+MK046003.1 GI:1583081008
+
+64. Bovine coronavirus isolate HT317 hemagglutinin-esterase gene, complete cds
+1,275 bp linear RNA 
+MK046002.1 GI:1583081006
+
+65. Bovine coronavirus isolate HT316 hemagglutinin-esterase gene, complete cds
+1,275 bp linear RNA 
+MK046001.1 GI:1583081004
+
+66. Bovine coronavirus isolate HT315 hemagglutinin-esterase gene, complete cds
+1,275 bp linear RNA 
+MK046000.1 GI:1583081002
+
+67. Bovine coronavirus isolate HCM307 hemagglutinin-esterase gene, complete cds
+1,275 bp linear RNA 
+MK045999.1 GI:1583081000
+
+68. Bovine coronavirus isolate HCM306 hemagglutinin-esterase gene, complete cds
+1,275 bp linear RNA 
+MK045998.1 GI:1583080998
+
+69. Bovine coronavirus isolate HCM305 hemagglutinin-esterase gene, complete cds
+1,275 bp linear RNA 
+MK045997.1 GI:1583080996
+
+70. Bovine coronavirus isolate HCM304 hemagglutinin-esterase gene, complete cds
+1,275 bp linear RNA 
+MK045996.1 GI:1583080994
+
+71. Bovine coronavirus isolate HT293 hemagglutinin-esterase gene, complete cds
+1,275 bp linear RNA 
+MK045995.1 GI:1583080992
+
+72. Bovine coronavirus isolate NA226 hemagglutinin-esterase gene, complete cds
+1,275 bp linear RNA 
+MK045994.1 GI:1583080990
+
+73. Bovine coronavirus isolate VP200 hemagglutinin-esterase gene, complete cds
+1,275 bp linear RNA 
+MK045993.1 GI:1583080988
+
+74. Bovine coronavirus isolate MC199 hemagglutinin-esterase gene, complete cds
+1,275 bp linear RNA 
+MK045992.1 GI:1583080986
+
+75. Bovine coronavirus strain Dakahleya-strain3 nucleocapsid (N) gene, partial cds
+234 bp linear RNA 
+MK153064.1 GI:1571071741
+
+76. Bovine coronavirus strain Dakahleya-strain2 nucleocapsid (N) gene, partial cds
+234 bp linear RNA 
+MK153063.1 GI:1571071739
+
+77. Bovine coronavirus strain Dakahleya-strain1 nucleocapsid (N) gene, partial cds
+234 bp linear RNA 
+MK153062.1 GI:1571071737
+
+78. Bovine coronavirus strain BCOV-China/SWUN/HN3/2018 spike glycoprotein gene, complete cds
+4,092 bp linear RNA 
+MK095186.1 GI:1547164693
+
+79. Bovine coronavirus strain BCOV-China/SWUN/HN2/2018 spike glycoprotein gene, complete cds
+4,092 bp linear RNA 
+MK095185.1 GI:1547164691
+
+80. Bovine coronavirus strain BCOV-China/SWUN/HN1/2018 spike glycoprotein gene, complete cds
+4,092 bp linear RNA 
+MK095184.1 GI:1547164689
+
+81. Bovine coronavirus strain BCOV-China/SWUN/LN5/2018 spike glycoprotein gene, complete cds
+4,092 bp linear RNA 
+MK095183.1 GI:1547164687
+
+82. Bovine coronavirus strain BCOV-China/SWUN/LN4/2018 spike glycoprotein gene, complete cds
+4,092 bp linear RNA 
+MK095182.1 GI:1547164685
+
+83. Bovine coronavirus strain BCOV-China/SWUN/LN3/2018 spike glycoprotein gene, complete cds
+4,092 bp linear RNA 
+MK095181.1 GI:1547164683
+
+84. Bovine coronavirus strain BCOV-China/SWUN/LN2/2018 spike glycoprotein gene, complete cds
+4,092 bp linear RNA 
+MK095180.1 GI:1547164681
+
+85. Bovine coronavirus strain BCOV-China/SWUN/LN1/2018 spike glycoprotein gene, complete cds
+4,092 bp linear RNA 
+MK095179.1 GI:1547164678
+
+86. Bovine coronavirus strain BCOV-China/SWUN/SX2/2018 spike glycoprotein gene, complete cds
+4,092 bp linear RNA 
+MK095178.1 GI:1547164675
+
+87. Bovine coronavirus strain BCOV-China/SWUN/SX1/2018 spike glycoprotein gene, complete cds
+4,092 bp linear RNA 
+MK095177.1 GI:1547164672
+
+88. Bovine coronavirus strain BCOV-China/SWUN/SC3/2017 spike glycoprotein gene, complete cds
+4,092 bp linear RNA 
+MK095176.1 GI:1547164670
+
+89. Bovine coronavirus strain BCOV-China/SWUN/SC2/2017 spike glycoprotein gene, complete cds
+4,092 bp linear RNA 
+MK095175.1 GI:1547164668
+
+90. Bovine coronavirus strain BCOV-China/SWUN/SC1/2017 spike glycoprotein gene, complete cds
+4,092 bp linear RNA 
+MK095174.1 GI:1547164665
+
+91. Bovine coronavirus strain BCOV-China/SWUN/HN3/2018 nucleocapsid protein gene, complete cds
+1,347 bp linear RNA 
+MK095173.1 GI:1547164070
+
+92. Bovine coronavirus strain BCOV-China/SWUN/HN2/2018 nucleocapsid protein gene, complete cds
+1,347 bp linear RNA 
+MK095172.1 GI:1547164065
+
+93. Bovine coronavirus strain BCOV-China/SWUN/HN1/2018 nucleocapsid protein gene, complete cds
+1,347 bp linear RNA 
+MK095171.1 GI:1547164060
+
+94. Bovine coronavirus strain BCOV-China/SWUN/LN5/2018 nucleocapsid protein gene, complete cds
+1,347 bp linear RNA 
+MK095170.1 GI:1547164055
+
+95. Bovine coronavirus strain BCOV-China/SWUN/LN4/2018 nucleocapsid protein gene, complete cds
+1,347 bp linear RNA 
+MK095169.1 GI:1547164050
+
+96. Bovine coronavirus strain BCOV-China/SWUN/LN3/2018 nucleocapsid protein gene, complete cds
+1,347 bp linear RNA 
+MK095168.1 GI:1547164045
+
+97. Bovine coronavirus strain BCOV-China/SWUN/LN2/2018 nucleocapsid protein gene, complete cds
+1,347 bp linear RNA 
+MK095167.1 GI:1547164040
+
+98. Bovine coronavirus strain BCOV-China/SWUN/LN1/2018 nucleocapsid protein gene, complete cds
+1,347 bp linear RNA 
+MK095166.1 GI:1547164035
+
+99. Bovine coronavirus strain BCOV-China/SWUN/SX2/2018 nucleocapsid protein gene, complete cds
+1,347 bp linear RNA 
+MK095165.1 GI:1547164030
+
+100. Bovine coronavirus strain BCOV-China/SWUN/ SX1/2018 nucleocapsid protein gene, complete cds
+1,347 bp linear RNA 
+MK095164.1 GI:1547164025
+
+101. Bovine coronavirus strain BCOV-China/SWUN/SC3/2017 nucleocapsid protein gene, complete cds
+1,347 bp linear RNA 
+MK095163.1 GI:1547164020
+
+102. Bovine coronavirus strain BCOV-China/SWUN/SC2/2017 nucleocapsid protein gene, complete cds
+1,347 bp linear RNA 
+MK095162.1 GI:1547164015
+
+103. Bovine coronavirus strain BCOV-China/SWUN/SC1/2017 nucleocapsid protein gene, complete cds
+1,347 bp linear RNA 
+MK095161.1 GI:1547164010
+
+104. Bovine coronavirus strain BCOV-China/SWUN/HN3/2018 membrane protein gene, complete cds
+693 bp linear RNA 
+MK095160.1 GI:1547163397
+
+105. Bovine coronavirus strain BCOV-China/SWUN/HN2/2018 membrane protein gene, complete cds
+693 bp linear RNA 
+MK095159.1 GI:1547163392
+
+106. Bovine coronavirus strain BCOV-China/SWUN/HN1/2018 membrane protein gene, complete cds
+693 bp linear RNA 
+MK095158.1 GI:1547163387
+
+107. Bovine coronavirus strain BCOV-China/SWUN/LN5/2018 membrane protein gene, complete cds
+693 bp linear RNA 
+MK095157.1 GI:1547163383
+
+108. Bovine coronavirus strain BCOV-China/SWUN/LN4/2018 membrane protein gene, complete cds
+693 bp linear RNA 
+MK095156.1 GI:1547163378
+
+109. Bovine coronavirus strain BCOV-China/SWUN/LN3/2018 membrane protein gene, complete cds
+693 bp linear RNA 
+MK095155.1 GI:1547163373
+
+110. Bovine coronavirus strain BCOV-China/SWUN/LN2/2018 membrane protein gene, complete cds
+693 bp linear RNA 
+MK095154.1 GI:1547163368
+
+111. Bovine coronavirus strain BCOV-China/SWUN/LN1/2018 membrane protein gene, complete cds
+693 bp linear RNA 
+MK095153.1 GI:1547163364
+
+112. Bovine coronavirus strain BCOV-China/SWUN/ SX2/2018 membrane protein gene, complete cds
+693 bp linear RNA 
+MK095152.1 GI:1547163360
+
+113. Bovine coronavirus strain BCOV-China/SWUN/SX1/2018 membrane protein gene, complete cds
+693 bp linear RNA 
+MK095151.1 GI:1547163356
+
+114. Bovine coronavirus strain BCOV-China/SWUN/SC3/2017 membrane protein gene, complete cds
+693 bp linear RNA 
+MK095150.1 GI:1547163352
+
+115. Bovine coronavirus strain BCOV-China/SWUN/SC2/2017 membrane protein gene, complete cds
+693 bp linear RNA 
+MK095149.1 GI:1547163348
+
+116. Bovine coronavirus strain BCOV-China/SWUN/SC1/2017 membrane protein gene, complete cds
+693 bp linear RNA 
+MK095148.1 GI:1547163345
+
+117. Bovine coronavirus strain BCOV-China/SWUN/HN3/2018 hemagglutinin-esterase gene, complete cds
+1,275 bp linear RNA 
+MK095147.1 GI:1547162720
+
+118. Bovine coronavirus strain BCOV-China/SWUN/HN2/2018 hemagglutinin-esterase gene, complete cds
+1,275 bp linear RNA 
+MK095146.1 GI:1547162715
+
+119. Bovine coronavirus strain BCOV-China/SWUN/HN1/2018 hemagglutinin-esterase gene, complete cds
+1,275 bp linear RNA 
+MK095145.1 GI:1547162710
+
+120. Bovine coronavirus strain BCOV-China/SWUN/LN5/2018 hemagglutinin-esterase gene, complete cds
+1,275 bp linear RNA 
+MK095144.1 GI:1547162705
+
+121. Bovine coronavirus strain BCOV-China/SWUN/LN4/2018 hemagglutinin-esterase gene, complete cds
+1,275 bp linear RNA 
+MK095143.1 GI:1547162701
+
+122. Bovine coronavirus strain BCOV-China/SWUN/LN3/2018 hemagglutinin-esterase gene, complete cds
+1,275 bp linear RNA 
+MK095142.1 GI:1547162696
+
+123. Bovine coronavirus strain BCOV-China/SWUN/LN2/2018 hemagglutinin-esterase gene, complete cds
+1,275 bp linear RNA 
+MK095141.1 GI:1547162691
+
+124. Bovine coronavirus strain BCOV-China/SWUN/LN1/2018 hemagglutinin-esterase gene, complete cds
+1,275 bp linear RNA 
+MK095140.1 GI:1547162686
+
+125. Bovine coronavirus strain BCOV-China/SWUN/SX2/2018 hemagglutinin-esterase gene, complete cds
+1,275 bp linear RNA 
+MK095139.1 GI:1547162681
+
+126. Bovine coronavirus strain BCOV-China/SWUN/SX1/2018 hemagglutinin-esterase gene, complete cds
+1,275 bp linear RNA 
+MK095138.1 GI:1547162676
+
+127. Bovine coronavirus strain BCOV-China/SWUN/SC3/2017 hemagglutinin-esterase gene, complete cds
+1,275 bp linear RNA 
+MK095137.1 GI:1547162671
+
+128. Bovine coronavirus strain BCOV-China/SWUN/SC2/2017 hemagglutinin-esterase gene, complete cds
+1,275 bp linear RNA 
+MK095136.1 GI:1547162666
+
+129. Bovine coronavirus strain BCOV-China/SWUN/SC1/2017 hemagglutinin-esterase gene, complete cds
+1,275 bp linear RNA 
+MK095135.1 GI:1547162661
+
+130. Bovine coronavirus strain VP200 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+MH203067.1 GI:1454299510
+
+131. Bovine coronavirus strain MC199 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+MH203066.1 GI:1454299508
+
+132. Bovine coronavirus strain BL104 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+MH203065.1 GI:1454299506
+
+133. Bovine coronavirus strain DT97 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+MH203064.1 GI:1454299504
+
+134. Bovine coronavirus strain BL104 hemagglutinin-esterase (HE) gene, complete cds
+1,275 bp linear RNA 
+MH203063.1 GI:1454296021
+
+135. Bovine coronavirus strain DT97 hemagglutinin-esterase (HE) gene, complete cds
+1,275 bp linear RNA 
+MH203062.1 GI:1454296019
+
+136. Bovine coronavirus strain PL84 hemagglutinin-esterase (HE) gene, complete cds
+1,275 bp linear RNA 
+MH203061.1 GI:1454296017
+
+137. Bovine coronavirus strain PL83 hemagglutinin-esterase (HE) gene, complete cds
+1,275 bp linear RNA 
+MH203060.1 GI:1454296015
+
+138. Bovine coronavirus strain ND65 hemagglutinin-esterase (HE) gene, complete cds
+1,275 bp linear RNA 
+MH203059.1 GI:1454296013
+
+139. Bovine coronavirus strain ND65 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+MH197039.1 GI:1454294256
+
+140. Bovine coronavirus strain PL83 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+MH197038.1 GI:1454294254
+
+141. Bovine coronavirus strain PL84 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+MH197037.1 GI:1454294252
+
+142. UNVERIFIED: Bovine coronavirus genomic sequence
+602 bp linear RNA 
+MG386280.1 GI:1391208542
+
+143. UNVERIFIED: Bovine coronavirus strain Teh-IRIBR-2017 genomic sequence
+370 bp linear RNA 
+MG386279.1 GI:1391208541
+
+144. UNVERIFIED: Bovine coronavirus isolate IRI-Alborz-S mRNA sequence
+630 bp linear mRNA 
+MG859976.1 GI:1390637268
+
+145. UNVERIFIED: Bovine coronavirus isolate IRI-Tehran-S mRNA sequence
+620 bp linear mRNA 
+MG859975.1 GI:1390637267
+
+146. UNVERIFIED: Bovine coronavirus isolate IRI-Isfahan-S mRNA sequence
+626 bp linear mRNA 
+MG859974.1 GI:1390637266
+
+147. UNVERIFIED: Bovine coronavirus isolate IRI-Qom-S mRNA sequence
+610 bp linear mRNA 
+MG859973.1 GI:1390637264
+
+148. UNVERIFIED: Bovine coronavirus isolate IRIB-Qazvin mRNA sequence
+380 bp linear mRNA 
+MG859972.1 GI:1390637263
+
+149. UNVERIFIED: Bovine coronavirus isolate IRIB-saveh mRNA sequence
+404 bp linear mRNA 
+MG859971.1 GI:1390637122
+
+150. UNVERIFIED: Bovine coronavirus isolate IRIB-QOM mRNA sequence
+370 bp linear mRNA 
+MG859970.1 GI:1390637024
+
+151. UNVERIFIED: Bovine coronavirus isolate IRIB-Alborz mRNA sequence
+362 bp linear mRNA 
+MG859969.1 GI:1390637023
+
+152. UNVERIFIED: Bovine coronavirus isolate IRIB-Esfehan mRNA sequence
+371 bp linear mRNA 
+MG859968.1 GI:1390637021
+
+153. UNVERIFIED: Bovine coronavirus isolate IRIB-Khozestan mRNA sequence
+364 bp linear mRNA 
+MG859967.1 GI:1390637020
+
+154. Bovine coronavirus isolate 7-16-23, complete genome
+31,032 bp linear RNA 
+MH043955.1 GI:1377686485
+
+155. Bovine coronavirus isolate 4-17-08, complete genome
+31,016 bp linear RNA 
+MH043954.1 GI:1377686474
+
+156. Bovine coronavirus isolate 4-17-25, complete genome
+31,032 bp linear RNA 
+MH043953.1 GI:1377686463
+
+157. Bovine coronavirus isolate 4-17-03, complete genome
+31,019 bp linear RNA 
+MH043952.1 GI:1377686452
+
+158. Bovine coronavirus strain ABT/BF/16/Bocv86 membrane protein (M) gene, partial cds
+464 bp linear RNA 
+KX897162.1 GI:1150667589
+
+159. Bovine coronavirus strain ABT/BF/16/Bocv164 membrane protein (M) gene, partial cds
+454 bp linear RNA 
+KX897161.1 GI:1150667587
+
+160. Bovine coronavirus strain ABT/BF/16/Bocv167 membrane protein (M) gene, partial cds
+457 bp linear RNA 
+KX897160.1 GI:1150667585
+
+161. Bovine coronavirus strain ABT/16/BF/BoCv183 membrane protein (M) gene, partial cds
+419 bp linear RNA 
+KX897159.1 GI:1150667583
+
+162. Bovine coronavirus strain TWD3 spike protein (S) gene, partial cds
+448 bp linear RNA 
+KX373888.1 GI:1101018143
+
+163. Bovine coronavirus strain TWD2 spike protein (S) gene, partial cds
+448 bp linear RNA 
+KX373887.1 GI:1101018141
+
+164. Bovine coronavirus strain TWD1 spike protein (S) gene, partial cds
+448 bp linear RNA 
+KX373886.1 GI:1101018139
+
+165. Bovine coronavirus isolate SKcrevo spike protein gene, partial cds
+2,304 bp linear RNA 
+KY612620.1 GI:1269235330
+
+166. Bovine coronavirus isolate SK21735 spike protein gene, partial cds
+2,304 bp linear RNA 
+KY612619.1 GI:1269235328
+
+167. Bovine coronavirus isolate AT15 spike protein gene, partial cds
+2,304 bp linear RNA 
+KY612618.1 GI:1269235326
+
+168. Bovine coronavirus isolate AT13 spike protein gene, partial cds
+2,304 bp linear RNA 
+KY612617.1 GI:1269235324
+
+169. Bovine coronavirus clone N nucleocapsid protein (N) gene, partial cds
+258 bp linear RNA 
+FJ218460.1 GI:209781583
+
+170. Bovine coronavirus clone P nucleocapsid protein (N) gene, partial cds
+405 bp linear RNA 
+FJ218459.1 GI:209781581
+
+171. Bovine coronavirus strain Kakegawa spike glycoprotein gene, partial cds
+2,681 bp linear RNA 
+DQ479424.1 GI:94471592
+
+172. Bovine coronavirus isolate BR-UEL3 spike glycoprotein gene, partial cds
+2,681 bp linear RNA 
+DQ479423.1 GI:94471590
+
+173. Bovine coronavirus isolate BR-UEL2 spike glycoprotein gene, partial cds
+2,681 bp linear RNA 
+DQ479422.1 GI:94471588
+
+174. Bovine coronavirus isolate BR-UEL1 spike glycoprotein gene, partial cds
+2,681 bp linear RNA 
+DQ479421.1 GI:94471586
+
+175. Bovine coronavirus isolate 182NS spike glycoprotein gene, partial cds
+2,240 bp linear RNA 
+DQ320764.1 GI:84310312
+
+176. Bovine coronavirus isolate 232NS spike glycoprotein gene, partial cds
+2,240 bp linear RNA 
+DQ320763.1 GI:84310310
+
+177. Bovine coronavirus isolate 220NS spike glycoprotein gene, partial cds
+2,240 bp linear RNA 
+DQ320762.1 GI:84310308
+
+178. Bovine coronavirus strain Kakegawa spike protein subunit 1 (S1) gene, partial cds
+404 bp linear RNA 
+AY646095.1 GI:49617494
+
+179. Bovine coronavirus strain LYVB spike protein subunit 1 (S1) gene, partial cds
+363 bp linear RNA 
+AY606205.1 GI:47499014
+
+180. Bovine coronavirus strain USP-14 spike protein subunit 1 (S1) gene, partial cds
+430 bp linear RNA 
+AY606204.1 GI:47499012
+
+181. Bovine coronavirus strain USP-13 spike protein subunit 1 (S1) gene, partial cds
+394 bp linear RNA 
+AY606203.1 GI:47499010
+
+182. Bovine coronavirus strain USP-12 spike protein subunit 1 (S1) gene, partial cds
+429 bp linear RNA 
+AY606202.1 GI:47499008
+
+183. Bovine coronavirus strain USP-11 spike protein subunit 1 (S1) gene, partial cds
+430 bp linear RNA 
+AY606201.1 GI:47499006
+
+184. Bovine coronavirus strain USP-10 spike protein subunit 1 (S1) gene, partial cds
+430 bp linear RNA 
+AY606200.1 GI:47499004
+
+185. Bovine coronavirus strain USP-09 spike protein subunit 1 (S1) gene, partial cds
+387 bp linear RNA 
+AY606199.1 GI:47499002
+
+186. Bovine coronavirus strain USP-08 spike protein subunit 1 (S1) gene, partial cds
+430 bp linear RNA 
+AY606198.1 GI:47499000
+
+187. Bovine coronavirus strain USP-07 spike protein subunit 1 (S1) gene, partial cds
+412 bp linear RNA 
+AY606197.1 GI:47498998
+
+188. Bovine coronavirus strain USP-06 spike protein subunit 1 (S1) gene, partial cds
+430 bp linear RNA 
+AY606196.1 GI:47498996
+
+189. Bovine coronavirus strain USP-05 spike protein subunit 1 (S1) gene, partial cds
+395 bp linear RNA 
+AY606195.1 GI:47498994
+
+190. Bovine coronavirus strain USP-04 spike protein subunit 1 (S1) gene, partial cds
+430 bp linear RNA 
+AY606194.1 GI:47498992
+
+191. Bovine coronavirus strain USP-03 spike protein subunit 1 (S1) gene, partial cds
+430 bp linear RNA 
+AY606193.1 GI:47498990
+
+192. Bovine coronavirus strain USP-02 spike protein subunit 1 (S1) gene, partial cds
+428 bp linear RNA 
+AY606192.1 GI:47498988
+
+193. Bovine coronavirus isolate WDBR-01 spike protein S1 mRNA, partial cds
+430 bp linear mRNA 
+AY353075.1 GI:34148004
+
+194. Bovine coronavirus isolate YAROSLAVL/10/97 hemagglutinin-esterase (HE) gene, partial cds
+228 bp linear RNA 
+AY184423.1 GI:28541850
+
+195. Bovine coronavirus isolate SUZDAL\12\01 hemagglutinin-esterase (HE) gene, partial cds
+228 bp linear RNA 
+AY184422.1 GI:28541795
+
+196. Bovine coronavirus isolate STAVROVO/03/98 hemagglutinin-esterase (HE) gene, partial cds
+228 bp linear RNA 
+AY184421.1 GI:28541742
+
+197. Bovine coronavirus isolate SOBINKA/04/00 hemagglutinin-esterase (HE) gene, partial cds
+228 bp linear RNA 
+AY184420.1 GI:28541688
+
+198. Bovine coronavirus isolate SHUYA/04/99 hemagglutinin-esterase (HE) gene, partial cds
+228 bp linear RNA 
+AY184419.1 GI:28541641
+
+199. Bovine coronavirus isolate SOBINKA/01/01 hemagglutinin-esterase (HE) gene, partial cds
+228 bp linear RNA 
+AY184418.1 GI:28541586
+
+200. Bovine coronavirus isolate ODICOVO/06/00 hemagglutinin-esterase (HE) gene, partial cds
+228 bp linear RNA 
+AY184417.1 GI:28541535
+
+201. Bovine coronavirus isolate MELENKI/11/99 hemagglutinin-esterase (HE) gene, partial cds
+228 bp linear RNA 
+AY184416.1 GI:28541470
+
+202. Bovine coronavirus isolate KOSHKINSK/11/00 hemagglutinin-esterase (HE) gene, partial cds
+228 bp linear RNA 
+AY184415.1 GI:28541397
+
+203. Bovine coronavirus isolate Kavernino/12/00 hemagglutinin-esterase (HE) gene, partial cds
+228 bp linear RNA 
+AY184414.1 GI:28541329
+
+204. Bovine coronavirus isolate JURYEV-POLSKY/03/00 hemagglutinin-esterase (HE) gene, partial cds
+228 bp linear RNA 
+AY184413.1 GI:28541255
+
+205. Bovine coronavirus isolate JURJEV-POLSKY/02/02 hemagglutinin-esterase (HE) gene, partial cds
+228 bp linear RNA 
+AY184412.1 GI:28541183
+
+206. Bovine coronavirus isolate BALAHNA/09/00 hemagglutinin-esterase (HE) gene, partial cds
+228 bp linear RNA 
+AY184411.1 GI:28541109
+
+207. Bovine coronavirus strain BCoV/WD/2003/WDBR-934 hemagglutinin-esterase gene, partial cds
+370 bp linear RNA 
+GU214770.1 GI:281323193
+
+208. Bovine coronavirus strain BCoV/WD/2003/WDBR-923 hemagglutinin-esterase gene, partial cds
+370 bp linear RNA 
+GU214769.1 GI:281323191
+
+209. Bovine coronavirus strain BCoV/WD/2003/WDBR-9224 hemagglutinin-esterase gene, partial cds
+370 bp linear RNA 
+GU214768.1 GI:281323189
+
+210. Bovine coronavirus strain BCoV/WD/2003/WDBR-9146 hemagglutinin-esterase gene, partial cds
+370 bp linear RNA 
+GU214767.1 GI:281323187
+
+211. Bovine coronavirus strain BCoV/WD/2003/WDBR-1275 hemagglutinin-esterase gene, partial cds
+370 bp linear RNA 
+GU214766.1 GI:281323185
+
+212. Bovine coronavirus strain BCoV/WD/2003/WDBR-887 hemagglutinin-esterase gene, partial cds
+370 bp linear RNA 
+GU214765.1 GI:281323183
+
+213. Bovine coronavirus strain BCoV/WD/2003/WDBR-841 hemagglutinin-esterase gene, partial cds
+370 bp linear RNA 
+GU214763.1 GI:281323180
+
+214. Bovine coronavirus strain BCoV/WD/2003/WDBR-9219 hemagglutinin-esterase gene, partial cds
+370 bp linear RNA 
+GU214762.1 GI:281323178
+
+215. Bovine coronavirus strain BCoV/WD/2003/WDBR-9215 hemagglutinin-esterase gene, partial cds
+370 bp linear RNA 
+GU214761.1 GI:281323176
+
+216. Bovine coronavirus strain BCoV/WD/2003/WDBR-938 hemagglutinin-esterase gene, partial cds
+370 bp linear RNA 
+GU214760.1 GI:281323174
+
+217. Bovine coronavirus strain BCoV/WD/2003/WDBR-868 hemagglutinin-esterase gene, partial cds
+370 bp linear RNA 
+GU214759.1 GI:281323172
+
+218. Bovine coronavirus strain BCoV/WD/2003/WDBR-587 hemagglutinin-esterase gene, partial cds
+370 bp linear RNA 
+GU214758.1 GI:281323170
+
+219. Bovine coronavirus strain BCoV/WD/2003/WDBR-96 hemagglutinin-esterase gene, partial cds
+370 bp linear RNA 
+GU214757.1 GI:281323168
+
+220. Bovine coronavirus strain BCoV/WD/2003/WDBR-96 spike protein gene, partial cds
+382 bp linear RNA 
+FJ899737.1 GI:237868670
+
+221. Bovine coronavirus isolate USP1 spike protein subunit 1 (S1) gene, partial cds
+373 bp linear RNA 
+AY255831.2 GI:124298191
+
+222. Bovine coronavirus strain Arg95TC spike protein (S1) gene, partial cds
+1,555 bp linear RNA 
+KP059127.1 GI:815860416
+
+223. Bovine coronavirus strain B5324 spike protein (S1) gene, partial cds
+1,555 bp linear RNA 
+KP059126.1 GI:815860414
+
+224. Bovine coronavirus strain 4041 spike protein (S1) gene, partial cds
+332 bp linear RNA 
+KP033210.1 GI:815860412
+
+225. Bovine coronavirus strain 4583 spike protein (S1) gene, partial cds
+332 bp linear RNA 
+KP033209.1 GI:815860410
+
+226. Bovine coronavirus strain 2026 spike protein (S1) gene, partial cds
+332 bp linear RNA 
+KP033208.1 GI:815860408
+
+227. Bovine coronavirus strain Arg95 spike protein (S1) gene, partial cds
+332 bp linear RNA 
+KP033207.1 GI:815860406
+
+228. Bovine coronavirus strain 1617 spike protein (S1) gene, partial cds
+332 bp linear RNA 
+KP033206.1 GI:815860404
+
+229. Bovine coronavirus strain 4733 spike protein (S1) gene, partial cds
+332 bp linear RNA 
+KP033205.1 GI:815860402
+
+230. Bovine coronavirus strain KWD10 hemagglutinin-esterase (HE), structural protein E (E), and structural protein M (M) genes, complete cds
+2,423 bp linear RNA 
+AH014875.2 GI:1036029285
+
+231. Bovine coronavirus strain KWD9 hemagglutinin-esterase (HE), structural protein E (E), and structural protein M (M) genes, complete cds
+2,423 bp linear RNA 
+AH014874.2 GI:1036029284
+
+232. Bovine coronavirus strain KWD8 hemagglutinin-esterase (HE), structural protein E (E), and structural protein M (M) genes, complete cds
+2,423 bp linear RNA 
+AH014873.2 GI:1036029283
+
+233. Bovine coronavirus strain KWD7 hemagglutinin-esterase (HE), structural protein E (E), and structural protein M (M) genes, complete cds
+2,423 bp linear RNA 
+AH014872.2 GI:1036029282
+
+234. Bovine coronavirus strain KWD6 hemagglutinin-esterase (HE), structural protein E (E), and structural protein M (M) genes, complete cds
+2,423 bp linear RNA 
+AH014871.2 GI:1036029281
+
+235. Bovine coronavirus strain KWD5 hemagglutinin-esterase (HE), structural protein E (E), and structural protein M (M) genes, complete cds
+2,423 bp linear RNA 
+AH014870.2 GI:1036029280
+
+236. Bovine coronavirus strain KWD4 hemagglutinin-esterase (HE), structural protein E (E), and structural protein M (M) genes, complete cds
+2,423 bp linear RNA 
+AH014869.2 GI:1036029279
+
+237. Bovine coronavirus strain KWD3 hemagglutinin-esterase (HE), structural protein E (E), and structural protein M (M) genes, complete cds
+2,423 bp linear RNA 
+AH014868.2 GI:1036029278
+
+238. Bovine coronavirus strain KWD2 hemagglutinin-esterase (HE), structural protein E (E), and structural protein M (M) genes, complete cds
+2,423 bp linear RNA 
+AH014867.2 GI:1036029277
+
+239. Bovine coronavirus strain KWD1 hemagglutinin-esterase (HE), structural protein E (E), and structural protein M (M) genes, complete cds
+2,423 bp linear RNA 
+AH014866.2 GI:1036029276
+
+240. Bovine coronavirus strain Quebec, complete genome
+31,100 bp linear RNA 
+AF220295.1 GI:17529670
+
+241. Bovine coronavirus spike glycoprotein mRNA, complete cds
+4,110 bp linear mRNA 
+AF181469.1 GI:12330251
+
+242. Bovine coronavirus spike protein (S) gene, partial cds
+1,359 bp linear RNA 
+AF313395.1 GI:11321425
+
+243. Bovine coronavirus gene 1b protein (1) gene, partial cds
+291 bp linear RNA 
+AF159126.1 GI:6808598
+
+244. Bovine coronavirus matrix protein (M) gene, complete cds
+915 bp linear RNA 
+M27474.1 GI:1041046
+
+245. Bovine coronavirus hemagglutinin gene, complete cds
+1,304 bp linear RNA 
+L38963.1 GI:625023
+
+246. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2004/14 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KT318124.1 GI:1005742548
+
+247. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2014/13 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KT318123.1 GI:1005742546
+
+248. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2014/12 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KT318122.1 GI:1005742544
+
+249. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2013/11 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KT318121.1 GI:1005742542
+
+250. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2013/10 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KT318120.1 GI:1005742540
+
+251. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2013/09 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KT318119.1 GI:1005742538
+
+252. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2013/08 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KT318118.1 GI:1005742536
+
+253. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2012/07 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KT318117.1 GI:1005742534
+
+254. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2010/06 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KT318116.1 GI:1005742532
+
+255. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2003/05 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KT318115.1 GI:1005742530
+
+256. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2008/04 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KT318114.1 GI:1005742528
+
+257. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2007/03 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KT318113.1 GI:1005742526
+
+258. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2005/02 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KT318112.1 GI:1005742524
+
+259. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2005/01 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KT318111.1 GI:1005742522
+
+260. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2004/14 replicase gene, partial cds
+2,783 bp linear RNA 
+KT318110.1 GI:1005742510
+
+261. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2014/13 replicase gene, partial cds
+2,783 bp linear RNA 
+KT318109.1 GI:1005742508
+
+262. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2014/12 replicase gene, partial cds
+2,783 bp linear RNA 
+KT318108.1 GI:1005742506
+
+263. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2013/11 replicase gene, partial cds
+2,783 bp linear RNA 
+KT318107.1 GI:1005742504
+
+264. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2013/10 replicase gene, partial cds
+2,783 bp linear RNA 
+KT318106.1 GI:1005742502
+
+265. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2013/09 replicase gene, partial cds
+2,783 bp linear RNA 
+KT318105.1 GI:1005742500
+
+266. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2013/08 replicase gene, partial cds
+2,783 bp linear RNA 
+KT318104.1 GI:1005742498
+
+267. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2012/07 replicase gene, partial cds
+2,783 bp linear RNA 
+KT318103.1 GI:1005742496
+
+268. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2010/06 replicase gene, partial cds
+2,783 bp linear RNA 
+KT318102.1 GI:1005742494
+
+269. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2003/05 replicase gene, partial cds
+2,783 bp linear RNA 
+KT318101.1 GI:1005742492
+
+270. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2008/04 replicase gene, partial cds
+2,783 bp linear RNA 
+KT318100.1 GI:1005742490
+
+271. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2007/03 replicase gene, partial cds
+2,783 bp linear RNA 
+KT318099.1 GI:1005742488
+
+272. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2005/02 replicase gene, partial cds
+2,783 bp linear RNA 
+KT318098.1 GI:1005742486
+
+273. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2005/01 replicase gene, partial cds
+2,783 bp linear RNA 
+KT318097.1 GI:1005742484
+
+274. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2004/14 nucleocapsid protein (N) gene, complete cds
+1,347 bp linear RNA 
+KT318096.1 GI:1005742478
+
+275. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2014/13 nucleocapsid protein (N) gene, complete cds
+1,347 bp linear RNA 
+KT318095.1 GI:1005742476
+
+276. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2014/12 nucleocapsid protein (N) gene, complete cds
+1,347 bp linear RNA 
+KT318094.1 GI:1005742474
+
+277. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2013/11 nucleocapsid protein (N) gene, complete cds
+1,347 bp linear RNA 
+KT318093.1 GI:1005742472
+
+278. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2013/10 nucleocapsid protein (N) gene, complete cds
+1,347 bp linear RNA 
+KT318092.1 GI:1005742470
+
+279. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2013/09 nucleocapsid protein (N) gene, complete cds
+1,347 bp linear RNA 
+KT318091.1 GI:1005742468
+
+280. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2013/08 nucleocapsid protein (N) gene, complete cds
+1,347 bp linear RNA 
+KT318090.1 GI:1005742466
+
+281. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2012/07 nucleocapsid protein (N) gene, complete cds
+1,347 bp linear RNA 
+KT318089.1 GI:1005742464
+
+282. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2010/06 nucleocapsid protein (N) gene, complete cds
+1,347 bp linear RNA 
+KT318088.1 GI:1005742462
+
+283. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2003/05 nucleocapsid protein (N) gene, complete cds
+1,347 bp linear RNA 
+KT318087.1 GI:1005742460
+
+284. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2008/04 nucleocapsid protein (N) gene, complete cds
+1,347 bp linear RNA 
+KT318086.1 GI:1005742458
+
+285. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2007/03 nucleocapsid protein (N) gene, complete cds
+1,347 bp linear RNA 
+KT318085.1 GI:1005742456
+
+286. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2005/01 nucleocapsid protein (N) gene, complete cds
+1,347 bp linear RNA 
+KT318084.1 GI:1005742454
+
+287. Bovine coronavirus isolate BCoV/FRA/EPI/Caen/2005/02 nucleocapsid protein (N) gene, complete cds
+1,338 bp linear RNA 
+KT318083.1 GI:1005742445
+
+288. Bovine coronavirus strain BR-UEL10 nucleocapsid protein (N) gene, partial cds
+249 bp linear RNA 
+KU167034.1 GI:953504282
+
+289. Bovine coronavirus strain BR-UEL9 nucleocapsid protein (N) gene, partial cds
+251 bp linear RNA 
+KU167033.1 GI:953504280
+
+290. Bovine coronavirus strain BR-UEL8 nucleocapsid protein gene, partial cds
+251 bp linear RNA 
+KP860296.1 GI:912499271
+
+291. Bovine coronavirus strain BR-UEL7 nucleocapsid protein gene, partial cds
+251 bp linear RNA 
+KP860295.1 GI:912499269
+
+292. Bovine coronavirus strain HLJ-14/CHN spike protein (S) gene, complete cds
+4,092 bp linear RNA 
+KM985631.1 GI:756402809
+
+293. Bovine coronavirus strain HLJ-14/CHN hemagglutinin protein (HE) gene, complete cds
+1,275 bp linear RNA 
+KM985632.1 GI:756402807
+
+294. Bovine coronavirus strain HLJ-14/CHN membrane protein (M) gene, complete cds
+693 bp linear RNA 
+KM985633.1 GI:756402805
+
+295. Bovine coronavirus strain HLJ-14/CHN nucleocapsid protein (N) gene, complete cds
+1,347 bp linear RNA 
+KM985634.1 GI:756402803
+
+296. Bovine coronavirus strain HLJ-14/CHN small membrane protein (sM) gene, complete cds
+255 bp linear RNA 
+KM985635.1 GI:756402801
+
+297. Bovine coronavirus spike glycoprotein S1 subunit gene, partial cds
+2,727 bp linear RNA 
+KM386671.1 GI:725077366
+
+298. Bovine coronavirus strain Ismailia spike glycoprotein S1 subunit gene, partial cds
+2,716 bp linear RNA 
+KM386670.1 GI:725077364
+
+299. Bovine coronavirus isolate RVLC10 hemagglutinin esterase protein gene, partial cds
+1,165 bp linear RNA 
+KF272918.1 GI:558095272
+
+300. Bovine coronavirus isolate RVLC7 hemagglutinin esterase protein gene, partial cds
+1,165 bp linear RNA 
+KF272917.1 GI:558095270
+
+301. Bovine coronavirus isolate RVLC4 hemagglutinin esterase protein gene, partial cds
+1,165 bp linear RNA 
+KF272916.1 GI:558095268
+
+302. Bovine coronavirus isolate RVLC10 nucleocapsid gene, partial cds
+702 bp linear RNA 
+KF272915.1 GI:558095266
+
+303. Bovine coronavirus isolate RVLC9 nucleocapsid gene, partial cds
+702 bp linear RNA 
+KF272913.1 GI:558095262
+
+304. Bovine coronavirus isolate RVLC7 nucleocapsid gene, partial cds
+702 bp linear RNA 
+KF272911.1 GI:558095258
+
+305. Bovine coronavirus isolate RVLC4 nucleocapsid gene, partial cds
+702 bp linear RNA 
+KF272909.1 GI:558095254
+
+306. Bovine coronavirus isolate Z6_0712 spike glyprotein (S) gene, partial cds
+1,038 bp linear RNA 
+JN795167.1 GI:393802087
+
+307. Bovine coronavirus isolate Z5_0711 spike glyprotein (S) gene, partial cds
+1,038 bp linear RNA 
+JN795166.1 GI:393802085
+
+308. Bovine coronavirus isolate Z4_0711 spike glyprotein (S) gene, partial cds
+1,038 bp linear RNA 
+JN795165.1 GI:393802083
+
+309. Bovine coronavirus isolate Z3_0711 spike glyprotein (S) gene, partial cds
+1,038 bp linear RNA 
+JN795164.1 GI:393802081
+
+310. Bovine coronavirus isolate Z2_0711 spike glyprotein (S) gene, partial cds
+1,038 bp linear RNA 
+JN795163.1 GI:393802079
+
+311. Bovine coronavirus isolate Z1_0711 spike glyprotein (S) gene, partial cds
+1,038 bp linear RNA 
+JN795162.1 GI:393802077
+
+312. Bovine coronavirus isolate Y1_0801 spike glyprotein (S) gene, partial cds
+1,038 bp linear RNA 
+JN795161.1 GI:393802075
+
+313. Bovine coronavirus isolate U1_0907 spike glyprotein (S) gene, partial cds
+1,038 bp linear RNA 
+JN795160.1 GI:393802073
+
+314. Bovine coronavirus isolate P1_0902 spike glyprotein (S) gene, partial cds
+1,038 bp linear RNA 
+JN795159.1 GI:393802071
+
+315. Bovine coronavirus isolate N4_0903 spike glyprotein (S) gene, partial cds
+1,038 bp linear RNA 
+JN795158.1 GI:393802069
+
+316. Bovine coronavirus isolate N3_0605 spike glyprotein (S) gene, partial cds
+1,038 bp linear RNA 
+JN795157.1 GI:393802067
+
+317. Bovine coronavirus isolate N2_0603 spike glyprotein (S) gene, partial cds
+1,038 bp linear RNA 
+JN795156.1 GI:393802065
+
+318. Bovine coronavirus isolate N1_0511 spike glyprotein (S) gene, partial cds
+1,038 bp linear RNA 
+JN795155.1 GI:393802063
+
+319. Bovine coronavirus isolate M2_0605 spike glyprotein (S) gene, partial cds
+1,038 bp linear RNA 
+JN795154.1 GI:393802061
+
+320. Bovine coronavirus isolate M1_0602 spike glyprotein (S) gene, partial cds
+1,038 bp linear RNA 
+JN795153.1 GI:393802059
+
+321. Bovine coronavirus isolate I4_0810 spike glyprotein (S) gene, partial cds
+1,038 bp linear RNA 
+JN795152.1 GI:393802057
+
+322. Bovine coronavirus isolate I3_0703 spike glyprotein (S) gene, partial cds
+1,038 bp linear RNA 
+JN795151.1 GI:393802055
+
+323. Bovine coronavirus isolate I2_0702 spike glyprotein (S) gene, partial cds
+1,038 bp linear RNA 
+JN795150.1 GI:393802053
+
+324. Bovine coronavirus isolate I1_0702 spike glyprotein (S) gene, partial cds
+1,038 bp linear RNA 
+JN795149.1 GI:393802051
+
+325. Bovine coronavirus isolate C6_0903 spike glyprotein (S) gene, partial cds
+1,038 bp linear RNA 
+JN795148.1 GI:393802049
+
+326. Bovine coronavirus isolate C5_0801 spike glyprotein (S) gene, partial cds
+1,038 bp linear RNA 
+JN795147.1 GI:393802047
+
+327. Bovine coronavirus isolate C4_0712 spike glyprotein (S) gene, partial cds
+1,038 bp linear RNA 
+JN795146.1 GI:393802045
+
+328. Bovine coronavirus isolate C3_0711 spike glyprotein (S) gene, partial cds
+1,038 bp linear RNA 
+JN795145.1 GI:393802043
+
+329. Bovine coronavirus isolate C2_0701 spike glyprotein (S) gene, partial cds
+1,038 bp linear RNA 
+JN795144.1 GI:393802041
+
+330. Bovine coronavirus isolate C1_9202 spike glyprotein (S) gene, partial cds
+1,038 bp linear RNA 
+JN795143.1 GI:393802039
+
+331. Bovine coronavirus isolate AC2_0711 spike glyprotein (S) gene, partial cds
+1,038 bp linear RNA 
+JN795142.1 GI:393802037
+
+332. Bovine coronavirus isolate AC1_0611 spike glyprotein (S) gene, partial cds
+1,038 bp linear RNA 
+JN795141.1 GI:393802035
+
+333. Bovine coronavirus S gene for spike protein, isolate VB 68/11/CAMAGUEY/2011, genomic RNA
+4,092 bp linear RNA 
+HE616741.1 GI:359690940
+
+334. Bovine coronavirus S gene for spike protein, isolate VB 24/11/CIEGO DE AVILA/2011, genomic RNA
+4,092 bp linear RNA 
+HE616740.1 GI:359690938
+
+335. Bovine coronavirus S gene for spike protein, isolate VB 16/10/CIENFUEGOS/2010, genomic RNA
+4,092 bp linear RNA 
+HE616739.1 GI:359690936
+
+336. Bovine coronavirus S gene for spike protein, isolate VB 7/09/MAYABEQUE/2009, genomic RNA
+4,092 bp linear RNA 
+HE616738.1 GI:359690934
+
+337. Bovine coronavirus partial S gene for spike protein, isolate VB 32/10/MATANZAS/2010, genomic RNA
+398 bp linear RNA 
+HE616737.1 GI:359690932
+
+338. Bovine coronavirus partial S gene for spike protein, isolate VB 17/10/CIENFUEGOS/2010, genomic RNA
+398 bp linear RNA 
+HE616736.1 GI:359690930
+
+339. Bovine coronavirus partial S gene for spike protein, isolate VB 27/09/MAYABEQUE/2009, genomic RNA
+398 bp linear RNA 
+HE616735.1 GI:359690928
+
+340. Bovine coronavirus partial S gene for spike protein, isolate VB 5/09/MAYABEQUE/2009, genomic RNA
+398 bp linear RNA 
+HE616734.1 GI:359690926
+
+341. Bovine coronavirus isolate BCoV C11/11/Ire RNA-dependent RNA polymerase gene, partial cds
+248 bp linear RNA 
+JN204180.1 GI:389595588
+
+342. Bovine coronavirus isolate BCoV C4/11/Ire RNA-dependent RNA polymerase gene, partial cds
+237 bp linear RNA 
+JN204179.1 GI:389595586
+
+343. Bovine coronavirus Quebec BCQ.20 S glycoprotein S1B portion mRNA, partial cds
+1,147 bp linear mRNA 
+U06092.1 GI:468051
+
+344. Bovine coronavirus Quebec BCQ.9 S glycoprotein S1B portion mRNA, partial cds
+1,147 bp linear mRNA 
+U06091.1 GI:468049
+
+345. Bovine coronavirus Quebec BCQ.2070 S glycoprotein S1B portion mRNA partial cds
+1,147 bp linear mRNA 
+U06090.1 GI:468047
+
+346. Bovine coronavirus isolate Rc7N-04 S gene, partial cds
+624 bp linear RNA 
+DQ121661.1 GI:74054224
+
+347. Bovine coronavirus isolate Rc7F-04 S gene, partial cds
+624 bp linear RNA 
+DQ121660.1 GI:74054222
+
+348. Bovine coronavirus isolate Rc6N-04 S gene, partial cds
+624 bp linear RNA 
+DQ121659.1 GI:74054220
+
+349. Bovine coronavirus isolate Rc6F-04 S gene, partial cds
+624 bp linear RNA 
+DQ121658.1 GI:74054218
+
+350. Bovine coronavirus isolate Rc5N-04 S gene, partial cds
+624 bp linear RNA 
+DQ121657.1 GI:74054216
+
+351. Bovine coronavirus isolate Rc5F-04 S gene, partial cds
+624 bp linear RNA 
+DQ121656.1 GI:74054214
+
+352. Bovine coronavirus isolate Rc4N-04 S gene, partial cds
+624 bp linear RNA 
+DQ121655.1 GI:74054212
+
+353. Bovine coronavirus isolate Rc4F-04 S gene, partial cds
+624 bp linear RNA 
+DQ121654.1 GI:74054210
+
+354. Bovine coronavirus isolate Rc3N-04 S gene, partial cds
+624 bp linear RNA 
+DQ121653.1 GI:74054208
+
+355. Bovine coronavirus isolate Rc3F-04 S gene, partial cds
+624 bp linear RNA 
+DQ121652.1 GI:74054206
+
+356. Bovine coronavirus isolate Rc2N-04 S gene, partial cds
+624 bp linear RNA 
+DQ121651.1 GI:74054204
+
+357. Bovine coronavirus isolate Rc2F-04 S gene, partial cds
+624 bp linear RNA 
+DQ121650.1 GI:74054202
+
+358. Bovine coronavirus isolate Rc1N-99 S gene, partial cds
+624 bp linear RNA 
+DQ121649.1 GI:74054200
+
+359. Bovine coronavirus isolate Rc1N-04 S gene, partial cds
+624 bp linear RNA 
+DQ121648.1 GI:74054198
+
+360. Bovine coronavirus isolate Rc1N-02 S gene, partial cds
+624 bp linear RNA 
+DQ121647.1 GI:74054196
+
+361. Bovine coronavirus isolate Rc1F-04 S gene, partial cds
+624 bp linear RNA 
+DQ121646.1 GI:74054194
+
+362. Bovine coronavirus isolate Qa4F-03 S gene, partial cds
+624 bp linear RNA 
+DQ121645.1 GI:74054192
+
+363. Bovine coronavirus isolate Qa3F-03 S gene, partial cds
+624 bp linear RNA 
+DQ121644.1 GI:74054190
+
+364. Bovine coronavirus isolate Qa2F-03 S gene, partial cds
+624 bp linear RNA 
+DQ121643.1 GI:74054188
+
+365. Bovine coronavirus isolate Qa1F-03 S gene, partial cds
+624 bp linear RNA 
+DQ121642.1 GI:74054186
+
+366. Bovine coronavirus isolate Pc1N-02 S gene, partial cds
+624 bp linear RNA 
+DQ121641.1 GI:74054184
+
+367. Bovine coronavirus isolate Oc2N-03 S gene, partial cds
+624 bp linear RNA 
+DQ121640.1 GI:74054182
+
+368. Bovine coronavirus isolate Oc1N-03 S gene, partial cds
+624 bp linear RNA 
+DQ121639.1 GI:74054180
+
+369. Bovine coronavirus isolate Nc4N-02 S gene, partial cds
+624 bp linear RNA 
+DQ121638.1 GI:74054178
+
+370. Bovine coronavirus isolate Nc3N-02 S gene, partial cds
+624 bp linear RNA 
+DQ121637.1 GI:74054176
+
+371. Bovine coronavirus isolate Nc1N-02b S gene, partial cds
+624 bp linear RNA 
+DQ121636.1 GI:74054174
+
+372. Bovine coronavirus isolate Nc2N-02 S gene, partial cds
+624 bp linear RNA 
+DQ121635.1 GI:74054172
+
+373. Bovine coronavirus isolate Nc1N-02a S gene, partial cds
+624 bp linear RNA 
+DQ121634.1 GI:74054170
+
+374. Bovine coronavirus isolate Mc1F-03 S gene, partial cds
+624 bp linear RNA 
+DQ121633.1 GI:74054168
+
+375. Bovine coronavirus isolate Lc1F-03 S gene, partial cds
+624 bp linear RNA 
+DQ121632.1 GI:74054166
+
+376. Bovine coronavirus isolate Kc1F-03 S gene, partial cds
+624 bp linear RNA 
+DQ121631.1 GI:74054164
+
+377. Bovine coronavirus isolate Jc1F-03 S gene, partial cds
+624 bp linear RNA 
+DQ121630.1 GI:74054162
+
+378. Bovine coronavirus isolate Ic1F-03 S gene, partial cds
+624 bp linear RNA 
+DQ121629.1 GI:74054160
+
+379. Bovine coronavirus isolate Hc1F-01 S gene, partial cds
+624 bp linear RNA 
+DQ121628.1 GI:74054158
+
+380. Bovine coronavirus isolate Gc1F-01 S gene, partial cds
+624 bp linear RNA 
+DQ121627.1 GI:74054156
+
+381. Bovine coronavirus isolate Fc2F-03 S gene, partial cds
+624 bp linear RNA 
+DQ121626.1 GI:74054154
+
+382. Bovine coronavirus isolate Fc1F-03 S gene, partial cds
+624 bp linear RNA 
+DQ121625.1 GI:74054152
+
+383. Bovine coronavirus isolate Ea1F-03 S gene, partial cds
+624 bp linear RNA 
+DQ121624.1 GI:74054150
+
+384. Bovine coronavirus isolate Dc2F-03 S gene, partial cds
+624 bp linear RNA 
+DQ121623.1 GI:74054148
+
+385. Bovine coronavirus isolate Dc1F-03 S gene, partial cds
+624 bp linear RNA 
+DQ121622.1 GI:74054146
+
+386. Bovine coronavirus isolate Cc1F-03 S gene, partial cds
+624 bp linear RNA 
+DQ121621.1 GI:74054144
+
+387. Bovine coronavirus isolate Bc1F-03 S gene, partial cds
+624 bp linear RNA 
+DQ121620.1 GI:74054142
+
+388. Bovine coronavirus isolate Ac1F-03 S gene, partial cds
+624 bp linear RNA 
+DQ121619.1 GI:74054140
+
+389. Bovine coronavirus strain BCVN3-WT nonfunctional nucleocapsid protein (N) gene, partial sequence
+237 bp linear RNA 
+FJ603613.2 GI:224776037
+
+390. Bovine coronavirus strain BCVN2-WT nonfunctional nucleocapsid protein (N) gene, partial sequence
+237 bp linear RNA 
+FJ603612.2 GI:224776036
+
+391. Bovine coronavirus strain BCVN1-TC nonfunctional nucleocapsid protein (N) gene, partial sequence
+217 bp linear RNA 
+FJ603611.2 GI:224776035
+
+392. Bovine coronavirus strain BCoV/WD/2003/WDBR-972
+370 bp linear RNA 
+GU214764.1 GI:281323182
+
+393. H=hemagglutinin protein...Iorf2 protein [bovine coronavirus, Genomic RNA, 3 genes, 1290 nt]
+1,290 bp linear RNA 
+S50936.1 GI:234102
+
+394. Bovine coronavirus strain 438/06-TN S protein (S) gene, complete cds
+4,092 bp linear RNA 
+EU814647.1 GI:193795728
+
+395. Bovine coronavirus isolate KWD10 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+AY935646.1 GI:61105569
+
+396. Bovine coronavirus isolate KWD9 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+AY935645.1 GI:61105567
+
+397. Bovine coronavirus isolate KWD8 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+AY935644.1 GI:61105565
+
+398. Bovine coronavirus isolate KWD7 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+AY935643.1 GI:61105563
+
+399. Bovine coronavirus isolate KWD6 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+AY935642.1 GI:61105561
+
+400. Bovine coronavirus isolate KWD5 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+AY935641.1 GI:61105559
+
+401. Bovine coronavirus isolate KWD4 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+AY935640.1 GI:61105557
+
+402. Bovine coronavirus isolate KWD3 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+AY935639.1 GI:61105555
+
+403. Bovine coronavirus isolate KWD2 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+AY935638.1 GI:61105553
+
+404. Bovine coronavirus isolate KWD1 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+AY935637.1 GI:61105551
+
+405. Bovine coronavirus strain BC94 spike protein (S) gene, complete cds
+4,092 bp linear RNA 
+EU401989.1 GI:170675012
+
+406. Bovine coronavirus strain BC94 hemagglutinin-esterase (HE) gene, complete cds
+1,275 bp linear RNA 
+EU401979.1 GI:170675004
+
+407. Bovine coronavirus strain BC94 nucleocapsid protein (N) gene, complete cds
+1,347 bp linear RNA 
+EU401985.1 GI:170674994
+
+408. Bovine coronavirus isolate 0501 spike protein gene, complete cds
+4,092 bp linear RNA 
+EU686689.1 GI:196174730
+
+409. Bovine coronavirus isolate SUN5 spike protein (S) gene, complete cds
+4,092 bp linear RNA 
+EU401988.1 GI:170675010
+
+410. Bovine coronavirus isolate A3 spike protein (S) gene, complete cds
+4,092 bp linear RNA 
+EU401987.1 GI:170675008
+
+411. Bovine coronavirus isolate 0502 spike protein (S) gene, complete cds
+4,092 bp linear RNA 
+EU401986.1 GI:170675006
+
+412. Bovine coronavirus isolate SUN5 hemagglutinin-esterase (HE) gene, complete cds
+1,275 bp linear RNA 
+EU401978.1 GI:170675002
+
+413. Bovine coronavirus isolate A3 hemagglutinin-esterase (HE) gene, complete cds
+1,275 bp linear RNA 
+EU401977.1 GI:170675000
+
+414. Bovine coronavirus isolate 0502 hemagglutinin-esterase (HE) gene, complete cds
+1,275 bp linear RNA 
+EU401976.1 GI:170674998
+
+415. Bovine coronavirus isolate 0501 hemagglutinin-esterase (HE) gene, complete cds
+1,275 bp linear RNA 
+EU401975.1 GI:170674996
+
+416. Bovine coronavirus isolate SUN5 nucleocapsid protein (N) gene, complete cds
+1,347 bp linear RNA 
+EU401984.1 GI:170674992
+
+417. Bovine coronavirus isolate A3 nucleocapsid protein (N) gene, complete cds
+1,347 bp linear RNA 
+EU401983.1 GI:170674990
+
+418. Bovine coronavirus isolate 0512 nucleocapsid protein (N) gene, complete cds
+1,347 bp linear RNA 
+EU401982.1 GI:170674988
+
+419. Bovine coronavirus isolate 0502 nucleocapsid protein (N) gene, complete cds
+1,347 bp linear RNA 
+EU401981.1 GI:170674986
+
+420. Bovine coronavirus isolate 0501 nucleocapsid protein (N) gene, complete cds
+1,347 bp linear RNA 
+EU401980.1 GI:170674984
+
+421. Bovine coronavirus strain YC nucleocapsid protein (N) gene, complete cds
+1,347 bp linear RNA 
+FJ556872.1 GI:220682203
+
+422. Bovine coronavirus strain 438/06-TN-50 S protein (S) gene, complete cds
+4,092 bp linear RNA 
+EU814648.1 GI:193795730
+
+423. Bovine coronavirus strain 339/06 hemagglutinin-esterase (HE) and spike protein (S) genes, complete cds
+5,659 bp linear RNA 
+EF445634.1 GI:145559630
+
+424. Bovine coronavirus isolate KCD10 hemagglutinin-esterase (HE) gene, complete cds
+1,275 bp linear RNA 
+DQ389651.1 GI:87082949
+
+425. Bovine coronavirus isolate KCD9 hemagglutinin-esterase (HE) gene, complete cds
+1,275 bp linear RNA 
+DQ389650.1 GI:87082947
+
+426. Bovine coronavirus isolate KCD8 hemagglutinin-esterase (HE) gene, complete cds
+1,275 bp linear RNA 
+DQ389649.1 GI:87082945
+
+427. Bovine coronavirus isolate KCD7 hemagglutinin-esterase (HE) gene, complete cds
+1,275 bp linear RNA 
+DQ389648.1 GI:87082943
+
+428. Bovine coronavirus isolate KCD6 hemagglutinin-esterase (HE) gene, complete cds
+1,275 bp linear RNA 
+DQ389647.1 GI:87082941
+
+429. Bovine coronavirus isolate KCD5 hemagglutinin-esterase (HE) gene, complete cds
+1,275 bp linear RNA 
+DQ389646.1 GI:87082939
+
+430. Bovine coronavirus isolate KCD4 hemagglutinin-esterase (HE) gene, complete cds
+1,275 bp linear RNA 
+DQ389645.1 GI:87082937
+
+431. Bovine coronavirus isolate KCD3 hemagglutinin-esterase (HE) gene, complete cds
+1,275 bp linear RNA 
+DQ389644.1 GI:87082935
+
+432. Bovine coronavirus isolate KCD2 hemagglutinin-esterase (HE) gene, complete cds
+1,275 bp linear RNA 
+DQ389643.1 GI:87082933
+
+433. Bovine coronavirus isolate KCD1 hemagglutinin-esterase (HE) gene, complete cds
+1,275 bp linear RNA 
+DQ389642.1 GI:87082931
+
+434. Bovine coronavirus isolate KCD10 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+DQ389641.1 GI:87082929
+
+435. Bovine coronavirus isolate KCD9 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+DQ389640.1 GI:87082927
+
+436. Bovine coronavirus isolate KCD8 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+DQ389639.1 GI:87082925
+
+437. Bovine coronavirus isolate KCD7 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+DQ389638.1 GI:87082923
+
+438. Bovine coronavirus isolate KCD6 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+DQ389637.1 GI:87082921
+
+439. Bovine coronavirus isolate KCD5 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+DQ389636.1 GI:87082919
+
+440. Bovine coronavirus isolate KCD4 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+DQ389635.1 GI:87082917
+
+441. Bovine coronavirus isolate KCD3 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+DQ389634.1 GI:87082915
+
+442. Bovine coronavirus isolate KCD2 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+DQ389633.1 GI:87082913
+
+443. Bovine coronavirus isolate KCD1 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+DQ389632.1 GI:87082911
+
+444. Bovine coronavirus strain V270 spike protein gene, complete cds
+4,092 bp linear RNA 
+EF193075.1 GI:122726677
+
+445. Bovine coronavirus strain V270 nucleocapsid protein (N) gene, complete cds
+1,347 bp linear RNA 
+EF193074.1 GI:122726655
+
+446. Bovine coronavirus strain L9 nucleocapsid protein (N) gene, complete cds
+1,347 bp linear RNA 
+EF193073.1 GI:122726623
+
+447. Leader sequence of the bovine coronavirus mRNAs and genome cDNA, 5' end
+70 bp linear mRNA 
+M62375.1 GI:323344
+
+448. Bovine coronavirus genomic RNA for 32K nonstructural protein
+850 bp linear RNA 
+X15445.1 GI:58906
+
+449. UNVERIFIED: Bovine coronavirus isolate CoV/Bovine/Argentina/SalVLD/2016 spike glycoprotein-like gene, partial sequence
+464 bp linear RNA 
+MN199235.1 GI:1822128267
+
+450. Bovine coronavirus TCG-19 RNA, complete genome
+30,949 bp linear RNA 
+LC494178.1 GI:1806649953
+
+451. Bovine coronavirus TCG-9 RNA, complete genome
+30,936 bp linear RNA 
+LC494177.1 GI:1806649942
+
+452. Bovine coronavirus TCG-17 RNA, complete genome
+30,945 bp linear RNA 
+LC494176.1 GI:1806649931
+
+453. Bovine coronavirus TCG-18 RNA, complete genome
+30,941 bp linear RNA 
+LC494175.1 GI:1806649920
+
+454. Bovine coronavirus TCG-8 RNA, complete genome
+30,951 bp linear RNA 
+LC494174.1 GI:1806649909
+
+455. Bovine coronavirus TCG-7 RNA, complete genome
+30,951 bp linear RNA 
+LC494173.1 GI:1806649898
+
+456. Bovine coronavirus TCG-6 RNA, complete genome
+30,952 bp linear RNA 
+LC494172.1 GI:1806649887
+
+457. Bovine coronavirus TCG-16 RNA, complete genome
+30,936 bp linear RNA 
+LC494171.1 GI:1806649876
+
+458. Bovine coronavirus TCG-15 RNA, complete genome
+30,938 bp linear RNA 
+LC494170.1 GI:1806649865
+
+459. Bovine coronavirus TCG-14 RNA, complete genome
+30,945 bp linear RNA 
+LC494169.1 GI:1806649854
+
+460. Bovine coronavirus TCG-13 RNA, complete genome
+30,950 bp linear RNA 
+LC494168.1 GI:1806649843
+
+461. Bovine coronavirus TCG-12 RNA, complete genome
+30,942 bp linear RNA 
+LC494167.1 GI:1806649832
+
+462. Bovine coronavirus TCG-11 RNA, complete genome
+30,934 bp linear RNA 
+LC494166.1 GI:1806649821
+
+463. Bovine coronavirus TCG-10 RNA, complete genome
+30,926 bp linear RNA 
+LC494165.1 GI:1806649810
+
+464. Bovine coronavirus TCG-1 RNA, complete genome
+30,951 bp linear RNA 
+LC494164.1 GI:1806649799
+
+465. Bovine coronavirus TCG-2 RNA, complete genome
+30,923 bp linear RNA 
+LC494163.1 GI:1806649788
+
+466. Bovine coronavirus TCG-3 RNA, complete genome
+30,936 bp linear RNA 
+LC494162.1 GI:1806649777
+
+467. Bovine coronavirus TCG-5 RNA, complete genome
+30,940 bp linear RNA 
+LC494161.1 GI:1806649766
+
+468. Bovine coronavirus TCG-4 RNA, complete genome
+30,954 bp linear RNA 
+LC494160.1 GI:1806649755
+
+469. Bovine coronavirus SHG-6 RNA, complete genome
+30,947 bp linear RNA 
+LC494159.1 GI:1806649744
+
+470. Bovine coronavirus SHG-5 RNA, complete genome
+30,950 bp linear RNA 
+LC494158.1 GI:1806649733
+
+471. Bovine coronavirus SHG-4 RNA, complete genome
+30,953 bp linear RNA 
+LC494157.1 GI:1806649722
+
+472. Bovine coronavirus SHG-3 RNA, complete genome
+30,942 bp linear RNA 
+LC494156.1 GI:1806649711
+
+473. Bovine coronavirus SHG-2 RNA, complete genome
+30,938 bp linear RNA 
+LC494155.1 GI:1806649700
+
+474. Bovine coronavirus SHG-1 RNA, complete genome
+30,936 bp linear RNA 
+LC494154.1 GI:1806649689
+
+475. Bovine coronavirus IWT-27 RNA, complete genome
+30,944 bp linear RNA 
+LC494153.1 GI:1806649678
+
+476. Bovine coronavirus IWT-26 RNA, complete genome
+30,950 bp linear RNA 
+LC494152.1 GI:1806649667
+
+477. Bovine coronavirus IWT-25 RNA, complete genome
+30,951 bp linear RNA 
+LC494151.1 GI:1806649656
+
+478. Bovine coronavirus IWT-24 RNA, complete genome
+30,954 bp linear RNA 
+LC494150.1 GI:1806649645
+
+479. Bovine coronavirus IWT-23 RNA, complete genome
+30,944 bp linear RNA 
+LC494149.1 GI:1806649634
+
+480. Bovine coronavirus IWT-22 RNA, complete genome
+30,946 bp linear RNA 
+LC494148.1 GI:1806649623
+
+481. Bovine coronavirus IWT-17 RNA, complete genome
+30,944 bp linear RNA 
+LC494147.1 GI:1806649612
+
+482. Bovine coronavirus IWT-16 RNA, complete genome
+30,954 bp linear RNA 
+LC494146.1 GI:1806649601
+
+483. Bovine coronavirus IWT-21 RNA, complete genome
+30,954 bp linear RNA 
+LC494145.1 GI:1806649590
+
+484. Bovine coronavirus IWT-20 RNA, complete genome
+30,954 bp linear RNA 
+LC494144.1 GI:1806649579
+
+485. Bovine coronavirus IWT-19 RNA, complete genome
+30,954 bp linear RNA 
+LC494143.1 GI:1806649568
+
+486. Bovine coronavirus IWT-18 RNA, complete genome
+30,954 bp linear RNA 
+LC494142.1 GI:1806649557
+
+487. Bovine coronavirus IWT-15 RNA, complete genome
+30,950 bp linear RNA 
+LC494141.1 GI:1806649546
+
+488. Bovine coronavirus IWT-14 RNA, complete genome
+30,939 bp linear RNA 
+LC494140.1 GI:1806649535
+
+489. Bovine coronavirus IWT-13 RNA, complete genome
+30,942 bp linear RNA 
+LC494139.1 GI:1806649524
+
+490. Bovine coronavirus IWT-12 RNA, complete genome
+30,954 bp linear RNA 
+LC494138.1 GI:1806649513
+
+491. Bovine coronavirus IWT-11 RNA, complete genome
+30,951 bp linear RNA 
+LC494137.1 GI:1806649502
+
+492. Bovine coronavirus IWT-8 RNA, complete genome
+30,941 bp linear RNA 
+LC494136.1 GI:1806649491
+
+493. Bovine coronavirus IWT-7 RNA, complete genome
+30,945 bp linear RNA 
+LC494135.1 GI:1806649480
+
+494. Bovine coronavirus IWT-6 RNA, complete genome
+30,951 bp linear RNA 
+LC494134.1 GI:1806649469
+
+495. Bovine coronavirus IWT-5 RNA, complete genome
+30,954 bp linear RNA 
+LC494133.1 GI:1806649458
+
+496. Bovine coronavirus IWT-4 RNA, complete genome
+30,954 bp linear RNA 
+LC494132.1 GI:1806649447
+
+497. Bovine coronavirus IWT-3 RNA, complete genome
+30,955 bp linear RNA 
+LC494131.1 GI:1806649436
+
+498. Bovine coronavirus IWT-2 RNA, complete genome
+30,954 bp linear RNA 
+LC494130.1 GI:1806649425
+
+499. Bovine coronavirus IWT-1 RNA, complete genome
+30,934 bp linear RNA 
+LC494129.1 GI:1806649414
+
+500. Bovine coronavirus IWT-10 RNA, complete genome
+30,954 bp linear RNA 
+LC494128.1 GI:1806649403
+
+501. Bovine coronavirus IWT-9 RNA, complete genome
+30,951 bp linear RNA 
+LC494127.1 GI:1806649392
+
+502. Bovine coronavirus GIF-1 RNA, complete genome
+30,951 bp linear RNA 
+LC494126.1 GI:1806649381
+
+503. Bovine coronavirus TCG-33 RNA, complete genome
+30,942 bp linear RNA 
+LC494192.1 GI:1806649299
+
+504. Bovine coronavirus TCG-32 RNA, complete genome
+30,942 bp linear RNA 
+LC494191.1 GI:1806649288
+
+505. Bovine coronavirus TCG-31 RNA, complete genome
+30,898 bp linear RNA 
+LC494190.1 GI:1806649277
+
+506. Bovine coronavirus TCG-30 RNA, complete genome
+30,937 bp linear RNA 
+LC494189.1 GI:1806649266
+
+507. Bovine coronavirus TCG-29 RNA, complete genome
+30,942 bp linear RNA 
+LC494188.1 GI:1806649255
+
+508. Bovine coronavirus TCG-28 RNA, complete genome
+30,940 bp linear RNA 
+LC494187.1 GI:1806649244
+
+509. Bovine coronavirus TCG-27 RNA, complete genome
+30,942 bp linear RNA 
+LC494186.1 GI:1806649233
+
+510. Bovine coronavirus TCG-26 RNA, complete genome
+30,942 bp linear RNA 
+LC494185.1 GI:1806649222
+
+511. Bovine coronavirus TCG-25 RNA, complete genome
+30,940 bp linear RNA 
+LC494184.1 GI:1806649211
+
+512. Bovine coronavirus TCG-24 RNA, complete genome
+30,936 bp linear RNA 
+LC494183.1 GI:1806649200
+
+513. Bovine coronavirus TCG-23 RNA, complete genome
+30,940 bp linear RNA 
+LC494182.1 GI:1806649189
+
+514. Bovine coronavirus TCG-22 RNA, complete genome
+30,923 bp linear RNA 
+LC494181.1 GI:1806649178
+
+515. Bovine coronavirus TCG-21 RNA, complete genome
+30,939 bp linear RNA 
+LC494180.1 GI:1806649167
+
+516. Bovine coronavirus TCG-20 RNA, complete genome
+30,936 bp linear RNA 
+LC494179.1 GI:1806649156
+
+517. Bovine coronavirus isolate Gyeongju6 spike glycoprotein precursor (S) gene, partial cds
+836 bp linear RNA 
+MN650894.1 GI:1802647600
+
+518. Bovine coronavirus isolate Youngju2-5 spike glycoprotein precursor (S) gene, partial cds
+836 bp linear RNA 
+MN650893.1 GI:1802647598
+
+519. Bovine coronavirus isolate Youngju2 spike glycoprotein precursor (S) gene, partial cds
+836 bp linear RNA 
+MN650892.1 GI:1802647596
+
+520. Bovine coronavirus isolate Mungyeong2 spike glycoprotein precursor (S) gene, partial cds
+836 bp linear RNA 
+MN650891.1 GI:1802647594
+
+521. Bovine coronavirus isolate Mungyeong1 spike glycoprotein precursor (S) gene, partial cds
+836 bp linear RNA 
+MN650890.1 GI:1802647592
+
+522. UNVERIFIED: Bovine coronavirus isolate Asan15 spike glycoprotein precursor-like (S) gene, partial sequence
+836 bp linear RNA 
+MN650889.1 GI:1802647591
+
+523. Bovine coronavirus isolate Asan11 spike glycoprotein precursor (S) gene, partial cds
+836 bp linear RNA 
+MN650888.1 GI:1802647589
+
+524. Bovine coronavirus isolate Sangju5 spike glycoprotein precursor (S) gene, partial cds
+836 bp linear RNA 
+MN650887.1 GI:1802647587
+
+525. UNVERIFIED: Bovine coronavirus isolate Youngju5 spike glycoprotein precursor-like (S) gene, partial sequence
+836 bp linear RNA 
+MN650886.1 GI:1802647586
+
+526. Bovine coronavirus isolate Samrye6 spike glycoprotein precursor (S) gene, partial cds
+836 bp linear RNA 
+MN650885.1 GI:1802647584
+
+527. Bovine coronavirus isolate BCoV/CH/HB-BD/2019 hemagglutinin-esterase (HE) gene, complete cds
+1,275 bp linear RNA 
+MK903507.1 GI:1785470115
+
+528. Bovine coronavirus isolate BCoV/CH/HB-BD/2019 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+MK903506.1 GI:1785470113
+
+529. Bovine coronavirus isolate BCoV/CH/HB-BD/2019 nucleocapsid protein (N) gene, complete cds
+1,347 bp linear RNA 
+MK903505.1 GI:1785470111
+
+530. Bovine coronavirus clone H1b S protein (S) gene, partial cds
+976 bp linear RNA 
+MK989634.1 GI:1783625804
+
+531. Bovine coronavirus clone G83c S protein (S) gene, partial cds
+1,338 bp linear RNA 
+MK989632.1 GI:1783625802
+
+532. Bovine coronavirus clone G76b S protein (S) gene, partial cds
+1,294 bp linear RNA 
+MK989629.1 GI:1783625800
+
+533. Bovine coronavirus clone H1a S protein (S) gene, partial cds
+996 bp linear RNA 
+MK989633.1 GI:1783625798
+
+534. Bovine coronavirus clone G83b S protein (S) gene, partial cds
+441 bp linear RNA 
+MK989631.1 GI:1783625796
+
+535. Bovine coronavirus clone G83a S protein (S) gene, partial cds
+1,038 bp linear RNA 
+MK989630.1 GI:1783625794
+
+536. Bovine coronavirus clone G76a S protein (S) gene, partial cds
+2,265 bp linear RNA 
+MK989628.1 GI:1783625792
+
+537. Bovine coronavirus clone 79 S protein (S) gene, partial cds
+1,798 bp linear RNA 
+MK989627.1 GI:1783625790
+
+538. Bovine coronavirus clone 8553 S protein (S) gene, partial cds
+482 bp linear RNA 
+MK989626.1 GI:1783625788
+
+539. Bovine coronavirus clone 1N S protein (S) gene, partial cds
+452 bp linear RNA 
+MK989625.1 GI:1783625786
+
+540. Bovine coronavirus clone S8 S protein (S) gene, complete cds
+4,097 bp linear RNA 
+MK989624.1 GI:1783625784
+
+541. Bovine coronavirus clone T5 S protein (S) gene, complete cds
+4,097 bp linear RNA 
+MK989623.1 GI:1783625782
+
+542. Bovine coronavirus clone U1 S protein (S) gene, complete cds
+4,097 bp linear RNA 
+MK989622.1 GI:1783625780
+
+543. Bovine coronavirus clone 4945 S protein (S) gene, complete cds
+4,097 bp linear RNA 
+MK989621.1 GI:1783625778
+
+544. Bovine coronavirus clone 4950 S protein (S) gene, complete cds
+4,097 bp linear RNA 
+MK989620.1 GI:1783625776
+
+545. Bovine coronavirus clone 0061 N protein (N) gene, partial cds
+414 bp linear RNA 
+MK989619.1 GI:1783625774
+
+546. Bovine coronavirus clone 1817 N protein (N) gene, partial cds
+414 bp linear RNA 
+MK989618.1 GI:1783625772
+
+547. Bovine coronavirus clone 356 N protein (N) gene, partial cds
+414 bp linear RNA 
+MK989617.1 GI:1783625770
+
+548. Bovine coronavirus clone 355 N protein (N) gene, partial cds
+414 bp linear RNA 
+MK989616.1 GI:1783625768
+
+549. Bovine coronavirus clone C5 N protein (N) gene, partial cds
+414 bp linear RNA 
+MK989615.1 GI:1783625766
+
+550. Bovine coronavirus clone C4 N protein (N) gene, partial cds
+414 bp linear RNA 
+MK989614.1 GI:1783625764
+
+551. Bovine coronavirus U40-Miyazaki-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504730.1 GI:1779934288
+
+552. Bovine coronavirus U39-Miyazaki-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504729.1 GI:1779934286
+
+553. Bovine coronavirus U36-Miyazaki-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504728.1 GI:1779934284
+
+554. Bovine coronavirus U35-Miyazaki-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504727.1 GI:1779934282
+
+555. Bovine coronavirus U34-Miyazaki-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504726.1 GI:1779934280
+
+556. Bovine coronavirus U31-Miyazaki-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504725.1 GI:1779934278
+
+557. Bovine coronavirus U30-Miyazaki-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504724.1 GI:1779934276
+
+558. Bovine coronavirus U28-Miyazaki-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504723.1 GI:1779934274
+
+559. Bovine coronavirus U27-Miyazaki-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504722.1 GI:1779934272
+
+560. Bovine coronavirus U25-Miyazaki-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504721.1 GI:1779934270
+
+561. Bovine coronavirus U24-Miyazaki-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504720.1 GI:1779934268
+
+562. Bovine coronavirus U22-Miyazaki-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504719.1 GI:1779934266
+
+563. Bovine coronavirus U21-Miyazaki-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504718.1 GI:1779934264
+
+564. Bovine coronavirus U19-Miyazaki-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504717.1 GI:1779934262
+
+565. Bovine coronavirus U17-Miyazaki-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504716.1 GI:1779934260
+
+566. Bovine coronavirus U16-Miyazaki-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504715.1 GI:1779934258
+
+567. Bovine coronavirus U14-Miyazaki-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504714.1 GI:1779934256
+
+568. Bovine coronavirus U13-Miyazaki-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504713.1 GI:1779934254
+
+569. Bovine coronavirus U12-Miyazaki-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504712.1 GI:1779934252
+
+570. Bovine coronavirus T5-Miyazaki-2016 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504711.1 GI:1779934250
+
+571. Bovine coronavirus T1-Miyazaki-2016 S1 gene for spike protein subunit 1, partial sequence
+411 bp linear RNA 
+LC504710.1 GI:1779934249
+
+572. Bovine coronavirus T16-Miyazaki-2016 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504709.1 GI:1779934247
+
+573. Bovine coronavirus S9-Mie-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504708.1 GI:1779934245
+
+574. Bovine coronavirus S8-Mie-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504707.1 GI:1779934243
+
+575. Bovine coronavirus S7-Mie-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504706.1 GI:1779934241
+
+576. Bovine coronavirus S6-Mie-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504705.1 GI:1779934239
+
+577. Bovine coronavirus S5-Mie-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504704.1 GI:1779934237
+
+578. Bovine coronavirus S4-Mie-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504703.1 GI:1779934235
+
+579. Bovine coronavirus S3-Mie-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504702.1 GI:1779934233
+
+580. Bovine coronavirus S2-Mie-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504701.1 GI:1779934231
+
+581. Bovine coronavirus S1-Mie-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504700.1 GI:1779934229
+
+582. Bovine coronavirus S15-Mie-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504699.1 GI:1779934227
+
+583. Bovine coronavirus S14-Mie-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504698.1 GI:1779934225
+
+584. Bovine coronavirus S13-Mie-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504697.1 GI:1779934223
+
+585. Bovine coronavirus S12-Mie-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504696.1 GI:1779934221
+
+586. Bovine coronavirus S11-Mie-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504695.1 GI:1779934219
+
+587. Bovine coronavirus S10-Mie-2018 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504694.1 GI:1779934217
+
+588. Bovine coronavirus N30-Miyazaki-2016 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504693.1 GI:1779934215
+
+589. Bovine coronavirus M28-Miyazaki-2016 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504692.1 GI:1779934213
+
+590. Bovine coronavirus KK4-Kumamoto-2016 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504691.1 GI:1779934211
+
+591. Bovine coronavirus KK29-Kumamoto-2016 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504690.1 GI:1779934209
+
+592. Bovine coronavirus KK28-Kumamoto-2016 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504689.1 GI:1779934207
+
+593. Bovine coronavirus KK27-Kumamoto-2016 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504688.1 GI:1779934205
+
+594. Bovine coronavirus KK26-Kumamoto-2016 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504687.1 GI:1779934203
+
+595. Bovine coronavirus KK25-Kumamoto-2016 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504686.1 GI:1779934201
+
+596. Bovine coronavirus KK24-Kumamoto-2016 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504685.1 GI:1779934199
+
+597. Bovine coronavirus KK21-Kumamoto-2016 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504684.1 GI:1779934197
+
+598. Bovine coronavirus KK18-Kumamoto-2016 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504683.1 GI:1779934195
+
+599. Bovine coronavirus KK13-Kumamoto-2016 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504682.1 GI:1779934193
+
+600. Bovine coronavirus KK10-Kumamoto-2016 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504681.1 GI:1779934191
+
+601. Bovine coronavirus I8-Miyazaki-2017 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504680.1 GI:1779934189
+
+602. Bovine coronavirus E7-Mie-2016 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504679.1 GI:1779934187
+
+603. Bovine coronavirus D5-Mie-2016 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504678.1 GI:1779934185
+
+604. Bovine coronavirus CS3-Miyazaki-2016 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504677.1 GI:1779934183
+
+605. Bovine coronavirus CS1-Miyazaki-2016 S1 gene for spike protein subunit 1, partial sequence
+411 bp linear RNA 
+LC504676.1 GI:1779934182
+
+606. Bovine coronavirus C20-Miyazaki-2016 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504675.1 GI:1779934180
+
+607. Bovine coronavirus C19-Miyazaki-2016 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504674.1 GI:1779934178
+
+608. Bovine coronavirus C18-Miyazaki-2016 S1 gene for spike protein subunit 1, partial sequence
+411 bp linear RNA 
+LC504673.1 GI:1779934177
+
+609. Bovine coronavirus C16-Miyazaki-2016 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504672.1 GI:1779934175
+
+610. Bovine coronavirus C15-Miyazaki-2016 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504671.1 GI:1779934173
+
+611. Bovine coronavirus C14-Miyazaki-2016 S1 gene for spike protein subunit 1, partial sequence
+411 bp linear RNA 
+LC504670.1 GI:1779934172
+
+612. Bovine coronavirus C13-Miyazaki-2016 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504669.1 GI:1779934170
+
+613. Bovine coronavirus C11-Miyazaki-2016 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504668.1 GI:1779934168
+
+614. Bovine coronavirus A9-Aichi-2016 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504667.1 GI:1779934166
+
+615. Bovine coronavirus A7-Aichi-2016 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504666.1 GI:1779934164
+
+616. Bovine coronavirus A6-Aichi-2016 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504665.1 GI:1779934162
+
+617. Bovine coronavirus A5-Aichi-2016 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504664.1 GI:1779934160
+
+618. Bovine coronavirus A25-Aichi-2016 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504663.1 GI:1779934158
+
+619. Bovine coronavirus A14-Aichi-2016 S1 gene for spike protein subunit 1, partial cds
+411 bp linear RNA 
+LC504662.1 GI:1779934156
+
+620. Bovine coronavirus isolate QHHZ1 hemagglutinin gene, partial cds
+1,272 bp linear RNA 
+MK688459.1 GI:1766756704
+
+621. Bovine coronavirus isolate QHHZ1 nucleocapsid protein gene, partial cds
+1,344 bp linear RNA 
+MK688458.1 GI:1766756702
+
+622. Bovine coronavirus isolate RVSRI19 spike glycoprotein (S) gene, partial cds
+1,125 bp linear RNA 
+MK559492.1 GI:1743039605
+
+623. Bovine coronavirus isolate BOV-36/IND/2015 nucleocapsid protein (N) gene, partial cds
+462 bp linear RNA 
+MH753493.1 GI:1631969957
+
+624. Bovine coronavirus isolate BOV-21/IND/2015 nucleocapsid protein (N) gene, partial cds
+462 bp linear RNA 
+MH753492.1 GI:1631969955
+
+625. Bovine coronavirus isolate BOV-18/IND/2015 nucleocapsid protein (N) gene, partial cds
+462 bp linear RNA 
+MH753491.1 GI:1631969953
+
+626. Bovine coronavirus isolate BOV-36/IND/2015 replicase protein gene, partial cds
+598 bp linear RNA 
+MH753496.1 GI:1631969951
+
+627. Bovine coronavirus isolate BOV-21/IND/2015 replicase protein gene, partial cds
+598 bp linear RNA 
+MH753495.1 GI:1631969949
+
+628. Bovine coronavirus isolate BOV-18/IND/2015 replicase protein gene, partial cds
+665 bp linear RNA 
+MH753494.1 GI:1631969947
+
+629. Bovine coronavirus isolate PG11 S1 (S) gene, partial cds
+300 bp linear RNA 
+KT381482.1 GI:983175573
+
+630. Bovine coronavirus isolate PD9 S1 (S) gene, partial cds
+300 bp linear RNA 
+KT381481.1 GI:983175571
+
+631. Bovine coronavirus isolate PB3 S1 (S) gene, partial cds
+300 bp linear RNA 
+KT381480.1 GI:983175569
+
+632. Bovine coronavirus isolate PF4 S1 (S) gene, partial cds
+521 bp linear RNA 
+KT381479.1 GI:983175567
+
+633. Bovine coronavirus isolate PF2 S1 (S) gene, partial cds
+521 bp linear RNA 
+KT381478.1 GI:983175565
+
+634. Bovine coronavirus isolate PF1 S1 (S) gene, partial cds
+521 bp linear RNA 
+KT381477.1 GI:983175563
+
+635. Bovine coronavirus isolate PE9 S1 (S) gene, partial cds
+521 bp linear RNA 
+KT381476.1 GI:983175561
+
+636. Bovine coronavirus isolate PE7 S1 (S) gene, partial cds
+521 bp linear RNA 
+KT381475.1 GI:983175559
+
+637. Bovine coronavirus isolate PE5 S1 (S) gene, partial cds
+521 bp linear RNA 
+KT381474.1 GI:983175557
+
+638. Bovine coronavirus isolate PE4 S1 (S) gene, partial cds
+521 bp linear RNA 
+KT381473.1 GI:983175555
+
+639. Bovine coronavirus isolate PD4 S1 (S) gene, partial cds
+521 bp linear RNA 
+KT381472.1 GI:983175553
+
+640. Bovine coronavirus isolate PD1 S1 (S) gene, partial cds
+521 bp linear RNA 
+KT381471.1 GI:983175551
+
+641. Bovine coronavirus isolate PB9 S1 (S) gene, partial cds
+521 bp linear RNA 
+KT381470.1 GI:983175549
+
+642. Bovine coronavirus isolate PB2 S1 (S) gene, partial cds
+521 bp linear RNA 
+KT381469.1 GI:983175547
+
+643. Bovine coronavirus isolate PA11 S1 (S) gene, partial cds
+521 bp linear RNA 
+KT381468.1 GI:983175545
+
+644. Bovine coronavirus strain TUR2 N protein (N) gene, partial cds
+346 bp linear RNA 
+MK787439.1 GI:1646981601
+
+645. Bovine coronavirus strain TUR1 N protein (N) gene, partial cds
+391 bp linear RNA 
+MK787438.1 GI:1646981599
+
+646. Bovine coronavirus strain TUR83 N protein (N) gene, partial cds
+672 bp linear RNA 
+MK787437.1 GI:1646981597
+
+647. Bovine coronavirus strain TUR76 N protein (N) gene, partial cds
+678 bp linear RNA 
+MK787436.1 GI:1646981595
+
+648. Bovine coronavirus strain TUR8553 N protein (N) gene, partial cds
+672 bp linear RNA 
+MK787435.1 GI:1646981593
+
+649. Bovine coronavirus strain TUR4950 N protein (N) gene, partial cds
+686 bp linear RNA 
+MK787434.1 GI:1646981591
+
+650. Bovine coronavirus strain TUR4945 N protein (N) gene, partial cds
+374 bp linear RNA 
+MK787433.1 GI:1646981589
+
+651. Bovine coronavirus strain TUR6 N protein (N) gene, partial cds
+407 bp linear RNA 
+MK787432.1 GI:1646981587
+
+652. Bovine coronavirus strain TUR8 N protein (N) gene, partial cds
+467 bp linear RNA 
+MK787431.1 GI:1646981585
+
+653. Bovine coronavirus strain TUR5 N protein (N) gene, partial cds
+474 bp linear RNA 
+MK787430.1 GI:1646981583
+
+654. Bovine coronavirus strain TUR3940 N protein (N) gene, partial cds
+410 bp linear RNA 
+MK787429.1 GI:1646981581
+
+655. Bovine coronavirus strain TUR79 N protein (N) gene, partial cds
+399 bp linear RNA 
+MK787428.1 GI:1646981579
+
+656. Bovine coronavirus strain TUR77 N protein (N) gene, partial cds
+374 bp linear RNA 
+MK787427.1 GI:1646981577
+
+657. Bovine coronavirus isolate strain ICSA17-LBA spike protein (S) gene, complete cds
+4,092 bp linear RNA 
+MG757144.1 GI:1350895116
+
+658. Bovine coronavirus isolate strain ICSA4-EN spike protein (S) gene, complete cds
+4,092 bp linear RNA 
+MG757143.1 GI:1350895114
+
+659. Bovine coronavirus isolate ICSA-pool-LBA, complete genome
+30,939 bp linear RNA 
+MG757142.1 GI:1350895102
+
+660. Bovine coronavirus isolate ICSA-pool-EN, complete genome
+31,019 bp linear RNA 
+MG757141.1 GI:1350895090
+
+661. Bovine coronavirus isolate ICSA16-LBA, complete genome
+31,024 bp linear RNA 
+MG757140.1 GI:1350895078
+
+662. Bovine coronavirus isolate ICSA16-EN, complete genome
+31,028 bp linear RNA 
+MG757139.1 GI:1350895066
+
+663. Bovine coronavirus isolate ICSA21-LBA, complete genome
+31,026 bp linear RNA 
+MG757138.1 GI:1350895054
+
+664. Bovine coronavirus, complete genome
+31,028 bp linear RNA 
+NC_003045.1 GI:15081544
+
+665. Bovine coronavirus isolate Nazaktabar-3/2009/Iran-Fars nucleocapsid protein (N) gene, partial cds
+398 bp linear RNA 
+MH424418.1 GI:1409161670
+
+666. Bovine coronavirus isolate Nazaktabar-2/2009/Iran-Fars nucleocapsid protein (N) gene, partial cds
+398 bp linear RNA 
+MH424417.1 GI:1409161668
+
+667. Bovine coronavirus isolate Nazaktabar-1/2010/Iran-Zanjan nucleocapsid protein (N) gene, partial cds
+398 bp linear RNA 
+MH424416.1 GI:1409161666
+
+668. Bovine coronavirus spike glycoprotein (S) gene, partial cds
+1,069 bp linear RNA 
+MH396489.1 GI:1409161652
+
+669. Bovine coronavirus isolate Nazaktabar-1/2010/Iran-Zanjan spike glycoprotein (S) gene, partial cds
+1,065 bp linear RNA 
+MH371012.1 GI:1409161650
+
+670. Bovine coronavirus isolate Nazaktabar-2/2009/Iran-Fars spike glycoprotein (S) gene, partial cds
+1,069 bp linear RNA 
+MH371011.1 GI:1409161648
+
+671. Bovine coronavirus strain TWD4 nucleocapsid protein (N) gene, partial cds
+1,229 bp linear RNA 
+MF737175.1 GI:1386811124
+
+672. Bovine coronavirus strain IB3688/15 N protein (N) gene, partial cds
+306 bp linear RNA 
+MF510422.1 GI:1384956975
+
+673. Bovine coronavirus strain IB3700/15 N protein (N) gene, partial cds
+306 bp linear RNA 
+MF510421.1 GI:1384956973
+
+674. Bovine coronavirus strain IB15235/15 N protein (N) gene, partial cds
+306 bp linear RNA 
+MF510420.1 GI:1384956971
+
+675. Bovine coronavirus strain IB15571/15 N protein (N) gene, partial cds
+306 bp linear RNA 
+MF510419.1 GI:1384956969
+
+676. Bovine coronavirus strain IB18304/15 N protein (N) gene, partial cds
+306 bp linear RNA 
+MF510418.1 GI:1384956967
+
+677. Bovine coronavirus strain IB18900/13 N protein (N) gene, partial cds
+306 bp linear RNA 
+MF510417.1 GI:1384956965
+
+678. Bovine coronavirus strain IB21185/15 N protein (N) gene, partial cds
+306 bp linear RNA 
+MF510416.1 GI:1384956963
+
+679. Bovine coronavirus strain IB21188/2015 N protein (N) gene, partial cds
+306 bp linear RNA 
+MF510415.1 GI:1384956961
+
+680. Bovine coronavirus isolate BCoV_2014_13, complete genome
+30,847 bp linear RNA 
+KX982264.1 GI:1170988996
+
+681. Bovine coronavirus strain BCoV-WT-3 nucleocapsid protein gene, partial cds
+735 bp linear RNA 
+KX266234.1 GI:1108874400
+
+682. Bovine coronavirus strain BCoV-WT-2 nucleocapsid protein gene, partial cds
+735 bp linear RNA 
+KX266233.1 GI:1108874367
+
+683. Bovine coronavirus isolate Ontario BCO.44175 hemagglutinin-esterase (HE) gene, complete cds; spike protein S1 subunit (S1) gene, partial cds; and 4.9 kDa putative non-structural protein, 4.8 kDa putative non-structural protein, 12.7 kDa putative non-stuctural protein, and E small protein membrane protein genes, complete cds
+4,663 bp linear RNA 
+AH010063.2 GI:1036031008
+
+684. Bovine coronavirus isolate Quebec BCQ.1523 hemagglutinin-esterase (HE) gene, complete cds; spike protein S1 subunit (S1) gene, partial cds; and 4.9 kDa putative non-structural protein, 4.8 kDa putative non-structural protein, 12.7 kDa putative non-structural protein, and E small membrane protein genes, complete cds
+4,663 bp linear RNA 
+AH010062.2 GI:1036031007
+
+685. Bovine coronavirus isolate Quebec BCQ.7373 hemagglutinin-esterase (HE) gene, complete cds; spike protein S1 subunit (S1) gene, partial cds; and 4.9 kDa putative non-structural protein, 4.8 kDa putative non-structural protein, 12.7 kDa putative non-structural protein, and E small membrane protein genes, complete cds
+4,663 bp linear RNA 
+AH010061.2 GI:1036031006
+
+686. Bovine coronavirus strain CaenBCV spike glycoprotein precursor (S) mRNA, partial cds
+2,668 bp linear mRNA 
+DQ355400.1 GI:88595863
+
+687. Bovine coronavirus isolate An-11 spike protein (S1) gene, partial cds
+487 bp linear RNA 
+GQ259979.1 GI:295923845
+
+688. Bovine coronavirus isolate An-4 spike protein (S1) gene, partial cds
+450 bp linear RNA 
+GQ259978.1 GI:295923843
+
+689. Bovine coronavirus strain ARRIAH hemagglutinin-esterase (HE) mRNA, partial cds
+228 bp linear mRNA 
+AY092770.1 GI:26245161
+
+690. Bovine coronavirus strain BCoV-WT-1 nucleocapsid protein (N) gene, partial cds
+709 bp linear RNA 
+KX073971.1 GI:1035470469
+
+691. Bovine coronavirus strain BCoV-XN-1 nucleocapsid protein (N) gene, partial cds
+694 bp linear RNA 
+KX073970.1 GI:1035470467
+
+692. Bovine coronavirus isolate BCoV/SLO/TZ66/2014 RNA-dependent RNA polymerase gene, partial cds
+390 bp linear RNA 
+KX059631.1 GI:1035470187
+
+693. Bovine coronavirus isolate BCoV/SLO/TZ65/2014 RNA-dependent RNA polymerase gene, partial cds
+390 bp linear RNA 
+KX059630.1 GI:1035470185
+
+694. Bovine coronavirus isolate BCoV/SLO/TP30/2013 RNA-dependent RNA polymerase gene, partial cds
+390 bp linear RNA 
+KX059629.1 GI:1035470183
+
+695. Bovine coronavirus isolate BCoV/SLO/TZ132/2014 RNA-dependent RNA polymerase gene, partial cds
+390 bp linear RNA 
+KX059628.1 GI:1035470181
+
+696. Bovine coronavirus isolate BCoV/SLO/TZ104/2013 RNA-dependent RNA polymerase gene, partial cds
+390 bp linear RNA 
+KX059627.1 GI:1035470179
+
+697. Bovine coronavirus isolate BCoV/SLO/TZ103/2013 RNA-dependent RNA polymerase gene, partial cds
+390 bp linear RNA 
+KX059626.1 GI:1035470177
+
+698. Bovine coronavirus isolate BCoV/SLO/TP63/2014 RNA-dependent RNA polymerase gene, partial cds
+390 bp linear RNA 
+KX059625.1 GI:1035470175
+
+699. Bovine coronavirus isolate BCoV/SLO/41376/2015 RNA-dependent RNA polymerase gene, partial cds
+390 bp linear RNA 
+KX059624.1 GI:1035470173
+
+700. Bovine coronavirus isolate BCoV/SLO/JJ-6/2015 RNA-dependent RNA polymerase gene, partial cds
+390 bp linear RNA 
+KX059623.1 GI:1035470171
+
+701. Bovine coronavirus isolate BCoV/SLO/JJ-5/2015 RNA-dependent RNA polymerase gene, partial cds
+390 bp linear RNA 
+KX059622.1 GI:1035470169
+
+702. Bovine coronavirus isolate BCoV/SLO/5580/2013 RNA-dependent RNA polymerase gene, partial cds
+390 bp linear RNA 
+KX059621.1 GI:1035470167
+
+703. Bovine coronavirus isolate BCoV/SLO/6906/2013 RNA-dependent RNA polymerase gene, partial cds
+390 bp linear RNA 
+KX059620.1 GI:1035470165
+
+704. Bovine coronavirus isolate BCoV/SLO/TP36/2013 RNA-dependent RNA polymerase gene, partial cds
+390 bp linear RNA 
+KX059619.1 GI:1035470163
+
+705. Bovine coronavirus isolate BCoV/SLO/TP49/2013 RNA-dependent RNA polymerase gene, partial cds
+390 bp linear RNA 
+KX059618.1 GI:1035470161
+
+706. Bovine coronavirus isolate BCoV/SLO/TZ101/2013 RNA-dependent RNA polymerase gene, partial cds
+390 bp linear RNA 
+KX059617.1 GI:1035470159
+
+707. Bovine coronavirus isolate BCoV/SLO/TZ102/2013 RNA-dependent RNA polymerase gene, partial cds
+390 bp linear RNA 
+KX059616.1 GI:1035470157
+
+708. Bovine coronavirus isolate BCoV/SLO/TZ15/2012 RNA-dependent RNA polymerase gene, partial cds
+390 bp linear RNA 
+KX059615.1 GI:1035470155
+
+709. Bovine coronavirus isolate BCoV/SLO/TZ94/2013 RNA-dependent RNA polymerase gene, partial cds
+390 bp linear RNA 
+KX059614.1 GI:1035470153
+
+710. Bovine coronavirus isolate BCoV/SLO/TZ96/2013 RNA-dependent RNA polymerase gene, partial cds
+390 bp linear RNA 
+KX059613.1 GI:1035470151
+
+711. Bovine coronavirus isolate BCoV/SLO/TZ98/2013 RNA-dependent RNA polymerase gene, partial cds
+390 bp linear RNA 
+KX059612.1 GI:1035470149
+
+712. Bovine coronavirus isolate BCoV/SLO/TZ95/2013 RNA-dependent RNA polymerase gene, partial cds
+390 bp linear RNA 
+KX059611.1 GI:1035470147
+
+713. Bovine coronavirus isolate BCoV/SLO/TP73/2014 RNA-dependent RNA polymerase gene, partial cds
+390 bp linear RNA 
+KX059610.1 GI:1035470145
+
+714. Bovine coronavirus isolate BCoV/SLO/TP66/2014 RNA-dependent RNA polymerase gene, partial cds
+390 bp linear RNA 
+KX059609.1 GI:1035470143
+
+715. Bovine coronavirus isolate BCoV/SLO/TP14/2012 RNA-dependent RNA polymerase gene, partial cds
+390 bp linear RNA 
+KX059608.1 GI:1035470141
+
+716. Bovine coronavirus strain BCV-AKS-01, complete genome
+30,975 bp linear RNA 
+KU886219.1 GI:1035470452
+
+717. Bovine coronavirus isolate Ontario BCO.43277 hemagglutinin-esterase (HE) gene, complete cds; spike protein S1 subunit (S1) gene, partial cds; and 4.8 kDa putative non-structural protein, 12.7 kDa putative non-structural protein, and E small membrane protein genes, complete cds
+4,663 bp linear RNA 
+AH010241.2 GI:1036031075
+
+718. Bovine coronavirus isolate BCoV-LUN, complete genome
+31,028 bp linear RNA 
+AF391542.1 GI:18033971
+
+719. Bovine coronavirus isolate BCoV-ENT, complete genome
+31,028 bp linear RNA 
+AF391541.1 GI:15077808
+
+720. Bovine coronavirus isolate Quebec BCQ.3994 hemagglutinin-esterase (HE) gene, complete cds; and spike protein S1 subunit (S1) gene, partial cds
+3,608 bp linear RNA 
+AF339836.1 GI:13173411
+
+721. Bovine coronavirus isolate Quebec BCQ.3994 4.9 kDa putative non-structural protein, 4.8 kDa putative non-structural protein, 12.7 kDa putative non-structural protein, and E small membrane protein genes, complete cds
+955 bp linear DNA 
+AF239312.1 GI:11870055
+
+722. Bovine coronavirus isolate Quebec BCQ.3708 hemagglutinin-esterase (HE) gene, complete cds
+1,304 bp linear DNA 
+AF230528.1 GI:11870032
+
+723. Bovine coronavirus isolate Quebec BCQ.701 hemagglutinin-esterase (HE) gene, complete cds
+1,304 bp linear DNA 
+AF230527.1 GI:11870029
+
+724. Bovine coronavirus isolate Quebec BCQ.376 hemagglutinin-esterase (HE) gene, complete cds
+1,304 bp linear DNA 
+AF230526.1 GI:11870026
+
+725. Bovine coronavirus isolate Quebec BCQ.2439 hemagglutinin-esterase (HE) gene, complete cds
+1,304 bp linear DNA 
+AF230525.1 GI:11870023
+
+726. Bovine coronavirus isolate Quebec BCQ.2442 hemagglutinin-esterase (HE) gene, complete cds
+1,304 bp linear DNA 
+AF230524.1 GI:11870020
+
+727. Bovine coronavirus isolate Quebec BCQ.2508 hemagglutinin-esterase (HE) gene, complete cds
+1,304 bp linear DNA 
+AF230523.1 GI:11870017
+
+728. Bovine coronavirus strain OK-0514-3 32 kDa putative non-structural protein, hemagglutinin esterase (HE), spike glycoprotein (S), 4.9 kDa putative non-structural protein, 4.8 kDa putative non-structural protein, 12.7 kDa putative non-structural protein, structural protein E (E), structural protein M (M), structural protein N (N), and I protein (I) genes, complete cds
+9,538 bp linear RNA 
+AF058944.1 GI:6706935
+
+729. Bovine coronavirus strain LSU-94LSS-051-2 32 kDa putative non-structural protein, hemagglutinin esterase (HE), spike glycoprotein (S), truncated 4.9 kDa putative non-structural protein, 4.8 kDa putative non-structural protein, 12.7 kDa putative non-structural protein, structural protein E (E), structural protein M (M), structural protein N (N), and I protein (I) genes, complete cds
+9,538 bp linear RNA 
+AF058943.1 GI:6706924
+
+730. Bovine coronavirus strain LY-138 32 kDa putative non-structural protein, hemagglutinin esterase (HE), spike glycoprotein (S), 4.9 kDa putative non-structural protein, 4.8 kDa putative non-structural protein, 12.7 kDa putative non-structural protein, structural protein E (E), structural protein M (M), structural protein N (N), and I protein (I) genes, complete cds
+9,545 bp linear RNA 
+AF058942.1 GI:6706913
+
+731. Bovine coronavirus RNA-directed RNA polymerase (pol) gene, partial cds
+922 bp linear RNA 
+AF124985.1 GI:4927022
+
+732. Bovine coronavirus spike glycoprotein (S) gene, complete cds
+4,110 bp linear RNA 
+M64668.1 GI:323357
+
+733. Bovine coronavirus spike glycoprotein (S) gene, complete cds
+4,110 bp linear RNA 
+M64667.1 GI:323355
+
+734. Bovine coronavirus hemagglutinin mRNA, partial cds
+1,304 bp linear mRNA 
+M80842.1 GI:323346
+
+735. Bovine coronavirus nucleocapsid gene, complete cds; and unknown gene
+1,710 bp linear RNA 
+M36656.1 GI:210700
+
+736. Bovine coronavirus strain BR-UEL11 spike S1 subunit gene, partial cds
+441 bp linear RNA 
+KP208779.1 GI:807984959
+
+737. Bovine coronavirus isolate BCV-Aks-1 nucleocapsid protein (N) gene, partial cds
+725 bp linear RNA 
+KT247647.1 GI:928007511
+
+738. Bovine coronavirus isolate K658/10 spike protein (S) gene, partial cds
+975 bp linear RNA 
+KM677178.1 GI:751131139
+
+739. Bovine coronavirus isolate K6578/11 spike protein (S) gene, partial cds
+975 bp linear RNA 
+KM677177.1 GI:751131137
+
+740. Bovine coronavirus isolate K5220/12 spike protein (S) gene, partial cds
+975 bp linear RNA 
+KM677176.1 GI:751131135
+
+741. Bovine coronavirus isolate K12/10 spike protein (S) gene, partial cds
+975 bp linear RNA 
+KM677175.1 GI:751131133
+
+742. Bovine coronavirus isolate D71-73F spike protein (S) gene, partial cds
+975 bp linear RNA 
+KM677174.1 GI:751131131
+
+743. Bovine coronavirus isolate D73/11 spike protein (S) gene, partial cds
+975 bp linear RNA 
+KM677173.1 GI:751131129
+
+744. Bovine coronavirus isolate D72/11 spike protein (S) gene, partial cds
+975 bp linear RNA 
+KM677172.1 GI:751131127
+
+745. Bovine coronavirus isolate D71/11 spike protein (S) gene, partial cds
+975 bp linear RNA 
+KM677171.1 GI:751131125
+
+746. Bovine coronavirus isolate B60853/11 spike protein (S) gene, partial cds
+975 bp linear RNA 
+KM677170.1 GI:751131123
+
+747. Bovine coronavirus isolate B6075/12 spike protein (S) gene, partial cds
+975 bp linear RNA 
+KM677169.1 GI:751131121
+
+748. Bovine coronavirus isolate B37/11 spike protein (S) gene, partial cds
+975 bp linear RNA 
+KM677168.1 GI:751131119
+
+749. Bovine coronavirus isolate B3492/11 spike protein (S) gene, partial cds
+975 bp linear RNA 
+KM677167.1 GI:751131117
+
+750. Bovine coronavirus isolate B34649/11 spike protein (S) gene, partial cds
+975 bp linear RNA 
+KM677166.1 GI:751131115
+
+751. Bovine coronavirus isolate B32/11 spike protein (S) gene, partial cds
+975 bp linear RNA 
+KM677165.1 GI:751131113
+
+752. Bovine coronavirus isolate B30/10 spike protein (S) gene, partial cds
+975 bp linear RNA 
+KM677164.1 GI:751131111
+
+753. Bovine coronavirus isolate B27/10 spike protein (S) gene, partial cds
+975 bp linear RNA 
+KM677163.1 GI:751131109
+
+754. Bovine coronavirus isolate K658/10 nucleocapsid protein (N) gene, partial cds
+362 bp linear RNA 
+KM677162.1 GI:751131107
+
+755. Bovine coronavirus isolate K6578/11 nucleocapsid protein (N) gene, partial cds
+362 bp linear RNA 
+KM677161.1 GI:751131105
+
+756. Bovine coronavirus isolate K5220/12 nucleocapsid protein (N) gene, partial cds
+362 bp linear RNA 
+KM677160.1 GI:751131103
+
+757. Bovine coronavirus isolate K12/10 nucleocapsid protein (N) gene, partial cds
+362 bp linear RNA 
+KM677159.1 GI:751131101
+
+758. Bovine coronavirus isolate D71-73F nucleocapsid protein (N) gene, partial cds
+362 bp linear RNA 
+KM677158.1 GI:751131099
+
+759. Bovine coronavirus isolate D73/11 nucleocapsid protein (N) gene, partial cds
+362 bp linear RNA 
+KM677157.1 GI:751131097
+
+760. Bovine coronavirus isolate D72/11 nucleocapsid protein (N) gene, partial cds
+362 bp linear RNA 
+KM677156.1 GI:751131095
+
+761. Bovine coronavirus isolate D71/11 nucleocapsid protein (N) gene, partial cds
+362 bp linear RNA 
+KM677155.1 GI:751131093
+
+762. Bovine coronavirus isolate B60853/11 nucleocapsid protein (N) gene, partial cds
+362 bp linear RNA 
+KM677154.1 GI:751131091
+
+763. Bovine coronavirus isolate B6075/12 nucleocapsid protein (N) gene, partial cds
+362 bp linear RNA 
+KM677153.1 GI:751131089
+
+764. Bovine coronavirus isolate B37/11 nucleocapsid protein (N) gene, partial cds
+362 bp linear RNA 
+KM677152.1 GI:751131087
+
+765. Bovine coronavirus isolate B3492/11 nucleocapsid protein (N) gene, partial cds
+362 bp linear RNA 
+KM677151.1 GI:751131085
+
+766. Bovine coronavirus isolate B34649/11 nucleocapsid protein (N) gene, partial cds
+362 bp linear RNA 
+KM677150.1 GI:751131083
+
+767. Bovine coronavirus isolate B32/11 nucleocapsid protein (N) gene, partial cds
+362 bp linear RNA 
+KM677149.1 GI:751131081
+
+768. Bovine coronavirus isolate B30/10 nucleocapsid protein (N) gene, partial cds
+362 bp linear RNA 
+KM677148.1 GI:751131079
+
+769. Bovine coronavirus isolate B27/10 nucleocapsid protein (N) gene, partial cds
+362 bp linear RNA 
+KM677147.1 GI:751131077
+
+770. hemagglutinin [bovine coronavirus, strain L9, mRNA, 1304 nt]
+1,304 bp linear mRNA 
+S69264.1 GI:239682
+
+771. Bovine coronavirus strain BR-UEL6 nucleocapsid protein (N) gene, partial cds
+249 bp linear RNA 
+KM982442.1 GI:751813750
+
+772. Bovine coronavirus strain BR-UEL5 nucleocapsid protein (N) gene, partial cds
+247 bp linear RNA 
+KJ719309.1 GI:662489137
+
+773. Bovine coronavirus strain BR-UEL4 nucleocapsid protein (N) gene, partial cds
+249 bp linear RNA 
+KJ719308.1 GI:662489135
+
+774. Bovine coronavirus isolate OSU-3166NS-09 spike protein (S) gene, partial cds
+1,052 bp linear RNA 
+JX536392.1 GI:431812571
+
+775. Bovine coronavirus isolate CalfGard A609860 spike protein (S) gene, partial cds
+909 bp linear RNA 
+JQ741970.1 GI:429884769
+
+776. Bovine coronavirus isolate Nebraska (NVSL) spike protein (S) gene, partial cds
+1,026 bp linear RNA 
+JQ741969.1 GI:429884767
+
+777. Bovine coronavirus isolate OSU-576BAL-09 spike protein (S) gene, partial cds
+1,026 bp linear RNA 
+JQ741968.1 GI:429884765
+
+778. Bovine coronavirus isolate OSU-542BAL-09 spike protein (S) gene, partial cds
+1,026 bp linear RNA 
+JQ741967.1 GI:429884763
+
+779. Bovine coronavirus isolate OSU-538BAL-09 spike protein (S) gene, partial cds
+1,026 bp linear RNA 
+JQ741966.1 GI:429884761
+
+780. Bovine coronavirus isolate OSU-554BAL-09 spike protein (S) gene, partial cds
+1,026 bp linear RNA 
+JQ741965.1 GI:429884759
+
+781. Bovine coronavirus isolate OSU-834NS-09 spike protein (S) gene, partial cds
+1,026 bp linear RNA 
+JQ741964.1 GI:429884757
+
+782. Bovine coronavirus isolate OSU-776NS-09 spike protein (S) gene, partial cds
+1,026 bp linear RNA 
+JQ741963.1 GI:429884755
+
+783. Bovine coronavirus isolate OSU-3174NS-09 spike protein (S) gene, partial cds
+1,026 bp linear RNA 
+JQ741962.1 GI:429884753
+
+784. Bovine coronavirus isolate OSU-747BAL-09 spike protein (S) gene, partial cds
+1,026 bp linear RNA 
+JQ741961.1 GI:429884751
+
+785. Bovine coronavirus isolate OSU-3167NS-09 spike protein (S) gene, partial cds
+1,026 bp linear RNA 
+JQ741960.1 GI:429884749
+
+786. Bovine coronavirus isolate OSU-746BAL-09 spike protein (S) gene, partial cds
+1,026 bp linear RNA 
+JQ741959.1 GI:429884747
+
+787. Bovine coronavirus isolate OSU-3175NS-09 spike protein (S) gene, partial cds
+1,026 bp linear RNA 
+JQ741958.1 GI:429884745
+
+788. Bovine coronavirus isolate OSU-787NS-09 spike protein (S) gene, partial cds
+1,026 bp linear RNA 
+JQ741957.1 GI:429884743
+
+789. Bovine coronavirus isolate OSU-778NS-09 spike protein (S) gene, partial cds
+1,026 bp linear RNA 
+JQ741956.1 GI:429884741
+
+790. Bovine coronavirus isolate OSU-1776NS-09 spike protein (S) gene, partial cds
+1,026 bp linear RNA 
+JQ741955.1 GI:429884739
+
+791. Bovine coronavirus isolate OSU-3171NS-09 spike protein (S) gene, partial cds
+1,026 bp linear RNA 
+JQ741954.1 GI:429884737
+
+792. Bovine coronavirus isolate OSU-776NS-11 spike protein (S) gene, partial cds
+1,026 bp linear RNA 
+JQ741953.1 GI:429884735
+
+793. Bovine coronavirus isolate OSU-665NS-09 spike protein (S) gene, partial cds
+1,026 bp linear RNA 
+JQ741952.1 GI:429884733
+
+794. Bovine coronavirus isolate OSU-717NS-11 spike protein (S) gene, partial cds
+1,026 bp linear RNA 
+JQ741951.1 GI:429884731
+
+795. Bovine coronavirus isolate OSU-43NS-08 spike protein (S) gene, partial cds
+1,026 bp linear RNA 
+JQ741950.1 GI:429884729
+
+796. Bovine coronavirus isolate OSU-AN5-00 spike protein (S) gene, partial cds
+1,026 bp linear RNA 
+JQ741949.1 GI:429884727
+
+797. Bovine coronavirus isolate OSU-TN10-99 spike protein (S) gene, partial cds
+1,026 bp linear RNA 
+JQ741948.1 GI:429884725
+
+798. Bovine coronavirus isolate OSU-AN3-00 spike protein (S) gene, partial cds
+1,026 bp linear RNA 
+JQ741947.1 GI:429884723
+
+799. Bovine coronavirus isolate SWE/P/10-4 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169940.1 GI:519668545
+
+800. Bovine coronavirus isolate SWE/Y/10-3 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169939.1 GI:519668543
+
+801. Bovine coronavirus isolate SWE/M/10-2 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169938.1 GI:519668541
+
+802. Bovine coronavirus isolate SWE/M/10-1 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169937.1 GI:519668539
+
+803. Bovine coronavirus isolate SWE/U/09-3* spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169936.1 GI:519668537
+
+804. Bovine coronavirus isolate SWE/C/09-2 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169935.1 GI:519668535
+
+805. Bovine coronavirus isolate SWE/P/09-1 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169934.1 GI:519668533
+
+806. Bovine coronavirus isolate SWE/I/08-3 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169933.1 GI:519668531
+
+807. Bovine coronavirus isolate SWE/C/08-2 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169932.1 GI:519668529
+
+808. Bovine coronavirus isolate SWE/AC/08-1 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169931.1 GI:519668527
+
+809. Bovine coronavirus isolate SWE/C/07-6 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169930.1 GI:519668525
+
+810. Bovine coronavirus isolate SWE/I/07-5 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169929.1 GI:519668523
+
+811. Bovine coronavirus isolate SWE/I/07-4 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169928.1 GI:519668521
+
+812. Bovine coronavirus isolate SWE/I/07-3 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169927.1 GI:519668519
+
+813. Bovine coronavirus isolate SWE/C/07-2 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169926.1 GI:519668517
+
+814. Bovine coronavirus isolate SWE/Z/07-1 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169925.1 GI:519668515
+
+815. Bovine coronavirus isolate SWE/M/06-4* spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169924.1 GI:519668513
+
+816. Bovine coronavirus isolate SWE/M/06-3* spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169923.1 GI:519668511
+
+817. Bovine coronavirus isolate SWE/AC/06-1 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169922.1 GI:519668509
+
+818. Bovine coronavirus isolate SWE/N/05-2 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169921.1 GI:519668507
+
+819. Bovine coronavirus isolate SWE/N/05-1 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169920.1 GI:519668505
+
+820. Bovine coronavirus isolate DEN/05-4 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169919.1 GI:519668503
+
+821. Bovine coronavirus isolate DEN/05-3 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169918.1 GI:519668501
+
+822. Bovine coronavirus isolate DEN/05-2 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169917.1 GI:519668499
+
+823. Bovine coronavirus isolate DEN/05-1 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169916.1 GI:519668497
+
+824. Bovine coronavirus isolate DEN/03-3 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169915.1 GI:519668495
+
+825. Bovine coronavirus isolate DEN/03-2 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169914.1 GI:519668493
+
+826. Bovine coronavirus isolate DEN/03-1 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169913.1 GI:519668491
+
+827. Bovine coronavirus isolate SWE/02-4 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169912.1 GI:519668489
+
+828. Bovine coronavirus isolate SWE/02-3 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169911.1 GI:519668487
+
+829. Bovine coronavirus isolate SWE/02-2 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169910.1 GI:519668485
+
+830. Bovine coronavirus isolate SWE/02-1 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169909.1 GI:519668483
+
+831. Bovine coronavirus isolate SWE/C/92 spike glycoprotein (S) gene, complete cds
+4,092 bp linear RNA 
+KF169908.1 GI:519668481
+
+832. Bovine coronavirus isolate BWD86 spike protein gene, partial cds
+999 bp linear RNA 
+KC907372.1 GI:529162718
+
+833. Bovine coronavirus isolate BWD22 spike protein gene, partial cds
+999 bp linear RNA 
+KC907371.1 GI:529162716
+
+834. Bovine coronavirus isolate BCD117 spike protein gene, partial cds
+999 bp linear RNA 
+KC907370.1 GI:529162714
+
+835. Bovine coronavirus isolate BCD14 spike protein gene, partial cds
+999 bp linear RNA 
+KC907369.1 GI:529162712
+
+836. Bovine coronavirus isolate BCD08 spike protein gene, partial cds
+999 bp linear RNA 
+KC907368.1 GI:529162710
+
+837. Bovine coronavirus strain Nyala 10/01 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+HM573330.1 GI:310769589
+
+838. Bovine coronavirus strain Sitatunga 10/01 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+HM573329.1 GI:310769587
+
+839. Bovine coronavirus strain Himalayan Tahr2 10/01 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+HM573328.1 GI:310769585
+
+840. Bovine coronavirus strain Himalayan Tahr1 10/01 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+HM573327.1 GI:310769583
+
+841. Bovine coronavirus strain Wisent 10/01 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+HM573326.1 GI:310769581
+
+842. Bovine coronavirus strain Nyala 10/01 hemagglutinin-esterase protein precursor (HE) gene, complete cds
+1,275 bp linear RNA 
+HM573325.1 GI:310769579
+
+843. Bovine coronavirus strain Sitatunga 10/01 hemagglutinin-esterase protein precursor (HE) gene, complete cds
+1,275 bp linear RNA 
+HM573324.1 GI:310769577
+
+844. Bovine coronavirus strain Himalayan Tahr2 10/01 hemagglutinin-esterase protein precursor (HE) gene, complete cds
+1,275 bp linear RNA 
+HM573323.1 GI:310769575
+
+845. Bovine coronavirus strain Himalayan Tahr1 10/01 hemagglutinin-esterase protein precursor (HE) gene, complete cds
+1,275 bp linear RNA 
+HM573322.1 GI:310769573
+
+846. Bovine coronavirus strain Wisent 10/01 hemagglutinin-esterase protein precursor (HE) gene, complete cds
+1,275 bp linear RNA 
+HM573321.1 GI:310769571
+
+847. Bovine coronavirus isolate KWD19 hemagglutinin-esterase (HE) gene, complete cds
+1,275 bp linear RNA 
+DQ994170.1 GI:115493042
+
+848. Bovine coronavirus isolate KWD18 hemagglutinin-esterase (HE) gene, complete cds
+1,275 bp linear RNA 
+DQ994169.1 GI:115493040
+
+849. Bovine coronavirus isolate KWD17 hemagglutinin-esterase (HE) gene, complete cds
+1,275 bp linear RNA 
+DQ994168.1 GI:115493038
+
+850. Bovine coronavirus isolate KWD16 hemagglutinin-esterase (HE) gene, complete cds
+1,275 bp linear RNA 
+DQ994167.1 GI:115493036
+
+851. Bovine coronavirus isolate KWD15 hemagglutinin-esterase (HE) gene, complete cds
+1,275 bp linear RNA 
+DQ994166.1 GI:115493034
+
+852. Bovine coronavirus isolate KWD14 hemagglutinin-esterase (HE) gene, complete cds
+1,275 bp linear RNA 
+DQ994165.1 GI:115493032
+
+853. Bovine coronavirus isolate KWD13 hemagglutinin-esterase (HE) gene, complete cds
+1,275 bp linear RNA 
+DQ994164.1 GI:115493030
+
+854. Bovine coronavirus isolate KWD12 hemagglutinin-esterase (HE) gene, complete cds
+1,275 bp linear RNA 
+DQ994163.1 GI:115493028
+
+855. Bovine coronavirus isolate KWD11 hemagglutinin-esterase (HE) gene, complete cds
+1,275 bp linear RNA 
+DQ994162.1 GI:115493026
+
+856. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: 66/H
+411 bp linear RNA 
+AB451543.1 GI:212373310
+
+857. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Kagoshima/7/07
+411 bp linear RNA 
+AB450917.1 GI:212373308
+
+858. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Kagoshima/6/07
+411 bp linear RNA 
+AB450916.1 GI:212373306
+
+859. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Kagoshima/5/07
+411 bp linear RNA 
+AB450915.1 GI:212373304
+
+860. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Kagoshima/4/07
+411 bp linear RNA 
+AB450914.1 GI:212373302
+
+861. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Kagoshima/3/07
+411 bp linear RNA 
+AB450913.1 GI:212373300
+
+862. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Kagoshima/2/07
+411 bp linear RNA 
+AB450912.1 GI:212373298
+
+863. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Kagoshima/1/07
+411 bp linear RNA 
+AB450911.1 GI:212373296
+
+864. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Kumamoto/2/07
+411 bp linear RNA 
+AB450910.1 GI:212373294
+
+865. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Kumamoto/1/07
+411 bp linear RNA 
+AB450909.1 GI:212373292
+
+866. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Kochi/7/06
+411 bp linear RNA 
+AB450908.1 GI:212373290
+
+867. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Kochi/6/05
+411 bp linear RNA 
+AB450907.1 GI:212373288
+
+868. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Kochi/5/05
+411 bp linear RNA 
+AB450906.1 GI:212373286
+
+869. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Kochi/4/04
+411 bp linear RNA 
+AB450905.1 GI:212373284
+
+870. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Kochi/3/04
+411 bp linear RNA 
+AB450904.1 GI:212373282
+
+871. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Kochi/2/04
+411 bp linear RNA 
+AB450903.1 GI:212373280
+
+872. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Kochi/1/04
+411 bp linear RNA 
+AB450902.1 GI:212373278
+
+873. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Shimane/23/07
+411 bp linear RNA 
+AB450901.1 GI:212373276
+
+874. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Shimane/22/06
+411 bp linear RNA 
+AB450900.1 GI:212373274
+
+875. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Shimane/21/06
+411 bp linear RNA 
+AB450899.1 GI:212373272
+
+876. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Shimane/20/06
+411 bp linear RNA 
+AB450898.1 GI:212373270
+
+877. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Shimane/19/05
+411 bp linear RNA 
+AB450897.1 GI:212373268
+
+878. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Shimane/18/05
+411 bp linear RNA 
+AB450896.1 GI:212373266
+
+879. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Shimane/17/05
+411 bp linear RNA 
+AB450895.1 GI:212373264
+
+880. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Shimane/16/05
+411 bp linear RNA 
+AB450894.1 GI:212373262
+
+881. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Shimane/15/05
+411 bp linear RNA 
+AB450893.1 GI:212373260
+
+882. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Shimane/14/05
+411 bp linear RNA 
+AB450892.1 GI:212373258
+
+883. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Shimane/13/03
+411 bp linear RNA 
+AB450891.1 GI:212373256
+
+884. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Shimane/12/03
+411 bp linear RNA 
+AB450890.1 GI:212373254
+
+885. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Shimane/11/03
+411 bp linear RNA 
+AB450889.1 GI:212373252
+
+886. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Shimane/10/03
+411 bp linear RNA 
+AB450888.1 GI:212373250
+
+887. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Shimane/9/03
+411 bp linear RNA 
+AB450887.1 GI:212373248
+
+888. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Shimane/8/03
+411 bp linear RNA 
+AB450886.1 GI:212373246
+
+889. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Shimane/7/02
+411 bp linear RNA 
+AB450885.1 GI:212373244
+
+890. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Shimane/6/02
+411 bp linear RNA 
+AB450884.1 GI:212373242
+
+891. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Shimane/5/01
+411 bp linear RNA 
+AB450883.1 GI:212373240
+
+892. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Shimane/4/00
+411 bp linear RNA 
+AB450882.1 GI:212373238
+
+893. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Shimane/3/00
+411 bp linear RNA 
+AB450881.1 GI:212373236
+
+894. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Shimane/2/00
+411 bp linear RNA 
+AB450880.1 GI:212373234
+
+895. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Shimane/1/00
+411 bp linear RNA 
+AB450879.1 GI:212373232
+
+896. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Wakayama/11/08
+411 bp linear RNA 
+AB450878.1 GI:212373230
+
+897. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Wakayama/10/07
+411 bp linear RNA 
+AB450877.1 GI:212373228
+
+898. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Wakayama/9/07
+411 bp linear RNA 
+AB450876.1 GI:212373226
+
+899. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Wakayama/8/07
+411 bp linear RNA 
+AB450875.1 GI:212373224
+
+900. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Gifu/2/06
+411 bp linear RNA 
+AB450874.1 GI:212373222
+
+901. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Gifu/1/06
+411 bp linear RNA 
+AB450873.1 GI:212373220
+
+902. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Ishikawa/25/08
+411 bp linear RNA 
+AB450872.1 GI:212373218
+
+903. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Ishikawa/24/08
+411 bp linear RNA 
+AB450871.1 GI:212373216
+
+904. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Ishikawa/23/08
+411 bp linear RNA 
+AB450870.1 GI:212373214
+
+905. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Ishikawa/22/07
+411 bp linear RNA 
+AB450869.1 GI:212373212
+
+906. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Ishikawa/21/07
+411 bp linear RNA 
+AB450868.1 GI:212373210
+
+907. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Ishikawa/20/06
+411 bp linear RNA 
+AB450867.1 GI:212373208
+
+908. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Ishikawa/19/06
+411 bp linear RNA 
+AB450866.1 GI:212373206
+
+909. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Ishikawa/18/06
+411 bp linear RNA 
+AB450865.1 GI:212373204
+
+910. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Ishikawa/17/06
+411 bp linear RNA 
+AB450864.1 GI:212373202
+
+911. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Ishikawa/16/06
+411 bp linear RNA 
+AB450863.1 GI:212373200
+
+912. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Ishikawa/15/06
+411 bp linear RNA 
+AB450862.1 GI:212373198
+
+913. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Ishikawa/14/05
+411 bp linear RNA 
+AB450861.1 GI:212373196
+
+914. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Ishikawa/13/06
+411 bp linear RNA 
+AB450860.1 GI:212373194
+
+915. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Ishikawa/12/06
+411 bp linear RNA 
+AB450859.1 GI:212373192
+
+916. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Ishikawa/11/06
+411 bp linear RNA 
+AB450858.1 GI:212373190
+
+917. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Ishikawa/10/06
+411 bp linear RNA 
+AB450857.1 GI:212373188
+
+918. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Toyama/1/08
+411 bp linear RNA 
+AB450856.1 GI:212373186
+
+919. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Ibaraki/6/07
+411 bp linear RNA 
+AB450855.1 GI:212373184
+
+920. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Ibaraki/5/07
+411 bp linear RNA 
+AB450854.1 GI:212373182
+
+921. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Ibaraki/4/07
+411 bp linear RNA 
+AB450853.1 GI:212373180
+
+922. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Ibaraki/3/06
+411 bp linear RNA 
+AB450852.1 GI:212373178
+
+923. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Ibaraki/2/05
+411 bp linear RNA 
+AB450851.1 GI:212373176
+
+924. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Ibaraki/1/04
+411 bp linear RNA 
+AB450850.1 GI:212373174
+
+925. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Yamagata/13/07
+411 bp linear RNA 
+AB450849.1 GI:212373172
+
+926. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Yamagata/12/07
+411 bp linear RNA 
+AB450848.1 GI:212373170
+
+927. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Yamagata/11/07
+411 bp linear RNA 
+AB450847.1 GI:212373168
+
+928. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Yamagata/10/07
+411 bp linear RNA 
+AB450846.1 GI:212373166
+
+929. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Yamagata/9/07
+411 bp linear RNA 
+AB450845.1 GI:212373164
+
+930. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Yamagata/8/07
+411 bp linear RNA 
+AB450844.1 GI:212373162
+
+931. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/40/08
+411 bp linear RNA 
+AB450843.1 GI:212373160
+
+932. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/39/08
+411 bp linear RNA 
+AB450842.1 GI:212373158
+
+933. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/38/08
+411 bp linear RNA 
+AB450841.1 GI:212373156
+
+934. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/37/08
+411 bp linear RNA 
+AB450840.1 GI:212373154
+
+935. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/36/07
+411 bp linear RNA 
+AB450839.1 GI:212373152
+
+936. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/35/07
+411 bp linear RNA 
+AB450838.1 GI:212373150
+
+937. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/34/07
+411 bp linear RNA 
+AB450837.1 GI:212373148
+
+938. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/33/06
+411 bp linear RNA 
+AB450836.1 GI:212373146
+
+939. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/32/06
+411 bp linear RNA 
+AB450835.1 GI:212373144
+
+940. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/31/06
+411 bp linear RNA 
+AB450834.1 GI:212373142
+
+941. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/30/06
+411 bp linear RNA 
+AB450833.1 GI:212373140
+
+942. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/29/06
+411 bp linear RNA 
+AB450832.1 GI:212373138
+
+943. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/28/05
+411 bp linear RNA 
+AB450831.1 GI:212373136
+
+944. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/27/05
+411 bp linear RNA 
+AB450830.1 GI:212373134
+
+945. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/26/05
+411 bp linear RNA 
+AB450829.1 GI:212373132
+
+946. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/25/05
+411 bp linear RNA 
+AB450828.1 GI:212373130
+
+947. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/24/05
+411 bp linear RNA 
+AB450827.1 GI:212373128
+
+948. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/23/05
+411 bp linear RNA 
+AB450826.1 GI:212373126
+
+949. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/22/05
+411 bp linear RNA 
+AB450825.1 GI:212373124
+
+950. Bovine coronavirus genomic RNA, complete genome, strain: Kakegawa
+31,038 bp linear RNA 
+AB354579.1 GI:155369167
+
+951. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Osaka/2/06
+411 bp linear RNA 
+AB277153.1 GI:134048797
+
+952. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Osaka/1/06
+411 bp linear RNA 
+AB277152.1 GI:134048795
+
+953. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Wakayama/6/03
+411 bp linear RNA 
+AB277151.1 GI:134048793
+
+954. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Wakayama/5/05
+411 bp linear RNA 
+AB277150.1 GI:134048791
+
+955. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Wakayama/4/05
+411 bp linear RNA 
+AB277149.1 GI:134048789
+
+956. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Wakayama/3/05
+411 bp linear RNA 
+AB277148.1 GI:134048787
+
+957. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Wakayama/2/05
+411 bp linear RNA 
+AB277147.1 GI:134048785
+
+958. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Wakayama/1/05
+411 bp linear RNA 
+AB277146.1 GI:134048783
+
+959. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Yamagata/7/03
+411 bp linear RNA 
+AB277145.1 GI:134048781
+
+960. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Yamagata/6/03
+411 bp linear RNA 
+AB277144.1 GI:134048779
+
+961. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Yamagata/5/03
+411 bp linear RNA 
+AB277143.1 GI:134048777
+
+962. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Yamagata/4/03
+411 bp linear RNA 
+AB277142.1 GI:134048775
+
+963. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Yamagata/3/03
+411 bp linear RNA 
+AB277141.1 GI:134048773
+
+964. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Yamagata/2/03
+411 bp linear RNA 
+AB277140.1 GI:134048771
+
+965. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Yamagata/1/03
+411 bp linear RNA 
+AB277139.1 GI:134048769
+
+966. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Tochigi/11/03
+411 bp linear RNA 
+AB277138.1 GI:134048767
+
+967. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Tochigi/10/02
+411 bp linear RNA 
+AB277137.1 GI:134048765
+
+968. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Tochigi/9/02
+411 bp linear RNA 
+AB277136.1 GI:134048763
+
+969. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Tochigi/8/02
+411 bp linear RNA 
+AB277135.1 GI:134048761
+
+970. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Tochigi/7/02
+411 bp linear RNA 
+AB277134.1 GI:134048759
+
+971. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Tochigi/6/02
+411 bp linear RNA 
+AB277133.1 GI:134048757
+
+972. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Tochigi/5/02
+411 bp linear RNA 
+AB277132.1 GI:134048755
+
+973. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Tochigi/4/02
+411 bp linear RNA 
+AB277131.1 GI:134048753
+
+974. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Tochigi/2/01
+411 bp linear RNA 
+AB277130.1 GI:134048751
+
+975. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Tochigi/1/01
+411 bp linear RNA 
+AB277129.1 GI:134048749
+
+976. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Ishikawa/9/04
+411 bp linear RNA 
+AB277128.1 GI:134048747
+
+977. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Ishikawa/8/04
+411 bp linear RNA 
+AB277127.1 GI:134048745
+
+978. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Ishikawa/7/04
+411 bp linear RNA 
+AB277126.1 GI:134048743
+
+979. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Ishikawa/6/04
+411 bp linear RNA 
+AB277125.1 GI:134048741
+
+980. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Ishikawa/5/04
+411 bp linear RNA 
+AB277124.1 GI:134048739
+
+981. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Ishikawa/4/02
+411 bp linear RNA 
+AB277123.1 GI:134048737
+
+982. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Ishikawa/3/01
+411 bp linear RNA 
+AB277122.1 GI:134048735
+
+983. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Ishikawa/2/99
+411 bp linear RNA 
+AB277121.1 GI:134048733
+
+984. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Ishikawa/1/99
+411 bp linear RNA 
+AB277120.1 GI:134048731
+
+985. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/21/05
+411 bp linear RNA 
+AB277119.1 GI:134048729
+
+986. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/20/05
+411 bp linear RNA 
+AB277118.1 GI:134048727
+
+987. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/19/05
+411 bp linear RNA 
+AB277117.1 GI:134048725
+
+988. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/18/05
+411 bp linear RNA 
+AB277116.1 GI:134048723
+
+989. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/17/05
+411 bp linear RNA 
+AB277115.1 GI:134048721
+
+990. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/16/04
+411 bp linear RNA 
+AB277114.1 GI:134048719
+
+991. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/15/04
+411 bp linear RNA 
+AB277113.1 GI:134048717
+
+992. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/14/04
+411 bp linear RNA 
+AB277112.1 GI:134048715
+
+993. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/13/04
+411 bp linear RNA 
+AB277111.1 GI:134048713
+
+994. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/12/03
+411 bp linear RNA 
+AB277110.1 GI:134048711
+
+995. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/11/03
+411 bp linear RNA 
+AB277109.1 GI:134048709
+
+996. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/10/03
+411 bp linear RNA 
+AB277108.1 GI:134048707
+
+997. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/9/03
+411 bp linear RNA 
+AB277107.1 GI:134048705
+
+998. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/8/03
+411 bp linear RNA 
+AB277106.1 GI:134048703
+
+999. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/7/03
+411 bp linear RNA 
+AB277105.1 GI:134048701
+
+1000. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/6/03
+411 bp linear RNA 
+AB277104.1 GI:134048699
+
+1001. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/5/02
+411 bp linear RNA 
+AB277103.1 GI:134048697
+
+1002. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/4/03
+411 bp linear RNA 
+AB277102.1 GI:134048695
+
+1003. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/3/02
+411 bp linear RNA 
+AB277101.1 GI:134048693
+
+1004. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/2/02
+411 bp linear RNA 
+AB277100.1 GI:134048691
+
+1005. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Hokkaido/1/02
+411 bp linear RNA 
+AB277099.1 GI:134048689
+
+1006. Bovine coronavirus S1 gene for spike protein subunit 1, partial cds, strain: Kakegawa
+411 bp linear RNA 
+AB277098.1 GI:134048687
+
+1007. Bovine coronavirus isolate KWD19 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+DQ389660.1 GI:87082967
+
+1008. Bovine coronavirus isolate KWD18 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+DQ389659.1 GI:87082965
+
+1009. Bovine coronavirus isolate KWD17 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+DQ389658.1 GI:87082963
+
+1010. Bovine coronavirus isolate KWD16 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+DQ389657.1 GI:87082961
+
+1011. Bovine coronavirus isolate KWD15 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+DQ389656.1 GI:87082959
+
+1012. Bovine coronavirus isolate KWD14 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+DQ389655.1 GI:87082957
+
+1013. Bovine coronavirus isolate KWD13 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+DQ389654.1 GI:87082955
+
+1014. Bovine coronavirus isolate KWD12 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+DQ389653.1 GI:87082953
+
+1015. Bovine coronavirus isolate KWD11 spike glycoprotein precursor (S) gene, complete cds
+4,092 bp linear RNA 
+DQ389652.1 GI:87082951
+
+1016. Bovine respiratory coronavirus mRNA
+4,129 bp linear mRNA 
+M80844.1 GI:323345
+
+1017. Sequence 25 from Patent WO2016034610
+31,022 bp linear DNA 
+LQ289146.1 GI:1073730020
+
+1018. Sequence 23 from Patent WO2016034610
+1,275 bp linear DNA 
+LQ289144.1 GI:1073730019
+
+1019. Sequence 21 from Patent WO2016034610
+4,092 bp linear DNA 
+LQ289142.1 GI:1073730018
+
+1020. Sequence 19 from Patent WO2016034610
+330 bp linear DNA 
+LQ289140.1 GI:1073730017
+
+1021. Sequence 17 from Patent WO2016034610
+138 bp linear DNA 
+LQ289138.1 GI:1073730016
+
+1022. Sequence 15 from Patent WO2016034610
+132 bp linear DNA 
+LQ289136.1 GI:1073730015
+
+1023. Sequence 13 from Patent WO2016034610
+837 bp linear DNA 
+LQ289134.1 GI:1073730014
+
+1024. Sequence 11 from Patent WO2016034610
+21,284 bp linear DNA 
+LQ289132.1 GI:1073730013
+
+1025. Sequence 9 from Patent WO2016034610
+1,347 bp linear DNA 
+LQ289130.1 GI:1073730012
+
+1026. Sequence 7 from Patent WO2016034610
+255 bp linear DNA 
+LQ289128.1 GI:1073730011
+
+1027. Sequence 5 from Patent WO2016034610
+693 bp linear DNA 
+LQ289126.1 GI:1073730010
+
+1028. Sequence 3 from Patent WO2016034610
+1,218 bp linear DNA 
+LQ289124.1 GI:1073730009
+
+1029. Sequence 1 from Patent WO2016034610
+4,038 bp linear DNA 
+LQ289122.1 GI:1073730008
+
+1030. Oligonucleotide analogs having cationic intersubunit linkages
+20 bp linear DNA 
+FW337967.1 GI:298562190
+
+1031. Oligonucleotide analogs having cationic intersubunit linkages
+20 bp linear DNA 
+FW337966.1 GI:298562189
+
+1032. Oligonucleotide analogs having cationic intersubunit linkages
+40 bp linear DNA 
+FW337956.1 GI:298562179
+
+1033. ANTISENSE ANTIVIRAL COMPOUND AND METHOD FOR TREATING SSRNA VIRAL INFECTION
+40 bp linear DNA 
+DL470168.1 GI:218736347
+
+1034. MULTI-ALLELIC MOLECULAR DETECTION OF SARS-ASSOCIATED CORONAVIRUS
+1,347 bp linear DNA 
+DI158178.1 GI:168449250
+
+1035. MULTI-ALLELIC MOLECULAR DETECTION OF SARS-ASSOCIATED CORONAVIRUS
+693 bp linear DNA 
+DI156571.1 GI:168447969
+
+1036. MULTI-ALLELIC MOLECULAR DETECTION OF SARS-ASSOCIATED CORONAVIRUS
+255 bp linear DNA 
+DI156529.1 GI:168447927
+
+1037. MULTI-ALLELIC MOLECULAR DETECTION OF SARS-ASSOCIATED CORONAVIRUS
+4,092 bp linear DNA 
+DI158731.1 GI:168321299
+
+1038. MULTI-ALLELIC MOLECULAR DETECTION OF SARS-ASSOCIATED CORONAVIRUS
+1,347 bp linear DNA 
+DJ011649.1 GI:157903178
+
+1039. MULTI-ALLELIC MOLECULAR DETECTION OF SARS-ASSOCIATED CORONAVIRUS
+693 bp linear DNA 
+DJ011628.1 GI:157903157
+
+1040. MULTI-ALLELIC MOLECULAR DETECTION OF SARS-ASSOCIATED CORONAVIRUS
+255 bp linear DNA 
+DJ011612.1 GI:157903141
+
+1041. MULTI-ALLELIC MOLECULAR DETECTION OF SARS-ASSOCIATED CORONAVIRUS
+4,092 bp linear DNA 
+DJ011589.1 GI:157902119
+
+1042. REAGENTS AND METHODS FOR DETECTING SEVERE ACUTE RESPIRATORY SYNDROME CORONAVIRUS
+240 bp linear DNA 
+DD441253.1 GI:150446118
+
+1043. Sequence 488 from Patent WO2007130519
+60 bp linear DNA 
+GN350724.1 GI:236163387
+
+1044. Sequence 487 from Patent WO2007130519
+60 bp linear DNA 
+GN350723.1 GI:236163385
+
+1045. Sequence 486 from Patent WO2007130519
+60 bp linear DNA 
+GN350722.1 GI:236163382
+
+1046. Sequence 485 from Patent WO2007130519
+60 bp linear DNA 
+GN350721.1 GI:236163379
+
+1047. Sequence 484 from Patent WO2007130519
+60 bp linear DNA 
+GN350720.1 GI:236163377
+
+1048. Sequence 483 from Patent WO2007130519
+60 bp linear DNA 
+GN350719.1 GI:236163375
+
+1049. Sequence 482 from Patent WO2007130519
+60 bp linear DNA 
+GN350718.1 GI:236163373
+
+1050. Sequence 481 from Patent WO2007130519
+60 bp linear DNA 
+GN350717.1 GI:236163371
+
+1051. Sequence 480 from Patent WO2007130519
+60 bp linear DNA 
+GN350716.1 GI:236163369
+
+1052. Sequence 479 from Patent WO2007130519
+60 bp linear DNA 
+GN350715.1 GI:236163366
+
+1053. Bovine enteric coronavirus mRNA 5 and mRNA 6 unique regions for NS2 and NS3 nonstructural proteins
+962 bp linear RNA 
+X51347.1 GI:58684
+
+1054. Sequence 69 from Patent WO2005021798
+1,347 bp linear DNA 
+CS050876.1 GI:61890068
+
+1055. Sequence 48 from Patent WO2005021798
+693 bp linear DNA 
+CS050855.1 GI:61890047
+
+1056. Sequence 32 from Patent WO2005021798
+255 bp linear DNA 
+CS050839.1 GI:61890031
+
+1057. Sequence 9 from Patent WO2005021798
+4,092 bp linear DNA 
+CS050816.1 GI:61890008
+
+1058. Sequence 26 from Patent WO2004094667
+240 bp linear DNA 
+CQ903022.1 GI:55784864
+
+1059. Sequence 49 from Patent WO2004011651
+24 bp linear DNA 
+CQ772334.1 GI:45126123
+
+1060. Sequence 48 from Patent WO2004011651
+26 bp linear DNA 
+CQ772333.1 GI:45126122
+
+1061. Sequence 47 from Patent WO2004011651
+25 bp linear DNA 
+CQ772332.1 GI:45126121
+
+1062. Sequence 46 from Patent WO2004011651
+20 bp linear DNA 
+CQ772331.1 GI:45126120
+
+1063. Sequence 45 from Patent WO2004011651
+20 bp linear DNA 
+CQ772330.1 GI:45126119
+
+1064. Sequence 44 from Patent WO2004011651
+20 bp linear DNA 
+CQ772329.1 GI:45126118
+
+1065. Sequence 43 from Patent WO2004011651
+20 bp linear DNA 
+CQ772328.1 GI:45126117
+
+1066. Sequence 42 from Patent WO2004011651
+20 bp linear DNA 
+CQ772327.1 GI:45126116
+
+1067. Sequence 41 from Patent WO2004011651
+23 bp linear DNA 
+CQ772326.1 GI:45126115
+
+1068. Sequence 40 from Patent WO2004011651
+24 bp linear DNA 
+CQ772325.1 GI:45126114
+
+1069. Sequence 39 from Patent WO2004011651
+19 bp linear DNA 
+CQ772324.1 GI:45126113
+
+1070. Sequence 38 from Patent WO2004011651
+20 bp linear DNA 
+CQ772323.1 GI:45126112
+
+1071. Sequence 37 from Patent WO2004011651
+20 bp linear DNA 
+CQ772322.1 GI:45126111
+
+1072. Sequence 36 from Patent WO2004011651
+21 bp linear DNA 
+CQ772321.1 GI:45126110
+
+1073. Sequence 35 from Patent WO2004011651
+23 bp linear DNA 
+CQ772320.1 GI:45126109
+
+1074. Sequence 34 from Patent WO2004011651
+24 bp linear DNA 
+CQ772319.1 GI:45126108
+
+1075. Sequence 23 from Patent WO2004011651
+497 bp linear DNA 
+CQ772308.1 GI:45126101
+
+1076. Sequence 14 from Patent WO2004011651
+4,049 bp linear DNA 
+CQ772299.1 GI:45126097
+
+1077. Sequence 5 from Patent WO2004011651
+250 bp linear DNA 
+CQ772290.1 GI:45126092
+
+1078. Bovine enteric coronavirus gene for spike glycoprotein precursor, complete cds
+4,200 bp linear RNA 
+D00731.1 GI:221136
+
+1079. Bovine coronavirus UP2/PRT/2005 hemmaglutinin-esterase protein mRNA, partial cds
+322 bp linear mRNA 
+EU703816.1 GI:189342845
+
+1080. Bovine coronavirus UP1/PRT/2005 hemmaglutinin-esterase protein mRNA, partial cds
+322 bp linear mRNA 
+EU703815.1 GI:189342843
+
+1081. Bovine coronavirus cow/WDBR-54/BRA/2003 nucleocapsid protein gene, partial cds
+225 bp linear RNA 
+GU808352.1 GI:294861841
+
+1082. Bovine coronavirus cow/WDBR-9224/BRA/2003 nucleocapsid protein gene, partial cds
+219 bp linear RNA 
+GU808351.1 GI:294861839
+
+1083. Bovine coronavirus cow/WDBR-9215/BRA/2003 nucleocapsid protein gene, partial cds
+258 bp linear RNA 
+GU808350.1 GI:294861837
+
+1084. Bovine coronavirus cow/WDBR-9146/BRA/2003 nucleocapsid protein gene, partial cds
+258 bp linear RNA 
+GU808349.1 GI:294861835
+
+1085. Bovine coronavirus cow/WDBR-1275/BRA/2003 nucleocapsid protein gene, partial cds
+251 bp linear RNA 
+GU808348.1 GI:294861833
+
+1086. Bovine coronavirus cow/WDBR-1005/BRA/2003 nucleocapsid protein gene, partial cds
+258 bp linear RNA 
+GU808347.1 GI:294861831
+
+1087. Bovine coronavirus cow/WDBR-978/BRA/2003 nucleocapsid protein gene, partial cds
+258 bp linear RNA 
+GU808346.1 GI:294861829
+
+1088. Bovine coronavirus cow/WDBR-923/BRA/2003 nucleocapsid protein gene, partial cds
+258 bp linear RNA 
+GU808345.1 GI:294861827
+
+1089. Bovine coronavirus cow/WDBR-887/BRA/2003 nucleocapsid protein gene, partial cds
+258 bp linear RNA 
+GU808344.1 GI:294861825
+
+1090. Bovine coronavirus cow/WDBR-841/BRA/2003 nucleocapsid protein gene, partial cds
+258 bp linear RNA 
+GU808343.1 GI:294861823
+
+1091. Bovine coronavirus cow/WDBR-729/BRA/2003 nucleocapsid protein gene, partial cds
+251 bp linear RNA 
+GU808342.1 GI:294861821
+
+1092. Bovine coronavirus cow/WDBR-96/BRA/2003 nucleocapsid protein gene, partial cds
+258 bp linear RNA 
+GU808341.1 GI:294861819
+
+1093. Bovine coronavirus Bubalus/Italy/179/07-11 nonstructural protein 1b (ORF1b) gene, partial cds; and 32 kDa nonstructural protein, hemagglutinin-esterase (HE), spike protein (S), 4.9 kDa nonstructural protein, 4.8 kDa nonstructural protein, 12.7 kDa nonstructural protein, envelope protein (E), membrane protein (M), nucleocapsid protein (N), and I protein (I) genes, complete cds
+9,679 bp linear RNA 
+EU019216.1 GI:157785735
+
+1094. Bovine coronavirus Bubalus/155/ITA/2008 spike protein gene, partial cds
+817 bp linear RNA 
+GU001947.1 GI:283101147
+
+1095. Bovine coronavirus Bubalus/153/ITA/2008 spike protein gene, partial cds
+817 bp linear RNA 
+GU001946.1 GI:283101145
+
+1096. Bovine coronavirus Bubalus/82/ITA/2008 spike protein gene, partial cds
+817 bp linear RNA 
+GU001945.1 GI:283101143
+
+1097. Bovine coronavirus Bubalus/339/ITA/2007 spike protein gene, partial cds
+817 bp linear RNA 
+GU001944.1 GI:283101141
+
+1098. Bovine coronavirus R-AH187, complete genome
+30,964 bp linear RNA 
+EF424620.1 GI:145208944
+
+1099. Bovine coronavirus E-AH187, complete genome
+30,995 bp linear RNA 
+EF424619.1 GI:145208932
+
+1100. Bovine coronavirus R-AH65-TC, complete genome
+30,995 bp linear RNA 
+EF424618.1 GI:145208920
+
+1101. Bovine coronavirus R-AH65, complete genome
+31,016 bp linear RNA 
+EF424617.1 GI:145208908
+
+1102. Bovine coronavirus E-AH65-TC, complete genome
+30,970 bp linear RNA 
+EF424616.1 GI:145208896
+
+1103. Bovine coronavirus E-AH65, complete genome
+31,017 bp linear RNA 
+EF424615.1 GI:145208884
+
+1104. Bovine coronavirus DB2, complete genome
+31,007 bp linear RNA 
+DQ811784.2 GI:331264481
+
+1105. Bovine coronavirus E-AH187-TC, complete genome
+30,995 bp linear RNA 
+FJ938064.1 GI:251748088
+
+1106. Bovine coronavirus E-DB2-TC, complete genome
+31,024 bp linear RNA 
+FJ938063.1 GI:251748075
+
+1107. Bovine coronavirus isolate Alpaca, complete genome
+31,076 bp linear RNA 
+DQ915164.2 GI:124294673
+
+1108. JP 2012125220-A/4: A method for rapid and simultanoues detection of bovine group A rotavirus and bovine coronavirus
+20 bp linear DNA 
+HV775733.1 GI:410124686
+
+1109. JP 2012125220-A/3: A method for rapid and simultanoues detection of bovine group A rotavirus and bovine coronavirus
+20 bp linear DNA 
+HV775732.1 GI:410124685
+
+1110. JP 2012125220-A/2: A method for rapid and simultanoues detection of bovine group A rotavirus and bovine coronavirus
+20 bp linear DNA 
+HV775731.1 GI:410124684
+
+1111. JP 2012125220-A/1: A method for rapid and simultanoues detection of bovine group A rotavirus and bovine coronavirus
+20 bp linear DNA 
+HV775730.1 GI:410124683
+
+1112. Water deer coronavirus isolate W17-18, complete genome
+31,034 bp linear RNA 
+MG518518.1 GI:1360645492
+
+1113. Human enteric coronavirus 4408 p28 gene, partial cds
+948 bp linear RNA 
+AF523844.1 GI:22347591
+
+1114. Sequence 49 from Patent EP2182066
+24 bp linear DNA 
+HC734607.1 GI:296176231
+
+1115. Sequence 48 from Patent EP2182066
+26 bp linear DNA 
+HC734606.1 GI:296176230
+
+1116. Sequence 47 from Patent EP2182066
+25 bp linear DNA 
+HC734605.1 GI:296176229
+
+1117. Sequence 46 from Patent EP2182066
+20 bp linear DNA 
+HC734604.1 GI:296176228
+
+1118. Sequence 45 from Patent EP2182066
+20 bp linear DNA 
+HC734603.1 GI:296176227
+
+1119. Sequence 44 from Patent EP2182066
+20 bp linear DNA 
+HC734602.1 GI:296176226
+
+1120. Sequence 43 from Patent EP2182066
+20 bp linear DNA 
+HC734601.1 GI:296176225
+
+1121. Sequence 42 from Patent EP2182066
+20 bp linear DNA 
+HC734600.1 GI:296176224
+
+1122. Sequence 41 from Patent EP2182066
+23 bp linear DNA 
+HC734599.1 GI:296176220
+
+1123. Sequence 40 from Patent EP2182066
+24 bp linear DNA 
+HC734598.1 GI:296176219
+
+1124. Sequence 39 from Patent EP2182066
+19 bp linear DNA 
+HC734597.1 GI:296176218
+
+1125. Sequence 38 from Patent EP2182066
+20 bp linear DNA 
+HC734596.1 GI:296176217
+
+1126. Sequence 37 from Patent EP2182066
+20 bp linear DNA 
+HC734595.1 GI:296176216
+
+1127. Sequence 36 from Patent EP2182066
+21 bp linear DNA 
+HC734594.1 GI:296176215
+
+1128. Sequence 35 from Patent EP2182066
+23 bp linear DNA 
+HC734593.1 GI:296176214
+
+1129. Sequence 34 from Patent EP2182066
+24 bp linear DNA 
+HC734592.1 GI:296176213
+
+1130. Sequence 23 from Patent EP2182066
+497 bp linear DNA 
+HC734581.1 GI:296176206
+
+1131. Sequence 14 from Patent EP2182066
+4,049 bp linear DNA 
+HC734572.1 GI:296176202
+
+1132. Sequence 5 from Patent EP2182066
+250 bp linear DNA 
+HC734563.1 GI:296176197
+
+1133. Human enteric coronavirus 4408 4.9 kDa protein, 4.8 kDa protein, 12.7 kDa protein, small envelope protein (E), triple spanning membrane protein (M), nucleocapsid protein (N), and I protein (I) genes, complete cds
+3,037 bp linear RNA 
+AY316299.1 GI:34398245
+
+1134. Sambar deer coronavirus US/OH-WD388-TC/1994 calf-passaged, complete genome
+30,987 bp linear RNA 
+FJ425190.1 GI:215478163
+
+1135. Sambar deer coronavirus US/OH-WD388/1994, complete genome
+30,997 bp linear RNA 
+FJ425189.1 GI:215478150
+
+1136. Sambar deer coronavirus US/OH-WD388-TC/1994, complete genome
+30,995 bp linear RNA 
+FJ425188.1 GI:215478138
+
+1137. White-tailed deer coronavirus US/OH-WD470/1994, complete genome
+31,020 bp linear RNA 
+FJ425187.1 GI:215478127
+
+1138. Waterbuck coronavirus US/OH-WD358/1994, complete genome
+30,962 bp linear RNA 
+FJ425186.1 GI:215478115
+
+1139. Waterbuck coronavirus US/OH-WD358-GnC/1994, complete genome
+30,940 bp linear RNA 
+FJ425185.1 GI:215478103
+
+1140. Waterbuck coronavirus US/OH-WD358-TC/1994, complete genome
+30,995 bp linear RNA 
+FJ425184.1 GI:215478091
+
+1141. Calf-giraffe coronavirus US/OH3/2006, complete genome
+30,979 bp linear RNA 
+EF424624.1 GI:145208992
+
+1142. Giraffe coronavirus US/OH3/2003, complete genome
+31,002 bp linear RNA 
+EF424623.1 GI:145208980
+
+1143. Giraffe coronavirus US/OH3-TC/2006, complete genome
+30,979 bp linear RNA 
+EF424622.1 GI:145208968
+
+1144. Sable antelope coronavirus US/OH1/2003, complete genome
+30,995 bp linear RNA 
+EF424621.1 GI:145208956
+
+1145. Sequence 25 from Patent EP2182066
+497 bp linear DNA 
+HC734583.1 GI:296176208
+
+1146. Human enteric coronavirus strain 4408, complete genome
+30,953 bp linear RNA 
+FJ938067.1 GI:251748126
+
+1147. Bovine respiratory coronavirus bovine/US/OH-440-TC/1996, complete genome
+30,953 bp linear RNA 
+FJ938066.1 GI:251748114
+
+1148. Bovine respiratory coronavirus AH187, complete genome
+30,969 bp linear RNA 
+FJ938065.1 GI:251748101
+
+1149. Human enteric coronavirus 4408, complete genome
+31,029 bp linear RNA 
+FJ415324.1 GI:212571732
+
+1150. Human enteric coronavirus 4408 3'UTR, partial sequence
+292 bp linear RNA 
+AF523848.1 GI:22347602
+
+1151. Human enteric coronavirus 4408 hemagglutinin-esterase (HE) gene sequence
+1,297 bp linear RNA 
+L07747.1 GI:308767
+
+1152. Human enteric coronavirus 4408 spike glycoprotein (S) gene sequence
+4,133 bp linear RNA 
+L07748.1 GI:308768
+
+1153. S2=glycoprotein [porcine hemagglutinating encephalomyelitis virus HEV, 67N, Genomic, 645 nt]
+645 bp linear DNA 
+S79187.1 GI:1086958
+
+1154. Sequence 25 from patent US 10434168
+31,028 bp linear DNA 
+MO401628.1 GI:1807461127
+
+1155. Sequence 23 from patent US 10434168
+1,275 bp linear DNA 
+MO401627.1 GI:1807461126
+
+1156. Sequence 21 from patent US 10434168
+4,092 bp linear DNA 
+MO401626.1 GI:1807461125
+
+1157. Sequence 19 from patent US 10434168
+330 bp linear DNA 
+MO401625.1 GI:1807461124
+
+1158. Sequence 17 from patent US 10434168
+138 bp linear DNA 
+MO401624.1 GI:1807461123
+
+1159. Sequence 15 from patent US 10434168
+132 bp linear DNA 
+MO401623.1 GI:1807461122
+
+1160. Sequence 13 from patent US 10434168
+837 bp linear DNA 
+MO401622.1 GI:1807461121
+
+1161. Sequence 11 from patent US 10434168
+21,284 bp linear DNA 
+MO401621.1 GI:1807461120
+
+1162. Sequence 9 from patent US 10434168
+1,347 bp linear DNA 
+MO401620.1 GI:1807461119
+
+1163. Sequence 7 from patent US 10434168
+255 bp linear DNA 
+MO401619.1 GI:1807461118
+
+1164. Sequence 5 from patent US 10434168
+693 bp linear DNA 
+MO401618.1 GI:1807461117
+
+1165. Sequence 3 from patent US 10434168
+1,218 bp linear DNA 
+MO401617.1 GI:1807461116
+
+1166. Sequence 1 from patent US 10434168
+4,038 bp linear DNA 
+MO401616.1 GI:1807461115
+
+1167. Yak coronavirus strain YAK/HY24/CH/2017, complete genome
+31,032 bp linear RNA 
+MH810163.1 GI:1549115545
+
+1168. Yak coronavirus isolate YN3 S protein gene, complete cds
+4,092 bp linear RNA 
+MH810162.1 GI:1549115543
+
+1169. Yak coronavirus isolate YN2 S protein gene, complete cds
+4,092 bp linear RNA 
+MH810161.1 GI:1549115541
+
+1170. Yak coronavirus isolate YN1 S protein gene, complete cds
+4,092 bp linear RNA 
+MH810160.1 GI:1549115539
+
+1171. Yak coronavirus isolate XZ3 S protein gene, complete cds
+4,092 bp linear RNA 
+MH810159.1 GI:1549115537
+
+1172. Yak coronavirus isolate XZ2 S protein gene, complete cds
+4,092 bp linear RNA 
+MH810158.1 GI:1549115535
+
+1173. Yak coronavirus isolate XZ1 S protein gene, complete cds
+4,092 bp linear RNA 
+MH810157.1 GI:1549115533
+
+1174. Yak coronavirus isolate SC3 S protein gene, complete cds
+4,092 bp linear RNA 
+MH810156.1 GI:1549115531
+
+1175. Yak coronavirus isolate SC2 S protein gene, complete cds
+4,092 bp linear RNA 
+MH810155.1 GI:1549115529
+
+1176. Yak coronavirus isolate SC1 S protein gene, complete cds
+4,092 bp linear RNA 
+MH810154.1 GI:1549115527
+
+1177. Yak coronavirus isolate QH3 S protein gene, complete cds
+4,092 bp linear RNA 
+MH810153.1 GI:1549115525
+
+1178. Yak coronavirus isolate QH2 S protein gene, complete cds
+4,092 bp linear RNA 
+MH810152.1 GI:1549115523
+
+1179. Yak coronavirus isolate QH1 S protein gene, complete cds
+4,092 bp linear RNA 
+MH810151.1 GI:1549115521
+
+1180. Yak coronavirus isolate HY24 S protein gene, complete cds
+4,092 bp linear RNA 
+MH741424.1 GI:1549115357
+
+1181. Yak coronavirus isolate SC1 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741423.1 GI:1549115355
+
+1182. Yak coronavirus isolate SC2 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741422.1 GI:1549115353
+
+1183. Yak coronavirus isolate SC3 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741421.1 GI:1549115351
+
+1184. Yak coronavirus isolate SC4 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741420.1 GI:1549115349
+
+1185. Yak coronavirus isolate SC5 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741419.1 GI:1549115347
+
+1186. Yak coronavirus isolate SC6 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741418.1 GI:1549115345
+
+1187. Yak coronavirus isolate SC7 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741417.1 GI:1549115343
+
+1188. Yak coronavirus isolate SC8 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741416.1 GI:1549115341
+
+1189. Yak coronavirus isolate SC9 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741415.1 GI:1549115339
+
+1190. Yak coronavirus isolate SC10 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741414.1 GI:1549115337
+
+1191. Yak coronavirus isolate YN1 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741413.1 GI:1549115335
+
+1192. Yak coronavirus isolate YN2 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741412.1 GI:1549115333
+
+1193. Yak coronavirus isolate YN3 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741411.1 GI:1549115331
+
+1194. Yak coronavirus isolate YN4 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741410.1 GI:1549115329
+
+1195. Yak coronavirus isolate YN5 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741409.1 GI:1549115327
+
+1196. Yak coronavirus isolate YN6 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741408.1 GI:1549115325
+
+1197. Yak coronavirus isolate YN7 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741407.1 GI:1549115323
+
+1198. Yak coronavirus isolate YN8 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741406.1 GI:1549115321
+
+1199. Yak coronavirus isolate YN9 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741405.1 GI:1549115319
+
+1200. Yak coronavirus isolate YN10 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741404.1 GI:1549115317
+
+1201. Yak coronavirus isolate XZ1 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741403.1 GI:1549115315
+
+1202. Yak coronavirus isolate XZ2 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741402.1 GI:1549115313
+
+1203. Yak coronavirus isolate XZ3 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741401.1 GI:1549115311
+
+1204. Yak coronavirus isolate XZ4 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741400.1 GI:1549115309
+
+1205. Yak coronavirus isolate XZ5 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741399.1 GI:1549115307
+
+1206. Yak coronavirus isolate XZ6 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741398.1 GI:1549115305
+
+1207. Yak coronavirus isolate XZ7 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741397.1 GI:1549115303
+
+1208. Yak coronavirus isolate XZ8 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741396.1 GI:1549115301
+
+1209. Yak coronavirus isolate XZ9 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741395.1 GI:1549115299
+
+1210. Yak coronavirus isolate XZ10 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741394.1 GI:1549115297
+
+1211. Yak coronavirus isolate QH1 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741393.1 GI:1549115295
+
+1212. Yak coronavirus isolate QH2 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741392.1 GI:1549115293
+
+1213. Yak coronavirus isolate QH3 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741391.1 GI:1549115291
+
+1214. Yak coronavirus isolate QH4 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741390.1 GI:1549115289
+
+1215. Yak coronavirus isolate QH5 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741389.1 GI:1549115287
+
+1216. Yak coronavirus isolate QH6 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741388.1 GI:1549115285
+
+1217. Yak coronavirus isolate QH7 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741387.1 GI:1549115283
+
+1218. Yak coronavirus isolate QH8 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741386.1 GI:1549115281
+
+1219. Yak coronavirus isolate QH9 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741385.1 GI:1549115279
+
+1220. Yak coronavirus isolate QH10 HE protein (HE) gene, partial cds
+773 bp linear RNA 
+MH741384.1 GI:1549115277
+
+1221. Yak coronavirus isolate QH1 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741383.1 GI:1549115275
+
+1222. Yak coronavirus isolate QH2 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741382.1 GI:1549115273
+
+1223. Yak coronavirus isolate QH3 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741381.1 GI:1549115271
+
+1224. Yak coronavirus isolate QH4 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741380.1 GI:1549115269
+
+1225. Yak coronavirus isolate QH5 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741379.1 GI:1549115267
+
+1226. Yak coronavirus isolate QH6 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741378.1 GI:1549115265
+
+1227. Yak coronavirus isolate QH7 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741377.1 GI:1549115263
+
+1228. Yak coronavirus isolate QH8 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741376.1 GI:1549115261
+
+1229. Yak coronavirus isolate QH9 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741375.1 GI:1549115259
+
+1230. Yak coronavirus isolate QH10 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741374.1 GI:1549115257
+
+1231. Yak coronavirus isolate SC1 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741373.1 GI:1549115255
+
+1232. Yak coronavirus isolate SC2 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741372.1 GI:1549115253
+
+1233. Yak coronavirus isolate SC3 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741371.1 GI:1549115251
+
+1234. Yak coronavirus isolate SC4 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741370.1 GI:1549115249
+
+1235. Yak coronavirus isolate SC5 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741369.1 GI:1549115247
+
+1236. Yak coronavirus isolate SC6 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741368.1 GI:1549115245
+
+1237. Yak coronavirus isolate SC7 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741367.1 GI:1549115243
+
+1238. Yak coronavirus isolate SC8 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741366.1 GI:1549115241
+
+1239. Yak coronavirus isolate SC9 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741365.1 GI:1549115239
+
+1240. Yak coronavirus isolate SC10 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741364.1 GI:1549115237
+
+1241. Yak coronavirus isolate XZ1 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741363.1 GI:1549115235
+
+1242. Yak coronavirus isolate XZ2 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741362.1 GI:1549115233
+
+1243. Yak coronavirus isolate XZ3 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741361.1 GI:1549115231
+
+1244. Yak coronavirus isolate XZ4 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741360.1 GI:1549115229
+
+1245. Yak coronavirus isolate XZ5 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741359.1 GI:1549115227
+
+1246. Yak coronavirus isolate XZ6 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741358.1 GI:1549115225
+
+1247. Yak coronavirus isolate XZ7 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741357.1 GI:1549115223
+
+1248. Yak coronavirus isolate XZ8 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741356.1 GI:1549115221
+
+1249. Yak coronavirus isolate XZ9 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741355.1 GI:1549115219
+
+1250. Yak coronavirus isolate XZ10 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741354.1 GI:1549115217
+
+1251. Yak coronavirus isolate YN1 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741353.1 GI:1549115215
+
+1252. Yak coronavirus isolate YN2 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741352.1 GI:1549115213
+
+1253. Yak coronavirus isolate YN3 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741351.1 GI:1549115211
+
+1254. Yak coronavirus isolate YN4 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741350.1 GI:1549115209
+
+1255. Yak coronavirus isolate YN5 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741349.1 GI:1549115207
+
+1256. Yak coronavirus isolate YN6 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741348.1 GI:1549115205
+
+1257. Yak coronavirus isolate YN7 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741347.1 GI:1549115203
+
+1258. Yak coronavirus isolate YN8 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741346.1 GI:1549115201
+
+1259. Yak coronavirus isolate YN9 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741345.1 GI:1549115199
+
+1260. Yak coronavirus isolate YN10 N protein (N) gene, partial cds
+642 bp linear RNA 
+MH741344.1 GI:1549115197
+
+1261. Yak coronavirus isolate QH1 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741343.1 GI:1549115195
+
+1262. Yak coronavirus isolate QH2 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741342.1 GI:1549115193
+
+1263. Yak coronavirus isolate QH3 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741341.1 GI:1549115191
+
+1264. Yak coronavirus isolate QH4 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741340.1 GI:1549115189
+
+1265. Yak coronavirus isolate QH5 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741339.1 GI:1549115187
+
+1266. Yak coronavirus isolate QH6 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741338.1 GI:1549115185
+
+1267. Yak coronavirus isolate QH7 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741337.1 GI:1549115183
+
+1268. Yak coronavirus isolate QH8 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741336.1 GI:1549115181
+
+1269. Yak coronavirus isolate QH9 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741335.1 GI:1549115179
+
+1270. Yak coronavirus isolate QH10 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741334.1 GI:1549115177
+
+1271. Yak coronavirus isolate SC1 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741333.1 GI:1549115175
+
+1272. Yak coronavirus isolate SC2 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741332.1 GI:1549115173
+
+1273. Yak coronavirus isolate SC3 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741331.1 GI:1549115171
+
+1274. Yak coronavirus isolate SC4 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741330.1 GI:1549115169
+
+1275. Yak coronavirus isolate SC5 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741329.1 GI:1549115167
+
+1276. Yak coronavirus isolate SC6 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741328.1 GI:1549115165
+
+1277. Yak coronavirus isolate SC7 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741327.1 GI:1549115163
+
+1278. Yak coronavirus isolate SC8 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741326.1 GI:1549115161
+
+1279. Yak coronavirus isolate SC9 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741325.1 GI:1549115159
+
+1280. Yak coronavirus isolate SC10 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741324.1 GI:1549115157
+
+1281. Yak coronavirus isolate XZ1 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741323.1 GI:1549115155
+
+1282. Yak coronavirus isolate XZ2 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741322.1 GI:1549115153
+
+1283. Yak coronavirus isolate XZ3 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741321.1 GI:1549115151
+
+1284. Yak coronavirus isolate XZ4 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741320.1 GI:1549115149
+
+1285. Yak coronavirus isolate XZ5 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741319.1 GI:1549115147
+
+1286. Yak coronavirus isolate XZ6 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741318.1 GI:1549115145
+
+1287. Yak coronavirus isolate XZ7 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741317.1 GI:1549115143
+
+1288. Yak coronavirus isolate XZ8 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741316.1 GI:1549115141
+
+1289. Yak coronavirus isolate XZ9 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741315.1 GI:1549115139
+
+1290. Yak coronavirus isolate XZ10 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741314.1 GI:1549115137
+
+1291. Yak coronavirus isolate YN1 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741313.1 GI:1549115135
+
+1292. Yak coronavirus isolate YN2 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741312.1 GI:1549115133
+
+1293. Yak coronavirus isolate YN3 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741311.1 GI:1549115131
+
+1294. Yak coronavirus isolate YN4 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741310.1 GI:1549115129
+
+1295. Yak coronavirus isolate YN5 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741309.1 GI:1549115127
+
+1296. Yak coronavirus isolate YN6 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741308.1 GI:1549115125
+
+1297. Yak coronavirus isolate YN7 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741307.1 GI:1549115123
+
+1298. Yak coronavirus isolate YN8 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741306.1 GI:1549115121
+
+1299. Yak coronavirus isolate YN9 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741305.1 GI:1549115119
+
+1300. Yak coronavirus isolate YN10 S protein (S) gene, partial cds
+488 bp linear RNA 
+MH741304.1 GI:1549115117
+
+1301. Canine respiratory coronavirus strain CRCoV/BJ-221 spike protein (S) gene, partial cds
+938 bp linear RNA 
+KX432217.1 GI:1150017232
+
+1302. Canine respiratory coronavirus strain CRCoV/BJ-221 RNA-directed RNA polymerase (pol) gene, partial cds
+950 bp linear RNA 
+KX432216.1 GI:1150017230
+
+1303. Canine respiratory coronavirus strain CRCoV/BJ-34 spike protein (S) gene, partial cds
+914 bp linear RNA 
+KX432215.1 GI:1150017228
+
+1304. Canine respiratory coronavirus strain CRCoV/BJ-34 RNA-directed RNA polymerase (pol) gene, partial cds
+911 bp linear RNA 
+KX432214.1 GI:1150017226
+
+1305. Canine respiratory coronavirus strain BJ232, complete genome
+30,868 bp linear RNA 
+KX432213.1 GI:1150017213
+
+1306. Rotavirus A cow/NDBR-51/Brazil/2002 VP1 protein gene, partial cds
+184 bp linear RNA 
+GU808356.1 GI:294861849
+
+1307. Rotavirus A cow/NDBR-49/Brazil/2002 VP1 protein gene, partial cds
+184 bp linear RNA 
+GU808355.1 GI:294861847
+
+1308. Rotavirus A cow/NDBR-47/Brazil/2000 VP1 protein gene, partial cds
+184 bp linear RNA 
+GU808354.1 GI:294861845
+
+1309. Rotavirus A cow/NDBR-44/Brazil/2000 VP1 protein gene, partial cds
+144 bp linear RNA 
+GU808353.1 GI:294861843
+
+1310. Bos taurus NADH dehydrogenase subunit 5 (ND5) mRNA, partial cds; mitochondrial
+124 bp linear mRNA 
+FJ976184.1 GI:238632197
+
+1311. Bovine rotavirus strain 8209 clone N VP1 gene, partial cds
+172 bp linear RNA 
+FJ986469.1 GI:239634456
+
+1312. Bovine rotavirus strain 8209 clone P VP1 gene, partial cds
+401 bp linear RNA 
+FJ986468.1 GI:239634454
+
+1313. Equine Coronavirus NC99 p28 gene, partial cds
+941 bp linear RNA 
+AF523846.1 GI:22347597
+
+1314. Porcine hemagglutinating encephalomyelitis virus p28 gene, partial cds
+948 bp linear RNA 
+AF523845.1 GI:22347594
+
+1315. Human coronavirus OC43 p28 gene, partial cds
+948 bp linear RNA 
+AF523843.1 GI:22347588
+
+1316. Betacoronavirus 1 isolate BCoV/WD/2003/WDBR-D-17 spike protein (S) gene, partial cds
+4,045 bp linear RNA 
+KP284097.1 GI:931352684
+
+1317. Betacoronavirus 1 isolate BCoV/WD/2003/WDBR-9146 spike protein (S) gene, partial cds
+4,043 bp linear RNA 
+KP284096.1 GI:931352682
+
+1318. Synthetic construct VP8/S2 fusion protein gene, partial cds
+474 bp linear other-genetic 
+KP828358.1 GI:906409576
+
+1319. Betacoronavirus 1 strain BCoV/WD/2007/WDBR-R-54 spike protein subunit 1 (S) gene, partial cds
+427 bp linear RNA 
+JQ918877.1 GI:393010331
+
+1320. Betacoronavirus 1 strain BCoV/WD/2007/WDBR-R-577 spike protein subunit 1 (S) gene, partial cds
+444 bp linear RNA 
+JQ918876.1 GI:393010329
+
+1321. Betacoronavirus 1 strain BCoV/WD/2007/WDBR-R-31 spike protein subunit 1 (S) gene, partial cds
+444 bp linear RNA 
+JQ918875.1 GI:393010327
+
+1322. Betacoronavirus 1 strain BCoV/WD/2007/WDBR-R-34 spike protein subunit 1 (S) gene, partial cds
+448 bp linear RNA 
+JQ918874.1 GI:393010325
+
+1323. Betacoronavirus 1 strain BCoV/WD/2007/WDBR-R-37 spike protein subunit 1 (S) gene, partial cds
+394 bp linear RNA 
+JQ918873.1 GI:393010323
+
+1324. Betacoronavirus 1 strain BCoV/WD/2007/WDBR-R-S/N spike protein subunit 1 (S) gene, partial cds
+441 bp linear RNA 
+JQ918872.1 GI:393010321
+
+1325. Betacoronavirus 1 strain BCoV/WD/2007/WDBR-R-573 spike protein subunit 1 (S) gene, partial cds
+416 bp linear RNA 
+JQ918871.1 GI:393010319
+
+1326. Betacoronavirus 1 strain BCoV/WD/2007/WDBR-R-715 spike protein subunit 1 (S) gene, partial cds
+448 bp linear RNA 
+JQ918870.1 GI:393010317
+
+1327. Betacoronavirus 1 strain BCoV/WD/2007/WDBR-R-67 spike protein subunit 1 (S) gene, partial cds
+444 bp linear RNA 
+JQ918869.1 GI:393010315
+
+1328. Betacoronavirus 1 strain BCoV/WD/2007/WDBR-R-766 spike protein subunit 1 (S) gene, partial cds
+448 bp linear RNA 
+JQ918868.1 GI:393010313
+
+1329. Betacoronavirus 1 strain BCoV/WD/2007/WDBR-R-729 spike protein subunit 1 (S) gene, partial cds
+442 bp linear RNA 
+JQ918867.1 GI:393010311
+
+1330. Betacoronavirus 1 strain BCoV/WD/2007/WDBR-R-749 spike protein subunit 1 (S) gene, partial cds
+414 bp linear RNA 
+JQ918866.1 GI:393010309
+
+1331. Betacoronavirus 1 strain BCoV/WD/2007/WDBR-R-725 spike protein subunit 1 (S) gene, partial cds
+333 bp linear RNA 
+JQ918865.1 GI:393010307
+
+1332. Betacoronavirus 1 strain BCoV/WD/2007/WDBR-R-58 spike protein subunit 1 (S) gene, partial cds
+444 bp linear RNA 
+JQ918864.1 GI:393010305
+
+1333. Betacoronavirus 1 strain BCoV/WD/2007/WDBR-R-37 hemagglutinin-esterase (HE) gene, partial cds
+402 bp linear RNA 
+JQ918863.1 GI:393010303
+
+1334. Betacoronavirus 1 strain BCoV/WD/2007/WDBR-R-577 hemagglutinin-esterase (HE) gene, partial cds
+402 bp linear RNA 
+JQ918862.1 GI:393010301
+
+1335. Betacoronavirus 1 strain BCoV/WD/2007/WDBR-R-31 hemagglutinin-esterase (HE) gene, partial cds
+411 bp linear RNA 
+JQ918861.1 GI:393010299
+
+1336. Betacoronavirus 1 strain BCoV/WD/2007/WDBR-R-34 hemagglutinin-esterase (HE) gene, partial cds
+402 bp linear RNA 
+JQ918860.1 GI:393010297
+
+1337. Betacoronavirus 1 strain BCoV/WD/2007/WDBR-R-S/N hemagglutinin-esterase (HE) gene, partial cds
+402 bp linear RNA 
+JQ918859.1 GI:393010295
+
+1338. Betacoronavirus 1 strain BCoV/WD/2007/WDBR-R-573 hemagglutinin-esterase (HE) gene, partial cds
+374 bp linear RNA 
+JQ918858.1 GI:393010293
+
+1339. Betacoronavirus 1 strain BCoV/WD/2007/WDBR-R-715 hemagglutinin-esterase (HE) gene, partial cds
+411 bp linear RNA 
+JQ918857.1 GI:393010291
+
+1340. Betacoronavirus 1 strain BCoV/WD/2007/WDBR-R-67 hemagglutinin-esterase (HE) gene, partial cds
+348 bp linear RNA 
+JQ918856.1 GI:393010289
+
+1341. Betacoronavirus 1 strain BCoV/WD/2007/WDBR-R-729 hemagglutinin-esterase (HE) gene, partial cds
+373 bp linear RNA 
+JQ918855.1 GI:393010287
+
+1342. Betacoronavirus 1 strain BCoV/WD/2007/WDBR-R-749 hemagglutinin-esterase (HE) gene, partial cds
+411 bp linear RNA 
+JQ918854.1 GI:393010285
+
+1343. Betacoronavirus 1 strain BCoV/WD/2007/WDBR-R-725 hemagglutinin-esterase (HE) gene, partial cds
+368 bp linear RNA 
+JQ918853.1 GI:393010283
+
+1344. Betacoronavirus 1 strain BCoV/WD/2007/WDBR-R-58 hemagglutinin-esterase (HE) gene, partial cds
+362 bp linear RNA 
+JQ918852.1 GI:393010281
+
+1345. Human coronavirus OC43 12.9 kDa nonstructural protein and 9.5 kDa nonstructural proteins, complete cds
+770 bp linear RNA 
+M99576.1 GI:329567
+
+1346. Porcine hemagglutinating encephalomyelitis virus strain VW572, complete genome
+30,480 bp linear RNA 
+DQ011855.1 GI:67518090
+
+1347. Sequence 137 from Patent EP1857116
+35 bp linear DNA 
+FB342895.1 GI:207100619
+
+1348. Sequence 132 from Patent EP1857116
+27 bp linear DNA 
+FB342890.1 GI:207100618
+
+1349. Sequence 131 from Patent EP1857116
+27 bp linear DNA 
+FB342889.1 GI:207100617
+
+1350. Sequence 130 from Patent EP1857116
+27 bp linear DNA 
+FB342888.1 GI:207100616
+
+1351. Sequence 129 from Patent EP1857116
+27 bp linear DNA 
+FB342887.1 GI:207100615
+
+1352. Sequence 128 from Patent EP1857116
+27 bp linear DNA 
+FB342886.1 GI:207100614
+
+1353. Sequence 127 from Patent EP1857116
+27 bp linear DNA 
+FB342885.1 GI:207100613
+
+1354. Sequence 126 from Patent EP1857116
+27 bp linear DNA 
+FB342884.1 GI:207100612
+
+1355. Sequence 125 from Patent EP1857116
+27 bp linear DNA 
+FB342883.1 GI:207100611
+
+1356. Sequence 124 from Patent EP1857116
+27 bp linear DNA 
+FB342882.1 GI:207100610
+
+1357. Sequence 123 from Patent EP1857116
+27 bp linear DNA 
+FB342881.1 GI:207100609
+
+1358. Sequence 122 from Patent EP1857116
+27 bp linear DNA 
+FB342880.1 GI:207100608
+
+1359. Sequence 121 from Patent EP1857116
+27 bp linear DNA 
+FB342879.1 GI:207100607
+
+1360. Sequence 120 from Patent EP1857116
+27 bp linear DNA 
+FB342878.1 GI:207100606
+
+1361. Sequence 119 from Patent EP1857116
+27 bp linear DNA 
+FB342877.1 GI:207100605
+
+1362. Sequence 118 from Patent EP1857116
+21 bp linear DNA 
+FB342876.1 GI:207100604
+
+1363. Sequence 117 from Patent EP1857116
+21 bp linear DNA 
+FB342875.1 GI:207100603
+
+1364. Sequence 116 from Patent EP1857116
+21 bp linear DNA 
+FB342874.1 GI:207100602
+
+1365. Sequence 115 from Patent EP1857116
+21 bp linear DNA 
+FB342873.1 GI:207100601
+
+1366. Sequence 114 from Patent EP1857116
+21 bp linear DNA 
+FB342872.1 GI:207100600
+
+1367. Sequence 113 from Patent EP1857116
+21 bp linear DNA 
+FB342871.1 GI:207100599
+
+1368. Sequence 112 from Patent EP1857116
+21 bp linear DNA 
+FB342870.1 GI:207100598
+
+1369. Sequence 111 from Patent EP1857116
+21 bp linear DNA 
+FB342869.1 GI:207100597
+
+1370. Sequence 110 from Patent EP1857116
+21 bp linear DNA 
+FB342868.1 GI:207100596
+
+1371. Sequence 109 from Patent EP1857116
+21 bp linear DNA 
+FB342867.1 GI:207100595
+
+1372. Sequence 108 from Patent EP1857116
+21 bp linear DNA 
+FB342866.1 GI:207100594
+
+1373. Sequence 107 from Patent EP1857116
+42 bp linear DNA 
+FB342865.1 GI:207100593
+
+1374. Sequence 106 from Patent EP1857116
+42 bp linear DNA 
+FB342864.1 GI:207100592
+
+1375. Sequence 105 from Patent EP1857116
+33 bp linear DNA 
+FB342863.1 GI:207100591
+
+1376. Sequence 104 from Patent EP1857116
+36 bp linear DNA 
+FB342862.1 GI:207100590
+
+1377. Sequence 103 from Patent EP1857116
+42 bp linear DNA 
+FB342861.1 GI:207100589
+
+1378. Sequence 102 from Patent EP1857116
+30 bp linear DNA 
+FB342860.1 GI:207100588
+
+1379. Sequence 101 from Patent EP1857116
+33 bp linear DNA 
+FB342859.1 GI:207100587
+
+1380. Sequence 100 from Patent EP1857116
+33 bp linear DNA 
+FB342858.1 GI:207100586
+
+1381. Sequence 99 from Patent EP1857116
+42 bp linear DNA 
+FB342857.1 GI:207100585
+
+1382. Sequence 98 from Patent EP1857116
+45 bp linear DNA 
+FB342856.1 GI:207100584
+
+1383. Sequence 97 from Patent EP1857116
+27 bp linear DNA 
+FB342855.1 GI:207100583
+
+1384. Sequence 96 from Patent EP1857116
+45 bp linear DNA 
+FB342854.1 GI:207100582
+
+1385. Sequence 95 from Patent EP1857116
+45 bp linear DNA 
+FB342853.1 GI:207100581
+
+1386. Sequence 94 from Patent EP1857116
+45 bp linear DNA 
+FB342852.1 GI:207100580
+
+1387. Sequence 93 from Patent EP1857116
+27 bp linear DNA 
+FB342851.1 GI:207100579
+
+1388. Sequence 92 from Patent EP1857116
+27 bp linear DNA 
+FB342850.1 GI:207100578
+
+1389. Sequence 91 from Patent EP1857116
+24 bp linear DNA 
+FB342849.1 GI:207100577
+
+1390. Sequence 90 from Patent EP1857116
+45 bp linear DNA 
+FB342848.1 GI:207100576
+
+1391. Sequence 89 from Patent EP1857116
+45 bp linear DNA 
+FB342847.1 GI:207100575
+
+1392. Sequence 88 from Patent EP1857116
+45 bp linear DNA 
+FB342846.1 GI:207100574
+
+1393. Sequence 87 from Patent EP1857116
+51 bp linear DNA 
+FB342845.1 GI:207100573
+
+1394. Sequence 86 from Patent EP1857116
+48 bp linear DNA 
+FB342844.1 GI:207100572
+
+1395. Sequence 85 from Patent EP1857116
+51 bp linear DNA 
+FB342843.1 GI:207100571
+
+1396. Sequence 84 from Patent EP1857116
+51 bp linear DNA 
+FB342842.1 GI:207100570
+
+1397. Sequence 83 from Patent EP1857116
+51 bp linear DNA 
+FB342841.1 GI:207100569
+
+1398. Sequence 82 from Patent EP1857116
+48 bp linear DNA 
+FB342840.1 GI:207100568
+
+1399. Sequence 81 from Patent EP1857116
+48 bp linear DNA 
+FB342839.1 GI:207100567
+
+1400. Sequence 80 from Patent EP1857116
+51 bp linear DNA 
+FB342838.1 GI:207100566
+
+1401. Sequence 79 from Patent EP1857116
+51 bp linear DNA 
+FB342837.1 GI:207100565
+
+1402. Sequence 78 from Patent EP1857116
+51 bp linear DNA 
+FB342836.1 GI:207100564
+
+1403. Sequence 77 from Patent EP1857116
+15 bp linear DNA 
+FB342835.1 GI:207100563
+
+1404. Sequence 76 from Patent EP1857116
+15 bp linear DNA 
+FB342834.1 GI:207100562
+
+1405. Sequence 75 from Patent EP1857116
+15 bp linear DNA 
+FB342833.1 GI:207100561
+
+1406. Sequence 74 from Patent EP1857116
+15 bp linear DNA 
+FB342832.1 GI:207100560
+
+1407. Sequence 73 from Patent EP1857116
+15 bp linear DNA 
+FB342831.1 GI:207100559
+
+1408. Sequence 72 from Patent EP1857116
+15 bp linear DNA 
+FB342830.1 GI:207100558
+
+1409. Sequence 15 from Patent EP1857116
+843 bp linear DNA 
+FB342773.1 GI:207100557
+
+1410. Sequence 14 from Patent EP1857116
+816 bp linear DNA 
+FB342772.1 GI:207100556
+
+1411. Sequence 13 from Patent EP1857116
+843 bp linear DNA 
+FB342771.1 GI:207100555
+
+1412. Sequence 12 from Patent EP1857116
+792 bp linear DNA 
+FB342770.1 GI:207100554
+
+1413. Sequence 11 from Patent EP1857116
+792 bp linear DNA 
+FB342769.1 GI:207100553
+
+1414. Sequence 10 from Patent EP1857116
+795 bp linear DNA 
+FB342768.1 GI:207100552
+
+1415. Sequence 9 from Patent EP1857116
+843 bp linear DNA 
+FB342767.1 GI:207100551
+
+1416. Bovine coronaviurus KV0516 transmembrane protein (M) mRNA, complete cds
+693 bp linear mRNA 
+EF371516.1 GI:125661355
+
+1417. Bovine coronaviurus KV0501 transmembrane protein (M) mRNA, complete cds
+693 bp linear mRNA 
+EF371515.1 GI:125661353
+
+1418. Biological Material
+24 bp linear DNA 
+DD266180.1 GI:109246011
+
+1419. Biological Material
+26 bp linear DNA 
+DD266179.1 GI:109246010
+
+1420. Biological Material
+25 bp linear DNA 
+DD266178.1 GI:109246009
+
+1421. Biological Material
+20 bp linear DNA 
+DD266177.1 GI:109246008
+
+1422. Biological Material
+20 bp linear DNA 
+DD266176.1 GI:109246007
+
+1423. Biological Material
+20 bp linear DNA 
+DD266175.1 GI:109246006
+
+1424. Biological Material
+20 bp linear DNA 
+DD266174.1 GI:109246005
+
+1425. Biological Material
+20 bp linear DNA 
+DD266173.1 GI:109246004
+
+1426. Biological Material
+23 bp linear DNA 
+DD266172.1 GI:109246003
+
+1427. Biological Material
+24 bp linear DNA 
+DD266171.1 GI:109246002
+
+1428. Biological Material
+19 bp linear DNA 
+DD266170.1 GI:109246001
+
+1429. Biological Material
+20 bp linear DNA 
+DD266169.1 GI:109246000
+
+1430. Biological Material
+20 bp linear DNA 
+DD266168.1 GI:109245999
+
+1431. Biological Material
+21 bp linear DNA 
+DD266167.1 GI:109245998
+
+1432. Biological Material
+23 bp linear DNA 
+DD266166.1 GI:109245997
+
+1433. Biological Material
+24 bp linear DNA 
+DD266165.1 GI:109245996
+
+1434. Biological Material
+497 bp linear DNA 
+DD266158.1 GI:109245989
+
+1435. Biological Material
+4,049 bp linear DNA 
+DD266154.1 GI:109245985
+
+1436. Biological Material
+250 bp linear DNA 
+DD266149.1 GI:109245980
+
+1437. Sequence 10 from patent US 6867021
+28 bp linear DNA 
+AR643440.1 GI:62781722
+
+1438. Sequence 9 from patent US 6867021
+28 bp linear DNA 
+AR643439.1 GI:62781721
+
+1439. Sequence 8 from patent US 6867021
+24 bp linear DNA 
+AR643438.1 GI:62781720
+
+1440. Sequence 7 from patent US 6867021
+20 bp linear DNA 
+AR643437.1 GI:62781719
+
+1441. Sequence 6 from patent US 6867021
+21 bp linear DNA 
+AR643436.1 GI:62781718
+
+1442. Sequence 5 from patent US 6867021
+21 bp linear DNA 
+AR643435.1 GI:62781717
+
+1443. Sequence 4 from patent US 6867021
+19 bp linear DNA 
+AR643434.1 GI:62781716
+
+1444. Sequence 3 from patent US 6867021
+19 bp linear DNA 
+AR643433.1 GI:62781715
+
+1445. Sequence 2 from patent US 6867021
+23 bp linear DNA 
+AR643432.1 GI:62781714
+
+1446. Sequence 1 from patent US 6867021
+22 bp linear DNA 
+AR643431.1 GI:62781713
+
+1447. Puffinosis virus mRNA for hemagglutinin-esterase
+1,378 bp linear mRNA 
+AJ005960.1 GI:3392987
