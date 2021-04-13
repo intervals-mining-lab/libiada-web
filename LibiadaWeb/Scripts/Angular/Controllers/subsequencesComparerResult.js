@@ -96,7 +96,7 @@
                 $scope.equalElementsToShow = $scope.equalElements[firstIndex][secondIndex];
                 $scope.loading = false;
             } else {
-                $http.get("/api/TaskManagerWebApi", {
+                $http.get("/api/TaskManagerWebApi/GetSubsequencesComparerDataElement", {
                     params: {
                         taskId: $scope.taskId,
                         firstIndex: firstIndex,
@@ -136,7 +136,7 @@
             var arrangementType = $scope.characteristic.arrangementType.Value;
             var characteristicId = $scope.characteristicsDictionary["(" + characteristicType + ", " + link + ", " + arrangementType + ")"];
 
-            $http.get("/api/LocalCalculationWebApi", {
+            $http.get("/api/LocalCalculationWebApi/GetSubsequenceCharacteristic", {
                 params: {
                     subsequenceId: firstSubsequenceId,
                     characteristicLinkId: characteristicId,
@@ -146,7 +146,7 @@
             }).then(function (firstCharacteristics) {
                 $scope.firstSubsequenceLocalCharacteristics = JSON.parse(firstCharacteristics.data);
 
-                $http.get("/api/LocalCalculationWebApi", {
+                $http.get("/api/LocalCalculationWebApi/GetSubsequenceCharacteristic", {
                     params: {
                         subsequenceId: secondSubsequenceId,
                         characteristicLinkId: characteristicId,
@@ -382,7 +382,7 @@
         var location = window.location.href.split("/");
         $scope.taskId = location[location.length - 1];
         $scope.loading = true;
-        $http.get("/api/TaskManagerWebApi/", { params: { id: $scope.taskId } })
+        $http.get(`/api/TaskManagerWebApi/${$scope.taskId}`)
             .then(function (data) {
                 MapModelFromJson($scope, JSON.parse(data.data));
 

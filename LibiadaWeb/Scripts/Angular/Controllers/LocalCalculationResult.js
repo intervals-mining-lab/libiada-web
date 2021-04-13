@@ -108,7 +108,7 @@
         }
 
 		function calculateLocalCharacteristicsSimilarityMatrix() {
-			$http.get("/api/LocalCalculationWebApi", {
+			$http.get("/api/LocalCalculationWebApi/CalculateLocalCharacteristicsSimilarityMatrix", {
 				params: {
 					taskId: $scope.taskId,
 					aligner: $scope.aligner.Value,
@@ -334,7 +334,7 @@
 		var location = window.location.href.split("/");
 		$scope.taskId = location[location.length - 1];
 
-		$http.get("/api/TaskManagerWebApi/", { params: { id: $scope.taskId } })
+		$http.get(`/api/TaskManagerWebApi/${$scope.taskId}`)
 			.then(function (data) {
 				MapModelFromJson($scope, JSON.parse(data.data));
 
