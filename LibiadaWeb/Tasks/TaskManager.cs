@@ -47,7 +47,7 @@
             RemoveGarbageFromDb();
             using (var db = new LibiadaWebEntities())
             {
-                CalculationTask[] databaseTasks = db.CalculationTask.OrderByDescending(t => t.Created).ToArray();
+                CalculationTask[] databaseTasks = db.CalculationTask.OrderBy(t => t.Created).ToArray();
                 lock (tasks)
                 {
                     foreach (CalculationTask task in databaseTasks)

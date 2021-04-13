@@ -78,7 +78,7 @@
                     There are no sheduled or active tasks
                 </td>
             </tr>
-            <tr ng-repeat="task in tasks" ng-cloak ng-class="calculateStatusClass(task.TaskState)">
+            <tr ng-repeat="task in tasks | orderBy:'Id':true" ng-cloak ng-class="calculateStatusClass(task.TaskState)">
                 <td ng-bind="$index + 1" />
                 @if (AccountHelper.IsAdmin())
                 {
