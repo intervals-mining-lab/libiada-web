@@ -42,7 +42,7 @@
             return CreateTask(() =>
             {
                 var commonSequenceRepository = new CommonSequenceRepository(db);
-                
+
                 var sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId && l.Notation == Notation.Consonance).Id;
                 var sequenceName = db.Matter.Single(l => l.Id == matterId).Name;
                 var chain = commonSequenceRepository.GetLibiadaBaseChain(sequenceId);
@@ -50,23 +50,20 @@
                 var threshold = Convert.ToDouble(thresholdString);
                 var balanceString = balance.Replace('.', ',');
                 var balanceDouble = Convert.ToDouble(balanceString);
-                
+
                 PoemSegmenter poemSegmenter = new PoemSegmenter(chain.ToString(), wordLength, threshold, balanceDouble);
-                
+
                 var resultSegmentation = poemSegmenter.StartSegmentation();
                 var consonanceDictionary = resultSegmentation.Item1.OrderByDescending(d => d.Value).ToDictionary(d => d.Key, d => d.Value);
                 var poemChain = resultSegmentation.Item2;
                 var result = new Dictionary<string, object>
                 {
                     {"segmentedString", consonanceDictionary},
-                    {"poemChain", poemChain }
+                    {"poemChain", poemChain },
+                    {"poemName", sequenceName}
                 };
 
-                return new Dictionary<string, object>
-                    {
-                        {"poemName", sequenceName},
-                        { "data", JsonConvert.SerializeObject(result) }
-                    };
+                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
             });
         }
     }

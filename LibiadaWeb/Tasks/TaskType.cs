@@ -264,12 +264,6 @@
         [TaskClass(typeof(BatchGeneticImportFromGenBankSearchFileController))]
         BatchGeneticImportFromGenBankSearchFile = 36,
 
-        /// <summary>
-        /// Poem segmentation task.
-        /// </summary>
-        [Display(Name = "Poem segmentation")]
-        [TaskClass(typeof(PoemSegmentationController))]
-        PoemSegmentation = 37
         /// Imports genetic sequences and their annotations
         /// using genbank search results query.
         /// </summary>
@@ -292,6 +286,20 @@
         /// </summary>
         [Display(Name = "GenBank accession versions update check")]
         [TaskClass(typeof(GenBankAccessionVersionUpdateCheckerController))]
-        GenBankAccessionVersionUpdateChecker = 39
+        GenBankAccessionVersionUpdateChecker = 39,
+
+        /// <summary>
+        /// Poem segmentation task.
+        /// </summary>
+        [Display(Name = "Poem segmentation")]
+        [TaskClass(typeof(PoemSegmentationController))]
+        PoemSegmentation = 40,
+
+        /// <summary>
+        /// Custom sequence segmentation task.
+        /// </summary>
+        [Display(Name = "Custom sequence segmentation")]
+        [TaskClass(typeof(CustomSequenceSegmentationController))]
+        CustomSequenceSegmentation = 41,
     }
 }

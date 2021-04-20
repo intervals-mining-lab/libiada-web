@@ -19,7 +19,7 @@
         /// <summary>
         /// The sequence types count.
         /// </summary>
-        private const int SequenceTypesCount = 13;
+        private const int SequenceTypesCount = 14;
 
         /// <summary>
         /// Array of all sequence types.
@@ -71,6 +71,7 @@
         [TestCase((SequenceType)11, "Plastid")]
         [TestCase((SequenceType)12, "MitochondrialPlasmid")]
         [TestCase((SequenceType)13, "CompleteImage")]
+        [TestCase((SequenceType)14, "CompletePoem")]
         public void SequenceTypeNamesTest(SequenceType sequenceType, string name) => Assert.AreEqual(name, sequenceType.GetName());
 
         /// <summary>
