@@ -13,6 +13,8 @@
 
     using Newtonsoft.Json;
 
+    using SystemTask = System.Threading.Tasks.Task;
+
     /// <summary>
     /// SignalR messages hub class.
     /// </summary>
@@ -88,7 +90,7 @@
             return JsonConvert.SerializeObject(tasks.ToArray());
         }
 
-        public override System.Threading.Tasks.Task OnConnected()
+        public override SystemTask OnConnected()
         {
             if (AccountHelper.IsAdmin())
             {
@@ -101,7 +103,7 @@
             return base.OnConnected();
         }
 
-        public override System.Threading.Tasks.Task OnDisconnected(bool stopCalled)
+        public override SystemTask OnDisconnected(bool stopCalled)
         {
             if (AccountHelper.IsAdmin())
             {
@@ -132,6 +134,27 @@
             catch (Exception e)
             {
                 throw new Exception($"Unable to delete task with id = {id}", e);
+            }
+        }
+
+        /// <summary>
+        /// Delete tasks with the specified state.
+        /// </summary>
+        /// <param name="taskState">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        public void DeleteTasksWithState(TaskState taskState)
+        {
+            try
+            {
+                TaskManager.Instance.DeleteTasksWithState(taskState);
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Unable to delete tasks with state '{taskState}'", e);
             }
         }
 

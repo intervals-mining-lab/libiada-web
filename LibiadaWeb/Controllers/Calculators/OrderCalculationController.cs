@@ -1,17 +1,17 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
-    using System.Web.Mvc.Html;
 
     using LibiadaCore.Core;
+    using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
 
+    using LibiadaWeb.Tasks;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
-    using LibiadaWeb.Models.Calculators;
-    using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
 
@@ -44,8 +44,6 @@
         /// </returns>
         public ActionResult Index()
         {
-            var imageTransformers = EnumHelper.GetSelectList(typeof(ImageTransformer));
-
             using (var db = new LibiadaWebEntities())
             {
                 var viewDataHelper = new ViewDataHelper(db);
@@ -83,22 +81,32 @@
                                  orderGenerator.StrictGenerateOrders(length, alphabetCardinality) :
                                  orderGenerator.GenerateOrders(length, alphabetCardinality);
 
-                var calculator = new CustomSequencesCharacterisitcsCalculator(characteristicLinkIds);
-                var characteristics = calculator.Calculate(orders.Select(order => new Chain(order))).ToList();
+                var characteristics = new double[orders.Count][];
                 var sequencesCharacteristics = new List<SequenceCharacteristics>();
                 for (int i = 0; i < orders.Count; i++)
                 {
-                    sequencesCharacteristics.Add(new SequenceCharacteristics
-                    {
-                        MatterName = string.Join(",", orders[i].Select(n => n.ToString()).ToArray()),
-                        Characteristics = characteristics[i]
-                    });
+                    sequencesCharacteristics.Add(new SequenceCharacteristics());
                 }
+                for (int j = 0; j < orders.Count; j++)
+                {
+                    var sequence = new Chain(orders[j].Select(Convert.ToInt16).ToArray());
+                    characteristics[j] = new double[characteristicLinkIds.Length];
+                    for (int k = 0; k < characteristicLinkIds.Length; k++)
+                    {
 
-                sequencesCharacteristics.RemoveAll(el => el.Characteristics.Any(v => double.IsInfinity(v) ||
-                                                                                     double.IsNaN(v) ||
-                                                                                     double.IsNegativeInfinity(v) ||
-                                                                                     double.IsPositiveInfinity(v)));
+                        Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkIds[k]);
+                        FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkIds[k]);
+                        IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
+
+                        characteristics[j][k] = calculator.Calculate(sequence, link);
+                    }
+
+                    sequencesCharacteristics[j] = new SequenceCharacteristics
+                    {
+                        MatterName = string.Join(",", orders[j].Select(n => n.ToString()).ToArray()),
+                        Characteristics = characteristics[j]
+                    };
+                }
 
                 var characteristicNames = new string[characteristicLinkIds.Length];
                 var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
@@ -114,7 +122,10 @@
                     };
                 }
 
-
+                sequencesCharacteristics.RemoveAll(el => el.Characteristics.Any(v => double.IsInfinity(v) ||
+                                                                                     double.IsNaN(v) ||
+                                                                                     double.IsNegativeInfinity(v) ||
+                                                                                     double.IsPositiveInfinity(v)));
                 var index = new int[characteristicsList.Length];
                 for (int i = 0; i < index.Length; i++)
                 {
@@ -128,10 +139,7 @@
                     { "characteristicsIndex", index }
                 };
 
-                return new Dictionary<string, object>
-                {
-                    { "data", JsonConvert.SerializeObject(result) }
-                };
+                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
             });
         }
     }

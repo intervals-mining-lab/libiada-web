@@ -16,7 +16,6 @@
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Tasks;
@@ -45,7 +44,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            using (var db = new LibiadaWebEntities() )
+            using (var db = new LibiadaWebEntities())
             {
                 var viewDataHelper = new ViewDataHelper(db);
                 var data = viewDataHelper.GetCharacteristicsData(CharacteristicCategory.Full);
@@ -115,25 +114,34 @@
                     }
                 }
 
-
-                var calculator = new CustomSequencesCharacterisitcsCalculator(characteristicLinkIds);
-                var sequencesCharacteristics = new List<SequenceCharacteristics>();
-                for (int i = 0; i < sequences.Length; i++)
+                var sequencesCharacteristics = new SequenceCharacteristics[sequences.Length];
+                for (int j = 0; j < sequences.Length; j++)
                 {
-                    var sequence = new Chain(sequences[i]);
-                    for (int l = 0; l < iterationsCount; l++)
+                    var characteristics = new double[characteristicLinkIds.Length];
+                    for (int k = 0; k < characteristicLinkIds.Length; k++)
                     {
-                        for (int w = 0; w < transformationsSequence.Length; w++)
+                        var sequence = new Chain(sequences[j]);
+                        for (int l = 0; l < iterationsCount; l++)
                         {
-                            sequence = transformationsSequence[w] == OrderTransformation.Dissimilar ? DissimilarChainFactory.Create(sequence)
-                                                                 : HighOrderFactory.Create(sequence, EnumExtensions.GetLink(transformationsSequence[w]));
+                            for (int w = 0; w < transformationsSequence.Length; w++)
+                            {
+                                sequence = transformationsSequence[w] == OrderTransformation.Dissimilar ? DissimilarChainFactory.Create(sequence)
+                                                                     : HighOrderFactory.Create(sequence, EnumExtensions.GetLink(transformationsSequence[w]));
+                            }
                         }
+
+                        Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkIds[k]);
+                        FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkIds[k]);
+                        IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
+
+                        characteristics[k] = calculator.Calculate(sequence, link);
                     }
-                    sequencesCharacteristics.Add(new SequenceCharacteristics
+
+                    sequencesCharacteristics[j] = new SequenceCharacteristics
                     {
-                        MatterName = sequencesNames[i],
-                        Characteristics = calculator.Calculate(sequence)
-                    });
+                        MatterName = sequencesNames[j],
+                        Characteristics = characteristics
+                    };
                 }
 
                 string[] characteristicNames = characteristicLinkIds.Select(c => characteristicTypeLinkRepository.GetCharacteristicName(c)).ToArray();
@@ -164,10 +172,7 @@
                                      { "iterationsCount", iterationsCount }
                                  };
 
-                return new Dictionary<string, object>
-                           {
-                               { "data", JsonConvert.SerializeObject(result) }
-                           };
+                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
             });
         }
     }

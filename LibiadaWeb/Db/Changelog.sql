@@ -3046,4 +3046,42 @@ $BODY$;
 ALTER FUNCTION trigger_chain_key_unique_check() OWNER TO postgres;
 COMMENT ON FUNCTION trigger_chain_key_unique_check() IS 'Checks that there is one and only one sequence with the given id.';
 
+-- 18.05.2020
+-- Add push notification subscribers table.
+
+CREATE TABLE dbo."AspNetPushNotificationSubscribers"
+(
+    "Id" serial NOT NULL,
+    "UserId" integer NOT NULL DEFAULT 0,
+    "Endpoint" text NOT NULL,
+    "P256dh" text NOT NULL,
+    "Auth" text NOT NULL,
+    CONSTRAINT "PK_dbo.AspNetPushNotificationSubscribers" PRIMARY KEY ("Id"),
+    CONSTRAINT "FK_dbo.AspNetPushNotificationSubscribers_dbo.AspNetUsers_UserId" FOREIGN KEY ("UserId")
+        REFERENCES dbo."AspNetUsers" ("Id") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+);
+COMMENT ON TABLE dbo."AspNetPushNotificationSubscribers" IS 'Table for storing data about devices that are subscribers to push notifications.';
+
+-- 15.04.2021
+-- Copy tasks results into task_result table.
+
+INSERT INTO task_result (task_id, key, value) 
+	SELECT id, 'data', result
+	FROM task
+	WHERE result IS NOT NULL;
+
+INSERT INTO task_result (task_id, key, value) 
+	SELECT id, 'similarityMatrix', additional_result_data 
+	FROM task
+	WHERE additional_result_data IS NOT NULL;
+
+INSERT INTO task_result (task_id, key, value) 
+	SELECT t.id, d.key, d.value :: json 
+	FROM task t
+	INNER JOIN json_each_text(t.result::json ) d ON true
+	WHERE t.additional_result_data IS NOT NULL
+	AND d.key IN ('characteristics', 'attributeValues');
+
 COMMIT;

@@ -1,7 +1,6 @@
-﻿using System;
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
@@ -84,31 +83,29 @@ namespace LibiadaWeb.Controllers.Calculators
                     default: throw new ArgumentException("Invalid type of generate");
                 }
                 var sequences = sequenceGenerator.GenerateSequences(length, alphabetCardinality);
-                var result = new Dictionary<int[], List<BaseChain>>(new OrderEqualityComparer());
+                var SequecesOrdersDistribution = new Dictionary<int[], List<BaseChain>>(new OrderEqualityComparer());
                 foreach (int[] order in orders)
                 {
-                    result.Add(order, new List<BaseChain>());
+                    SequecesOrdersDistribution.Add(order, new List<BaseChain>());
                 }
 
                 foreach (BaseChain sequence in sequences)
                 {
-                    result[sequence.Building].Add(sequence);
+                    SequecesOrdersDistribution[sequence.Building].Add(sequence);
                 }
 
-                var data = new Dictionary<string, object>
+                var result = new Dictionary<string, object>
                 {
-                    { "result", result.Select(r => new
+                    { 
+                        "result", SequecesOrdersDistribution.Select(r => new
                         {
                             order = r.Key,
                             sequences = r.Value.Select(s => s.ToString(",")).ToArray()
-                        })
+                        }) 
                     }
                 };
 
-                return new Dictionary<string, object>
-                {
-                    { "data", JsonConvert.SerializeObject(data) }
-                };
+                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
             });
         }
     }

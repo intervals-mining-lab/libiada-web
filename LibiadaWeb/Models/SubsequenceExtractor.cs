@@ -53,24 +53,22 @@
         /// </returns>
         public Dictionary<long, Chain> GetSubsequencesSequences(Subsequence[] subsequences)
         {
-            long[] distinctIds = subsequences.Select(s => s.SequenceId).Distinct().ToArray();
-            if (distinctIds.Length == 1)
+            long[] parentSequenceIds = subsequences.Select(s => s.SequenceId).Distinct().ToArray();
+            Dictionary<long, Sequence> parentSequences = new Dictionary<long, Sequence>();
+            foreach (long id in parentSequenceIds)
             {
-                Sequence sourceSequence = GetDotNetBioSequence(distinctIds.Single());
-                var result = new Dictionary<long, Chain>();
-
-                foreach (Subsequence subsequence in subsequences)
-                {
-                    Chain sequence = GetSequence(sourceSequence, subsequence);
-                    result.Add(subsequence.Id, sequence);
-                }
-
-                return result;
+                parentSequences[id] = GetDotNetBioSequence(id);
             }
-            else
+
+            var result = new Dictionary<long, Chain>();
+
+            foreach (Subsequence subsequence in subsequences)
             {
-                throw new NotImplementedException();
+                Chain sequence = GetSequence(parentSequences[subsequence.SequenceId], subsequence);
+                result[subsequence.Id] = sequence;
             }
+
+            return result;
         }
 
         /// <summary>
@@ -153,11 +151,49 @@
                  || IsSubsequenceAttributePassesFilters(subsequence, Attribute.Gene, filters)
                  || IsSubsequenceAttributePassesFilters(subsequence, Attribute.LocusTag, filters))
                 {
-                        result.Add(subsequence);
+                    result.Add(subsequence);
                 }
             }
 
             return result.ToArray();
+        }
+
+        /// <summary>
+        /// Extracts <see cref="Sequence"/> for given subsequences ids
+        /// and formats header sutable for fasta file.
+        /// </summary>
+        /// <param name="subsequencesIds">
+        /// Subsequences ids.
+        /// </param>
+        /// <returns>
+        /// Array of <see cref="ISequence"/> for given ids.
+        /// </returns>
+        public ISequence[] GetBioSequencesForFastaConverter(long[] subsequencesIds)
+        {
+            Subsequence[] subsequences;
+            Dictionary<long, Chain> sequences;
+            Dictionary<long, string> mattersNames;
+            subsequences = db.Subsequence.Where(s => subsequencesIds.Contains(s.Id))
+                             .Include(s => s.Position)
+                             .Include(s => s.SequenceAttribute)
+                             .ToArray();
+            sequences = GetSubsequencesSequences(subsequences);
+            var parentIds = subsequences.Select(s => s.SequenceId).ToArray();
+            mattersNames = db.DnaSequence
+                             .Include(ds => ds.Matter)
+                             .Where(ds => parentIds.Contains(ds.Id))
+                             .ToDictionary(ds => ds.Id, ds => ds.Matter.Name);
+
+            ISequence[] bioSequences = new ISequence[subsequences.Length];
+            for (int i = 0; i < subsequences.Length; i++)
+            {
+                var subsequence = subsequences[i];
+                var bioSequence = new Sequence(Alphabets.DNA, sequences[subsequence.Id].ToString());
+                bioSequence.ID = $"{mattersNames[subsequence.SequenceId].Replace(' ', '_')}?from={subsequence.Start}to={subsequence.Start + subsequence.Length}";
+                bioSequences[i] = bioSequence;
+            }
+
+            return bioSequences;
         }
 
         /// <summary>

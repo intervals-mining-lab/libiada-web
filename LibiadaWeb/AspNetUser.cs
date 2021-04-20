@@ -20,6 +20,7 @@ namespace LibiadaWeb
             AspNetUserLogins = new HashSet<AspNetUserLogin>();
             Tasks = new HashSet<CalculationTask>();
             AspNetRoles = new HashSet<AspNetRole>();
+            AspNetPushNotificationSubscribers = new HashSet<AspNetPushNotificationSubscriber>();
         }
     
         public int Id { get; set; }
@@ -39,5 +40,6 @@ namespace LibiadaWeb
         public virtual ICollection<AspNetUserLogin> AspNetUserLogins { get; set; }
         public virtual ICollection<CalculationTask> Tasks { get; set; }
         public virtual ICollection<AspNetRole> AspNetRoles { get; set; }
+        public virtual ICollection<AspNetPushNotificationSubscriber> AspNetPushNotificationSubscribers { get; set; }
     }
 }

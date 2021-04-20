@@ -1,88 +1,64 @@
 ﻿@{
     ViewBag.Title = "Accordance calculation";
 }
+@Scripts.Render("~/bundles/loadingWindow")
+<h2>@ViewBag.Title</h2>
 
 @if (ViewBag.Error == null)
 {
-    <h2>@ViewBag.Title</h2>
+    @Html.Partial("_AngularControllerInitializer", "CalculationResultController")
 
-    @ViewBag.matterNames[0]
+<div ng-controller="CalculationResultCtrl">
+    {{ matterNames[0] }}
     <br />
-    @ViewBag.matterNames[1]
-
-    string calculationType = ViewBag.calculationType;
-    switch (calculationType)
-    {
-        case "Equality":
+    {{ matterNames[1] }}
+    <div ng-switch="calculationType">
+        <div ng-switch-when="Equality">
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
                         <th>
                             Element name
                         </th>
-                        <th>
-                            @Html.Raw(ViewBag.characteristicName.Replace("  ", "<br/>"))
-                        </th>
-                        <th>
-                            @Html.Raw(ViewBag.characteristicName.Replace("  ", "<br/>"))
+                        <th ng-bind="characteristicName" />
+                        <th ng-bind="characteristicName">
                             <br />
                             Reverse order
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    @for (int i = 0; i < ViewBag.characteristics[0].Count; i++)
-                    {
-                        <tr>
-                            <td>
-                                @ViewBag.alphabet[i]
-                            </td>
-                            <td>
-                                @ViewBag.characteristics[0][i]
-                            </td>
-                            <td>
-                                @ViewBag.characteristics[1][i]
-                            </td>
-                        </tr>
-                    }
+                    <tr ng-repeat="characteristic in characteristics[0]">
+                        <td ng-bind="alphabet[$index]" />
+                        <td ng-bind="characteristics[0][$index]" />
+                        <td ng-bind="characteristics[1][$index]" />
+                    </tr>
                 </tbody>
             </table>
-        break;
-        case "All":
-        <div>
-            @Html.Raw(ViewBag.characteristicName.Replace("  ", "<br/>"))
         </div>
-        <table class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>
-                        Element name
-                    </th>
-                    @for (int j = 0; j < ViewBag.characteristics[0].Count; j++)
-                    {
-                        <th>
-                            @ViewBag.secondAlphabet[j]
-                        </th>
-                    }
-                </tr>
-            </thead>
-            <tbody>
-                @for (int i = 0; i < ViewBag.characteristics.Count; i++)
-                {
+        <div ng-switch-when="All">
+            {{ characteristicName }}
+            <table class="table table-bordered table-hover">
+                <thead>
                     <tr>
-                        <td>
-                            @ViewBag.firstAlphabet[i]
-                        </td>
-                        @for (int j = 0; j < ViewBag.characteristics[i].Count; j++)
-                        {
-                            <td>
-                                @ViewBag.characteristics[i][j]
-                            </td>
-                        }
+                        <th>
+                            Element name
+                        </th>
+                        <th ng-repeat="characteristic in characteristics[0]" ng-bind="secondAlphabet[$index]" />
                     </tr>
-                }
-            </tbody>
-        </table>
-        break;
-    }
+                </thead>
+                <tbody>
+                    <tr ng-repeat="characteristic in characteristics">
+                        <td ng-bind="firstAlphabet[$index]" />
+                        <td ng-repeat="characteristic in characteristics[$index]" ng-bind="characteristics[$parent.$index][$index]" />
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/d3js")
 }

@@ -126,7 +126,7 @@
                                   bool? sequentialTransfer,
                                   int scrambling)
         {
-            Matter matter = db.Matter.Single(m => m.Id == matterId);
+            Matter matter = Cache.GetInstance().Matters.Single(m => m.Id == matterId);
             long sequenceId;
             switch (matter.Nature)
             {
@@ -164,8 +164,8 @@
                     Nature = matter.Nature,
                     Name = $"{matter.Name} {scrambling} mixes"
                 };
-            db.Matter.Add(resultMatter);
-            db.SaveChanges();
+            MatterRepository matterRepository = new MatterRepository(db);
+            matterRepository.CreateMatter(resultMatter);
 
             var result = new CommonSequence
                 {

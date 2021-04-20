@@ -3,19 +3,37 @@
 @{
     ViewBag.Title = "Libiada task manager";
 }
+
+@section EndScripts {
+    <script src="~/Scripts/push-notification.js" async></script>
+}
+
 @Scripts.Render("~/bundles/loadingWindow")
 
 @Html.Partial("_AngularControllerInitializer", "TaskManagerController")
+
 <script src="~/signalr/hubs"></script>
 <h2>@ViewBag.Title</h2>
 
 <div ng-controller="TaskManagerCtrl">
     <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
-    <div class="form-group" ng-show="RedirectTaskId">
+
+    <div class="form">
+        <div class="form-group" ng-show="RedirectTaskId">
             <label>
-                <input type="checkbox" id="AutoRedirect" ng-model="autoRedirect" /> Auto redirect to result page
+                <input type="checkbox" id="AutoRedirect" ng-model="autoRedirect" /> Autoredirect to result page
             </label>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <button id="push-notification-button" class="btn btn-sm hidden" onclick="unsubscribeDevice()">Disable push notifications</button>
+            </div>
+        </div>
     </div>
+    <br />
+    <br />
+
+
     <table ng-cloak st-table="tasks" class="table table-bordered table-hover">
         <thead>
             <tr>
@@ -60,7 +78,7 @@
                     There are no sheduled or active tasks
                 </td>
             </tr>
-            <tr ng-repeat="task in tasks" ng-cloak ng-class="calculateStatusClass(task.TaskState)">
+            <tr ng-repeat="task in tasks | orderBy:'Id':true" ng-cloak ng-class="calculateStatusClass(task.TaskState)">
                 <td ng-bind="$index + 1" />
                 @if (AccountHelper.IsAdmin())
                 {
@@ -84,11 +102,26 @@
         </tbody>
     </table>
 
-    <br />
-    <div class="form-horizontal">
-        <div class="form-group">
-            <div class="col-md-offset-0 col-md-10">
-                <button class="btn btn-danger" ng-hide="tasks.length <= 1" ng-cloak ng-click="deleteAllTasks()">Delete all tasks</button>
+
+    <div class="form-inline">
+        <div class="form-group" ng-hide="tasks.length <= 1">
+            <div class="col-md-10">
+                <button class="btn btn-danger" ng-cloak ng-click="deleteAllTasks()">Delete all tasks</button>
+            </div>
+        </div>
+        <div class="form-group" ng-hide="calculateTaskCountWithState('InProgress') < 1">
+            <div class="col-md-10">
+                <button class="btn btn-danger" ng-cloak ng-click="deleteTasksWithState('InProgress')">Delete running tasks</button>
+            </div>
+        </div>
+        <div class="form-group" ng-hide="calculateTaskCountWithState('Error') < 1">
+            <div class="col-md-10">
+                <button class="btn btn-danger" ng-cloak ng-click="deleteTasksWithState('Error')">Delete failed tasks</button>
+            </div>
+        </div>
+        <div class="form-group" ng-hide="calculateTaskCountWithState('InQueue') < 1">
+            <div class="col-md-10">
+                <button class="btn btn-danger" ng-hide="tasks.length <= 1" ng-cloak ng-click="deleteTasksWithState('InQueue')">Delete tasks in queue</button>
             </div>
         </div>
     </div>

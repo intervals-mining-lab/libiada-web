@@ -16,7 +16,7 @@
                 ctrl.mattersInputName = "matterId";
                 ctrl.mattersInputType = "radio";
             }
-        }
+        };
 
         ctrl.$onChanges = function (changes) {
             if (changes.nature) {
@@ -30,7 +30,7 @@
             }
 
             ctrl.matters.forEach(m => ctrl.setMatterVisibility(m));
-        }
+        };
 
         ctrl.setMatterVisibility = function (matter) {
             ctrl.searchMatterText = ctrl.searchMatterText || "";
@@ -39,7 +39,7 @@
                           && matter.Group.includes(ctrl.group || "")
                           && matter.SequenceType.includes(ctrl.sequenceType || "")
                           && matter.Text.toUpperCase().includes(ctrl.searchMatterText.toUpperCase())
-                          && (ctrl.nature !== ctrl.geneticNature || !ctrl.showRefSeqOnly || ctrl.isRefSeq(matter)));
+                          && (ctrl.nature != ctrl.geneticNature || !ctrl.showRefSeqOnly || ctrl.isRefSeq(matter)));
         };
 
         ctrl.isRefSeq = function (matter) {

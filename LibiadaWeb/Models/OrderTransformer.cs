@@ -1,11 +1,13 @@
-﻿using LibiadaWeb.Models.CalculatorsData;
-using System.Collections.Generic;
-using System.Linq;
-using LibiadaCore.Core;
-using SequenceGenerator;
-
-namespace LibiadaWeb.Models
+﻿namespace LibiadaWeb.Models
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    
+    using SequenceGenerator;
+
+    using LibiadaWeb.Models.CalculatorsData;
+
+    using LibiadaCore.Core;
     using LibiadaCore.DataTransformers;
     using LibiadaCore.Extensions;
 
@@ -85,6 +87,7 @@ namespace LibiadaWeb.Models
                     completed = true;
                 }
             }
+
             return checkedOrders.Count;
         }
     }

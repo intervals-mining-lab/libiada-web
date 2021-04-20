@@ -13,6 +13,7 @@
     using LibiadaCore.Extensions;
     using LibiadaCore.Music;
 
+    using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Sequences;
     using LibiadaWeb.Tasks;
 
@@ -126,7 +127,7 @@
                 var firstElements = new List<Element>();
                 var secondElements = new List<Element>();
 
-                Matter matter = db.Matter.Single(m => m.Id == matterId);
+                Matter matter = Cache.GetInstance().Matters.Single(m => m.Id == matterId);
                 long sequenceId;
                 switch (matter.Nature)
                 {
@@ -192,7 +193,7 @@
 
                 string characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
 
-                return new Dictionary<string, object>
+                var result = new Dictionary<string, object>
                 {
                     { "characteristics", characteristics },
                     { "isFilter", filter },
@@ -205,6 +206,18 @@
                     { "matterName", db.CommonSequence.Single(m => m.Id == sequenceId).Matter.Name },
                     { "notationName", db.CommonSequence.Single(c => c.Id == sequenceId).Notation.GetDisplayValue() }
                 };
+
+                string json = JsonConvert.SerializeObject(result, new JsonSerializerSettings()
+                {
+                    ContractResolver = new SerializationFilter(new[]
+                    {
+                        "FirstElementBinaryCharacteristic",
+                        "SecondElementBinaryCharacteristic",
+                        "Sequence"
+                    })
+                });
+
+                return new Dictionary<string, string> { { "data", json } };
             });
         }
 

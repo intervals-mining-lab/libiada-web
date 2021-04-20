@@ -150,7 +150,7 @@
 
                 var list = EnumHelper.GetSelectList(typeof(Link));
                 list.RemoveAt(0);
-                var data = new Dictionary<string, object>
+                var result = new Dictionary<string, object>
                 {
                     { "result", resultIntervals.Select(r => new
                     {
@@ -175,10 +175,7 @@
                     { "characteristicsIndex", index }
                 };
 
-                return new Dictionary<string, object>
-                {
-                    { "data", JsonConvert.SerializeObject(data) }
-                };
+                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
             });
         }
     }

@@ -1,36 +1,35 @@
 ﻿@{
     ViewBag.Title = "Sequences alignment";
 }
-
+@Scripts.Render("~/bundles/loadingWindow")
 <h2>@ViewBag.Title</h2>
 
 @if (ViewBag.Error == null)
 {
+    @Html.Partial("_AngularControllerInitializer", "CalculationResultController")
+<div ng-controller="CalculationResultCtrl">
     <div>
-        Alignment type: @ViewBag.validationType
+        Alignment type: {{validationType}}
     </div>
 
     <div>
-        Optimal shift: @ViewBag.optimalRotation
+        Optimal shift: {{optimalRotation}}
     </div>
-    if (ViewBag.sort)
-    {
-        <div>
-            Characteristics sorted descending
-        </div>
-    }
-    if (ViewBag.cyclicShift)
-    {
-        <div>
-            Cyclic shift is used
-        </div>
-    }
 
-    @ViewBag.firstSequenceName
+    <div ng-if="sort">
+        Characteristics sorted descending
+    </div>
+
+    <div ng-if="cyclicShift">
+        Cyclic shift is used
+    </div>
+
+    {{firstSequenceName}}
     <br />
-    @ViewBag.secondSequenceName
+    {{secondSequenceName}}
     <br />
-    @ViewBag.characteristicName
+    {{characteristicName}}
+
     <table class="table table-bordered table-hover">
         <thead>
             <tr>
@@ -40,21 +39,26 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var distance in ViewBag.distances)
-            {
-                <tr>
-
-                    <td>
-                        @distance
-                    </td>
-
-                </tr>
-            }
+            <tr ng-repeat="distance in distances">
+                <td ng-bind="distance.Value">
+                </td>
+            </tr>
         </tbody>
     </table>
-
-    @section Scripts {
-        @Scripts.Render("~/bundles/jqueryui")
-        @Scripts.Render("~/bundles/slider")
-    }
+</div>
 }
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/slider")
+    @Scripts.Render("~/bundles/d3js")
+}
+
+
+
+
+
+
+
+
+

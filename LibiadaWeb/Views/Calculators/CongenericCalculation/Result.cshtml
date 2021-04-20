@@ -1,46 +1,33 @@
 ﻿@{
     ViewBag.Title = "Congeneric sequences characteristics";
 }
-
+@Scripts.Render("~/bundles/loadingWindow")
 <h2>@ViewBag.Title</h2>
 
 @if (ViewBag.Error == null)
 {
-    for (int d = 0; d < ViewBag.characteristics.Count; d++)
-    {
-    @ViewBag.matterNames[d]
-    <table class="table table-bordered table-hover" id="resultTable">
-        <thead>
-            <tr>
-                <th>
-                    Element
-                </th>
-                @foreach (var characteristicName in ViewBag.characteristicNames)
-                {
-                    <th>
-                        @characteristicName
-                    </th>
-                }
-            </tr>
-        </thead>
-        <tbody>
-            @for (int i = 0; i < ViewBag.characteristics[d][0].Count; i++)
-            {
+    @Html.Partial("_AngularControllerInitializer", "CalculationResultController")
+<div ng-controller="CalculationResultCtrl">
+
+    <div ng-repeat="characteristic in characteristics">
+        {{ matterNames[$index] }}
+        <table class="table table-bordered table-hover" id="resultTable">
+            <thead>
                 <tr>
-                    <td>
-                        @ViewBag.elementNames[d][i]
-                    </td>
-                    @foreach (var characteristic in ViewBag.characteristics[d])
-                    {
-                        <td>
-                            @characteristic[i].Value
-                        </td>
-                    }
+                    <th>
+                        Element
+                    </th>
+                    <th ng-repeat="characteristicName in characteristicNames" ng-bind="characteristicName" />
                 </tr>
-            }
-        </tbody>
-    </table>
-    }
+            </thead>
+            <tbody>
+                <tr ng-repeat="ch in characteristics[$index][0]">
+                    <td ng-bind="elementNames[$parent.$index][$index]" />
+                    <td ng-repeat="characteristic in characteristics[$parent.$index]" ng-bind="characteristic[$index].Value" />
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
     <br />
     <div id="visualization_container" style="width: 800px; height: 500px"></div>
@@ -56,25 +43,24 @@
     <label for="logarithmicScale">Log scale</label>
     <br />
     <br />
-    <div id="xhider">
-        @Html.Label("X axis")
-        <select name="xaxis" id="xaxis">
-            @foreach (var option in ViewBag.characteristicsList)
-            {
-                <option value="@option.Value">@option.Text</option>
-            }
-        </select>
+
+    <div class="form-group">
+        <label class="control-label col-md-2" for="firstCharacteristic">First characteristic:</label>
+        <div class="col-md-10">
+            <select class="form-control" title="First characteristic" ng-model="firstCharacteristic" ng-options="c.Text for c in characteristicsList" id="firstCharacteristic"></select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-md-2" for="secondCharacteristic">Second characteristic:</label>
+        <div class="col-md-10">
+            <select class="form-control" title="Second characteristic" ng-model="secondCharacteristic" ng-options="c.Text for c in characteristicsList" id="secondCharacteristic"></select>
+        </div>
     </div>
     <br />
-    <div id="yhider">
-        @Html.Label("Y axis")
-        <select name="yaxis" id="yaxis">
-            @foreach (var option in ViewBag.characteristicsList)
-            {
-                <option value="@option.Value">@option.Text</option>
-            }
-        </select>
-    </div>
-    <br />
-    <button onclick=" DrawChart() ">Show</button>
+    <input type="button" class="btn btn-default" ng-click="draw()" value="Draw" />
+</div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/d3js")
 }
