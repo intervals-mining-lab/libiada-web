@@ -1,14 +1,14 @@
-﻿using System;
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
+
     using LibiadaCore.Core;
-    using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
     using LibiadaCore.Extensions;
+
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.CalculatorsData;
@@ -87,7 +87,7 @@ namespace LibiadaWeb.Controllers.Calculators
                     case 1:
                         orders = orderGenerator.GenerateOrders(length, alphabetCardinality);
                         break;
-                    default: throw new ArgumentException("Invalid type of generate");
+                    default: throw new ArgumentException($"Invalid type of order generator param: {generateStrict}");
                 }
                 var calculator = new CustomSequencesCharacterisitcsCalculator(characteristicLinkIds);
                 var characteristics = calculator.Calculate(orders.Select(order => new Chain(order))).ToList();
@@ -96,15 +96,15 @@ namespace LibiadaWeb.Controllers.Calculators
                 {
                     sequencesCharacteristics.Add(new SequenceCharacteristics
                     {
-                        MatterName = String.Join(",", orders[i].Select(n => n.ToString()).ToArray()),
+                        MatterName = string.Join(",", orders[i].Select(n => n.ToString()).ToArray()),
                         Characteristics = characteristics[i]
                     });
                 }
 
-                sequencesCharacteristics.RemoveAll(el => el.Characteristics.Any(v => Double.IsInfinity(v) ||
-                                                                                        Double.IsNaN(v) ||
-                                                                                        Double.IsNegativeInfinity(v) ||
-                                                                                        Double.IsPositiveInfinity(v)));
+                sequencesCharacteristics.RemoveAll(el => el.Characteristics.Any(v => double.IsInfinity(v) ||
+                                                                                     double.IsNaN(v) ||
+                                                                                     double.IsNegativeInfinity(v) ||
+                                                                                     double.IsPositiveInfinity(v)));
 
 
 
@@ -138,10 +138,13 @@ namespace LibiadaWeb.Controllers.Calculators
                         resultAccordance.Add(element.Key, new Dictionary<int[], SequenceCharacteristics>());
                         foreach(var order in element.Value)
                         {
-                            resultAccordance[element.Key].Add(order, sequencesCharacteristics.FirstOrDefault(el => el.MatterName.SequenceEqual(String.Join(",", order.Select(n => n.ToString()).ToArray()))));
+                            // TODO refactor this
+                            var characteristic = sequencesCharacteristics
+                                              .FirstOrDefault(el => el.MatterName.SequenceEqual(string.Join(",", order.Select(n => n.ToString()).ToArray())));
+                            resultAccordance[element.Key].Add(order, characteristic);
                         }
                     }
-                    resultIntervals.Add(EnumExtensions.GetDisplayValue<Link>(link), resultAccordance);
+                    resultIntervals.Add(link.GetDisplayValue(), resultAccordance);
                 }
 
 

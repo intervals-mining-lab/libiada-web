@@ -1,17 +1,15 @@
-﻿using System;
-using System.Web.Mvc.Html;
-using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
-using LibiadaWeb.Helpers;
-using LibiadaWeb.Models.CalculatorsData;
-using LibiadaWeb.Models.Repositories.Catalogs;
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+    using System.Web.Mvc.Html;
 
     using LibiadaCore.Core;
+
+    using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models.CalculatorsData;
+    using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Tasks;
 
@@ -92,15 +90,15 @@ namespace LibiadaWeb.Controllers.Calculators
                 {
                     sequencesCharacteristics.Add(new SequenceCharacteristics
                     {
-                        MatterName = String.Join(",", orders[i].Select(n => n.ToString()).ToArray()),
+                        MatterName = string.Join(",", orders[i].Select(n => n.ToString()).ToArray()),
                         Characteristics = characteristics[i]
                     });
                 }
 
-                sequencesCharacteristics.RemoveAll(el => el.Characteristics.Any(v => Double.IsInfinity(v) ||
-                                                                                        Double.IsNaN(v) ||
-                                                                                        Double.IsNegativeInfinity(v) ||
-                                                                                        Double.IsPositiveInfinity(v)));
+                sequencesCharacteristics.RemoveAll(el => el.Characteristics.Any(v => double.IsInfinity(v) ||
+                                                                                     double.IsNaN(v) ||
+                                                                                     double.IsNegativeInfinity(v) ||
+                                                                                     double.IsPositiveInfinity(v)));
 
                 var characteristicNames = new string[characteristicLinkIds.Length];
                 var characteristicsList = new SelectListItem[characteristicLinkIds.Length];

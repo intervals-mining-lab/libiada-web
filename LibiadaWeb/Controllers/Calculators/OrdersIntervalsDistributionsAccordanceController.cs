@@ -1,13 +1,14 @@
-﻿using System;
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
+
     using LibiadaCore.Core;
     using LibiadaCore.Extensions;
+
     using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
@@ -78,7 +79,7 @@ namespace LibiadaWeb.Controllers.Calculators
                     {
                         continue;
                     }
-                    result.Add(EnumExtensions.GetDisplayValue<Link>(link), 
+                    result.Add(link.GetDisplayValue(), 
                         IntervalsDistributionExtractor.GetOrdersIntervalsDistributionsAccordance(orders.ToArray(), link));
                 }
                 var list = EnumHelper.GetSelectList(typeof(Link));

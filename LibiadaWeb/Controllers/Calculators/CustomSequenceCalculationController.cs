@@ -12,7 +12,6 @@
     using Bio.Extensions;
 
     using LibiadaCore.Core;
-    using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
     using LibiadaCore.Core.SimpleTypes;
     using LibiadaCore.Images;
 

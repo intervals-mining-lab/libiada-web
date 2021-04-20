@@ -1,14 +1,11 @@
-﻿using LibiadaCore.Core;
-using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
-using LibiadaWeb.Models.CalculatorsData;
-using LibiadaWeb.Models.Repositories.Catalogs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace LibiadaWeb.Models.Calculators
+﻿namespace LibiadaWeb.Models.Calculators
 {
+    using LibiadaCore.Core;
+    using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
+    using LibiadaWeb.Models.Repositories.Catalogs;
+
+    using System.Collections.Generic;
+
     public class CustomSequencesCharacterisitcsCalculator
     {
         private readonly LinkedFullCalculator[] calculators;
@@ -31,6 +28,7 @@ namespace LibiadaWeb.Models.Calculators
             {
                 result.Add(Calculate(sequence));
             }
+
             return result;
         }
 
