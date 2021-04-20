@@ -89,7 +89,7 @@
                     return HttpNotFound();
                 }
 
-                ViewBag.MatterId = new SelectList(db.Matter.ToArray(), "Id", "Name", commonSequence.MatterId);
+                ViewBag.MatterId = new SelectList(Cache.GetInstance().Matters.ToArray(), "Id", "Name", commonSequence.MatterId);
                 ViewBag.Notation = EnumHelper.GetSelectList(typeof(Notation), commonSequence.Notation);
                 ViewBag.RemoteDb = EnumHelper.GetSelectList(typeof(RemoteDb), commonSequence.RemoteDb);
                 return View(commonSequence);
@@ -118,7 +118,7 @@
                     return RedirectToAction("Index");
                 }
 
-                ViewBag.MatterId = new SelectList(db.Matter.ToArray(), "Id", "Name", commonSequence.MatterId);
+                ViewBag.MatterId = new SelectList(Cache.GetInstance().Matters.ToArray(), "Id", "Name", commonSequence.MatterId);
                 ViewBag.Notation = EnumHelper.GetSelectList(typeof(Notation), commonSequence.Notation);
                 ViewBag.RemoteDb = EnumHelper.GetSelectList(typeof(RemoteDb), commonSequence.RemoteDb);
                 return View(commonSequence);

@@ -267,7 +267,7 @@
         var location = window.location.href.split("/");
         $scope.taskId = location[location.length - 1];
 		
-        $http.get("/api/TaskManagerWebApi/" + $scope.taskId)
+        $http.get(`/api/TaskManagerWebApi/${$scope.taskId}`)
             .then(function (data) {
                 MapModelFromJson($scope, JSON.parse(data.data));
                 console.log($scope);

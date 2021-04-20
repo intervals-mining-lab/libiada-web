@@ -105,10 +105,7 @@
             DistanceCalculator distanceCalculator,
             Aggregator aggregator)
         {
-            TaskManager taskManager = TaskManager.Instance;
-            Task task = taskManager.GetTask(taskId);
-
-            var data = (string)task.Result["data"];
+            var data = TaskManager.Instance.GetTaskData(taskId);
 
             var characteristicsObject = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(data);
             var characteristics = characteristicsObject["characteristics"];
@@ -141,7 +138,15 @@
                 }
             }
 
-            return JsonConvert.SerializeObject(result);
+            var response = new Dictionary<string, object>
+            {
+                { "aligner", aligner },
+                { "distanceCalculator", distanceCalculator },
+                { "aggregator", aggregator },
+                { "result", result }
+            };
+
+            return JsonConvert.SerializeObject(response);
         }
     }
 }

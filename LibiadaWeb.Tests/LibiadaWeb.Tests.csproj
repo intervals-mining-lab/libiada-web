@@ -52,9 +52,11 @@
   <ItemGroup>
     <Compile Include="Attributes\NatureAttributeTests.cs" />
     <Compile Include="AttributeTests.cs" />
+    <Compile Include="Controllers\Calculators\SubsequencesDistributionControllerTests.cs" />
     <Compile Include="Extensions\EnumExtensionsTests.cs" />
     <Compile Include="FeatureTests.cs" />
     <Compile Include="GroupTests.cs" />
+    <Compile Include="Helpers\NcbiHelperTests.cs" />
     <Compile Include="LanguageTests.cs" />
     <Compile Include="Models\Repositories\Sequences\MatterRepositoryTests.cs" />
     <Compile Include="NatureTests.cs" />
@@ -63,6 +65,7 @@
     <Compile Include="RemoteDbTests.cs" />
     <Compile Include="SequenceRepositoryTests.cs" />
     <Compile Include="SequenceTypeTests.cs" />
+    <Compile Include="SystemData.cs" />
     <Compile Include="Tasks\TaskStateTests.cs" />
     <Compile Include="Tasks\TaskTypeTests.cs" />
     <Compile Include="TranslatorTests.cs" />
@@ -87,6 +90,7 @@
       <Version>3.12.0</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

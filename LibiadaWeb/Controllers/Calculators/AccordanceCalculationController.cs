@@ -56,7 +56,8 @@
         public ActionResult Index()
         {
             var viewDataHelper = new ViewDataHelper(db);
-            ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillViewData(CharacteristicCategory.Accordance, 2, 2, "Calculate"));
+            var viewData = viewDataHelper.FillViewData(CharacteristicCategory.Accordance, 2, 2, "Calculate");
+            ViewBag.data = JsonConvert.SerializeObject(viewData);
             return View();
         }
 
@@ -109,12 +110,12 @@
                     throw new ArgumentException("Number of selected matters must be 2.", nameof(matterIds));
                 }
 
-                var characteristics = new List<List<double>>();
+                var characteristics = new Dictionary<int, Dictionary<int, double>>();
                 string characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
                 var result = new Dictionary<string, object>
                                  {
                                      { "characteristics", characteristics },
-                                     { "matterNames", db.Matter.Where(m => matterIds.Contains(m.Id)).Select(m => m.Name).ToList() },
+                                     { "matterNames", Cache.GetInstance().Matters.Where(m => matterIds.Contains(m.Id)).Select(m => m.Name).ToList() },
                                      { "characteristicName", characteristicName },
                                      { "calculationType", calculationType }
                                  };
@@ -168,8 +169,8 @@
                             throw new Exception("Alphabets of sequences are not equal.");
                         }
 
-                        characteristics.Add(new List<double>());
-                        characteristics.Add(new List<double>());
+                        characteristics.Add(0, new Dictionary<int, double>());
+                        characteristics.Add(1, new Dictionary<int, double>());
                         var alphabet = new List<string>();
 
                         for (int i = 0; i < firstChainAlphabet.Cardinality; i++)
@@ -181,10 +182,10 @@
                             CongenericChain secondCongenericChain = secondChain.CongenericChain(element);
 
                             double characteristicValue = calculator.Calculate(firstCongenericChain, secondCongenericChain, link);
-                            characteristics[0].Add(characteristicValue);
+                            characteristics[0].Add(i, characteristicValue);
 
                             characteristicValue = calculator.Calculate(secondCongenericChain, firstCongenericChain, link);
-                            characteristics[1].Add(characteristicValue);
+                            characteristics[1].Add(i, characteristicValue);
                         }
 
                         result.Add("alphabet", alphabet);
@@ -194,7 +195,7 @@
                         var firstAlphabet = new List<string>();
                         for (int i = 0; i < firstChain.Alphabet.Cardinality; i++)
                         {
-                            characteristics.Add(new List<double>());
+                            characteristics.Add(i, new Dictionary<int, double>());
                             IBaseObject firstElement = firstChainAlphabet[i];
                             firstAlphabet.Add(firstElement.ToString());
                             for (int j = 0; j < secondChainAlphabet.Cardinality; j++)
@@ -205,7 +206,7 @@
                                 var secondCongenericChain = secondChain.CongenericChain(secondElement);
 
                                 var characteristicValue = calculator.Calculate(firstCongenericChain, secondCongenericChain, link);
-                                characteristics[i].Add(characteristicValue);
+                                characteristics[i].Add(j, characteristicValue);
                             }
                         }
 
@@ -226,7 +227,7 @@
                         throw new ArgumentException("Calculation type is not implemented", nameof(calculationType));
                 }
 
-                return result;
+                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
             });
         }
     }

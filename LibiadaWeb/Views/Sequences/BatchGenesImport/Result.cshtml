@@ -1,40 +1,35 @@
 ﻿@{
     ViewBag.Title = "Batch genes import result";
 }
-
+@Scripts.Render("~/bundles/loadingWindow")
 <h2>@ViewBag.Title</h2>
 
 @if (ViewBag.Error == null)
 {
-    <table class="table table-bordered table-hover">
-        <thead>
-            <tr>
-                <th>
-                    #
-                </th>
-                <th>
-                    Sequence
-                </th>
-                <th>
-                    Result
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @for (int i = 0; i < ViewBag.matterNames.Length; i++)
-            {
-                <tr class="@Helpers.GetCssClassForImportResult(ViewBag.status[i])">
-                    <td>
-                        @(i + 1)
-                    </td>
-                    <td>
-                        @ViewBag.matterNames[i]
-                    </td>
-                    <td>
-                        @ViewBag.results[i]
-                    </td>
+    @Html.Partial("_AngularControllerInitializer", "BatchSequenceImportResultController")
+
+    <div ng-controller="BatchSequenceImportResultCtrl">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        #
+                    </th>
+                    <th>
+                        Sequence
+                    </th>
+                    <th>
+                        Result
+                    </th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <tr ng-repeat="matter in result" ng-class="calculateStatusClass(matter.Status)">
+                    <td ng-bind="$index + 1" />
+                    <td ng-bind="matter.MatterName" />
+                    <td ng-bind="matter.Result" />
+                </tr>
+            </tbody>
+        </table>
+    </div>
 }

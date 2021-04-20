@@ -104,16 +104,13 @@
                     return HttpNotFound();
                 }
 
-                var groups = EnumExtensions.ToArray<Group>().ToSelectListWithNature();
-                var sequenceTypes = EnumExtensions.ToArray<SequenceType>().ToSelectListWithNature();
-                var natures = EnumHelper.GetSelectList(typeof(Nature), matter.Nature);
                 var data = new Dictionary<string, object>
-                               {
-                                   { "natures", natures },
-                                   { "groups", groups },
-                                   { "sequenceTypes", sequenceTypes },
-                                   { "matter", new StringedMatter(matter, db.CommonSequence.Count(c => c.MatterId == matter.Id)) }
-                               };
+                {
+                    { "natures", EnumHelper.GetSelectList(typeof(Nature), matter.Nature) },
+                    { "groups", EnumExtensions.ToArray<Group>().ToSelectListWithNature() },
+                    { "sequenceTypes", EnumExtensions.ToArray<SequenceType>().ToSelectListWithNature() },
+                    { "matter", new StringedMatter(matter, db.CommonSequence.Count(c => c.MatterId == matter.Id)) }
+                };
 
                 ViewBag.data = JsonConvert.SerializeObject(data);
 
@@ -143,16 +140,13 @@
                     return RedirectToAction("Index");
                 }
 
-                var groups = EnumExtensions.ToArray<Group>().ToSelectListWithNature();
-                var sequenceTypes = EnumExtensions.ToArray<SequenceType>().ToSelectListWithNature();
-                var natures = EnumHelper.GetSelectList(typeof(Nature), matter.Nature);
                 var data = new Dictionary<string, object>
-                               {
-                                   { "natures", natures },
-                                   { "groups", groups },
-                                   { "sequenceTypes", sequenceTypes },
-                                   { "matter", new StringedMatter(matter, db.CommonSequence.Count(c => c.MatterId == matter.Id)) }
-                               };
+                {
+                    { "natures", EnumHelper.GetSelectList(typeof(Nature), matter.Nature) },
+                    { "groups", EnumExtensions.ToArray<Group>().ToSelectListWithNature() },
+                    { "sequenceTypes", EnumExtensions.ToArray<SequenceType>().ToSelectListWithNature() },
+                    { "matter", new StringedMatter(matter, db.CommonSequence.Count(c => c.MatterId == matter.Id)) }
+                };
 
                 ViewBag.data = JsonConvert.SerializeObject(data);
                 return View(matter);
@@ -206,6 +200,7 @@
                 Matter matter = await db.Matter.FindAsync(id);
                 db.Matter.Remove(matter);
                 await db.SaveChangesAsync();
+                Cache.Clear();
                 return RedirectToAction("Index");
             }
         }

@@ -12,6 +12,8 @@
 
     using Newtonsoft.Json;
 
+    using SystemTask = System.Threading.Tasks.Task;
+
     /// <summary>
     /// The task manager.
     /// </summary>
@@ -26,11 +28,6 @@
         /// The instance.
         /// </summary>
         private static volatile TaskManager instance;
-
-        /// <summary>
-        /// Machine cores count.
-        /// </summary>
-        private readonly int coresCount = Environment.ProcessorCount;
 
         /// <summary>
         /// Gets the tasks.
@@ -59,6 +56,7 @@
                     }
                 }
             }
+
         }
 
         /// <summary>
@@ -92,7 +90,7 @@
         /// <param name="taskType">
         /// The task Type.
         /// </param>
-        public long CreateTask(Func<Dictionary<string, object>> action, TaskType taskType)
+        public long CreateTask(Func<Dictionary<string, string>> action, TaskType taskType)
         {
             CalculationTask databaseTask;
             Task task;
@@ -104,7 +102,7 @@
                     Created = DateTime.Now,
                     Description = taskType.GetDisplayValue(),
                     Status = TaskState.InQueue,
-                    UserId = Convert.ToInt32(AccountHelper.GetUserId()),
+                    UserId = AccountHelper.GetUserId(),
                     TaskType = taskType
                 };
 
@@ -121,7 +119,7 @@
                     signalrHub.Send(TaskEvent.AddTask, task.TaskData);
                 }
             }
-            
+
             ManageTasks();
             return task.TaskData.Id;
         }
@@ -132,6 +130,22 @@
         public void DeleteAllTasks()
         {
             List<Task> tasksToDelete = GetUserTasks();
+
+            for (int i = tasksToDelete.Count - 1; i >= 0; i--)
+            {
+                DeleteTask(tasksToDelete[i].TaskData.Id);
+            }
+        }
+
+        /// <summary>
+        /// Deletes tasks with the specified state.
+        /// </summary>
+        /// <param name="taskState">
+        /// The task state.
+        /// </param>
+        public void DeleteTasksWithState(TaskState taskState)
+        {
+            List<Task> tasksToDelete = GetUserTasksWithState(taskState);
 
             for (int i = tasksToDelete.Count - 1; i >= 0; i--)
             {
@@ -154,9 +168,11 @@
                 {
                     lock (task)
                     {
-                        if (task.Thread != null && task.Thread.IsAlive)
+                        if ((task.SystemTask != null) && (!task.SystemTask.IsCompleted))
                         {
-                            task.Thread.Abort();
+                            CancellationTokenSource cancellationTokenSource = task.CancellationTokenSource;
+                            cancellationTokenSource.Cancel();
+                            cancellationTokenSource.Dispose();
                         }
 
                         tasks.Remove(task);
@@ -182,24 +198,24 @@
         /// </returns>
         public IEnumerable<TaskData> GetTasksData()
         {
-            List<Task> result = GetUserTasks();
-            return result.Select(t => t.TaskData.Clone());
+            return GetUserTasks().Select(t => t.TaskData.Clone());
         }
 
         /// <summary>
         /// The get task.
         /// </summary>
         /// <param name="id">
-        /// The id.
+        /// The task id in database.
         /// </param>
         /// <returns>
         /// The <see cref="Task"/>.
         /// </returns>
-        public Task GetTask(int id)
+        public Task GetTask(long id)
         {
             Task result;
             lock (tasks)
             {
+                // TODO: check if task with id exists
                 Task task = tasks.Single(t => t.TaskData.Id == id);
 
                 lock (task)
@@ -214,6 +230,33 @@
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Gets the task data by id.
+        /// </summary>
+        /// <param name="id">
+        /// The task id in database.
+        /// </param>
+        /// <returns>
+        /// The json as <see cref="string"/>.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Thrown if task is not complete.
+        /// </exception>
+        public string GetTaskData(long id, string key = "data")
+        {
+            Task task = GetTask(id);
+            var taskStatus = task.TaskData.TaskState;
+            if (taskStatus != TaskState.Completed && taskStatus != TaskState.Error)
+            {
+                throw new Exception("Task state is not 'complete'");
+            }
+
+            using (var db = new LibiadaWebEntities())
+            {
+                return db.TaskResult.Single(tr => tr.TaskId == id && tr.Key == key).Value;
+            }
         }
 
         /// <summary>
@@ -239,7 +282,23 @@
         }
 
         /// <summary>
-        /// Removes not finished amd not started tasks from db
+        /// Gets tasks available to user with the specified state.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="T:List{Task}"/>.
+        /// </returns>
+        private List<Task> GetUserTasksWithState(TaskState taskState)
+        {
+            List<Task> result = GetUserTasks();
+            lock (tasks)
+            {
+                result = result.Where(t => t.TaskData.TaskState == taskState).ToList();
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Removes not finished and not started tasks from database
         /// on task manager initialization.
         /// </summary>
         private void RemoveGarbageFromDb()
@@ -247,7 +306,7 @@
             using (var db = new LibiadaWebEntities())
             {
                 var tasksToDelete = db.CalculationTask
-                    .Where(t => (t.Status != TaskState.Completed && t.Status != TaskState.Error) || t.Result == null)
+                    .Where(t => t.Status != TaskState.Completed && t.Status != TaskState.Error)
                     .ToArray();
 
                 db.CalculationTask.RemoveRange(tasksToDelete);
@@ -256,39 +315,51 @@
         }
 
         /// <summary>
-        /// The manage tasks.
+        /// Initializes new tasks and runs tasks scheduling it
+        /// for execution to the current TaskScheduler.
         /// </summary>
         private void ManageTasks()
         {
             lock (tasks)
             {
-                int activeTasks = 0;
-                foreach (Task task in tasks)
+                List<Task> tasksToStart = tasks.FindAll(t => t.TaskData.TaskState == TaskState.InQueue);
+                if (tasksToStart.Count != 0)
                 {
-                    lock (task)
-                    {
-                        if (task.TaskData.TaskState == TaskState.InProgress)
-                        {
-                            activeTasks++;
-                        }
-                    }
-                }
-
-                while (activeTasks < coresCount)
-                {
-                    activeTasks++;
-                    Task taskToStart = tasks.FirstOrDefault(t => t.TaskData.TaskState == TaskState.InQueue);
-                    if (taskToStart != null)
+                    foreach (Task taskToStart in tasksToStart)
                     {
                         lock (taskToStart)
                         {
-                            taskToStart.TaskData.TaskState = TaskState.InProgress;
-                            StartTask(taskToStart.TaskData.Id);
+                            Task task = tasks.Single(t => t.TaskData.Id == taskToStart.TaskData.Id);
+                            task.TaskData.TaskState = TaskState.InProgress;
+                            var cancellationTokenSource = new CancellationTokenSource();
+                            CancellationToken token = cancellationTokenSource.Token;
+                            task.CancellationTokenSource = cancellationTokenSource;
+                            var systemTask = new SystemTask(() =>
+                            {
+                                using (cancellationTokenSource.Token.Register(Thread.CurrentThread.Abort))
+                                {
+                                    ExecuteTaskAction(task);
+                                }
+
+                            }, token);
+
+                            SystemTask notificationTask = systemTask.ContinueWith((SystemTask t) =>
+                            {
+                                cancellationTokenSource.Dispose();
+
+                                var data = new Dictionary<string, string>
+                                {
+                                    { "title", $"LibiadaWeb: Task completed" },
+                                    { "body", $"Task type: { task.TaskData.TaskType.GetDisplayValue() } \nExecution time: { task.TaskData.ExecutionTime }" },
+                                    { "icon", "/Content/DNA.png" },
+                                    { "tag", $"/{ task.TaskData.TaskType }/Result/{ task.TaskData.Id }" }
+                                };
+                                PushNotificationHelper.Send(task.TaskData.UserId, data);
+                            });
+
+                            task.SystemTask = systemTask;
+                            systemTask.Start();
                         }
-                    }
-                    else
-                    {
-                        break;
                     }
                 }
             }
@@ -304,7 +375,7 @@
         {
             try
             {
-                Func<Dictionary<string, object>> actionToCall;
+                Func<Dictionary<string, string>> actionToCall;
                 lock (task)
                 {
                     actionToCall = task.Action;
@@ -323,29 +394,22 @@
                 }
 
                 // executing action
-                Dictionary<string, object> result = actionToCall();
+                Dictionary<string, string> result = actionToCall();
 
                 lock (task)
                 {
                     task.TaskData.Completed = DateTime.Now;
                     task.TaskData.ExecutionTime = task.TaskData.Completed - task.TaskData.Started;
-                    task.Result = result;
+                    TaskResult[] results = result.Select(r => new TaskResult { Key = r.Key, Value = r.Value, TaskId = task.TaskData.Id }).ToArray();
+
                     task.TaskData.TaskState = TaskState.Completed;
                     using (var db = new LibiadaWebEntities())
                     {
-                        CalculationTask databaseTask = db.CalculationTask.Single(t => (t.Id == task.TaskData.Id));
+                        db.TaskResult.AddRange(results);
 
+                        CalculationTask databaseTask = db.CalculationTask.Single(t => (t.Id == task.TaskData.Id));
                         databaseTask.Completed = DateTime.Now;
                         databaseTask.Status = TaskState.Completed;
-                        if (result.ContainsKey("data"))
-                        {
-                            databaseTask.Result = result["data"].ToString();
-                        }
-
-                        if (result.ContainsKey("additionalData"))
-                        {
-                            databaseTask.AdditionalResultData = JsonConvert.SerializeObject(result["additionalData"]);
-                        }
 
                         db.Entry(databaseTask).State = EntityState.Modified;
                         db.SaveChanges();
@@ -353,6 +417,10 @@
 
                     signalrHub.Send(TaskEvent.ChangeStatus, task.TaskData);
                 }
+            }
+            catch (ThreadAbortException e)
+            {
+                // TODO: implement an exception handling/logging
             }
             catch (Exception e)
             {
@@ -367,51 +435,36 @@
 
                 lock (task)
                 {
-                    task.TaskData.Completed = DateTime.Now;
-                    task.TaskData.ExecutionTime = task.TaskData.Completed - task.TaskData.Started;
-                    task.TaskData.TaskState = TaskState.Error;
-                    task.Result = new Dictionary<string, object>
-                                      {
-                                          { "Error", true },
-                                          { "ErrorMessage", errorMessage },
-                                          { "StackTrace", stackTrace }
-                                      };
+                    var taskData = task.TaskData;
+                    taskData.Completed = DateTime.Now;
+                    taskData.ExecutionTime = taskData.Completed - taskData.Started;
+                    taskData.TaskState = TaskState.Error;
+
+                    TaskResult[] results = new[]
+                    {
+                        new TaskResult { Key = "ErrorMessage", Value = JsonConvert.SerializeObject(errorMessage), TaskId = taskData.Id },
+                        new TaskResult { Key = "StackTrace", Value = JsonConvert.SerializeObject(stackTrace), TaskId = taskData.Id }
+                    };
 
                     using (var db = new LibiadaWebEntities())
                     {
-                        CalculationTask databaseTask = db.CalculationTask.Single(t => (t.Id == task.TaskData.Id));
+                        db.TaskResult.AddRange(results);
 
+                        CalculationTask databaseTask = db.CalculationTask.Single(t => (t.Id == taskData.Id));
                         databaseTask.Completed = DateTime.Now;
                         databaseTask.Status = TaskState.Error;
-                        databaseTask.Result = JsonConvert.SerializeObject(task.Result);
+
                         db.Entry(databaseTask).State = EntityState.Modified;
                         db.SaveChanges();
                     }
 
-                    signalrHub.Send(TaskEvent.ChangeStatus, task.TaskData);
+                    signalrHub.Send(TaskEvent.ChangeStatus, taskData);
                 }
             }
-
-            ManageTasks();
-        }
-
-        /// <summary>
-        /// The start task.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        private void StartTask(long id)
-        {
-            Task taskToStart;
-            lock (tasks)
+            finally
             {
-                taskToStart = tasks.Single(t => t.TaskData.Id == id);
+                ManageTasks();
             }
-
-            var thread = new Thread(() => ExecuteTaskAction(taskToStart));
-            taskToStart.Thread = thread;
-            thread.Start();
         }
     }
 }

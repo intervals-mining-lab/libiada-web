@@ -103,7 +103,7 @@
                 var commonSequenceRepository = new CommonSequenceRepository(db);
                 var mattersCharacteristics = new object[matterIds.Length];
                 matterIds = matterIds.OrderBy(m => m).ToArray();
-                Dictionary<long, Matter> matters = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id);
+                Dictionary<long, Matter> matters = Cache.GetInstance().Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id);
 
                 for (int i = 0; i < matterIds.Length; i++)
                 {
@@ -181,18 +181,15 @@
                 }
 
                 var result = new Dictionary<string, object>
-                                 {
-                                     { "characteristics", mattersCharacteristics },
-                                     { "characteristicNames", characteristicNames },
-                                     { "characteristicsList", characteristicsList },
-                                     { "transformationsList", transformations },
-                                     { "iterationsCount", iterationsCount }
-                                 };
+                {
+                    { "characteristics", mattersCharacteristics },
+                    { "characteristicNames", characteristicNames },
+                    { "characteristicsList", characteristicsList },
+                    { "transformationsList", transformations },
+                    { "iterationsCount", iterationsCount }
+                };
 
-                return new Dictionary<string, object>
-                           {
-                               { "data", JsonConvert.SerializeObject(result) }
-                           };
+                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
             });
         }
     }

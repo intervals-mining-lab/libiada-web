@@ -20,7 +20,7 @@
         /// <summary>
         /// The task types count.
         /// </summary>
-        private const int TaskTypesCount = 35;
+        private const int TaskTypesCount = 39;
 
         /// <summary>
         /// Array of all tasks types.
@@ -89,6 +89,10 @@
         [TestCase((TaskType)33, "OrdersIntervalsDistributionsAccordance")]
         [TestCase((TaskType)34, "IntervalsCharacteristicsDistribution")]
         [TestCase((TaskType)35, "BatchImagesImport")]
+        [TestCase((TaskType)36, "BatchGeneticImportFromGenBankSearchFile")]
+        [TestCase((TaskType)37, "BatchGeneticImportFromGenBankSearchQuery")]
+        [TestCase((TaskType)38, "NcbiNuccoreSearch")]
+        [TestCase((TaskType)39, "GenBankAccessionVersionUpdateChecker")]
         public void TaskTypeNameTest(TaskType taskType, string name) => Assert.AreEqual(name, taskType.GetName());
 
         /// <summary>

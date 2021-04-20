@@ -109,11 +109,11 @@
                 using (var db = new LibiadaWebEntities())
                 {
                     long firstMatterId = matterIds[0];
-                    firstMatterName = db.Matter.Single(m => m.Id == firstMatterId).Name;
+                    firstMatterName = Cache.GetInstance().Matters.Single(m => m.Id == firstMatterId).Name;
                     firstParentId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
 
                     long secondMatterId = matterIds[1];
-                    secondMatterName = db.Matter.Single(m => m.Id == firstMatterId).Name;;
+                    secondMatterName = Cache.GetInstance().Matters.Single(m => m.Id == secondMatterId).Name;
                     secondParentId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
                 }
 
@@ -154,18 +154,20 @@
 
                 string characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
 
-                return new Dictionary<string, object>
+                var result = new Dictionary<string, object>
                 {
                     { "firstSequenceName", firstMatterName },
                     { "secondSequenceName", secondMatterName },
                     { "characteristicName", characteristicName },
                     { "features", features.ConvertAll(p => p.GetDisplayValue()) },
                     { "optimalRotation", optimalRotation },
-                    { "distances", distances },
+                    { "distances", distances.Select(el => new {Value = el}) },
                     { "validationType", validationType },
                     { "cyclicShift", cyclicShift },
                     { "sort", sort }
                 };
+
+                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
             });
         }
 
@@ -186,7 +188,7 @@
             switch (validationType)
             {
                 case "Similarity":
-                   return (first, second) => Math.Abs(Math.Min(first, second));
+                    return (first, second) => Math.Abs(Math.Min(first, second));
                 case "Difference":
                     return (first, second) => -Math.Abs(first - second);
                 case "NormalizedDifference":
