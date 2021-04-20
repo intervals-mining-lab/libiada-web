@@ -86,6 +86,9 @@
     <Compile Include="App_Start\SmsService.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="AspNetPushNotificationSubscriber.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
     <Compile Include="AspNetRole.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
@@ -109,6 +112,7 @@
     <Compile Include="BinaryCharacteristicValue.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Cache.cs" />
     <Compile Include="CalculationTask.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
@@ -154,6 +158,8 @@
     <Compile Include="Controllers\PartialController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\Sequences\BatchGenesImportController.cs" />
+    <Compile Include="Controllers\Sequences\BatchGeneticImportFromGenBankSearchFileController.cs" />
+    <Compile Include="Controllers\Sequences\BatchGeneticImportFromGenBankSearchQueryController.cs" />
     <Compile Include="Controllers\Sequences\BatchImagesImportController.cs" />
     <Compile Include="Controllers\Sequences\BatchMusicImportController.cs" />
     <Compile Include="Controllers\Sequences\BatchPoemsImportController.cs" />
@@ -161,7 +167,9 @@
     <Compile Include="Controllers\Sequences\CommonSequencesController.cs" />
     <Compile Include="Controllers\Sequences\CustomSequenceOrderTransformerController.cs" />
     <Compile Include="Controllers\Sequences\FmotifsDictionaryController.cs" />
+    <Compile Include="Controllers\Sequences\GenBankAccessionVersionUpdateCheckerController.cs" />
     <Compile Include="Controllers\Sequences\MattersController.cs" />
+    <Compile Include="Controllers\Sequences\NcbiNuccoreSearchController.cs" />
     <Compile Include="Controllers\Sequences\OrderTransformationConvergenceController.cs" />
     <Compile Include="Controllers\Sequences\OrderTransformerController.cs" />
     <Compile Include="Controllers\Sequences\CustomSequenceSegmentationController.cs" />
@@ -200,6 +208,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Group.cs" />
+    <Compile Include="Helpers\PushNotificationHelper.cs" />
     <Compile Include="ImageMatrixTransformer.cs" />
     <Compile Include="ImageOrderExtractor.cs" />
     <Compile Include="ImageSequence.cs">
@@ -254,6 +263,9 @@
     <Compile Include="Models\CalculatorsData\FragmentData.cs" />
     <Compile Include="Models\Calculators\SubsequencesCharacteristicsCalculator.cs" />
     <Compile Include="Models\CalculatorsData\SelectListItemWithNature.cs" />
+    <Compile Include="Models\NcbiSequencesData\AccessionUpdateSearchResult.cs" />
+    <Compile Include="Models\NcbiSequencesData\ESearchResult.cs" />
+    <Compile Include="Models\NcbiSequencesData\ESummaryResult.cs" />
     <Compile Include="Models\OrderTransformer.cs" />
     <Compile Include="Models\Repositories\Catalogs\AccordanceCharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\BinaryCharacteristicRepository.cs" />
@@ -267,6 +279,9 @@
     <Compile Include="Models\Repositories\Sequences\IMeasureRepsitory.cs" />
     <Compile Include="Models\Repositories\Sequences\MeasureRepository.cs" />
     <Compile Include="Models\SelectListItemComparer.cs" />
+    <Compile Include="Models\NcbiSequencesData\ESearchResponce.cs" />
+    <Compile Include="Models\NcbiSequencesData\NuccoreObject.cs" />
+    <Compile Include="Models\SerializationFilter.cs" />
     <Compile Include="Models\SubsequenceImporter.cs" />
     <Compile Include="Multisequence.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
@@ -341,10 +356,8 @@
     <Compile Include="Models\Account\VerifyPhoneNumberViewModel.cs" />
     <Compile Include="Models\Aliases.cs" />
     <Compile Include="Models\CalculatorsData\CharacteristicSelectListItem.cs" />
-    <Compile Include="Models\CalculatorsData\LinkSelectListItem.cs" />
     <Compile Include="Models\CalculatorsData\SubsequenceData.cs" />
     <Compile Include="Models\CalculatorsData\SequenceData.cs" />
-    <Compile Include="Models\CalculatorsData\IntPair.cs" />
     <Compile Include="Models\Repositories\Catalogs\AttributeRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\ISequenceAttributeRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\FeatureRepository.cs" />
@@ -368,6 +381,12 @@
     <Compile Include="Translator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ConnectionStrings.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Content\alertify.css" />
+    <Content Include="Content\alertify.min.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -435,6 +454,8 @@
       <LastGenOutput>LibiadaWeb.cs</LastGenOutput>
       <DependentUpon>LibiadaWeb.edmx</DependentUpon>
     </Content>
+    <Content Include="Scripts\alertify.js" />
+    <Content Include="Scripts\alertify.min.js" />
     <Content Include="Scripts\angular-mocks.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
@@ -445,6 +466,7 @@
     <Content Include="Scripts\Angular\Components\orderTransformations.js" />
     <Content Include="Scripts\Angular\Components\scrollJumper.js" />
     <Content Include="Scripts\Angular\Controllers\accordance.js" />
+    <Content Include="Scripts\Angular\Controllers\batchGeneticImportFromGenBankSearchFile.js" />
     <Content Include="Scripts\Angular\Controllers\batchMusicImport.js" />
     <Content Include="Scripts\Angular\Controllers\batchPoemsImport.js" />
     <Content Include="Scripts\Angular\Controllers\batchSequenceImport.js" />
@@ -479,7 +501,6 @@
     <Content Include="Scripts\Angular\Controllers\calculation.js" />
     <Content Include="Scripts\Angular\Controllers\subsequencesCalculation.js" />
     <Content Include="Scripts\Angular\Controllers\matterSequenceCreate.js" />
-    <Content Include="Scripts\Angular\Controllers\subsequencesDistributionResultPlotly.js" />
     <Content Include="Scripts\Angular\Controllers\subsequencesDistributionResult.js" />
     <Content Include="Scripts\Angular\Controllers\taskManager.js" />
     <Content Include="Scripts\Angular\Directives\tableParse.js" />
@@ -737,6 +758,7 @@
     <Content Include="Scripts\Angular\Components\loadingWindow.js" />
     <Content Include="Scripts\plotly\plotly.js" />
     <Content Include="Scripts\plotly\plotly.min.js" />
+    <Content Include="Scripts\push-notification.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
@@ -751,6 +773,7 @@
     <Content Include="Scripts\midijs\inc\jasmid\LICENSE" />
     <Content Include="Scripts\midijs\inc\tuna\README.md" />
     <None Include="Scripts\_references.js" />
+    <Content Include="sw-push-notification.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -813,7 +836,6 @@
     <Content Include="Views\Partial\_MattersSubmit.cshtml" />
     <Content Include="Views\Calculators\Charts\Index.cshtml" />
     <Content Include="Views\Calculators\SubsequencesDistribution\Index.cshtml" />
-    <Content Include="Views\Calculators\SubsequencesDistribution\OldResult.cshtml" />
     <Content Include="Views\Partial\_LocalFile.cshtml" />
     <Content Include="Views\Sequences\GenesImport\Result.cshtml" />
     <Content Include="Views\Calculators\SubsequencesSimilarity\Result.cshtml" />
@@ -839,6 +861,7 @@
     <Content Include="App_Code\Helpers.cshtml" />
     <Content Include="Views\Sequences\BatchSequenceImport\Index.cshtml" />
     <Content Include="Views\Sequences\BatchSequenceImport\Result.cshtml" />
+    <Content Include="Views\Sequences\GenBankAccessionVersionUpdateChecker\Result.cshtml" />
     <Content Include="Views\Calculators\SubsequencesComparer\Index.cshtml" />
     <Content Include="Views\Calculators\CustomSequenceOrderTransformationCalculation\Result.cshtml" />
     <Content Include="Views\Calculators\CustomSequenceOrderTransformationCalculation\Index.cshtml" />
@@ -887,6 +910,13 @@
     <Content Include="Views\Calculators\OrdersIntervalsDistributionsAccordance\Result.cshtml" />
     <Content Include="Views\Calculators\IntervalsCharacteristicsDistribution\Index.cshtml" />
     <Content Include="Views\Calculators\IntervalsCharacteristicsDistribution\Result.cshtml" />
+    <Content Include="Views\Sequences\BatchGeneticImportFromGenBankSearchFile\Index.cshtml" />
+    <Content Include="Views\Sequences\BatchGeneticImportFromGenBankSearchFile\Result.cshtml" />
+    <Content Include="Views\Sequences\BatchGeneticImportFromGenBankSearchQuery\Result.cshtml" />
+    <Content Include="Views\Sequences\BatchGeneticImportFromGenBankSearchQuery\Index.cshtml" />
+    <Content Include="Views\Sequences\NcbiNuccoreSearch\Index.cshtml" />
+    <Content Include="Views\Sequences\NcbiNuccoreSearch\Result.cshtml" />
+    <Content Include="Views\Sequences\GenBankAccessionVersionUpdateChecker\Index.cshtml" />
     <Content Include="Views\Sequences\BatchImagesImport\Result.cshtml" />
     <Content Include="Views\Sequences\BatchImagesImport\Index.cshtml" />
     <None Include="Web.Release.config">
@@ -898,6 +928,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\PushNotification\" />
+    <Folder Include="Views\Sequences\NcbiNuccoreSearch\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -921,6 +953,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="AlertifyJS">
+      <Version>1.13.1</Version>
+    </PackageReference>
     <PackageReference Include="Antlr">
       <Version>3.5.0.2</Version>
     </PackageReference>
@@ -990,6 +1025,9 @@
     <PackageReference Include="Microsoft.AspNet.WebPages">
       <Version>3.2.7</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.Configuration.ConfigurationBuilders.UserSecrets">
+      <Version>2.0.0</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.jQuery.Unobtrusive.Validation">
       <Version>3.2.11</Version>
     </PackageReference>
@@ -1032,9 +1070,6 @@
     <PackageReference Include="Newtonsoft.Json">
       <Version>12.0.3</Version>
     </PackageReference>
-    <PackageReference Include="Npgsql">
-      <Version>4.1.3</Version>
-    </PackageReference>
     <PackageReference Include="Owin">
       <Version>1.0.0</Version>
     </PackageReference>
@@ -1046,6 +1081,9 @@
     </PackageReference>
     <PackageReference Include="WebGrease">
       <Version>1.6.0</Version>
+    </PackageReference>
+    <PackageReference Include="WebPush">
+      <Version>1.0.11</Version>
     </PackageReference>
   </ItemGroup>
   <PropertyGroup>

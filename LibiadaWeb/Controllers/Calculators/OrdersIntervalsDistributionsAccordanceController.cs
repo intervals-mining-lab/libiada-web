@@ -1,13 +1,14 @@
-﻿using System;
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
+
     using LibiadaCore.Core;
     using LibiadaCore.Extensions;
+
     using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
@@ -15,7 +16,7 @@ namespace LibiadaWeb.Controllers.Calculators
     using SequenceGenerator;
 
     /// <summary>
-    /// Calculates accordance of orders by intervals distributions.
+    /// Calculates accordance of orders to intervals distributions.
     /// </summary>
     [Authorize(Roles = "Admin")]
     public class OrdersIntervalsDistributionsAccordanceController : AbstractResultController
@@ -35,7 +36,6 @@ namespace LibiadaWeb.Controllers.Calculators
         /// </returns>
         public ActionResult Index()
         {
-            ViewBag.data = "{}";
             return View();
         }
 
@@ -71,7 +71,7 @@ namespace LibiadaWeb.Controllers.Calculators
                         break;
                     default: throw new ArgumentException("Invalid type of generate");
                 }
-                var result = new Dictionary<string, Dictionary<Dictionary<int, int>, List<int[]>>>();
+                var distributionsAccordance = new Dictionary<string, Dictionary<Dictionary<int, int>, List<int[]>>>();
                 foreach (var link in EnumExtensions.ToArray<Link>())
                 {
                     if (link == Link.NotApplied)
@@ -107,32 +107,29 @@ namespace LibiadaWeb.Controllers.Calculators
                             accordance.Add(fullIntervals, new List<int[]> { order });
                         }
                     }
-                    result.Add(EnumExtensions.GetDisplayValue<Link>(link), accordance);
+                    distributionsAccordance.Add(link.GetDisplayValue(), accordance);
                 }
                 var list = EnumHelper.GetSelectList(typeof(Link));
                 list.RemoveAt(0);
-                var data = new Dictionary<string, object>
+                var result = new Dictionary<string, object>
                 {
-                    { "result", result.Select(r => new
-                    {
-                        link = r.Key.ToString(),
-                        accordance = r.Value.Select(d => new {
-                            distributionIntervals = d.Key.Select(pair => new
-                            {
-                                interval = pair.Key,
-                                count = pair.Value
-                            }).ToArray(),
-                            orders = d.Value.ToArray()
+                    { "result", distributionsAccordance.Select(r => new
+                        {
+                            link = r.Key.ToString(),
+                            accordance = r.Value.Select(d => new {
+                                distributionIntervals = d.Key.Select(pair => new
+                                {
+                                    interval = pair.Key,
+                                    count = pair.Value
+                                }).ToArray(),
+                                orders = d.Value.ToArray()
+                            })
                         })
-                    })
                     },
-                    {"linkList",list }
+                    { "linkList", list }
                 };
 
-                return new Dictionary<string, object>
-                {
-                    { "data", JsonConvert.SerializeObject(data) }
-                };
+                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
             });
         }
     }

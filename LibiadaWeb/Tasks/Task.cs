@@ -6,6 +6,8 @@
 
     using Newtonsoft.Json;
 
+    using SystemTask = System.Threading.Tasks.Task;
+
     /// <summary>
     /// The task.
     /// </summary>
@@ -14,7 +16,7 @@
         /// <summary>
         /// The action.
         /// </summary>
-        public readonly Func<Dictionary<string, object>> Action;
+        public readonly Func<Dictionary<string, string>> Action;
 
         /// <summary>
         /// The task data.
@@ -24,12 +26,17 @@
         /// <summary>
         /// The result.
         /// </summary>
-        public Dictionary<string, object> Result;
+        //public Dictionary<string, string> Result;
 
         /// <summary>
-        /// The thread.
+        /// The cancellation token source to delete the task.
         /// </summary>
-        public Thread Thread;
+        public CancellationTokenSource CancellationTokenSource;
+
+        /// <summary>
+        /// The system task that executes asynchronously on a thread pool.
+        /// </summary>
+        public SystemTask SystemTask;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Task"/> class.
@@ -46,7 +53,7 @@
         /// <param name="taskType">
         /// The task Type.
         /// </param>
-        public Task(long id, Func<Dictionary<string, object>> action, int userId, TaskType taskType)
+        public Task(long id, Func<Dictionary<string, string>> action, int userId, TaskType taskType)
         {
             Action = action;
             TaskData = new TaskData(id, userId, taskType);
@@ -61,12 +68,12 @@
         public Task(CalculationTask task)
         {
             TaskData = new TaskData(task);
-            Result = new Dictionary<string, object> { { "data", task.Result } };
-            if (!string.IsNullOrEmpty(task.AdditionalResultData))
-            {
-                // TODO: rewrite to use more abstract class or leave json for further parsing
-                Result.Add("additionalData", JsonConvert.DeserializeObject<List<(int, int, double)>[,]>(task.AdditionalResultData));
-            }
+            //Result = new Dictionary<string, string> { { "data", task.Result } };
+            //if (!string.IsNullOrEmpty(task.AdditionalResultData))
+            //{
+            //    // TODO: rewrite to use more abstract class or leave json for further parsing
+            //    Result.Add("additionalData", JsonConvert.DeserializeObject<List<(int, int, double)>[,]>(task.AdditionalResultData));
+            //}
         }
 
         /// <summary>
@@ -84,12 +91,12 @@
         /// <param name="thread">
         /// The thread.
         /// </param>
-        private Task(Func<Dictionary<string, object>> action, TaskData taskData, Dictionary<string, object> result, Thread thread)
+        private Task(Func<Dictionary<string, string>> action, TaskData taskData, /*Dictionary<string, string> result,*/ SystemTask systemTask)
         {
             Action = action;
             TaskData = taskData.Clone();
-            Result = result;
-            Thread = thread;
+            //Result = result;
+            SystemTask = systemTask;
         }
 
         /// <summary>
@@ -100,7 +107,7 @@
         /// </returns>
         public Task Clone()
         {
-            return new Task(Action, TaskData, Result, Thread);
+            return new Task(Action, TaskData, /*Result,*/ SystemTask);
         }
     }
 }

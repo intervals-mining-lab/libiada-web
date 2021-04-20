@@ -37,16 +37,16 @@
 
                 using (var db = new LibiadaWebEntities())
                 {
-                    Matter[] matters = db.Matter.Where(m => m.Nature == Nature.Literature).ToArray();
+                    Matter[] matters = Cache.GetInstance().Matters.Where(m => m.Nature == Nature.Literature).ToArray();
 
                     for (int i = 0; i < Request.Files.Count; i++)
                     {
                         string sequenceName = Request.Files[i].FileName.Substring(0, Request.Files[i].FileName.LastIndexOf('.'));
 
                         var importResult = new MatterImportResult()
-                                               {
-                                                   MatterName = sequenceName
-                                               };
+                        {
+                            MatterName = sequenceName
+                        };
 
                         try
                         {
@@ -95,12 +95,9 @@
                         }
                     }
 
-                    var data = new Dictionary<string, object> { { "result", importResults } };
+                    var result = new Dictionary<string, object> { { "result", importResults } };
 
-                    return new Dictionary<string, object>
-                    {
-                        {"data", JsonConvert.SerializeObject(data)}
-                    };
+                    return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
                 }
             });
         }

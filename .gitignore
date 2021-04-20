@@ -4,6 +4,9 @@
 *.suo
 .vs/
 
+#rider temp files
+.idea/
+
 [Dd]ebug/
 [Rr]elease/
 x64/
@@ -72,3 +75,6 @@ Web.Release.config
 ConnectionStrings.config
 
 .vs
+
+# Secret data storage
+LibiadaWeb/secrets.file

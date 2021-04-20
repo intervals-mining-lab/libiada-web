@@ -20,9 +20,8 @@
 
     using Newtonsoft.Json;
 
-    using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
-
     using static LibiadaWeb.Models.Calculators.SubsequencesCharacteristicsCalculator;
+    using static LibiadaCore.Extensions.EnumExtensions;
 
     /// <summary>
     /// The subsequences comparer controller.
@@ -182,14 +181,12 @@
                     { "mattersNames", matterNames },
                     { "characteristicName", characteristicName },
                     { "similarities", similarities },
-                    { "characteristics", characteristics },
                     { "features", features.ToDictionary(f => (byte)f, f => f.GetDisplayValue()) },
-                    { "attributeValues", allAttributeValues.Select(sa => new { attribute = sa.AttributeId, value = sa.Value }) },
-                    { "attributes", EnumExtensions.ToArray<LibiadaWeb.Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
+                    { "attributes", ToArray<LibiadaWeb.Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
                     { "maxPercentageDifference", maxPercentageDifference },
                     { "sequenceCharacteristicName", sequenceCharacteristicName },
                     { "nature", (byte)Nature.Genetic },
-                    { "notations", EnumExtensions.ToArray<Notation>().Where(n => n.GetNature() == Nature.Genetic).ToSelectListWithNature() }
+                    { "notations", ToArray<Notation>().Where(n => n.GetNature() == Nature.Genetic).ToSelectListWithNature() }
                 };
 
                 foreach ((string key, object value) in characteristicsTypesData)
@@ -197,11 +194,13 @@
                     result.Add(key, value);
                 }
 
-                return new Dictionary<string, object>
-                           {
-                               { "additionalData", similarityMatrix },
-                               { "data", JsonConvert.SerializeObject(result) }
-                           };
+                return new Dictionary<string, string>
+                {
+                    { "similarityMatrix", JsonConvert.SerializeObject(similarityMatrix) },
+                    { "characteristics", JsonConvert.SerializeObject(characteristics) },
+                    { "attributeValues", JsonConvert.SerializeObject(allAttributeValues.Select(sa => new { attribute = sa.AttributeId, value = sa.Value })) },
+                    { "data", JsonConvert.SerializeObject(result) }
+                };
             });
         }
 
@@ -482,6 +481,7 @@
                     similarityMatrix[i, j] = new List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>();
                 }
             }
+
             foreach (var similarPairsList in similarPairs)
             {
                 foreach (((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference) in similarPairsList)
@@ -497,6 +497,7 @@
                     similarityMatrix[secondMatter, firstMatter].Add(symmetricalSimilarityData);
                 }
             }
+
             return similarityMatrix;
         }
     }

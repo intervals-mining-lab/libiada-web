@@ -87,7 +87,7 @@
                 using (var db = new LibiadaWebEntities())
                 {
                     var commonSequenceRepository = new CommonSequenceRepository(db);
-                    mattersName = db.Matter.Single(m => matterId == m.Id).Name;
+                    mattersName = Cache.GetInstance().Matters.Single(m => matterId == m.Id).Name;
                     var sequenceId = db.CommonSequence.Single(c => matterId == c.MatterId && c.Notation == notation).Id;
                     sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
 
@@ -211,15 +211,9 @@
                 // TODO: sequence prediction
 
 
-                var result = new Dictionary<string, object>
-                                 {
-                                         { "result", sequencePredictionResult }
-                                 };
+                var result = new Dictionary<string, object> { { "result", sequencePredictionResult } };
 
-                return new Dictionary<string, object>
-                           {
-                               { "data", JsonConvert.SerializeObject(result) }
-                           };
+                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
             });
         }
     }
