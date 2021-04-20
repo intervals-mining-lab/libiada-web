@@ -56,7 +56,7 @@
                     }
                 }
             }
-            
+
         }
 
         /// <summary>
@@ -90,7 +90,7 @@
         /// <param name="taskType">
         /// The task Type.
         /// </param>
-        public long CreateTask(Func<Dictionary<string, object>> action, TaskType taskType)
+        public long CreateTask(Func<Dictionary<string, string>> action, TaskType taskType)
         {
             CalculationTask databaseTask;
             Task task;
@@ -205,12 +205,12 @@
         /// The get task.
         /// </summary>
         /// <param name="id">
-        /// The id.
+        /// The task id in database.
         /// </param>
         /// <returns>
         /// The <see cref="Task"/>.
         /// </returns>
-        public Task GetTask(int id)
+        public Task GetTask(long id)
         {
             Task result;
             lock (tasks)
@@ -230,6 +230,33 @@
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Gets the task data by id.
+        /// </summary>
+        /// <param name="id">
+        /// The task id in database.
+        /// </param>
+        /// <returns>
+        /// The json as <see cref="string"/>.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Thrown if task is not complete.
+        /// </exception>
+        public string GetTaskData(long id, string key = "data")
+        {
+            Task task = GetTask(id);
+            var taskStatus = task.TaskData.TaskState;
+            if (taskStatus != TaskState.Completed && taskStatus != TaskState.Error)
+            {
+                throw new Exception("Task state is not 'complete'");
+            }
+
+            using (var db = new LibiadaWebEntities())
+            {
+                return db.TaskResult.Single(tr => tr.TaskId == id && tr.Key == key).Value;
+            }
         }
 
         /// <summary>
@@ -279,9 +306,7 @@
             using (var db = new LibiadaWebEntities())
             {
                 var tasksToDelete = db.CalculationTask
-                    .Where(t => (t.Status != TaskState.Completed 
-                              && t.Status != TaskState.Error) 
-                              || t.Result == null)
+                    .Where(t => t.Status != TaskState.Completed && t.Status != TaskState.Error)
                     .ToArray();
 
                 db.CalculationTask.RemoveRange(tasksToDelete);
@@ -317,7 +342,7 @@
                                 }
 
                             }, token);
-                                
+
                             SystemTask notificationTask = systemTask.ContinueWith((SystemTask t) =>
                             {
                                 cancellationTokenSource.Dispose();
@@ -334,7 +359,6 @@
 
                             task.SystemTask = systemTask;
                             systemTask.Start();
-
                         }
                     }
                 }
@@ -351,7 +375,7 @@
         {
             try
             {
-                Func<Dictionary<string, object>> actionToCall;
+                Func<Dictionary<string, string>> actionToCall;
                 lock (task)
                 {
                     actionToCall = task.Action;
@@ -370,29 +394,22 @@
                 }
 
                 // executing action
-                Dictionary<string, object> result = actionToCall();
+                Dictionary<string, string> result = actionToCall();
 
                 lock (task)
                 {
                     task.TaskData.Completed = DateTime.Now;
                     task.TaskData.ExecutionTime = task.TaskData.Completed - task.TaskData.Started;
-                    task.Result = result;
+                    TaskResult[] results = result.Select(r => new TaskResult { Key = r.Key, Value = r.Value, TaskId = task.TaskData.Id }).ToArray();
+
                     task.TaskData.TaskState = TaskState.Completed;
                     using (var db = new LibiadaWebEntities())
                     {
-                        CalculationTask databaseTask = db.CalculationTask.Single(t => (t.Id == task.TaskData.Id));
+                        db.TaskResult.AddRange(results);
 
+                        CalculationTask databaseTask = db.CalculationTask.Single(t => (t.Id == task.TaskData.Id));
                         databaseTask.Completed = DateTime.Now;
                         databaseTask.Status = TaskState.Completed;
-                        if (result.ContainsKey("data"))
-                        {
-                            databaseTask.Result = result["data"].ToString();
-                        }
-
-                        if (result.ContainsKey("additionalData"))
-                        {
-                            databaseTask.AdditionalResultData = JsonConvert.SerializeObject(result["additionalData"]);
-                        }
 
                         db.Entry(databaseTask).State = EntityState.Modified;
                         db.SaveChanges();
@@ -418,28 +435,30 @@
 
                 lock (task)
                 {
-                    task.TaskData.Completed = DateTime.Now;
-                    task.TaskData.ExecutionTime = task.TaskData.Completed - task.TaskData.Started;
-                    task.TaskData.TaskState = TaskState.Error;
-                    task.Result = new Dictionary<string, object>
-                                      {
-                                          { "Error", true },
-                                          { "ErrorMessage", errorMessage },
-                                          { "StackTrace", stackTrace }
-                                      };
+                    var taskData = task.TaskData;
+                    taskData.Completed = DateTime.Now;
+                    taskData.ExecutionTime = taskData.Completed - taskData.Started;
+                    taskData.TaskState = TaskState.Error;
+
+                    TaskResult[] results = new[]
+                    {
+                        new TaskResult { Key = "ErrorMessage", Value = JsonConvert.SerializeObject(errorMessage), TaskId = taskData.Id },
+                        new TaskResult { Key = "StackTrace", Value = JsonConvert.SerializeObject(stackTrace), TaskId = taskData.Id }
+                    };
 
                     using (var db = new LibiadaWebEntities())
                     {
-                        CalculationTask databaseTask = db.CalculationTask.Single(t => (t.Id == task.TaskData.Id));
+                        db.TaskResult.AddRange(results);
 
+                        CalculationTask databaseTask = db.CalculationTask.Single(t => (t.Id == taskData.Id));
                         databaseTask.Completed = DateTime.Now;
                         databaseTask.Status = TaskState.Error;
-                        databaseTask.Result = JsonConvert.SerializeObject(task.Result);
+
                         db.Entry(databaseTask).State = EntityState.Modified;
                         db.SaveChanges();
                     }
 
-                    signalrHub.Send(TaskEvent.ChangeStatus, task.TaskData);
+                    signalrHub.Send(TaskEvent.ChangeStatus, taskData);
                 }
             }
             finally

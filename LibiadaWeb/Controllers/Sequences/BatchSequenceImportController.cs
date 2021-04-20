@@ -72,57 +72,57 @@
                     var matterRepository = new MatterRepository(db);
                     var dnaSequenceRepository = new GeneticSequenceRepository(db);
 
-                    var(existingAccessions, accessionsToImport) = dnaSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
+                    var (existingAccessions, accessionsToImport) = dnaSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
 
                     importResults.AddRange(existingAccessions.ConvertAll(existingAccession => new MatterImportResult
-                                                                                                  {
-                                                                                                      MatterName = existingAccession,
-                                                                                                      Result = "Sequence already exists",
-                                                                                                      Status = "Exists"
-                                                                                                  }));
+                    {
+                        MatterName = existingAccession,
+                        Result = "Sequence already exists",
+                        Status = "Exists"
+                    }));
 
                     foreach (string accession in accessionsToImport)
                     {
-                        var result = new MatterImportResult() { MatterName = accession };
+                        var importResult = new MatterImportResult() { MatterName = accession };
 
                         try
                         {
                             ISequence bioSequence = NcbiHelper.DownloadGenBankSequence(accession);
                             GenBankMetadata metadata = NcbiHelper.GetMetadata(bioSequence);
-                            result.MatterName = metadata.Version.CompoundAccession;
+                            importResult.MatterName = metadata.Version.CompoundAccession;
 
                             Matter matter = matterRepository.CreateMatterFromGenBankMetadata(metadata);
 
-                            result.SequenceType = matter.SequenceType.GetDisplayValue();
-                            result.Group = matter.Group.GetDisplayValue();
-                            result.MatterName = matter.Name;
-                            result.AllNames = $"Common name = {metadata.Source.CommonName}, "
+                            importResult.SequenceType = matter.SequenceType.GetDisplayValue();
+                            importResult.Group = matter.Group.GetDisplayValue();
+                            importResult.MatterName = matter.Name;
+                            importResult.AllNames = $"Common name = {metadata.Source.CommonName}, "
                                             + $"Species = {metadata.Source.Organism.Species}, "
                                             + $"Definition = {metadata.Definition}, "
-                                            + $"Saved matter name = {result.MatterName}";
+                                            + $"Saved matter name = {importResult.MatterName}";
 
                             var sequence = new CommonSequence
-                                               {
-                                                   Matter = matter,
-                                                   Notation = Notation.Nucleotides,
-                                                   RemoteDb = RemoteDb.GenBank,
-                                                   RemoteId = metadata.Version.CompoundAccession
-                                               };
+                            {
+                                Matter = matter,
+                                Notation = Notation.Nucleotides,
+                                RemoteDb = RemoteDb.GenBank,
+                                RemoteId = metadata.Version.CompoundAccession
+                            };
                             bool partial = metadata.Definition.ToLower().Contains("partial");
                             dnaSequenceRepository.Create(sequence, bioSequence, partial);
 
-                            (result.Result, result.Status) = importGenes ?
+                            (importResult.Result, importResult.Status) = importGenes ?
                                                              ImportFeatures(metadata, sequence) :
                                                              ("Successfully imported sequence", "Success");
                         }
                         catch (Exception exception)
                         {
-                            result.Status = "Error";
-                            result.Result = $"Error: {exception.Message}";
+                            importResult.Status = "Error";
+                            importResult.Result = $"Error: {exception.Message}";
                             while (exception.InnerException != null)
                             {
                                 exception = exception.InnerException;
-                                result.Result += $" {exception.Message}";
+                                importResult.Result += $" {exception.Message}";
                             }
 
                             foreach (var dbEntityEntry in db.ChangeTracker.Entries())
@@ -135,7 +135,7 @@
                         }
                         finally
                         {
-                            importResults.Add(result);
+                            importResults.Add(importResult);
                         }
                     }
 
@@ -154,12 +154,9 @@
                     }
                 }
 
-                var data = new Dictionary<string, object> { { "result", importResults } };
+                var result = new Dictionary<string, object> { { "result", importResults } };
 
-                return new Dictionary<string, object>
-                           {
-                               { "data", JsonConvert.SerializeObject(data) }
-                           };
+                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
             });
         }
 
@@ -182,7 +179,7 @@
             {
                 using (var subsequenceImporter = new SubsequenceImporter(metadata.Features.All, sequence.Id))
                 {
-                    var(featuresCount, nonCodingCount) = subsequenceImporter.CreateSubsequences();
+                    var (featuresCount, nonCodingCount) = subsequenceImporter.CreateSubsequences();
 
                     string result = $"Successfully imported sequence, {featuresCount} features "
                                   + $"and {nonCodingCount} non-coding subsequences";

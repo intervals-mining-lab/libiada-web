@@ -109,7 +109,7 @@
                     if (chain.Alphabet.Cardinality != dbChain.Alphabet.Cardinality)
                     {
                         message = $"Alphabet sizes are not equal. In db - {dbChain.Alphabet.Cardinality}. In file - {chain.Alphabet.Cardinality}";
-                        return new Dictionary<string, object> { { "data", JsonConvert.SerializeObject(new { message }) } };
+                        return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(new { message }) } };
                     }
 
                     for (int i = 0; i < chain.Alphabet.Cardinality; i++)
@@ -117,14 +117,14 @@
                         if (!chain.Alphabet[i].ToString().Equals(dbChain.Alphabet[i].ToString()))
                         {
                             message = $"{i} elements in alphabet are not equal. In db - {dbChain.Alphabet[i]}. In file - {chain.Alphabet[i]}";
-                            return new Dictionary<string, object> { { "data", JsonConvert.SerializeObject(new { message }) } };
+                            return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(new { message }) } };
                         }
                     }
 
                     if (chain.Length != dbChain.Length)
                     {
                         message = $"Sequence length in db {dbChain.Length}, and sequence length from file{chain.Length}";
-                        return new Dictionary<string, object> { { "data", JsonConvert.SerializeObject(new { message, status }) } };
+                        return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(new { message, status }) } };
                     }
 
                     int[] libiadaBuilding = chain.Building;
@@ -135,14 +135,14 @@
                         if (libiadaBuilding[j] != dataBaseBuilding[j])
                         {
                             message = $"{j} sequences elements are not equal. In db {dataBaseBuilding[j]}. In file {libiadaBuilding[j]}";
-                            return new Dictionary<string, object> { { "data", JsonConvert.SerializeObject(new { message, status }) } };
+                            return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(new { message, status }) } };
                         }
                     }
 
                     message = "Sequences are equal and not equal at the same time.";
                 }
 
-                return new Dictionary<string, object> { { "data", JsonConvert.SerializeObject(new { message, status }) } };
+                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(new { message, status }) } };
             });
         }
     }

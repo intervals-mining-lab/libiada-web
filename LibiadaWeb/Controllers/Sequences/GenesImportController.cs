@@ -92,17 +92,14 @@
                         .ToArray();
 
                     result = new Dictionary<string, object>
-                                 {
-                                     { "matterName", matterName },
-                                     { "genes", sequenceSubsequences },
-                                     { "features", features }
-                                 };
+                    {
+                        { "matterName", matterName },
+                        { "genes", sequenceSubsequences },
+                        { "features", features }
+                    };
                 }
 
-                return new Dictionary<string, object>
-                           {
-                               { "data", JsonConvert.SerializeObject(result) }
-                           };
+                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
             });
         }
     }

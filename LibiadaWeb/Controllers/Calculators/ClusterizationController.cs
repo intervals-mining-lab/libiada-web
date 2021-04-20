@@ -5,7 +5,7 @@
     using System.Web.Mvc;
 
     using Clusterizator;
-    
+
     using LibiadaCore.Music;
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
@@ -162,9 +162,9 @@
                 }
 
                 double[][] characteristics;
-                
-                    characteristics = SequencesCharacteristicsCalculator.Calculate(sequenceIds, characteristicLinkIds);
-                
+
+                characteristics = SequencesCharacteristicsCalculator.Calculate(sequenceIds, characteristicLinkIds);
+
                 var clusterizationParams = new Dictionary<string, double>
                 {
                     { "clustersCount", clustersCount },
@@ -210,10 +210,7 @@
                     { "clustersCount", clusterizationResult.Distinct().Count() }
                 };
 
-                return new Dictionary<string, object>
-                {
-                    { "data", JsonConvert.SerializeObject(result) }
-                };
+                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
             });
         }
     }

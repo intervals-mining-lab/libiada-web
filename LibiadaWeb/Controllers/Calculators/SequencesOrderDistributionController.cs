@@ -1,7 +1,6 @@
-﻿using System;
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
@@ -65,48 +64,47 @@ namespace LibiadaWeb.Controllers.Calculators
                 switch (typeGenerate)
                 {
                     case 0:
-                        sequenceGenerator = (ISequenceGenerator) new StrictSequenceGenerator();
+                        sequenceGenerator = new StrictSequenceGenerator();
                         orders = orderGenerator.StrictGenerateOrders(length, alphabetCardinality);
                         break;
                     case 1:
-                        sequenceGenerator = (ISequenceGenerator)new SequenceGenerator();
+                        sequenceGenerator = new SequenceGenerator();
                         orders = orderGenerator.GenerateOrders(length, alphabetCardinality);
-                        break; 
+                        break;
                     case 2:
-                        sequenceGenerator = (ISequenceGenerator) new NonRedundantStrictSequenceGenerator();
+                        sequenceGenerator = new NonRedundantStrictSequenceGenerator();
                         orders = orderGenerator.StrictGenerateOrders(length, alphabetCardinality);
                         break;
                     case 3:
-                        sequenceGenerator = (ISequenceGenerator)new NonRedundantSequenceGenerator();
+                        sequenceGenerator = new NonRedundantSequenceGenerator();
                         orders = orderGenerator.GenerateOrders(length, alphabetCardinality);
                         break;
                     default: throw new ArgumentException("Invalid type of generate");
                 }
                 var sequences = sequenceGenerator.GenerateSequences(length, alphabetCardinality);
-                Dictionary<int[], List<BaseChain>> result = new Dictionary<int[], List<BaseChain>>(new OrderEqualityComparer());
+                var SequecesOrdersDistribution = new Dictionary<int[], List<BaseChain>>(new OrderEqualityComparer());
                 foreach (var order in orders)
                 {
-                    result.Add(order, new List<BaseChain>());
+                    SequecesOrdersDistribution.Add(order, new List<BaseChain>());
                 }
 
                 foreach (var sequence in sequences)
                 {
-                    result[sequence.Building].Add(sequence);
+                    SequecesOrdersDistribution[sequence.Building].Add(sequence);
                 }
 
-                var data = new Dictionary<string, object>
+                var result = new Dictionary<string, object>
                 {
-                    { "result", result.Select(r => new
-                    {
-                        order = r.Key,
-                        sequences = r.Value.Select(s => s.ToString(",")).ToArray()
-                    }) }
+                    { 
+                        "result", SequecesOrdersDistribution.Select(r => new
+                        {
+                            order = r.Key,
+                            sequences = r.Value.Select(s => s.ToString(",")).ToArray()
+                        }) 
+                    }
                 };
 
-                return new Dictionary<string, object>
-                {
-                    { "data", JsonConvert.SerializeObject(data) }
-                };
+                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
             });
         }
     }

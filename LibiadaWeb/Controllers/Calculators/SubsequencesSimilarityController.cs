@@ -165,7 +165,7 @@
                 var firstSequenceSimilarity = similarSubsequences.Count * 100d / firstSequenceSubsequences.Length;
 
                 var secondSequenceSimilarity = similarSubsequences.Count * 100d / secondSequenceSubsequences.Length;
-                
+
                 var result = new Dictionary<string, object>
                 {
                     { "firstSequenceName", Cache.GetInstance().Matters.Single(m => m.Id == firstMatterId).Name },
@@ -181,15 +181,12 @@
                     { "secondSequenceAttributes", secondSequenceAttributes }
                 };
 
-            string json = JsonConvert.SerializeObject(result, new JsonSerializerSettings()
-            { 
-                ContractResolver = new SerializationFilter(new[] { "DnaSequence", "SequenceAttribute" }) 
-            });
+                string json = JsonConvert.SerializeObject(result, new JsonSerializerSettings()
+                {
+                    ContractResolver = new SerializationFilter(new[] { "DnaSequence", "SequenceAttribute" })
+                });
 
-            return new Dictionary<string, object>
-                           {
-                               { "data", json }
-                           };
+                return new Dictionary<string, string> { { "data", json } };
             });
         }
 
@@ -215,7 +212,7 @@
             var subsequenceIds = subsequences.Select(s => s.Id);
             var existingCharacteristics = db.CharacteristicValue
                                             .Where(cv => cv.CharacteristicLinkId == characteristicLinkId && subsequenceIds.Contains(cv.SequenceId))
-                                            .ToDictionary(cv=> cv.SequenceId);
+                                            .ToDictionary(cv => cv.SequenceId);
             Dictionary<long, Chain> sequences = subsequenceExtractor.GetSubsequencesSequences(subsequences);
             for (int i = 0; i < subsequences.Length; i++)
             {

@@ -102,19 +102,35 @@
                         firstIndex: firstIndex,
                         secondIndex: secondIndex
                     }
-                }).then(function (equalElements) {
-                    $scope.equalElements[firstIndex][secondIndex] = JSON.parse(equalElements.data);
-
-                    $scope.applyFilters($scope.equalElements[firstIndex][secondIndex]);
-
-                    $scope.equalElementsToShow = $scope.equalElements[firstIndex][secondIndex];
-
-                    $scope.loading = false;
-                }, function () {
-                    alert("Failed loading subsequences data");
-
-                    $scope.loading = false;
-                });
+                })
+                    .then(response => JSON.parse(response.data))
+                    .then(equalElements => $scope.equalElements[firstIndex][secondIndex] = equalElements)
+                    .then(_ => $http.get("/api/TaskManagerWebApi/GetTaskData", {
+                        params: {
+                            id: $scope.taskId,
+                            key: "characteristics"
+                        }
+                    }))
+                    .then(response => JSON.parse(response.data))
+                    .then(characteristics => $scope.characteristics = characteristics)
+                    .then(_ => $http.get("/api/TaskManagerWebApi/GetTaskData", {
+                        params: {
+                            id: $scope.taskId,
+                            key: "attributeValues"
+                        }
+                    }))
+                    .then(response => JSON.parse(response.data))
+                    .then(attributeValues => $scope.attributeValues = attributeValues)
+                    .then(function () {
+                        $scope.applyFilters($scope.equalElements[firstIndex][secondIndex]);
+                        $scope.equalElementsToShow = $scope.equalElements[firstIndex][secondIndex];
+                        $scope.loading = false;
+                    })
+                    .catch(error => {
+                        alert("Failed to load subsequences data");
+                        console.error(error);
+                        $scope.loading = false;
+                    });
             }
         }
 

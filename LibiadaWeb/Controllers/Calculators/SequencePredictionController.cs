@@ -211,15 +211,9 @@
                 // TODO: sequence prediction
 
 
-                var result = new Dictionary<string, object>
-                                 {
-                                         { "result", sequencePredictionResult }
-                                 };
+                var result = new Dictionary<string, object> { { "result", sequencePredictionResult } };
 
-                return new Dictionary<string, object>
-                           {
-                               { "data", JsonConvert.SerializeObject(result) }
-                           };
+                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
             });
         }
     }

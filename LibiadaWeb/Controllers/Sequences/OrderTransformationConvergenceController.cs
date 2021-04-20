@@ -125,10 +125,8 @@
                     { "loopIteration", loopIteration },
                     { "lastIteration", lastIteration }
                 };
-                return new Dictionary<string, object>
-                           {
-                               { "data", JsonConvert.SerializeObject(result) }
-                           };
+
+                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
             });
         }
     }

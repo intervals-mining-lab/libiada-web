@@ -181,18 +181,15 @@
                 }
 
                 var result = new Dictionary<string, object>
-                                 {
-                                     { "characteristics", mattersCharacteristics },
-                                     { "characteristicNames", characteristicNames },
-                                     { "characteristicsList", characteristicsList },
-                                     { "transformationsList", transformations },
-                                     { "iterationsCount", iterationsCount }
-                                 };
+                {
+                    { "characteristics", mattersCharacteristics },
+                    { "characteristicNames", characteristicNames },
+                    { "characteristicsList", characteristicsList },
+                    { "transformationsList", transformations },
+                    { "iterationsCount", iterationsCount }
+                };
 
-                return new Dictionary<string, object>
-                           {
-                               { "data", JsonConvert.SerializeObject(result) }
-                           };
+                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
             });
         }
     }

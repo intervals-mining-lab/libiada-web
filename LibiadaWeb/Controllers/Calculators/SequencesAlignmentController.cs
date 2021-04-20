@@ -167,10 +167,7 @@
                     { "sort", sort }
                 };
 
-                return new Dictionary<string, object>
-                           {
-                               { "data", JsonConvert.SerializeObject(result) }
-                           };
+                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
             });
         }
 
@@ -191,7 +188,7 @@
             switch (validationType)
             {
                 case "Similarity":
-                   return (first, second) => Math.Abs(Math.Min(first, second));
+                    return (first, second) => Math.Abs(Math.Min(first, second));
                 case "Difference":
                     return (first, second) => -Math.Abs(first - second);
                 case "NormalizedDifference":

@@ -98,12 +98,9 @@
                         }
                     }
 
-                    var data = new Dictionary<string, object> { { "result", importResults } };
+                    var result = new Dictionary<string, object> { { "result", importResults } };
 
-                    return new Dictionary<string, object>
-                    {
-                        {"data", JsonConvert.SerializeObject(data)}
-                    };
+                    return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
                 }
             });
         }

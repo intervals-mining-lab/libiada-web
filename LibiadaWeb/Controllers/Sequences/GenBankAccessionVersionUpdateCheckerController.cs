@@ -65,7 +65,7 @@
                 // slicing accessions into chunks to prevent "too long request" error
                 string[] accessions = sequencesData.Keys.ToArray();
                 const int maxChunkSize = 10000;
-                
+
                 for (int i = 0; i < accessions.Length; i += maxChunkSize)
                 {
                     int actualChunkSize = Math.Min(maxChunkSize, accessions.Length - i);
@@ -75,28 +75,28 @@
                     searchResults.AddRange(NcbiHelper.ExecuteESummaryRequest(ncbiWebEnvironment, queryKey, true));
                 }
 
-                
+
                 for (int i = 0; i < searchResults.Count; i++)
                 {
-                    var result = searchResults[i];
-                    result.Title = result.Title.TrimEnd(", complete genome")
+                    var searchResult = searchResults[i];
+                    searchResult.Title = searchResult.Title.TrimEnd(", complete genome")
                                                .TrimEnd(", complete sequence")
                                                .TrimEnd(", complete CDS")
                                                .TrimEnd(", complete cds")
                                                .TrimEnd(", genome");
 
-                    var newAccession = result.AccessionVersion.Split('.');
+                    var newAccession = searchResult.AccessionVersion.Split('.');
                     var sequenceData = sequencesData[newAccession[0]];
                     sequenceData.RemoteVersion = Convert.ToByte(newAccession[1]);
-                    sequenceData.RemoteName = result.Title;
-                    sequenceData.RemoteOrganism = result.Organism;
-                    sequenceData.RemoteUpdateDate = result.UpdateDate.ToString(OutputFormats.DateFormat);
-                    sequenceData.Updated = sequenceData.LocalUpdateDateTime <= result.UpdateDate || sequenceData.RemoteVersion > sequenceData.LocalVersion;
-                    sequenceData.NameUpdated = !(sequenceData.Name.Contains(result.Title) && sequenceData.Name.Contains(result.Organism));
+                    sequenceData.RemoteName = searchResult.Title;
+                    sequenceData.RemoteOrganism = searchResult.Organism;
+                    sequenceData.RemoteUpdateDate = searchResult.UpdateDate.ToString(OutputFormats.DateFormat);
+                    sequenceData.Updated = sequenceData.LocalUpdateDateTime <= searchResult.UpdateDate || sequenceData.RemoteVersion > sequenceData.LocalVersion;
+                    sequenceData.NameUpdated = !(sequenceData.Name.Contains(searchResult.Title) && sequenceData.Name.Contains(searchResult.Organism));
                 }
 
 
-                var data = new Dictionary<string, object>
+                var result = new Dictionary<string, object>
                 {
                     {
                         "results", sequencesData.Values
@@ -106,10 +106,7 @@
                     }
                 };
 
-                return new Dictionary<string, object>
-                           {
-                               { "data", JsonConvert.SerializeObject(data) }
-                           };
+                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
             });
         }
     }

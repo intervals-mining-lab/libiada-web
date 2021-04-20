@@ -157,16 +157,13 @@
                 }
 
                 var result = new Dictionary<string, object>
-                                 {
-                                         { "characteristics", sequencesCharacteristics },
-                                         { "characteristicNames", characteristicNames },
-                                         { "characteristicsList", characteristicsList }
-                                 };
+                {
+                        { "characteristics", sequencesCharacteristics },
+                        { "characteristicNames", characteristicNames },
+                        { "characteristicsList", characteristicsList }
+                };
 
-                return new Dictionary<string, object>
-                           {
-                               { "data", JsonConvert.SerializeObject(result) }
-                           };
+                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
 
 
 

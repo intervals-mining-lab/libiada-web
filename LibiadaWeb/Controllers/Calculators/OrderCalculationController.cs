@@ -1,19 +1,17 @@
-﻿using System;
-using System.Web.Mvc.Html;
-using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
-using LibiadaWeb.Helpers;
-using LibiadaWeb.Models.CalculatorsData;
-using LibiadaWeb.Models.Repositories.Catalogs;
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
 
     using LibiadaCore.Core;
+    using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
 
     using LibiadaWeb.Tasks;
+    using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models.CalculatorsData;
+    using LibiadaWeb.Models.Repositories.Catalogs;
 
     using Newtonsoft.Json;
 
@@ -46,8 +44,6 @@ namespace LibiadaWeb.Controllers.Calculators
         /// </returns>
         public ActionResult Index()
         {
-            var imageTransformers = EnumHelper.GetSelectList(typeof(ImageTransformer));
-
             using (var db = new LibiadaWebEntities())
             {
                 var viewDataHelper = new ViewDataHelper(db);
@@ -123,9 +119,9 @@ namespace LibiadaWeb.Controllers.Calculators
                 }
 
                 sequencesCharacteristics.RemoveAll(el => el.Characteristics.Any(v => Double.IsInfinity(v) ||
-                                                                                            Double.IsNaN(v) ||
-                                                                                            Double.IsNegativeInfinity(v) ||
-                                                                                            Double.IsPositiveInfinity(v)));
+                                                                                     Double.IsNaN(v) ||
+                                                                                     Double.IsNegativeInfinity(v) ||
+                                                                                     Double.IsPositiveInfinity(v)));
                 var index = new int[characteristicsList.Length];
                 for (int i = 0; i < index.Length; i++)
                 {
@@ -139,10 +135,7 @@ namespace LibiadaWeb.Controllers.Calculators
                     { "characteristicsIndex", index }
                 };
 
-                return new Dictionary<string, object>
-                {
-                    { "data", JsonConvert.SerializeObject(result) }
-                };
+                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
             });
         }
     }

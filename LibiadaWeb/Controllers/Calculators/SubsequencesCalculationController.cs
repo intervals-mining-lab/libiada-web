@@ -95,11 +95,11 @@
                 {
                     subsequencesCharacteristicsNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[k]);
                     subsequencesCharacteristicsList[k] = new SelectListItem
-                                                             {
-                                                                 Value = k.ToString(),
-                                                                 Text = subsequencesCharacteristicsNames[k],
-                                                                 Selected = false
-                                                             };
+                    {
+                        Value = k.ToString(),
+                        Text = subsequencesCharacteristicsNames[k],
+                        Selected = false
+                    };
                 }
 
                 // TODO: Maybe AttributesValueCache should be created in the Subsequences calculator
@@ -116,19 +116,17 @@
 
                 List<AttributeValue> allAttributeValues = attributeValuesCache.AllAttributeValues;
 
-                var resultData = new Dictionary<string, object>
-                            {
-                                { "sequencesData", sequencesData },
-                                { "features", features.ToDictionary(f => (byte)f, f => f.GetDisplayValue()) },
-                                { "attributes", EnumExtensions.ToArray<Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
-                                { "attributeValues", allAttributeValues.Select(sa => new { attribute = sa.AttributeId, value = sa.Value }) },
-                                { "subsequencesCharacteristicsNames", subsequencesCharacteristicsNames },
-                                { "subsequencesCharacteristicsList", subsequencesCharacteristicsList }
-                            };
-                return new Dictionary<string, object>
-                    {
-                        { "data", JsonConvert.SerializeObject(resultData) }
-                    };
+                var result = new Dictionary<string, object>
+                {
+                    { "sequencesData", sequencesData },
+                    { "features", features.ToDictionary(f => (byte)f, f => f.GetDisplayValue()) },
+                    { "attributes", EnumExtensions.ToArray<Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
+                    { "attributeValues", allAttributeValues.Select(sa => new { attribute = sa.AttributeId, value = sa.Value }) },
+                    { "subsequencesCharacteristicsNames", subsequencesCharacteristicsNames },
+                    { "subsequencesCharacteristicsList", subsequencesCharacteristicsList }
+                };
+                
+                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
             });
         }
     }

@@ -206,21 +206,18 @@
                     { "matterName", db.CommonSequence.Single(m => m.Id == sequenceId).Matter.Name },
                     { "notationName", db.CommonSequence.Single(c => c.Id == sequenceId).Notation.GetDisplayValue() }
                 };
-               
-                            string json = JsonConvert.SerializeObject(result, new JsonSerializerSettings()
-                            {
-                                ContractResolver = new SerializationFilter(new[] 
-                                { 
-                                    "FirstElementBinaryCharacteristic", 
-                                    "SecondElementBinaryCharacteristic",
-                                    "Sequence"
-                                })
-                            });
 
-                return new Dictionary<string, object>
-                           {
-                               { "data", json }
-                           };
+                string json = JsonConvert.SerializeObject(result, new JsonSerializerSettings()
+                {
+                    ContractResolver = new SerializationFilter(new[]
+                    {
+                        "FirstElementBinaryCharacteristic",
+                        "SecondElementBinaryCharacteristic",
+                        "Sequence"
+                    })
+                });
+
+                return new Dictionary<string, string> { { "data", json } };
             });
         }
 
