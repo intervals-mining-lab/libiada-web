@@ -100,7 +100,8 @@
                     params: {
                         taskId: $scope.taskId,
                         firstIndex: firstIndex,
-                        secondIndex: secondIndex
+                        secondIndex: secondIndex,
+                        filtered: $scope.flags.displayFiltered
                     }
                 })
                     .then(response => JSON.parse(response.data))
@@ -394,6 +395,7 @@
         $scope.similarityValueSelected = false;
         $scope.loadingScreenHeader = "Loading data";
         $scope.characteristic = {};
+        $scope.flags = { displayFiltered: false };
 
         var location = window.location.href.split("/");
         $scope.taskId = location[location.length - 1];

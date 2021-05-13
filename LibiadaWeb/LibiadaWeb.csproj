@@ -257,6 +257,7 @@
     <Compile Include="Models\CalculatorsData\SequenceCharacteristics.cs" />
     <Compile Include="Models\CalculatorsData\SequencePredictionData.cs" />
     <Compile Include="Models\Calculators\CongenericSequencesCharacteristicsCalculator.cs" />
+    <Compile Include="Models\Calculators\LocalCharacteristicsCalculator.cs" />
     <Compile Include="Models\Calculators\SequencesCharacteristicsCalculator.cs" />
     <Compile Include="Models\CalculatorsData\FragmentData.cs" />
     <Compile Include="Models\Calculators\SubsequencesCharacteristicsCalculator.cs" />
@@ -923,7 +924,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\PushNotification\" />
-    <Folder Include="Views\Sequences\NcbiNuccoreSearch\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
