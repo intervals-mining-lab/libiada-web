@@ -178,11 +178,12 @@
                             </div>
                             <div role="tabpanel" class="tab-pane" id="tooltip">
                                 <div ng-if="tooltipElements.length > 1">
-                                    <button type="button" 
-                                            class="btn btn-sm" 
-                                            ng-disabled="alignmentInProcess" 
+                                    <button type="button"
+                                            class="btn btn-sm"
+                                            ng-disabled="alignmentInProcess"
                                             ng-click="alignAllWithClustal()">
-                                    Align subsequences</button>
+                                        Align subsequences
+                                    </button>
                                     <button type="button"
                                             class="btn btn-sm"
                                             ng-disabled="alignmentInProcess"
@@ -262,15 +263,12 @@
         if (AccountHelper.IsAdmin())
         {
             <div class="error-message">
-                @Html.Raw(ViewBag.ErrorMessage)
+                @ViewBag.Error.Message
             </div>
             <br />
-            if (ViewBag.StackTrace != null)
-            {
-                <div class="stack-trace">
-                    @Html.Raw(ViewBag.StackTrace)
-                </div>
-            }
+            <div class="stack-trace">
+                @ViewBag.Error.StackTrace
+            </div>
         }
         else
         {
