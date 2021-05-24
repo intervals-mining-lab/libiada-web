@@ -5,6 +5,7 @@
     using System.Data.Entity;
     using System.Linq;
     using System.Threading;
+    using System.Web;
 
     using LibiadaCore.Extensions;
 
@@ -440,15 +441,16 @@
                     taskData.ExecutionTime = taskData.Completed - taskData.Started;
                     taskData.TaskState = TaskState.Error;
 
-                    TaskResult[] results = new[]
+                    var error = new { Message = errorMessage, StackTrace = stackTrace };
+
+                    TaskResult taskResult = new TaskResult
                     {
-                        new TaskResult { Key = "ErrorMessage", Value = JsonConvert.SerializeObject(errorMessage), TaskId = taskData.Id },
-                        new TaskResult { Key = "StackTrace", Value = JsonConvert.SerializeObject(stackTrace), TaskId = taskData.Id }
+                         Key = "Error", Value = JsonConvert.SerializeObject(error), TaskId = taskData.Id
                     };
 
                     using (var db = new LibiadaWebEntities())
                     {
-                        db.TaskResult.AddRange(results);
+                        db.TaskResult.Add(taskResult);
 
                         CalculationTask databaseTask = db.CalculationTask.Single(t => (t.Id == taskData.Id));
                         databaseTask.Completed = DateTime.Now;
