@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Sequences Order Distribution";
 }
 @Scripts.Render("~/bundles/loadingWindow")
@@ -10,23 +9,20 @@
     @Html.Partial("_AngularControllerInitializer", "SequencesOrderDistributionResultController")
 
     <div ng-controller="SequencesOrderDistributionResultCtrl">
-        <loading-window loading = "loading" loading-screen-header = "loadingScreenHeader"></loading-window>
+        <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <div ng-disabled="loading">
-            <div ng-repeat="order in result">
+            <div ng-repeat="order in ::result">
                 <table class="table table-bordered table-hover" ng-cloak>
                     <thead>
                         <tr>
-                            <th>
-                                #
-                            </th>
-                            <th ng-bind="order.order">
-                            </th>
+                            <th>#</th>
+                            <th ng-bind="::order.order" />
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="sequence in order.sequences">
-                            <td ng-bind="$index+1"></td>
-                            <td ng-bind="sequence"></td>
+                        <tr ng-repeat="sequence in ::order.sequences">
+                            <td ng-bind="::$index+1" />
+                            <td ng-bind="::sequence" />
                         </tr>
                     </tbody>
                 </table>
@@ -35,13 +31,13 @@
             <div class="form-group">
                 <label class="control-label col-md-2" for="height">Height:</label>
                 <div class="col-md-10">
-                    <input class="form-control" name="height" id="height" type="number" min="{{500}}" step="20" ng-model="height" />
+                    <input class="form-control" name="height" id="height" type="number" min="500" step="20" ng-model="height" />
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2" for="width">Width:</label>
                 <div class="col-md-10">
-                    <input class="form-control" name="width" id="width" type="number" min="{{400}}" step="20" ng-model="width" />
+                    <input class="form-control" name="width" id="width" type="number" min="400" step="20" ng-model="width" />
                 </div>
             </div>
             <br />

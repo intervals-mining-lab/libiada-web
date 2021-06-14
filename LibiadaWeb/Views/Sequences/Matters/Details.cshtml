@@ -10,70 +10,29 @@
     <h4>Matter</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
+        <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+        <dd>@Html.DisplayFor(model => model.Name)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
+        <dt>@Html.DisplayNameFor(model => model.Description)</dt>
+        <dd>@Html.DisplayFor(model => model.Description)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
+        <dt>@Html.DisplayNameFor(model => model.Created)</dt>
+        <dd>@Html.DisplayFor(model => model.Created)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
+        <dt>@Html.DisplayNameFor(model => model.Modified)</dt>
+        <dd>@Html.DisplayFor(model => model.Modified)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Created)
-        </dt>
+        <dt>@Html.DisplayNameFor(model => model.Nature)</dt>
+        <dd>@Html.DisplayFor(model => model.Nature)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Created)
-        </dd>
+        <dt>@Html.DisplayNameFor(model => model.Group)</dt>
+        <dd>@Html.DisplayFor(model => model.Group)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Modified)
-        </dt>
+        <dt>@Html.DisplayNameFor(model => model.SequenceType)</dt>
+        <dd>@Html.DisplayFor(model => model.SequenceType)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Modified)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Nature)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Nature)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Group)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Group)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.SequenceType)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.SequenceType)
-        </dd>
-
-        <dt>
-            Sequences count
-        </dt>
-
-        <dd>
-            @ViewBag.SequencesCount
-        </dd>
-
+        <dt>Sequences count</dt>
+        <dd>@ViewBag.SequencesCount</dd>
     </dl>
 </div>
 <p>

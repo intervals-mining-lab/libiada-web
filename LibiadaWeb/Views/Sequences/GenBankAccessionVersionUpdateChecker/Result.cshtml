@@ -26,16 +26,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="result in results" ng-class="result.Updated ? result.NameUpdated ? 'warning' : 'danger' : result.NameUpdated ? '' : 'info'">
-                        <td ng-bind="$index + 1" />
-                        <td ng-bind="result.Name" />
-                        <td ng-bind="result.RemoteName" />
-                        <td ng-bind="result.RemoteOrganism" />
-                        <td ng-bind="result.LocalAccession" />
-                        <td ng-bind="result.LocalVersion" />
-                        <td ng-bind="result.RemoteVersion" />
-                        <td ng-bind="result.LocalUpdateDate" />
-                        <td ng-bind="result.RemoteUpdateDate" />
+                    <tr ng-repeat="result in ::results" ng-class="::result.Updated ? result.NameUpdated ? 'warning' : 'danger' : result.NameUpdated ? '' : 'info'">
+                        <td ng-bind="::$index + 1" />
+                        <td ng-bind="::result.Name" />
+                        <td ng-bind="::result.RemoteName" />
+                        <td ng-bind="::result.RemoteOrganism" />
+                        <td ng-bind="::result.LocalAccession" />
+                        <td ng-bind="::result.LocalVersion" />
+                        <td ng-bind="::result.RemoteVersion" />
+                        <td ng-bind="::result.LocalUpdateDate" />
+                        <td ng-bind="::result.RemoteUpdateDate" />
                     </tr>
                 </tbody>
             </table>
