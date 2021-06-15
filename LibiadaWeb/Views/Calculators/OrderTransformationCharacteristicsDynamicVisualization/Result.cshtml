@@ -13,27 +13,27 @@
 
         <table class="table table-bordered table-hover" ng-cloak>
             <tbody>
-                <tr ng-repeat="t in transformationsList">
-                    <td ng-bind="t" />
+                <tr ng-repeat="transformation in ::transformationsList">
+                    <td ng-bind="::transformation" />
                 </tr>
             </tbody>
         </table>
         <br />
         <div class="monospace">
-            Transformations repeated {{iterationsCount}} times
+            Transformations repeated {{::iterationsCount}} times
         </div>
         <br />
 
         <div class="form-group">
             <label class="control-label col-md-2" for="height">Height:</label>
             <div class="col-md-10">
-                <input class="form-control" name="height" id="height" type="number" min="{{500 + legendHeight}}" step="20" ng-model="height" />
+                <input class="form-control" name="height" id="height" type="number" min="{{::500 + legendHeight}}" step="20" ng-model="height" />
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-md-2" for="width">Width:</label>
             <div class="col-md-10">
-                <input class="form-control" name="width" id="width" type="number" min="{{400}}" step="20" ng-model="width" />
+                <input class="form-control" name="width" id="width" type="number" min="400" step="20" ng-model="width" />
             </div>
         </div>
         <br />

@@ -13,46 +13,41 @@
         <div ng-disabled="loading">
             <table class="table table-bordered table-hover" ng-cloak>
                 <thead>
-                <tr>
-                    <th>
-                        №
-                    </th>
-                    <th>
-                        Transformation
-                    </th>
-                </tr>
+                    <tr>
+                        <th>#</th>
+                        <th>Transformation</th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="transformation in transformationsList">
-                    <td ng-bind="$index + 1"/>
-                    <td ng-bind="transformation"/>
-                </tr>
+                    <tr ng-repeat="transformation in ::transformationsList">
+                        <td ng-bind="::$index + 1" />
+                        <td ng-bind="::transformation" />
+                    </tr>
                 </tbody>
             </table>
             <br />
             <div class="monospace">
-                Transformations repeated {{iterationsCount}} times
+                Transformations repeated {{::iterationsCount}} times
             </div>
             <br />
             <table class="table table-bordered table-hover" ng-cloak>
                 <thead>
-                <tr>
-                    <th>
-                        Name
-                    </th>
-                    <th>
-                        Sequence
-                    </th>
-                </tr>
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Sequence
+                        </th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="sequence in sequences">
-                    <td ng-bind="sequence.name"/>
-                    <td ng-bind="sequence.value"/>
-                </tr>
+                    <tr ng-repeat="sequence in ::sequences">
+                        <td ng-bind="::sequence.name" />
+                        <td ng-bind="::sequence.value" />
+                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
-
 }

@@ -75,7 +75,7 @@
             return "glyphicon " + icon;
         }
 
-        function calculateTaskCountWithState(state) {
+        function getTaskCountWithStatus(state) {
             var count = $scope.tasks.filter(task => task.TaskState === state).length;
             return count;
         }
@@ -88,11 +88,11 @@
                 }, () => {});
         }
 
-        function deleteTasksWithState(taskState) {
-            alertify.confirm('Confirm action', 'Are you sure you want to delete all tasks with state "' + taskState + '"?',
+        function deleteTasksWithStatus(taskState) {
+            alertify.confirm('Confirm action', 'Are you sure you want to delete all tasks with "' + taskState + '" status?',
                 () => {                    
                     $scope.tasksHub.server.deleteTasksWithState(taskState);
-                    alertify.success('All tasks with state "' + taskState + '" have been deleted.');
+                    alertify.success('All tasks with "' + taskState + '" status have been deleted.');
                 }, () => {});
         }
 
@@ -118,9 +118,9 @@
         $scope.taskEvent = taskEvent;
         $scope.calculateStatusClass = calculateStatusClass;
         $scope.calculateStatusGlyphicon = calculateStatusGlyphicon;
-        $scope.calculateTaskCountWithState = calculateTaskCountWithState;
+        $scope.getTaskCountWithStatus = getTaskCountWithStatus;
         $scope.deleteAllTasks = deleteAllTasks;
-        $scope.deleteTasksWithState = deleteTasksWithState;
+        $scope.deleteTasksWithStatus = deleteTasksWithStatus;
         $scope.deleteTask = deleteTask;
         $scope.tryRedirectToResult = tryRedirectToResult;
 

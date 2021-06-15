@@ -12,22 +12,16 @@
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>
-                    <th>
-                        #
-                    </th>
-                    <th>
-                        Sequence
-                    </th>
-                    <th>
-                        Result
-                    </th>
+                    <th>#</th>
+                    <th>Sequence</th>
+                    <th>Result</th>
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="matter in result" ng-class="calculateStatusClass(matter.Status)">
-                    <td ng-bind="$index + 1" />
-                    <td ng-bind="matter.MatterName" />
-                    <td ng-bind="matter.Result" />
+                <tr ng-repeat="matter in ::result" ng-class="::calculateStatusClass(matter.Status)">
+                    <td ng-bind="::$index + 1" />
+                    <td ng-bind="::matter.MatterName" />
+                    <td ng-bind="::matter.Result" />
                 </tr>
             </tbody>
         </table>

@@ -21,18 +21,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="matter in result" ng-class="calculateStatusClass(matter.Status)">
-                        <td ng-bind="$index + 1" />
-                        <td ng-bind="matter.MatterName" />
-                        <td ng-bind="matter.Result" />
+                    <tr ng-repeat="matter in ::result" ng-class="::calculateStatusClass(matter.Status)">
+                        <td ng-bind="::$index + 1" />
+                        <td ng-bind="::matter.MatterName" />
+                        <td ng-bind="::matter.Result" />
                     </tr>
                 </tbody>
             </table>
             <hr />
             <h3>Found accessions:</h3>
             <br/>
-            <div ng-repeat="accession in accessions">
-                {{accession}}
+            <div ng-repeat="accession in ::accessions">
+                {{::accession}}
             </div>
         </div>
     </div>

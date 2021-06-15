@@ -3,24 +3,38 @@
     <div class="form-group">
         <label class="control-label col-md-2" for="operation">Transformation:</label>
         <div class="col-md-10">
-            <select class="form-control" title="Operation" ng-model="transformation.transformation" ng-options="o.Text for o in $ctrl.transformations" id="operation"></select>
+            <select class="form-control"
+                    title="Operation"
+                    ng-model="transformation.transformation"
+                    ng-options="o.Text for o in ::$ctrl.transformations"
+                    id="operation"></select>
             <input type="hidden" name="transformationsSequence" ng-value="transformation.transformation.Value" />
         </div>
     </div>
     <br />
     <div class="form-group">
         <div class=" col-md-offset-2 col-md-10">
-            <button type="button" class="btn btn-danger" ng-click="$ctrl.deleteTransformation(transformation)" ng-disabled="$ctrl.transformationsSequence.length <= 1">Delete transformation</button>
+            <button type="button"
+                    class="btn btn-danger"
+                    ng-click="$ctrl.deleteTransformation(transformation)"
+                    ng-disabled="$ctrl.transformationsSequence.length <= 1">
+                Delete transformation
+            </button>
         </div>
     </div>
     <br />
 </div>
 <div class="form-group">
     <div class="col-md-offset-2  col-md-10">
-        <button type="button" class="btn btn-success" ng-init="$ctrl.addTransformation()" ng-click="$ctrl.addTransformation()">Add transformation</button>
+        <button type="button"
+                class="btn btn-success"
+                ng-init="$ctrl.addTransformation()"
+                ng-click="$ctrl.addTransformation()">
+            Add transformation
+        </button>
     </div>
 </div>
-<br/>
+<br />
 <div class="form-group">
     <label class="control-label col-md-2" for="iterationsCount">Repeat transformation n times:</label>
     <div class="col-md-10">

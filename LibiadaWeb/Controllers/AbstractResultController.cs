@@ -6,6 +6,7 @@
     using System.Web.Mvc;
 
     using LibiadaWeb.Tasks;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// Abstract parent controller for all tasks controllers (calculators, etc.).
@@ -48,8 +49,7 @@
                     ViewBag.Error = true;
                     using(var db = new LibiadaWebEntities())
                     {
-                        ViewBag.ErrorMessage = db.TaskResult.Single(tr => tr.TaskId == id && tr.Key == "ErrorMessage").Value;
-                        ViewBag.StackTrace = db.TaskResult.Single(tr => tr.TaskId == id && tr.Key == "StackTrace").Value;
+                        ViewBag.Error = JsonConvert.DeserializeObject(db.TaskResult.Single(tr => tr.TaskId == id && tr.Key == "Error").Value);
                     }
                 }
             }

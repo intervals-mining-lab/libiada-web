@@ -84,18 +84,27 @@
                         </ul>
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane" id="legend">
+                                <div class="col-md-3">
+                                    <button type="button" id="btn-on" class="btn btn-default btn-sm" ng-click="legendSetVisibilityForAll(true)">
+                                        Show all
+                                    </button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" id="btn-off" class="btn btn-default btn-sm" ng-click="legendSetVisibilityForAll(false)">
+                                        Hide all
+                                    </button>
+                                </div>
                                 <!-- .roundedOne -->
-                                <div class="col-md-3">
-                                    <button type="button" id="btn-on" class="btn btn-default btn-sm" ng-click="legendShowAll(matters)" ng-class="'legend'" style="margin-top: 5px;"> Show all </button>
-                                </div>
-                                <div class="col-md-3">
-                                    <button type="button" id="btn-off" class="btn btn-default btn-sm" ng-click="legendHideAll(matters)" ng-class="'legend'" style="margin-top: 5px; margin-bottom: 20px;"> Hide all </button>
-                                </div>
                                 <div ng-repeat="legendItem in matters">
                                     <div class="roundedOne">
-                                        <input type="checkbox" ng-click="legendClick(legendItem)" ng-model="legendItem.visible" id="{{'matter' + legendItem.id}}" name="check" checked />
-                                        <label for="{{'matter' + legendItem.id}}" ng-class="'legend' + legendItem.id" style="margin-right: 5px;"></label>
-                                        <label for="{{'matter' + legendItem.id}}" class="monospace">{{legendItem.name}}</label>
+                                        <input type="checkbox"
+                                               ng-click="legendClick(legendItem)"
+                                               ng-model="legendItem.visible"
+                                               id="{{::'matter' + legendItem.id}}"
+                                               name="check"
+                                               checked />
+                                        <label for="{{::'matter' + legendItem.id}}" ng-class="'legend' + legendItem.id" style="margin-right: 5px;"></label>
+                                        <label for="{{::'matter' + legendItem.id}}" class="monospace" ng-bind="::legendItem.name"></label>
                                     </div>
                                 </div>
                                 <!-- end .roundedOne -->
@@ -107,7 +116,7 @@
                                         <select class="form-control"
                                                 title="Subsequence characteristic"
                                                 ng-model="subsequenceCharacteristic"
-                                                ng-options="c.Text for c in subsequencesCharacteristicsList"
+                                                ng-options="c.Text for c in ::subsequencesCharacteristicsList"
                                                 ng-change="redrawGenesMap()"
                                                 id="subsequenceCharacteristic"></select>
                                     </div>
@@ -147,25 +156,41 @@
                                     <div ng-repeat="characteristicComparer in characteristicComparers">
                                         <div class="form-group">
                                             <div class="col-md-10">
-                                                <select class="form-control" ng-model="characteristicComparer.characteristic" ng-options="c.Text for c in subsequencesCharacteristicsList" id="characteristic" title="Characteristic"></select>
+                                                <select class="form-control"
+                                                        ng-model="characteristicComparer.characteristic"
+                                                        ng-options="c.Text for c in ::subsequencesCharacteristicsList"
+                                                        id="characteristic" title="Characteristic"></select>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-md-10" for="precision">Precision of characteristic comparison:</label>
                                             <div class="col-md-10">
-                                                <input class="form-control" ng-model="characteristicComparer.precision" type="number" value="0" step="any" min="0" id="precision" />
+                                                <input class="form-control"
+                                                       ng-model="characteristicComparer.precision"
+                                                       type="number"
+                                                       value="0"
+                                                       step="any"
+                                                       min="0"
+                                                       id="precision" />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="col-md-10">
-                                                <button type="button btn-sm" style="margin-top: 15px;" class="btn btn-danger col-md-10" ng-click="deleteCharacteristicComparer(characteristicComparer)" ng-disabled="characteristicComparers.length <= 1">Delete characteristic comparer</button>
+                                                <button type="button" style="margin-top: 15px;"
+                                                        class="btn btn-danger btn-sm col-md-10"
+                                                        ng-click="deleteCharacteristicComparer(characteristicComparer)"
+                                                        ng-disabled="characteristicComparers.length <= 1">
+                                                    Delete characteristic comparer
+                                                </button>
                                             </div>
                                         </div>
                                         <br />
                                     </div>
                                     <div class="form-group">
                                         <div class="col-md-10">
-                                            <button type="button" class="btn btn-success btn-sm" ng-click="addCharacteristicComparer()">Add characteristic comparer</button>
+                                            <button type="button" class="btn btn-success btn-sm" ng-click="addCharacteristicComparer()">
+                                                Add characteristic comparer
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -178,11 +203,12 @@
                             </div>
                             <div role="tabpanel" class="tab-pane" id="tooltip">
                                 <div ng-if="tooltipElements.length > 1">
-                                    <button type="button" 
-                                            class="btn btn-sm" 
-                                            ng-disabled="alignmentInProcess" 
+                                    <button type="button"
+                                            class="btn btn-sm"
+                                            ng-disabled="alignmentInProcess"
                                             ng-click="alignAllWithClustal()">
-                                    Align subsequences</button>
+                                        Align subsequences
+                                    </button>
                                     <button type="button"
                                             class="btn btn-sm"
                                             ng-disabled="alignmentInProcess"
@@ -199,33 +225,36 @@
                                     </button>
                                 </div>
                                 <br />
-                                <div ng-repeat="tooltipElement in tooltipElements" ng-class="'bg-' + tooltipElement.color" class="monospace">
-                                    <a target="_blank" rel="noopener" ng-if="tooltipElement.sequenceRemoteId"
-                                       ng-href="https://www.ncbi.nlm.nih.gov/nuccore/{{tooltipElement.sequenceRemoteId}}">
-                                        {{tooltipElement.name}}
+                                <div ng-repeat="tooltipElement in tooltipElements" ng-class="::'bg-' + tooltipElement.color" class="monospace">
+                                    <a target="_blank"
+                                       rel="noopener"
+                                       ng-if="::tooltipElement.sequenceRemoteId"
+                                       ng-href="::https://www.ncbi.nlm.nih.gov/nuccore/{{tooltipElement.sequenceRemoteId}}"
+                                       ng-bind="::tooltipElement.name">
                                     </a>
-                                    <span ng-if="!tooltipElement.sequenceRemoteId">{{tooltipElement.name}}</span>
+                                    <span ng-if="::!tooltipElement.sequenceRemoteId" ng-bind="::tooltipElement.name"></span>
                                     <br />
-                                    <a target="_blank" rel="noopener" ng-if="tooltipElement.remoteId" ng-href="https://www.ncbi.nlm.nih.gov/nuccore/{{tooltipElement.remoteId}}">
+                                    <a target="_blank"
+                                       rel="noopener"
+                                       ng-if="::tooltipElement.remoteId"
+                                       ng-href="::https://www.ncbi.nlm.nih.gov/nuccore/{{tooltipElement.remoteId}}">
                                         Peptide ncbi page
                                     </a>
-                                    <div>
-                                        {{tooltipElement.feature}}
-                                    </div>
-                                    <div ng-repeat="attribute in tooltipElement.attributes">
-                                        {{attribute}}
-                                    </div>
-                                    <div ng-if="tooltipElement.partial">Partial</div>
+                                    <div ng-bind="::tooltipElement.feature"></div>
+                                    <div ng-repeat="attribute in ::tooltipElement.attributes" ng-bind="::attribute"></div>
+                                    <div ng-if="::tooltipElement.partial">Partial</div>
                                     <div>
                                         Position:
-                                        <a target="_blank" rel="noopener" ng-if="tooltipElement.sequenceRemoteId"
-                                           ng-href="https://www.ncbi.nlm.nih.gov/nuccore/{{tooltipElement.sequenceRemoteId}}?from={{tooltipElement.positions[0]+1}}&to={{tooltipElement.positions[0]+tooltipElement.lengths[0]}}">
-                                            {{tooltipElement.position}}
+                                        <a target="_blank"
+                                           rel="noopener"
+                                           ng-if="::tooltipElement.sequenceRemoteId"
+                                           ng-href="::https://www.ncbi.nlm.nih.gov/nuccore/{{tooltipElement.sequenceRemoteId}}?from={{tooltipElement.positions[0]+1}}&to={{tooltipElement.positions[0]+tooltipElement.lengths[0]}}"
+                                           ng-bind="::tooltipElement.position">
                                         </a>
-                                        <span ng-if="!tooltipElement.sequenceRemoteId">{{tooltipElement.position}}</span>
+                                        <span ng-if="::!tooltipElement.sequenceRemoteId" ng-bind="::tooltipElement.position"></span>
                                     </div>
                                     <div>
-                                        Length:{{tooltipElement.length}}
+                                        Length:{{::tooltipElement.length}}
                                     </div>
                                     <div ng-show="tooltipElements.length > 1">
                                         <label>
@@ -235,14 +264,21 @@
                                     </div>
                                     <div ng-class="['panel', 'panel-' + tooltipElement.color]">
                                         <div class="panel-heading">
-                                            <button type="button" class="btn btn-default btn-sm" data-toggle="collapse" data-target="#subsequenceCharacteristics{{$index + 1}}" aria-expanded="false" aria-controls="subsequenceCharacteristics{{$index + 1}}">Numeric characteristics</button>
+                                            <button type="button"
+                                                    class="btn btn-default btn-sm"
+                                                    data-toggle="collapse"
+                                                    data-target="#subsequenceCharacteristics{{$index + 1}}"
+                                                    aria-expanded="false"
+                                                    aria-controls="subsequenceCharacteristics{{$index + 1}}">
+                                                Numeric characteristics
+                                            </button>
                                         </div>
                                         <div class="panel-collapse collapse" id="subsequenceCharacteristics{{$index + 1}}">
                                             <table class="table table-bordered" style="font-size:14px;">
-                                                <thead ng-repeat="value in tooltipElement.characteristics">
-                                                    <tr ng-class="tooltipElement.color">
-                                                        <td align=center scope="col">{{subsequencesCharacteristicsNames[$index]}}</td>
-                                                        <td scope="col">{{value}}</td>
+                                                <thead ng-repeat="value in ::tooltipElement.characteristics">
+                                                    <tr ng-class="::tooltipElement.color">
+                                                        <td align=center scope="col" ng-bind="::subsequencesCharacteristicsNames[$index]" />
+                                                        <td scope="col" ng-bind="::value" />
                                                     </tr>
                                                 </thead>
                                             </table>
@@ -262,15 +298,12 @@
         if (AccountHelper.IsAdmin())
         {
             <div class="error-message">
-                @Html.Raw(ViewBag.ErrorMessage)
+                @ViewBag.Error.Message
             </div>
             <br />
-            if (ViewBag.StackTrace != null)
-            {
-                <div class="stack-trace">
-                    @Html.Raw(ViewBag.StackTrace)
-                </div>
-            }
+            <div class="stack-trace">
+                @ViewBag.Error.StackTrace
+            </div>
         }
         else
         {
