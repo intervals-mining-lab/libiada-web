@@ -19,46 +19,20 @@
             <h4>Music sequence</h4>
             <hr />
             <dl class="dl-horizontal">
+                <dt>@Html.DisplayNameFor(model => model.Matter.Name)</dt>
+                <dd>@Html.DisplayFor(model => model.Matter.Name)</dd>
 
-                <dt>
-                    @Html.DisplayNameFor(model => model.Matter.Name)
-                </dt>
+                <dt>@Html.DisplayNameFor(model => model.Notation)</dt>
+                <dd>@Html.DisplayFor(model => model.Notation)</dd>
 
-                <dd>
-                    @Html.DisplayFor(model => model.Matter.Name)
-                </dd>
+                <dt>@Html.DisplayNameFor(model => model.PauseTreatment)</dt>
+                <dd>@Html.DisplayFor(model => model.PauseTreatment)</dd>
 
-                <dt>
-                    @Html.DisplayNameFor(model => model.Notation)
-                </dt>
+                <dt>@Html.DisplayNameFor(model => model.SequentialTransfer)</dt>
+                <dd>@(Model.SequentialTransfer ? "Yes" : "No")</dd>
 
-                <dd>
-                    @Html.DisplayFor(model => model.Notation)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.PauseTreatment)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.PauseTreatment)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.SequentialTransfer)
-                </dt>
-
-                <dd>
-                    @(Model.SequentialTransfer ? "Yes" : "No")
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.Created)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.Created)
-                </dd>
+                <dt>@Html.DisplayNameFor(model => model.Created)</dt>
+                <dd>@Html.DisplayFor(model => model.Created)</dd>
             </dl>
         </div>
         <div>
@@ -67,24 +41,18 @@
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th>
-                            Notation
-                        </th>
-                        <th>
-                            Vusialization
-                        </th>
-                        <th>
-                            Acoustic
-                        </th>
+                        <th>Notation</th>
+                        <th>Visualization</th>
+                        <th>Acoustic</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="fmotif in data.fmotifs">
+                    <tr ng-repeat="fmotif in ::data.fmotifs">
                         <th>
-                            <div id="notation_{{fmotif.Id}}"></div><div id="notation_{{fmotif.Id}}"></div>
+                            <div id="notation_{{::fmotif.Id}}"></div><div id="notation_{{::fmotif.Id}}"></div>
                         </th>
                         <th>
-                            <div id="visualization_{{fmotif.Id}}"></div>
+                            <div id="visualization_{{::fmotif.Id}}"></div>
                         </th>
                         <th>
                             <input type="button" class="btn btn-default" ng-click="play($index)" value="Play" />

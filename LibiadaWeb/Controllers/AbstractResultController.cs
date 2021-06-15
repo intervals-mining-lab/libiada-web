@@ -2,9 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Mvc;
 
     using LibiadaWeb.Tasks;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// Abstract parent controller for all tasks controllers (calculators, etc.).
@@ -28,7 +30,7 @@
         /// The result.
         /// </summary>
         /// <param name="id">
-        /// The task Id.
+        /// The task id in database.
         /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
@@ -38,24 +40,17 @@
             try
             {
                 Task task = TaskManager.Instance.GetTask(id);
-                switch (task.TaskData.TaskState)
+                var taskStatus = task.TaskData.TaskState;
+                if (taskStatus != TaskState.Completed && taskStatus != TaskState.Error)
                 {
-                    case TaskState.Completed:
-                    case TaskState.Error:
-                        Dictionary<string, object> result = task.Result;
-                        if (result == null)
-                        {
-                            throw new Exception("No data.");
-                        }
-
-                        foreach (string key in result.Keys)
-                        {
-                            ViewData[key] = key == "data" || key == "additionalData" ? "{}" : result[key];
-                        }
-
-                        break;
-                    default:
-                        throw new Exception($"Task with id = {id} is not completed, current status is {task.TaskData.TaskState}");
+                    throw new Exception($"Task with id = {id} is not complete, current status is {taskStatus}");
+                } else if(taskStatus == TaskState.Error)
+                {
+                    ViewBag.Error = true;
+                    using(var db = new LibiadaWebEntities())
+                    {
+                        ViewBag.Error = JsonConvert.DeserializeObject(db.TaskResult.Single(tr => tr.TaskId == id && tr.Key == "Error").Value);
+                    }
                 }
             }
             catch (Exception e)
@@ -67,7 +62,6 @@
                 ViewBag.ErrorMessage = e.Message;
             }
 
-            ViewBag.taskId = id;
             return View();
         }
 
@@ -80,7 +74,7 @@
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        protected ActionResult CreateTask(Func<Dictionary<string, object>> action)
+        protected ActionResult CreateTask(Func<Dictionary<string, string>> action)
         {
             long taskId = TaskManager.Instance.CreateTask(action, taskType);
             return RedirectToAction(taskId.ToString(), "TaskManager");

@@ -56,7 +56,7 @@ namespace LibiadaWeb.Controllers.Calculators
                 var transformationsSelectList = new List<SelectListItem> { new SelectListItem { Value = 0.ToString(), Text = "All" } };
                 transformationsSelectList.AddRange(EnumHelper.GetSelectList(typeof(OrderTransformation)));
 
-                var data = new Dictionary<string, object>
+                var result = new Dictionary<string, object>
                 {
                     { "transformationsData", orderTransformer.TransformationsData },
                     { "orders", orderTransformer.Orders },
@@ -64,10 +64,7 @@ namespace LibiadaWeb.Controllers.Calculators
 
                 };
 
-                return new Dictionary<string, object>
-                {
-                    { "data", JsonConvert.SerializeObject(data) }
-                };
+                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
             });
         }
     }

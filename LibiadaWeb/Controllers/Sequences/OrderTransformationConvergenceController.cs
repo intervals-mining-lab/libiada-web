@@ -118,17 +118,15 @@
 
                 var result = new Dictionary<string, object>
                 {
-                    { "chain", sequence },
+                    { "chain", sequence.ToString(" ") },
                     { "transformationsList", transformations },
                     { "iterationsCount", iterationsCount },
                     { "transformationsResult", transformationsResult },
                     { "loopIteration", loopIteration },
                     { "lastIteration", lastIteration }
                 };
-                return new Dictionary<string, object>
-                           {
-                               { "data", JsonConvert.SerializeObject(result) }
-                           };
+
+                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
             });
         }
     }

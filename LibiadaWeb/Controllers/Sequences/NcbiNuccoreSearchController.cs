@@ -117,12 +117,9 @@
 
                 accessions = searchResults.Select(sr => sr.AccessionVersion).ToArray();
 
-                var data = new Dictionary<string, object> { { "result", results }, { "accessions", accessions } };
+                var result = new Dictionary<string, object> { { "result", results }, { "accessions", accessions } };
 
-                return new Dictionary<string, object>
-                           {
-                               { "data", JsonConvert.SerializeObject(data) }
-                           };
+                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
             });
         }
     }

@@ -284,9 +284,11 @@
         }
 
         private struct ContenderValue
-        {
-            public double CurrentAverageRemoteness;
-            public Chain PredictedWord;
+                var result = new Dictionary<string, object>
+                return new Dictionary<string, object>
+                           {
+                               { "data", JsonConvert.SerializeObject(result) }
+                           };
         }
     }
 }

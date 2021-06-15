@@ -7,45 +7,29 @@
 @if (ViewBag.Error == null)
 {
     @Html.Partial("_AngularControllerInitializer", "CalculationResultController")
-<div ng-controller="CalculationResultCtrl">
-    <div>
-        Alignment type: {{validationType}}
+    <div ng-controller="CalculationResultCtrl">
+        <div>Alignment type: {{::validationType}}</div>
+        <div>Optimal shift: {{::optimalRotation}}</div>
+        <div ng-if="sort">Characteristics sorted descending</div>
+        <div ng-if="cyclicShift">Cyclic shift is used</div>
+        <div ng-bind="::firstSequenceName"></div>
+        <br />
+        <div ng-bind="::secondSequenceName"></div>
+        <br />
+        <div ng-bind="::characteristicName"></div>
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Distances</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="distance in ::distances">
+                    <td ng-bind="::distance.Value" />
+                </tr>
+            </tbody>
+        </table>
     </div>
-
-    <div>
-        Optimal shift: {{optimalRotation}}
-    </div>
-
-    <div ng-if="sort">
-        Characteristics sorted descending
-    </div>
-
-    <div ng-if="cyclicShift">
-        Cyclic shift is used
-    </div>
-
-    {{firstSequenceName}}
-    <br />
-    {{secondSequenceName}}
-    <br />
-    {{characteristicName}}
-
-    <table class="table table-bordered table-hover">
-        <thead>
-            <tr>
-                <th>
-                    Distances
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="distance in distances">
-                <td ng-bind="distance.Value">
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
 }
 
 @section Scripts {
@@ -53,12 +37,3 @@
     @Scripts.Render("~/bundles/slider")
     @Scripts.Render("~/bundles/d3js")
 }
-
-
-
-
-
-
-
-
-

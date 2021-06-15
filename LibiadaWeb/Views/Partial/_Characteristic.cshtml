@@ -2,10 +2,10 @@
 
 <br />
 <div class="form-group">
-    <label class="control-label col-md-2" for="characteristic">{{$ctrl.title}}:</label>
+    <label class="control-label col-md-2" for="characteristic" ng-bind="::$ctrl.title">:</label>
     <div class="col-md-10">
         <select class="form-control"
-                title="{{$ctrl.title}}"
+                title="{{::$ctrl.title}}"
                 ng-model="$ctrl.characteristic.characteristicType"
                 ng-options="c.Text for c in $ctrl.characteristicTypes"
                 ng-change="$ctrl.selectLink($ctrl.characteristic)"
@@ -35,7 +35,7 @@
 
         </div>
     </div>
-    <div class="form-group" ng-show="$ctrl.hideNotation">
+    <div class="form-group" ng-hide="$ctrl.hideNotation">
         <label class="control-label col-md-2" for="notation">Notation:</label>
         <div class="col-md-10">
             <select class="form-control"
@@ -61,7 +61,7 @@
                 <select class="form-control"
                         title="Language"
                         ng-model="$ctrl.characteristic.language"
-                        ng-options="l.Text for l in $ctrl.languages"
+                        ng-options="l.Text for l in ::$ctrl.languages"
                         id="language"></select>
                 <input type="hidden" name="language" ng-value="$ctrl.characteristic.language.Value" />
             </div>
@@ -72,7 +72,7 @@
                 <select class="form-control"
                         title="Translator"
                         ng-model="$ctrl.characteristic.translator"
-                        ng-options="t.Text for t in $ctrl.translators"
+                        ng-options="t.Text for t in ::$ctrl.translators"
                         id="translator"></select>
                 <input type="hidden" name="translator" ng-value="$ctrl.characteristic.translator.Value" />
             </div>
@@ -86,15 +86,15 @@
             <div class="col-md-10">
                 <select class="form-control"
                         title="PauseTreatment"
-                        ng-model="characteristic.pauseTreatment"
-                        ng-options="t.Text for t in $ctrl.pauseTreatments"
+                        ng-model="$ctrl.characteristic.pauseTreatment"
+                        ng-options="t.Text for t in ::$ctrl.pauseTreatments"
                         id="pauseTreatment"></select>
-                <input type="hidden" name="pauseTreatment" ng-value="characteristic.pauseTreatment.Value" />
+                <input type="hidden" name="pauseTreatment" ng-value="$ctrl.characteristic.pauseTreatment.Value" />
             </div>
         </div>
         <div class="col-md-offset-2 col-md-10">
             <label>
-                <input type="checkbox" name="sequentialTransfer" ng-model="sequentialTransfer" value="true" />
+                <input type="checkbox" name="sequentialTransfer" ng-model="$ctrl.sequentialTransfer" value="true" />
                 <input type="hidden" name="sequentialTransfer" value="false" />
                 Sequential transfer
             </label>

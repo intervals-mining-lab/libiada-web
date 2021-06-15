@@ -21,31 +21,41 @@
         /// Gets the task data by id.
         /// </summary>
         /// <param name="id">
-        /// The id.
+        /// The task id in database.
+        /// </param>
+        /// <param name="key">
+        /// Name of the parameter in task results.
         /// </param>
         /// <returns>
-        /// The <see cref="string"/>.
+        /// The json as <see cref="string"/>.
         /// </returns>
         /// <exception cref="Exception">
         /// Thrown if task is not complete.
         /// </exception>
-        public string GetTaskData(int id)
+        public string GetTaskData(long id, string key = "data")
         {
-            Task task = TaskManager.Instance.GetTask(id);
-
-            if (task.TaskData.TaskState != TaskState.Completed)
+            try
             {
-                throw new Exception("Task state is not 'complete'");
+                return TaskManager.Instance.GetTaskData(id, key);
             }
+            catch (Exception ex)
+            {
+                string message = ex.Message;
+                while (ex.InnerException != null)
+                {
+                    ex = ex.InnerException;
+                    message += $"{Environment.NewLine} {ex.Message}";
+                }
 
-            return task.Result["data"].ToString();
+                return JsonConvert.SerializeObject(new { Status = "Error", Message = message });
+            }
         }
 
         /// <summary>
         /// Get subsequences comparer data element.
         /// </summary>
         /// <param name="taskId">
-        /// The task id.
+        /// The task id in database.
         /// </param>
         /// <param name="firstIndex">
         /// The first sequence index.
@@ -61,22 +71,27 @@
         /// </exception>
         public string GetSubsequencesComparerDataElement(int taskId, int firstIndex, int secondIndex)
         {
-            Task task = TaskManager.Instance.GetTask(taskId);
-
-            if (task.TaskData.TaskState != TaskState.Completed)
+            try
             {
-                throw new Exception("Task state is not 'complete'");
-            }
+                var taskData = GetTaskData(taskId, "similarityMatrix");
 
-            if (!task.Result.ContainsKey("additionalData"))
+                var similarityMatrix = JsonConvert.DeserializeObject<List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>[,]>(taskData);
+
+                List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)> result = similarityMatrix[firstIndex, secondIndex];
+
+                return JsonConvert.SerializeObject(result);
+            }
+            catch (Exception ex)
             {
-                throw new Exception("Task doesn't have additional data");
+                string message = ex.Message;
+                while (ex.InnerException != null)
+                {
+                    ex = ex.InnerException;
+                    message += $"{Environment.NewLine} {ex.Message}";
+                }
+
+                return JsonConvert.SerializeObject(new { Status = "Error", Message = message });
             }
-
-            List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)> result =
-                ((List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>[,])task.Result["additionalData"])[firstIndex, secondIndex];
-
-            return JsonConvert.SerializeObject(result);
         }
 
         /// <summary>
@@ -122,11 +137,25 @@
                 db.SaveChanges();
             }
         }
-        
+
         public string GetApplicationServerKey()
         {
-            var response = new { applicationServerKey = ConfigurationManager.AppSettings["PublicVapidKey"] };
-            return JsonConvert.SerializeObject(response);
+            try
+            {
+                var response = new { applicationServerKey = ConfigurationManager.AppSettings["PublicVapidKey"] };
+                return JsonConvert.SerializeObject(response);
+            }
+            catch (Exception ex)
+            {
+                string message = ex.Message;
+                while (ex.InnerException != null)
+                {
+                    ex = ex.InnerException;
+                    message += $"{Environment.NewLine} {ex.Message}";
+                }
+
+                return JsonConvert.SerializeObject(new { Status = "Error", Message = message });
+            }
         }
     }
 }

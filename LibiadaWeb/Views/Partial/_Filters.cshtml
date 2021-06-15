@@ -13,12 +13,12 @@
 <div ng-repeat="filter in filters">
     <div class="form-group">
         <div class="col-md-10">
-            <input type="hidden" name="filters" ng-value="filter.value" />
-            <div ng-bind="filter.value" style="margin-top: 15px;"></div>
+            <input type="hidden" name="filters" ng-value="::filter.value" />
+            <div ng-bind="::filter.value" style="margin-top: 15px;"></div>
             <button type="button" class="btn btn-danger" ng-click="deleteFilter(filter)" style="margin-top: 15px;">Delete filter</button>
         </div>
     </div>
-    <br/>
+    <br />
 </div>
 
 <hr />

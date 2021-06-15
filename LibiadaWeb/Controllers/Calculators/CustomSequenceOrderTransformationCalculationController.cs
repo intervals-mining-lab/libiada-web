@@ -44,7 +44,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            using (var db = new LibiadaWebEntities() )
+            using (var db = new LibiadaWebEntities())
             {
                 var viewDataHelper = new ViewDataHelper(db);
                 var data = viewDataHelper.GetCharacteristicsData(CharacteristicCategory.Full);
@@ -138,10 +138,10 @@
                     }
 
                     sequencesCharacteristics[j] = new SequenceCharacteristics
-                                                      {
-                                                          MatterName = sequencesNames[j],
-                                                          Characteristics = characteristics
-                                                      };
+                    {
+                        MatterName = sequencesNames[j],
+                        Characteristics = characteristics
+                    };
                 }
 
                 string[] characteristicNames = characteristicLinkIds.Select(c => characteristicTypeLinkRepository.GetCharacteristicName(c)).ToArray();
@@ -172,10 +172,7 @@
                                      { "iterationsCount", iterationsCount }
                                  };
 
-                return new Dictionary<string, object>
-                           {
-                               { "data", JsonConvert.SerializeObject(result) }
-                           };
+                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
             });
         }
     }

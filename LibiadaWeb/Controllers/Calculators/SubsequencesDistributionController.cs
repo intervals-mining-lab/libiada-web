@@ -145,7 +145,7 @@
                     // sorting organisms by their characteristic
                     sequencesData = sequencesData.OrderBy(r => r.Characteristic).ToArray();
                     List<AttributeValue> allAttributeValues = attributeValuesCache.AllAttributeValues;
-                    var resultData = new Dictionary<string, object>
+                    var result = new Dictionary<string, object>
                                  {
                                      { "result", sequencesData },
                                      { "subsequencesCharacteristicsNames", subsequencesCharacteristicsNames },
@@ -156,10 +156,7 @@
                                      { "attributeValues", allAttributeValues.Select(sa => new { attribute = sa.AttributeId, value = sa.Value }) }
                                  };
 
-                    return new Dictionary<string, object>
-                    {
-                        { "data", JsonConvert.SerializeObject(resultData) }
-                    };
+                    return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
                 });
         }
 
@@ -175,7 +172,7 @@
         /// JSON containing result status (Success / Error)
         /// and remote job id or errror message.
         /// </returns>
-        public string  CreateAlignmentTask(long[] subsequencesIds)
+        public string CreateAlignmentTask(long[] subsequencesIds)
         {
             try
             {
@@ -204,8 +201,8 @@
                     // TODO: make email global parameter
                     result = webClient.UploadString(url, $"email=info@foarlab.org&sequence={fasta}");
                 }
-                    
-                return JsonConvert.SerializeObject(new { Status = "Success", Result = result }) ;
+
+                return JsonConvert.SerializeObject(new { Status = "Success", Result = result });
             }
             catch (Exception ex)
             {

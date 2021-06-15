@@ -1,6 +1,4 @@
-﻿using Accord.Math;
-
-namespace LibiadaWeb.Controllers.Sequences
+﻿namespace LibiadaWeb.Controllers.Sequences
 {
     using System;
     using System.Collections.Generic;
@@ -135,7 +133,7 @@ namespace LibiadaWeb.Controllers.Sequences
                             var matterRepository = new MatterRepository(db);
                             int fileSize = Request.Files[0].ContentLength;
                             var file = new byte[fileSize];
-                            Request.Files[0].InputStream.Read(file, 0 , fileSize);
+                            Request.Files[0].InputStream.Read(file, 0, fileSize);
                             var matter = new Matter
                             {
                                 Nature = Nature.Image,
@@ -150,11 +148,9 @@ namespace LibiadaWeb.Controllers.Sequences
                             throw new InvalidEnumArgumentException(nameof(nature), (int)nature, typeof(Nature));
                     }
 
-                    var data = new ImportResult(commonSequence, language, original, translator, partial, precision);
-                    return new Dictionary<string, object>
-                               {
-                                   { "data", JsonConvert.SerializeObject(data) }
-                               };
+                    var result = new ImportResult(commonSequence, language, original, translator, partial, precision);
+                    
+                    return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
                 }
                 catch (Exception)
                 {

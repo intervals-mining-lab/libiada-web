@@ -3064,4 +3064,24 @@ CREATE TABLE dbo."AspNetPushNotificationSubscribers"
 );
 COMMENT ON TABLE dbo."AspNetPushNotificationSubscribers" IS 'Table for storing data about devices that are subscribers to push notifications.';
 
+-- 15.04.2021
+-- Copy tasks results into task_result table.
+
+INSERT INTO task_result (task_id, key, value) 
+	SELECT id, 'data', result
+	FROM task
+	WHERE result IS NOT NULL;
+
+INSERT INTO task_result (task_id, key, value) 
+	SELECT id, 'similarityMatrix', additional_result_data 
+	FROM task
+	WHERE additional_result_data IS NOT NULL;
+
+INSERT INTO task_result (task_id, key, value) 
+	SELECT t.id, d.key, d.value :: json 
+	FROM task t
+	INNER JOIN json_each_text(t.result::json ) d ON true
+	WHERE t.additional_result_data IS NOT NULL
+	AND d.key IN ('characteristics', 'attributeValues');
+
 COMMIT;
