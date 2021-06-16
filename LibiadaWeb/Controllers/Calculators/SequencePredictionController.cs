@@ -78,7 +78,7 @@
             return CreateTask(() =>
             {
                 string characteristicName;
-                string mattersName;
+                string matterName;
                 double[] characteristics;
                 Chain sequence;
                 IFullCalculator calculator;
@@ -87,7 +87,7 @@
                 using (var db = new LibiadaWebEntities())
                 {
                     var commonSequenceRepository = new CommonSequenceRepository(db);
-                    mattersName = Cache.GetInstance().Matters.Single(m => matterId == m.Id).Name;
+                    matterName = Cache.GetInstance().Matters.Single(m => matterId == m.Id).Name;
                     var sequenceId = db.CommonSequence.Single(c => matterId == c.MatterId && c.Notation == notation).Id;
                     sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
 
@@ -110,16 +110,17 @@
                 Chain chain;
                 (sequencePredictionResult, chain) = Predict(averageRemotenessCalc, sequence, initialLength, alphabet, averageRemoteness, doubleAccuracy);
 
-                var matching = FindPercentageOfMatching(sequence, chain) * 100;
+                var matching = FindPercentageOfMatching(sequence, chain, initialLength) * 100;
 
 
                 var result = new Dictionary<string, object>
                 {
                     { "result", sequencePredictionResult },
-                    {"matching", matching }
+                    { "matterName", matterName },
+                    { "matching", matching }
                 };
 
-                return new Dictionary<string, object>
+                return new Dictionary<string, string>
                 {
                     { "data", JsonConvert.SerializeObject(result) }
                 };
@@ -241,8 +242,8 @@
                         Predicted = contenderValue.PredictedWord.ToString(),
                         ActualCharacteristic = contenderValue.CurrentAverageRemoteness,
                         TheoreticalCharacteristic = averageRemotenessCalc.Calculate(SubChain(sequence, 0, i), Link.Start)
-                    //PercentageOfMatched = FindPercentageOfMatching(sequence, currentPredicion)
-                });
+                        //PercentageOfMatched = FindPercentageOfMatching(sequence, currentPredicion)
+                    });
 
                     predicted = Concat(predicted, contenderValue.PredictedWord, wordPositionStart);
 
@@ -269,10 +270,10 @@
             return chain;
         }
 
-        private double FindPercentageOfMatching(Chain first, Chain second)
+        private double FindPercentageOfMatching(Chain first, Chain second, int startIndex)
         {
             int count = 0;
-            for (int i = 0; i < second.Length; i++)
+            for (int i = startIndex; i < second.Length; i++)
             {
                 if (first.Get(i).Equals(second.Get(i)))
                 {
@@ -280,15 +281,13 @@
                 }
             }
 
-            return (double)count / second.Length;
+            return (double)count / (second.Length - startIndex);
         }
 
         private struct ContenderValue
-                var result = new Dictionary<string, object>
-                return new Dictionary<string, object>
-                           {
-                               { "data", JsonConvert.SerializeObject(result) }
-                           };
+        {
+            public double CurrentAverageRemoteness;
+            public Chain PredictedWord;
         }
     }
 }

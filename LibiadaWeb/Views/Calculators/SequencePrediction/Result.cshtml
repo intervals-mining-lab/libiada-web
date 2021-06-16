@@ -11,6 +11,9 @@
     <div ng-controller="SequencePredictionResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <div ng-disabled="loading">
+            <h2> Sequence prediction result </h2>
+            <h3>Sequence name: {{matterName}} </h3>
+            <div> Correct prediction % {{matching}} </div>
             <table class="table table-bordered table-hover" ng-cloak>
                 <thead>
                     <tr>
@@ -21,7 +24,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="characteristic in ::result">
+                    <tr ng-repeat="characteristic in ::result" 
+                        ng-class="characteristic.Fragment == characteristic.Predicted ? 'success' : 'danger'">
                         <td ng-bind="::characteristic.ActualCharacteristic" />
                         <td ng-bind="::characteristic.TheoreticalCharacteristic" />
                         <td ng-bind="::characteristic.Fragment" />
