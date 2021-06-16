@@ -118,7 +118,7 @@
 
                 var result = new Dictionary<string, object>
                 {
-                    { "chain", sequence },
+                    { "chain", sequence.ToString(" ") },
                     { "transformationsList", transformations },
                     { "iterationsCount", iterationsCount },
                     { "transformationsResult", transformationsResult },

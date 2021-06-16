@@ -34,7 +34,21 @@
         /// </exception>
         public string GetTaskData(long id, string key = "data")
         {
-            return TaskManager.Instance.GetTaskData(id, key);
+            try
+            {
+                return TaskManager.Instance.GetTaskData(id, key);
+            }
+            catch (Exception ex)
+            {
+                string message = ex.Message;
+                while (ex.InnerException != null)
+                {
+                    ex = ex.InnerException;
+                    message += $"{Environment.NewLine} {ex.Message}";
+                }
+
+                return JsonConvert.SerializeObject(new { Status = "Error", Message = message });
+            }
         }
 
         /// <summary>
@@ -57,28 +71,27 @@
         /// </exception>
         public string GetSubsequencesComparerDataElement(int taskId, int firstIndex, int secondIndex, bool filtered)
         {
-            Task task = TaskManager.Instance.GetTask(taskId);
-
-            if (task.TaskData.TaskState != TaskState.Completed)
-            {
-                throw new Exception("Task state is not 'complete'");
-            }
-
-            List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>[,] similarityMatrix;
-
-            using (var db = new LibiadaWebEntities())
+            try
             {
                 var taskData = GetTaskData(taskId, filtered ? "filteredSimilarityMatrix" : "similarityMatrix");
-                similarityMatrix = JsonConvert.DeserializeObject<List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>[,]>(taskData);
+
+                var similarityMatrix = JsonConvert.DeserializeObject<List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>[,]>(taskData);
+
+                List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)> result = similarityMatrix[firstIndex, secondIndex];
+
+                return JsonConvert.SerializeObject(result);
             }
-            //if (!task.Result.ContainsKey("similarityMatrix"))
-            //{
-            //    throw new Exception("Task doesn't have additional data");
-            //}
+            catch (Exception ex)
+            {
+                string message = ex.Message;
+                while (ex.InnerException != null)
+                {
+                    ex = ex.InnerException;
+                    message += $"{Environment.NewLine} {ex.Message}";
+                }
 
-            List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)> result = similarityMatrix[firstIndex, secondIndex];
-
-            return JsonConvert.SerializeObject(result);
+                return JsonConvert.SerializeObject(new { Status = "Error", Message = message });
+            }
         }
 
         /// <summary>
@@ -127,8 +140,22 @@
 
         public string GetApplicationServerKey()
         {
-            var response = new { applicationServerKey = ConfigurationManager.AppSettings["PublicVapidKey"] };
-            return JsonConvert.SerializeObject(response);
+            try
+            {
+                var response = new { applicationServerKey = ConfigurationManager.AppSettings["PublicVapidKey"] };
+                return JsonConvert.SerializeObject(response);
+            }
+            catch (Exception ex)
+            {
+                string message = ex.Message;
+                while (ex.InnerException != null)
+                {
+                    ex = ex.InnerException;
+                    message += $"{Environment.NewLine} {ex.Message}";
+                }
+
+                return JsonConvert.SerializeObject(new { Status = "Error", Message = message });
+            }
         }
     }
 }

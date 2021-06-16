@@ -12,30 +12,20 @@
         <table class="table table-bordered table-hover" ng-cloak>
             <thead>
                 <tr>
-                    <th>
-                        File name
-                    </th>
-                    <th>
-                        Channels
-                    </th>
-                    <th>
-                        Frequency
-                    </th>
-                    <th>
-                        Audio format
-                    </th>
-                    <th>
-                        Sample size
-                    </th>
+                    <th>File name</th>
+                    <th>Channels</th>
+                    <th>Frequency</th>
+                    <th>Audio format</th>
+                    <th>Sample size</th>
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="element in data">
-                    <td ng-bind="element.name" />
-                    <td ng-bind="element.channels" />
-                    <td ng-bind="element.sampleRate" />
-                    <td ng-bind="element.audioFormat" />
-                    <td ng-bind="element.sampleSize" />
+                <tr ng-repeat="element in ::data">
+                    <td ng-bind="::element.name" />
+                    <td ng-bind="::element.channels" />
+                    <td ng-bind="::element.sampleRate" />
+                    <td ng-bind="::element.audioFormat" />
+                    <td ng-bind="::element.sampleSize" />
                 </tr>
             </tbody>
         </table>

@@ -1,13 +1,13 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
-    using System.Collections;
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
-    using LibiadaCore.Iterators;
+    using LibiadaCore.Extensions;
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.CalculatorsData;
@@ -41,7 +41,7 @@
             using (var db = new LibiadaWebEntities())
             {
                 var viewDataHelper = new ViewDataHelper(db);
-                var viewData = viewDataHelper.FillViewData(CharacteristicCategory.Full, 1, 1, "Calculate");
+                var viewData = viewDataHelper.FillViewData(CharacteristicCategory.Full, 1, 1, "Predict");
                 ViewBag.data = JsonConvert.SerializeObject(viewData);
                 return View();
             }
@@ -73,12 +73,12 @@
             Notation notation,
             int step,
             int initialLength,
-            double accuracy)
+            string accuracy)
         {
             return CreateTask(() =>
             {
                 string characteristicName;
-                string mattersName;
+                string matterName;
                 double[] characteristics;
                 Chain sequence;
                 IFullCalculator calculator;
@@ -87,7 +87,7 @@
                 using (var db = new LibiadaWebEntities())
                 {
                     var commonSequenceRepository = new CommonSequenceRepository(db);
-                    mattersName = Cache.GetInstance().Matters.Single(m => matterId == m.Id).Name;
+                    matterName = Cache.GetInstance().Matters.Single(m => matterId == m.Id).Name;
                     var sequenceId = db.CommonSequence.Single(c => matterId == c.MatterId && c.Notation == notation).Id;
                     sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
 
@@ -101,120 +101,193 @@
 
                 // characteristics = SequencesCharacteristicsCalculator.Calculate( new[] { sequenceId }, characteristicLinkId);
 
-                CutRule cutRule = new CutRuleWithFixedStart(sequence.Length, step);
-
-                Depth depthCaulc = new Depth();
-
-                CutRuleIterator iter = cutRule.GetIterator();
-
-                var fragments = new List<Chain>();
-                var partNames = new List<string>();
-                var lengthes = new List<int>();
-                var teoreticalDepht = new List<double>();
-
-                while (iter.Next())
-                {
-                    var fragment = new Chain(iter.GetEndPosition() - iter.GetStartPosition());
-
-                    for (int k = 0; iter.GetStartPosition() + k < iter.GetEndPosition(); k++)
-                    {
-                        fragment.Set(sequence[iter.GetStartPosition() + k], k);
-                    }
-
-                    fragments.Add(fragment);
-                    partNames.Add(fragment.ToString());
-                    lengthes.Add(fragment.Length);
-
-                    teoreticalDepht.Add(depthCaulc.Calculate(fragment, Link.Start));
-                }
-
-                characteristics = new double[fragments.Count];
-                for (int k = 0; k < fragments.Count; k++)
-                {
-                    characteristics[k] = calculator.Calculate(fragments[k], link);
-                    // fragmentsData[k] = new FragmentData(characteristics, fragments[k].ToString(), starts[i][k], fragments[k].Length);
-                }
-
-
-
-
-                // var predicted = new List<Chain>();
-
-                //int[] startingPart = new int[initialLength];
-
-
-                Chain predicted = new Chain(initialLength);
-
-                for (int i = 0; i < initialLength; i++)
-                {
-                    predicted.Set(sequence[i], i);
-                }
-
+                AverageRemoteness averageRemotenessCalc = new AverageRemoteness();
+                double averageRemoteness = averageRemotenessCalc.Calculate(sequence, Link.Start);
                 Alphabet alphabet = sequence.Alphabet;
-                IEnumerator enumerator = alphabet.GetEnumerator();
-                var sequencePredictionResult = new List<SequencePredictionData>();
+                var doubleAccuracy = double.Parse(accuracy);
 
-                for (int i = initialLength; i < sequence.Length; i++)
+                List<SequencePredictionData> sequencePredictionResult;
+                Chain chain;
+                (sequencePredictionResult, chain) = Predict(averageRemotenessCalc, sequence, initialLength, alphabet, averageRemoteness, doubleAccuracy);
+
+                var matching = FindPercentageOfMatching(sequence, chain, initialLength) * 100;
+
+
+                var result = new Dictionary<string, object>
                 {
-                    Chain temp = new Chain(i + 1);
-                    for (int j = 0; j < i; j++)
+                    { "result", sequencePredictionResult },
+                    { "matterName", matterName },
+                    { "matching", matching }
+                };
+
+                return new Dictionary<string, string>
+                {
+                    { "data", JsonConvert.SerializeObject(result) }
+                };
+            });
+        }
+
+        //private Chain IncrementNextCharacter(Chain target, int startElement, Alphabet alphabet)
+        //{
+        //    if (startElement + 1 < target.Length)
+        //    {
+        //        if (IsLast(target.Get(startElement + 1), alphabet))
+        //        {
+        //            IBaseObject firstLetter = alphabet.First();
+        //            target.Set(firstLetter, startElement + 1);
+        //            target = IncrementNextCharacter(target, startElement + 1, alphabet);
+        //        }
+        //        else
+        //        {
+        //            IBaseObject letter = GetElementAfter(target.Get(startElement + 1), alphabet);
+        //            target.Set(letter, startElement + 1);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        target = ExtendAndCopy(target, 1);
+        //        IBaseObject firstLetter = alphabet.First();
+        //        target.Set(firstLetter, target.Length - 1);
+        //    }
+        //    return target;
+        //}
+
+        private IBaseObject GetElementAfter(IBaseObject element, Alphabet alphabet)
+        {
+            bool current = false;
+            foreach (IBaseObject alphabetElement in alphabet)
+            {
+                if (current)
+                {
+                    return alphabetElement;
+                }
+                if (alphabetElement.Equals(element))
+                {
+                    current = true;
+                }
+            }
+
+            throw new Exception();
+        }
+
+        private bool IsLast(IBaseObject letter, Alphabet alphabet)
+        {
+            return alphabet.Last().Equals(letter);
+        }
+
+        private Chain ExtendAndCopy(Chain source, int extensionLength)
+        {
+            return Copy(source, new Chain(source.Length + extensionLength));
+        }
+
+        private Chain Copy(Chain source, Chain destanation)
+        {
+            int commonLenth = Math.Min(source.Length, destanation.Length);
+            for (int i = 0; i < commonLenth; i++)
+            {
+                destanation.Set(source.Get(i), i);
+            }
+            return destanation;
+        }
+
+        private Chain Concat(Chain left, Chain right, int indexStart)
+        {
+            var result = new List<IBaseObject>(indexStart + right.Length);
+            result.AddRange(left.ToArray().SubArray(0, indexStart));
+            result.AddRange(right.ToArray());
+            return new Chain(result);
+        }
+
+        private (List<SequencePredictionData>, Chain) Predict(
+            AverageRemoteness averageRemotenessCalc,
+            Chain sequence,
+            int initialLength,
+            Alphabet alphabet,
+            double averageRemoteness,
+            double accuracy)
+        {
+            var sequencePredictionResult = new List<SequencePredictionData>();
+
+            int wordPositionStart = initialLength;
+            Chain currentPredicion = null;
+            Chain predicted = Copy(sequence, new Chain(initialLength));
+            for (int i = initialLength; i < sequence.Length; i++)
+            {
+                currentPredicion = Copy(predicted, new Chain(i + 1));
+                Dictionary<double, ContenderValue> contenderValues = new Dictionary<double, ContenderValue>();
+                bool isFound = false;
+                foreach (IBaseObject element in alphabet)
+                {
+                    currentPredicion.Set(element, wordPositionStart);
+                    double currentAvgRemoteness = averageRemotenessCalc.Calculate(currentPredicion, Link.Start);
+                    double delta = Math.Abs(currentAvgRemoteness - averageRemoteness);
+
+                    if (delta < accuracy)
                     {
-                        temp.Set(predicted[j], j);
-                    }
-                    predicted = temp;
-                    double depth = 0;
-                    /* do
-                     {
-                         predicted.Set((IBaseObject)enumerator.Current, i);
-                         depth = depthCaulc.Calculate(predicted, Link.Start);
-                         if (System.Math.Abs(depth - teoreticalDepht.ElementAt(i)) <= accuracy)
-                         {
-                             break;
-                         }
-                     } while (enumerator.MoveNext());*/
-                    IBaseObject predictedLetter = null;
-                    foreach (IBaseObject letter in alphabet)
-                    {
-                        predicted.Set(letter, i);
-                        depth = depthCaulc.Calculate(predicted, Link.Start);
-                        if (System.Math.Abs(depth - teoreticalDepht.ElementAt(i)) <= accuracy)
+                        contenderValues.Add(delta, new ContenderValue
                         {
-                            predictedLetter = letter;
-                            break;
-                        }
+                            CurrentAverageRemoteness = currentAvgRemoteness,
+                            PredictedWord = SubChain(currentPredicion, wordPositionStart, i)
+                        });
+                        isFound = true;
                     }
+                }
 
-
-
+                if (isFound)
+                {
+                    ContenderValue contenderValue = contenderValues[contenderValues.Keys.Min()];
                     sequencePredictionResult.Add(new SequencePredictionData
                     {
-                        Fragment = fragments.ElementAt(i).ToString(),
-                        Predicted = /*enumerator.Current.ToString()*/ predicted.ToString(),
-                        ActualCharacteristic = depth,
-                        TheoreticalCharacteristic = teoreticalDepht.ElementAt(i)
+                        Fragment = SubChain(sequence, wordPositionStart, i).ToString(),
+                        Predicted = contenderValue.PredictedWord.ToString(),
+                        ActualCharacteristic = contenderValue.CurrentAverageRemoteness,
+                        TheoreticalCharacteristic = averageRemotenessCalc.Calculate(SubChain(sequence, 0, i), Link.Start)
+                        //PercentageOfMatched = FindPercentageOfMatching(sequence, currentPredicion)
                     });
-                }
 
-                /*int equal = 0;
-                for (int i = initialLength; i < sequence.Length; i++)
+                    predicted = Concat(predicted, contenderValue.PredictedWord, wordPositionStart);
+
+                    wordPositionStart = i + 1;
+                }
+                else
                 {
-                    if (sequence[i] == predicted[i])
-                    {
-                        equal++;
-                    }
+                    throw new Exception($"Couldn't predict with given accuracy. Position: {i}");
+                    //currentPredicion = IncrementNextCharacter(currentPredicion, wordPositionStart, alphabet);
                 }
+            }
 
+            return (sequencePredictionResult, currentPredicion);
+        }
 
-                double accuracyPercentage = equal / (sequence.Length - initialLength);*/
+        // todo fix throwing exception
+        private Chain SubChain(Chain source, int start, int end)
+        {
+            Chain chain = new Chain(end - start + 1);
+            for (int i = 0; i < chain.Length; i++)
+            {
+                chain.Set(source.Get(start + i), i);
+            }
+            return chain;
+        }
 
+        private double FindPercentageOfMatching(Chain first, Chain second, int startIndex)
+        {
+            int count = 0;
+            for (int i = startIndex; i < second.Length; i++)
+            {
+                if (first.Get(i).Equals(second.Get(i)))
+                {
+                    count++;
+                }
+            }
 
-                // TODO: sequence prediction
+            return (double)count / (second.Length - startIndex);
+        }
 
-
-                var result = new Dictionary<string, object> { { "result", sequencePredictionResult } };
-
-                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
-            });
+        private struct ContenderValue
+        {
+            public double CurrentAverageRemoteness;
+            public Chain PredictedWord;
         }
     }
 }

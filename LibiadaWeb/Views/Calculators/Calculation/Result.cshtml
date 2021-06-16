@@ -14,16 +14,14 @@
             <table st-table="characteristics" class="table table-bordered table-hover" ng-cloak>
                 <thead>
                     <tr>
-                        <th>
-                            Sequence name
-                        </th>
-                        <th ng-repeat="characteristicName in characteristicNames" ng-bind="characteristicName" />
+                        <th>Sequence name</th>
+                        <th ng-repeat="characteristicName in ::characteristicNames" ng-bind="::characteristicName" />
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="characteristic in characteristics">
-                        <td ng-bind="characteristic.MatterName" />
-                        <td ng-repeat="value in characteristic.Characteristics" ng-bind="value" />
+                    <tr ng-repeat="characteristic in ::characteristics">
+                        <td ng-bind="::characteristic.MatterName" />
+                        <td ng-repeat="value in ::characteristic.Characteristics" ng-bind="::value" />
                     </tr>
                 </tbody>
             </table>
@@ -31,26 +29,34 @@
             <div class="form-group">
                 <label class="control-label col-md-2" for="firstCharacteristic">First characteristic:</label>
                 <div class="col-md-10">
-                    <select class="form-control" title="First characteristic" ng-model="firstCharacteristic" ng-options="c.Text for c in characteristicsList" id="firstCharacteristic"></select>
+                    <select class="form-control"
+                            title="First characteristic"
+                            ng-model="firstCharacteristic"
+                            ng-options="c.Text for c in ::characteristicsList"
+                            id="firstCharacteristic"></select>
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2" for="secondCharacteristic">Second characteristic:</label>
                 <div class="col-md-10">
-                    <select class="form-control" title="Second characteristic" ng-model="secondCharacteristic" ng-options="c.Text for c in characteristicsList" id="secondCharacteristic"></select>
+                    <select class="form-control"
+                            title="Second characteristic"
+                            ng-model="secondCharacteristic"
+                            ng-options="c.Text for c in ::characteristicsList"
+                            id="secondCharacteristic"></select>
                 </div>
             </div>
             <br />
             <div class="form-group">
                 <label class="control-label col-md-2" for="height">Height:</label>
                 <div class="col-md-10">
-                    <input class="form-control" name="height" id="height" type="number" min="{{500 + legendHeight}}" step="20" ng-model="height" />
+                    <input class="form-control" name="height" id="height" type="number" min="{{::500 + legendHeight}}" step="20" ng-model="height" />
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2" for="width">Width:</label>
                 <div class="col-md-10">
-                    <input class="form-control" name="width" id="width" type="number" min="{{400}}" step="20" ng-model="width" />
+                    <input class="form-control" name="width" id="width" type="number" min="400" step="20" ng-model="width" />
                 </div>
             </div>
             <br />

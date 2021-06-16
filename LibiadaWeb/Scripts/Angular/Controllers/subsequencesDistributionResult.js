@@ -447,35 +447,16 @@
             $scope.redrawGenesMap();
         }
 
-        function legendShowAll(matters) {
-            for (var i = 0; i < matters.length; i++) {
-                for (var j = 0; j < $scope.points[matters[i].index].length; j++) {
-                    var point = $scope.points[matters[i].index][j];
-                    if (!point.legendVisible) {
-                        point.legendVisible = true;
-                    }
+        function legendSetVisibilityForAll(visibility) {
+            for (var i = 0; i < $scope.matters.length; i++) {
+                var index = $scope.matters[i].index;
+                for (var j = 0; j < $scope.points[index].length; j++) {
+                    $scope.points[index][j].legendVisible = visibility;
                 }
             }
 
             for (var k = 0; k < $scope.matters.length; k++) {
-                $scope.matters[k].visible = true;
-            }
-
-            $scope.redrawGenesMap();
-        }
-
-        function legendHideAll(matters) {
-            for (var i = 0; i < matters.length; i++) {
-                for (var j = 0; j < $scope.points[matters[i].index].length; j++) {
-                    var point = $scope.points[matters[i].index][j];
-                    if (point.legendVisible) {
-                        point.legendVisible = false;
-                    }
-                }
-            }
-
-            for (var k = 0; k < $scope.matters.length; k++) {
-                $scope.matters[k].visible = false;
+                $scope.matters[k].visible = visibility;
             }
 
             $scope.redrawGenesMap();
@@ -556,8 +537,7 @@
         $scope.fillVisiblePoints = fillVisiblePoints;
         $scope.filterByFeature = filterByFeature;
         $scope.legendClick = legendClick;
-        $scope.legendShowAll = legendShowAll;
-        $scope.legendHideAll = legendHideAll;
+        $scope.legendSetVisibilityForAll = legendSetVisibilityForAll;
         $scope.getAttributesText = getAttributesText;
         $scope.fillPointTooltip = fillPointTooltip;
         $scope.showTooltip = showTooltip;

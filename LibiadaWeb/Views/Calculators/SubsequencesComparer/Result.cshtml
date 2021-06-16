@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Subsequences comparer";
+    ViewBag.Title = "Similarity matrix";
 }
 
 @Scripts.Render("~/bundles/Characteristic")
@@ -55,15 +55,21 @@
                 </tr>
                 <tr>
                     <td />
-                    <td ng-repeat="matterName in mattersNames" title="{{matterName}}">{{$index + 1}}</td>
+                    <td ng-repeat="matterName in mattersNames" title="{{matterName}}" ng-bind="$index + 1"></td>
                 </tr>
             </tbody>
         </table>
 
         <hr />
 
+        <ul class="list-group">
+            <li class="list-group-item" ng-repeat="matterName in mattersNames"> <b> {{$index + 1}} - {{matterName}} </b> </li>
+        </ul>
+
+        <hr />
+
         <div class="form-group">
-            <label>Maximum difference = {{maxPercentageDifference}}%</label>
+            <label>Maximum difference = {{::maxPercentageDifference}}%</label>
         </div>
 
         <div class="form-group" ng-show="similarityValueSelected">
@@ -82,12 +88,6 @@
                 Number of not equal subsequences from second sequence = {{similarityValue.secondNotEqualElementsCount}}
             </label>
         </div>
-
-        <ul class="list-group">
-            <li class="list-group-item" ng-repeat="matterName in mattersNames"> <b> {{$index + 1}} - {{matterName}} </b> </li>
-        </ul>
-
-        <hr />
 
         @Html.Partial("_Filters")
 
@@ -132,7 +132,14 @@
 
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <button type="button" class="btn btn-default btn-xs" data-toggle="collapse" data-target="#additionalActions{{$index + 1}}" aria-expanded="false" aria-controls="additionalActions{{$index + 1}}">+</button>
+                                <button type="button"
+                                        class="btn btn-default btn-xs"
+                                        data-toggle="collapse"
+                                        data-target="#additionalActions{{$index + 1}}"
+                                        aria-controls="additionalActions{{$index + 1}}"
+                                        aria-expanded="false">
+                                    +
+                                </button>
                             </div>
                             <div class="panel-collapse collapse" id="additionalActions{{$index + 1}}">
                                 <div class="panel-body">
@@ -158,11 +165,13 @@
                                     </div>
                                     <div class="form-group">
                                         <div class="col-md-offset-2 col-md-10">
-                                            <input type="button" class="btn btn-default" ng-click="calculateLocalCharacteristics(characteristics[firstMatterIndex][equalElement.Item1].Id, characteristics[secondMatterIndex][equalElement.Item2].Id, $index)" value="CalculateLocalCharacteristics" />
+                                            <input type="button" 
+                                                   class="btn btn-default" 
+                                                   ng-click="calculateLocalCharacteristics(characteristics[firstMatterIndex][equalElement.Item1].Id, characteristics[secondMatterIndex][equalElement.Item2].Id, $index)" 
+                                                   value="CalculateLocalCharacteristics" />
                                         </div>
                                     </div>
-                                    <div id="chart{{$index}}">
-                                    </div>
+                                    <div id="chart{{$index}}"></div>
                                 </div>
                             </div>
                         </div>
