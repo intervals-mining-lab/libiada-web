@@ -68,7 +68,7 @@
             {
                 @Html.ActionLink("Sliding window calculation (Functions of sequences)", "Index", "LocalCalculation")
                 <br />
-                @Html.ActionLink("Clusterization", "Index", "Clusterization")
+                @Html.ActionLink("Cluster analysis", "Index", "Clusterization")
                 <br />
                 @Html.ActionLink("Alignment of sequences", "Index", "SequencesAlignment")
                 <br />
@@ -117,5 +117,8 @@
 }
 else
 {
-    <div>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" }) or @Html.ActionLink("log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" }) to use Libiada service.</div>
+    <div>
+        @Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" }) or 
+        @Html.ActionLink("log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" }) to use Libiada service.
+    </div>
 }

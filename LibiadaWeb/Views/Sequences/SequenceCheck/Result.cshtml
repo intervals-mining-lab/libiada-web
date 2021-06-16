@@ -11,7 +11,7 @@
     <div ng-controller="BatchSequenceImportResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <br />
-        <div ng-class="calculateStatusClass(status)">{{message}}</div>
+        <div ng-class="::calculateStatusClass(status)" ng-bind="::message"></div>
         <div>
             @Html.ActionLink("Check another sequence", "Index").
         </div>

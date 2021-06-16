@@ -17,37 +17,37 @@
         <br />
         <ul class="list-group">
             <li class="list-group-item">
-                Nature: {{Nature}}
+                Nature: {{::Nature}}
             </li>
             <li class="list-group-item">
-                Notation: {{Notation}}
+                Notation: {{::Notation}}
             </li>
             <li class="list-group-item">
-                Group: {{Group}}
+                Group: {{::Group}}
             </li>
             <li class="list-group-item">
-                SequenceType: {{SequenceType}}
+                SequenceType: {{::SequenceType}}
             </li>
             <li class="list-group-item">
-                Description: {{Description}}
+                Description: {{::Description}}
             </li>
-            <li class="list-group-item" ng-if="RemoteId && RemoteId.length > 0">
-                Remote id: {{RemoteId}}
+            <li class="list-group-item" ng-if="::RemoteId && RemoteId.length > 0">
+                Remote id: {{::RemoteId}}
             </li>
-            <li class="list-group-item" ng-if="Language && Language.length > 0">
-                Language: {{Language}}
+            <li class="list-group-item" ng-if="::Language && Language.length > 0">
+                Language: {{::Language}}
             </li>
-            <li class="list-group-item" ng-if="Original != null">
-                {{Original ? 'Text is not translated' : 'Text is translated'}}
+            <li class="list-group-item" ng-if="::Original != null">
+                {{::Original ? 'Text is not translated' : 'Text is translated'}}
             </li>
-            <li class="list-group-item" ng-if="Translator && Translator.length > 0">
-                Translator: {{Translator}}
+            <li class="list-group-item" ng-if="::Translator && Translator.length > 0">
+                Translator: {{::Translator}}
             </li>
-            <li class="list-group-item" ng-if="Partial">
+            <li class="list-group-item" ng-if="::Partial">
                 Sequence is partial
             </li>
-            <li class="list-group-item" ng-if="Precision">
-                Data precision: {{Precision}}
+            <li class="list-group-item" ng-if="::Precision">
+                Data precision: {{::Precision}}
             </li>
         </ul>
         <div>

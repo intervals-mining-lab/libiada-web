@@ -27,10 +27,6 @@ function SetCheckBoxesState(checkboxes, state, filter) {
     });
 }
 
-function FakeDisableMattersSelect() {
-    return false;
-}
-
 function FakeFilterByFeature() {
     return false;
 }

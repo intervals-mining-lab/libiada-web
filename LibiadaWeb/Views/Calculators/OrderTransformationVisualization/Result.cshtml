@@ -9,27 +9,21 @@
     @Html.Partial("_AngularControllerInitializer", "OrderTransformationVisualizationResultController")
 
     <div ng-controller="OrderTransformationVisualizationResultCtrl">
-        <loading-window loading = "loading" loading-screen-header = "loadingScreenHeader"></loading-window>
+        <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <div ng-disabled="loading">
             <table st-table="ordersTable" class="table table-bordered table-hover" ng-cloak>
                 <thead>
                     <tr>
-                        <th>
-                            Order ID
-                        </th>
-                        <th>
-                            Order
-                        </th>
-                        <th>
-                            Count of unique final orders
-                        </th>
+                        <th>#</th>
+                        <th>Order</th>
+                        <th>Count of unique final orders</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="order in orders">
-                        <td ng-bind="$index" />
-                        <td ng-bind="order" />
-                        <td ng-bind="transformationsData[$index].UniqueFinalOrdersCount" />
+                    <tr ng-repeat="order in ::orders">
+                        <td ng-bind="::$index" />
+                        <td ng-bind="::order" />
+                        <td ng-bind="::transformationsData[$index].UniqueFinalOrdersCount" />
                     </tr>
                 </tbody>
             </table>
@@ -37,35 +31,42 @@
             <div class="form-group">
                 <label class="control-label col-md-2" for="initialOrder">Initial order Id:</label>
                 <div class="col-md-10">
-                    <select class="form-control" title="Initial order" ng-model="initialOrder" ng-options="orderId.id for orderId in ordersIds" id="initialOrder"></select>
+                    <select class="form-control"
+                            title="Initial order"
+                            ng-model="initialOrder"
+                            ng-options="orderId.id for orderId in ::ordersIds"
+                            id="initialOrder"></select>
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2" for="transformationType">Transformation type:</label>
                 <div class="col-md-10">
-                    <select class="form-control" title="Transformation type" ng-model="transformationType" ng-options="t.Text for t in transformationsList" id="transformationType"></select>
+                    <select class="form-control"
+                            title="Transformation type"
+                            ng-model="transformationType"
+                            ng-options="t.Text for t in ::transformationsList"
+                            id="transformationType"></select>
                 </div>
             </div>
             <br />
             <div class="form-group">
                 <label class="control-label col-md-2" for="height">Height:</label>
                 <div class="col-md-10">
-                    <input class="form-control" name="height" id="height" type="number" min="{{500 + legendHeight}}" step="20" ng-model="height" />
+                    <input class="form-control" name="height" id="height" type="number" min="{{::500 + legendHeight}}" step="20" ng-model="height" />
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2" for="width">Width:</label>
                 <div class="col-md-10">
-                    <input class="form-control" name="width" id="width" type="number" min="{{400}}" step="20" ng-model="width" />
+                    <input class="form-control" name="width" id="width" type="number" min="400" step="20" ng-model="width" />
                 </div>
             </div>
             <br />
             <input type="button" class="btn btn-default" ng-click="draw()" value="Draw" />
             <div id="chart">
             </div>
-
-            </div>
         </div>
+    </div>
     <br />
 }
 

@@ -16,16 +16,16 @@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.Partial("_CustomSequences")
-        <order-transformations transformations="transformations">
+        <order-transformations transformations="::transformations">
         </order-transformations>
 
-        <characteristics characteristic-types="characteristicTypes"
-                         characteristics-dictionary="characteristicsDictionary"
+        <characteristics characteristic-types="::characteristicTypes"
+                         characteristics-dictionary="::characteristicsDictionary"
                          nature="nature"
-                         notations="notations"
-                         languages="languages"
-                         translators="translators"
-                         pause-treatments="pauseTreatments"
+                         notations="::notations"
+                         languages="::languages"
+                         translators="::translators"
+                         pause-treatments="::pauseTreatments"
                          hide-notation="true">
         </characteristics>
         <br />

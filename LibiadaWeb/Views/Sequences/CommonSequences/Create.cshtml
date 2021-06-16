@@ -24,14 +24,20 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Matter.Nature, new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    <select class="form-control" ng-model="nature" ng-options="n.Value as n.Text for n in natures" ng-change="filterByNature()" ng-init="filterByNature()"></select>
+                    <select class="form-control"
+                            ng-model="nature"
+                            ng-options="n.Value as n.Text for n in ::natures"
+                            ng-change="filterByNature()"
+                            ng-init="filterByNature()"></select>
                     @Html.ValidationMessageFor(model => model.Matter.Nature, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="form-group">
                 @Html.LabelFor(model => model.Notation, new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    <select class="form-control" ng-model="notationId" ng-options="n.Value as n.Text for n in notations | filter:{ Nature: nature }"></select>
+                    <select class="form-control"
+                            ng-options="n.Value as n.Text for n in notations | filter:{ Nature: nature }"
+                            ng-model="notationId"></select>
                     <input type="hidden" name="Notation" ng-value="notationId" />
                     @Html.ValidationMessageFor(model => model.Notation, "", new { @class = "text-danger" })
                 </div>
@@ -39,13 +45,14 @@
         }
         else
         {
-            <div ng-hide="true" ng-init="filterByNature()"></div>
-            <input type="hidden" name="Notation" ng-value="notationId" />
+            <input type="hidden" name="Notation" ng-init="filterByNature()" ng-value="notationId" />
         }
         <div class="form-group">
             @Html.LabelFor(model => model.MatterId, "Matter", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <select class="form-control" ng-model="matterId" ng-options="m.Value as m.Text for m in matters | filter:{ Nature: nature }"></select>
+                <select class="form-control"
+                        ng-options="m.Value as m.Text for m in matters | filter:{ Nature: nature }"
+                        ng-model="matterId"></select>
                 <input type="hidden" name="MatterId" ng-value="matterId" />
                 @Html.ValidationMessageFor(model => model.MatterId, "", new { @class = "text-danger" })
             </div>
@@ -62,7 +69,9 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.RemoteDb, new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    <select class="form-control" ng-model="remoteDbId" ng-options="r.Value as r.Text for r in remoteDbs | filter:{ Nature: nature }">
+                    <select class="form-control"
+                            ng-model="remoteDbId"
+                            ng-options="r.Value as r.Text for r in ::remoteDbs | filter:{ Nature: nature }">
                         <option value="">None</option>
                     </select>
                     <input type="hidden" name="RemoteDb" ng-value="remoteDbId" />
@@ -93,7 +102,10 @@
                 <div class="form-group">
                     <label class="control-label col-md-2" for="language">Language of literary work:</label>
                     <div class="col-md-10">
-                        <select class="form-control" ng-model="languageId" ng-options="l.Value as l.Text for l in languages" id="language"></select>
+                        <select class="form-control"
+                                ng-model="languageId"
+                                ng-options="l.Value as l.Text for l in languages"
+                                id="language"></select>
                         <input type="hidden" name="language" ng-value="languageId" />
                         @Html.ValidationMessage("language", "", new { @class = "text-danger" })
                     </div>
@@ -110,7 +122,10 @@
                 <div class="form-group" ng-hide="original">
                     <label class="control-label col-md-2" for="translator">Translator:</label>
                     <div class="col-md-10">
-                        <select class="form-control" ng-model="translatorId" ng-options="t.Value as t.Text for t in translators" id="translator"></select>
+                        <select class="form-control"
+                                ng-model="translatorId"
+                                ng-options="t.Value as t.Text for t in translators"
+                                id="translator"></select>
                         <input type="hidden" name="translator" ng-value="translatorId" />
                         @Html.ValidationMessage("translator", "", new { @class = "text-danger" })
                     </div>

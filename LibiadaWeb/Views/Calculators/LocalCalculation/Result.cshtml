@@ -12,50 +12,56 @@
         <div ng-disabled="loading">
             <input type="button" class="btn btn-default" ng-click="changeCharacteristicsTableVisibility()" value="Show characteristics table" />
             <br />
-            <div ng-repeat="chainsCharacteristics in characteristics">
-                <h3>{{$index+1}}. {{chainsCharacteristics.matterName}}</h3>
+            <div ng-repeat="chainsCharacteristics in ::characteristics">
+                <h3>{{::$index+1}}. {{::chainsCharacteristics.matterName}}</h3>
                 <table ng-if="isCharacteristicsTableVisible" st-table="characteristics" class="table table-bordered table-hover" ng-cloak>
                     <thead>
                         <tr>
-                            <th>
-                                Fragment name
-                            </th>
-                            <th>
-                                Start
-                            </th>
-                            <th>
-                                Length
-                            </th>
-                            <th ng-repeat="characteristicName in characteristicNames" ng-bind="characteristicName" />
+                            <th>Fragment name</th>
+                            <th>Start</th>
+                            <th>Length</th>
+                            <th ng-repeat="characteristicName in ::characteristicNames" ng-bind="::characteristicName" />
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="fragmentsData in chainsCharacteristics.fragmentsData">
-                            <td ng-bind="fragmentsData.Name" />
-                            <td ng-bind="fragmentsData.Start" />
-                            <td ng-bind="fragmentsData.Length" />
-                            <td ng-repeat="value in fragmentsData.Characteristics" ng-bind="value" />
+                        <tr ng-repeat="fragmentsData in ::chainsCharacteristics.fragmentsData">
+                            <td ng-bind="::fragmentsData.Name" />
+                            <td ng-bind="::fragmentsData.Start" />
+                            <td ng-bind="::fragmentsData.Length" />
+                            <td ng-repeat="value in ::fragmentsData.Characteristics" ng-bind="::value" />
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <br/>
+            <br />
             <div class="form-group">
                 <label class="control-label col-md-2" for="aligner">Aligner:</label>
                 <div class="col-md-10">
-                    <select class="form-control" title="Aligner" ng-model="aligner" ng-options="c.Text for c in aligners" id="aligner"></select>
+                    <select class="form-control"
+                            title="Aligner"
+                            ng-model="aligner"
+                            ng-options="c.Text for c in ::aligners"
+                            id="aligner"></select>
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2" for="distancesCalculator">Distances calculator:</label>
                 <div class="col-md-10">
-                    <select class="form-control" title="Distances calculator" ng-model="distanceCalculator" ng-options="c.Text for c in distanceCalculators" id="distancesCalculator"></select>
+                    <select class="form-control"
+                            title="Distances calculator"
+                            ng-model="distanceCalculator"
+                            ng-options="c.Text for c in ::distanceCalculators"
+                            id="distancesCalculator"></select>
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2" for="aggregator">Aggregator:</label>
                 <div class="col-md-10">
-                    <select class="form-control" title="Aggregator" ng-model="aggregator" ng-options="c.Text for c in aggregators" id="aggregator"></select>
+                    <select class="form-control"
+                            title="Aggregator"
+                            ng-model="aggregator"
+                            ng-options="c.Text for c in ::aggregators"
+                            id="aggregator"></select>
                 </div>
             </div>
             <input type="button" class="btn btn-default" ng-click="calculateLocalCharacteristicsSimilarityMatrix()" value="Calculate similarity matrix" />
@@ -64,15 +70,14 @@
                 <caption>Aligner: {{usedAligner}}, Distances calculator: {{usedDistanceCalculator}}, Aggregator: {{usedAggregator}}</caption>
                 <tbody>
                     <tr>
-                        <td>№</td>
+                        <td>#</td>
                         <td ng-repeat="comparisonRaw in comparisonMatrix" title="{{characteristics[$index].matterName}}">{{$index + 1}}</td>
                     </tr>
                     <tr ng-repeat="comparisonRaw in comparisonMatrix">
-                        <td title="{{characteristics[$index].matterName}}">{{$index + 1}}</td>
+                        <td title="{{characteristics[$index].matterName}}" ng-bind="$index + 1" />
                         <td ng-repeat="comparisonValue in comparisonRaw track by $index"
-                            title="{{characteristics[$parent.$index].matterName}} &#13{{characteristics[$index].matterName}}">
-                            {{comparisonValue.toFixed(5)}}
-                        </td>
+                            title="{{characteristics[$parent.$index].matterName}} &#13{{characteristics[$index].matterName}}"
+                            ng-bind="comparisonValue.toFixed(5)" />
                     </tr>
                 </tbody>
             </table>
@@ -88,26 +93,34 @@
             <div class="form-group">
                 <label class="control-label col-md-2" for="firstCharacteristic">First characteristic:</label>
                 <div class="col-md-10">
-                    <select class="form-control" title="First characteristic" ng-model="firstCharacteristic" ng-options="c.Text for c in characteristicsList" id="firstCharacteristic"></select>
+                    <select class="form-control"
+                            title="First characteristic"
+                            ng-model="firstCharacteristic"
+                            ng-options="c.Text for c in ::characteristicsList"
+                            id="firstCharacteristic"></select>
                 </div>
             </div>
             <div class="form-group" ng-hide="lineChart">
                 <label class="control-label col-md-2" for="secondCharacteristic">Second characteristic:</label>
                 <div class="col-md-10">
-                    <select class="form-control" title="Second characteristic" ng-model="secondCharacteristic" ng-options="c.Text for c in characteristicsList" id="secondCharacteristic"></select>
+                    <select class="form-control"
+                            title="Second characteristic"
+                            ng-model="secondCharacteristic"
+                            ng-options="c.Text for c in ::characteristicsList"
+                            id="secondCharacteristic"></select>
                 </div>
             </div>
             <br />
             <div class="form-group">
                 <label class="control-label col-md-2" for="height">Height:</label>
                 <div class="col-md-10">
-                    <input class="form-control" name="height" id="height" type="number" min="{{500 + legendHeight}}" step="20" ng-model="height" />
+                    <input class="form-control" name="height" id="height" type="number" min="{{::500 + legendHeight}}" step="20" ng-model="height" />
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2" for="width">Width:</label>
                 <div class="col-md-10">
-                    <input class="form-control" name="width" id="width" type="number" min="{{400}}" step="20" ng-model="width" />
+                    <input class="form-control" name="width" id="width" type="number" min="400" step="20" ng-model="width" />
                 </div>
             </div>
             <br />

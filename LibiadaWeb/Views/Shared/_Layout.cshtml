@@ -45,15 +45,12 @@
                 if (AccountHelper.IsAdmin())
                 {
                     <div class="error-message">
-                        @Html.Raw(ViewBag.ErrorMessage.Replace(Environment.NewLine, "<br/><br/>"))
+                        @ViewBag.Error.Message
                     </div>
                     <br />
-                    if (ViewBag.StackTrace != null)
-                    {
-                        <div class="stack-trace">
-                            @Html.Raw(ViewBag.StackTrace.Replace(Environment.NewLine, "<br/><br/>"))
-                        </div>
-                    }
+                    <div class="stack-trace">
+                        @ViewBag.Error.StackTrace
+                    </div>
                 }
                 else
                 {

@@ -123,8 +123,9 @@ const main = async () => {
         const swRegistration = await navigator.serviceWorker.register("sw-push-notification.js");
         await initPush();
     }
-    catch {
+    catch (exception) {
         console.log("Service Worker Error");
+        console.log(exception);
     }
 };
 main();
