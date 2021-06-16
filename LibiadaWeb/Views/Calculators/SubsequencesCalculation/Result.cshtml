@@ -21,26 +21,34 @@
         <div class="form-group">
             <label class="control-label col-md-2" for="firstCharacteristic">First characteristic:</label>
             <div class="col-md-10">
-                <select class="form-control" title="First characteristic" ng-model="firstCharacteristic" ng-options="c.Text for c in subsequencesCharacteristicsList" id="firstCharacteristic"></select>
+                <select class="form-control"
+                        title="First characteristic"
+                        ng-model="firstCharacteristic"
+                        ng-options="c.Text for c in ::subsequencesCharacteristicsList"
+                        id="firstCharacteristic"></select>
             </div>
         </div>
         <div class="form-group" ng-hide="lineChart">
             <label class="control-label col-md-2" for="secondCharacteristic">Second characteristic:</label>
             <div class="col-md-10">
-                <select class="form-control" title="Second characteristic" ng-model="secondCharacteristic" ng-options="c.Text for c in subsequencesCharacteristicsList" id="secondCharacteristic"></select>
+                <select class="form-control"
+                        title="Second characteristic"
+                        ng-model="secondCharacteristic"
+                        ng-options="c.Text for c in ::subsequencesCharacteristicsList"
+                        id="secondCharacteristic"></select>
             </div>
         </div>
         <br />
         <div class="form-group">
             <label class="control-label col-md-2" for="height">Height:</label>
             <div class="col-md-10">
-                <input class="form-control" name="height" id="height" type="number" min="{{500 + legendHeight}}" step="20" ng-model="height" />
+                <input class="form-control" name="height" id="height" type="number" min="{{::500 + legendHeight}}" step="20" ng-model="height" />
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-md-2" for="width">Width:</label>
             <div class="col-md-10">
-                <input class="form-control" name="width" id="width" type="number" min="{{400}}" step="20" ng-model="width" />
+                <input class="form-control" name="width" id="width" type="number" min="400" step="20" ng-model="width" />
             </div>
         </div>
         <br />
@@ -54,26 +62,20 @@
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>
-                                Feature
-                            </th>
-                            <th>
-                                Subsequence attributes
-                            </th>
-                            <th>
-                                Subsequence position
-                            </th>
-                            <th ng-repeat="characteristicName in subsequencesCharacteristicsNames" ng-bind="characteristicName" />
+                            <th>Feature</th>
+                            <th>Subsequence attributes</th>
+                            <th>Subsequence position</th>
+                            <th ng-repeat="characteristicName in ::subsequencesCharacteristicsNames" ng-bind="::characteristicName" />
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="subsequenceData in sequenceData.SubsequencesData">
-                            <td ng-bind="features[subsequenceData.FeatureId]" />
+                        <tr ng-repeat="subsequenceData in ::sequenceData.SubsequencesData">
+                            <td ng-bind="::features[subsequenceData.FeatureId]" />
                             <td ng-bind-html="getAttributesText(subsequenceData.Attributes)" />
                             <td>
-                                <div ng-repeat="start in subsequenceData.Starts">Start: {{start}} Length:{{subsequenceData.Lengths[$index]}}</div>
+                                <div ng-repeat="start in ::subsequenceData.Starts">Start: {{::start}} Length:{{::subsequenceData.Lengths[$index]}}</div>
                             </td>
-                            <td ng-repeat="characteristicValue in subsequenceData.CharacteristicsValues" ng-bind="characteristicValue" />
+                            <td ng-repeat="characteristicValue in ::subsequenceData.CharacteristicsValues" ng-bind="::characteristicValue" />
                         </tr>
                     </tbody>
                 </table>

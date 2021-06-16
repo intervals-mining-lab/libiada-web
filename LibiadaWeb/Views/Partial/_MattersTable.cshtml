@@ -22,8 +22,7 @@
 <table ng-cloak class="table table-bordered table-hover">
     <thead>
         <tr>
-            <th>
-            </th>
+            <th></th>
             <th>
                 <input type="text"
                        class="form-control"
@@ -50,18 +49,10 @@
             </th>
         </tr>
         <tr>
-            <th>
-                #
-            </th>
-            <th>
-                @(Html.DisplayNameFor(model => model.Name))
-            </th>
-            <th>
-                @(Html.DisplayNameFor(model => model.Group))
-            </th>
-            <th>
-                @(Html.DisplayNameFor(model => model.SequenceType))
-            </th>
+            <th>#</th>
+            <th>@(Html.DisplayNameFor(model => model.Name))</th>
+            <th>@(Html.DisplayNameFor(model => model.Group))</th>
+            <th>@(Html.DisplayNameFor(model => model.SequenceType))</th>
         </tr>
     </thead>
     <tbody>
@@ -74,8 +65,7 @@
                            name="{{::$ctrl.mattersInputName}}"
                            ng-value="::matter.Value"
                            ng-change="$ctrl.matterSelectChange(matter)"
-                           ng-disabled="$ctrl.checkboxes && !matter.Selected && ($ctrl.selectedMatters >= $ctrl.maximumSelectedMatters)"/>
-
+                           ng-disabled="$ctrl.checkboxes && !matter.Selected && ($ctrl.selectedMatters >= $ctrl.maximumSelectedMatters)" />
                     {{::matter.Text}}
                 </label>
             </td>
