@@ -11,71 +11,40 @@
     <h4>Matter</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
+        <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+        <dd>@Html.DisplayFor(model => model.Name)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
+        <dt>@Html.DisplayNameFor(model => model.Description)</dt>
+        <dd>@Html.DisplayFor(model => model.Description)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
+        <dt>@Html.DisplayNameFor(model => model.Created)</dt>
+        <dd>@Html.DisplayFor(model => model.Created)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
+        <dt>@Html.DisplayNameFor(model => model.Modified)</dt>
+        <dd>@Html.DisplayFor(model => model.Modified)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Created)
-        </dt>
+        <dt>@Html.DisplayNameFor(model => model.Nature)</dt>
+        <dd>@Html.DisplayFor(model => model.Nature)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Created)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Modified)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Modified)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Nature)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Nature)
-        </dd>
-
-        <dt>
-            Sequences count
-        </dt>
-
-        <dd>
-            @ViewBag.SequencesCount
-        </dd>
-
+        <dt>Sequences count</dt>
+        <dd>@ViewBag.SequencesCount</dd>
     </dl>
 
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
 
-    <div class="form-actions no-color">
-        @if (ViewBag.SequencesCount > 0)
-        {
-           <p class="text-danger"> Sorry, matter with child sequences cannot be deleted</p>
-        }
-        else
-        {
-            <input type="submit" value="Delete" class="btn btn-default" />
-        }
-        <br />
-        @Html.ActionLink("Back to List", "Index")
-    </div>
+        <div class="form-actions no-color">
+            @if (ViewBag.SequencesCount > 0)
+            {
+                <p class="text-danger"> Sorry, matter with child sequences cannot be deleted</p>
+            }
+            else
+            {
+                <input type="submit" value="Delete" class="btn btn-default" />
+            }
+            <br />
+            @Html.ActionLink("Back to List", "Index")
+        </div>
     }
 </div>

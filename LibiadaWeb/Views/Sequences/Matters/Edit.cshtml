@@ -13,71 +13,78 @@
 {
     @Html.AntiForgeryToken()
 
-<div class="form-horizontal" ng-controller="MatterEditCtrl">
-    <h4>Matter</h4>
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @Html.HiddenFor(model => model.Id)
+    <div class="form-horizontal" ng-controller="MatterEditCtrl">
+        <h4>Matter</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
 
-    @if (AccountHelper.IsAdmin())
-    {
+        @if (AccountHelper.IsAdmin())
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.Nature, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <select class="form-control"
+                            ng-model="nature"
+                            ng-options="n.Value as n.Text for n in ::natures"
+                            ng-change="filterByNature()"></select>
+                    <input type="hidden" name="Nature" ng-value="nature" />
+                    @Html.ValidationMessageFor(model => model.Nature, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+        else
+        {
+            <div ng-hide="true" ng-init="filterByNature()"></div>
+            <input type="hidden" name="Nature" ng-value="nature" />
+        }
+
         <div class="form-group">
-            @Html.LabelFor(model => model.Nature, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <select class="form-control" ng-model="nature" ng-options="n.Value as n.Text for n in natures" ng-change="filterByNature()"></select>
-                <input type="hidden" name="Nature" ng-value="nature" />
-                @Html.ValidationMessageFor(model => model.Nature, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", ng_model = "name" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
         </div>
-    }
-    else
-    {
-        <div ng-hide="true" ng-init="filterByNature()"></div>
-        <input type="hidden" name="Nature" ng-value="nature" />
-    }
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", ng_model = "name" } })
-            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", ng_model = "description" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("Sequences count", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <p class="form-control-static" ng-bind="::matter.SequencesCount"></p>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Group, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select class="form-control"
+                        ng-options="g.Value as g.Text for g in groups | filter:{ Nature: nature }"
+                        ng-model="group"></select>
+                <input type="hidden" name="Group" ng-value="group" />
+                @Html.ValidationMessageFor(model => model.Group, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.SequenceType, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select class="form-control"
+                        ng-options="g.Value as g.Text for g in sequenceTypes | filter:{ Nature: nature }"
+                        ng-model="sequenceType"></select>
+                <input type="hidden" name="SequenceType" ng-value="sequenceType" />
+                @Html.ValidationMessageFor(model => model.SequenceType, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
         </div>
     </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.Description, new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", ng_model = "description" } })
-            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.Label("Sequences count", new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            <p class="form-control-static">{{matter.SequencesCount}}</p>
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.Group, new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            <select class="form-control" ng-model="group" ng-options="g.Value as g.Text for g in groups | filter:{ Nature: nature }"></select>
-            <input type="hidden" name="Group" ng-value="group" />
-            @Html.ValidationMessageFor(model => model.Group, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.SequenceType, new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            <select class="form-control" ng-model="sequenceType" ng-options="g.Value as g.Text for g in sequenceTypes | filter:{ Nature: nature }"></select>
-            <input type="hidden" name="SequenceType" ng-value="sequenceType" />
-            @Html.ValidationMessageFor(model => model.SequenceType, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Save" class="btn btn-default" />
-        </div>
-    </div>
-</div>
 }
 
 <div>

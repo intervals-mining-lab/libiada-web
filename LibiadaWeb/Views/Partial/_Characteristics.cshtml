@@ -61,7 +61,7 @@
                     <select class="form-control"
                             title="Language"
                             ng-model="characteristic.language"
-                            ng-options="l.Text for l in $ctrl.languages"
+                            ng-options="l.Text for l in ::$ctrl.languages"
                             id="language"></select>
                     <input type="hidden" name="languages" ng-value="characteristic.language.Value" />
                 </div>
@@ -72,7 +72,7 @@
                     <select class="form-control"
                             title="Translator"
                             ng-model="characteristic.translator"
-                            ng-options="t.Text for t in $ctrl.translators"
+                            ng-options="t.Text for t in ::$ctrl.translators"
                             id="translator"></select>
                     <input type="hidden" name="translators" ng-value="characteristic.translator.Value" />
                 </div>
@@ -87,14 +87,14 @@
                     <select class="form-control"
                             title="PauseTreatment"
                             ng-model="characteristic.pauseTreatment"
-                            ng-options="t.Text for t in $ctrl.pauseTreatments"
+                            ng-options="t.Text for t in ::$ctrl.pauseTreatments"
                             id="pauseTreatment"></select>
                     <input type="hidden" name="pauseTreatments" ng-value="characteristic.pauseTreatment.Value" />
                 </div>
             </div>
             <div class="col-md-offset-2 col-md-10">
                 <label>
-                    <input type="checkbox" name="sequentialTransfers" ng-model="sequentialTransfer" value="true" />
+                    <input type="checkbox" name="sequentialTransfers" ng-model="characteristic.sequentialTransfer" value="true" />
                     <input type="hidden" name="sequentialTransfers" value="false" />
                     Sequential transfer
                 </label>

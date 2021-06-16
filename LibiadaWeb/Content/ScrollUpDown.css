@@ -1,18 +1,18 @@
-﻿/* описание кнопки «Вверх» */
+﻿/* "Up" scroll button */
 #buttonScrollUp {
     height: 50%;
     top: 0px;
     text-align: center;
 }
 
-/* описание кнопки «Вниз» */
+/* "Down" scroll button */
 #buttonScrollDown {
     height: 50%;
     bottom: 0px;
     text-align: center;
 }
 
-/* описание столбца фонового цвета для обеих кнопок */
+/* scroll buttons panel */
 #scrollUpDown {
     position: fixed;
     height: 100%;

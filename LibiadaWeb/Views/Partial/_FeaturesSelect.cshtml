@@ -2,12 +2,17 @@
 
 <br />
 @Html.LabelFor(model => model.Feature, new { @class = "control-label col-md-2" })
-<div ng-repeat="feature in features">
+<div ng-repeat="feature in ::features">
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <label>
-                <input type="checkbox" name="features" ng-value="feature.Value" checked ng-model="feature.Selected" ng-change="filterByFeature(feature)" />
-                {{feature.Text}}
+                <input type="checkbox"
+                       name="features"
+                       checked
+                       ng-value="::feature.Value"
+                       ng-model="feature.Selected"
+                       ng-change="filterByFeature(feature)" />
+                {{::feature.Text}}
             </label>
         </div>
     </div>

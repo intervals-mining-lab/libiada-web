@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Intervals Characteristics Distribution";
 }
 @Scripts.Render("~/bundles/loadingWindow")
@@ -15,19 +14,23 @@
             <div class="form-group">
                 <label class="control-label col-md-2" for="characteristic">Characteristic:</label>
                 <div class="col-md-10">
-                    <select class="form-control" title="Characteristic" ng-model="characteristic" ng-options="c.Text for c in characteristicsList" id="characteristic"></select>
+                    <select class="form-control"
+                            title="Characteristic"
+                            ng-model="characteristic"
+                            ng-options="c.Text for c in ::characteristicsList"
+                            id="characteristic"></select>
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2" for="height">Height:</label>
                 <div class="col-md-10">
-                    <input class="form-control" name="height" id="height" type="number" min="{{500}}" step="20" ng-model="height" />
+                    <input class="form-control" name="height" id="height" type="number" min="500" step="20" ng-model="height" />
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2" for="width">Width:</label>
                 <div class="col-md-10">
-                    <input class="form-control" name="width" id="width" type="number" min="{{400}}" step="20" ng-model="width" />
+                    <input class="form-control" name="width" id="width" type="number" min="400" step="20" ng-model="width" />
                 </div>
             </div>
             <br />

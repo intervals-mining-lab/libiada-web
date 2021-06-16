@@ -20,18 +20,22 @@
                        nature="nature"
                        groups="groups"
                        sequence-types="sequenceTypes"
-                       maximum-selected-matters="maximumSelectedMatters"
+                       maximum-selected-matters="::maximumSelectedMatters"
                        selected-matters="selectedMatters">
         </matters-table>
-        <characteristics-without-notation characteristic-types="characteristicTypes"
-                                          characteristics-dictionary="characteristicsDictionary">
+        <characteristics-without-notation characteristic-types="::characteristicTypes"
+                                          characteristics-dictionary="::characteristicsDictionary">
         </characteristics-without-notation>
         @if (AccountHelper.IsAdmin())
         {
             <div class="form-group">
                 <label class="control-label col-md-2" for="notation">Notation:</label>
                 <div class="col-md-10">
-                    <select class="form-control" title="Notation" ng-model="notation" ng-options="n.Text for n in notations | filter:{ Nature: nature }" id="notation"></select>
+                    <select class="form-control"
+                            title="Notation"
+                            ng-model="notation"
+                            ng-options="n.Text for n in notations | filter:{ Nature: nature }"
+                            id="notation"></select>
                 </div>
             </div>
         }
@@ -43,14 +47,22 @@
                     <div class="form-group">
                         <label class="control-label col-md-2" for="language">Language:</label>
                         <div class="col-md-10">
-                            <select class="form-control" title="Language" ng-model="language" ng-options="l.Text for l in languages" id="language"></select>
+                            <select class="form-control"
+                                    title="Language"
+                                    ng-model="language"
+                                    ng-options="l.Text for l in ::languages"
+                                    id="language"></select>
                             <input type="hidden" name="language" ng-value="language.Value" />
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-2" for="translator">Translator:</label>
                         <div class="col-md-10">
-                            <select class="form-control" title="Translator" ng-model="translator" ng-options="t.Text for t in translators" id="translator"></select>
+                            <select class="form-control"
+                                    title="Translator"
+                                    ng-model="translator"
+                                    ng-options="t.Text for t in ::translators"
+                                    id="translator"></select>
                             <input type="hidden" name="translator" ng-value="translator.Value" />
                         </div>
                     </div>
@@ -64,7 +76,7 @@
                             <select class="form-control"
                                     title="PauseTreatment"
                                     ng-model="pauseTreatment"
-                                    ng-options="t.Text for t in pauseTreatments"
+                                    ng-options="t.Text for t in ::pauseTreatments"
                                     id="pauseTreatment"></select>
                             <input type="hidden" name="pauseTreatment" ng-value="pauseTreatment.Value" />
                         </div>
