@@ -123,20 +123,35 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-md-10">
-                                        <label>
-                                            <input type="checkbox" name="numericXAxis" ng-model="numericXAxis" ng-change="redrawGenesMap()" value="false" />
+                                        <input type="checkbox"
+                                               name="numericXAxis"
+                                               id="numericXAxis"
+                                               ng-model="numericXAxis"
+                                               ng-change="redrawGenesMap()"
+                                               value="false" />
+                                        <label for="numericXAxis">
                                             Numeric X axis
                                         </label>
                                     </div>
                                     <div class="col-md-10">
-                                        <label>
-                                            <input type="checkbox" name="LogX" ng-model="plotTypeX" ng-change="redrawGenesMap()" value="false" />
+                                        <input type="checkbox"
+                                               name="LogX"
+                                               id="LogX"
+                                               ng-model="plotTypeX"
+                                               ng-change="redrawGenesMap()"
+                                               value="false" />
+                                        <label for="LogX">
                                             Logarithmic scale for X axis
                                         </label>
                                     </div>
                                     <div class="col-md-10">
-                                        <label>
-                                            <input type="checkbox" name="LogY" ng-model="plotTypeY" ng-change="redrawGenesMap()" value="false" />
+                                        <input type="checkbox"
+                                               name="LogY"
+                                               id="LogY"
+                                               ng-model="plotTypeY"
+                                               ng-change="redrawGenesMap()"
+                                               value="false" />
+                                        <label for="LogY">
                                             Logarithmic scale for Y axis
                                         </label>
                                     </div>
@@ -146,8 +161,12 @@
                                 <br />
                                 <div class="form-group">
                                     <div class="col-md-10">
-                                        <label>
-                                            <input type="checkbox" name="highlight" ng-model="highlight" value="false" />
+                                        <input type="checkbox"
+                                               name="highlight"
+                                               id="highlight"
+                                               ng-model="highlight"
+                                               value="false" />
+                                        <label for="highlight">
                                             Highlight similar subsequences
                                         </label>
                                     </div>
@@ -159,11 +178,14 @@
                                                 <select class="form-control"
                                                         ng-model="characteristicComparer.characteristic"
                                                         ng-options="c.Text for c in ::subsequencesCharacteristicsList"
-                                                        id="characteristic" title="Characteristic"></select>
+                                                        id="characteristic"
+                                                        title="Characteristic"></select>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="col-md-10" for="precision">Precision of characteristic comparison:</label>
+                                            <label class="col-md-10" for="precision">
+                                                Precision of characteristic comparison:
+                                            </label>
                                             <div class="col-md-10">
                                                 <input class="form-control"
                                                        ng-model="characteristicComparer.precision"
@@ -188,7 +210,9 @@
                                     </div>
                                     <div class="form-group">
                                         <div class="col-md-10">
-                                            <button type="button" class="btn btn-success btn-sm" ng-click="addCharacteristicComparer()">
+                                            <button type="button"
+                                                    class="btn btn-success btn-sm"
+                                                    ng-click="addCharacteristicComparer()">
                                                 Add characteristic comparer
                                             </button>
                                         </div>
@@ -257,8 +281,11 @@
                                         Length:{{::tooltipElement.length}}
                                     </div>
                                     <div ng-show="tooltipElements.length > 1">
-                                        <label>
-                                            <input type="checkbox" name="selectSubsequenceForAlignment" ng-model="tooltipElement.selectedForAlignment" />
+                                        <input type="checkbox"
+                                               name="selectSubsequenceForAlignment"
+                                               id="selectSubsequenceForAlignment"
+                                               ng-model="tooltipElement.selectedForAlignment" />
+                                        <label for="selectSubsequenceForAlignment">
                                             Select sequence for alignment
                                         </label>
                                     </div>

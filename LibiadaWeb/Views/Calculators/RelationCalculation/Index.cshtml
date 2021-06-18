@@ -32,9 +32,9 @@
         </characteristic>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <label>
-                    <input type="checkbox" name="filter" ng-model="showFilters" value="true" />
-                    <input type="hidden" name="filter" value="false" />
+                <input type="checkbox" name="filter" id="filter" ng-model="showFilters" value="true" />
+                <input type="hidden" name="filter" value="false" />
+                <label for="filter">
                     Filtration
                 </label>
             </div>
@@ -49,9 +49,9 @@
             </div>
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="checkbox" name="frequencyFilter" ng-model="frequencyFilter" value="true" />
-                        <input type="hidden" name="frequencyFilter" value="false" />
+                    <input type="checkbox" name="frequencyFilter" id="frequencyFilter" ng-model="frequencyFilter" value="true" />
+                    <input type="hidden" name="frequencyFilter" value="false" />
+                    <label for="frequencyFilter">
                         Calculate only for X most frequent elements
                     </label>
                 </div>

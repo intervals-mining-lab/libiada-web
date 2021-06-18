@@ -1,34 +1,41 @@
 ﻿<div class="form-group">
     <div class="col-md-offset-2 col-md-10">
-        <label>
-            <input type="checkbox" name="localFile" ng-model="localFile" value="true" />
-            <input type="hidden" name="localFile" value="false" />
+        <input type="checkbox" name="localFile" id="localFile" ng-model="localFile" value="true" />
+        <input type="hidden" name="localFile" value="false" />
+        <label for="localFile">
             Load sequence from local file(s)
         </label>
     </div>
 </div>
 <div class="form-group" ng-show="localFile">
     <div class="col-md-offset-2 col-md-10">
-        <label>
-            <input type="radio" name="fileType" ng-model="fileType" value="genetic" selected />
+
+        <input type="radio"
+               name="fileType"
+               id="fileTypeGenetic"
+               ng-model="fileType"
+               ng-init="fileType = 'genetic'"
+               value="genetic"
+               checked />
+        <label for="fileTypeGenetic">
             FASTA file (contains genetic sequence)
         </label>
     </div>
     <div class="col-md-offset-2 col-md-10">
-        <label>
-            <input type="radio" name="fileType" ng-model="fileType" value="text" />
+        <input type="radio" name="fileType" id="fileTypeText" ng-model="fileType" value="text" />
+        <label for="fileTypeText">
             Text file (read by letters)
         </label>
     </div>
     <div class="col-md-offset-2 col-md-10">
-        <label>
-            <input type="radio" name="fileType" ng-model="fileType" value="image" />
+        <input type="radio" name="fileType" id="fileTypeImage" ng-model="fileType" value="image" />
+        <label for="fileTypeImage">
             Image file
         </label>
     </div>
     <div class="col-md-offset-2 col-md-10">
-        <label>
-            <input type="radio" name="fileType" ng-model="fileType" value="wavFile" />
+        <input type="radio" name="fileType" id="fileTypeWavFile" ng-model="fileType" value="wavFile" />
+        <label for="fileTypeWavFile">
             WAV file
         </label>
     </div>
@@ -50,14 +57,18 @@
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <button type="button" class="btn btn-danger" ng-click="deleteSequence(customSequence)" ng-disabled="customSequences.length <= 1">Delete sequence</button>
+                <button type="button" class="btn btn-danger" ng-click="deleteSequence(customSequence)" ng-disabled="customSequences.length <= 1">
+                    Delete sequence
+                </button>
             </div>
         </div>
         <br />
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <button type="button" class="btn btn-success" ng-init="addSequence()" ng-click="addSequence()">Add sequence</button>
+            <button type="button" class="btn btn-success" ng-init="addSequence()" ng-click="addSequence()">
+                Add sequence
+            </button>
         </div>
     </div>
 </div>
@@ -65,9 +76,9 @@
     <br />
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <label>
-                <input type="checkbox" name="toLower" ng-model="toLower" value="true" />
-                <input type="hidden" name="toLower" value="false" />
+            <input type="checkbox" name="toLower" id="toLower" ng-model="toLower" value="true" />
+            <input type="hidden" name="toLower" value="false" />
+            <label for="toLower">
                 Convert to lower case
             </label>
         </div>
@@ -75,14 +86,13 @@
     <br />
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <label>
-                <input type="checkbox" name="removePunctuation" ng-model="removePunctuation" value="true" />
-                <input type="hidden" name="removePunctuation" value="false" />
+            <input type="checkbox" name="removePunctuation" id="removePunctuation" ng-model="removePunctuation" value="true" />
+            <input type="hidden" name="removePunctuation" value="false" />
+            <label for="removePunctuation">
                 Remove punctuation
             </label>
         </div>
     </div>
-
     <hr />
     <br />
 </div>

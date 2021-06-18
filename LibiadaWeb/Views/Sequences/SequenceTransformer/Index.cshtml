@@ -20,19 +20,17 @@
                        maximum-selected-matters="::maximumSelectedMatters"
                        selected-matters="selectedMatters">
         </matters-table>
-        <label class="control-label col-md-2" for="transformType">Transform nucleotide sequences To:</label>
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <label>
-                    <input type="radio" name="transformType" value="toAmino" checked id="transformType" />
+            <label class="control-label col-md-3" for="transformType">Transform nucleotide sequences To:</label>
+            <div class="col-md-6">
+                <input type="radio" name="transformType" id="transformTypeAmino" value="toAmino" checked />
+                <label for="transformTypeAmino">
                     Amino
                 </label>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <label>
-                    <input type="radio" name="transformType" value="toTriplet" id="transformType" />
+            <div class="col-md-6">
+                <input type="radio" name="transformType" value="toTriplet" id="transformTypeTriplet" />
+                <label for="transformTypeTriplet">
                     Triplet
                 </label>
             </div>

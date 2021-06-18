@@ -30,18 +30,18 @@
             </div>
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <label>
                         <input type="radio" name="generateStrict" id="generateStrict" value="0" checked />
-                        Generate all possible orders with only given alphabet cardinality
-                    </label>
+                        <label for="generateStrict">
+                            Generate all possible orders with only given alphabet cardinality
+                        </label>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="radio" name="generateStrict" id="generateStrict" value="1" />
-                        Generate all possible orders with alphabet cardinality less or equal to given
-                    </label>
+                        <input type="radio" name="generateStrict" id="generateAll" value="1" />
+                        <label for="generateAll">
+                            Generate all possible orders with alphabet cardinality less or equal to given
+                        </label>
                 </div>
             </div>
             @Html.Partial("_MattersSubmit")
