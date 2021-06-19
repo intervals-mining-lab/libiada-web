@@ -8,37 +8,39 @@
     </div>
 </div>
 <div class="form-group" ng-show="localFile">
-    <div class="col-md-offset-2 col-md-10">
-
-        <input type="radio"
-               name="fileType"
-               id="fileTypeGenetic"
-               ng-model="fileType"
-               ng-init="fileType = 'genetic'"
-               value="genetic"
-               checked />
-        <label for="fileTypeGenetic">
-            FASTA file (contains genetic sequence)
-        </label>
-    </div>
-    <div class="col-md-offset-2 col-md-10">
-        <input type="radio" name="fileType" id="fileTypeText" ng-model="fileType" value="text" />
-        <label for="fileTypeText">
-            Text file (read by letters)
-        </label>
-    </div>
-    <div class="col-md-offset-2 col-md-10">
-        <input type="radio" name="fileType" id="fileTypeImage" ng-model="fileType" value="image" />
-        <label for="fileTypeImage">
-            Image file
-        </label>
-    </div>
-    <div class="col-md-offset-2 col-md-10">
-        <input type="radio" name="fileType" id="fileTypeWavFile" ng-model="fileType" value="wavFile" />
-        <label for="fileTypeWavFile">
-            WAV file
-        </label>
-    </div>
+    <fieldset>
+        <legend>File type:</legend>
+        <div class="col-md-offset-2 col-md-10">
+            <input type="radio"
+                   name="fileType"
+                   id="fileTypeGenetic"
+                   ng-model="fileType"
+                   ng-init="fileType = 'genetic'"
+                   value="genetic"
+                   checked />
+            <label for="fileTypeGenetic">
+                FASTA file (contains genetic sequence)
+            </label>
+        </div>
+        <div class="col-md-offset-2 col-md-10">
+            <input type="radio" name="fileType" id="fileTypeText" ng-model="fileType" value="text" />
+            <label for="fileTypeText">
+                Text file (read by letters)
+            </label>
+        </div>
+        <div class="col-md-offset-2 col-md-10">
+            <input type="radio" name="fileType" id="fileTypeImage" ng-model="fileType" value="image" />
+            <label for="fileTypeImage">
+                Image file
+            </label>
+        </div>
+        <div class="col-md-offset-2 col-md-10">
+            <input type="radio" name="fileType" id="fileTypeWavFile" ng-model="fileType" value="wavFile" />
+            <label for="fileTypeWavFile">
+                WAV file
+            </label>
+        </div>
+    </fieldset>
 </div>
 <div class="form-group" ng-show="localFile">
     <label class="control-label col-md-2" for="file">Sequence file(s):</label>

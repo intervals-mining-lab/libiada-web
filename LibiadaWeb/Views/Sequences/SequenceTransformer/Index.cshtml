@@ -20,8 +20,8 @@
                        maximum-selected-matters="::maximumSelectedMatters"
                        selected-matters="selectedMatters">
         </matters-table>
-        <div class="form-group">
-            <label class="control-label col-md-3" for="transformType">Transform nucleotide sequences To:</label>
+        <fieldset>
+            <legend>Transform nucleotide sequences to:</legend>
             <div class="col-md-6">
                 <input type="radio" name="transformType" id="transformTypeAmino" value="toAmino" checked />
                 <label for="transformTypeAmino">
@@ -34,7 +34,7 @@
                     Triplet
                 </label>
             </div>
-        </div>
+        </fieldset>
         <hr />
         @Html.Partial("_MattersSubmit")
     </div>
