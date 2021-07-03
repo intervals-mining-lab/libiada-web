@@ -223,10 +223,10 @@
             var yMinArray = [];
 
             legendData.forEach(function (data) {
-                xMinArray.push(d3.min(data.points, function (d) { return d.x; }));
-                xMaxArray.push(d3.max(data.points, function (d) { return d.x; }));
-                yMinArray.push(d3.min(data.points, function (d) { return d.value; }));
-                yMaxArray.push(d3.max(data.points, function (d) { return d.value; }));
+                xMinArray.push(d3.min(data.points, d => d.x));
+                xMaxArray.push(d3.max(data.points, d => d.x));
+                yMinArray.push(d3.min(data.points, d => d.value));
+                yMaxArray.push(d3.max(data.points, d => d.value));
             });
 
             // setup x
@@ -244,7 +244,7 @@
                 .tickPadding(10);
 
 
-            var xMap = function (d) { return xScale(d.x); };
+            var xMap = d => xScale(d.x);
 
             // setup y
             var yMin = d3.min(yMinArray);
@@ -259,10 +259,9 @@
                 .tickSizeOuter(0)
                 .tickPadding(10);
 
-            var yMap = function (d) { return yScale(d.value); };
+            var yMap = d => yScale(d.value);
 
             // setup fill color
-            var cValue = function (d) { return d.id; };
             var color = d3.scaleOrdinal(["red", "blue"]);
 
             // add the graph canvas to the body of the webpage
@@ -307,17 +306,15 @@
 
             legendData.forEach(function (data) {
                 // Nest the entries by symbol
-                var dataNest = d3.nest()
-                    .key(function (d) { return d.id })
-                    .entries(data.points);
+                var dataGroups = d3.group(data.points, d => d.id);
 
                 // Loop through each symbol / key
-                dataNest.forEach(function (d) {
+                dataGroups.forEach(function (value) {
                     svg.append("path")
-                        .datum(d.values)
+                        .datum(value)
                         .attr("class", "line")
                         .attr("d", line)
-                        .attr('stroke', function (d) { return color(cValue(d[0])); })
+                        .attr('stroke', d => color(d[0].id))
                         .attr('stroke-width', 1)
                         .attr('fill', 'none')
                         .attr("opacity", 0.6);
@@ -331,29 +328,27 @@
                 .append("g")
                 .attr("class", "legend")
                 .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; })
-                .on("click", function (d) {
+                .on("click", function (event, d) {
                     d.visible = !d.visible;
                     var legendEntry = d3.select(this);
                     legendEntry.select("text")
-                        .style("opacity", function () { return d.visible ? 1 : 0.5; });
+                        .style("opacity", () => d.visible ? 1 : 0.5);
                     legendEntry.select("rect")
-                        .style("fill-opacity", function () { return d.visible ? 1 : 0; });
+                        .style("fill-opacity", () => d.visible ? 1 : 0);
 
                     svg.selectAll(".line")
                         .filter(function (line) {
                             return line[0].id === d.id;
                         })
-                        .attr("visibility", function (line) {
-                            return d.visible ? "visible" : "hidden";
-                        });
+                        .attr("visibility", () => d.visible ? "visible" : "hidden");
                 });
 
             // draw legend's colored rectangles
             legend.append("rect")
                 .attr("width", 15)
                 .attr("height", 15)
-                .style("fill", function (d) { return color(d.id); })
-                .style("stroke", function (d) { return color(d.id); })
+                .style("fill", d => color(d.id))
+                .style("stroke", d => color(d.id))
                 .style("stroke-width", 4)
                 .attr("transform", "translate(0, -" + $scope.legendHeight + ")");
 
@@ -363,7 +358,7 @@
                 .attr("y", 9)
                 .attr("dy", ".35em")
                 .attr("transform", "translate(0, -" + $scope.legendHeight + ")")
-                .text(function (d) { return d.name; })
+                .text(d => d.name)
                 .style("font-size", "9pt");
         }
 

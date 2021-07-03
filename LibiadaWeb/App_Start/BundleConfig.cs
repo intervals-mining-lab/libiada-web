@@ -16,34 +16,30 @@
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-{version}.js"));
+                        "~/Libraries/jquery/jquery.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
-                        "~/Scripts/jquery.validate*"));
-
-            bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
-                        "~/Scripts/jquery-ui-{version}.js"));
-
-            bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
-                        "~/Scripts/modernizr-*"));
+                        "~/Libraries/jquery-validate/jquery.validate.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                        "~/Scripts/bootstrap.js",
-                        "~/Scripts/respond.js"));
+                        "~/Libraries/twitter-bootstrap/js/bootstrap.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/angularjs").Include(
                         "~/Scripts/Angular/functions.js",
-                        "~/Scripts/angular.js",
-                        "~/Scripts/smart-table.js"));
+                        "~/Libraries/angular.js/angular.js",
+                        "~/Libraries/angular-smart-table/smart-table.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/d3js").Include(
-                        "~/Scripts/d3/d3.js"));
+                        "~/Libraries/d3/d3.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/plotlyjs").Include(
-                        "~/Scripts/plotly/plotly.js"));
+                        "~/Libraries/plotly.js/plotly.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/alertify").Include(
-                        "~/Scripts/alertify.min.js"));
+                        "~/Libraries/AlertifyJS/alertify.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/midijs").Include(
+                        "~/Libraries/midi.js/lib/midi.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/AccordanceController").Include(
                         "~/Scripts/Angular/Controllers/accordance.js",
@@ -100,19 +96,6 @@
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/MusicFilesResultController").Include(
                         "~/Scripts/Angular/Controllers/musicFilesResult.js"));
-
-            bundles.Add(new ScriptBundle("~/bundles/midijs").Include(
-                        "~/Scripts/midijs/inc/shim/Base64.js",
-                        "~/Scripts/midijs/inc/shim/Base64binary.js",
-                        "~/Scripts/midijs/inc/shim/WebAudioAPI.js",
-                        "~/Scripts/midijs/js/midi/audioDetect.js",
-                        "~/Scripts/midijs/js/midi/gm.js",
-                        "~/Scripts/midijs/js/midi/loader.js",
-                        "~/Scripts/midijs/js/midi/plugin.audiotag.js",
-                        "~/Scripts/midijs/js/midi/plugin.webaudio.js",
-                        "~/Scripts/midijs/js/midi/plugin.webmidi.js",
-                        "~/Scripts/midijs/js/util/dom_request_xhr.js",
-                        "~/Scripts/midijs/js/util/dom_request_script.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/OrderCalculationController").Include(
                         "~/Scripts/Angular/Controllers/orderCalculation.js"));
@@ -181,7 +164,7 @@
 
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/TaskManagerController").Include(
-                        "~/Scripts/jquery.signalR-{version}.js",
+                        "~/Libraries/signalr.js/jquery.signalR.js",
                         "~/Scripts/Angular/Controllers/taskManager.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/scrollJumper").Include(
@@ -203,11 +186,11 @@
                        "~/Scripts/Angular/Components/orderTransformations.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                        "~/Content/bootstrap.css",
+                        "~/Libraries/twitter-bootstrap/css/bootstrap.css",
                         "~/Content/site.css",
                         "~/Content/scrollUpDown.css",
-                        "~/Content/alertify.min.css",
-                        "~/Content/themes/alertify-bootstrap.min.css"
+                        "~/Libraries/AlertifyJS/css/alertify.css",
+                        "~/Libraries/AlertifyJS/css/themes/bootstrap.css"
                         ));
 
             bundles.Add(new StyleBundle("~/Content/genesMap").Include(

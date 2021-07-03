@@ -64,7 +64,6 @@
 
         // initializes data for genes map
         function fillPoints() {
-            var id = 0;
             for (var i = 0; i < $scope.result.length; i++) {
                 var sequenceData = $scope.result[i];
                 $scope.matters.push({ id: sequenceData.MatterId, name: sequenceData.MatterName, visible: true, index: i, color: $scope.colorScale(i) });
@@ -94,7 +93,6 @@
                     };
                     $scope.points[i].push(point);
                     $scope.visiblePoints[i].push(point);
-                    id++;
                 }
             }
         }
@@ -262,7 +260,7 @@
                 }
             }
 
-
+            // connecting all similar dots with lines
             //                svg.append("line")
             //                    .attr("class", "similar-line")
             //                    .attr("x1", $scope.xMap(point))
@@ -528,6 +526,22 @@
                 });
         }
 
+        // calculates color for given matter index 
+        // using d3.interpolate and matters count
+        function colorScale(index) {
+
+            // upper limit of color range
+            var lastIndex = $scope.result.length;
+
+            // color are shifted for odd and even indexes
+            var colorCode = index / (2 * lastIndex);
+            if (index % 2 != 0) {
+                colorCode = colorCode + 0.5;
+            }
+
+            return d3.interpolateTurbo(colorCode);
+        }
+
         $scope.onInit = onInit;
         $scope.fillPoints = fillPoints;
         $scope.setCheckBoxesState = SetCheckBoxesState;
@@ -554,7 +568,7 @@
         $scope.alignAllWithClustal = alignAllWithClustal;
         $scope.alignSimilarWithClustal = alignSimilarWithClustal;
         $scope.alignSelectedWithClustal = alignSelectedWithClustal;
-        $scope.colorScale = d3.scaleOrdinal(d3.schemeCategory20);
+        $scope.colorScale = colorScale;
 
         $scope.onInit();
     }

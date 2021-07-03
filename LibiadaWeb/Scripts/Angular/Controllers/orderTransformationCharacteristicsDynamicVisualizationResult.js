@@ -5,14 +5,8 @@
 
         function fillLegend() {
             $scope.legend = [];
-            if ($scope.clustersCount) {
-                for (var j = 0; j < $scope.clustersCount; j++) {
-                    $scope.legend.push({ name: j + 1, visible: true });
-                }
-            } else {
-                for (var k = 0; k < $scope.characteristics.length; k++) {
-                    $scope.legend.push({ name: $scope.characteristics[k].matterName, visible: true });
-                }
+            for (var k = 0; k < $scope.characteristics.length; k++) {
+                $scope.legend.push({ id: k, name: $scope.characteristics[k].matterName, visible: true });
             }
         }
 
@@ -27,8 +21,7 @@
                         id: i,
                         name: $scope.characteristics[i].matterName,
                         x: j,
-                        y: characteristic[j],
-                        cluster: $scope.characteristics[i].matterName
+                        y: characteristic[j]
                     });
                 }
             }
@@ -39,13 +32,13 @@
         function fillPointTooltip(d) {
             var tooltipContent = [];
             tooltipContent.push("Name: " + d.name);
-            tooltipContent.push($scope.characteristicName + ": " +$scope.characteristics[d.id].characteristics[d.x]);
+            tooltipContent.push($scope.characteristicName + ": " + $scope.characteristics[d.id].characteristics[d.x]);
             tooltipContent.push($scope.transformationsList[d.x % $scope.transformationsList.length]);
             return tooltipContent.join("</br>");
         }
 
         // shows tooltip for dot or group of dots
-        function showTooltip(d, tooltip, newSelectedDot, svg) {
+        function showTooltip(event, d, tooltip, svg) {
             $scope.clearTooltip(tooltip);
 
             tooltip.style("opacity", 0.9);
@@ -71,8 +64,8 @@
                 .style("border-radius", "5px")
                 .style("font-family", "monospace")
                 .style("padding", "5px")
-                .style("left", (d3.event.pageX + 10) + "px")
-                .style("top", (d3.event.pageY - 8) + "px");
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 8) + "px");
 
             tooltip.hideTooltip = false;
         }
@@ -146,8 +139,7 @@
             $scope.yMap = function (d) { return yScale($scope.yValue(d)); };
 
             // setup fill color
-            var cValue = function (d) { return d.cluster; };
-            var color = d3.scaleOrdinal(d3.schemeCategory20);
+            var color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.legend.length]);
 
             // add the graph canvas to the body of the webpage
             var svg = d3.select("#chart").append("svg")
@@ -177,7 +169,7 @@
             svg.append("text")
                 .attr("class", "label")
                 .attr("transform",
-                "translate(" + (width / 2) + " ," + (height + margin.top - $scope.legendHeight) + ")")
+                    "translate(" + (width / 2) + " ," + (height + margin.top - $scope.legendHeight) + ")")
                 .style("text-anchor", "middle")
                 .text("Transformation number")
                 .style("font-size", "12pt");
@@ -208,9 +200,9 @@
                 .attr("cx", $scope.xMap)
                 .attr("cy", $scope.yMap)
                 .style("fill-opacity", 0.6)
-                .style("fill", function (d) { return color(cValue(d)); })
-                .style("stroke", function (d) { return color(cValue(d)); })
-                .on("click", function (d) { return $scope.showTooltip(d, tooltip, d3.select(this), svg); });
+                .style("fill", function (d) { return color(d.id); })
+                .style("stroke", function (d) { return color(d.id); })
+                .on("click", function (event, d) { return $scope.showTooltip(event, d, tooltip, svg); });
 
             // draw legend
             var legend = svg.selectAll(".legend")
@@ -219,8 +211,7 @@
                 .append("g")
                 .attr("class", "legend")
                 .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; })
-                .on("click",
-                function (d) {
+                .on("click", function (event, d) {
                     d.visible = !d.visible;
                     var legendEntry = d3.select(this);
                     legendEntry.select("text")
@@ -229,19 +220,19 @@
                         .style("fill-opacity", function () { return d.visible ? 1 : 0; });
 
                     svg.selectAll(".dot")
-                        .filter(function (dot) { return dot.cluster === d.name; })
+                        .filter(function (dot) { return dot.name === d.name; })
                         .attr("visibility",
-                        function (dot) {
-                            return d.visible ? "visible" : "hidden";
-                        });
+                            function (dot) {
+                                return d.visible ? "visible" : "hidden";
+                            });
                 });
 
             // draw legend colored rectangles
             legend.append("rect")
                 .attr("width", 15)
                 .attr("height", 15)
-                .style("fill", function (d) { return color(d.name); })
-                .style("stroke", function (d) { return color(d.name); })
+                .style("fill", function (d) { return color(d.id); })
+                .style("stroke", function (d) { return color(d.id); })
                 .style("stroke-width", 4)
                 .attr("transform", "translate(0, -" + $scope.legendHeight + ")");
 
@@ -251,7 +242,7 @@
                 .attr("y", 9)
                 .attr("dy", ".35em")
                 .attr("transform", "translate(0, -" + $scope.legendHeight + ")")
-                .text(function (d) { return ($scope.clustersCount ? "Cluster " : "") + d.name; })
+                .text(function (d) { return d.name; })
                 .style("font-size", "9pt");
         }
 
@@ -286,10 +277,10 @@
 
                 $scope.loading = false;
             },
-            function () {
-                alert("Failed loading characteristic data");
-                $scope.loading = false;
-            });
+                function () {
+                    alert("Failed loading characteristic data");
+                    $scope.loading = false;
+                });
     }
 
     angular.module("libiada").controller("OrderTransformationCharacteristicsDynamicVisualizationResultCtrl", ["$scope", "$http", orderTransformationCharacteristicsDynamicVisualizationResult]);

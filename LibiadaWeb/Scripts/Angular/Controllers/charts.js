@@ -62,7 +62,7 @@
                 .attr("cx", function (d) { return x(d.date); })
                 .attr("cy", function (d) { return y(d.close); })
                 // Tooltip stuff after this
-                .on("mouseover", function (d) {
+                .on("mouseover", function (event, d) {
                     div.transition()
                         .duration(700)
                         .style("opacity", 0);
@@ -73,8 +73,8 @@
                         "Name = " + (d.name) +
                         "<br/>x = " + (d.date) +
                         "<br/>y = " + d.close)
-                        .style("left", (d3.event.pageX) + "px")
-                        .style("top", (d3.event.pageY - 28) + "px");
+                        .style("left", (event.pageX) + "px")
+                        .style("top", (event.pageY - 28) + "px");
                 });
 
             // Add the X Axis

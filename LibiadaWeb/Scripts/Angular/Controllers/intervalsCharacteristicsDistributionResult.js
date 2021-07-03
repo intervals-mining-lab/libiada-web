@@ -9,7 +9,6 @@
             var index = 0;
             var chT = $scope.characteristic.Text.split("  ");
             var ch = +$scope.characteristic.Value;
-            console.log(ch);
             for (var i = 0; i < $scope.result.length; i++) {
                 if ($scope.result[i].link === chT[chT.length-1]) {
                 for (var j = 0; j < $scope.result[i].accordance.length; j++) {
@@ -44,7 +43,7 @@
         }
 
         // shows tooltip for dot or group of dots
-        function showTooltip(d, tooltip, newSelectedDot, svg) {
+        function showTooltip(event, d, tooltip, svg) {
             $scope.clearTooltip(tooltip);
 
             tooltip.style("opacity", 0.9);
@@ -85,8 +84,8 @@
                 .style("border-radius", "5px")
                 .style("font-family", "monospace")
                 .style("padding", "5px")
-                .style("left", (d3.event.pageX + 10) + "px")
-                .style("top", (d3.event.pageY - 8) + "px");
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 8) + "px");
 
             tooltip.hideTooltip = false;
         }
@@ -177,8 +176,7 @@
             $scope.yMap = function (d) { return yScale($scope.yValue(d)); };
 
             // setup fill color
-            var cValue = function (d) { return d.cluster; };
-            var color = d3.scaleOrdinal(d3.schemeCategory20);
+            var color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.points.length]);
 
             // add the graph canvas to the body of the webpage
             var svg = d3.select("#chart").append("svg")
@@ -240,12 +238,9 @@
                 .attr("cx", $scope.xMap)
                 .attr("cy", $scope.yMap)
                 .style("fill-opacity", 0.6)
-                .style("fill", function (d) { return color(cValue(d)); })
-                .style("stroke", function (d) { return color(cValue(d)); })
-                .on("click", function (d) { return $scope.showTooltip(d, tooltip, d3.select(this), svg); });
-
-            console.log($scope);
-            
+                .style("fill", function (d) { return color(d.id); })
+                .style("stroke", function (d) { return color(d.id); })
+                .on("click", function (event, d) { return $scope.showTooltip(event, d, tooltip, svg); });            
         }
 
         $scope.draw = draw;
@@ -261,24 +256,23 @@
         $scope.dotRadius = 4;
         $scope.selectedDotRadius = $scope.dotRadius * 2;
 
-		$scope.loadingScreenHeader = "Loading Data";
-		$scope.loading = true;
+        $scope.loadingScreenHeader = "Loading Data";
+        $scope.loading = true;
 
         var location = window.location.href.split("/");
         $scope.taskId = location[location.length - 1];
-		
+        
         $http.get(`/api/TaskManagerWebApi/${$scope.taskId}`)
             .then(function (data) {
                 MapModelFromJson($scope, JSON.parse(data.data));
-                console.log($scope);
-				$scope.loading = false;
+                $scope.loading = false;
                 
             }, function () {
                 alert("Failed loading sequences order distribution data");
-				$scope.loading = false;
+                $scope.loading = false;
             });
     }
 
     angular.module("libiada").controller("IntervalsCharacteristicsDistributionResultCtrl", ["$scope", "$http", intervalsCharacteristicsDistributionResult]);
-	
+    
 }
