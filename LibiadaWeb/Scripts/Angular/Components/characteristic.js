@@ -4,7 +4,7 @@
     function Characteristic(filterFilter) {
         var ctrl = this;
 
-        ctrl.$onInit = function () {
+        ctrl.$onInit = () => {
             ctrl.characteristicName = ctrl.characteristicName || "characteristicLinkId";
             ctrl.title = ctrl.title || "Characteristic";
 
@@ -18,13 +18,13 @@
             ctrl.characteristic.pauseTreatment = ctrl.pauseTreatments ? ctrl.pauseTreatments[0] : null;
         };
 
-        ctrl.$onChanges = function (changes) {
+        ctrl.$onChanges = changes => {
             if (changes.nature) {
                 ctrl.filterByNature();
             }
         };
 
-        ctrl.filterByNature = function () {
+        ctrl.filterByNature = () => {
             if (ctrl.characteristic) {
                 ctrl.characteristic.notation = filterFilter(ctrl.notations, { Nature: ctrl.nature })[0];
             }

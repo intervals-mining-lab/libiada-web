@@ -40,7 +40,7 @@
                     db.CharacteristicValue.AddRange(characteristics);
                     db.SaveChanges();
                 }
-                catch (Exception exception)
+                catch (Exception)
                 {
                     // todo: refactor and optimize all this
                     var characteristicsSequences = characteristics.Select(c => c.SequenceId).Distinct().ToArray();
@@ -55,7 +55,7 @@
                     {
                         db.SaveChanges();
                     }
-                    catch (Exception anotherException)
+                    catch (Exception)
                     {
                     }
                 }

@@ -7,7 +7,7 @@
         function fillLegend() {
             $scope.legend = [];
             for (var i = 1; i < $scope.transformationsList.length; i++) {
-                $scope.legend.push({ name: $scope.transformationsList[i].Text, visible: true });
+                $scope.legend.push({ id: i - 1, name: $scope.transformationsList[i].Text, visible: true });
             }
         }
 
@@ -17,11 +17,11 @@
             var ordersForChecking = [initialOrder];
             var transformationVisibility = [];
             for (var l = 0; l < $scope.legend.length; l++) {
-                transformationVisibility.push({ name: $scope.legend[l].name, visible: $scope.legend[l].visible });
+                transformationVisibility.push({ id: l, name: $scope.legend[l].name, visible: $scope.legend[l].visible });
             }
             $scope.points.push({
                 id: 0,
-                Value: initialOrder,
+                value: initialOrder,
                 x: 0,
                 y: initialOrder,
                 transformationVisibility: transformationVisibility
@@ -31,13 +31,15 @@
             while (ordersForChecking.length > 0) {
                 var newOrdersForChecking = [];
                 for (var i = 0; i < ordersForChecking.length; i++) {
-                    for (var j = 0; j < $scope.transformationsData[ordersForChecking[i]].ResultTransformation.length; j++) {
-                        if ($scope.transformationType.Text === "All" ||
-                            $scope.transformationsData[ordersForChecking[i]].ResultTransformation[j].Transformation === $scope.transformationType.Text) {
+                    var resultTransformations = $scope.transformationsData[ordersForChecking[i]].ResultTransformation;
+                    for (var j = 0; j < resultTransformations.length; j++) {
+                        var resultTransformation = resultTransformations[j];
+                        if ($scope.transformationType.Text === "All" || resultTransformation.Transformation === $scope.transformationType.Text) {
                             var pointExist = false;
+                            var orderId = resultTransformation.OrderId;
                             for (var k = 0; k < $scope.points.length; k++) {
                                 if ($scope.points[k].x === $scope.counterIteration &&
-                                    $scope.points[k].y === $scope.transformationsData[ordersForChecking[i]].ResultTransformation[j].OrderId) {
+                                    $scope.points[k].y === orderId) {
                                     pointExist = true;
                                     break;
                                 }
@@ -45,18 +47,15 @@
                             if (!pointExist) {
                                 $scope.points.push({
                                     id: counterIdPoints++,
-                                    Value: $scope.transformationsData[ordersForChecking[i]].ResultTransformation[j].OrderId,
+                                    value: orderId,
                                     x: $scope.counterIteration,
-                                    y: $scope.transformationsData[ordersForChecking[i]].ResultTransformation[j].OrderId,
+                                    y: orderId,
                                     transformationVisibility: transformationVisibility
                                 });
                             }
-                            if (checkedOrders.indexOf(
-                                $scope.transformationsData[ordersForChecking[i]].ResultTransformation[j].OrderId) === -1) {
-                                checkedOrders.push(
-                                    $scope.transformationsData[ordersForChecking[i]].ResultTransformation[j].OrderId);
-                                newOrdersForChecking.push(
-                                    $scope.transformationsData[ordersForChecking[i]].ResultTransformation[j].OrderId);
+                            if (checkedOrders.indexOf(orderId) === -1) {
+                                checkedOrders.push(orderId);
+                                newOrdersForChecking.push(orderId);
                             }
                         }
                     }
@@ -69,93 +68,85 @@
         function fillLines() {
             var counterIdLines = 0;
             for (var i = 0; i < $scope.points.length; i++) {
-                var transformationsExist = false;
-                for (var l = 0; l < $scope.lines.length; l++) {
-                    if ($scope.lines[l].startOrderId === $scope.points[i].Value &&
-                        $scope.lines[l].x1 < $scope.points[i].x) {
-                        transformationsExist = true;
-                    }
-                }
-                if (!transformationsExist) {
-                    for (var j = 0;
-                        j < $scope.transformationsData[$scope.points[i].Value].ResultTransformation.length;
-                        j++) {
-                        var transformationType =
-                            $scope.transformationsData[$scope.points[i].Value].ResultTransformation[j].Transformation;
-                        if ($scope.transformationType.Text === "All" ||
-                            transformationType === $scope.transformationType.Text) {
-                            var childOrder = $scope.transformationsData[$scope.points[i].Value].ResultTransformation[j]
-                                .OrderId;
-                            var line = {
-                                x1: $scope.points[i].x,
-                                y1: $scope.points[i].y,
-                                x2: $scope.points[i].x + 1,
-                                y2: childOrder,
-                                Value: transformationType,
-                                startOrderId: $scope.points[i].Value
-                            };
-                            var orderExist = false;
-                            for (var k = 0; k < $scope.points.length; k++) {
-                                if ($scope.points[k].x === $scope.points[i].x + 1 &&
-                                    $scope.points[k].y === childOrder) {
-                                    orderExist = true;
+                var resultTransformation = $scope.transformationsData[$scope.points[i].value].ResultTransformation;
+                for (var j = 0; j < resultTransformation.length; j++) {
+                    var transformationType = resultTransformation[j].Transformation;
+                    if ($scope.transformationType.Text === "All" || transformationType === $scope.transformationType.Text) {
+                        var colorId = $scope.legend.find(d => d.name === transformationType).id;
+                        var childOrder = resultTransformation[j].OrderId;
+                        var line = {
+                            x1: $scope.points[i].x,
+                            y1: $scope.points[i].y,
+                            x2: $scope.points[i].x + 1,
+                            y2: childOrder,
+                            value: transformationType,
+                            startOrderId: $scope.points[i].value,
+                            colorId: colorId
+                        };
+                        var orderExist = false;
+                        for (var k = 0; k < $scope.points.length; k++) {
+                            if ($scope.points[k].x === $scope.points[i].x + 1 &&
+                                $scope.points[k].y === childOrder) {
+                                orderExist = true;
+                                break;
+                            }
+                        }
+                        if (orderExist) {
+                            var lineExist = false;
+                            var lineIterator = 0;
+                            for (var m = 0; m < $scope.lines.length; m++) {
+                                if ($scope.lines[m].x1 === line.x1 &&
+                                    $scope.lines[m].y1 === line.y1 &&
+                                    $scope.lines[m].x2 === line.x2 &&
+                                    $scope.lines[m].y2 === line.y2) {
+                                    lineExist = true;
+                                    lineIterator = ++$scope.lines[m].iterator;
                                     break;
                                 }
                             }
-                            if (orderExist) {
-                                var lineExist = false;
-                                var lineIterator = 0;
-                                for (var m = 0; m < $scope.lines.length; m++) {
-                                    if ($scope.lines[m].x1 === line.x1 &&
-                                        $scope.lines[m].y1 === line.y1 &&
-                                        $scope.lines[m].x2 === line.x2 &&
-                                        $scope.lines[m].y2 === line.y2) {
-                                        lineExist = true;
-                                        lineIterator = ++$scope.lines[m].iterator;
-                                        break;
-                                    }
-                                }
-                                if (lineExist) {
-                                    var cyline = (line.y1 + line.y2) / 2.0;
-                                    var cxline = (line.x1 + line.x2) / 2.0;
-                                    var yAmplitude = line.y2 - line.y1;
-                                    var shifty = 0.2 * lineIterator;
-                                    var shiftx = 0.05 * lineIterator * Math.abs(yAmplitude) / $scope.ordersIds.length;
-                                    $scope.lines.push({
-                                        id: counterIdLines++,
-                                        Value: line.Value,
-                                        arrowType: -1,
-                                        iterator: 0,
-                                        x1: line.x1,
-                                        y1: line.y1,
-                                        x2: cxline + shiftx,
-                                        y2: cyline + shifty,
-                                        startOrderId: line.startOrderId
-                                    });
-                                    $scope.lines.push({
-                                        id: counterIdLines++,
-                                        Value: line.Value,
-                                        arrowType: j,
-                                        iterator: 0,
-                                        x1: cxline + shiftx,
-                                        y1: cyline + shifty,
-                                        x2: line.x2,
-                                        y2: line.y2,
-                                        startOrderId: line.startOrderId
-                                    });
-                                } else {
-                                    $scope.lines.push({
-                                        id: counterIdLines++,
-                                        Value: line.Value,
-                                        arrowType: j,
-                                        iterator: 0,
-                                        x1: line.x1,
-                                        y1: line.y1,
-                                        x2: line.x2,
-                                        y2: line.y2,
-                                        startOrderId: line.startOrderId
-                                    });
-                                }
+                            if (lineExist) {
+                                var cyline = (line.y1 + line.y2) / 2.0;
+                                var cxline = (line.x1 + line.x2) / 2.0;
+                                var yAmplitude = line.y2 - line.y1;
+                                var shifty = 0.2 * lineIterator;
+                                var shiftx = 0.05 * lineIterator * Math.abs(yAmplitude) / $scope.ordersIds.length;
+                                $scope.lines.push({
+                                    id: counterIdLines++,
+                                    value: line.value,
+                                    arrowType: -1,
+                                    iterator: 0,
+                                    x1: line.x1,
+                                    y1: line.y1,
+                                    x2: cxline + shiftx,
+                                    y2: cyline + shifty,
+                                    startOrderId: line.startOrderId,
+                                    colorId: line.colorId
+                                });
+                                $scope.lines.push({
+                                    id: counterIdLines++,
+                                    value: line.value,
+                                    arrowType: j,
+                                    iterator: 0,
+                                    x1: cxline + shiftx,
+                                    y1: cyline + shifty,
+                                    x2: line.x2,
+                                    y2: line.y2,
+                                    startOrderId: line.startOrderId,
+                                    colorId: line.colorId
+                                });
+                            } else {
+                                $scope.lines.push({
+                                    id: counterIdLines++,
+                                    value: line.value,
+                                    arrowType: j,
+                                    iterator: 0,
+                                    x1: line.x1,
+                                    y1: line.y1,
+                                    x2: line.x2,
+                                    y2: line.y2,
+                                    startOrderId: line.startOrderId,
+                                    colorId: line.colorId
+                                });
                             }
                         }
                     }
@@ -174,13 +165,13 @@
         // constructs string representing tooltip text (inner html)
         function fillPointTooltip(d) {
             var tooltipContent = [];
-            tooltipContent.push("Order ID: " + d.Value);
-            tooltipContent.push("Order: " + $scope.orders[d.Value]);
+            tooltipContent.push("Order ID: " + d.value);
+            tooltipContent.push("Order: " + $scope.orders[d.value]);
             return tooltipContent.join("</br>");
         }
 
         // shows tooltip for dot or group of dots
-        function showTooltip(d, tooltip, newSelectedDot, svg) {
+        function showTooltip(event, d, tooltip, svg) {
             $scope.clearTooltip(tooltip);
             var color = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -189,14 +180,14 @@
             var tooltipHtml = [];
 
             tooltip.selectedDots = svg.selectAll(".dot")
-                .filter(function (dot) {
-                    if (dot.x === d.x && dot.y === d.y) {
-                        tooltipHtml.push($scope.fillPointTooltip(dot));
-                        return true;
-                    } else {
-                        return false;
-                    }
-                })
+                .filter(dot => {
+                        if (dot.x === d.x && dot.y === d.y) {
+                            tooltipHtml.push($scope.fillPointTooltip(dot));
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    })
                 .attr("rx", $scope.selectedDotRadius)
                 .attr("ry", $scope.selectedDotRadius);
 
@@ -212,24 +203,20 @@
                 .enter()
                 .append("g")
                 .attr("class", "dotlegend")
-                .attr("transform", function (vt, i) { return "translate(0," + i * 20 + ")"; })
+                .attr("transform", (vt, i) => "translate(0," + i * 20 + ")")
                 .append("rect")
                 .attr("width", 15)
                 .attr("height", 15)
-                .style("fill", function (vt) { return color(vt.name); })
-                .style("stroke", function (vt) { return color(vt.name); })
+                .style("fill", vt => color(vt.name))
+                .style("stroke", vt => color(vt.name))
                 .style("stroke-width", 4)
-                .style("fill-opacity", function (vt) { return vt.visible ? 1 : 0; })
-                .on("click", function (vt) {
+                .style("fill-opacity", vt => vt.visible ? 1 : 0)
+                .on("click", function (_event, vt) {
                     vt.visible = !vt.visible;
-                    d3.select(this).style("fill-opacity", function () { return vt.visible ? 1 : 0; });
+                    d3.select(this).style("fill-opacity", () => vt.visible ? 1 : 0);
                     svg.selectAll(".transform-line")
-                        .filter(function (line) {
-                            return line.startOrderId === d.Value && line.Value === vt.name;
-                        })
-                        .attr("visibility", function (line) {
-                            return vt.visible ? "visible" : "hidden";
-                        });
+                        .filter(line => line.startOrderId === d.value && line.value === vt.name)
+                        .attr("visibility", () => vt.visible ? "visible" : "hidden");
                 });
 
 
@@ -238,8 +225,8 @@
                 .style("border-radius", "5px")
                 .style("font-family", "monospace")
                 .style("padding", "5px")
-                .style("left", (d3.event.pageX + 10) + "px")
-                .style("top", (d3.event.pageY - 8) + "px");
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 8) + "px");
 
             tooltip.hideTooltip = false;
         }
@@ -295,7 +282,7 @@
                 .tickSizeOuter(0)
                 .tickPadding(10);
 
-            $scope.xMap = function (d) { return xScale($scope.xValue(d)); };
+            $scope.xMap = d => xScale($scope.xValue(d));
 
             // setup y
             // calculating margins for dots
@@ -314,11 +301,10 @@
                 .tickSizeOuter(0)
                 .tickPadding(10);
 
-            $scope.yMap = function (d) { return yScale($scope.yValue(d)); };
+            $scope.yMap = d => yScale($scope.yValue(d));
 
             // setup fill color
-            var cValue = function (d) { return d.Value; };
-            var color = d3.scaleOrdinal(d3.schemeCategory10);
+            var color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.legend.length]);
 
             // add the graph canvas to the body of the webpage
             var svg = d3.select("#chart").append("svg")
@@ -342,8 +328,8 @@
                     .attr("orient", "auto")
                     .append("path")
                     .attr("d", "M0,-5L10,0L0,5")
-                    .attr("stroke", color($scope.legend[i].name))
-                    .attr("fill", color($scope.legend[i].name));
+                    .attr("stroke", color($scope.legend[i].id))
+                    .attr("fill", color($scope.legend[i].id));
             }
 
             // add the tooltip area to the webpage
@@ -352,10 +338,10 @@
                 .style("opacity", 0);
 
             // preventing tooltip hiding if dot clicked
-            tooltip.on("click", function () { tooltip.hideTooltip = false; });
+            tooltip.on("click", () => { tooltip.hideTooltip = false; });
 
             // hiding tooltip
-            d3.select("#chart").on("click", function () { $scope.clearTooltip(tooltip); });
+            d3.select("#chart").on("click", () => { $scope.clearTooltip(tooltip); });
 
             // x-axis
             g.append("g")
@@ -391,12 +377,12 @@
                 .enter()
                 .append("line")
                 .attr("class", "transform-line")
-                .attr("x1", function (d) { return xScale(d.x1); })
-                .attr("y1", function (d) { return yScale(d.y1); })
-                .attr("x2", function (d) { return xScale(d.x2); })
-                .attr("y2", function (d) { return yScale(d.y2); })
-                .attr("marker-end", function (d) { return "url(#arrow" + d.arrowType + ")"; })
-                .style("stroke", function (d) { return color(d.Value); })
+                .attr("x1", d => xScale(d.x1))
+                .attr("y1", d => yScale(d.y1))
+                .attr("x2", d => xScale(d.x2))
+                .attr("y2", d => yScale(d.y2))
+                .attr("marker-end", d => "url(#arrow" + d.arrowType + ")")
+                .style("stroke", d => color(d.colorId))
                 .style("stroke-width", "2")
                 .attr("visibility", "visible");
 
@@ -406,20 +392,21 @@
                 .enter()
                 .append("g")
                 .attr("class", "legend")
-                .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; })
-                .on("click", function (d) {
+                .attr("transform", (d, i) => "translate(0," + i * 20 + ")")
+                .on("click", function (_event, d) {
                     d.visible = !d.visible;
                     var legendEntry = d3.select(this);
+
                     legendEntry.select("text")
-                        .style("opacity", function () { return d.visible ? 1 : 0.5; });
+                        .style("opacity", () => d.visible ? 1 : 0.5);
+
                     legendEntry.select("rect")
-                        .style("fill-opacity", function () { return d.visible ? 1 : 0; });
+                        .style("fill-opacity", () => d.visible ? 1 : 0);
 
                     svg.selectAll(".transform-line")
-                        .filter(function (line) { return line.Value === d.name; })
-                        .attr("visibility", function (line) {
-                            return d.visible ? "visible" : "hidden";
-                        });
+                        .filter(line => line.value === d.name)
+                        .attr("visibility", () => d.visible ? "visible" : "hidden");
+
                     for (var k = 0; k < $scope.points.length; k++) {
                         for (var j = 0; j < $scope.legend.length; j++) {
                             if ($scope.points[k].transformationVisibility[j].name === d.name) {
@@ -442,14 +429,14 @@
                 .style("fill-opacity", 0.6)
                 .style("fill", "black")
                 .style("stroke", "black")
-                .on("click", function (d) { return $scope.showTooltip(d, tooltip, d3.select(this), g); });
+                .on("click", (event, d) => $scope.showTooltip(event, d, tooltip, g));
 
             // draw legend colored rectangles
             legend.append("rect")
                 .attr("width", 15)
                 .attr("height", 15)
-                .style("fill", function (d) { return color(d.name); })
-                .style("stroke", function (d) { return color(d.name); })
+                .style("fill", d => color(d.id))
+                .style("stroke", d => color(d.id))
                 .style("stroke-width", 4)
                 .attr("transform", "translate(0, -" + $scope.legendHeight + ")");
 
@@ -459,7 +446,7 @@
                 .attr("y", 9)
                 .attr("dy", ".35em")
                 .attr("transform", "translate(0, -" + $scope.legendHeight + ")")
-                .text(function (d) { return d.name; })
+                .text(d => d.name)
                 .style("font-size", "9pt");
         }
 
@@ -507,5 +494,4 @@
     }
 
     angular.module("libiada").controller("OrderTransformationVisualizationResultCtrl", ["$scope", "$http", orderTransformationVisualizationResult]);
-
 }

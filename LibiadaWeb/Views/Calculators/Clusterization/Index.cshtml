@@ -44,7 +44,10 @@
         <div class="form-group">
             <label class="control-label col-md-2" for="ClusterizationType">Clusterization type:</label>
             <div class="col-md-10">
-                <select class="form-control" ng-model="ClusterizationType" ng-options="n.Text for n in ::ClusterizatorsTypes"></select>
+                <select class="form-control" 
+                        id="ClusterizationType" 
+                        ng-model="ClusterizationType" 
+                        ng-options="n.Text for n in ::ClusterizatorsTypes"></select>
                 <input type="hidden" name="ClusterizationType" ng-value="ClusterizationType.Value" />
             </div>
         </div>

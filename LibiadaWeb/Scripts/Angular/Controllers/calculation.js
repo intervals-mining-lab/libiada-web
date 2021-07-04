@@ -9,7 +9,7 @@
                 var notation = filterFilter($scope.notations, { Nature: $scope.nature })[0];
                 $scope.notation = notation;
                 // if notation is not linked to characteristic
-                angular.forEach($scope.characteristics, function (characteristic) {
+                angular.forEach($scope.characteristics, characteristic => {
                     characteristic.notation = notation;
                 });
             }

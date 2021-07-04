@@ -4,19 +4,26 @@
         <div class="form-group">
             <label class="control-label col-md-2" for="transformer">Transformer:</label>
             <div class="col-md-10">
-                <select class="form-control" ng-model="transformer.value" ng-options="s.Value as s.Text for s in ::imageTransformers" id="transformer"></select>
+                <select class="form-control"
+                        ng-model="transformer.value"
+                        ng-options="s.Value as s.Text for s in ::imageTransformers"
+                        id="transformer"></select>
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <button type="button" class="btn btn-danger" ng-click="deleteImageTransformation(transformer)">Delete characteristic</button>
+                <button type="button" class="btn btn-danger" ng-click="deleteImageTransformation(transformer)">
+                    Delete characteristic
+                </button>
             </div>
         </div>
         <br />
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <button type="button" class="btn btn-success" ng-click="addImageTransformation()">Add image tranformation</button>
+            <button type="button" class="btn btn-success" ng-click="addImageTransformation()">
+                Add image tranformation
+            </button>
         </div>
     </div>
     <hr />

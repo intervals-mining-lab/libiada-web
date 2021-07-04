@@ -3,10 +3,10 @@
         <div class="form-group">
             <label class="control-label col-md-2" for="language">Language:</label>
             <div class="col-md-10">
-                <select class="form-control" 
-                        title="Language" 
-                        ng-model="characteristic.language" 
-                        ng-options="l.Text for l in ::languages" 
+                <select class="form-control"
+                        title="Language"
+                        ng-model="characteristic.language"
+                        ng-options="l.Text for l in ::languages"
                         id="language"></select>
                 <input type="hidden" name="language" ng-value="characteristic.language.Value" />
             </div>
@@ -14,10 +14,10 @@
         <div class="form-group">
             <label class="control-label col-md-2" for="translator">Translator:</label>
             <div class="col-md-10">
-                <select class="form-control" 
-                        title="Translator" 
-                        ng-model="characteristic.translator" 
-                        ng-options="t.Text for t in ::translators" 
+                <select class="form-control"
+                        title="Translator"
+                        ng-model="characteristic.translator"
+                        ng-options="t.Text for t in ::translators"
                         id="translator"></select>
                 <input type="hidden" name="translator" ng-value="characteristic.translator.Value" />
             </div>
@@ -38,9 +38,13 @@
             </div>
         </div>
         <div class="col-md-offset-2 col-md-10">
-            <label>
-                <input type="checkbox" name="sequentialTransfer" ng-model="sequentialTransfer" value="true" />
-                <input type="hidden" name="sequentialTransfer" value="false" />
+            <input type="checkbox"
+                   name="sequentialTransfer"
+                   id="sequentialTransfer"
+                   ng-model="sequentialTransfer"
+                   value="true" />
+            <input type="hidden" name="sequentialTransfer" value="false" />
+            <label for="sequentialTransfer">
                 Sequential transfer
             </label>
         </div>

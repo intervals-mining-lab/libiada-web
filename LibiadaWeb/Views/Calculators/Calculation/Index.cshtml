@@ -37,16 +37,16 @@
         {
             <div class="form-group" ng-if="nature==@((byte)Nature.Genetic)">
                 <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="checkbox" name="complementary" value="true" ng-model="complementary" />
+                    <input type="checkbox" name="complementary" id="complementary" value="true" ng-model="complementary" />
+                    <label for="complementary">
                         Calculate characteristic for complementary sequence
                     </label>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="checkbox" name="rotate" value="true" ng-model="rotate" />
+                    <input type="checkbox" name="rotate" id="rotate" value="true" ng-model="rotate" />
+                    <label for="rotate">
                         Rotate sequences cyclically
                     </label>
                 </div>

@@ -1,0 +1,47 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "angular.js@1.8.2",
+      "destination": "Libraries/angular.js/"
+    },
+    {
+      "library": "jquery@3.6.0",
+      "destination": "Libraries/jquery/"
+    },
+    {
+      "library": "jquery-validate@1.19.3",
+      "destination": "Libraries/jquery-validate/"
+    },
+    {
+      "library": "AlertifyJS@1.13.1",
+      "destination": "Libraries/AlertifyJS/"
+    },
+    {
+      "provider": "unpkg",
+      "library": "midi.js@0.3.1",
+      "destination": "Libraries/midi.js/"
+    },
+    {
+      "library": "plotly.js@2.1.0",
+      "destination": "Libraries/plotly.js/"
+    },
+    {
+      "library": "angular-smart-table@2.1.11",
+      "destination": "Libraries/angular-smart-table/"
+    },
+    {
+      "library": "d3@7.0.0",
+      "destination": "Libraries/d3/"
+    },
+    {
+      "library": "signalr.js@2.4.2",
+      "destination": "Libraries/signalr.js/"
+    },
+    {
+      "library": "twitter-bootstrap@3.3.7",
+      "destination": "Libraries/twitter-bootstrap/"
+    }
+  ]
+}
