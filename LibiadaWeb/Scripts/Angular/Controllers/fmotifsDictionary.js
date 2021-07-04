@@ -11,10 +11,10 @@
             MIDI.loadPlugin({
                 soundfontUrl: "../../Scripts/midijs/soundfont/",
                 instrument: "acoustic_grand_piano",
-                onprogress: function (state, progress) {
+                onprogress: (state, progress) => {
                     console.log(state, progress);
                 },
-                onsuccess: function () {
+                onsuccess: () => {
                     //MIDI.programChange(0, MIDI.GM.byName["acoustic_guitar_steel"].program);
                 }
             });
@@ -109,7 +109,7 @@
         };
 
         // plays Fmotifs with animation
-        $scope.play = function (event) {
+        $scope.play = event => {
             MIDI.setVolume(0, 80);
             player.timeline = 0;
             var notes = $scope.data.fmotifs[event].NoteList;

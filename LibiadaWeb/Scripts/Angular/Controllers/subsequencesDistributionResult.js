@@ -24,7 +24,7 @@
             $('[data-toggle="tooltip"]').tooltip();
 
             // preventing scroll in key up and key down
-            window.addEventListener("keydown", function (e) {
+            window.addEventListener("keydown", e => {
                 if ($scope.isKeyUpOrDown(e.keyCode)) {
                     e.preventDefault();
                     $scope.keyUpDownPress(e.keyCode);
@@ -38,15 +38,14 @@
             $scope.taskId = location[location.length - 1];
 
             $http.get(`/api/TaskManagerWebApi/${$scope.taskId}`)
-                .then(function (data) {
+                .then((data) => {
                     MapModelFromJson($scope, JSON.parse(data.data));
                     $scope.plot = document.getElementById("chart");
                     $scope.subsequenceCharacteristic = $scope.subsequencesCharacteristicsList[0];
 
                     $scope.fillPoints();
 
-                    var comparer = (first, second) =>
-                        first.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value] - second.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value];
+                    var comparer = (first, second) => first.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value] - second.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value];
 
                     $scope.points = $scope.points.map(points => points.sort(comparer));
                     $scope.visiblePoints = $scope.visiblePoints.map(points => points.sort(comparer));
@@ -55,7 +54,7 @@
 
                     $scope.redrawGenesMap();
                     $scope.loading = false;
-                }, function () {
+                }, () => {
                     alert("Failed loading genes map data");
 
                     $scope.loading = false;
@@ -64,7 +63,6 @@
 
         // initializes data for genes map
         function fillPoints() {
-            var id = 0;
             for (var i = 0; i < $scope.result.length; i++) {
                 var sequenceData = $scope.result[i];
                 $scope.matters.push({ id: sequenceData.MatterId, name: sequenceData.MatterName, visible: true, index: i, color: $scope.colorScale(i) });
@@ -94,7 +92,6 @@
                     };
                     $scope.points[i].push(point);
                     $scope.visiblePoints[i].push(point);
-                    id++;
                 }
             }
         }
@@ -124,9 +121,7 @@
 
         // returns attribute index by its name if any
         function getAttributeIdByName(dot, attributeName) {
-            return dot.attributes.find(function (a) {
-                return $scope.attributes[$scope.attributeValues[a].attribute] === attributeName;
-            });
+            return dot.attributes.find(a => $scope.attributes[$scope.attributeValues[a].attribute] === attributeName);
         }
 
         // returns true if dot has given attribute and its value equal to the given value
@@ -246,7 +241,7 @@
             for (var i = 0; i < $scope.visiblePoints.length; i++) {
                 for (var j = 0; j < $scope.visiblePoints[i].length; j++) {
                     if (selectedPoint !== $scope.visiblePoints[i][j] && $scope.highlight) {
-                        var similar = $scope.characteristicComparers.every(function (filter) {
+                        var similar = $scope.characteristicComparers.every(filter => {
                             var selectedPointValue = selectedPoint.subsequenceCharacteristics[filter.characteristic.Value];
                             var anotherPointValue = $scope.visiblePoints[i][j].subsequenceCharacteristics[filter.characteristic.Value];
                             return Math.abs(selectedPointValue - anotherPointValue) <= filter.precision;
@@ -262,7 +257,7 @@
                 }
             }
 
-
+            // connecting all similar dots with lines
             //                svg.append("line")
             //                    .attr("class", "similar-line")
             //                    .attr("x1", $scope.xMap(point))
@@ -294,8 +289,8 @@
         // constructs string representing tooltip text (inner html)
         function fillPointTooltip(point, matterName, similarity) {
             var color = similarity === $scope.pointsSimilarity.same ? "default"
-                      : similarity === $scope.pointsSimilarity.similar ? "success"
-                      : similarity === $scope.pointsSimilarity.different ? "danger" : "danger";
+                : similarity === $scope.pointsSimilarity.similar ? "success"
+                    : similarity === $scope.pointsSimilarity.different ? "danger" : "danger";
 
             var tooltipElement = {
                 id: point.id,
@@ -339,7 +334,7 @@
         }
 
         function cText(points, index) {
-            return points.map(function (d) { return $scope.matters[index].name; });
+            return points.map(() => $scope.matters[index].name);
         }
 
         // selects nearest diffieret point of the same organism when "up" or "down" key pressed 
@@ -414,18 +409,16 @@
                 }
             };
 
-            var data = $scope.visiblePoints.map(function (points, index) {
-                return {
-                    hoverinfo: 'text+x+y',
-                    type: 'scattergl',
-                    x: points.map(p => $scope.numericXAxis ? p.numericX : p.x),
-                    y: points.map(p => p.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value]),
-                    text: cText(points, index),
-                    mode: "markers",
-                    marker: { opacity: 0.5, symbol: "circle-open", color: $scope.colorScale(index) },
-                    name: $scope.matters[index].name,
-                };
-            });
+            var data = $scope.visiblePoints.map((points, index) => ({
+                hoverinfo: 'text+x+y',
+                type: 'scattergl',
+                x: points.map(p => $scope.numericXAxis ? p.numericX : p.x),
+                y: points.map(p => p.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value]),
+                text: cText(points, index),
+                mode: "markers",
+                marker: { opacity: 0.5, symbol: "circle-open", color: $scope.colorScale(index) },
+                name: $scope.matters[index].name,
+            }));
 
             Plotly.newPlot($scope.plot, data, $scope.layout, { responsive: true });
 
@@ -512,7 +505,7 @@
         function alignWithClustal(subsequencesIds) {
             $scope.alignmentInProcess = true;
             $http.get("/SubsequencesDistribution/CreateAlignmentTask/", { params: { subsequencesIds: subsequencesIds } })
-                .then(function (response) {
+                .then(response => {
                     $scope.alignmentInProcess = false;
                     var result = response.data;
                     if (result.Status === "Success") {
@@ -522,10 +515,26 @@
                         alert("Failed to create alignment task", result.Message);
                         console.log(result.Message);
                     }
-                }, function () {
+                }, () => {
                     alert("Failed to create alignment task");
                     $scope.alignmentInProcess = false;
                 });
+        }
+
+        // calculates color for given matter index 
+        // using d3.interpolate and matters count
+        function colorScale(index) {
+
+            // upper limit of color range
+            var lastIndex = $scope.result.length;
+
+            // color are shifted for odd and even indexes
+            var colorCode = index / (2 * lastIndex);
+            if (index % 2 != 0) {
+                colorCode = colorCode + 0.5;
+            }
+
+            return d3.interpolateTurbo(colorCode);
         }
 
         $scope.onInit = onInit;
@@ -554,7 +563,7 @@
         $scope.alignAllWithClustal = alignAllWithClustal;
         $scope.alignSimilarWithClustal = alignSimilarWithClustal;
         $scope.alignSelectedWithClustal = alignSelectedWithClustal;
-        $scope.colorScale = d3.scaleOrdinal(d3.schemeCategory20);
+        $scope.colorScale = colorScale;
 
         $scope.onInit();
     }

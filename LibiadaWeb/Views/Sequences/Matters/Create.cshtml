@@ -111,9 +111,9 @@
             <div ng-switch-when="@((byte)Nature.Genetic)">
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        <label>
-                            <input type="checkbox" name="partial" value="true" />
-                            <input type="hidden" name="partial" value="false" />
+                        <input type="checkbox" name="partial" id="partial" value="true" />
+                        <input type="hidden" name="partial" value="false" />
+                        <label for="partial">
                             Sequence is partial (incomplete)
                         </label>
                     </div>
@@ -133,11 +133,12 @@
                 </div>
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        <label>
-                            <input type="checkbox" name="original" ng-model="original" value="true" />
+                        
+                            <input type="checkbox" name="original" id="original" ng-model="original" value="true" />
                             <input type="hidden" name="original" value="false" />
-                            Literary work is in original language (not in translation)
-                        </label>
+                            <label for="original">
+                                Literary work is in original language (not in translation)
+                            </label>
                     </div>
                 </div>
                 <div class="form-group" ng-hide="original">

@@ -3,9 +3,10 @@
 @if (AccountHelper.IsAdmin())
 {
     <div class="form-group">
-        <label class="control-label col-md-2">Nature</label>
+        <label class="control-label col-md-2" for="Nature">Nature</label>
         <div class="col-md-10">
             <select class="form-control"
+                    id="Nature"
                     ng-model="nature"
                     ng-options="n.Value as n.Text for n in ::natures"
                     ng-change="filterByNature()"

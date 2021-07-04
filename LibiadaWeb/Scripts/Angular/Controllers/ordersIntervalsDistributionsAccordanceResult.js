@@ -9,19 +9,19 @@
             $scope.maxLevel = 1;
             for (var i = 0; i < $scope.result.length; i++) {
                 if ($scope.result[i].link === $scope.linkType.Text) {
-                for (var j = 0; j < $scope.result[i].accordance.length; j++) {
-                    var distributionIntervals = $scope.result[i].accordance[j].distributionIntervals;
-                    var orders = $scope.result[i].accordance[j].orders;
+                    for (var j = 0; j < $scope.result[i].accordance.length; j++) {
+                        var distributionIntervals = $scope.result[i].accordance[j].distributionIntervals;
+                        var orders = $scope.result[i].accordance[j].orders;
                     if (orders.length > $scope.maxLevel) {
                         $scope.maxLevel = orders.length;
                     }
-                    $scope.points.push({
-                        id: j,
-                        distributionIntervals: distributionIntervals,
-                        x: j + 1,
-                        y: orders.length,
-                        orders: orders
-                    });
+                        $scope.points.push({
+                            id: j,
+                            distributionIntervals: distributionIntervals,
+                            x: j + 1,
+                            y: orders.length,
+                            orders: orders
+                        });
                     }
                 }
             }
@@ -80,7 +80,7 @@
         }
 
         // shows tooltip for dot or group of dots
-        function showTooltip(d, tooltip, newSelectedDot, svg) {
+        function showTooltip(event, d, tooltip, svg) {
             $scope.clearTooltip(tooltip);
 
             tooltip.style("opacity", 0.9);
@@ -88,14 +88,14 @@
             var tooltipHtml = [];
 
             tooltip.selectedDots = svg.selectAll(".dot")
-                .filter(function (dot) {
-                    if (dot.x === d.x && dot.y === d.y) {
-                        tooltipHtml.push($scope.fillPointTooltip(dot));
-                        return true;
-                    } else {
-                        return false;
-                    }
-                })
+                .filter(dot => {
+                        if (dot.x === d.x && dot.y === d.y) {
+                            tooltipHtml.push($scope.fillPointTooltip(dot));
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    })
                 .attr("rx", $scope.selectedDotRadius)
                 .attr("ry", $scope.selectedDotRadius);
 
@@ -106,8 +106,8 @@
                 .style("border-radius", "5px")
                 .style("font-family", "monospace")
                 .style("padding", "5px")
-                .style("left", (d3.event.pageX + 10) + "px")
-                .style("top", (d3.event.pageY - 8) + "px");
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 8) + "px");
 
             tooltip.hideTooltip = false;
         }
@@ -155,8 +155,8 @@
             var xMargin = (xMax - xMin) * 0.05;
 
             var xScale = d3.scaleLinear()
-                    .domain([xMin - xMargin, xMax + xMargin])
-                    .range([0, width]);
+                .domain([xMin - xMargin, xMax + xMargin])
+                .range([0, width]);
             var xAxis = $scope.points.length > 10 ?
                 d3.axisBottom(xScale)
                     .tickSizeInner(-height)
@@ -168,7 +168,7 @@
                     .tickSizeOuter(0)
                     .tickPadding(10);
 
-            $scope.xMap = function (d) { return xScale($scope.xValue(d)); };
+            $scope.xMap = d => xScale($scope.xValue(d));
 
             // setup y
             // calculating margins for dots
@@ -195,11 +195,10 @@
                     .tickSizeOuter(0)
                     .tickPadding(10);
 
-            $scope.yMap = function (d) { return yScale($scope.yValue(d)); };
+            $scope.yMap = d => yScale($scope.yValue(d));
 
             // setup fill color
-            var cValue = function (d) { return d.cluster; };
-            var color = d3.scaleOrdinal(d3.schemeCategory20);
+            var color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.points.length]);
 
             // add the graph canvas to the body of the webpage
             var svg = d3.select("#chart").append("svg")
@@ -215,10 +214,10 @@
                 .style("opacity", 0);
 
             // preventing tooltip hiding if dot clicked
-            tooltip.on("click", function () { tooltip.hideTooltip = false; });
+            tooltip.on("click", () => { tooltip.hideTooltip = false; });
 
             // hiding tooltip
-            d3.select("#chart").on("click", function () { $scope.clearTooltip(tooltip); });
+            d3.select("#chart").on("click", () => { $scope.clearTooltip(tooltip); });
 
             // x-axis
             svg.append("g")
@@ -259,10 +258,10 @@
                 .attr("cx", $scope.xMap)
                 .attr("cy", $scope.yMap)
                 .style("fill-opacity", 0.6)
-                .style("fill", function (d) { return color(cValue(d)); })
-                .style("stroke", function (d) { return color(cValue(d)); })
-                .on("click", function (d) { return $scope.showTooltip(d, tooltip, d3.select(this), svg); });
-            
+                .style("fill", d => color(d.id))
+                .style("stroke", d => color(d.id))
+                .on("click", (event, d) => $scope.showTooltip(event, d, tooltip, svg));
+
         }
 
         $scope.draw = draw;
@@ -282,23 +281,23 @@
         $scope.accordanceLevels = [];
         $scope.maxLevel = 1;
 
-		$scope.loadingScreenHeader = "Loading Data";
-		$scope.loading = true;
+        $scope.loadingScreenHeader = "Loading Data";
+        $scope.loading = true;
 
         var location = window.location.href.split("/");
         $scope.taskId = location[location.length - 1];
-		
+
         $http.get(`/api/TaskManagerWebApi/${$scope.taskId}`)
             .then(function (data) {
                 MapModelFromJson($scope, JSON.parse(data.data));
-				$scope.loading = false;
-                
+                $scope.loading = false;
+
             }, function () {
                 alert("Failed loading sequences order distribution data");
-				$scope.loading = false;
+                $scope.loading = false;
             });
     }
 
     angular.module("libiada").controller("OrdersIntervalsDistributionsAccordanceResultCtrl", ["$scope", "$http", ordersIntervalsDistributionsAccordanceResult]);
-	
+
 }

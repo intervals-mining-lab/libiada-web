@@ -30,31 +30,34 @@
                         translators="::translators"
                         pause-treatments="::pauseTreatments">
         </characteristic>
-        <label class="control-label col-md-2" for="calculationType">Calculation type:</label>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <label>
-                    <input type="radio" name="calculationType" id="calculationType" value="Equality" checked />
-                    Equality of elements
-                </label>
+
+        <fieldset >
+            <legend>Calculation type:</legend>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="radio" name="calculationType" id="calculationTypeEquality" value="Equality" checked />
+                    <label for="calculationTypeEquality">
+                        Equality of elements
+                    </label>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <label>
-                    <input type="radio" name="calculationType" id="calculationType" value="All" />
-                    All-to-All
-                </label>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="radio" name="calculationType" id="calculationTypeAll" value="All" />
+                    <label for="calculationTypeAll">
+                        All-to-All
+                    </label>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <label>
-                    <input type="radio" name="calculationType" id="calculationType" value="Specified" />
-                    Specified
-                </label>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="radio" name="calculationType" id="calculationTypeSpecified" value="Specified" />
+                    <label for="calculationTypeSpecified">
+                        Specified
+                    </label>
+                </div>
             </div>
-        </div>
+        </fieldset>
         <hr />
         @Html.Partial("_MattersSubmit")
     </div>
