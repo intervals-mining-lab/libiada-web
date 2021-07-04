@@ -7,7 +7,7 @@
         function filterByNature() {
             var arraysForFiltration = ["groups", "sequenceTypes"];
 
-            arraysForFiltration.forEach(function (arrayName) {
+            arraysForFiltration.forEach(arrayName => {
                 if (angular.isDefined($scope[arrayName])) {
                     $scope[arrayName + "Filtered"] = filterFilter($scope[arrayName], { Nature: $scope.nature });
                 }

@@ -419,7 +419,7 @@
                     signalrHub.Send(TaskEvent.ChangeStatus, task.TaskData);
                 }
             }
-            catch (ThreadAbortException e)
+            catch (ThreadAbortException)
             {
                 // TODO: implement an exception handling/logging
             }

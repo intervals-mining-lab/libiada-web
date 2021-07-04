@@ -10,19 +10,19 @@
 
         function onHubStart() {
             $scope.$apply();
-            $scope.tasksHub.server.getAllTasks().done(function (tasksJson) {
-                var tasks = JSON.parse(tasksJson);
-                for (var i = 0; i < tasks.length; i++) {
-                    $scope.tasks.push(tasks[i]);
+            $scope.tasksHub.server.getAllTasks().done(tasksJson => {
+                    var tasks = JSON.parse(tasksJson);
+                    for (var i = 0; i < tasks.length; i++) {
+                        $scope.tasks.push(tasks[i]);
 
-                    $scope.tryRedirectToResult(tasks[i]);
-                }
+                        $scope.tryRedirectToResult(tasks[i]);
+                    }
 
-                $scope.loading = false;
-                try {
-                    $scope.$apply();
-                } catch (e) { }
-            });
+                    $scope.loading = false;
+                    try {
+                        $scope.$apply();
+                    } catch (e) { }
+                });
         };
 
         function taskEvent(event, data) {
@@ -31,11 +31,11 @@
                     $scope.tasks.push(data);
                     break;
                 case "DeleteTask":
-                    var taskToDelete = $scope.tasks.find(function (t) { return t.Id === data.Id; });
+                    var taskToDelete = $scope.tasks.find(t => t.Id === data.Id);
                     $scope.tasks.splice($scope.tasks.indexOf(taskToDelete), 1);
                     break;
                 case "ChangeStatus":
-                    var taskToChange = $scope.tasks.find(function (t) { return t.Id === data.Id; });
+                    var taskToChange = $scope.tasks.find(t => t.Id === data.Id);
                     if (taskToChange) {
                         taskToChange.Created = data.Created;
                         taskToChange.Started = data.Started;

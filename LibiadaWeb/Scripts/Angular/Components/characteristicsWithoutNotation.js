@@ -6,13 +6,11 @@
 
         ctrl.characteristics = [];
 
-        ctrl.$onInit = function () {
-        };
+        ctrl.$onInit = () => { };
 
-        ctrl.$onChanges = function (changes) {
-        };
+        ctrl.$onChanges = changes => { };
 
-        ctrl.addCharacteristic = function addCharacteristic() {
+        ctrl.addCharacteristic = () => {
             ctrl.characteristics.push({
                 characteristicType: ctrl.characteristicTypes[0],
                 link: ctrl.characteristicTypes[0].Links[0],
@@ -23,13 +21,12 @@
             });
         };
 
-        ctrl.deleteCharacteristic = function deleteCharacteristic(characteristic) {
+        ctrl.deleteCharacteristic = characteristic => {
             ctrl.characteristics.splice(ctrl.characteristics.indexOf(characteristic), 1);
         };
 
-        ctrl.selectLink = function (characteristic) {
+        ctrl.selectLink = characteristic => {
             "use strict";
-
             characteristic.link = characteristic.characteristicType.Links[0];
             characteristic.arrangementType = characteristic.characteristicType.ArrangementTypes[0];
         };

@@ -11,7 +11,7 @@
                         try {
                             //Pasted data split into rows
                             var rows = text.split(/[\n\f\r]/);
-                            rows.forEach(function (thisRow) {
+                            rows.forEach(thisRow => {
                                 var row = thisRow.trim();
                                 if (row != "") {
                                     var cols = row.split("\t");
@@ -30,7 +30,7 @@
                         var text = $("#myPasteBox").val();
                         if (text != "") {
                             //We need to change the scope values
-                            scope.$apply(function () {
+                            scope.$apply(() => {
                                 if (attrs.ngModel != undefined && attrs.ngModel != "") {
                                     $parse(attrs.ngModel).assign(scope, text);
                                 }
@@ -43,10 +43,10 @@
                             });
                         }
                     }
-                    $document.ready(function () {
+                    $document.ready(() => {
                         //Handles the Ctrl + V keys for pasting
                         function handleKeyDown(e, args) {
-                            if (!inFocus && e.which == keyCodes.V && (e.ctrlKey || e.metaKey)) {    // CTRL + V
+                            if (!inFocus && e.which == keyCodes.V && (e.ctrlKey || e.metaKey)) { // CTRL + V
                                 //reset value of our box
                                 $("#myPasteBox").val("");
                                 //set it in focus so that pasted text goes inside the box
@@ -60,17 +60,17 @@
                                 'C': 67,
                                 'V': 86
                             };
-                            $("body").on("focus", "input, textarea", function () {
-                                //If this is true, we wont respond to Ctrl + V
-                                inFocus = true;
-                            });
-                            $("body").on("blur", "input, textarea", function () {
-                                //We are not on a text element so we will respond
-                                //to Ctrl + V
-                                inFocus = false;
-                            });
+
+                            //If this is true, we wont respond to Ctrl + V
+                            $("body").on("focus", "input, textarea", () => { inFocus = true; });
+
+                            //We are not on a text element so we will respond
+                            //to Ctrl + V
+                            $("body").on("blur", "input, textarea", () => { inFocus = false; });
+
                             //Handle the key down event
                             $(document).keydown(handleKeyDown);
+
                             //We will respond to when the textbox value changes
                             $("#myPasteBox").bind("input propertychange", textChanged);
                         }

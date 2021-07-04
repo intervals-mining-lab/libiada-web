@@ -12,25 +12,25 @@
 
     <div class="form-horizontal" ng-controller="BatchGeneticImportFromGenBankSearchFileCtrl">
         <div class="form-group">
-            <label class="control-label col-md-2">GenBank search query:</label>
+            <label class="control-label col-md-2" for="searchQuery">GenBank search query:</label>
             <div class="col-md-10">
                 <input type="text" class="form-control" name="searchQuery" id="searchQuery" placeholder="Enter term" ng-model="searchQuery">
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <label>
-                    <input type="checkbox" name="importPartial" value="true" />
-                    <input type="hidden" name="importPartial" value="false" />
+                <input type="checkbox" name="importPartial" id="importPartial" value="true" />
+                <input type="hidden" name="importPartial" value="false" />
+                <label for="importPartial">
                     Include partial sequences
                 </label>
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <label>
-                    <input type="checkbox" name="filterMinLength" value="true" ng-model="filterMinLength" />
-                    <input type="hidden" name="filterMinLength" value="false" />
+                <input type="checkbox" name="filterMinLength" id="filterMinLength" value="true" ng-model="filterMinLength" />
+                <input type="hidden" name="filterMinLength" value="false" />
+                <label for="filterMinLength">
                     Filter sequences by min length
                 </label>
             </div>
@@ -44,9 +44,9 @@
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <label>
-                    <input type="checkbox" name="filterMaxLength" value="true" ng-model="filterMaxLength" />
-                    <input type="hidden" name="filterMaxLength" value="false" />
+                <input type="checkbox" name="filterMaxLength" id="filterMaxLength" value="true" ng-model="filterMaxLength" />
+                <input type="hidden" name="filterMaxLength" value="false" />
+                <label for="filterMaxLength">
                     Filter sequences by max length
                 </label>
             </div>

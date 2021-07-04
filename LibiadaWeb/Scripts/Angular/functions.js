@@ -19,7 +19,7 @@ function SelectLink(characteristic) {
 function SetCheckBoxesState(checkboxes, state, filter) {
     "use strict";
 
-    angular.forEach(checkboxes, function (item) {
+    angular.forEach(checkboxes, item => {
         item.Selected = state;
         if (filter) {
             filter(item);

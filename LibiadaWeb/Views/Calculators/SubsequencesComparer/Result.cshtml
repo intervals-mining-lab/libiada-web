@@ -56,11 +56,11 @@
         <hr />
 
         <div class="form-group">
-            <label>Maximum difference = {{::maxPercentageDifference}}%</label>
+            <p>Maximum difference = {{::maxPercentageDifference}}%</p>
         </div>
 
         <div class="form-group" ng-show="similarityValueSelected">
-            <label>
+            <p>
                 Number of equal subsequences from first sequence = {{similarityValue.firstAbsolutelyEqualElementsCount}}
                 <br />
                 Number of similar subsequences from first sequence = {{similarityValue.firstNearlyEqualElementsCount}}
@@ -73,7 +73,7 @@
                 Number of similar subsequences from second sequence = {{similarityValue.secondNearlyEqualElementsCount}}
                 <br />
                 Number of not equal subsequences from second sequence = {{similarityValue.secondNotEqualElementsCount}}
-            </label>
+            </p>
         </div>
 
         @Html.Partial("_Filters")

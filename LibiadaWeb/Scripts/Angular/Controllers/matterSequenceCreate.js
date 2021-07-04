@@ -7,7 +7,7 @@
         function filterByNature() {
             var arraysForFiltration = ["notations", "remoteDbs", "matters", "groups", "sequenceTypes"];
 
-            arraysForFiltration.forEach(function (arrayName) {
+            arraysForFiltration.forEach(arrayName => {
                 if (angular.isDefined($scope[arrayName])) {
                     $scope[arrayName + "Filtered"] = filterFilter($scope[arrayName], { Nature: $scope.nature });
                 }
@@ -24,7 +24,7 @@
         function remoteIdChanged(remoteId) {
             var nameParts = $scope.name.split(" | ");
             if (nameParts.length <= 2) {
-                    $scope.name = nameParts[0] + (remoteId ?  " | " + remoteId : "");
+                $scope.name = nameParts[0] + (remoteId ? " | " + remoteId : "");
             }
         }
 

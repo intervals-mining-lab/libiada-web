@@ -93,9 +93,13 @@
                 </div>
             </div>
             <div class="col-md-offset-2 col-md-10">
-                <label>
-                    <input type="checkbox" name="sequentialTransfers" ng-model="characteristic.sequentialTransfer" value="true" />
-                    <input type="hidden" name="sequentialTransfers" value="false" />
+                <input type="checkbox"
+                       name="sequentialTransfers"
+                       id="sequentialTransfers"
+                       ng-model="characteristic.sequentialTransfer"
+                       value="true" />
+                <input type="hidden" name="sequentialTransfers" value="false" />
+                <label for="sequentialTransfers">
                     Sequential transfer
                 </label>
             </div>
