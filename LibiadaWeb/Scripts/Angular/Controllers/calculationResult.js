@@ -60,7 +60,7 @@
             var tooltipHtml = [];
 
             tooltip.selectedDots = svg.selectAll(".dot")
-                .filter(function (dot) {
+                .filter((dot) => {
                     if (dot.x === d.x && dot.y === d.y) {
                         tooltipHtml.push($scope.fillPointTooltip(dot));
                         return true;
@@ -134,7 +134,7 @@
                 .tickSizeOuter(0)
                 .tickPadding(10);
 
-            $scope.xMap = function (d) { return xScale($scope.xValue(d)); };
+            $scope.xMap = d => xScale($scope.xValue(d));
 
             // setup y
             // calculating margins for dots
@@ -213,9 +213,9 @@
                 .attr("cx", $scope.xMap)
                 .attr("cy", $scope.yMap)
                 .style("fill-opacity", 0.6)
-                .style("fill", function (d) { return color(d.id); })
-                .style("stroke", function (d) { return color(d.id); })
-                .on("click", function (event, d) { return $scope.showTooltip(event, d, tooltip, svg); });
+                .style("fill", d => color(d.id))
+                .style("stroke", d => color(d.id))
+                .on("click", (event, d) => $scope.showTooltip(event, d, tooltip, svg));
 
             // draw legend
             var legend = svg.selectAll(".legend")
@@ -223,28 +223,26 @@
                 .enter()
                 .append("g")
                 .attr("class", "legend")
-                .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; })
-                .on("click", function (event, d) {
+                .attr("transform", (_d, i) => "translate(0," + i * 20 + ")")
+                .on("click", (_event, d) => {
                     d.visible = !d.visible;
                     var legendEntry = d3.select(this);
                     legendEntry.select("text")
-                        .style("opacity", function () { return d.visible ? 1 : 0.5; });
+                        .style("opacity", () => d.visible ? 1 : 0.5);
                     legendEntry.select("rect")
-                        .style("fill-opacity", function () { return d.visible ? 1 : 0; });
+                        .style("fill-opacity", () => d.visible ? 1 : 0);
 
                     svg.selectAll(".dot")
-                        .filter(function (dot) { return dot.cluster === d.name; })
-                        .attr("visibility", function (dot) {
-                            return d.visible ? "visible" : "hidden";
-                        });
+                        .filter(dot => dot.cluster === d.name)
+                        .attr("visibility", () => d.visible ? "visible" : "hidden");
                 });
 
             // draw legend colored rectangles
             legend.append("rect")
                 .attr("width", 15)
                 .attr("height", 15)
-                .style("fill", function (d) { return color(d.id); })
-                .style("stroke", function (d) { return color(d.id); })
+                .style("fill", d => color(d.id))
+                .style("stroke", d => color(d.id))
                 .style("stroke-width", 4)
                 .attr("transform", "translate(0, -" + $scope.legendHeight + ")");
 
@@ -254,7 +252,7 @@
                 .attr("y", 9)
                 .attr("dy", ".35em")
                 .attr("transform", "translate(0, -" + $scope.legendHeight + ")")
-                .text(function (d) { return ($scope.clustersCount ? "Cluster " : "") + d.name; })
+                .text(d => ($scope.clustersCount ? "Cluster " : "") + d.name)
                 .style("font-size", "9pt");
         }
 

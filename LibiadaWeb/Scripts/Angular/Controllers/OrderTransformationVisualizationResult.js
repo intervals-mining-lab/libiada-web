@@ -180,14 +180,14 @@
             var tooltipHtml = [];
 
             tooltip.selectedDots = svg.selectAll(".dot")
-                .filter(function (dot) {
-                    if (dot.x === d.x && dot.y === d.y) {
-                        tooltipHtml.push($scope.fillPointTooltip(dot));
-                        return true;
-                    } else {
-                        return false;
-                    }
-                })
+                .filter(dot => {
+                        if (dot.x === d.x && dot.y === d.y) {
+                            tooltipHtml.push($scope.fillPointTooltip(dot));
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    })
                 .attr("rx", $scope.selectedDotRadius)
                 .attr("ry", $scope.selectedDotRadius);
 
@@ -211,7 +211,7 @@
                 .style("stroke", vt => color(vt.name))
                 .style("stroke-width", 4)
                 .style("fill-opacity", vt => vt.visible ? 1 : 0)
-                .on("click", function (event, vt) {
+                .on("click", function (_event, vt) {
                     vt.visible = !vt.visible;
                     d3.select(this).style("fill-opacity", () => vt.visible ? 1 : 0);
                     svg.selectAll(".transform-line")
@@ -393,7 +393,7 @@
                 .append("g")
                 .attr("class", "legend")
                 .attr("transform", (d, i) => "translate(0," + i * 20 + ")")
-                .on("click", function (event, d) {
+                .on("click", function (_event, d) {
                     d.visible = !d.visible;
                     var legendEntry = d3.select(this);
 

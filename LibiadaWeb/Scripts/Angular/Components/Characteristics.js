@@ -6,27 +6,24 @@
 
         ctrl.characteristics = [];
 
-        ctrl.$onInit = function() {
-        };
+        ctrl.$onInit = () => { };
 
-        function filterByNature() {
+        ctrl.filterByNature = () => {
             if (!ctrl.hideNotation) {
                 var notation = filterFilter(ctrl.notations, { Nature: ctrl.nature })[0];
                 ctrl.notation = notation;
                 // if notation is not linked to characteristic
-                angular.forEach(ctrl.characteristics, function (characteristic) {
-                    characteristic.notation = notation;
-                });
+                angular.forEach(ctrl.characteristics, characteristic => characteristic.notation = notation);
             }
-        }
+        };
 
-        ctrl.$onChanges = function(changes) {
+        ctrl.$onChanges = changes => {
             if (changes.nature) {
                 ctrl.filterByNature();
             }
         };
 
-        ctrl.addCharacteristic = function addCharacteristic() {
+        ctrl.addCharacteristic = () => {
             ctrl.characteristics.push({
                 characteristicType: ctrl.characteristicTypes[0],
                 link: ctrl.characteristicTypes[0].Links[0],
@@ -39,19 +36,14 @@
             });
         };
 
-        ctrl.deleteCharacteristic = function deleteCharacteristic(characteristic) {
+        ctrl.deleteCharacteristic = characteristic => {
             ctrl.characteristics.splice(ctrl.characteristics.indexOf(characteristic), 1);
         };
 
-        ctrl.selectLink = function(characteristic) {
-            "use strict";
-
+        ctrl.selectLink = characteristic => {
             characteristic.link = characteristic.characteristicType.Links[0];
             characteristic.arrangementType = characteristic.characteristicType.ArrangementTypes[0];
         };
-
-        ctrl.filterByNature = filterByNature;
-
     }
 
     angular.module("libiada").component("characteristics", {

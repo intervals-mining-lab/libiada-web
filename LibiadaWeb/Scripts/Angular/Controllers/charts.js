@@ -3,8 +3,8 @@
 
         function draw() {
             var margin = { top: 30, right: 20, bottom: 30, left: 200 },
-                    width = 800 - margin.left - margin.right,
-                    height = 600 - margin.top - margin.bottom;
+                width = 800 - margin.left - margin.right,
+                height = 600 - margin.top - margin.bottom;
 
             // Set the ranges
             var x = d3.scaleLinear().range([0, width]);
@@ -19,8 +19,8 @@
 
             // Define the line
             var valueline = d3.svg.line()
-                .x(function (d) { return x(d.date); })
-                .y(function (d) { return y(d.close); });
+                .x(d => x(d.date))
+                .y(d => y(d.close));
 
             // Define 'div' for tooltips
             var div = d3.select("body")
@@ -46,8 +46,8 @@
             });
 
             // Scale the range of the data
-            x.domain(d3.extent(data, function (d) { return d.date; }));
-            y.domain(d3.extent(data, function (d) { return d.close; }));
+            x.domain(d3.extent(data, d => d.date));
+            y.domain(d3.extent(data, d => d.close));
 
             // Add the valueline path.
             svg.append("path")
@@ -59,10 +59,10 @@
                 .data(data)
                 .enter().append("circle")
                 .attr("r", 2)
-                .attr("cx", function (d) { return x(d.date); })
-                .attr("cy", function (d) { return y(d.close); })
+                .attr("cx", d => x(d.date))
+                .attr("cy", d => y(d.close))
                 // Tooltip stuff after this
-                .on("mouseover", function (event, d) {
+                .on("mouseover", (event, d) => {
                     div.transition()
                         .duration(700)
                         .style("opacity", 0);
@@ -101,14 +101,14 @@
         $scope.data.close = [];
         $scope.data.name = [];
 
-        $scope.addX = function (i, j) {
+        $scope.addX = (i, j) => {
             $scope.data = [];
             for (var k = 1; k < $scope.parsedPaste.length; k++) {
                 $scope.data.push({ date: $scope.parsedPaste[k][i].replace(",", "."), close: $scope.parsedPaste[k][j].replace(",", "."), name: $scope.parsedPaste[k][0] });
             }
             draw();
         };
-        $scope.addY = function (l) {
+        $scope.addY = (l) => {
             $scope.data = [];
 
             for (var k = 1; k < $scope.parsedPaste.length; k++) {

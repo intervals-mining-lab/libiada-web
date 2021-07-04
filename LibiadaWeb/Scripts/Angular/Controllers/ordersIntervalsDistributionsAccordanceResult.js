@@ -62,14 +62,14 @@
             var tooltipHtml = [];
 
             tooltip.selectedDots = svg.selectAll(".dot")
-                .filter(function (dot) {
-                    if (dot.x === d.x && dot.y === d.y) {
-                        tooltipHtml.push($scope.fillPointTooltip(dot));
-                        return true;
-                    } else {
-                        return false;
-                    }
-                })
+                .filter(dot => {
+                        if (dot.x === d.x && dot.y === d.y) {
+                            tooltipHtml.push($scope.fillPointTooltip(dot));
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    })
                 .attr("rx", $scope.selectedDotRadius)
                 .attr("ry", $scope.selectedDotRadius);
 
@@ -142,7 +142,7 @@
                     .tickSizeOuter(0)
                     .tickPadding(10);
 
-            $scope.xMap = function (d) { return xScale($scope.xValue(d)); };
+            $scope.xMap = d => xScale($scope.xValue(d));
 
             // setup y
             // calculating margins for dots
@@ -169,7 +169,7 @@
                     .tickSizeOuter(0)
                     .tickPadding(10);
 
-            $scope.yMap = function (d) { return yScale($scope.yValue(d)); };
+            $scope.yMap = d => yScale($scope.yValue(d));
 
             // setup fill color
             var color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.points.length]);
@@ -188,10 +188,10 @@
                 .style("opacity", 0);
 
             // preventing tooltip hiding if dot clicked
-            tooltip.on("click", function () { tooltip.hideTooltip = false; });
+            tooltip.on("click", () => { tooltip.hideTooltip = false; });
 
             // hiding tooltip
-            d3.select("#chart").on("click", function () { $scope.clearTooltip(tooltip); });
+            d3.select("#chart").on("click", () => { $scope.clearTooltip(tooltip); });
 
             // x-axis
             svg.append("g")
@@ -232,9 +232,9 @@
                 .attr("cx", $scope.xMap)
                 .attr("cy", $scope.yMap)
                 .style("fill-opacity", 0.6)
-                .style("fill", function (d) { return color(d.id); })
-                .style("stroke", function (d) { return color(d.id); })
-                .on("click", function (event, d) { return $scope.showTooltip(event, d, tooltip, svg); });
+                .style("fill", d => color(d.id))
+                .style("stroke", d => color(d.id))
+                .on("click", (event, d) => $scope.showTooltip(event, d, tooltip, svg));
 
         }
 

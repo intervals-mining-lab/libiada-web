@@ -29,9 +29,7 @@
 
         // returns attribute index by its name if any
         function getAttributeIdByName(dot, attributeName) {
-            return dot.attributes.find(function (a) {
-                return $scope.attributes[$scope.attributeValues[a].attribute] === attributeName;
-            });
+            return dot.attributes.find(a => $scope.attributes[$scope.attributeValues[a].attribute] === attributeName);
         }
 
         // returns true if dot has given attribute and its value equal to the given value
@@ -51,14 +49,13 @@
                 $scope.filters.push({ value: $scope.newFilter });
 
                 d3.selectAll(".dot")
-                    .attr("visibility",
-                        function (d) {
-                            var filterValue = $scope.newFilter.toUpperCase();
-                            var visible = $scope.isAttributeEqual(d, "product", filterValue);
-                            visible = visible || $scope.isAttributeEqual(d, "locus_tag", filterValue);
-                            d.filtersVisible.push(visible);
-                            return $scope.dotVisible(d) ? "visible" : "hidden";
-                        });
+                    .attr("visibility", d => {
+                        var filterValue = $scope.newFilter.toUpperCase();
+                        var visible = $scope.isAttributeEqual(d, "product", filterValue);
+                        visible = visible || $scope.isAttributeEqual(d, "locus_tag", filterValue);
+                        d.filtersVisible.push(visible);
+                        return $scope.dotVisible(d) ? "visible" : "hidden";
+                    });
 
                 $scope.fillVisiblePoints();
                 $scope.newFilter = "";
@@ -69,7 +66,7 @@
         // deletes given filter
         function deleteFilter(filter) {
             d3.selectAll(".dot")
-                .attr("visibility", function (d) {
+                .attr("visibility", d => {
                     d.FiltersVisible.splice($scope.filters.indexOf(filter), 1);
                     return $scope.dotVisible(d) ? "visible" : "hidden";
                 });
@@ -117,7 +114,7 @@
             var featureValue = parseInt(feature.Value);
             d3.selectAll(".dot")
                 .filter(dot => dot.featureId === featureValue)
-                .attr("visibility", function (d) {
+                .attr("visibility", d => {
                     d.featureVisible = feature.Selected;
                     return $scope.dotVisible(d) ? "visible" : "hidden";
                 });
@@ -169,7 +166,7 @@
             tooltip.style("opacity", 0.9);
 
             tooltip.selectedDots = svg.selectAll(".dot")
-                .filter(function (dot) {
+                .filter(dot => {
                     if ($scope.xValue(dot) === $scope.xValue(d) && $scope.yValue(dot) === $scope.yValue(d)) {
                         tooltipHtml.push($scope.fillPointTooltip(dot));
                         return true;
@@ -262,9 +259,7 @@
             // sorting points by selected characteristic
             if ($scope.lineChart) {
                 for (var i = 0; i < $scope.points.length; i++) {
-                    $scope.points[i].sort(function (first, second) {
-                        return $scope.yValue(second) - $scope.yValue(first);
-                    });
+                    $scope.points[i].sort((first, second) => $scope.yValue(second) - $scope.yValue(first));
 
                     for (var j = 0; j < $scope.points[i].length; j++) {
                         $scope.points[i][j].rank = j + 1;
@@ -273,11 +268,10 @@
             }
 
             // all organisms are visible after redrawing
-            $scope.matters.forEach(function (matter) { matter.visible = true; });
+            $scope.matters.forEach(matter => { matter.visible = true; });
 
-            $scope.points.forEach(function (points) {
-
-                points.forEach(function (point) {
+            $scope.points.forEach(points => {
+                points.forEach(point => {
                     point.legendVisible = true;
                     point.FeatureVisible = $scope.features[point.featureId].Selected;
                 });
@@ -294,7 +288,7 @@
             var yMaxArray = [];
             var yMinArray = [];
 
-            $scope.points.forEach(function (points) {
+            $scope.points.forEach(points => {
                 xMinArray.push(d3.min(points, $scope.xValue));
                 xMaxArray.push(d3.max(points, $scope.xValue));
                 yMinArray.push(d3.min(points, $scope.yValue));
@@ -315,7 +309,7 @@
                 .tickSizeOuter(0)
                 .tickPadding(10);
 
-            $scope.xMap = function (d) { return xScale($scope.xValue(d)); };
+            $scope.xMap = d => xScale($scope.xValue(d));
 
             // setup y
             var yMin = d3.min(yMinArray);
@@ -330,7 +324,7 @@
                 .tickSizeOuter(0)
                 .tickPadding(10);
 
-            $scope.yMap = function (d) { return yScale($scope.yValue(d)); };
+            $scope.yMap = d => yScale($scope.yValue(d));
 
             // setup fill color
             var color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.matters.length]);
@@ -349,10 +343,10 @@
                 .style("opacity", 0);
 
             // preventing tooltip hiding if dot clicked
-            tooltip.on("click", function () { tooltip.hideTooltip = false; });
+            tooltip.on("click", () => { tooltip.hideTooltip = false; });
 
             // hiding tooltip
-            d3.select("#chart").on("click", function () { $scope.clearTooltip(tooltip); });
+            d3.select("#chart").on("click", () => { $scope.clearTooltip(tooltip); });
 
             // x-axis
             svg.append("g")
@@ -399,12 +393,10 @@
                 .attr("cx", $scope.xMap)
                 .attr("cy", $scope.yMap)
                 .style("fill-opacity", 0.6)
-                .style("fill", function (d) { return color(d.colorId); })
-                .style("stroke", function (d) { return color(d.colorId); })
-                .attr("visibility", function (dot) {
-                    return $scope.dotVisible(dot) ? "visible" : "hidden";
-                })
-                .on("click", function (event, d) { return $scope.showTooltip(event, d, tooltip, svg); });
+                .style("fill", d => color(d.colorId))
+                .style("stroke", d => color(d.colorId))
+                .attr("visibility", d => $scope.dotVisible(d) ? "visible" : "hidden")
+                .on("click", (event, d) => $scope.showTooltip(event, d, tooltip, svg));
 
             // draw legend
             var legend = svg.selectAll(".legend")
@@ -412,29 +404,29 @@
                 .enter()
                 .append("g")
                 .attr("class", "legend")
-                .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; })
-                .on("click", function (event, d) {
+                .attr("transform", (_d, i) => "translate(0," + i * 20 + ")")
+                .on("click", function (_event, d) {
                     d.visible = !d.visible;
                     var legendEntry = d3.select(this);
                     legendEntry.select("text")
-                        .style("opacity", function () { return d.visible ? 1 : 0.5; });
+                        .style("opacity", () => d.visible ? 1 : 0.5);
                     legendEntry.select("rect")
-                        .style("fill-opacity", function () { return d.visible ? 1 : 0; });
+                        .style("fill-opacity", () => d.visible ? 1 : 0);
 
                     svg.selectAll(".dot")
                         .filter(dot => dot.matterId === d.id)
-                        .attr("visibility", function (dot) {
+                        .attr("visibility", dot => {
                             dot.legendVisible = d.visible;
                             return $scope.dotVisible(dot) ? "visible" : "hidden";
-                        });                        
+                        });
                 });
 
             // draw legend colored rectangles
             legend.append("rect")
                 .attr("width", 15)
                 .attr("height", 15)
-                .style("fill", function (d) { return color(d.colorId); })
-                .style("stroke", function (d) { return color(d.colorId); })
+                .style("fill", d => color(d.colorId))
+                .style("stroke", d => color(d.colorId))
                 .style("stroke-width", 4)
                 .attr("transform", "translate(0, -" + $scope.legendHeight + ")");
 
@@ -444,7 +436,7 @@
                 .attr("y", 9)
                 .attr("dy", ".35em")
                 .attr("transform", "translate(0, -" + $scope.legendHeight + ")")
-                .text(function (d) { return d.name; })
+                .text(d => d.name)
                 .style("font-size", "9pt");
 
             $scope.loading = false;

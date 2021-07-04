@@ -59,7 +59,7 @@
             var tooltipHtml = [];
 
             tooltip.selectedDots = svg.selectAll(".dot")
-                .filter(function (dot) {
+                .filter(dot => {
                     if (dot.x === d.x && dot.y === d.y) {
                         tooltipHtml.push($scope.fillPointTooltip(dot));
                         return true;
@@ -194,10 +194,10 @@
                 .style("opacity", 0);
 
             // preventing tooltip hiding if dot clicked
-            tooltip.on("click", function () { tooltip.hideTooltip = false; });
+            tooltip.on("click", () => { tooltip.hideTooltip = false; });
 
             // hiding tooltip
-            d3.select("#chart").on("click", function () { $scope.clearTooltip(tooltip); });
+            d3.select("#chart").on("click", () => { $scope.clearTooltip(tooltip); });
 
             // x-axis
             svg.append("g")
@@ -236,7 +236,7 @@
                 var dataGroups = d3.group($scope.points, d => d.matterName);
 
                 // Loop through each symbol / key
-                dataGroups.forEach(function (value) {
+                dataGroups.forEach(value => {
                     svg.append("path")
                         .datum(value)
                         .attr("class", "line")
@@ -259,9 +259,9 @@
                 .attr("cy", $scope.yMap)
                 .style("fill-opacity", 0.6)
                 .style("opacity", $scope.lineChart ? 0 : 1)
-                .style("fill", function (d) { return color(d.characteristicId) })
-                .style("stroke", function (d) { return color(d.characteristicId) })
-                .on("click", function (event, d) { return $scope.showTooltip(event, d, tooltip, svg); });
+                .style("fill", d => color(d.characteristicId))
+                .style("stroke", d => color(d.characteristicId))
+                .on("click", (event, d) => $scope.showTooltip(event, d, tooltip, svg));
 
             // draw legend
             var legend = svg.selectAll(".legend")
@@ -269,34 +269,30 @@
                 .enter()
                 .append("g")
                 .attr("class", "legend")
-                .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; })
-                .on("click", function (event, d) {
+                .attr("transform", (_d, i) => "translate(0," + i * 20 + ")")
+                .on("click", function (_event, d) {
                     d.visible = !d.visible;
                     var legendEntry = d3.select(this);
                     legendEntry.select("text")
-                        .style("opacity", function () { return d.visible ? 1 : 0.5; });
+                        .style("opacity", () => d.visible ? 1 : 0.5);
                     legendEntry.select("rect")
-                        .style("fill-opacity", function () { return d.visible ? 1 : 0; });
+                        .style("fill-opacity", () => d.visible ? 1 : 0);
 
                     svg.selectAll(".dot")
-                        .filter(function (dot) { return dot.matterName === d.name; })
-                        .attr("visibility", function (dot) {
-                            return d.visible ? "visible" : "hidden";
-                        });
+                        .filter(dot => dot.matterName === d.name)
+                        .attr("visibility", () => d.visible ? "visible" : "hidden");
 
                     svg.selectAll(".line")
-                        .filter(function (line) { return line[0].matterName === d.name; })
-                        .attr("visibility", function (line) {
-                            return d.visible ? "visible" : "hidden";
-                        });
+                        .filter(line => line[0].matterName === d.name)
+                        .attr("visibility", () => d.visible ? "visible" : "hidden");
                 });
 
             // draw legend colored rectangles
             legend.append("rect")
                 .attr("width", 15)
                 .attr("height", 15)
-                .style("fill", function (d) { return color(d.id); })
-                .style("stroke", function (d) { return color(d.id); })
+                .style("fill", d => color(d.id))
+                .style("stroke", d => color(d.id))
                 .style("stroke-width", 4)
                 .attr("transform", "translate(0, -" + $scope.legendHeight + ")");
 
@@ -306,7 +302,7 @@
                 .attr("y", 9)
                 .attr("dy", ".35em")
                 .attr("transform", "translate(0, -" + $scope.legendHeight + ")")
-                .text(function (d) { return d.name; })
+                .text(d => d.name)
                 .style("font-size", "9pt");
         }
 

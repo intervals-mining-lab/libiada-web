@@ -47,14 +47,14 @@
             var tooltipHtml = [];
 
             tooltip.selectedDots = svg.selectAll(".dot")
-                .filter(function (dot) {
-                    if (dot.x === d.x && dot.y === d.y) {
-                        tooltipHtml.push($scope.fillPointTooltip(dot));
-                        return true;
-                    } else {
-                        return false;
-                    }
-                })
+                .filter(dot => {
+                        if (dot.x === d.x && dot.y === d.y) {
+                            tooltipHtml.push($scope.fillPointTooltip(dot));
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    })
                 .attr("rx", $scope.selectedDotRadius)
                 .attr("ry", $scope.selectedDotRadius);
 

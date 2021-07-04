@@ -1,35 +1,33 @@
 ﻿function loadingWindow() {
-	"use strict";
+    "use strict";
 
-	function LoadingWindowController() {
-		var ctrl = this;
+    function LoadingWindowController() {
+        var ctrl = this;
 
-		ctrl.loadingModalWindow = $("#loadingDialog");
+        ctrl.loadingModalWindow = $("#loadingDialog");
 
-		ctrl.$onInit = function () {
-		}
+        ctrl.$onInit = () => { };
 
-		ctrl.$onChanges = function (changes) {
-			if (changes.loading) {
-				if (ctrl.loading) {
-					ctrl.loadingModalWindow.modal("show");
-				}
-				else {
-					ctrl.loadingModalWindow.modal("hide");
-				}
-			}
-		}
+        ctrl.$onChanges = changes => {
+            if (changes.loading) {
+                if (ctrl.loading) {
+                    ctrl.loadingModalWindow.modal("show");
+                }
+                else {
+                    ctrl.loadingModalWindow.modal("hide");
+                }
+            }
+        };
+    }
 
-	}
-
-	angular.module("libiada").component("loadingWindow", {
+    angular.module("libiada").component("loadingWindow", {
         templateUrl: window.location.origin + "/Partial/_LoadingWindow",
-		controller: [LoadingWindowController],
-		bindings: {
-			loading: "<",
-			loadingScreenHeader: "<"
-		}
-	});
+        controller: [LoadingWindowController],
+        bindings: {
+            loading: "<",
+            loadingScreenHeader: "<"
+        }
+    });
 }
 
 loadingWindow();
