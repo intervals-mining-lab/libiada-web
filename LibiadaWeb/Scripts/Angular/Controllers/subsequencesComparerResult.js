@@ -23,9 +23,7 @@
 
         // checks if element is visible
         function elementVisible(element) {
-            return element.filtersVisible.length === 0 || element.filtersVisible.some(function (element) {
-                return element;
-            });
+            return element.filtersVisible.length === 0 || element.filtersVisible.some(e => e);
         }
 
         // deletes given filter
@@ -65,9 +63,9 @@
 
         // returns attribute index by its name if any
         function getAttributeIdByName(matterIndex, subsequenceIndex, attributeName) {
-            return $scope.characteristics[matterIndex][subsequenceIndex].Attributes.find(function (a) {
-                return $scope.attributes[$scope.attributeValues[a].attribute] === attributeName;
-            });
+            return $scope.characteristics[matterIndex][subsequenceIndex].Attributes.find(a =>
+                $scope.attributes[$scope.attributeValues[a].attribute] === attributeName
+            );
         }
 
         // returns true if dot has given attribute and its value equal to the given value
@@ -122,7 +120,7 @@
                     }))
                     .then(response => JSON.parse(response.data))
                     .then(attributeValues => $scope.attributeValues = attributeValues)
-                    .then(function () {
+                    .then(() => {
                         $scope.applyFilters($scope.equalElements[firstIndex][secondIndex]);
                         $scope.equalElementsToShow = $scope.equalElements[firstIndex][secondIndex];
                         $scope.loading = false;
@@ -160,7 +158,7 @@
                     windowSize: $scope.slidingWindowParams.windowSize,
                     step: $scope.slidingWindowParams.step
                 }
-            }).then(function (firstCharacteristics) {
+            }).then(firstCharacteristics => {
                 $scope.firstSubsequenceLocalCharacteristics = JSON.parse(firstCharacteristics.data);
 
                 $http.get("/api/LocalCalculationWebApi/GetSubsequenceCharacteristic", {
@@ -170,17 +168,17 @@
                         windowSize: $scope.slidingWindowParams.windowSize,
                         step: $scope.slidingWindowParams.step
                     }
-                }).then(function (secondCharacteristics) {
+                }).then(secondCharacteristics => {
                     $scope.secondSubsequenceLocalCharacteristics = JSON.parse(secondCharacteristics.data);
                     $scope.drawLocalCharacteristics(firstSubsequenceId, secondSubsequenceId, index);
 
                     $scope.loading = false;
-                }, function () {
+                }, () => {
                     alert("Failed loading characteristics data");
 
                     $scope.loading = false;
                 });
-            }, function () {
+            }, () => {
                 alert("Failed loading local characteristics data");
 
                 $scope.loading = false;
@@ -223,11 +221,11 @@
             var yMaxArray = [];
             var yMinArray = [];
 
-            legendData.forEach(function (data) {
-                xMinArray.push(d3.min(data.points, function (d) { return d.x; }));
-                xMaxArray.push(d3.max(data.points, function (d) { return d.x; }));
-                yMinArray.push(d3.min(data.points, function (d) { return d.value; }));
-                yMaxArray.push(d3.max(data.points, function (d) { return d.value; }));
+            legendData.forEach(data => {
+                xMinArray.push(d3.min(data.points, d => d.x));
+                xMaxArray.push(d3.max(data.points, d => d.x));
+                yMinArray.push(d3.min(data.points, d => d.value));
+                yMaxArray.push(d3.max(data.points, d => d.value));
             });
 
             // setup x
@@ -245,7 +243,7 @@
                 .tickPadding(10);
 
 
-            var xMap = function (d) { return xScale(d.x); };
+            var xMap = d => xScale(d.x);
 
             // setup y
             var yMin = d3.min(yMinArray);
@@ -260,10 +258,9 @@
                 .tickSizeOuter(0)
                 .tickPadding(10);
 
-            var yMap = function (d) { return yScale(d.value); };
+            var yMap = d => yScale(d.value);
 
             // setup fill color
-            var cValue = function (d) { return d.id; };
             var color = d3.scaleOrdinal(["red", "blue"]);
 
             // add the graph canvas to the body of the webpage
@@ -306,19 +303,17 @@
                 .x(xMap)
                 .y(yMap);
 
-            legendData.forEach(function (data) {
+            legendData.forEach(data => {
                 // Nest the entries by symbol
-                var dataNest = d3.nest()
-                    .key(function (d) { return d.id })
-                    .entries(data.points);
+                var dataGroups = d3.group(data.points, d => d.id);
 
                 // Loop through each symbol / key
-                dataNest.forEach(function (d) {
+                dataGroups.forEach(value => {
                     svg.append("path")
-                        .datum(d.values)
+                        .datum(value)
                         .attr("class", "line")
                         .attr("d", line)
-                        .attr('stroke', function (d) { return color(cValue(d[0])); })
+                        .attr('stroke', d => color(d[0].id))
                         .attr('stroke-width', 1)
                         .attr('fill', 'none')
                         .attr("opacity", 0.6);
@@ -331,30 +326,26 @@
                 .enter()
                 .append("g")
                 .attr("class", "legend")
-                .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; })
-                .on("click", function (d) {
+                .attr("transform", (_d, i) => "translate(0," + i * 20 + ")")
+                .on("click", function (_event, d) {
                     d.visible = !d.visible;
                     var legendEntry = d3.select(this);
                     legendEntry.select("text")
-                        .style("opacity", function () { return d.visible ? 1 : 0.5; });
+                        .style("opacity", () => d.visible ? 1 : 0.5);
                     legendEntry.select("rect")
-                        .style("fill-opacity", function () { return d.visible ? 1 : 0; });
+                        .style("fill-opacity", () => d.visible ? 1 : 0);
 
                     svg.selectAll(".line")
-                        .filter(function (line) {
-                            return line[0].id === d.id;
-                        })
-                        .attr("visibility", function (line) {
-                            return d.visible ? "visible" : "hidden";
-                        });
+                        .filter((line) => line[0].id === d.id)
+                        .attr("visibility", () => d.visible ? "visible" : "hidden");
                 });
 
             // draw legend's colored rectangles
             legend.append("rect")
                 .attr("width", 15)
                 .attr("height", 15)
-                .style("fill", function (d) { return color(d.id); })
-                .style("stroke", function (d) { return color(d.id); })
+                .style("fill", d => color(d.id))
+                .style("stroke", d => color(d.id))
                 .style("stroke-width", 4)
                 .attr("transform", "translate(0, -" + $scope.legendHeight + ")");
 
@@ -364,7 +355,7 @@
                 .attr("y", 9)
                 .attr("dy", ".35em")
                 .attr("transform", "translate(0, -" + $scope.legendHeight + ")")
-                .text(function (d) { return d.name; })
+                .text(d => d.name)
                 .style("font-size", "9pt");
         }
 
@@ -401,7 +392,7 @@
         $scope.taskId = location[location.length - 1];
         $scope.loading = true;
         $http.get(`/api/TaskManagerWebApi/${$scope.taskId}`)
-            .then(function (data) {
+            .then(data => {
                 MapModelFromJson($scope, JSON.parse(data.data));
 
                 $scope.equalElements = new Array($scope.mattersNames.length);
@@ -411,7 +402,7 @@
                 }
 
                 $scope.loading = false;
-            }, function () {
+            }, () => {
                 alert("Failed loading characteristic data");
 
                 $scope.loading = false;
@@ -419,7 +410,7 @@
     }
 
     function makePositive() {
-        return function (num) { return Math.abs(num); };
+        return num => Math.abs(num);
     }
 
     angular.module("libiada")

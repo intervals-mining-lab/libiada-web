@@ -5,13 +5,14 @@
 <div ng-repeat="feature in ::features">
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <label>
-                <input type="checkbox"
-                       name="features"
-                       checked
-                       ng-value="::feature.Value"
-                       ng-model="feature.Selected"
-                       ng-change="filterByFeature(feature)" />
+            <input type="checkbox"
+                   name="features"
+                   id="{{::'features'+feature.Value}}"
+                   checked
+                   ng-value="::feature.Value"
+                   ng-model="feature.Selected"
+                   ng-change="filterByFeature(feature)" />
+            <label for="{{::'features'+feature.Value}}">
                 {{::feature.Text}}
             </label>
         </div>

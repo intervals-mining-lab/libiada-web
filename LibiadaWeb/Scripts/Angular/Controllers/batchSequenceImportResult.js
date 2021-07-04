@@ -6,8 +6,8 @@
         // returns css class for given status
         function calculateStatusClass(status) {
             return status === "Success" ? "success"
-                : status === "Exists" ? "info"
-                    : status === "Error" ? "danger" : "";
+                 : status === "Exists" ? "info"
+                 : status === "Error" ? "danger" : "";
         }
 
         $scope.calculateStatusClass = calculateStatusClass;

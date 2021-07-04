@@ -3,6 +3,7 @@
 *.DotSettings.user
 *.suo
 .vs/
+.vs
 
 #rider temp files
 .idea/
@@ -45,11 +46,16 @@ build/
 *.log
 *.scc
 
+# Resharper
 _ReSharper*/
 *.[Rr]e[Ss]harper
 *.user
+
+# Packeges
 [Pp]ackages
 packages/
+Libraries/
+
 *.dgml
 *[Ss]tyle[Cc]op.[Cc]ache
 
@@ -74,7 +80,7 @@ LibiadaWeb/JSLintNet.json
 Web.Release.config
 ConnectionStrings.config
 
-.vs
+
 
 # Secret data storage
 LibiadaWeb/secrets.file

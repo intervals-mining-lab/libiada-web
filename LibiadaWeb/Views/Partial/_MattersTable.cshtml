@@ -2,14 +2,16 @@
 
 <div class="form-group" ng-init="$ctrl.geneticNature = @((byte)Nature.Genetic)" ng-show="$ctrl.nature == $ctrl.geneticNature">
     <div class="col-md-offset-2 col-md-10">
-        <label>
+        
             <input type="checkbox"
                    name="showRefSeqOnly"
-                   checked="checked"
+                   id="showRefSeqOnly"
+                   checked
                    ng-model="$ctrl.showRefSeqOnly"
                    ng-change="$ctrl.toogleMattersVisibility()" />
-            Show only reference sequences
-        </label>
+            <label for="showRefSeqOnly">
+                Show only reference sequences
+            </label>
     </div>
 </div>
 <div class="form-group" ng-if="::$ctrl.checkboxes">
@@ -18,7 +20,7 @@
         <input type="button" class="btn btn-default" ng-click="$ctrl.unselectAllVisibleMatters()" value="Unselect all visible sequences" />
     </div>
 </div>
-<label class="control-label">Sequences:</label>
+<h4>Sequences:</h4>
 <table ng-cloak class="table table-bordered table-hover">
     <thead>
         <tr>
@@ -59,15 +61,17 @@
         <tr ng-repeat="matter in $ctrl.matters | filter: { Visible: true } track by matter.Value " ng-cloak>
             <td ng-bind="$index + 1" />
             <td>
-                <label>
+                
                     <input type="{{::$ctrl.mattersInputType}}"
                            ng-model="matter.Selected"
                            name="{{::$ctrl.mattersInputName}}"
+                           id="{{::'matter' + matter.Value}}"
                            ng-value="::matter.Value"
                            ng-change="$ctrl.matterSelectChange(matter)"
                            ng-disabled="$ctrl.checkboxes && !matter.Selected && ($ctrl.selectedMatters >= $ctrl.maximumSelectedMatters)" />
-                    {{::matter.Text}}
-                </label>
+                    <label for="{{::'matter' + matter.Value}}">
+                        {{::matter.Text}}
+                    </label>
             </td>
             <td ng-bind="::matter.Group" />
             <td ng-bind="::matter.SequenceType" />

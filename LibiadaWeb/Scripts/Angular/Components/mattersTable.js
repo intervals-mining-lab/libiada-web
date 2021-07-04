@@ -4,7 +4,7 @@
     function MattersTableController(filterFilter) {
         var ctrl = this;
 
-        ctrl.$onInit = function () {
+        ctrl.$onInit = () => {
             ctrl.showRefSeqOnly = true;
             ctrl.checkboxes = ctrl.maximumSelectedMatters > 1;
             ctrl.selectedMatters = 0;
@@ -18,13 +18,13 @@
             }
         };
 
-        ctrl.$onChanges = function (changes) {
+        ctrl.$onChanges = changes => {
             if (changes.nature) {
                 ctrl.toogleMattersVisibility(true);
             }
         };
 
-        ctrl.toogleMattersVisibility = function (isNewNature) {
+        ctrl.toogleMattersVisibility = isNewNature => {
             if (isNewNature) {
                 ctrl.matters.forEach(m => m.Selected = false);
             }
@@ -32,7 +32,7 @@
             ctrl.matters.forEach(m => ctrl.setMatterVisibility(m));
         };
 
-        ctrl.setMatterVisibility = function (matter) {
+        ctrl.setMatterVisibility = matter => {
             ctrl.searchMatterText = ctrl.searchMatterText || "";
             matter.Visible = matter.Selected || (ctrl.searchMatterText.length >= 4
                           && matter.Nature == ctrl.nature
@@ -42,37 +42,28 @@
                           && (ctrl.nature != ctrl.geneticNature || !ctrl.showRefSeqOnly || ctrl.isRefSeq(matter)));
         };
 
-        ctrl.isRefSeq = function (matter) {
-            return matter.Text.split("|").slice(-1)[0].indexOf("_") !== -1;
+        // checks if genetic sequence is referense sequence 
+        // (its  genbank id contains "_")
+        ctrl.isRefSeq = matter => matter.Text.split("|").slice(-1)[0].indexOf("_") !== -1;
+
+        ctrl.matterSelectChange = matter => matter.Selected ? ctrl.selectedMatters++ : ctrl.selectedMatters--;
+
+        ctrl.getVisibleMatters = () => ctrl.matters.filter(m => m.Visible);
+
+        ctrl.selectAllVisibleMatters = () => {
+            ctrl.matters.filter(m => m.Visible).forEach(matter => {
+                    if (!matter.Selected && (ctrl.selectedMatters < ctrl.maximumSelectedMatters)) {
+                        matter.Selected = true;
+                        ctrl.selectedMatters++;
+                    }
+                });
         };
 
-        ctrl.matterSelectChange = function (matter) {
-            if (matter.Selected) {
-                ctrl.selectedMatters++;
-            } else {
-                ctrl.selectedMatters--;
-            }
-        };
-
-        ctrl.getVisibleMatters = function () {
-            return ctrl.matters.filter(m => m.Visible);
-        };
-
-        ctrl.selectAllVisibleMatters = function () {
-            ctrl.matters.filter(m => m.Visible).forEach(function (matter) {
-                if (!matter.Selected && (ctrl.selectedMatters < ctrl.maximumSelectedMatters)) {
-                    matter.Selected = true;
-                    ctrl.selectedMatters++;
-                }
-            });
-        };
-
-        ctrl.unselectAllVisibleMatters = function () {
-            ctrl.matters.filter(m => m.Selected).forEach(function (matter) {
-                matter.Selected = false;
-
-                ctrl.setMatterVisibility(matter);
-            });
+        ctrl.unselectAllVisibleMatters = () => {
+            ctrl.matters.filter(m => m.Selected).forEach(matter => {
+                    matter.Selected = false;
+                    ctrl.setMatterVisibility(matter);
+                });
 
             ctrl.selectedMatters = 0;
         };

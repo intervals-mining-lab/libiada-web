@@ -8,59 +8,52 @@
 
 @using (Html.BeginForm())
 {
-    <div ng-controller="SequencesOrderDistributionCtrl">
-        @Html.AntiForgeryToken()
-        <div class="form-horizontal">
-            <h4>Parameters</h4>
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <div class="form-group">
-                <label class="control-label col-md-2" for="length">Generated sequnces length:</label>
-                <div class="col-md-10">
-                    <input class="form-control" name="length" type="number" value="4" min="0" id="length" />
-                    @Html.ValidationMessage("length", "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-md-2" for="alphabetCardinality">Generated sequnces alphabet cardinality:</label>
-                <div class="col-md-10">
-                    <input class="form-control" name="alphabetCardinality" type="number" value="4" min="0" id="alphabetCardinality" />
-                    @Html.ValidationMessage("alphabetCardinality", "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="radio" name="typeGenerate" id="typeGenerate" value="0" checked />
-                        Generate all possible sequences with only given alphabet cardinality
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="radio" name="typeGenerate" id="typeGenerate" value="1" />
-                        Generate all possible sequences with alphabet cardinality less or equal to given
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="radio" name="typeGenerate" id="typeGenerate" value="2" />
-                        Generate only non-redundant sequences with only given alphabet cardinality
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="radio" name="typeGenerate" id="typeGenerate" value="3" />
-                        Generate only non-redundant sequences with alphabet cardinality less or equal to given
-                    </label>
-                </div>
-            </div>
-            @Html.Partial("_MattersSubmit")
+<div ng-controller="SequencesOrderDistributionCtrl" class="form-horizontal">
+    @Html.AntiForgeryToken()
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        <label class="control-label col-md-2" for="length">Generated sequnces length:</label>
+        <div class="col-md-10">
+            <input class="form-control" name="length" type="number" value="4" min="0" id="length" />
+            @Html.ValidationMessage("length", "", new { @class = "text-danger" })
         </div>
     </div>
+    <div class="form-group">
+        <label class="control-label col-md-2" for="alphabetCardinality">Generated sequnces alphabet cardinality:</label>
+        <div class="col-md-10">
+            <input class="form-control" name="alphabetCardinality" type="number" value="4" min="0" id="alphabetCardinality" />
+            @Html.ValidationMessage("alphabetCardinality", "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <fieldset>
+        <legend>Sequences generation settings:</legend>
+        <div class="col-md-offset-2 col-md-10">
+            <input type="radio" name="typeGenerate" id="generationTypeStrict" value="0" checked />
+            <label for="generationTypeStrict">
+                Generate all possible sequences with only given alphabet cardinality
+            </label>
+        </div>
+        <div class="col-md-offset-2 col-md-10">
+            <input type="radio" name="typeGenerate" id="generationTypeAll" value="1" />
+            <label for="generationTypeAll">
+                Generate all possible sequences with alphabet cardinality less or equal to given
+            </label>
+        </div>
+        <div class="col-md-offset-2 col-md-10">
+            <input type="radio" name="typeGenerate" id="generationTypeNonRedundantStrict" value="2" />
+            <label for="generationTypeNonRedundantStrict">
+                Generate only non-redundant sequences with only given alphabet cardinality
+            </label>
+        </div>
+        <div class="col-md-offset-2 col-md-10">
+            <input type="radio" name="typeGenerate" id="generationTypeNonRedundant" value="3" />
+            <label for="generationTypeNonRedundant">
+                Generate only non-redundant sequences with alphabet cardinality less or equal to given
+            </label>
+        </div>
+    </fieldset>
+    <hr />
+    @Html.Partial("_MattersSubmit")
+</div>
 }
