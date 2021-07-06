@@ -9,7 +9,7 @@
         // initializes MIDI player
         $scope.onload = function () {
             MIDI.loadPlugin({
-                soundfontUrl: "../../Scripts/midijs/soundfont/",
+                soundfontUrl: "../../Scripts/",
                 instrument: "acoustic_grand_piano",
                 onprogress: (state, progress) => {
                     console.log(state, progress);

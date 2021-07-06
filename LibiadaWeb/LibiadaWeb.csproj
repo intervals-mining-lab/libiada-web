@@ -744,6 +744,7 @@
     <Content Include="Libraries\twitter-bootstrap\js\bootstrap.js" />
     <Content Include="Libraries\twitter-bootstrap\js\bootstrap.min.js" />
     <Content Include="Libraries\twitter-bootstrap\js\npm.js" />
+    <Content Include="Scripts\acoustic_grand_piano-ogg.js" />
     <Content Include="Scripts\Angular\Components\characteristic.js" />
     <Content Include="Scripts\Angular\Components\characteristics.js" />
     <Content Include="Scripts\Angular\Components\characteristicsWithoutNotation.js" />
