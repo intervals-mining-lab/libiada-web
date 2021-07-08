@@ -379,10 +379,6 @@
     <Compile Include="Translator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ConnectionStrings.config">
-      <DependentUpon>Web.config</DependentUpon>
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="Content\dna.png" />
     <Content Include="Content\GenesMap.css" />
     <Content Include="Content\ScrollUpDown.css" />
