@@ -288,6 +288,7 @@
                     data += $"&api_key={ApiKey}";
                 }
 
+                WaitForRequest();
                 requestResult = webClient.UploadString(url, data);
             }
 
@@ -400,20 +401,17 @@
 
             var memoryStream = new MemoryStream();
 
-            lock (SyncRoot)
+            WaitForRequest();
+            using (var downloader = new WebClient())
             {
-                WaitForRequest();
-                using (var downloader = new WebClient())
+                using (Stream stream = downloader.OpenRead(resultUrl))
                 {
-                    using (Stream stream = downloader.OpenRead(resultUrl))
+                    if (stream == null)
                     {
-                        if (stream == null)
-                        {
-                            throw new Exception("Response stream was null.");
-                        }
-
-                        stream.CopyTo(memoryStream);
+                        throw new Exception("Response stream was null.");
                     }
+
+                    stream.CopyTo(memoryStream);
                 }
             }
 
@@ -427,14 +425,17 @@
         /// </summary>
         private static void WaitForRequest()
         {
-            int delay = string.IsNullOrEmpty(ApiKey) ? 334 : 100;
-
-            if (DateTimeOffset.Now - lastRequestDateTime < new TimeSpan(0, 0, 0, 0, delay))
+            lock (SyncRoot)
             {
-                Thread.Sleep(delay);
-            }
+                int delay = string.IsNullOrEmpty(ApiKey) ? 334 : 100;
 
-            lastRequestDateTime = DateTimeOffset.Now;
+                if (DateTimeOffset.Now - lastRequestDateTime < new TimeSpan(0, 0, 0, 0, delay))
+                {
+                    Thread.Sleep(delay);
+                }
+
+                lastRequestDateTime = DateTimeOffset.Now;
+            }
         }
     }
 }
