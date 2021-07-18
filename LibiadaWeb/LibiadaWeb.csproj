@@ -960,6 +960,12 @@
     <Content Include="Views\Sequences\GenBankAccessionVersionUpdateChecker\Index.cshtml" />
     <Content Include="Views\Sequences\BatchImagesImport\Result.cshtml" />
     <Content Include="Views\Sequences\BatchImagesImport\Index.cshtml" />
+    <Content Include="secrets.file">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="secrets.file.example">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
