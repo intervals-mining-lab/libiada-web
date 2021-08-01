@@ -111,10 +111,10 @@
         <div class="col-md-10">
             <select class="form-control"
                     title="Reading trajectory"
-                    ng-model="characteristic.trajectory"
+                    ng-model="$ctrl.characteristic.trajectory"
                     ng-options="t.Text for t in ::$ctrl.trajectories"
                     id="trajectory"></select>
-            <input type="hidden" name="trajectories" ng-value="characteristic.trajectories.Value" />
+            <input type="hidden" name="trajectories" ng-value="$ctrl.characteristic.trajectories.Value" />
         </div>
     </div>
 </div>
