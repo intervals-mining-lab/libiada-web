@@ -54,30 +54,6 @@
 <input type="hidden" name="notation" ng-value="$ctrl.characteristic.notation.Value" />
 
 <div ng-switch="$ctrl.nature">
-    <div ng-switch-when="@((byte)Nature.Literature)">
-        <div class="form-group">
-            <label class="control-label col-md-2" for="language">Language:</label>
-            <div class="col-md-10">
-                <select class="form-control"
-                        title="Language"
-                        ng-model="$ctrl.characteristic.language"
-                        ng-options="l.Text for l in ::$ctrl.languages"
-                        id="language"></select>
-                <input type="hidden" name="language" ng-value="$ctrl.characteristic.language.Value" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-2" for="translator">Translator:</label>
-            <div class="col-md-10">
-                <select class="form-control"
-                        title="Translator"
-                        ng-model="$ctrl.characteristic.translator"
-                        ng-options="t.Text for t in ::$ctrl.translators"
-                        id="translator"></select>
-                <input type="hidden" name="translator" ng-value="$ctrl.characteristic.translator.Value" />
-            </div>
-        </div>
-    </div>
     <div ng-switch-when="@((byte)Nature.Genetic)">
     </div>
     <div ng-switch-when="@((byte)Nature.Music)">
@@ -104,7 +80,42 @@
             </label>
         </div>
     </div>
+    <div ng-switch-when="@((byte)Nature.Literature)">
+        <div class="form-group">
+            <label class="control-label col-md-2" for="language">Language:</label>
+            <div class="col-md-10">
+                <select class="form-control"
+                        title="Language"
+                        ng-model="$ctrl.characteristic.language"
+                        ng-options="l.Text for l in ::$ctrl.languages"
+                        id="language"></select>
+                <input type="hidden" name="language" ng-value="$ctrl.characteristic.language.Value" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2" for="translator">Translator:</label>
+            <div class="col-md-10">
+                <select class="form-control"
+                        title="Translator"
+                        ng-model="$ctrl.characteristic.translator"
+                        ng-options="t.Text for t in ::$ctrl.translators"
+                        id="translator"></select>
+                <input type="hidden" name="translator" ng-value="$ctrl.characteristic.translator.Value" />
+            </div>
+        </div>
+    </div>
     <div ng-switch-when="@((byte)Nature.MeasurementData)">
+    </div>
+    <div ng-switch-when="@((byte)Nature.Image)">
+        <label class="control-label col-md-2" for="trajectory">Reading trajectory:</label>
+        <div class="col-md-10">
+            <select class="form-control"
+                    title="Reading trajectory"
+                    ng-model="characteristic.trajectory"
+                    ng-options="t.Text for t in ::$ctrl.trajectories"
+                    id="trajectory"></select>
+            <input type="hidden" name="trajectories" ng-value="characteristic.trajectories.Value" />
+        </div>
     </div>
 </div>
 <hr />

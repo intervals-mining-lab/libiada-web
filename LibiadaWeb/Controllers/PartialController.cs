@@ -41,6 +41,14 @@
         public PartialViewResult _Characteristic() => PartialView();
 
         /// <summary>
+        /// Characteristics nature parameters partial view.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="PartialViewResult"/>.
+        /// </returns>
+        public PartialViewResult _CharacteristicNatureParams() => PartialView();
+
+        /// <summary>
         /// The Characteristics partial view.
         /// </summary>
         /// <returns>

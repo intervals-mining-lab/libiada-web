@@ -8,6 +8,7 @@
     using System.Web.Mvc.Html;
 
     using LibiadaCore.Extensions;
+    using LibiadaCore.Images;
     using LibiadaCore.Music;
 
     using LibiadaWeb.Extensions;
@@ -82,7 +83,8 @@
                            { "sequenceTypes", sequenceTypes.ToSelectListWithNature() },
                            { "groups", groups.ToSelectListWithNature() },
                            { "languages", EnumHelper.GetSelectList(typeof(Language)) },
-                           { "translators", EnumHelper.GetSelectList(typeof(Translator)) }
+                           { "translators", EnumHelper.GetSelectList(typeof(Translator)) },
+                           { "trajectories", EnumHelper.GetSelectList(typeof(Trajectory)) }
                        };
         }
 
@@ -134,6 +136,7 @@
             data.Add("languages", EnumHelper.GetSelectList(typeof(Language)));
             data.Add("translators", EnumHelper.GetSelectList(typeof(Translator)));
             data.Add("pauseTreatments", EnumHelper.GetSelectList(typeof(PauseTreatment)));
+            data.Add("trajectories", EnumHelper.GetSelectList(typeof(Trajectory)));
             data.Add("sequenceTypes", sequenceTypes.ToSelectListWithNature(true));
             data.Add("groups", groups.ToSelectListWithNature(true));
 
