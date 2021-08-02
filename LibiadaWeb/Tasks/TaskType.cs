@@ -22,7 +22,7 @@
         /// The calculation.
         /// </summary>
         [Display(Name = "Characteristics calculation")]
-        [TaskClass(typeof(CalculationController))]
+       // [TaskClass(typeof(CalculationController))]
         Calculation = 2,
 
         /// <summary>

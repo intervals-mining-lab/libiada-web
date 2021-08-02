@@ -107,14 +107,16 @@
         <div ng-switch-when="@((byte)Nature.MeasurementData)">
         </div>
         <div ng-switch-when="@((byte)Nature.Image)">
-            <label class="control-label col-md-2" for="trajectory">Reading trajectory:</label>
-            <div class="col-md-10">
-                <select class="form-control"
-                        title="Reading trajectory"
-                        ng-model="characteristic.trajectory"
-                        ng-options="t.Text for t in ::$ctrl.trajectories"
-                        id="trajectory"></select>
-                <input type="hidden" name="trajectories" ng-value="characteristic.trajectories.Value" />
+            <div class="form-group">
+                <label class="control-label col-md-2" for="trajectory">Reading trajectory:</label>
+                <div class="col-md-10">
+                    <select class="form-control"
+                            title="Reading trajectory"
+                            ng-model="characteristic.trajectory"
+                            ng-options="t.Text for t in ::$ctrl.trajectories"
+                            id="trajectory"></select>
+                    <input type="hidden" name="trajectories" ng-value="characteristic.trajectory.Value" />
+                </div>
             </div>
         </div>
     </div>

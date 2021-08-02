@@ -4,15 +4,16 @@
     using System.Linq;
     using System.Web.Mvc;
 
+    using LibiadaCore.Images;
     using LibiadaCore.Music;
+
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.CalculatorsData;
+    using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
     using LibiadaWeb.Tasks;
-
-    using Models.Repositories.Catalogs;
 
     using Newtonsoft.Json;
 
@@ -92,6 +93,7 @@
             Translator?[] translators,
             PauseTreatment[] pauseTreatments,
             bool[] sequentialTransfers,
+            ImageOrderExtractor[] trajectories,
             bool rotate,
             bool complementary,
             uint? rotationLength)
@@ -103,31 +105,8 @@
                 long[][] sequenceIds;
                 using (var db = new LibiadaWebEntities())
                 {
-                    if (notations[0].GetNature() == Nature.Image)
-                    {
-                        var existingSequences = db.ImageSequences.Where(s => matterIds.Contains(s.MatterId))
-                        .ToArray();
-                        ImageSequenceRepository imageSequenceRepository = new ImageSequenceRepository();
-                        for (int i = 0; i < matterIds.Length; i++)
-                        {
-                            for (int j = 0; j < notations.Length; j++)
-                            {
-                                if (!existingSequences.Any(s => s.MatterId == matterIds[i] && s.Notation == notations[j]))
-                                {
-                                    var newImageSequence = new ImageSequence()
-                                    {
-                                        MatterId = matterIds[i],
-                                        Notation = notations[j],
-                                        OrderExtractor = ImageOrderExtractor.LineLeftToRightTopToBottom
-                                    };
-                                    imageSequenceRepository.Create(newImageSequence, db);
-                                }
-                            }
-                        }
-                        db.SaveChanges();
-                    }
                     var commonSequenceRepository = new CommonSequenceRepository(db);
-                    sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds, notations, languages, translators, pauseTreatments, sequentialTransfers, ImageOrderExtractor.LineLeftToRightTopToBottom);
+                    sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds, notations, languages, translators, pauseTreatments, sequentialTransfers, trajectories);
                     mattersNames = Cache.GetInstance().Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
                 }
 

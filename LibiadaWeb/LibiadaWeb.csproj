@@ -103,6 +103,7 @@
     </Compile>
     <Compile Include="Attribute.cs" />
     <Compile Include="Attributes\GenBankFeatureNameAttribute.cs" />
+    <Compile Include="Attributes\ImageOrderExtractorAttribute.cs" />
     <Compile Include="Attributes\SequenceGroupTypeAttribute.cs" />
     <Compile Include="Attributes\ImageTransformerTypeAttribute.cs" />
     <Compile Include="Attributes\TaskClassAttribute.cs" />

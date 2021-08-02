@@ -1,19 +1,22 @@
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
+    using SixLabors.ImageSharp;
+
+    using System;
     using System.Collections.Generic;
     using System.Data.Entity;
-    using SixLabors.ImageSharp;
     using System.Linq;
     using System.Text;
 
     using LibiadaCore.Core;
+    using LibiadaCore.Extensions;
     using LibiadaCore.Music;
-
-    using LibiadaWeb.Extensions;
-    using LibiadaWeb.Helpers;
     using LibiadaCore.Images;
     using LibiadaCore.Core.SimpleTypes;
-    using System;
+
+    using LibiadaWeb.Helpers;
+    using LibiadaWeb.Attributes;
+    using LibiadaWeb.Extensions;
 
 
     /// <summary>
@@ -116,14 +119,15 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             }
 
             // if it is not "real" sequence , then it must be image "sequence" 
-            var imageMatter = Db.ImageSequences.Include(s => s.Matter).Single(s => s.Id == sequenceId).Matter;
-            if (imageMatter.Nature != Nature.Image)
+            var imageSequence = Db.ImageSequences.Include(s => s.Matter).Single(s => s.Id == sequenceId);
+            if (imageSequence.Matter.Nature != Nature.Image)
             {
                 throw new Exception("Cannot find sequence to return");
             }
 
-            var image = Image.Load(imageMatter.Source);
-            var sequence = ImageProcessor.ProcessImage(image, new IImageTransformer[0], new IMatrixTransformer[0], new LineOrderExtractor());
+            var image = Image.Load(imageSequence.Matter.Source);
+            var orderExtractor = imageSequence.OrderExtractor.GetAttribute<ImageOrderExtractor, ImageOrderExtractorAttribute>().Value;
+            var sequence = ImageProcessor.ProcessImage(image, new IImageTransformer[0], new IMatrixTransformer[0], (IImageOrderExtractor)Activator.CreateInstance(orderExtractor));
             var alphabet = new Alphabet { NullValue.Instance() };
             var incompleteAlphabet = sequence.Alphabet;
             for (int j = 0; j < incompleteAlphabet.Cardinality; j++)
@@ -187,10 +191,10 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             Translator?[] translators,
             PauseTreatment[] pauseTreatments,
             bool[] sequentialTransfers,
-            ImageOrderExtractor imageOrderExtractor)
+            ImageOrderExtractor[] imageOrderExtractors)
         {
             var sequenceIds = new long[matterIds.Length][];
-
+            CreateMissingImageSequences(matterIds, notations, imageOrderExtractors);
             for (int i = 0; i < matterIds.Length; i++)
             {
                 var matterId = matterIds[i];
@@ -219,6 +223,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                                                           && m.SequentialTransfer == sequentialTransfer).Id;
                             break;
                         case Nature.Image:
+                            ImageOrderExtractor imageOrderExtractor = imageOrderExtractors[j];
                             sequenceIds[i][j] = Db.ImageSequences.Single(c => c.MatterId == matterId && c.Notation == notation && c.OrderExtractor == imageOrderExtractor).Id;
                             break;
                         default:
@@ -252,6 +257,54 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         {
             long[] elements = Db.GetAlphabetElementIds(sequenceId);
             return ElementRepository.ToLibiadaAlphabet(elements);
+        }
+
+        /// <summary>
+        /// Creates image sequences for given order reading trajectories
+        /// if they are missing in database.
+        /// </summary>
+        /// <param name="matterIds">
+        /// Matters ids.
+        /// </param>
+        /// <param name="notations">
+        /// notations of images.
+        /// </param>
+        /// <param name="imageOrderExtractors">
+        /// Reading trajectories.
+        /// </param>
+        private void CreateMissingImageSequences(long[] matterIds, Notation[] notations, ImageOrderExtractor[] imageOrderExtractors)
+        {
+            if (notations[0].GetNature() == Nature.Image)
+            {
+                var existingSequences = Db.ImageSequences
+                    .Where(s => matterIds.Contains(s.MatterId) 
+                             && notations.Contains(s.Notation) 
+                             && imageOrderExtractors.Contains(s.OrderExtractor))
+                    .ToList();
+
+                ImageSequenceRepository imageSequenceRepository = new ImageSequenceRepository();
+                for (int i = 0; i < matterIds.Length; i++)
+                {
+                    for (int j = 0; j < notations.Length; j++)
+                    {
+                        if (!existingSequences.Any(s => s.MatterId == matterIds[i] 
+                                                     && s.Notation == notations[j] 
+                                                     && s.OrderExtractor == imageOrderExtractors[j]))
+                        {
+                            var newImageSequence = new ImageSequence()
+                            {
+                                MatterId = matterIds[i],
+                                Notation = notations[j],
+                                OrderExtractor = imageOrderExtractors[j]
+                            };
+                            imageSequenceRepository.Create(newImageSequence, Db);
+                            existingSequences.Add(newImageSequence);
+                        }
+                    }
+                }
+
+                Db.SaveChanges();
+            }
         }
     }
 }
