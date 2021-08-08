@@ -4,6 +4,7 @@
     using System.Linq;
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
+
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
     using LibiadaCore.DataTransformers;

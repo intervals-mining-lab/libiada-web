@@ -12,6 +12,7 @@
     using LibiadaCore.Music;
 
     using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
     using LibiadaWeb.Tasks;
@@ -121,7 +122,7 @@
                 }
 
                 var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
-                var mattersCharacteristics = new object[matterIds.Length];
+                var sequencesCharacteristics = new SequenceCharacteristics[matterIds.Length];
                 matterIds = matterIds.OrderBy(m => m).ToArray();
 
                 for (int i = 0; i < matterIds.Length; i++)
@@ -151,22 +152,22 @@
                         characteristics[j] = calculator.Calculate(sequence, link);
                     }
 
-                    mattersCharacteristics[i] = new { matterName = mattersNames[matterId], characteristics };
+                    sequencesCharacteristics[i] = new SequenceCharacteristics
+                    {
+                        MatterName = mattersNames[matterId],
+                        Characteristics = characteristics
+                    };
                 }
 
                 var characteristicNames = new string[characteristicLinkIds.Length];
+                var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
                 for (int k = 0; k < characteristicLinkIds.Length; k++)
                 {
                     characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[k], notations[k]);
-                }
-
-                var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
-                for (int i = 0; i < characteristicNames.Length; i++)
-                {
-                    characteristicsList[i] = new SelectListItem
+                    characteristicsList[k] = new SelectListItem
                     {
-                        Value = i.ToString(),
-                        Text = characteristicNames[i],
+                        Value = k.ToString(),
+                        Text = characteristicNames[k],
                         Selected = false
                     };
                 }
@@ -175,7 +176,7 @@
 
                 var result = new Dictionary<string, object>
                 {
-                    { "characteristics", mattersCharacteristics },
+                    { "characteristics", sequencesCharacteristics },
                     { "characteristicNames", characteristicNames },
                     { "characteristicsList", characteristicsList },
                     { "transformationsList", transformations },
