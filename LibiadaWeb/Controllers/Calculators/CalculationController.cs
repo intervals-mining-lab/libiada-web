@@ -4,10 +4,8 @@
     using System.Linq;
     using System.Web.Mvc;
 
-    using LibiadaCore.Images;
     using LibiadaCore.Music;
 
-    using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.CalculatorsData;
@@ -70,6 +68,9 @@
         /// </param>
         /// <param name="sequentialTransfers">
         /// Sequential transfer flag used in music sequences.
+        /// </param>
+        /// <param name="trajectories">
+        /// Reading trajectories for images.
         /// </param>
         /// <param name="rotate">
         /// Rotation flag.

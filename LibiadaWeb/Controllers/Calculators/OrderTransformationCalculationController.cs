@@ -4,6 +4,7 @@
     using System.Linq;
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
+
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
     using LibiadaCore.DataTransformers;
@@ -80,6 +81,9 @@
         /// <param name="sequentialTransfers">
         /// Sequential transfer flag used in music sequences.
         /// </param>
+        /// <param name="trajectories">
+        /// Reading trajectories for images.
+        /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
@@ -94,67 +98,60 @@
             Language[] languages,
             Translator?[] translators,
             PauseTreatment[] pauseTreatments,
-            bool[] sequentialTransfers)
+            bool[] sequentialTransfers,
+            ImageOrderExtractor[] trajectories)
         {
             return CreateTask(() =>
             {
-                var db = new LibiadaWebEntities();
+                Dictionary<long, string> mattersNames = Cache.GetInstance().Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
+                Chain[][] sequences = new Chain[matterIds.Length][];
+
+                using (var db = new LibiadaWebEntities())
+                {
+                    var commonSequenceRepository = new CommonSequenceRepository(db);
+                    long[][] sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds, notations, languages, translators, pauseTreatments, sequentialTransfers, trajectories);
+                    for (int i = 0; i < matterIds.Length; i++)
+                    {
+                        sequences[i] = new Chain[characteristicLinkIds.Length];
+                        for (int j = 0; j < characteristicLinkIds.Length; j++)
+                        {
+                            sequences[i][j] = commonSequenceRepository.GetLibiadaChain(sequenceIds[i][j]);
+                        }
+                    }
+                }
+
                 var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
-                var commonSequenceRepository = new CommonSequenceRepository(db);
                 var mattersCharacteristics = new object[matterIds.Length];
                 matterIds = matterIds.OrderBy(m => m).ToArray();
-                Dictionary<long, Matter> matters = Cache.GetInstance().Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id);
 
                 for (int i = 0; i < matterIds.Length; i++)
                 {
                     long matterId = matterIds[i];
                     var characteristics = new double[characteristicLinkIds.Length];
-                    for (int k = 0; k < characteristicLinkIds.Length; k++)
+                    for (int j = 0; j < characteristicLinkIds.Length; j++)
                     {
-                        Notation notation = notations[k];
-                        long sequenceId;
-                        switch (matters[matterId].Nature)
-                        {
-                            case Nature.Literature:
-                                Language language = languages[k];
-                                Translator translator = translators[k] ?? Translator.NoneOrManual;
-                                sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId
-                                                                               && l.Notation == notation
-                                                                               && l.Language == language
-                                                                               && l.Translator == translator).Id;
-                                break;
-                            case Nature.Music:
-                                PauseTreatment pauseTreatment = pauseTreatments[k];
-                                bool sequentialTransfer = sequentialTransfers[k];
-                                sequenceId = db.MusicSequence.Single(m => m.MatterId == matterId
-                                                                          && m.Notation == notation
-                                                                          && m.PauseTreatment == pauseTreatment
-                                                                          && m.SequentialTransfer == sequentialTransfer).Id;
-                                break;
-                            default:
-                                sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
-                                break;
-                        }
+                        Notation notation = notations[j];
 
-                        Chain sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
+
+                        Chain sequence = sequences[i][j];
                         for (int l = 0; l < iterationsCount; l++)
                         {
-                            for (int j = 0; j < transformationsSequence.Length; j++)
+                            for (int k = 0; k < transformationsSequence.Length; k++)
                             {
-                                sequence = transformationsSequence[j] == OrderTransformation.Dissimilar ? DissimilarChainFactory.Create(sequence)
-                                                                     : HighOrderFactory.Create(sequence, EnumExtensions.GetLink(transformationsSequence[j]));
+                                sequence = transformationsSequence[k] == OrderTransformation.Dissimilar ? DissimilarChainFactory.Create(sequence)
+                                                                     : HighOrderFactory.Create(sequence, EnumExtensions.GetLink(transformationsSequence[k]));
                             }
                         }
 
-                        int characteristicLinkId = characteristicLinkIds[k];
+                        int characteristicLinkId = characteristicLinkIds[j];
                         Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
                         FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
 
                         IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
-                        characteristics[k] = calculator.Calculate(sequence, link);
+                        characteristics[j] = calculator.Calculate(sequence, link);
                     }
 
-                    mattersCharacteristics[i] = new { matterName = matters[matterId].Name, characteristics };
+                    mattersCharacteristics[i] = new { matterName = mattersNames[matterId], characteristics };
                 }
 
                 var characteristicNames = new string[characteristicLinkIds.Length];
@@ -174,11 +171,7 @@
                     };
                 }
 
-                var transformations = new Dictionary<int, string>();
-                for (int i = 0; i < transformationsSequence.Length; i++)
-                {
-                    transformations.Add(i, transformationsSequence[i].GetDisplayValue());
-                }
+                var transformations = transformationsSequence.Select(ts => ts.GetDisplayValue());
 
                 var result = new Dictionary<string, object>
                 {
