@@ -270,9 +270,9 @@
                 .append("g")
                 .attr("class", "legend")
                 .attr("transform", (_d, i) => "translate(0," + i * 20 + ")")
-                .on("click", function (_event, d) {
+                .on("click", function (event, d) {
                     d.visible = !d.visible;
-                    var legendEntry = d3.select(this);
+                    var legendEntry = d3.select(event.currentTarget);
                     legendEntry.select("text")
                         .style("opacity", () => d.visible ? 1 : 0.5);
                     legendEntry.select("rect")

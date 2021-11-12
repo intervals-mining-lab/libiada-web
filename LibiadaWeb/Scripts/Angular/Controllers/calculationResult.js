@@ -115,10 +115,12 @@
             d3.select(".tooltip").remove();
             d3.select(".chart-svg").remove();
 
+            var actualLegendHeight = $scope.legendSettings.show ? $scope.legendHeight : 0;
+
             // chart size and margin settings
-            var margin = { top: 30 + $scope.legendHeight, right: 30, bottom: 30, left: 60 };
+            var margin = { top: 30 + actualLegendHeight, right: 30, bottom: 35, left: 50 };
             var width = $scope.width - margin.left - margin.right;
-            var height = $scope.height - margin.top - margin.bottom;
+            var height = $scope.height + actualLegendHeight - margin.top - margin.bottom;
 
             // setup x
             // calculating margins for dots
@@ -158,7 +160,7 @@
             // add the graph canvas to the body of the webpage
             var svg = d3.select("#chart").append("svg")
                 .attr("width", $scope.width)
-                .attr("height", $scope.height)
+                .attr("height", $scope.height + actualLegendHeight)
                 .attr("class", "chart-svg")
                 .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -182,7 +184,7 @@
 
             svg.append("text")
                 .attr("class", "label")
-                .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top - $scope.legendHeight) + ")")
+                .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top - actualLegendHeight) + ")")
                 .style("text-anchor", "middle")
                 .text($scope.firstCharacteristic.Text)
                 .style("font-size", "12pt");
@@ -216,44 +218,45 @@
                 .style("fill", d => color(d.id))
                 .style("stroke", d => color(d.id))
                 .on("click", (event, d) => $scope.showTooltip(event, d, tooltip, svg));
+            if ($scope.legendSettings.show) {
+                // draw legend
+                var legend = svg.selectAll(".legend")
+                    .data($scope.legend)
+                    .enter()
+                    .append("g")
+                    .attr("class", "legend")
+                    .attr("transform", (_d, i) => "translate(0," + i * 20 + ")")
+                    .on("click", (event, d) => {
+                        d.visible = !d.visible;
+                        var legendEntry = d3.select(event.currentTarget);
+                        legendEntry.select("text")
+                            .style("opacity", () => d.visible ? 1 : 0.5);
+                        legendEntry.select("rect")
+                            .style("fill-opacity", () => d.visible ? 1 : 0);
 
-            // draw legend
-            var legend = svg.selectAll(".legend")
-                .data($scope.legend)
-                .enter()
-                .append("g")
-                .attr("class", "legend")
-                .attr("transform", (_d, i) => "translate(0," + i * 20 + ")")
-                .on("click", (_event, d) => {
-                    d.visible = !d.visible;
-                    var legendEntry = d3.select(this);
-                    legendEntry.select("text")
-                        .style("opacity", () => d.visible ? 1 : 0.5);
-                    legendEntry.select("rect")
-                        .style("fill-opacity", () => d.visible ? 1 : 0);
+                        svg.selectAll(".dot")
+                            .filter(dot => dot.cluster === d.name)
+                            .attr("visibility", () => d.visible ? "visible" : "hidden");
+                    });
 
-                    svg.selectAll(".dot")
-                        .filter(dot => dot.cluster === d.name)
-                        .attr("visibility", () => d.visible ? "visible" : "hidden");
-                });
+                // draw legend colored rectangles
+                legend.append("rect")
+                    .attr("width", 15)
+                    .attr("height", 15)
+                    .style("fill", d => color(d.id))
+                    .style("stroke", d => color(d.id))
+                    .style("stroke-width", 4)
+                    .attr("transform", "translate(0, -" + $scope.legendHeight + ")");
 
-            // draw legend colored rectangles
-            legend.append("rect")
-                .attr("width", 15)
-                .attr("height", 15)
-                .style("fill", d => color(d.id))
-                .style("stroke", d => color(d.id))
-                .style("stroke-width", 4)
-                .attr("transform", "translate(0, -" + $scope.legendHeight + ")");
-
-            // draw legend text
-            legend.append("text")
-                .attr("x", 24)
-                .attr("y", 9)
-                .attr("dy", ".35em")
-                .attr("transform", "translate(0, -" + $scope.legendHeight + ")")
-                .text(d => ($scope.clustersCount ? "Cluster " : "") + d.name)
-                .style("font-size", "9pt");
+                // draw legend text
+                legend.append("text")
+                    .attr("x", 24)
+                    .attr("y", 9)
+                    .attr("dy", ".35em")
+                    .attr("transform", "translate(0, -" + $scope.legendHeight + ")")
+                    .text(d => ($scope.clustersCount ? "Cluster " : "") + d.name)
+                    .style("font-size", "9pt");
+            }
         }
 
         $scope.draw = draw;
@@ -266,8 +269,9 @@
         $scope.xValue = xValue;
 
         $scope.width = 800;
-        $scope.dotRadius = 4;
+        $scope.dotRadius = 3;
         $scope.selectedDotRadius = $scope.dotRadius * 2;
+        $scope.legendSettings = { show: true };
 
         $scope.loadingScreenHeader = "Loading data";
 
@@ -286,7 +290,7 @@
                 $scope.secondCharacteristic = $scope.characteristicsList.length > 1 ? $scope.characteristicsList[1] : $scope.characteristicsList[0];
 
                 $scope.legendHeight = $scope.legend.length * 20;
-                $scope.height = 800 + $scope.legendHeight;
+                $scope.height = 800;
 
                 $scope.loading = false;
             }, function () {

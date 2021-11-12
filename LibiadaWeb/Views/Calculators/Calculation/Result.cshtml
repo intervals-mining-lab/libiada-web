@@ -14,12 +14,14 @@
             <table st-table="characteristics" class="table table-bordered table-hover" ng-cloak>
                 <thead>
                     <tr>
+                        <th>#</th>
                         <th>Sequence name</th>
                         <th ng-repeat="characteristicName in ::characteristicNames" ng-bind="::characteristicName" />
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="characteristic in ::characteristics">
+                        <td ng-bind="$index+1" />
                         <td ng-bind="::characteristic.MatterName" />
                         <td ng-repeat="value in ::characteristic.Characteristics" ng-bind="::value" />
                     </tr>
@@ -50,13 +52,24 @@
             <div class="form-group">
                 <label class="control-label col-md-2" for="height">Height:</label>
                 <div class="col-md-10">
-                    <input class="form-control" name="height" id="height" type="number" min="{{::500 + legendHeight}}" step="20" ng-model="height" />
+                    <input class="form-control" name="height" id="height" type="number" min="500" step="20" ng-model="height" />
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2" for="width">Width:</label>
                 <div class="col-md-10">
                     <input class="form-control" name="width" id="width" type="number" min="400" step="20" ng-model="width" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="checkbox"
+                           name="showLegend"
+                           id="showLegend"
+                           ng-model="legendSettings.show" />
+                    <label for="showLegend">
+                       Draw legend
+                    </label>
                 </div>
             </div>
             <br />

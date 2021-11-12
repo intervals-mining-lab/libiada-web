@@ -61,13 +61,13 @@
         /// <summary>
         /// The equals.
         /// </summary>
-        /// <param name="obj">
-        /// The obj.
+        /// <param name="other">
+        /// Attribute value to compare to.
         /// </param>
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        public override bool Equals(object obj) => obj is AttributeValue attributeValue && this == attributeValue;
+        public override bool Equals(object other) => other is AttributeValue attributeValue && this == attributeValue;
 
         /// <summary>
         /// Calculates hash using <see cref="AttributeId"/> and <see cref="Value"/> hash codes.
