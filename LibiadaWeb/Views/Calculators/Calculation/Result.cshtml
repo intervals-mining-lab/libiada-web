@@ -19,12 +19,7 @@
                         <th ng-repeat="characteristicName in ::characteristicNames" ng-bind="::characteristicName" />
                     </tr>
                 </thead>
-                <tbody>
-                    <tr ng-repeat="characteristic in ::characteristics">
-                        <td ng-bind="$index+1" />
-                        <td ng-bind="::characteristic.MatterName" />
-                        <td ng-repeat="value in ::characteristic.Characteristics" ng-bind="::value" />
-                    </tr>
+                <tbody id="calculationResults">
                 </tbody>
             </table>
             <br />

@@ -292,6 +292,15 @@
                 $scope.legendHeight = $scope.legend.length * 20;
                 $scope.height = 800;
 
+                if ($("#calculationResults").length > 0) {
+                    $("#calculationResults").append($scope.characteristics.map((c, i) =>
+                        `<tr id="resultRow${i}">
+                        <td>${i + 1}</td>
+                        <td>${c.MatterName}</td>`
+                        + c.Characteristics.map(c => `<td>${c}</td>`).join()
+                    ).join());
+                }
+
                 $scope.loading = false;
             }, function () {
                 alert("Failed loading characteristic data");
