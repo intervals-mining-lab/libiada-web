@@ -259,6 +259,59 @@
             }
         }
 
+        async function exportToExcel() {
+
+            const workbook = new ExcelJS.Workbook();
+            const worksheet = workbook.addWorksheet("My Sheet");
+            var columns = [
+                { header: '№', key: 'id', width: 10 },
+                { header: 'Sequence name', key: 'name', width: 32 }
+            ];
+
+            columns = columns.concat($scope.characteristicNames.map(cn => ({ header: cn, key: cn, width: 10 })));
+
+            worksheet.columns = columns;
+
+            for (var i = 0; i < $scope.characteristics.length; i++) {
+                var row = { id: i + 1, name: $scope.characteristics[i].MatterName };
+                $scope.characteristics[i].Characteristics.forEach((cv, j) => row[$scope.characteristicNames[j]] = cv);
+                worksheet.addRow(row).commit();
+            }
+
+            const buffer = await workbook.xlsx.writeBuffer();
+
+            const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
+
+            // TODO: rewrite it using browser file API
+            var saveBlobAsFile = function (blob) {
+                var a = document.createElement("a");
+                document.body.appendChild(a);
+                a.style = "display: none";
+                var url = window.URL.createObjectURL(blob);
+                a.href = url;
+                a.download = $scope.excelFileName || "Results";
+                a.click();
+                window.URL.revokeObjectURL(url);
+                a.remove();
+            };
+
+            saveBlobAsFile(blob);
+        }
+
+        function renderResultsTable() {
+            if (!$scope.characteristicsTableRendering.rendered) {
+                if ($("#calculationResults").length > 0) {
+                    $("#calculationResults").append($scope.characteristics.map((c, i) =>
+                        `<tr id="resultRow${i}">
+                        <td>${i + 1}</td>
+                        <td>${c.MatterName}</td>`
+                        + c.Characteristics.map(c => `<td>${c}</td>`).join()
+                    ).join());
+                }
+                $scope.characteristicsTableRendering.rendered = true;
+            }
+        }
+
         $scope.draw = draw;
         $scope.fillPoints = fillPoints;
         $scope.fillPointTooltip = fillPointTooltip;
@@ -267,11 +320,14 @@
         $scope.fillLegend = fillLegend;
         $scope.yValue = yValue;
         $scope.xValue = xValue;
+        $scope.exportToExcel = exportToExcel;
+        $scope.renderResultsTable = renderResultsTable;
 
         $scope.width = 800;
         $scope.dotRadius = 3;
         $scope.selectedDotRadius = $scope.dotRadius * 2;
         $scope.legendSettings = { show: true };
+        $scope.characteristicsTableRendering = { rendered: false };
 
         $scope.loadingScreenHeader = "Loading data";
 
@@ -291,15 +347,6 @@
 
                 $scope.legendHeight = $scope.legend.length * 20;
                 $scope.height = 800;
-
-                if ($("#calculationResults").length > 0) {
-                    $("#calculationResults").append($scope.characteristics.map((c, i) =>
-                        `<tr id="resultRow${i}">
-                        <td>${i + 1}</td>
-                        <td>${c.MatterName}</td>`
-                        + c.Characteristics.map(c => `<td>${c}</td>`).join()
-                    ).join());
-                }
 
                 $scope.loading = false;
             }, function () {

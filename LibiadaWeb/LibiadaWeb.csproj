@@ -427,6 +427,10 @@
     <Content Include="Libraries\angular.js\angular.min.js" />
     <Content Include="Libraries\d3\d3.js" />
     <Content Include="Libraries\d3\d3.min.js" />
+    <Content Include="Libraries\exceljs\exceljs.bare.js" />
+    <Content Include="Libraries\exceljs\exceljs.bare.min.js" />
+    <Content Include="Libraries\exceljs\exceljs.js" />
+    <Content Include="Libraries\exceljs\exceljs.min.js" />
     <Content Include="Libraries\jquery-validate\additional-methods.js" />
     <Content Include="Libraries\jquery-validate\additional-methods.min.js" />
     <Content Include="Libraries\jquery-validate\jquery.validate.js" />
@@ -815,6 +819,10 @@
     <Content Include="Libraries\twitter-bootstrap\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Libraries\twitter-bootstrap\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Libraries\twitter-bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Libraries\exceljs\exceljs.bare.js.map" />
+    <Content Include="Libraries\exceljs\exceljs.bare.min.js.map" />
+    <Content Include="Libraries\exceljs\exceljs.js.map" />
+    <Content Include="Libraries\exceljs\exceljs.min.js.map" />
     <None Include="Properties\PublishProfiles\Release.pubxml" />
     <Content Include="Scripts\Angular\functions.js" />
     <Content Include="Scripts\Angular\Components\loadingWindow.js" />

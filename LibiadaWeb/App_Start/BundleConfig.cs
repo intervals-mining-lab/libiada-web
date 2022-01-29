@@ -69,7 +69,8 @@
                         "~/Scripts/Angular/Components/mattersTable.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/CalculationResultController").Include(
-                        "~/Scripts/Angular/Controllers/calculationResult.js"));
+                        "~/Scripts/Angular/Controllers/calculationResult.js",
+                        "~/Libraries/exceljs/exceljs.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/ChartsController").Include(
                         "~/Scripts/Angular/Directives/tableParse.js",
