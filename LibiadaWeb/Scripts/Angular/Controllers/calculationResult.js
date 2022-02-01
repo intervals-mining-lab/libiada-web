@@ -263,12 +263,14 @@
 
             const workbook = new ExcelJS.Workbook();
             const worksheet = workbook.addWorksheet("My Sheet");
+            const font = { name: 'Courier New' };
+            const border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } }
             var columns = [
-                { header: '№', key: 'id', width: 10 },
-                { header: 'Sequence name', key: 'name', width: 32 }
+                { header: '№', key: 'id', width: 10, style: { font: font, border: border }  },
+                { header: 'Sequence name', key: 'name', width: 32, style: { font: font, border: border } }
             ];
 
-            columns = columns.concat($scope.characteristicNames.map(cn => ({ header: cn, key: cn, width: 10 })));
+            columns = columns.concat($scope.characteristicNames.map(cn => ({ header: cn, key: cn, width: 20, style: { font: font, border: border } })));
 
             worksheet.columns = columns;
 
