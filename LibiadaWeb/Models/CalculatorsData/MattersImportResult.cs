@@ -1,5 +1,7 @@
 ﻿namespace LibiadaWeb.Models.CalculatorsData
 {
+    using System;
+
     /// <summary>
     /// The matter import result.
     /// </summary>
@@ -34,5 +36,9 @@
         /// The group.
         /// </summary>
         public string Group;
+
+        public string CollectionCountry;
+
+        public DateTimeOffset CollectionDate;
     }
 }

@@ -1,7 +1,6 @@
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
     using System;
-    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Linq;
@@ -9,8 +8,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using Bio.IO.GenBank;
 
     using LibiadaCore.Extensions;
-
-    using LibiadaWeb.Models.CalculatorsData;
 
     /// <summary>
     /// The matter repository.
@@ -68,7 +65,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                         matter.Group = Group.Eucariote;
                         matter.SequenceType = name.Contains("16s") ? SequenceType.Mitochondrion16SRRNA
                                             : name.Contains("plasmid") ? SequenceType.MitochondrialPlasmid
-                                            : SequenceType.MitochondrionGenome;
+                                            : SequenceType.MitochondrialGenome;
                     }
                     else if (name.Contains("18s"))
                     {
@@ -120,54 +117,12 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             if (matter != null)
             {
                 matter.Sequence = new Collection<CommonSequence>();
-                commonSequence.MatterId = CreateMatter(matter);
+                commonSequence.MatterId = SaveToDatabase(matter);
             }
             else
             {
                 commonSequence.Matter = db.Matter.Single(m => m.Id == commonSequence.MatterId);
             }
-        }
-
-        /// <summary>
-        /// The get select list with nature.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IEnumerable{Object}"/>.
-        /// </returns>
-        public IEnumerable<object> GetMatterSelectList()
-        {
-            return GetMatterSelectList(m => true);
-        }
-
-        /// <summary>
-        /// The get matter select list.
-        /// </summary>
-        /// <param name="filter">
-        /// The filter.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IEnumerable{Object}"/>.
-        /// </returns>
-        public IEnumerable<object> GetMatterSelectList(Func<Matter, bool> filter)
-        {
-            return GetMatterSelectList(db.Matter.Where(filter));
-        }
-
-        /// <summary>
-        /// Get matter select list.
-        /// </summary>
-        /// <param name="matters">
-        /// The matters.
-        /// </param>
-        /// <param name="selected">
-        /// The selected.
-        /// </param>
-        /// <returns>
-        /// The <see cref="T:IEnumerable{MattersTableRow}"/>.
-        /// </returns>
-        public IEnumerable<MattersTableRow> GetMatterSelectList(IEnumerable<Matter> matters, Func<Matter, bool> selected)
-        {
-            return matters.OrderBy(m => m.Created).Select(m => new MattersTableRow(m, selected(m)));
         }
 
         /// <summary>
@@ -201,7 +156,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <returns>
         /// The <see cref="long"/>.
         /// </returns>
-        public long CreateMatter(Matter matter)
+        public long SaveToDatabase(Matter matter)
         {
             db.Matter.Add(matter);
             db.SaveChanges();
@@ -269,28 +224,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             }
 
             throw new Exception($"Sequences names are not equal. CommonName = {commonName}, Species = {species}, Definition = {definition}");
-        }
-
-        /// <summary>
-        /// The get select list with nature.
-        /// </summary>
-        /// <param name="matters">
-        /// The matters.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IEnumerable{Object}"/>.
-        /// </returns>
-        private IEnumerable<object> GetMatterSelectList(IEnumerable<Matter> matters)
-        {
-            return matters.OrderBy(m => m.Created).Select(m => new
-            {
-                Value = m.Id,
-                Text = m.Name,
-                Selected = false,
-                SequenceType = m.SequenceType.GetDisplayValue(),
-                Group = m.Group.GetDisplayValue(),
-                m.Nature
-            });
         }
     }
 }

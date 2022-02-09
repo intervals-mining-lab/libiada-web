@@ -1,5 +1,6 @@
 ﻿namespace LibiadaWeb
 {
+    using System;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
@@ -53,6 +54,39 @@
         /// </summary>
         [Display(Name = "Modifier")]
         public AspNetUser Modifier { get; set; }
+    }
+
+    [MetadataType(typeof(MatterDataAnnotations))]
+    public partial class Matter
+    {
+    }
+
+    public class MatterDataAnnotations
+    {
+        /// <summary>
+        /// Gets or sets the sequence type.
+        /// </summary>
+        [Display(Name = "Sequence type")]
+        public SequenceType SequenceType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the multisequence number.
+        /// </summary>
+        [Display(Name = "Multisequence number")]
+        public short? MultisequenceNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets the collection country.
+        /// </summary>
+        [Display(Name = "Collection country")]
+        public string CollectionCountry { get; set; }
+
+        /// <summary>
+        /// Gets or sets the collection date.
+        /// </summary>
+        [Display(Name = "Collection date")]
+        [DataType(DataType.Date)]
+        public DateTime? CollectionDate { get; set; }
     }
 
     /// <summary>

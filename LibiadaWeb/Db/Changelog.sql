@@ -3084,4 +3084,11 @@ INSERT INTO task_result (task_id, key, value)
 	WHERE t.additional_result_data IS NOT NULL
 	AND d.key IN ('characteristics', 'attributeValues');
 
+-- 01.02.2022
+-- Add collection country and collection date columns for genetic matters.
+
+ALTER TABLE IF EXISTS matter ADD COLUMN collection_country text;
+
+ALTER TABLE IF EXISTS matter ADD COLUMN collection_date date;
+
 COMMIT;

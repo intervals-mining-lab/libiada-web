@@ -45,7 +45,7 @@
             using (var db = new LibiadaWebEntities())
             {
                 var viewDataHelper = new ViewDataHelper(db);
-                ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillMatterCreationData());
+                ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillMatterCreationViewData());
             }
 
             return View();
@@ -142,7 +142,7 @@
                                 Source = file,
                                 Group = commonSequence.Matter.Group
                             };
-                            matterRepository.CreateMatter(matter);
+                            matterRepository.SaveToDatabase(matter);
                             break;
                         default:
                             throw new InvalidEnumArgumentException(nameof(nature), (int)nature, typeof(Nature));
