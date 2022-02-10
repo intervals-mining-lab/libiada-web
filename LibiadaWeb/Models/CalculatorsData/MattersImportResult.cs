@@ -36,9 +36,5 @@
         /// The group.
         /// </summary>
         public string Group;
-
-        public string CollectionCountry;
-
-        public DateTimeOffset CollectionDate;
     }
 }

@@ -3091,4 +3091,9 @@ ALTER TABLE IF EXISTS matter ADD COLUMN collection_country text;
 
 ALTER TABLE IF EXISTS matter ADD COLUMN collection_date date;
 
+-- 10.02.2022
+-- Add unique constraint on multisequence id and number in matters table.
+
+ALTER TABLE IF EXISTS matter ADD CONSTRAINT uk_matter_multisequence UNIQUE (multisequence_id, multisequence_number);
+
 COMMIT;
