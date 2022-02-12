@@ -1,9 +1,11 @@
 ﻿namespace LibiadaWeb.Models.CalculatorsData
 {
+    using System;
+
     /// <summary>
     /// The attribute value.
     /// </summary>
-    public struct AttributeValue
+    public readonly struct AttributeValue : IEquatable<AttributeValue>
     {
         /// <summary>
         /// The attribute id.
@@ -57,6 +59,15 @@
         /// False if both fields are equal and true otherwise.
         /// </returns>
         public static bool operator !=(AttributeValue first, AttributeValue second) => !(first == second);
+
+        /// <summary>
+        /// Compares this attribute id and value to another.
+        /// </summary>
+        /// <param name="other">
+        /// Another <see cref="AttributeValue"/>.
+        /// </param>
+        /// <returns></returns>
+        public bool Equals(AttributeValue other) => this == other;
 
         /// <summary>
         /// The equals.

@@ -54,7 +54,7 @@
             mattersToShow.forEach(m => $(`#matter${m.Value}`).change(() => {
                 ctrl.toggleMatterSelection(m);
                 $scope.$apply();
-                }
+            }
             ));
 
         };
@@ -96,8 +96,18 @@
         };
 
         ctrl.toggleMatterSelection = matter => {
-            matter.Selected = !matter.Selected;
-            matter.Selected ? ctrl.selectedMatters++ : ctrl.selectedMatters--;
+            if (!matter.Selected) {
+                if ((ctrl.selectedMatters < ctrl.maximumSelectedMatters)) {
+                    matter.Selected = true;
+                    ctrl.selectedMatters++;
+                } else {
+                    $(`#matter${matter.Value}`).prop("checked", false);
+                    matter.Selected = false;
+                }
+            } else {
+                matter.Selected = false;
+                ctrl.selectedMatters--;
+            }
         };
 
         ctrl.getVisibleMatters = () => ctrl.matters.filter(m => m.Visible);

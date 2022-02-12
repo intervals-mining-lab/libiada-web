@@ -7,7 +7,7 @@
             $scope.legend = [];
 
             for (var k = 0; k < $scope.characteristics.length; k++) {
-                $scope.legend.push({ id: k, name: $scope.characteristics[k].matterName, visible: true });
+                $scope.legend.push({ id: k, name: $scope.characteristics[k].MatterName, visible: true });
             }
         }
 
@@ -19,15 +19,15 @@
 
             for (var i = 0; i < $scope.characteristics.length; i++) {
                 var characteristic = $scope.characteristics[i];
-                for (var j = 0; j < characteristic.fragmentsData.length; j++) {
-                    var fragmentData = characteristic.fragmentsData[j];
+                for (var j = 0; j < characteristic.FragmentsData.length; j++) {
+                    var fragmentData = characteristic.FragmentsData[j];
                     $scope.points.push({
                         id: j,
                         characteristicId: i,
                         name: fragmentData.Name,
                         x: fragmentData.Characteristics[first],
                         y: fragmentData.Characteristics[second],
-                        matterName: characteristic.matterName
+                        matterName: characteristic.MatterName
                     });
                 }
             }
@@ -40,7 +40,7 @@
             tooltipContent.push("Name: " + d.name);
             tooltipContent.push("Fragment №: " + d.id);
             var pointSharacteristics = [];
-            var characteristics = $scope.characteristics[d.characteristicId].fragmentsData[d.id].Characteristics;
+            var characteristics = $scope.characteristics[d.characteristicId].FragmentsData[d.id].Characteristics;
             for (var i = 0; i < characteristics.length; i++) {
                 pointSharacteristics.push($scope.characteristicsList[i].Text + ": " + characteristics[i]);
             }

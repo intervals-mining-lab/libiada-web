@@ -13,7 +13,7 @@
             <input type="button" class="btn btn-default" ng-click="changeCharacteristicsTableVisibility()" value="Show characteristics table" />
             <br />
             <div ng-repeat="chainsCharacteristics in ::characteristics">
-                <h3>{{::$index+1}}. {{::chainsCharacteristics.matterName}}</h3>
+                <h3>{{::$index+1}}. {{::chainsCharacteristics.MatterName}}</h3>
                 <table ng-if="isCharacteristicsTableVisible" st-table="characteristics" class="table table-bordered table-hover" ng-cloak>
                     <thead>
                         <tr>
@@ -24,7 +24,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="fragmentsData in ::chainsCharacteristics.fragmentsData">
+                        <tr ng-repeat="fragmentsData in ::chainsCharacteristics.FragmentsData">
                             <td ng-bind="::fragmentsData.Name" />
                             <td ng-bind="::fragmentsData.Start" />
                             <td ng-bind="::fragmentsData.Length" />
@@ -71,12 +71,12 @@
                 <tbody>
                     <tr>
                         <td>#</td>
-                        <td ng-repeat="comparisonRaw in comparisonMatrix" title="{{characteristics[$index].matterName}}">{{$index + 1}}</td>
+                        <td ng-repeat="comparisonRaw in comparisonMatrix" title="{{characteristics[$index].MatterName}}">{{$index + 1}}</td>
                     </tr>
                     <tr ng-repeat="comparisonRaw in comparisonMatrix">
-                        <td title="{{characteristics[$index].matterName}}" ng-bind="$index + 1" />
+                        <td title="{{characteristics[$index].MatterName}}" ng-bind="$index + 1" />
                         <td ng-repeat="comparisonValue in comparisonRaw track by $index"
-                            title="{{characteristics[$parent.$index].matterName}} &#13{{characteristics[$index].matterName}}"
+                            title="{{characteristics[$parent.$index].MatterName}} &#13{{characteristics[$index].MatterName}}"
                             ng-bind="comparisonValue.toFixed(5)" />
                     </tr>
                 </tbody>

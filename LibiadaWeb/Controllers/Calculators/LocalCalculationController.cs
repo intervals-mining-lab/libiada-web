@@ -245,11 +245,11 @@
                         autocorrelationData = AutoCorrelation.CalculateAutocorrelation(fragmentsData.Select(f => f.Characteristics).ToArray());
                     }
 
-                    mattersCharacteristics[i] = new LocalCharacteristicsData{ matterName = matters[matterIds[i]].Name,
-                                                                              fragmentsData = fragmentsData,
-                                                                              differenceData = differenceData,
-                                                                              fourierData = fourierData,
-                                                                              autocorrelationData = autocorrelationData };
+                    mattersCharacteristics[i] = new LocalCharacteristicsData(matters[matterIds[i]].Name,
+                                                                             fragmentsData,
+                                                                             differenceData,
+                                                                             fourierData,
+                                                                             autocorrelationData);
                 }
 
                 for (int l = 0; l < characteristicLinkIds.Length; l++)
