@@ -2,16 +2,15 @@
 
 <div class="form-group" ng-init="$ctrl.geneticNature = @((byte)Nature.Genetic)" ng-show="$ctrl.nature == $ctrl.geneticNature">
     <div class="col-md-offset-2 col-md-10">
-        
-            <input type="checkbox"
-                   name="showRefSeqOnly"
-                   id="showRefSeqOnly"
-                   checked
-                   ng-model="$ctrl.showRefSeqOnly"
-                   ng-change="$ctrl.toogleMattersVisibility()" />
-            <label for="showRefSeqOnly">
-                Show only reference sequences
-            </label>
+        <input type="checkbox"
+               name="showRefSeqOnly"
+               id="showRefSeqOnly"
+               checked
+               ng-model="$ctrl.showRefSeqOnly"
+               ng-change="$ctrl.toogleMattersVisibility()" />
+        <label for="showRefSeqOnly">
+            Show only reference sequences
+        </label>
     </div>
 </div>
 <div class="form-group" ng-if="::$ctrl.checkboxes">
@@ -24,7 +23,6 @@
 <table ng-cloak class="table table-bordered table-hover">
     <thead>
         <tr>
-            <th></th>
             <th>
                 <input type="text"
                        class="form-control"
@@ -51,31 +49,12 @@
             </th>
         </tr>
         <tr>
-            <th>#</th>
             <th>@(Html.DisplayNameFor(model => model.Name))</th>
             <th>@(Html.DisplayNameFor(model => model.Group))</th>
             <th>@(Html.DisplayNameFor(model => model.SequenceType))</th>
         </tr>
     </thead>
-    <tbody>
-        <tr ng-repeat="matter in $ctrl.matters | filter: { Visible: true } track by matter.Value " ng-cloak>
-            <td ng-bind="$index + 1" />
-            <td>
-                
-                    <input type="{{::$ctrl.mattersInputType}}"
-                           ng-model="matter.Selected"
-                           name="{{::$ctrl.mattersInputName}}"
-                           id="{{::'matter' + matter.Value}}"
-                           ng-value="::matter.Value"
-                           ng-change="$ctrl.matterSelectChange(matter)"
-                           ng-disabled="$ctrl.checkboxes && !matter.Selected && ($ctrl.selectedMatters >= $ctrl.maximumSelectedMatters)" />
-                    <label for="{{::'matter' + matter.Value}}">
-                        {{::matter.Text}}
-                    </label>
-            </td>
-            <td ng-bind="::matter.Group" />
-            <td ng-bind="::matter.SequenceType" />
-        </tr>
+    <tbody id="mattersSelectList">
     </tbody>
 </table>
 <br />

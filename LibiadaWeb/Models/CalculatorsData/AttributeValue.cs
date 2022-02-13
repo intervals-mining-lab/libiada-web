@@ -1,9 +1,11 @@
 ﻿namespace LibiadaWeb.Models.CalculatorsData
 {
+    using System;
+
     /// <summary>
     /// The attribute value.
     /// </summary>
-    public struct AttributeValue
+    public readonly struct AttributeValue : IEquatable<AttributeValue>
     {
         /// <summary>
         /// The attribute id.
@@ -59,15 +61,24 @@
         public static bool operator !=(AttributeValue first, AttributeValue second) => !(first == second);
 
         /// <summary>
+        /// Compares this attribute id and value to another.
+        /// </summary>
+        /// <param name="other">
+        /// Another <see cref="AttributeValue"/>.
+        /// </param>
+        /// <returns></returns>
+        public bool Equals(AttributeValue other) => this == other;
+
+        /// <summary>
         /// The equals.
         /// </summary>
-        /// <param name="obj">
-        /// The obj.
+        /// <param name="other">
+        /// Attribute value to compare to.
         /// </param>
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        public override bool Equals(object obj) => obj is AttributeValue attributeValue && this == attributeValue;
+        public override bool Equals(object other) => other is AttributeValue attributeValue && this == attributeValue;
 
         /// <summary>
         /// Calculates hash using <see cref="AttributeId"/> and <see cref="Value"/> hash codes.

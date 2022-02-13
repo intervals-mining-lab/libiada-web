@@ -1,4 +1,6 @@
-﻿@model Matter
+﻿@using LibiadaCore.Extensions;
+
+@model Matter
 
 @{
     ViewBag.Title = "Delete";
@@ -24,7 +26,25 @@
         <dd>@Html.DisplayFor(model => model.Modified)</dd>
 
         <dt>@Html.DisplayNameFor(model => model.Nature)</dt>
-        <dd>@Html.DisplayFor(model => model.Nature)</dd>
+        <dd>@Model.Nature.GetDisplayValue()</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Group)</dt>
+        <dd>@Model.Group.GetDisplayValue()</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.SequenceType)</dt>
+        <dd>@Model.SequenceType.GetDisplayValue()</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Multisequence)</dt>
+        <dd>@Html.DisplayFor(model => model.Multisequence.Name)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.MultisequenceNumber)</dt>
+        <dd>@Html.DisplayFor(model => model.MultisequenceNumber)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.CollectionCountry)</dt>
+        <dd>@Html.DisplayFor(model => model.CollectionCountry)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.CollectionDate)</dt>
+        <dd>@Html.DisplayFor(model => model.CollectionDate)</dd>
 
         <dt>Sequences count</dt>
         <dd>@ViewBag.SequencesCount</dd>

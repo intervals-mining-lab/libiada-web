@@ -37,7 +37,6 @@
         </div>
         <div>
             <h4>Formal motifs</h4>
-            <hr />
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
@@ -48,15 +47,15 @@
                 </thead>
                 <tbody>
                     <tr ng-repeat="fmotif in ::data.fmotifs">
-                        <th>
-                            <div id="notation_{{::fmotif.Id}}"></div><div id="notation_{{::fmotif.Id}}"></div>
-                        </th>
-                        <th>
+                        <td>
+                            <div id="notation_{{::fmotif.Id}}"></div>
+                        </td>
+                        <td>
                             <div id="visualization_{{::fmotif.Id}}"></div>
-                        </th>
-                        <th>
+                        </td>
+                        <td>
                             <input type="button" class="btn btn-default" ng-click="play($index)" value="Play" />
-                        </th>
+                        </td>
                     </tr>
                 </tbody>
             </table>

@@ -73,7 +73,7 @@
 
             for (int i = 0; i < chars.Length; i++)
             {
-                series[i] = chars[i].fragmentsData.Select(fd => fd.Characteristics[0]).ToArray();
+                series[i] = chars[i].FragmentsData.Select(fd => fd.Characteristics[0]).ToArray();
             }
 
             var alignersFactory = new AlignersFactory();

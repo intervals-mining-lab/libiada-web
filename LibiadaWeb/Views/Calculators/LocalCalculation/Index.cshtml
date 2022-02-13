@@ -6,6 +6,7 @@
 <h2>@ViewBag.Title</h2>
 
 @Scripts.Render("~/bundles/CharacteristicsWithoutNotation")
+@Scripts.Render("~/bundles/CharacteristicNatureParams")
 @Html.Partial("_AngularControllerInitializer", "CalculationController")
 
 @using (Html.BeginForm())
@@ -42,58 +43,14 @@
         <input type="hidden" name="notation" ng-value="notation.Value" />
         @if (AccountHelper.IsAdmin())
         {
-            <div ng-switch="nature">
-                <div ng-switch-when="@((byte)Nature.Literature)">
-                    <div class="form-group">
-                        <label class="control-label col-md-2" for="language">Language:</label>
-                        <div class="col-md-10">
-                            <select class="form-control"
-                                    title="Language"
-                                    ng-model="language"
-                                    ng-options="l.Text for l in ::languages"
-                                    id="language"></select>
-                            <input type="hidden" name="language" ng-value="language.Value" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-2" for="translator">Translator:</label>
-                        <div class="col-md-10">
-                            <select class="form-control"
-                                    title="Translator"
-                                    ng-model="translator"
-                                    ng-options="t.Text for t in ::translators"
-                                    id="translator"></select>
-                            <input type="hidden" name="translator" ng-value="translator.Value" />
-                        </div>
-                    </div>
-                </div>
-                <div ng-switch-when="@((byte)Nature.Genetic)">
-                </div>
-                <div ng-switch-when="@((byte)Nature.Music)">
-                    <div class="form-group">
-                        <label class="control-label col-md-2" for="pauseTreatment">Pause treatment:</label>
-                        <div class="col-md-10">
-                            <select class="form-control"
-                                    title="PauseTreatment"
-                                    ng-model="pauseTreatment"
-                                    ng-options="t.Text for t in ::pauseTreatments"
-                                    id="pauseTreatment"></select>
-                            <input type="hidden" name="pauseTreatment" ng-value="pauseTreatment.Value" />
-                        </div>
-                    </div>
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="checkbox" name="sequentialTransfer" id="sequentialTransfer" ng-model="sequentialTransfer" value="true" />
-                        <input type="hidden" name="sequentialTransfer" value="false" />
-                        <label for="sequentialTransfer">
-                            Sequential transfer
-                        </label>
-                    </div>
-                </div>
-                <div ng-switch-when="@((byte)Nature.MeasurementData)">
-                </div>
-            </div>
-            <br />
-            <br />
+            <characteristic-nature-params characteristic="characteristic"
+                                          nature="nature"
+                                          notations="notations"
+                                          languages="::languages"
+                                          translators="::translators"
+                                          pause-treatments="::pauseTreatments"
+                                          trajectories="::trajectories">
+            </characteristic-nature-params>
             <div class="form-group">
                 <label class="control-label col-md-2" for="length">Window size:</label>
                 <div class="col-md-10">
