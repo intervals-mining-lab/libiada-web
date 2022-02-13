@@ -1,17 +1,11 @@
-﻿function characteristic() {
+﻿function characteristicNatureParams() {
     "use strict";
 
-    function Characteristic(filterFilter) {
+    function CharacteristicNatureParams(filterFilter) {
         var ctrl = this;
 
         ctrl.$onInit = () => {
-            ctrl.characteristicName = ctrl.characteristicName || "characteristicLinkId";
-            ctrl.title = ctrl.title || "Characteristic";
-
             ctrl.characteristic = ctrl.characteristic || {};
-            ctrl.characteristic.characteristicType = ctrl.characteristicTypes[0];
-            ctrl.characteristic.link = ctrl.characteristicTypes[0].Links[0];
-            ctrl.characteristic.arrangementType = ctrl.characteristicTypes[0].ArrangementTypes[0];
             ctrl.characteristic.notation = filterFilter(ctrl.notations, { Nature: ctrl.nature })[0];
             ctrl.characteristic.language = ctrl.languages ? ctrl.languages[0] : null;
             ctrl.characteristic.translator = ctrl.translators ? ctrl.translators[0] : null;
@@ -30,27 +24,21 @@
                 ctrl.characteristic.notation = filterFilter(ctrl.notations, { Nature: ctrl.nature })[0];
             }
         };
-
-        ctrl.selectLink = SelectLink;
     }
 
-    angular.module("libiada").component("characteristic", {
-        templateUrl: window.location.origin + "/Partial/_Characteristic",
-        controller: ["filterFilter", Characteristic],
+    angular.module("libiada").component("characteristicNatureParams", {
+        templateUrl: window.location.origin + "/Partial/_CharacteristicNatureParams",
+        controller: ["filterFilter", CharacteristicNatureParams],
         bindings: {
             characteristic: "=?",
-            characteristicTypes: "<",
             nature: "<",
             notations: "<",
             languages: "<",
             translators: "<",
             pauseTreatments: "<",
-            trajectories: "<",
-            characteristicsDictionary: "<",
-            characteristicName: "@",
-            title: "@"
+            trajectories: "<"
         }
     });
 }
 
-characteristic();
+characteristicNatureParams();

@@ -18,12 +18,6 @@
         }
 
         $scope.filterByNature = filterByNature;
-
-        $scope.name = $scope.matter.Name;
-        $scope.description = $scope.matter.Description;
-        $scope.nature = $scope.matter.Nature;
-        $scope.group = $scope.matter.Group;
-        $scope.sequenceType = $scope.matter.SequenceType;
     }
 
     angular.module("libiada").controller("MatterEditCtrl", ["$scope", "filterFilter", matterEdit]);

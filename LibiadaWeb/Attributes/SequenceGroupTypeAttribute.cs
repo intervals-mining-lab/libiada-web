@@ -7,7 +7,7 @@
     /// Used to specify group types hierarchy.
     /// </summary>
     [AttributeUsage(AttributeTargets.Field)]
-    public class SequenceGroupTypeAttribute : System.Attribute
+    public class SequenceGroupTypeAttribute : Attribute
     {
         /// <summary>
         /// The group type value.

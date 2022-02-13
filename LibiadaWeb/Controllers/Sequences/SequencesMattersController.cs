@@ -45,7 +45,7 @@
             using (var db = new LibiadaWebEntities())
             {
                 var viewDataHelper = new ViewDataHelper(db);
-                ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillMatterCreationData());
+                ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillMatterCreationViewData());
             }
 
             return View();
@@ -142,13 +142,13 @@
                                 Source = file,
                                 Group = commonSequence.Matter.Group
                             };
-                            matterRepository.CreateMatter(matter);
+                            matterRepository.SaveToDatabase(matter);
                             break;
                         default:
                             throw new InvalidEnumArgumentException(nameof(nature), (int)nature, typeof(Nature));
                     }
-
-                    var result = new ImportResult(commonSequence, language, original, translator, partial, precision);
+                    string multisequenceName = db.Multisequence.SingleOrDefault(ms => ms.Id == commonSequence.Matter.MultisequenceId).Name;
+                    var result = new ImportResult(commonSequence, language, original, translator, partial, precision, multisequenceName);
                     
                     return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
                 }
@@ -243,6 +243,14 @@
             /// </summary>
             public readonly double? Precision;
 
+            public readonly string MultisequenceName;
+
+            public readonly int? MultisequenceNumber;
+
+            public readonly string CollectionCountry;
+
+            public readonly DateTimeOffset? CollectionDate;
+
             /// <summary>
             /// Initializes a new instance of the <see cref="ImportResult"/> struct.
             /// </summary>
@@ -264,13 +272,17 @@
             /// <param name="precision">
             /// The precision.
             /// </param>
+            /// <param name="multisequenceName">
+            /// The multisequence name.
+            /// </param>
             public ImportResult(
                 CommonSequence sequence,
                 Language? language,
                 bool? original,
                 Translator? translator,
                 bool? partial,
-                double? precision)
+                double? precision,
+                string multisequenceName)
             {
                 Matter matter = sequence.Matter;
 
@@ -286,6 +298,10 @@
                 Translator = translator?.GetDisplayValue();
                 Partial = partial;
                 Precision = precision;
+                MultisequenceName = multisequenceName;
+                MultisequenceNumber = matter.MultisequenceNumber;
+                CollectionCountry = matter.CollectionCountry;
+                CollectionDate = matter.CollectionDate;
             }
         }
     }

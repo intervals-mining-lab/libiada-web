@@ -211,9 +211,9 @@
                 .style("stroke", vt => color(vt.name))
                 .style("stroke-width", 4)
                 .style("fill-opacity", vt => vt.visible ? 1 : 0)
-                .on("click", function (_event, vt) {
+                .on("click", function (event, vt) {
                     vt.visible = !vt.visible;
-                    d3.select(this).style("fill-opacity", () => vt.visible ? 1 : 0);
+                    d3.select(event.currentTarget).style("fill-opacity", () => vt.visible ? 1 : 0);
                     svg.selectAll(".transform-line")
                         .filter(line => line.startOrderId === d.value && line.value === vt.name)
                         .attr("visibility", () => vt.visible ? "visible" : "hidden");
@@ -393,9 +393,9 @@
                 .append("g")
                 .attr("class", "legend")
                 .attr("transform", (d, i) => "translate(0," + i * 20 + ")")
-                .on("click", function (_event, d) {
+                .on("click", function (event, d) {
                     d.visible = !d.visible;
-                    var legendEntry = d3.select(this);
+                    var legendEntry = d3.select(event.currentTarget);
 
                     legendEntry.select("text")
                         .style("opacity", () => d.visible ? 1 : 0.5);

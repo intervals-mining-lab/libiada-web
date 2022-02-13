@@ -20,6 +20,10 @@
         <th>@Html.DisplayNameFor(model => model.Nature)</th>
         <th>@Html.DisplayNameFor(model => model.Group)</th>
         <th>@Html.DisplayNameFor(model => model.SequenceType)</th>
+        <th>@Html.DisplayNameFor(model => model.Multisequence)</th>
+        <th>@Html.DisplayNameFor(model => model.MultisequenceNumber)</th>
+        <th>@Html.DisplayNameFor(model => model.CollectionCountry)</th>
+        <th>@Html.DisplayNameFor(model => model.CollectionDate)</th>
         @if (AccountHelper.IsAdmin())
         {
             <th />
@@ -35,6 +39,10 @@
             <td>@item.Nature.GetDisplayValue()</td>
             <td>@item.Group.GetDisplayValue()</td>
             <td>@item.SequenceType.GetDisplayValue()</td>
+            <td>@Html.DisplayFor(modelItem => item.Multisequence.Name)</td>
+            <td>@Html.DisplayFor(modelItem => item.MultisequenceNumber)</td>
+            <td>@Html.DisplayFor(modelItem => item.CollectionCountry)</td>
+            <td>@Html.DisplayFor(modelItem => item.CollectionDate)</td>
             @if (AccountHelper.IsAdmin())
             {
                 <td>

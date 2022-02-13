@@ -1,21 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Web.Mvc;
-using Bio;
-using Bio.Core.Extensions;
-using Bio.IO.GenBank;
-using LibiadaCore.Extensions;
-using LibiadaWeb.Helpers;
-using LibiadaWeb.Models;
-using LibiadaWeb.Models.CalculatorsData;
-using LibiadaWeb.Models.Repositories.Sequences;
-using LibiadaWeb.Tasks;
-using Newtonsoft.Json;
-
-namespace LibiadaWeb.Controllers.Sequences
+﻿namespace LibiadaWeb.Controllers.Sequences
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using Bio;
+    using Bio.Core.Extensions;
+    using Bio.IO.GenBank;
+
+    using LibiadaCore.Extensions;
+    using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models;
+    using LibiadaWeb.Models.CalculatorsData;
+    using LibiadaWeb.Models.Repositories.Sequences;
+    using LibiadaWeb.Tasks;
+    using Newtonsoft.Json;
+
     [Authorize(Roles = "Admin")]
     public class BatchGeneticImportFromGenBankSearchFileController : AbstractResultController
     {

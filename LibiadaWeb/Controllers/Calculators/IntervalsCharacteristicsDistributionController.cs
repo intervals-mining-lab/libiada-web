@@ -1,14 +1,15 @@
-﻿using System;
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
+
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
     using LibiadaCore.Extensions;
+
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
@@ -74,6 +75,7 @@ namespace LibiadaWeb.Controllers.Calculators
         [HttpPost]
         public ActionResult Index(int length, int alphabetCardinality, int generateStrict, short[] characteristicLinkIds)
         {
+            // TODO: Reafctor all of this
             return CreateTask(() =>
             {
                 var orderGenerator = new OrderGenerator();
@@ -153,7 +155,8 @@ namespace LibiadaWeb.Controllers.Calculators
                         var order = orders[j];
                         var sequence = new Chain(order.Select(Convert.ToInt16).ToArray());
                         var fullIntervals = new Dictionary<int, int>();
-                        foreach (var el in sequence.Alphabet.ToList())
+                        var alphabet = sequence.Alphabet.ToList();
+                        foreach (var el in alphabet)
                         {
                             var congIntervals = sequence.CongenericChain(el).GetArrangement(link);
                             foreach (var interval in congIntervals)
@@ -192,7 +195,7 @@ namespace LibiadaWeb.Controllers.Calculators
                 {
                     { "result", resultIntervals.Select(r => new
                     {
-                        link = r.Key.ToString(),
+                        link = r.Key,
                         accordance = r.Value.Select(d => new {
                             distributionIntervals = d.Key.Select(pair => new
                             {

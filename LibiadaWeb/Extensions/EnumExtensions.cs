@@ -66,11 +66,11 @@
             }
 
             return values.Select(e => new SelectListItem
-                {
-                    Value = useDisplayValueAsValue ? e.GetDisplayValue() : Convert.ToByte(e).ToString(),
-                    Text = e.GetDisplayValue(),
-                    Selected = false
-                });
+            {
+                Value = useDisplayValueAsValue ? e.GetDisplayValue() : Convert.ToByte(e).ToString(),
+                Text = e.GetDisplayValue(),
+                Selected = false
+            });
         }
 
         /// <summary>
@@ -109,11 +109,11 @@
             }
 
             return values.Select(e => new SelectListItem
-                {
-                    Value = useDisplayValueAsValue ? e.GetDisplayValue() : Convert.ToByte(e).ToString(),
-                    Text = e.GetDisplayValue(),
-                    Selected = selectedValues.Contains(e)
-                });
+            {
+                Value = useDisplayValueAsValue ? e.GetDisplayValue() : Convert.ToByte(e).ToString(),
+                Text = e.GetDisplayValue(),
+                Selected = selectedValues.Contains(e)
+            });
         }
 
         /// <summary>
@@ -149,12 +149,12 @@
             }
 
             return values.Select(e => new SelectListItemWithNature
-                {
-                    Value = useDisplayValueAsValue ? e.GetDisplayValue() : Convert.ToByte(e).ToString(),
-                    Text = e.GetDisplayValue(),
-                    Selected = false,
-                    Nature = (byte)e.GetNature()
-                });
+            {
+                Value = useDisplayValueAsValue ? e.GetDisplayValue() : Convert.ToByte(e).ToString(),
+                Text = e.GetDisplayValue(),
+                Selected = false,
+                Nature = (byte)e.GetNature()
+            });
         }
 
         /// <summary>
@@ -193,12 +193,12 @@
             }
 
             return values.Select(e => new SelectListItemWithNature
-                {
-                    Value = useDisplayValueAsValue ? e.GetDisplayValue() : Convert.ToByte(e).ToString(),
-                    Text = e.GetDisplayValue(),
-                    Selected = selectedValues.Contains(e),
-                    Nature = (byte)e.GetNature()
-                });
+            {
+                Value = useDisplayValueAsValue ? e.GetDisplayValue() : Convert.ToByte(e).ToString(),
+                Text = e.GetDisplayValue(),
+                Selected = selectedValues.Contains(e),
+                Nature = (byte)e.GetNature()
+            });
         }
     }
 }

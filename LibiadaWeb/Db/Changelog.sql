@@ -3084,4 +3084,23 @@ INSERT INTO task_result (task_id, key, value)
 	WHERE t.additional_result_data IS NOT NULL
 	AND d.key IN ('characteristics', 'attributeValues');
 
+-- 01.02.2022
+-- Add collection country and collection date columns for genetic matters.
+
+ALTER TABLE IF EXISTS matter ADD COLUMN collection_country text;
+
+ALTER TABLE IF EXISTS matter ADD COLUMN collection_date date;
+
+-- 10.02.2022
+-- Add unique constraint on multisequence id and number in matters table.
+
+ALTER TABLE IF EXISTS matter ADD CONSTRAINT uk_matter_multisequence UNIQUE (multisequence_id, multisequence_number);
+
+-- 13.02.22
+-- Delete redundant columns result and additional_result_data from task table.
+
+ALTER TABLE IF EXISTS task DROP COLUMN IF EXISTS result;
+
+ALTER TABLE IF EXISTS task DROP COLUMN IF EXISTS additional_result_data;
+
 COMMIT;

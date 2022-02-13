@@ -42,21 +42,21 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", ng_model = "name" } })
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
             @Html.LabelFor(model => model.Description, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", ng_model = "description" } })
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
             @Html.Label("Sequences count", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <p class="form-control-static" ng-bind="::matter.SequencesCount"></p>
+                <p class="form-control-static" ng-bind="::sequencesCount"></p>
             </div>
         </div>
         <div class="form-group">
@@ -77,6 +77,39 @@
                         ng-model="sequenceType"></select>
                 <input type="hidden" name="SequenceType" ng-value="sequenceType" />
                 @Html.ValidationMessageFor(model => model.SequenceType, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Multisequence, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select class="form-control"
+                        ng-options="ms.Id as ms.Name for ms in multisequences | filter:{ Nature: nature }"
+                        ng-model="matter.MultisequenceId">
+                    <option value="">-- None --</option>
+                </select>
+                <input type="hidden" name="MultisequenceId" ng-value="matter.MultisequenceId" />
+                @Html.ValidationMessageFor(model => model.Multisequence, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.MultisequenceNumber, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.MultisequenceNumber, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.MultisequenceNumber, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.CollectionCountry, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CollectionCountry, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CollectionCountry, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.CollectionDate, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CollectionDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CollectionDate, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">

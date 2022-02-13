@@ -36,6 +36,8 @@ namespace LibiadaWeb
         public Nullable<int> MultisequenceId { get; set; }
         public Nullable<short> MultisequenceNumber { get; set; }
         public byte[] Source { get; set; }
+        public string CollectionCountry { get; set; }
+        public Nullable<System.DateTime> CollectionDate { get; set; }
     
         public virtual ICollection<CommonSequence> Sequence { get; set; }
         public virtual ICollection<DnaSequence> DnaSequence { get; set; }

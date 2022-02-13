@@ -9,11 +9,10 @@
 
     using LibiadaCore.Extensions;
     using LibiadaCore.Music;
-
+    using LibiadaWeb.Attributes;
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
-    using LibiadaWeb.Models.Repositories.Sequences;
 
     using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
 
@@ -28,11 +27,6 @@
         private readonly LibiadaWebEntities db;
 
         /// <summary>
-        /// The matter repository.
-        /// </summary>
-        private readonly MatterRepository matterRepository;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="ViewDataHelper"/> class.
         /// </summary>
         /// <param name="db">
@@ -41,7 +35,6 @@
         public ViewDataHelper(LibiadaWebEntities db)
         {
             this.db = db;
-            matterRepository = new MatterRepository(db);
         }
 
         /// <summary>
@@ -50,7 +43,7 @@
         /// <returns>
         /// The <see cref="Dictionary{String, Object}"/>.
         /// </returns>
-        public Dictionary<string, object> FillMatterCreationData()
+        public Dictionary<string, object> FillMatterCreationViewData()
         {
             IEnumerable<SelectListItem> natures;
             IEnumerable<Notation> notations;
@@ -74,16 +67,18 @@
             }
 
             return new Dictionary<string, object>
-                       {
-                           { "matters", matterRepository.GetMatterSelectList() },
-                           { "natures", natures },
-                           { "notations", notations.ToSelectListWithNature() },
-                           { "remoteDbs", remoteDbs.ToSelectListWithNature() },
-                           { "sequenceTypes", sequenceTypes.ToSelectListWithNature() },
-                           { "groups", groups.ToSelectListWithNature() },
-                           { "languages", EnumHelper.GetSelectList(typeof(Language)) },
-                           { "translators", EnumHelper.GetSelectList(typeof(Translator)) }
-                       };
+            {
+                { "matters", SelectListHelper.GetMatterSelectList(db) },
+                { "natures", natures },
+                { "notations", notations.ToSelectListWithNature() },
+                { "remoteDbs", remoteDbs.ToSelectListWithNature() },
+                { "sequenceTypes", sequenceTypes.ToSelectListWithNature() },
+                { "groups", groups.ToSelectListWithNature() },
+                { "multisequences", SelectListHelper.GetMultisequenceSelectList(db) },
+                { "languages", EnumHelper.GetSelectList(typeof(Language)) },
+                { "translators", EnumHelper.GetSelectList(typeof(Translator)) },
+                { "trajectories", EnumExtensions.SelectAllWithAttribute<ImageOrderExtractor>(typeof(ImageOrderExtractorAttribute)).ToSelectList() }
+            };
         }
 
         /// <summary>
@@ -134,6 +129,7 @@
             data.Add("languages", EnumHelper.GetSelectList(typeof(Language)));
             data.Add("translators", EnumHelper.GetSelectList(typeof(Translator)));
             data.Add("pauseTreatments", EnumHelper.GetSelectList(typeof(PauseTreatment)));
+            data.Add("trajectories", EnumExtensions.SelectAllWithAttribute<ImageOrderExtractor>(typeof(ImageOrderExtractorAttribute)).ToSelectList());
             data.Add("sequenceTypes", sequenceTypes.ToSelectListWithNature(true));
             data.Add("groups", groups.ToSelectListWithNature(true));
 
@@ -364,7 +360,7 @@
                 {
                     { "minimumSelectedMatters", minSelectedMatters },
                     { "maximumSelectedMatters", maxSelectedMatters },
-                    { "matters", matterRepository.GetMatterSelectList(filter) }
+                    { "matters", SelectListHelper.GetMatterSelectList(filter, db) }
                 };
         }
     }

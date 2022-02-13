@@ -108,11 +108,11 @@
             long[] matterIds,
             short[] characteristicLinkIds,
             Notation[] notations,
-            Language[] languages,
+            Language?[] languages,
             Translator?[] translators,
-            PauseTreatment[] pauseTreatments,
-            ImageOrderExtractor imageOrderExtractor,
-            bool[] sequentialTransfers,
+            PauseTreatment?[] pauseTreatments,
+            bool?[] sequentialTransfers,
+            ImageOrderExtractor?[] trajectories,
             bool sort,
             bool theoretical)
         {
@@ -129,7 +129,7 @@
                     mattersNames = Cache.GetInstance().Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
 
                     var commonSequenceRepository = new CommonSequenceRepository(db);
-                    sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds, notations, languages, translators, pauseTreatments, sequentialTransfers, imageOrderExtractor);
+                    sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds, notations, languages, translators, pauseTreatments, sequentialTransfers, trajectories);
 
                     var congenericCharacteristicRepository = CongenericCharacteristicRepository.Instance;
                     for (int k = 0; k < characteristicLinkIds.Length; k++)

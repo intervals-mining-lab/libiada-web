@@ -30,7 +30,7 @@
         [TestCase("Rickettsia japonica strain YH 16S ribosomal RNA gene, complete sequence", Nature.Genetic, Group.Bacteria, SequenceType.RRNA16S)]
         [TestCase("Feline morbillivirus Viruses; ssRNA viruses; ssRNA negative-strand viruses; | Feline morbillivirus viral cRNA, complete genome, strain: OtJP001.", Nature.Genetic, Group.Virus, SequenceType.CompleteGenome)]
         [TestCase("Cricetulus griseus 18S ribosomal RNA (Rn18s), ribosomal RNA", Nature.Genetic, Group.Eucariote, SequenceType.RRNA18S)]
-        [TestCase("Leptotrombidium akamushi mitochondrion, complete genome", Nature.Genetic, Group.Eucariote, SequenceType.MitochondrionGenome)]
+        [TestCase("Leptotrombidium akamushi mitochondrion, complete genome", Nature.Genetic, Group.Eucariote, SequenceType.MitochondrialGenome)]
         [TestCase("Odontella sinensis chloroplast, complete genome", Nature.Genetic, Group.Eucariote, SequenceType.ChloroplastGenome)]
         [TestCase("Nicotiana tabacum plastid, complete genome", Nature.Genetic, Group.Eucariote, SequenceType.Plastid)]
         [TestCase("rf4hurccjke", Nature.Literature, Group.ClassicalLiterature, SequenceType.CompleteText)]
