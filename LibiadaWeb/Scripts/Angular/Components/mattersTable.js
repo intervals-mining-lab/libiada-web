@@ -63,11 +63,11 @@
 
             ctrl.searchMatterText = ctrl.searchMatterText || "";
             matter.Visible = matter.Selected || (ctrl.searchMatterText.length >= 4
-                          && matter.Nature == ctrl.nature
-                          && matter.Group.includes(ctrl.group || "")
-                          && matter.SequenceType.includes(ctrl.sequenceType || "")
-                          && matter.Text.toUpperCase().includes(ctrl.searchMatterText.toUpperCase())
-                          && (ctrl.nature != ctrl.geneticNature || !ctrl.showRefSeqOnly || ctrl.isRefSeq(matter)));
+                && matter.Nature == ctrl.nature
+                && matter.Group.includes(ctrl.group || "")
+                && matter.SequenceType.includes(ctrl.sequenceType || "")
+                && matter.Text.toUpperCase().includes(ctrl.searchMatterText.toUpperCase())
+                && (ctrl.nature != ctrl.geneticNature || !ctrl.showRefSeqOnly || ctrl.isRefSeq(matter)));
         };
 
         // checks if genetic sequence is referense sequence 
@@ -96,17 +96,23 @@
         };
 
         ctrl.toggleMatterSelection = matter => {
-            if (!matter.Selected) {
-                if ((ctrl.selectedMatters < ctrl.maximumSelectedMatters)) {
-                    matter.Selected = true;
-                    ctrl.selectedMatters++;
-                } else {
-                    $(`#matter${matter.Value}`).prop("checked", false);
-                    matter.Selected = false;
-                }
-            } else {
+            if (matter.Selected) {
                 matter.Selected = false;
                 ctrl.selectedMatters--;
+            } else {
+                if (ctrl.maximumSelectedMatters == 1) {
+                    ctrl.matters.forEach(m => m.Selected = false);
+                    matter.Selected = true;
+                    ctrl.selectedMatters = 1;
+                } else {
+                    if ((ctrl.selectedMatters < ctrl.maximumSelectedMatters)) {
+                        matter.Selected = true;
+                        ctrl.selectedMatters++;
+                    } else {
+                        $(`#matter${matter.Value}`).prop("checked", false);
+                        matter.Selected = false;
+                    }
+                }
             }
         };
 
