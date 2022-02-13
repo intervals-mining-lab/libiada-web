@@ -80,6 +80,18 @@
         /// <param name="languages">
         /// The language ids.
         /// </param>
+        /// <param name="translators">
+        /// The translators ids.
+        /// </param>
+        /// <param name="pauseTreatments">
+        /// Pause treatment parameters of music sequences.
+        /// </param>
+        /// <param name="sequentialTransfers">
+        /// Sequential transfer flag used in music sequences.
+        /// </param>
+        /// <param name="trajectories">
+        /// Reading trajectories for images.
+        /// </param>
         /// <param name="clustersCount">
         /// The clusters count.
         /// Minimum clusters count for methods
@@ -113,10 +125,11 @@
             long[] matterIds,
             short[] characteristicLinkIds,
             Notation[] notations,
-            Language[] languages,
+            Language?[] languages,
             Translator?[] translators,
-            PauseTreatment[] pauseTreatments,
-            bool[] sequentialTransfers,
+            PauseTreatment?[] pauseTreatments,
+            bool?[] sequentialTransfers,
+            ImageOrderExtractor?[] trajectories,
             int clustersCount,
             ClusterizationType clusterizationType,
             double equipotencyWeight = 1,
@@ -128,36 +141,22 @@
             return CreateTask(() =>
             {
                 Dictionary<long, string> mattersNames;
-                Dictionary<long, string> matters = Cache.GetInstance().Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
+                Dictionary<long, string> matters = Cache.GetInstance()
+                                                        .Matters
+                                                        .Where(m => matterIds.Contains(m.Id))
+                                                        .ToDictionary(m => m.Id, m => m.Name);
 
                 long[][] sequenceIds;
                 using (var db = new LibiadaWebEntities())
                 {
-                    if (notations[0].GetNature() == Nature.Image)
-                    {
-                        var existingSequences = db.ImageSequences.Where(s => matterIds.Contains(s.MatterId))
-                        .ToArray();
-                        ImageSequenceRepository imageSequenceRepository = new ImageSequenceRepository();
-                        for (int i = 0; i < matterIds.Length; i++)
-                        {
-                            for (int j = 0; j < notations.Length; j++)
-                            {
-                                if (!existingSequences.Any(s => s.MatterId == matterIds[i] && s.Notation == notations[j]))
-                                {
-                                    var newImageSequence = new ImageSequence()
-                                    {
-                                        MatterId = matterIds[i],
-                                        Notation = notations[j],
-                                        OrderExtractor = ImageOrderExtractor.LineLeftToRightTopToBottom
-                                    };
-                                    imageSequenceRepository.Create(newImageSequence, db);
-                                }
-                            }
-                        }
-                        db.SaveChanges();
-                    }
                     var commonSequenceRepository = new CommonSequenceRepository(db);
-                    sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds, notations, languages, translators, pauseTreatments, sequentialTransfers, ImageOrderExtractor.LineLeftToRightTopToBottom);
+                    sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds,
+                                                                          notations,
+                                                                          languages,
+                                                                          translators,
+                                                                          pauseTreatments,
+                                                                          sequentialTransfers,
+                                                                          trajectories);
                     mattersNames = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
                 }
 

@@ -69,7 +69,8 @@
                         "~/Scripts/Angular/Components/mattersTable.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/CalculationResultController").Include(
-                        "~/Scripts/Angular/Controllers/calculationResult.js"));
+                        "~/Scripts/Angular/Controllers/calculationResult.js",
+                        "~/Libraries/exceljs/exceljs.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/ChartsController").Include(
                         "~/Scripts/Angular/Directives/tableParse.js",
@@ -173,11 +174,14 @@
             bundles.Add(new ScriptBundle("~/bundles/Characteristic").Include(
                         "~/Scripts/Angular/Components/characteristic.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/CharacteristicNatureParams").Include(
+                        "~/Scripts/Angular/Components/characteristicNatureParams.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/Characteristics").Include(
                         "~/Scripts/Angular/Components/characteristics.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/CharacteristicsWithoutNotation").Include(
-                        "~/Scripts/Angular/Components/CharacteristicsWithoutNotation.js"));
+                        "~/Scripts/Angular/Components/characteristicsWithoutNotation.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/loadingWindow").Include(
                         "~/Scripts/Angular/Components/loadingWindow.js"));

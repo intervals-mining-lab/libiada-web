@@ -1,5 +1,6 @@
 ﻿namespace LibiadaWeb.Models.CalculatorsData
 {
+    using System;
     using System.Linq;
 
     /// <summary>
@@ -62,7 +63,7 @@
         public SubsequenceData(Subsequence subsequence, double[] characteristics, int[] attributes) : this(subsequence)
         {
             CharacteristicsValues = characteristics;
-            Attributes = attributes ?? new int[0];
+            Attributes = attributes ?? Array.Empty<int>();
         }
 
         /// <summary>
@@ -73,8 +74,8 @@
         /// </param>
         public SubsequenceData(Subsequence subsequence)
         {
-            Attributes = new int[0];
-            CharacteristicsValues = new double[0];
+            Attributes = Array.Empty<int>();
+            CharacteristicsValues = Array.Empty<double>();
             Id = subsequence.Id;
             FeatureId = (byte)subsequence.Feature;
             RemoteId = subsequence.RemoteId;

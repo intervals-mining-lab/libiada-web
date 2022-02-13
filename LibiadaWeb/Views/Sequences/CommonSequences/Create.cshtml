@@ -48,7 +48,7 @@
             <input type="hidden" name="Notation" ng-init="filterByNature()" ng-value="notationId" />
         }
         <div class="form-group">
-            @Html.LabelFor(model => model.MatterId, "Matter", new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Matter, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <select class="form-control"
                         ng-options="m.Value as m.Text for m in matters | filter:{ Nature: nature }"

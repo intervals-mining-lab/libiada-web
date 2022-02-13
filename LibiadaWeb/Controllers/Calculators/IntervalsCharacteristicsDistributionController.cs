@@ -75,6 +75,7 @@
         [HttpPost]
         public ActionResult Index(int length, int alphabetCardinality, int generateStrict, short[] characteristicLinkIds)
         {
+            // TODO: Reafctor all of this
             return CreateTask(() =>
             {
                 var orderGenerator = new OrderGenerator();
@@ -134,6 +135,8 @@
                     var accordance = IntervalsDistributionExtractor.GetOrdersIntervalsDistributionsAccordance(orders.ToArray(), link);
                     var resultAccordance = new Dictionary<IntervalsDistribution, Dictionary<int[], SequenceCharacteristics>>();
                     foreach(var element in accordance)
+                        var alphabet = sequence.Alphabet.ToList();
+                        foreach (var el in alphabet)
                     {
                         resultAccordance.Add(element.Key, new Dictionary<int[], SequenceCharacteristics>());
                         foreach(var order in element.Value)
@@ -154,7 +157,7 @@
                 {
                     { "result", resultIntervals.Select(r => new
                     {
-                        link = r.Key.ToString(),
+                        link = r.Key,
                         accordance = r.Value.Select(d => new {
                             distributionIntervals = d.Key.Distribution.Select(pair => new
                             {

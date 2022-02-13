@@ -18,12 +18,12 @@
                     <tr>
                         <th>First element\Second element</th>
                         <th ng-repeat="element in ::elements" 
-                            ng-bind="::element.Name ? element.Name : element.Value" />
+                            ng-bind="::element.Name" />
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="element in ::elements">
-                        <td ng-bind="::element.Name ? element.Name : element.Value" />
+                        <td ng-bind="::element.Name" />
                         <td ng-repeat="element in ::elements" 
                             ng-bind="::characteristics[elements[$parent.$index].Id][elements[$index].Id]" />
                     </tr>
@@ -31,7 +31,7 @@
             </table>
         </div>
         <div ng-if="isFilter">
-            <table class="table">
+            <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
                         <th>First element</th>
@@ -41,8 +41,8 @@
                 </thead>
                 <tbody>
                     <tr ng-repeat="result in ::filteredResult">
-                        <td ng-bind="::firstElements[$index].Value" />
-                        <td ng-bind="::secondElements[$index].Value" />
+                        <td ng-bind="::firstElements[$index]" />
+                        <td ng-bind="::secondElements[$index]" />
                         <td ng-bind="::filteredResult[$index].Value" />
                     </tr>
                 </tbody>

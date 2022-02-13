@@ -42,7 +42,7 @@
                 var matterIds = db.DnaSequence.Include(c => c.Matter)
                     .Where(c => !string.IsNullOrEmpty(c.RemoteId) && !sequencesWithSubsequencesIds.Contains(c.Id)
                                 && (c.Matter.SequenceType == SequenceType.CompleteGenome
-                                    || c.Matter.SequenceType == SequenceType.MitochondrionGenome
+                                    || c.Matter.SequenceType == SequenceType.MitochondrialGenome
                                     || c.Matter.SequenceType == SequenceType.Plasmid)).Select(c => c.MatterId).ToArray();
 
                 var viewDataHelper = new ViewDataHelper(db);

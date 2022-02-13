@@ -13,7 +13,6 @@
     using LibiadaCore.Extensions;
     using LibiadaCore.Music;
 
-    using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Sequences;
     using LibiadaWeb.Tasks;
 
@@ -89,6 +88,9 @@
         /// <param name="sequentialTransfer">
         /// Sequential transfer flag used in music sequences.
         /// </param>
+        /// <param name="trajectory">
+        /// Reading trajectory for images.
+        /// </param>
         /// <param name="filterSize">
         /// The filter size.
         /// </param>
@@ -114,6 +116,7 @@
             Translator? translator,
             PauseTreatment? pauseTreatment,
             bool? sequentialTransfer,
+            ImageOrderExtractor? trajectory,
             int filterSize,
             bool filter,
             bool frequencyFilter,
@@ -121,36 +124,28 @@
         {
             return CreateTask(() =>
             {
-                var characteristics = new Dictionary<long, Dictionary<long, double>>();
-                Element[] elements = null;
-                List<BinaryCharacteristicValue> filteredResult = null;
-                var firstElements = new List<Element>();
-                var secondElements = new List<Element>();
-
+                string characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
                 Matter matter = Cache.GetInstance().Matters.Single(m => m.Id == matterId);
-                long sequenceId;
-                switch (matter.Nature)
-                {
-                    case Nature.Literature:
-                        sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId
-                                                                    && l.Notation == notation
-                                                                    && l.Language == language
-                                                                    && l.Translator == translator).Id;
-                        break;
-                    case Nature.Music:
-                        sequenceId = db.MusicSequence.Single(m => m.MatterId == matterId
-                                                               && m.Notation == notation
-                                                               && m.PauseTreatment == pauseTreatment
-                                                               && m.SequentialTransfer == sequentialTransfer).Id;
-                        break;
-                    default:
-                        sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
-                        break;
-                }
+                long sequenceId = commonSequenceRepository.GetSequenceIds(new[] { matterId }, 
+                                                                          notation, 
+                                                                          language, 
+                                                                          translator, 
+                                                                          pauseTreatment, 
+                                                                          sequentialTransfer,
+                                                                          trajectory).Single();
 
                 Chain currentChain = commonSequenceRepository.GetLibiadaChain(sequenceId);
-                BinaryCharacteristic binaryCharacteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
+                var sequence = db.CommonSequence.Single(m => m.Id == sequenceId);
 
+                var result = new Dictionary<string, object>
+                {
+                    { "isFilter", filter },
+                    { "matterName", sequence.Matter.Name },
+                    { "notationName", sequence.Notation.GetDisplayValue() },
+                    { "characteristicName", characteristicName }
+                };
+
+                BinaryCharacteristic binaryCharacteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
                 IBinaryCalculator calculator = BinaryCalculatorsFactory.CreateCalculator(binaryCharacteristic);
                 Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
 
@@ -165,57 +160,54 @@
 
                 if (filter)
                 {
-                    filteredResult = db.BinaryCharacteristicValue.Where(b => b.SequenceId == sequenceId && b.CharacteristicLinkId == characteristicLinkId)
-                        .OrderByDescending(b => b.Value)
-                        .Take(filterSize).ToList();
+                    var filteredResult = db.BinaryCharacteristicValue
+                                       .Where(b => b.SequenceId == sequenceId && b.CharacteristicLinkId == characteristicLinkId)
+                                       .OrderByDescending(b => b.Value)
+                                       .Take(filterSize)
+                                       .Select(rc => new
+                                       {
+                                           FirstElementId = rc.FirstElementId,
+                                           SecondElementId = rc.SecondElementId,
+                                           Value = rc.Value
+                                       })
+                                       .ToArray();
 
-                    for (int l = 0; l < filterSize; l++)
+                    var firstElements = new List<string>();
+                    var secondElements = new List<string>();
+                    for (int i = 0; i < filterSize; i++)
                     {
-                        long firstElementId = filteredResult[l].FirstElementId;
-                        firstElements.Add(db.Element.Single(e => e.Id == firstElementId));
+                        long firstElementId = filteredResult[i].FirstElementId;
+                        var firstElement = db.Element.Single(e => e.Id == firstElementId);
+                        firstElements.Add(firstElement.Name ?? firstElement.Value);
+
+                        long secondElementId = filteredResult[i].SecondElementId;
+                        var secondElement = db.Element.Single(e => e.Id == secondElementId);
+                        secondElements.Add(secondElement.Name ?? secondElement.Value);
                     }
 
-                    for (int m = 0; m < filterSize; m++)
-                    {
-                        long secondElementId = filteredResult[m].SecondElementId;
-                        secondElements.Add(db.Element.Single(e => e.Id == secondElementId));
-                    }
+                    result.Add("filteredResult", filteredResult);
+                    result.Add("filterSize", filterSize);
+                    result.Add("firstElements", firstElements);
+                    result.Add("secondElements", secondElements);
                 }
                 else
                 {
-                    characteristics = db.BinaryCharacteristicValue
+                    var characteristics = db.BinaryCharacteristicValue
                                         .Where(b => b.SequenceId == sequenceId && b.CharacteristicLinkId == characteristicLinkId)
                                         .GroupBy(b => b.FirstElementId)
                                         .ToDictionary(b => b.Key, b => b.ToDictionary(bb => bb.SecondElementId, bb => bb.Value));
                     var elementsIds = db.GetAlphabetElementIds(sequenceId);
-                    elements = db.Element.Where(e => elementsIds.Contains(e.Id)).OrderBy(e => e.Id).ToArray();
+                    var elements = db.Element
+                        .Where(e => elementsIds.Contains(e.Id))
+                        .OrderBy(e => e.Id)
+                        .Select(e => new { Name = e.Name ?? e.Value, e.Id })
+                        .ToArray();
+                    
+                    result.Add("characteristics", characteristics);
+                    result.Add("elements", elements);
                 }
 
-                string characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
-
-                var result = new Dictionary<string, object>
-                {
-                    { "characteristics", characteristics },
-                    { "isFilter", filter },
-                    { "filteredResult", filteredResult },
-                    { "firstElements", firstElements },
-                    { "secondElements", secondElements },
-                    { "filterSize", filterSize },
-                    { "elements", elements },
-                    { "characteristicName", characteristicName },
-                    { "matterName", db.CommonSequence.Single(m => m.Id == sequenceId).Matter.Name },
-                    { "notationName", db.CommonSequence.Single(c => c.Id == sequenceId).Notation.GetDisplayValue() }
-                };
-
-                string json = JsonConvert.SerializeObject(result, new JsonSerializerSettings()
-                {
-                    ContractResolver = new SerializationFilter(new[]
-                    {
-                        "FirstElementBinaryCharacteristic",
-                        "SecondElementBinaryCharacteristic",
-                        "Sequence"
-                    })
-                });
+                string json = JsonConvert.SerializeObject(result);
 
                 return new Dictionary<string, string> { { "data", json } };
             });
@@ -311,7 +303,7 @@
             }
 
             // ordering alphabet by frequencies
-            frequencies = SortKeyValuePairList(frequencies);
+            frequencies = frequencies.OrderBy(pair => pair.frequency).ToArray();
 
             // calculating relation characteristic only for elements with maximum frequency
             for (int i = 0; i < frequencyCount; i++)
@@ -335,20 +327,6 @@
 
             db.BinaryCharacteristicValue.AddRange(newCharacteristics);
             db.SaveChanges();
-        }
-
-        /// <summary>
-        /// Sort list by second element of the tuple.
-        /// </summary>
-        /// <param name="arrayForSort">
-        /// The array for sorting.
-        /// </param>
-        /// <returns>
-        /// The <see cref="T:(IBaseObject, double)[]"/>.
-        /// </returns>
-        private (IBaseObject, double)[] SortKeyValuePairList((IBaseObject element, double frequency)[] arrayForSort)
-        {
-            return arrayForSort.OrderBy(pair => pair.frequency).ToArray();
         }
     }
 }

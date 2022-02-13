@@ -4,6 +4,7 @@
     using System.Linq;
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
+
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
     using LibiadaCore.DataTransformers;
@@ -79,6 +80,9 @@
         /// <param name="sequentialTransfer">
         /// Sequential transfer flag used in music sequences.
         /// </param>
+        /// <param name="trajectory">
+        /// Reading trajectory for images.
+        /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
@@ -93,7 +97,8 @@
             Language? language,
             Translator? translator,
             PauseTreatment? pauseTreatment,
-            bool? sequentialTransfer)
+            bool? sequentialTransfer,
+            ImageOrderExtractor? trajectory)
         {
             return CreateTask(() =>
             {
@@ -107,25 +112,13 @@
                 for (int i = 0; i < matterIds.Length; i++)
                 {
                     long matterId = matterIds[i];
-                    long sequenceId;
-                    switch (matters[matterId].Nature)
-                    {
-                        case Nature.Literature:
-                            sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId
-                                                                        && l.Notation == notation
-                                                                        && l.Language == language
-                                                                        && l.Translator == translator).Id;
-                            break;
-                        case Nature.Music:
-                            sequenceId = db.MusicSequence.Single(m => m.MatterId == matterId
-                                                                   && m.Notation == notation
-                                                                   && m.PauseTreatment == pauseTreatment
-                                                                   && m.SequentialTransfer == sequentialTransfer).Id;
-                            break;
-                        default:
-                            sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
-                            break;
-                    }
+                    long sequenceId = commonSequenceRepository.GetSequenceIds(new[] { matterId },
+                                                                              notation,
+                                                                              language,
+                                                                              translator,
+                                                                              pauseTreatment,
+                                                                              sequentialTransfer,
+                                                                              trajectory).Single();
 
                     Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
                     FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);

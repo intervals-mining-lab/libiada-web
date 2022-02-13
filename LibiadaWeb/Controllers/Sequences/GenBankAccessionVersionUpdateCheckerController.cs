@@ -79,11 +79,12 @@
                 for (int i = 0; i < searchResults.Count; i++)
                 {
                     var searchResult = searchResults[i];
-                    searchResult.Title = searchResult.Title.TrimEnd(", complete genome")
-                                               .TrimEnd(", complete sequence")
-                                               .TrimEnd(", complete CDS")
-                                               .TrimEnd(", complete cds")
-                                               .TrimEnd(", genome");
+                    searchResult.Title = searchResult.Title.TrimEnd(".")
+                                                        .TrimEnd(", complete genome")
+                                                        .TrimEnd(", complete sequence")
+                                                        .TrimEnd(", complete CDS")
+                                                        .TrimEnd(", complete cds")
+                                                        .TrimEnd(", genome");
 
                     var newAccession = searchResult.AccessionVersion.Split('.');
                     var sequenceData = sequencesData[newAccession[0]];

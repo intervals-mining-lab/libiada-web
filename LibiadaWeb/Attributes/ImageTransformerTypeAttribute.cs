@@ -7,7 +7,8 @@
     /// <summary>
     /// The image transformer type attribute.
     /// </summary>
-    public class ImageTransformerTypeAttribute : System.Attribute
+    [AttributeUsage(AttributeTargets.Field)]
+    public class ImageTransformerTypeAttribute : Attribute
     {
         /// <summary>
         /// The image processor type.

@@ -42,6 +42,10 @@
     {
       "library": "twitter-bootstrap@3.3.7",
       "destination": "Libraries/twitter-bootstrap/"
+    },
+    {
+      "library": "exceljs@4.3.0",
+      "destination": "Libraries/exceljs/"
     }
   ]
 }

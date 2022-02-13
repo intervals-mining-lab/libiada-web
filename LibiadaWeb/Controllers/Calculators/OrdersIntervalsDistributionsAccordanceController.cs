@@ -83,7 +83,8 @@
                     {
                         var sequence = new Chain(order.Select(Convert.ToInt16).ToArray());
                         var fullIntervals = new Dictionary<int, int>();
-                        foreach (var el in sequence.Alphabet.ToList())
+                        var alphabet = sequence.Alphabet.ToList();
+                        foreach (var el in alphabet)
                         {
                             var congIntervals = sequence.CongenericChain(el).GetArrangement(link);
                             foreach (var interval in congIntervals)
@@ -118,7 +119,7 @@
                 {
                     { "result", distributionsAccordance.Select(r => new
                         {
-                            link = r.Key.ToString(),
+                            link = r.Key,
                             accordance = r.Value.Select(d => new {
                                 distributionIntervals = d.Key.Select(pair => new
                                 {

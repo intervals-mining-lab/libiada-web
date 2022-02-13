@@ -7,7 +7,7 @@
             $scope.legend = [];
 
             for (var k = 0; k < $scope.characteristics.length; k++) {
-                $scope.legend.push({ id: k, name: $scope.characteristics[k].matterName, visible: true });
+                $scope.legend.push({ id: k, name: $scope.characteristics[k].MatterName, visible: true });
             }
         }
 
@@ -19,15 +19,15 @@
 
             for (var i = 0; i < $scope.characteristics.length; i++) {
                 var characteristic = $scope.characteristics[i];
-                for (var j = 0; j < characteristic.fragmentsData.length; j++) {
-                    var fragmentData = characteristic.fragmentsData[j];
+                for (var j = 0; j < characteristic.FragmentsData.length; j++) {
+                    var fragmentData = characteristic.FragmentsData[j];
                     $scope.points.push({
                         id: j,
                         characteristicId: i,
                         name: fragmentData.Name,
                         x: fragmentData.Characteristics[first],
                         y: fragmentData.Characteristics[second],
-                        matterName: characteristic.matterName
+                        matterName: characteristic.MatterName
                     });
                 }
             }
@@ -40,7 +40,7 @@
             tooltipContent.push("Name: " + d.name);
             tooltipContent.push("Fragment №: " + d.id);
             var pointSharacteristics = [];
-            var characteristics = $scope.characteristics[d.characteristicId].fragmentsData[d.id].Characteristics;
+            var characteristics = $scope.characteristics[d.characteristicId].FragmentsData[d.id].Characteristics;
             for (var i = 0; i < characteristics.length; i++) {
                 pointSharacteristics.push($scope.characteristicsList[i].Text + ": " + characteristics[i]);
             }
@@ -270,9 +270,9 @@
                 .append("g")
                 .attr("class", "legend")
                 .attr("transform", (_d, i) => "translate(0," + i * 20 + ")")
-                .on("click", function (_event, d) {
+                .on("click", function (event, d) {
                     d.visible = !d.visible;
-                    var legendEntry = d3.select(this);
+                    var legendEntry = d3.select(event.currentTarget);
                     legendEntry.select("text")
                         .style("opacity", () => d.visible ? 1 : 0.5);
                     legendEntry.select("rect")

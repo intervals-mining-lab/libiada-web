@@ -75,7 +75,7 @@
                                 SequenceType = SequenceType.CompleteImage
                             };
 
-                            matterRepository.CreateMatter(matter);
+                            matterRepository.SaveToDatabase(matter);
                             importResult.Result = "Successfully imported image and created matter";
                             importResult.Status = "Success";
                             importResults.Add(importResult);

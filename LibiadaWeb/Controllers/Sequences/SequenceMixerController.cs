@@ -165,7 +165,7 @@
                     Name = $"{matter.Name} {scrambling} mixes"
                 };
             MatterRepository matterRepository = new MatterRepository(db);
-            matterRepository.CreateMatter(resultMatter);
+            matterRepository.SaveToDatabase(resultMatter);
 
             var result = new CommonSequence
                 {
