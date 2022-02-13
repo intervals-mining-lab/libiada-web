@@ -114,11 +114,7 @@
                     }
                 }
 
-                var transformations = new Dictionary<int, string>();
-                for (int i = 0; i < transformationsSequence.Length; i++)
-                {
-                    transformations.Add(i, transformationsSequence[i].GetDisplayValue());
-                }
+                var transformations = transformationsSequence.Select(ts => ts.GetDisplayValue());
 
                 var result = new Dictionary<string, object>
                 {

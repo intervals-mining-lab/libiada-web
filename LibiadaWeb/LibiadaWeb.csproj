@@ -103,6 +103,7 @@
     </Compile>
     <Compile Include="Attribute.cs" />
     <Compile Include="Attributes\GenBankFeatureNameAttribute.cs" />
+    <Compile Include="Attributes\ImageOrderExtractorAttribute.cs" />
     <Compile Include="Attributes\SequenceGroupTypeAttribute.cs" />
     <Compile Include="Attributes\ImageTransformerTypeAttribute.cs" />
     <Compile Include="Attributes\TaskClassAttribute.cs" />
@@ -209,6 +210,7 @@
     </Compile>
     <Compile Include="Group.cs" />
     <Compile Include="Helpers\PushNotificationHelper.cs" />
+    <Compile Include="Helpers\SelectListHelper.cs" />
     <Compile Include="ImageMatrixTransformer.cs" />
     <Compile Include="ImageOrderExtractor.cs" />
     <Compile Include="ImageSequence.cs">
@@ -381,10 +383,6 @@
     <Compile Include="Translator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ConnectionStrings.config">
-      <DependentUpon>Web.config</DependentUpon>
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="Content\dna.png" />
     <Content Include="Content\GenesMap.css" />
     <Content Include="Content\ScrollUpDown.css" />
@@ -432,6 +430,10 @@
     <Content Include="Libraries\angular.js\angular.min.js" />
     <Content Include="Libraries\d3\d3.js" />
     <Content Include="Libraries\d3\d3.min.js" />
+    <Content Include="Libraries\exceljs\exceljs.bare.js" />
+    <Content Include="Libraries\exceljs\exceljs.bare.min.js" />
+    <Content Include="Libraries\exceljs\exceljs.js" />
+    <Content Include="Libraries\exceljs\exceljs.min.js" />
     <Content Include="Libraries\jquery-validate\additional-methods.js" />
     <Content Include="Libraries\jquery-validate\additional-methods.min.js" />
     <Content Include="Libraries\jquery-validate\jquery.validate.js" />
@@ -746,7 +748,9 @@
     <Content Include="Libraries\twitter-bootstrap\js\bootstrap.js" />
     <Content Include="Libraries\twitter-bootstrap\js\bootstrap.min.js" />
     <Content Include="Libraries\twitter-bootstrap\js\npm.js" />
+    <Content Include="Scripts\acoustic_grand_piano-ogg.js" />
     <Content Include="Scripts\Angular\Components\characteristic.js" />
+    <Content Include="Scripts\Angular\Components\characteristicNatureParams.js" />
     <Content Include="Scripts\Angular\Components\characteristics.js" />
     <Content Include="Scripts\Angular\Components\characteristicsWithoutNotation.js" />
     <Content Include="Scripts\Angular\Components\mattersTable.js" />
@@ -818,6 +822,10 @@
     <Content Include="Libraries\twitter-bootstrap\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Libraries\twitter-bootstrap\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Libraries\twitter-bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Libraries\exceljs\exceljs.bare.js.map" />
+    <Content Include="Libraries\exceljs\exceljs.bare.min.js.map" />
+    <Content Include="Libraries\exceljs\exceljs.js.map" />
+    <Content Include="Libraries\exceljs\exceljs.min.js.map" />
     <None Include="Properties\PublishProfiles\Release.pubxml" />
     <Content Include="Scripts\Angular\functions.js" />
     <Content Include="Scripts\Angular\Components\loadingWindow.js" />
@@ -969,6 +977,10 @@
     <Content Include="Views\Sequences\GenBankAccessionVersionUpdateChecker\Index.cshtml" />
     <Content Include="Views\Sequences\BatchImagesImport\Result.cshtml" />
     <Content Include="Views\Sequences\BatchImagesImport\Index.cshtml" />
+    <Content Include="secrets.file">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="secrets.file.example" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1007,9 +1019,6 @@
     </PackageReference>
     <PackageReference Include="AutoMapper">
       <Version>6.2.2</Version>
-    </PackageReference>
-    <PackageReference Include="d3">
-      <Version>4.13.0</Version>
     </PackageReference>
     <PackageReference Include="EntityFramework">
       <Version>6.4.4</Version>

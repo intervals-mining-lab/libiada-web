@@ -45,7 +45,7 @@
                                   .Where(c => !string.IsNullOrEmpty(c.RemoteId) &&
                                                                                  !genesSequenceIds.Contains(c.Id) &&
                                                                                  (c.Matter.SequenceType == SequenceType.CompleteGenome
-                                                                               || c.Matter.SequenceType == SequenceType.MitochondrionGenome
+                                                                               || c.Matter.SequenceType == SequenceType.MitochondrialGenome
                                                                                || c.Matter.SequenceType == SequenceType.Plasmid))
                                   .Select(c => c.MatterId).ToList();
 

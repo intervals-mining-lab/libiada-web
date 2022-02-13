@@ -3,6 +3,8 @@
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
+    using LibiadaCore.Images;
+
     using LibiadaWeb.Attributes;
 
     /// <summary>
@@ -15,7 +17,7 @@
         /// </summary>
         [Display(Name = "Resize image")]
         [Description("Resizes image to given width and height")]
-        [ImageTransformerType(typeof(ImageTransformer))]
+        [ImageTransformerType(typeof(ImageResizer))]
         ImageResizer = 1
     }
 }

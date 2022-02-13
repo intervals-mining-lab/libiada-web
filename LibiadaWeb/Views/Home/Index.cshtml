@@ -88,6 +88,15 @@
                 <br />
                 @Html.ActionLink("Data visualization", "Index", "Charts")
 
+
+            }
+        </div>
+        <div class="col-md-4">
+            <h2>Tasks</h2>
+            @Html.ActionLink("Task manager", "Index", "TaskManager")
+            
+            @if (AccountHelper.IsAdmin())
+            {
                 <h2>Research</h2>
                 @Html.ActionLink("Calculate order transformations convergence", "Index", "OrderTransformationConvergence")
                 <br />
@@ -106,19 +115,14 @@
                 @Html.ActionLink("Visualization of orders transformations", "Index", "OrderTransformationVisualization")
                 <br />
                 @Html.ActionLink("Visualization of orders transformations characteristics dynamic", "Index", "OrderTransformationCharacteristicsDynamicVisualization")
-
             }
-        </div>
-        <div class="col-md-4">
-            <h2>Tasks</h2>
-            @Html.ActionLink("Task manager", "Index", "TaskManager")
         </div>
     </div>
 }
 else
 {
-    <div>
-        @Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" }) or 
-        @Html.ActionLink("log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" }) to use Libiada service.
-    </div>
+<div>
+    @Html.ActionLink("log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" }) or
+    @Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" }) to use Libiada service.
+</div>
 }

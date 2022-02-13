@@ -12,6 +12,7 @@
             if (!ctrl.hideNotation) {
                 var notation = filterFilter(ctrl.notations, { Nature: ctrl.nature })[0];
                 ctrl.notation = notation;
+
                 // if notation is not linked to characteristic
                 angular.forEach(ctrl.characteristics, characteristic => characteristic.notation = notation);
             }
@@ -28,11 +29,13 @@
                 characteristicType: ctrl.characteristicTypes[0],
                 link: ctrl.characteristicTypes[0].Links[0],
                 arrangementType: ctrl.characteristicTypes[0].ArrangementTypes[0],
-                // if notation is part of characterisitcs
+
+                // if notation is a part of characteristic
                 notation: ctrl.hideNotation ? 0 : filterFilter(ctrl.notations, { Nature: ctrl.nature })[0],
                 language: ctrl.languages ? ctrl.languages[0] : null,
                 translator: ctrl.translators ? ctrl.translators[0] : null,
-                pauseTreatment: ctrl.pauseTreatments ? ctrl.pauseTreatments[0] : null
+                pauseTreatment: ctrl.pauseTreatments ? ctrl.pauseTreatments[0] : null,
+                trajectory: ctrl.trajectories ? ctrl.trajectories[0] : null
             });
         };
 
@@ -56,6 +59,7 @@
             languages: "<",
             translators: "<",
             pauseTreatments: "<",
+            trajectories: "<",
             characteristicsDictionary: "<",
             hideNotation: "@"
         }

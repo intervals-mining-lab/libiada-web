@@ -112,6 +112,9 @@
         /// <param name="sequentialTransfer">
         /// Sequential transfer flag used in music sequences.
         /// </param>
+        /// <param name="trajectory">
+        /// Reading trajectory for images.
+        /// </param> 
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
@@ -130,7 +133,8 @@
             Language? language,
             Translator? translator,
             PauseTreatment? pauseTreatment,
-            bool? sequentialTransfer)
+            bool? sequentialTransfer,
+            ImageOrderExtractor? trajectory)
         {
             return CreateTask(() =>
             {
@@ -151,26 +155,13 @@
                     long matterId = matterIds[k];
                     Nature nature = Cache.GetInstance().Matters.Single(m => m.Id == matterId).Nature;
 
-                    long sequenceId;
-                    switch (nature)
-                    {
-                        case Nature.Literature:
-                            sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId
-                                                                        && l.Notation == notation
-                                                                        && l.Language == language
-                                                                        && l.Translator == translator).Id;
-                            break;
-                        case Nature.Music:
-                            sequenceId = db.MusicSequence.Single(m => m.MatterId == matterId
-                                                                      && m.Notation == notation
-                                                                      && m.PauseTreatment == pauseTreatment
-                                                                      && m.SequentialTransfer == sequentialTransfer).Id;
-                            break;
-                        default:
-                            sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId
-                                                                    && c.Notation == notation).Id;
-                            break;
-                    }
+                    long sequenceId = commonSequenceRepository.GetSequenceIds(new[] { matterId },
+                                                                           notation,
+                                                                           language,
+                                                                           translator,
+                                                                           pauseTreatment,
+                                                                           sequentialTransfer,
+                                                                           trajectory).Single();
 
                     chains[k] = commonSequenceRepository.GetLibiadaChain(sequenceId);
                 }
@@ -245,11 +236,11 @@
                         autocorrelationData = AutoCorrelation.CalculateAutocorrelation(fragmentsData.Select(f => f.Characteristics).ToArray());
                     }
 
-                    mattersCharacteristics[i] = new LocalCharacteristicsData{ matterName = matters[matterIds[i]].Name,
-                                                                              fragmentsData = fragmentsData,
-                                                                              differenceData = differenceData,
-                                                                              fourierData = fourierData,
-                                                                              autocorrelationData = autocorrelationData };
+                    mattersCharacteristics[i] = new LocalCharacteristicsData(matters[matterIds[i]].Name,
+                                                                             fragmentsData,
+                                                                             differenceData,
+                                                                             fourierData,
+                                                                             autocorrelationData);
                 }
 
                 for (int l = 0; l < characteristicLinkIds.Length; l++)

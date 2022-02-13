@@ -19,6 +19,7 @@
 
     using LibiadaWeb.Models.NcbiSequencesData;
     using Newtonsoft.Json.Linq;
+    using System.Configuration;
 
 
     /// <summary>
@@ -35,6 +36,8 @@
         /// Synchronization object.
         /// </summary>
         private static readonly object SyncRoot = new object();
+
+        private static readonly string ApiKey = ConfigurationManager.AppSettings["NcbiApiKey"];
 
         /// <summary>
         /// The last request date time.
@@ -277,8 +280,16 @@
                 webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
                 Uri url = new Uri(BaseUrl + urlEPost);
 
-                // TODO: make email global parameter
-                requestResult = webClient.UploadString(url, $"db=nuccore&id={ids}");
+                string data = $"db=nuccore&id={ids}";
+
+                // adding api key to request if there is any
+                if (!string.IsNullOrEmpty(ApiKey))
+                {
+                    data += $"&api_key={ApiKey}";
+                }
+
+                WaitForRequest();
+                requestResult = webClient.UploadString(url, data);
             }
 
             XmlDocument xmlReader = new XmlDocument();
@@ -380,24 +391,27 @@
         /// </exception>
         private static Stream GetResponseStream(string url)
         {
+            // adding api key to request if there is any
+            if (!string.IsNullOrEmpty(ApiKey))
+            {
+                url += $"&api_key={ApiKey}";
+            }
+
             string resultUrl = BaseUrl + url;
-            
+
             var memoryStream = new MemoryStream();
 
-            lock (SyncRoot)
+            WaitForRequest();
+            using (var downloader = new WebClient())
             {
-                WaitForRequest();
-                using(var downloader = new WebClient())
+                using (Stream stream = downloader.OpenRead(resultUrl))
                 {
-                    using (Stream stream = downloader.OpenRead(resultUrl))
+                    if (stream == null)
                     {
-                        if (stream == null)
-                        {
-                            throw new Exception("Response stream was null.");
-                        }
-
-                        stream.CopyTo(memoryStream);
+                        throw new Exception("Response stream was null.");
                     }
+
+                    stream.CopyTo(memoryStream);
                 }
             }
 
@@ -411,12 +425,17 @@
         /// </summary>
         private static void WaitForRequest()
         {
-            if (DateTimeOffset.Now - lastRequestDateTime < new TimeSpan(0, 0, 0, 0, 334))
+            lock (SyncRoot)
             {
-                Thread.Sleep(334);
-            }
+                int delay = string.IsNullOrEmpty(ApiKey) ? 334 : 100;
 
-            lastRequestDateTime = DateTimeOffset.Now;
+                if (DateTimeOffset.Now - lastRequestDateTime < new TimeSpan(0, 0, 0, 0, delay))
+                {
+                    Thread.Sleep(delay);
+                }
+
+                lastRequestDateTime = DateTimeOffset.Now;
+            }
         }
     }
 }

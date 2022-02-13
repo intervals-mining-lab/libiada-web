@@ -1,28 +1,4 @@
-﻿<div ng-switch="nature">
-    <div ng-switch-when="@((byte)Nature.Literature)">
-        <div class="form-group">
-            <label class="control-label col-md-2" for="language">Language:</label>
-            <div class="col-md-10">
-                <select class="form-control"
-                        title="Language"
-                        ng-model="characteristic.language"
-                        ng-options="l.Text for l in ::languages"
-                        id="language"></select>
-                <input type="hidden" name="language" ng-value="characteristic.language.Value" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-2" for="translator">Translator:</label>
-            <div class="col-md-10">
-                <select class="form-control"
-                        title="Translator"
-                        ng-model="characteristic.translator"
-                        ng-options="t.Text for t in ::translators"
-                        id="translator"></select>
-                <input type="hidden" name="translator" ng-value="characteristic.translator.Value" />
-            </div>
-        </div>
-    </div>
+﻿<div ng-switch="$ctrl.nature">
     <div ng-switch-when="@((byte)Nature.Genetic)">
     </div>
     <div ng-switch-when="@((byte)Nature.Music)">
@@ -31,17 +7,19 @@
             <div class="col-md-10">
                 <select class="form-control"
                         title="PauseTreatment"
-                        ng-model="characteristic.pauseTreatment"
-                        ng-options="t.Text for t in ::pauseTreatments"
+                        ng-model="$ctrl.characteristic.pauseTreatment"
+                        ng-options="t.Text for t in ::$ctrl.pauseTreatments"
                         id="pauseTreatment"></select>
-                <input type="hidden" name="pauseTreatment" ng-value="characteristic.pauseTreatment.Value" />
+                <input type="hidden"
+                       name="pauseTreatment"
+                       ng-value="$ctrl.characteristic.pauseTreatment.Value" />
             </div>
         </div>
         <div class="col-md-offset-2 col-md-10">
             <input type="checkbox"
                    name="sequentialTransfer"
                    id="sequentialTransfer"
-                   ng-model="sequentialTransfer"
+                   ng-model="$ctrl.sequentialTransfer"
                    value="true" />
             <input type="hidden" name="sequentialTransfer" value="false" />
             <label for="sequentialTransfer">
@@ -49,7 +27,50 @@
             </label>
         </div>
     </div>
+    <div ng-switch-when="@((byte)Nature.Literature)">
+        <div class="form-group">
+            <label class="control-label col-md-2" for="language">Language:</label>
+            <div class="col-md-10">
+                <select class="form-control"
+                        title="Language"
+                        ng-model="$ctrl.characteristic.language"
+                        ng-options="l.Text for l in ::$ctrl.languages"
+                        id="language"></select>
+                <input type="hidden"
+                       name="language"
+                       ng-value="$ctrl.characteristic.language.Value" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2" for="translator">Translator:</label>
+            <div class="col-md-10">
+                <select class="form-control"
+                        title="Translator"
+                        ng-model="$ctrl.characteristic.translator"
+                        ng-options="t.Text for t in ::$ctrl.translators"
+                        id="translator"></select>
+                <input type="hidden"
+                       name="translator"
+                       ng-value="$ctrl.characteristic.translator.Value" />
+            </div>
+        </div>
+    </div>
     <div ng-switch-when="@((byte)Nature.MeasurementData)">
+    </div>
+    <div ng-switch-when="@((byte)Nature.Image)">
+        <div class="form-group">
+            <label class="control-label col-md-2" for="trajectory">Reading trajectory:</label>
+            <div class="col-md-10">
+                <select class="form-control"
+                        title="Reading trajectory"
+                        ng-model="$ctrl.characteristic.trajectory"
+                        ng-options="t.Text for t in ::$ctrl.trajectories"
+                        id="trajectory"></select>
+                <input type="hidden"
+                       name="trajectories"
+                       ng-value="$ctrl.characteristic.trajectory.Value" />
+            </div>
+        </div>
     </div>
 </div>
 <hr />

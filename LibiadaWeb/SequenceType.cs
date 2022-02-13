@@ -51,12 +51,12 @@
         Plasmid = 5,
 
         /// <summary>
-        /// Complete mitochondrion genome.
+        /// Complete mitochondrial genome.
         /// </summary>
-        [Display(Name = "Mitochondrion genome")]
+        [Display(Name = "Mitochondrial genome")]
         [Description("Complete mitochondrion genome")]
         [Nature(Nature.Genetic)]
-        MitochondrionGenome = 6,
+        MitochondrialGenome = 6,
 
         /// <summary>
         /// Complete chloroplast genome.

@@ -10,7 +10,7 @@
                     ng-model="characteristic.characteristicType"
                     ng-options="c.Text for c in $ctrl.characteristicTypes"
                     ng-change="$ctrl.selectLink(characteristic)"
-                    id="characteristic"></select>
+                    id="characteristic{{$index}}"></select>
         </div>
     </div>
     <div class="form-group" ng-show="characteristic.characteristicType.Links.length > 1">
@@ -20,7 +20,7 @@
                     title="Link"
                     ng-model="characteristic.link"
                     ng-options="l.Text for l in characteristic.characteristicType.Links"
-                    id="link"></select>
+                    id="link{{$index}}"></select>
         </div>
     </div>
     @if (AccountHelper.IsAdmin())
@@ -32,7 +32,7 @@
                         title="Arrangement type"
                         ng-model="characteristic.arrangementType"
                         ng-options="a.Text for a in characteristic.characteristicType.ArrangementTypes"
-                        id="arrangementType"></select>
+                        id="arrangementType{{$index}}"></select>
 
             </div>
         </div>
@@ -44,7 +44,7 @@
                         title="Notation"
                         ng-model="characteristic.notation"
                         ng-options="n.Text for n in $ctrl.notations | filter:{ Nature: $ctrl.nature }"
-                        id="notation"></select>
+                        id="notation{{$index}}"></select>
                 <input type="hidden" name="notations" ng-value="characteristic.notation.Value" />
             </div>
         </div>
@@ -54,30 +54,6 @@
            ng-value="$ctrl.characteristicsDictionary['(' + characteristic.characteristicType.Value + ', ' + characteristic.link.Value + ', ' + characteristic.arrangementType.Value + ')']" />
 
     <div ng-switch="$ctrl.nature">
-        <div ng-switch-when="@((byte)Nature.Literature)">
-            <div class="form-group">
-                <label class="control-label col-md-2" for="language">Language:</label>
-                <div class="col-md-10">
-                    <select class="form-control"
-                            title="Language"
-                            ng-model="characteristic.language"
-                            ng-options="l.Text for l in ::$ctrl.languages"
-                            id="language"></select>
-                    <input type="hidden" name="languages" ng-value="characteristic.language.Value" />
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-md-2" for="translator">Translator:</label>
-                <div class="col-md-10">
-                    <select class="form-control"
-                            title="Translator"
-                            ng-model="characteristic.translator"
-                            ng-options="t.Text for t in ::$ctrl.translators"
-                            id="translator"></select>
-                    <input type="hidden" name="translators" ng-value="characteristic.translator.Value" />
-                </div>
-            </div>
-        </div>
         <div ng-switch-when="@((byte)Nature.Genetic)">
         </div>
         <div ng-switch-when="@((byte)Nature.Music)">
@@ -88,14 +64,14 @@
                             title="PauseTreatment"
                             ng-model="characteristic.pauseTreatment"
                             ng-options="t.Text for t in ::$ctrl.pauseTreatments"
-                            id="pauseTreatment"></select>
+                            id="pauseTreatment{{$index}}"></select>
                     <input type="hidden" name="pauseTreatments" ng-value="characteristic.pauseTreatment.Value" />
                 </div>
             </div>
             <div class="col-md-offset-2 col-md-10">
                 <input type="checkbox"
                        name="sequentialTransfers"
-                       id="sequentialTransfers"
+                       id="sequentialTransfers{{$index}}"
                        ng-model="characteristic.sequentialTransfer"
                        value="true" />
                 <input type="hidden" name="sequentialTransfers" value="false" />
@@ -104,7 +80,44 @@
                 </label>
             </div>
         </div>
+        <div ng-switch-when="@((byte)Nature.Literature)">
+            <div class="form-group">
+                <label class="control-label col-md-2" for="language">Language:</label>
+                <div class="col-md-10">
+                    <select class="form-control"
+                            title="Language"
+                            ng-model="characteristic.language"
+                            ng-options="l.Text for l in ::$ctrl.languages"
+                            id="language{{$index}}"></select>
+                    <input type="hidden" name="languages" ng-value="characteristic.language.Value" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2" for="translator">Translator:</label>
+                <div class="col-md-10">
+                    <select class="form-control"
+                            title="Translator"
+                            ng-model="characteristic.translator"
+                            ng-options="t.Text for t in ::$ctrl.translators"
+                            id="translator{{$index}}"></select>
+                    <input type="hidden" name="translators" ng-value="characteristic.translator.Value" />
+                </div>
+            </div>
+        </div>
         <div ng-switch-when="@((byte)Nature.MeasurementData)">
+        </div>
+        <div ng-switch-when="@((byte)Nature.Image)">
+            <div class="form-group">
+                <label class="control-label col-md-2" for="trajectory">Reading trajectory:</label>
+                <div class="col-md-10">
+                    <select class="form-control"
+                            title="Reading trajectory"
+                            ng-model="characteristic.trajectory"
+                            ng-options="t.Text for t in ::$ctrl.trajectories"
+                            id="trajectory{{$index}}"></select>
+                    <input type="hidden" name="trajectories" ng-value="characteristic.trajectory.Value" />
+                </div>
+            </div>
         </div>
     </div>
     <div class="form-group">

@@ -79,6 +79,15 @@
         /// <param name="translator">
         /// The translator id.
         /// </param>
+        /// <param name="pauseTreatment">
+        /// Pause treatment parameters of music sequences.
+        /// </param>
+        /// <param name="sequentialTransfer">
+        /// Sequential transfer flag used in music sequences.
+        /// </param>
+        /// <param name="trajectory">
+        /// Reading trajectory for images.
+        /// </param>
         /// <param name="calculationType">
         /// The calculation type.
         /// </param>
@@ -101,6 +110,7 @@
             Translator? translator,
             PauseTreatment? pauseTreatment,
             bool? sequentialTransfer,
+            ImageOrderExtractor? trajectory,
             string calculationType)
         {
             return CreateTask(() =>
@@ -120,40 +130,16 @@
                                      { "calculationType", calculationType }
                                  };
 
-                long firstMatterId = matterIds[0];
-                long secondMatterId = matterIds[1];
-                long firstSequenceId;
-                long secondSequenceId;
-                switch (notation.GetNature())
-                {
-                    case Nature.Literature:
-                        firstSequenceId = db.LiteratureSequence.Single(l => l.MatterId == firstMatterId
-                                                                         && l.Notation == notation
-                                                                         && l.Language == language
-                                                                         && l.Translator == translator).Id;
-                        secondSequenceId = db.LiteratureSequence.Single(l => l.MatterId == secondMatterId
-                                                                          && l.Notation == notation
-                                                                          && l.Language == language
-                                                                          && l.Translator == translator).Id;
-                        break;
-                    case Nature.Music:
-                        firstSequenceId = db.MusicSequence.Single(m => m.MatterId == firstMatterId
-                                                                    && m.Notation == notation
-                                                                    && m.PauseTreatment == pauseTreatment
-                                                                    && m.SequentialTransfer == sequentialTransfer).Id;
-                        secondSequenceId = db.MusicSequence.Single(m => m.MatterId == secondMatterId
-                                                                     && m.Notation == notation
-                                                                     && m.PauseTreatment == pauseTreatment
-                                                                     && m.SequentialTransfer == sequentialTransfer).Id;
-                        break;
-                    default:
-                        firstSequenceId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
-                        secondSequenceId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
-                        break;
-                }
+                var sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds,
+                                                                          notation,
+                                                                          language,
+                                                                          translator,
+                                                                          pauseTreatment,
+                                                                          sequentialTransfer,
+                                                                          trajectory);
 
-                Chain firstChain = commonSequenceRepository.GetLibiadaChain(firstSequenceId);
-                Chain secondChain = commonSequenceRepository.GetLibiadaChain(secondSequenceId);
+                Chain firstChain = commonSequenceRepository.GetLibiadaChain(sequenceIds[0]);
+                Chain secondChain = commonSequenceRepository.GetLibiadaChain(sequenceIds[1]);
 
                 AccordanceCharacteristic accordanceCharacteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
                 IAccordanceCalculator calculator = AccordanceCalculatorsFactory.CreateCalculator(accordanceCharacteristic);
