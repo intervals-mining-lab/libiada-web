@@ -108,11 +108,11 @@
             long[] matterIds,
             short[] characteristicLinkIds,
             Notation[] notations,
-            Language[] languages,
+            Language?[] languages,
             Translator?[] translators,
-            PauseTreatment[] pauseTreatments,
-            bool[] sequentialTransfers,
-            ImageOrderExtractor[] trajectories,
+            PauseTreatment?[] pauseTreatments,
+            bool?[] sequentialTransfers,
+            ImageOrderExtractor?[] trajectories,
             bool sort,
             bool theoretical)
         {

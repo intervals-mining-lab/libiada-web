@@ -96,11 +96,11 @@
             int iterationsCount,
             short[] characteristicLinkIds,
             Notation[] notations,
-            Language[] languages,
+            Language?[] languages,
             Translator?[] translators,
-            PauseTreatment[] pauseTreatments,
-            bool[] sequentialTransfers,
-            ImageOrderExtractor[] trajectories)
+            PauseTreatment?[] pauseTreatments,
+            bool?[] sequentialTransfers,
+            ImageOrderExtractor?[] trajectories)
         {
             return CreateTask(() =>
             {
@@ -110,7 +110,13 @@
                 using (var db = new LibiadaWebEntities())
                 {
                     var commonSequenceRepository = new CommonSequenceRepository(db);
-                    long[][] sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds, notations, languages, translators, pauseTreatments, sequentialTransfers, trajectories);
+                    long[][] sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds, 
+                                                                                   notations, 
+                                                                                   languages, 
+                                                                                   translators, 
+                                                                                   pauseTreatments, 
+                                                                                   sequentialTransfers, 
+                                                                                   trajectories);
                     for (int i = 0; i < matterIds.Length; i++)
                     {
                         sequences[i] = new Chain[characteristicLinkIds.Length];

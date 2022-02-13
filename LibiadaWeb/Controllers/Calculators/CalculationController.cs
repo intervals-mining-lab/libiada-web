@@ -90,11 +90,11 @@
             long[] matterIds,
             short[] characteristicLinkIds,
             Notation[] notations,
-            Language[] languages,
+            Language?[] languages,
             Translator?[] translators,
-            PauseTreatment[] pauseTreatments,
-            bool[] sequentialTransfers,
-            ImageOrderExtractor[] trajectories,
+            PauseTreatment?[] pauseTreatments,
+            bool?[] sequentialTransfers,
+            ImageOrderExtractor?[] trajectories,
             bool rotate,
             bool complementary,
             uint? rotationLength)
@@ -107,7 +107,13 @@
                 using (var db = new LibiadaWebEntities())
                 {
                     var commonSequenceRepository = new CommonSequenceRepository(db);
-                    sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds, notations, languages, translators, pauseTreatments, sequentialTransfers, trajectories);
+                    sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds, 
+                                                                          notations, 
+                                                                          languages, 
+                                                                          translators, 
+                                                                          pauseTreatments, 
+                                                                          sequentialTransfers, 
+                                                                          trajectories);
                     mattersNames = Cache.GetInstance().Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
                 }
 

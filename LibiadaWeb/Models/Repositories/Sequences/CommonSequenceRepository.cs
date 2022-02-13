@@ -111,7 +111,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public Chain GetLibiadaChain(long sequenceId)
         {
-           
+
             if (Db.CommonSequence.Any(s => s.Id == sequenceId))
             {
                 var matter = Db.CommonSequence.Include(s => s.Matter).Single(s => s.Id == sequenceId).Matter;
@@ -137,7 +137,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
 
             return new Chain(sequence.Building, alphabet);
         }
-        
+
         /// <summary>
         /// Loads sequence by id from db and converts it to <see cref="BaseChain"/>.
         /// </summary>
@@ -187,55 +187,95 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         public long[][] GetSequenceIds(
             long[] matterIds,
             Notation[] notations,
-            Language[] languages,
+            Language?[] languages,
             Translator?[] translators,
-            PauseTreatment[] pauseTreatments,
-            bool[] sequentialTransfers,
-            ImageOrderExtractor[] imageOrderExtractors)
+            PauseTreatment?[] pauseTreatments,
+            bool?[] sequentialTransfers,
+            ImageOrderExtractor?[] imageOrderExtractors)
         {
+
+
             var sequenceIds = new long[matterIds.Length][];
             CreateMissingImageSequences(matterIds, notations, imageOrderExtractors);
             for (int i = 0; i < matterIds.Length; i++)
             {
                 var matterId = matterIds[i];
                 sequenceIds[i] = new long[notations.Length];
-
-                for (int j = 0; j < notations.Length; j++)
+            }
+            for (int j = 0; j < notations.Length; j++)
+            {
+                var sequenceIdsForOneNotation = GetSequenceIds(matterIds,
+                                                               notations[j],
+                                                               languages?[j],
+                                                               translators?[j],
+                                                               pauseTreatments?[j],
+                                                               sequentialTransfers?[j],
+                                                               imageOrderExtractors?[j]);
+                for(int i = 0; i < matterIds.Length; i++)
                 {
-                    Notation notation = notations[j];
-
-                    switch (notation.GetNature())
-                    {
-                        case Nature.Literature:
-                            Language language = languages[j];
-                            Translator translator = translators[j] ?? Translator.NoneOrManual;
-                            sequenceIds[i][j] = Db.LiteratureSequence.Single(l => l.MatterId == matterId
-                                                                                  && l.Notation == notation
-                                                                                  && l.Language == language
-                                                                                  && l.Translator == translator).Id;
-                            break;
-                        case Nature.Music:
-                            PauseTreatment pauseTreatment = pauseTreatments[j];
-                            bool sequentialTransfer = sequentialTransfers[j];
-                            sequenceIds[i][j] = Db.MusicSequence.Single(m => m.MatterId == matterId
-                                                                          && m.Notation == notation
-                                                                          && m.PauseTreatment == pauseTreatment
-                                                                          && m.SequentialTransfer == sequentialTransfer).Id;
-                            break;
-                        case Nature.Image:
-                            ImageOrderExtractor imageOrderExtractor = imageOrderExtractors[j];
-                            sequenceIds[i][j] = Db.ImageSequences.Single(c => c.MatterId == matterId && c.Notation == notation && c.OrderExtractor == imageOrderExtractor).Id;
-                            break;
-                        default:
-                            sequenceIds[i][j] = Db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
-                            break;
-                    }
+                    sequenceIds[i][j] = sequenceIdsForOneNotation[i];
 
                 }
             }
 
             return sequenceIds;
         }
+
+        public long[] GetSequenceIds(long[] matterIds,
+            Notation notation,
+            Language? language,
+            Translator? translator,
+            PauseTreatment? pauseTreatment,
+            bool? sequentialTransfer,
+            ImageOrderExtractor? imageOrderExtractor)
+        {
+            var sequenceIds = new long[matterIds.Length];
+            for (int i = 0; i < matterIds.Length; i++)
+            {
+                switch (notation.GetNature())
+                {
+                    case Nature.Literature:
+                        return Db.LiteratureSequence
+                                 .Where(l => matterIds.Contains(l.MatterId)
+                                          && l.Notation == notation
+                                          && l.Language == language
+                                          && l.Translator == translator)
+                                 .ToArray()
+                                 .OrderBy(s => { return Array.IndexOf(matterIds, s.MatterId); })
+                                 .Select(s => s.Id)
+                                 .ToArray();
+                    case Nature.Music:
+                        return Db.MusicSequence
+                                 .Where(m => matterIds.Contains(m.MatterId)
+                                          && m.Notation == notation
+                                          && m.PauseTreatment == pauseTreatment
+                                          && m.SequentialTransfer == sequentialTransfer)
+                                 .ToArray()
+                                 .OrderBy(s => { return Array.IndexOf(matterIds, s.MatterId); })
+                                 .Select(s => s.Id)
+                                 .ToArray();
+                    case Nature.Image:
+                        return Db.ImageSequences
+                                 .Where(c => matterIds.Contains(c.MatterId)
+                                          && c.Notation == notation
+                                          && c.OrderExtractor == imageOrderExtractor)
+                                 .ToArray()
+                                 .OrderBy(s => { return Array.IndexOf(matterIds, s.MatterId); })
+                                 .Select(s => s.Id)
+                                 .ToArray();
+                    default:
+                        return Db.CommonSequence
+                                 .Where(c => matterIds.Contains(c.MatterId) && c.Notation == notation)
+                                 .ToArray()
+                                 .OrderBy(s => { return Array.IndexOf(matterIds, s.MatterId); })
+                                 .Select(s => s.Id)
+                                 .ToArray();
+                }
+            }
+
+            return sequenceIds;
+        }
+
 
         /// <summary>
         /// The dispose.
@@ -272,13 +312,13 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="imageOrderExtractors">
         /// Reading trajectories.
         /// </param>
-        private void CreateMissingImageSequences(long[] matterIds, Notation[] notations, ImageOrderExtractor[] imageOrderExtractors)
+        private void CreateMissingImageSequences(long[] matterIds, Notation[] notations, ImageOrderExtractor?[] imageOrderExtractors)
         {
             if (notations[0].GetNature() == Nature.Image)
             {
                 var existingSequences = Db.ImageSequences
-                    .Where(s => matterIds.Contains(s.MatterId) 
-                             && notations.Contains(s.Notation) 
+                    .Where(s => matterIds.Contains(s.MatterId)
+                             && notations.Contains(s.Notation)
                              && imageOrderExtractors.Contains(s.OrderExtractor))
                     .ToList();
 
@@ -287,15 +327,15 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 {
                     for (int j = 0; j < notations.Length; j++)
                     {
-                        if (!existingSequences.Any(s => s.MatterId == matterIds[i] 
-                                                     && s.Notation == notations[j] 
+                        if (!existingSequences.Any(s => s.MatterId == matterIds[i]
+                                                     && s.Notation == notations[j]
                                                      && s.OrderExtractor == imageOrderExtractors[j]))
                         {
                             var newImageSequence = new ImageSequence()
                             {
                                 MatterId = matterIds[i],
                                 Notation = notations[j],
-                                OrderExtractor = imageOrderExtractors[j]
+                                OrderExtractor = imageOrderExtractors[j]??ImageOrderExtractor.LineLeftToRightTopToBottom
                             };
                             imageSequenceRepository.Create(newImageSequence, Db);
                             existingSequences.Add(newImageSequence);

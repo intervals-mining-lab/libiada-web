@@ -80,6 +80,18 @@
         /// <param name="languages">
         /// The language ids.
         /// </param>
+        /// <param name="translators">
+        /// The translators ids.
+        /// </param>
+        /// <param name="pauseTreatments">
+        /// Pause treatment parameters of music sequences.
+        /// </param>
+        /// <param name="sequentialTransfers">
+        /// Sequential transfer flag used in music sequences.
+        /// </param>
+        /// <param name="trajectories">
+        /// Reading trajectories for images.
+        /// </param>
         /// <param name="clustersCount">
         /// The clusters count.
         /// Minimum clusters count for methods
@@ -113,11 +125,11 @@
             long[] matterIds,
             short[] characteristicLinkIds,
             Notation[] notations,
-            Language[] languages,
+            Language?[] languages,
             Translator?[] translators,
-            PauseTreatment[] pauseTreatments,
-            bool[] sequentialTransfers,
-            ImageOrderExtractor[] trajectories,
+            PauseTreatment?[] pauseTreatments,
+            bool?[] sequentialTransfers,
+            ImageOrderExtractor?[] trajectories,
             int clustersCount,
             ClusterizationType clusterizationType,
             double equipotencyWeight = 1,
@@ -129,13 +141,22 @@
             return CreateTask(() =>
             {
                 Dictionary<long, string> mattersNames;
-                Dictionary<long, string> matters = Cache.GetInstance().Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
+                Dictionary<long, string> matters = Cache.GetInstance()
+                                                        .Matters
+                                                        .Where(m => matterIds.Contains(m.Id))
+                                                        .ToDictionary(m => m.Id, m => m.Name);
 
                 long[][] sequenceIds;
                 using (var db = new LibiadaWebEntities())
                 {
                     var commonSequenceRepository = new CommonSequenceRepository(db);
-                    sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds, notations, languages, translators, pauseTreatments, sequentialTransfers, trajectories);
+                    sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds,
+                                                                          notations,
+                                                                          languages,
+                                                                          translators,
+                                                                          pauseTreatments,
+                                                                          sequentialTransfers,
+                                                                          trajectories);
                     mattersNames = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
                 }
 
