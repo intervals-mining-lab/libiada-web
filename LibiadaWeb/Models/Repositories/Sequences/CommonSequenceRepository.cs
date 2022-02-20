@@ -199,7 +199,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             CreateMissingImageSequences(matterIds, notations, imageOrderExtractors);
             for (int i = 0; i < matterIds.Length; i++)
             {
-                var matterId = matterIds[i];
                 sequenceIds[i] = new long[notations.Length];
             }
             for (int j = 0; j < notations.Length; j++)

@@ -1,6 +1,4 @@
-﻿@using LibiadaCore.Extensions
-@using LibiadaWeb.Helpers
-@model IEnumerable<Multisequence>
+﻿@model IEnumerable<Multisequence>
 
 @{
     ViewBag.Title = "Multisequences List";
@@ -16,10 +14,10 @@
     </tr>
     @foreach (var item in Model)
     {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-    </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+        </tr>
     }
 </table>

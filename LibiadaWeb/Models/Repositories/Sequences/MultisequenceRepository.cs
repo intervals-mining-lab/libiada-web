@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-
-namespace LibiadaWeb.Models.Repositories.Sequences
+﻿namespace LibiadaWeb.Models.Repositories.Sequences
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text.RegularExpressions;
+
+    /// <summary>
+    /// 
+    /// </summary>
     public class MultisequenceRepository
     {
         private static readonly Dictionary<int, string> RomanDigits = new Dictionary<int, string>
@@ -50,13 +53,14 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public static string GetMatterNameSplit(string matterName)
         {
-            if (matterName.Split('|').Length > 2)
+            string[] splitName = matterName.Split('|');
+            if (splitName.Length > 2)
             {
-                return matterName.Split('|')[1].Trim();
+                return splitName[1].Trim();
             }
             else
             {
-                return matterName.Split('|')[0].Trim();
+                return splitName[0].Trim();
             }
         }
 
@@ -71,78 +75,75 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public static int GetSequenceNumberByName(string matterName)
         {
-            var refSplitArray = matterName.Split(' ').ToList();
-            int result = 0;
+            var splitName = matterName.Split(' ').ToList();
             if (matterName.Contains("chromosome"))
             {
-                int chromosomeWordIndex = refSplitArray.IndexOf("chromosome");
-                if (refSplitArray.IndexOf("chromosome") < refSplitArray.Count - 1)
+                int chromosomeWordIndex = splitName.IndexOf("chromosome");
+                if (splitName.IndexOf("chromosome") < splitName.Count - 1)
                 {
-                    if (refSplitArray[chromosomeWordIndex + 1].Replace(".", string.Empty)
-                        .All(Char.IsDigit))
+                    if (splitName[chromosomeWordIndex + 1].Replace(".", string.Empty).All(char.IsDigit))
                     {
-                        result = Convert.ToInt32(refSplitArray[chromosomeWordIndex + 1].Replace(".", string.Empty));
+                        return Convert.ToInt32(splitName[chromosomeWordIndex + 1].Replace(".", string.Empty));
                     }
                     else
                     {
-                        result = ToArabic(refSplitArray[chromosomeWordIndex + 1].Replace(".", string.Empty));
+                        return ToArabic(splitName[chromosomeWordIndex + 1].Replace(".", string.Empty));
                     }
                 }
                 else
                 {
-                    result = 0;
+                    return 0;
                 }
             }
             else if (matterName.Contains("segment"))
             {
-                int segmentWordIndex = refSplitArray.IndexOf("segment");
-                if (refSplitArray[segmentWordIndex + 1].Contains("RNA"))
+                int segmentWordIndex = splitName.IndexOf("segment");
+                if (splitName[segmentWordIndex + 1].Contains("RNA"))
                 {
-                    result = Convert.ToInt32(refSplitArray[refSplitArray.IndexOf("RNA") + 1].Replace(".", string.Empty));
+                    return Convert.ToInt32(splitName[splitName.IndexOf("RNA") + 1].Replace(".", string.Empty));
                 }
-                else if (refSplitArray[segmentWordIndex + 1].All(Char.IsDigit))
+                else if (splitName[segmentWordIndex + 1].All(char.IsDigit))
                 {
-                    result = Convert.ToInt32(refSplitArray[segmentWordIndex + 1]);
+                    return Convert.ToInt32(splitName[segmentWordIndex + 1]);
                 }
                 else
                 {
-                    result = Convert.ToChar(refSplitArray[segmentWordIndex + 1]) - 64;
+                    return Convert.ToChar(splitName[segmentWordIndex + 1]) - 64;
                 }
             }
             else if (matterName.Contains("plasmid"))
             {
-                int plasmidWordIndex = refSplitArray.IndexOf("plasmid");
-                if (refSplitArray[plasmidWordIndex + 1].Length > 1 && !refSplitArray[plasmidWordIndex + 1].All(Char.IsDigit))
+                int plasmidWordIndex = splitName.IndexOf("plasmid");
+                if (splitName[plasmidWordIndex + 1].Length > 1 && !splitName[plasmidWordIndex + 1].All(char.IsDigit))
                 {
                     bool check = false;
-                    foreach (var ch in refSplitArray[plasmidWordIndex + 1])
+                    foreach (var ch in splitName[plasmidWordIndex + 1])
                     {
-                        if (Char.IsNumber(ch))
+                        if (char.IsNumber(ch))
                         {
                             check = true;
                         }
                     }
                     if (check)
                     {
-                        result = Convert.ToInt32(Regex.Replace(refSplitArray[plasmidWordIndex + 1],
-                            @"[^\d]+", ""));
+                        return Convert.ToInt32(Regex.Replace(splitName[plasmidWordIndex + 1], @"[^\d]+", ""));
                     }
                     else
                     {
-                        result = refSplitArray[plasmidWordIndex + 1].ToCharArray()[0] - 64;
+                        return splitName[plasmidWordIndex + 1].ToCharArray()[0] - 64;
                     }
                 }
-                else if (refSplitArray[plasmidWordIndex + 1].All(Char.IsDigit))
+                else if (splitName[plasmidWordIndex + 1].All(char.IsDigit))
                 {
-                    result = Convert.ToInt32(refSplitArray[plasmidWordIndex + 1]);
+                    return Convert.ToInt32(splitName[plasmidWordIndex + 1]);
                 }
                 else
                 {
-                    result = refSplitArray[plasmidWordIndex + 1].ToCharArray()[0] - 64;
+                    return splitName[plasmidWordIndex + 1].ToCharArray()[0] - 64;
                 }
             }
 
-            return result;
+            return 0;
         }
 
         /// <summary>
@@ -156,7 +157,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             var sequenceTypes = new SequenceType[]
             {
                 SequenceType.CompleteGenome,
-                SequenceType.MitochondrionGenome,
+                SequenceType.MitochondrialGenome,
                 SequenceType.ChloroplastGenome,
                 SequenceType.Plasmid,
                 SequenceType.Plastid,

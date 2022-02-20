@@ -1,32 +1,43 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Web.Mvc;
-using Accord.Math;
-using Bio.Extensions;
-using LibiadaWeb.Models.CalculatorsData;
-using LibiadaWeb.Models.Repositories.Sequences;
-using LibiadaWeb.Tasks;
-using Newtonsoft.Json;
-
+﻿
 namespace LibiadaWeb.Controllers.Sequences
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using Accord.Math;
+
+    using Bio.Extensions;
+
+    using LibiadaWeb.Models.Repositories.Sequences;
+    using LibiadaWeb.Tasks;
+
+    using Newtonsoft.Json;
+
+    /// <summary>
+    /// 
+    /// </summary>
     public class SequenceConcatenatorController : AbstractResultController
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public SequenceConcatenatorController() : base(TaskType.SequenceConcatenator)
         {
 
         }
 
-        private SequenceType[] sequenceTypeFilter = new SequenceType[]
+        /// <summary>
+        /// 
+        /// </summary>
+        private readonly SequenceType[] sequenceTypeFilter = new SequenceType[]
         {
             SequenceType.ChloroplastGenome,
             SequenceType.CompleteGenome,
             SequenceType.MitochondrialPlasmid,
-            SequenceType.MitochondrionGenome,
+            SequenceType.MitochondrialGenome,
             SequenceType.Plasmid,
             SequenceType.Plastid
         };
@@ -40,48 +51,51 @@ namespace LibiadaWeb.Controllers.Sequences
         /// <returns>
         /// Returns grouped matters.
         /// </returns>
-        private Dictionary<string, long[]> GeneticMattersGenerator(List<Matter> matters)
+        private Dictionary<string, long[]> SplitMattersIntoReferenceAnsNotReference(List<Matter> matters)
         {
-            
+
             matters = matters.Where(m => m.Nature == Nature.Genetic && sequenceTypeFilter.Contains(m.SequenceType)).ToList();
             var matterNameSpliters = new[] { "|", "chromosome", "plasmid", "segment" };
             var mattersNames = matters.Select(m => (m.Id, m.Name.Split(matterNameSpliters, StringSplitOptions.RemoveEmptyEntries)[0].Trim())).ToArray();
-            var tempArray = new List<string>();
+            var accessions = new List<string>();
 
             foreach (var matter in matters)
             {
-                if (!matter.Name.Contains("|"))
+                if (matter.Name.IndexOf('|') == -1)
                 {
                     throw new Exception();
                 }
-                tempArray.Add(matter.Name.Split('|').Last().Trim());
+
+                accessions.Add(matter.Name.Split('|').Last().Trim());
             }
 
-            var refArray = new List<(long, string)>();
-            var notRefArray = new List<(long, string)>();
+            var referenceArray = new List<(long, string)>();
+            var notReferenceArray = new List<(long, string)>();
 
             for (int i = 0; i < mattersNames.Length; i++)
             {
-                if (Enumerable.Contains(tempArray[i], '_'))
+                if (accessions[i].IndexOf('_') != -1)
                 {
-                    refArray.Add(mattersNames[i]);
+                    referenceArray.Add(mattersNames[i]);
                 }
                 else
                 {
-                    notRefArray.Add(mattersNames[i]);
+                    notReferenceArray.Add(mattersNames[i]);
                 }
             }
 
-            Dictionary<string, long[]> multisequencesRefMatters = refArray.GroupBy(mn => mn.Item2)
+            Dictionary<string, long[]> multisequencesRefMatters = referenceArray.GroupBy(mn => mn.Item2)
                 .ToDictionary(mn => mn.Key + " ref", mn => mn.Select(m => m.Item1).ToArray());
 
-            Dictionary<string, long[]> multisequencesNotRefMatters = notRefArray.GroupBy(mn => mn.Item2)
+            Dictionary<string, long[]> multisequencesNotRefMatters = notReferenceArray.GroupBy(mn => mn.Item2)
                 .ToDictionary(mn => mn.Key, mn => mn.Select(m => m.Item1).ToArray());
+
             var result = multisequencesRefMatters;
             foreach (var multisequencesNotRefMatter in multisequencesNotRefMatters)
             {
                 result.Add(multisequencesNotRefMatter.Key, multisequencesNotRefMatter.Value);
             }
+
             return result;
 
         }
@@ -107,23 +121,28 @@ namespace LibiadaWeb.Controllers.Sequences
                 using (var db = new LibiadaWebEntities())
                 {
                     List<Matter> matters = db.Matter.Where(m => sequenceTypeFilter.Contains(m.SequenceType)).ToList();
-                    var multisequences = GeneticMattersGenerator(matters);
+                    var multisequences = SplitMattersIntoReferenceAnsNotReference(matters);
                     var result = multisequences.Select(m => new { name = m.Key, matterIds = m.Value }).ToArray();
                     var matterIds = result.SelectMany(r => r.matterIds);
                     matters = matters.Where(m => matterIds.Contains(m.Id)).ToList();
                     var groupingResult = new Dictionary<string, object>
                     {
                         {"result", result},
-                        { "matters", matters.ToDictionary(m => m.Id, m => new StringedMatter(m, 0)) },
-                        { "ungroupedMatters", db.Matter.Where(m => m.Nature == Nature.Genetic && !matterIds.Contains(m.Id)).ToArray() }
+                        { "matters", matters.ToDictionary(m => m.Id, m => m.Name )},
+                        { "ungroupedMatters", db.Matter
+                                                .Where(m => m.Nature == Nature.Genetic && !matterIds.Contains(m.Id))
+                                                .Select(m => new { m.Id, m.Name })
+                                                .ToArray() }
                     };
 
-                    return new Dictionary<string, object>
+                    var data = JsonConvert.SerializeObject(groupingResult);
+
+                    return new Dictionary<string, string>
                     {
-                        { "data", JsonConvert.SerializeObject(groupingResult) }
+                        { "data",  data }
                     };
                 }
-            }); 
+            });
         }
 
         /// <summary>
@@ -137,12 +156,13 @@ namespace LibiadaWeb.Controllers.Sequences
         /// </param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult Result(Dictionary<string, long[]> multisequenceMatters, string[] multisequencesNames)
+        public ActionResult Result(Dictionary<string, long[]> multisequenceMatters)
         {
             using (var db = new LibiadaWebEntities())
             {
                 db.Database.ExecuteSqlCommand("UPDATE matter SET multisequence_id = NULL, multisequence_number = NULL");
                 db.Database.ExecuteSqlCommand("DELETE FROM multisequence");
+                var multisequencesNames = multisequenceMatters.Keys.ToArray();
                 Multisequence[] multisequences = new Multisequence[multisequencesNames.Length];
 
                 for (int i = 0; i < multisequencesNames.Length; i++)
@@ -160,15 +180,15 @@ namespace LibiadaWeb.Controllers.Sequences
                 var exceptionCases = new Dictionary<string, object>();
                 long mId = 0;
                 var matters = db.Matter.Where(mt => mt.Nature == Nature.Genetic).ToDictionary(m => m.Id, m => m);
-                for (int i = 0; i < multisequences.Length; i++)
+                foreach (Multisequence multisquence in multisequences)
                 {
                     try
                     {
-                        var matterIds = multisequenceMatters[multisequences[i].Name];
+                        var matterIds = multisequenceMatters[multisquence.Name];
                         foreach (var matterId in matterIds)
                         {
                             db.Entry(matters[matterId]).State = EntityState.Modified;
-                            matters[matterId].MultisequenceId = multisequences[i].Id;
+                            matters[matterId].MultisequenceId = multisquence.Id;
                             mId = matterId;
                         }
                         MultisequenceRepository.SetSequenceNumbers(matterIds.Select(m => matters[m]).ToArray());
@@ -177,11 +197,9 @@ namespace LibiadaWeb.Controllers.Sequences
                     }
                     catch (Exception e)
                     {
-                        exceptionCases.Add(multisequences[i].Name, matters[mId]);
+                        exceptionCases.Add(multisquence.Name, matters[mId]);
                     }
-
                 }
-
             }
 
             return RedirectToAction("Index", "Multisequence");
