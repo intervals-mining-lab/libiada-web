@@ -5,11 +5,24 @@
 }
 
 <h2>@ViewBag.Title</h2>
-
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="submit" value="Group matters into multisequences" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
 <table class="table table-bordered table-hover">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Matters)
         </th>
     </tr>
     @foreach (var item in Model)
@@ -17,6 +30,12 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @foreach (var matter in item.Matters)
+                {
+                    @Html.DisplayFor(modelItem => matter.Name)
+                }
             </td>
         </tr>
     }

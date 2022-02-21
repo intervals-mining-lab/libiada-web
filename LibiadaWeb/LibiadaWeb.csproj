@@ -176,7 +176,6 @@
     <Compile Include="Controllers\Sequences\OrderTransformerController.cs" />
     <Compile Include="Controllers\Sequences\SequenceCheckController.cs" />
     <Compile Include="Controllers\Sequences\SequenceCleanerController.cs" />
-    <Compile Include="Controllers\Sequences\SequenceConcatenatorController.cs" />
     <Compile Include="Controllers\Sequences\SequenceElementsController.cs" />
     <Compile Include="Controllers\Sequences\SequenceGroupsController.cs" />
     <Compile Include="Controllers\Sequences\SequenceMixerController.cs" />
@@ -980,8 +979,7 @@
     </Content>
     <None Include="secrets.file.example" />
     <Content Include="Views\Sequences\Multisequence\Index.cshtml" />
-    <Content Include="Views\Sequences\SequenceConcatenator\Index.cshtml" />
-    <Content Include="Views\Sequences\SequenceConcatenator\Result.cshtml" />
+    <Content Include="Views\Sequences\Multisequence\Result.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

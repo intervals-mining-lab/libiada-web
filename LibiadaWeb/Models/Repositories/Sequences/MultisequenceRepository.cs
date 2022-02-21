@@ -54,14 +54,7 @@
         public static string GetMatterNameSplit(string matterName)
         {
             string[] splitName = matterName.Split('|');
-            if (splitName.Length > 2)
-            {
-                return splitName[1].Trim();
-            }
-            else
-            {
-                return splitName[0].Trim();
-            }
+            return splitName.Length > 2 ? splitName[1].Trim() : splitName[0].Trim();
         }
 
         /// <summary>
