@@ -11,35 +11,16 @@
     using Bio.Extensions;
 
     using LibiadaWeb.Models.Repositories.Sequences;
-    using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
 
     /// <summary>
     /// 
     /// </summary>
-    public class MultisequenceController : AbstractResultController
+    public class MultisequenceController : Controller
     {
         /// <summary>
-        /// 
-        /// </summary>
-        public MultisequenceController() : base(TaskType.Multisequence)
-        {
-
-        }
-
-        // GET: Multisequence
-        public ActionResult Index()
-        {
-            using (var db = new LibiadaWebEntities())
-            {
-                List<Multisequence> multisequences = db.Multisequence.Include(ms => ms.Matters).ToList();
-                return View(multisequences);
-            }
-        }
-
-        /// <summary>
-        /// 
+        /// Array of sequence type used in multisequence grouping.
         /// </summary>
         private readonly SequenceType[] sequenceTypeFilter = new SequenceType[]
         {
@@ -50,6 +31,21 @@
             SequenceType.Plasmid,
             SequenceType.Plastid
         };
+
+        /// <summary>
+        /// Gets page with list of all multisequences.
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Index()
+        {
+            using (var db = new LibiadaWebEntities())
+            {
+                List<Multisequence> multisequences = db.Multisequence.Include(ms => ms.Matters).ToList();
+                return View(multisequences);
+            }
+        }
+
+        
 
         /// <summary>
         /// Divides matters into reference and not reference and groups them.
@@ -109,6 +105,11 @@
 
         }
 
+        public ActionResult Group()
+        {
+            return View();
+        }
+
         /// <summary>
         /// Gets genetic matters names and ids from database.
         /// </summary>
@@ -116,36 +117,30 @@
         /// <returns>
         /// Returns multisequences with sequences included in them.
         /// </returns>
-        [HttpPost]
-        public ActionResult Index(long[] excludeMatterIds)
+        public string GroupMattersIntoMultisequences(long[] excludeMatterIds)
         {
-            return CreateTask(() =>
+
+            using (var db = new LibiadaWebEntities())
             {
-                using (var db = new LibiadaWebEntities())
+                List<Matter> matters = db.Matter.Where(m => sequenceTypeFilter.Contains(m.SequenceType)).ToList();
+                Dictionary<string, long[]> multisequences = SplitMattersIntoReferenceAnsNotReference(matters);
+                var result = multisequences.Select(m => new { name = m.Key, matterIds = m.Value }).ToArray();
+                var matterIds = result.SelectMany(r => r.matterIds);
+                var mattersDictionary = matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
+                var groupingResult = new Dictionary<string, object>
                 {
-                    List<Matter> matters = db.Matter.Where(m => sequenceTypeFilter.Contains(m.SequenceType)).ToList();
-                    var multisequences = SplitMattersIntoReferenceAnsNotReference(matters);
-                    var result = multisequences.Select(m => new { name = m.Key, matterIds = m.Value }).ToArray();
-                    var matterIds = result.SelectMany(r => r.matterIds);
-                    matters = matters.Where(m => matterIds.Contains(m.Id)).ToList();
-                    var groupingResult = new Dictionary<string, object>
-                    {
-                        {"result", result},
-                        { "matters", matters.ToDictionary(m => m.Id, m => m.Name )},
-                        { "ungroupedMatters", db.Matter
-                                                .Where(m => m.Nature == Nature.Genetic && !matterIds.Contains(m.Id))
-                                                .Select(m => new { m.Id, m.Name })
-                                                .ToArray() }
-                    };
+                    {"result", result},
+                    { "matters", mattersDictionary},
+                    { "ungroupedMatters", db.Matter
+                                            .Where(m => m.Nature == Nature.Genetic && !matterIds.Contains(m.Id))
+                                            .Select(m => new { m.Id, m.Name })
+                                            .ToArray() }
+                };
 
-                    var data = JsonConvert.SerializeObject(groupingResult);
+                var data = JsonConvert.SerializeObject(groupingResult);
 
-                    return new Dictionary<string, string>
-                    {
-                        { "data",  data }
-                    };
-                }
-            });
+                return data;
+            }
         }
 
         /// <summary>

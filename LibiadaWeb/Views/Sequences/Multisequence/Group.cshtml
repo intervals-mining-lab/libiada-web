@@ -8,9 +8,9 @@
 {
     using (Html.BeginForm())
     {
-        @Html.Partial("_AngularControllerInitializer", "MultiSequenceConcatenationResultController")
+        @Html.Partial("_AngularControllerInitializer", "MultisequenceGroupingController")
 
-        <div ng-controller="MultiSequenceConcatenationResultCtrl">
+        <div ng-controller="MultisequenceGroupingCtrl">
             <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
             <div ng-disabled="loading">
                 <table class="table table-bordered table-hover" ng-cloak>

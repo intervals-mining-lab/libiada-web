@@ -767,7 +767,7 @@
     <Content Include="Scripts\Angular\Controllers\fmotifsDictionary.js" />
     <Content Include="Scripts\Angular\Controllers\localCalculationResult.js" />
     <Content Include="Scripts\Angular\Controllers\matterEdit.js" />
-    <Content Include="Scripts\Angular\Controllers\multisequenceConcatenationResult.js" />
+    <Content Include="Scripts\Angular\Controllers\multisequenceGrouping.js" />
     <Content Include="Scripts\Angular\Controllers\musicFilesResult.js" />
     <Content Include="Scripts\Angular\Controllers\orderCalculation.js" />
     <Content Include="Scripts\Angular\Controllers\intervalsCharacteristicsDistribution.js" />
@@ -979,7 +979,7 @@
     </Content>
     <None Include="secrets.file.example" />
     <Content Include="Views\Sequences\Multisequence\Index.cshtml" />
-    <Content Include="Views\Sequences\Multisequence\Result.cshtml" />
+    <Content Include="Views\Sequences\Multisequence\Group.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
