@@ -1062,7 +1062,7 @@
       <Version>3.2.12</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Owin">
-      <Version>4.2.0</Version>
+      <Version>4.2.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Owin.Host.SystemWeb">
       <Version>4.2.0</Version>
