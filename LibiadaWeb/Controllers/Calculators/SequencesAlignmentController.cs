@@ -122,8 +122,8 @@
 
                 if (sort)
                 {
-                    firstSequenceCharacteristics = firstSequenceCharacteristics.OrderByDescending(v => v).ToArray();
-                    secondSequenceCharacteristics = secondSequenceCharacteristics.OrderByDescending(v => v).ToArray();
+                    Array.Sort(firstSequenceCharacteristics, (x, y) => y.CompareTo(x));
+                    Array.Sort(secondSequenceCharacteristics, (x, y) => y.CompareTo(x));
                 }
 
                 List<double> longer;

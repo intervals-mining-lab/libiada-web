@@ -199,7 +199,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             CreateMissingImageSequences(matterIds, notations, imageOrderExtractors);
             for (int i = 0; i < matterIds.Length; i++)
             {
-                var matterId = matterIds[i];
                 sequenceIds[i] = new long[notations.Length];
             }
             for (int j = 0; j < notations.Length; j++)
@@ -230,6 +229,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             ImageOrderExtractor? imageOrderExtractor)
         {
             var sequenceIds = new long[matterIds.Length];
+
+
+            // TODO: fix this cycle return values 
             for (int i = 0; i < matterIds.Length; i++)
             {
                 switch (notation.GetNature())

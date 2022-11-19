@@ -3,15 +3,15 @@
   "defaultProvider": "cdnjs",
   "libraries": [
     {
-      "library": "angular.js@1.8.2",
+      "library": "angular.js@1.8.3",
       "destination": "Libraries/angular.js/"
     },
     {
-      "library": "jquery@3.6.0",
+      "library": "jquery@3.6.1",
       "destination": "Libraries/jquery/"
     },
     {
-      "library": "jquery-validate@1.19.3",
+      "library": "jquery-validate@1.19.5",
       "destination": "Libraries/jquery-validate/"
     },
     {
@@ -24,7 +24,7 @@
       "destination": "Libraries/midi.js/"
     },
     {
-      "library": "plotly.js@2.1.0",
+      "library": "plotly.js@2.14.0",
       "destination": "Libraries/plotly.js/"
     },
     {
@@ -32,11 +32,11 @@
       "destination": "Libraries/angular-smart-table/"
     },
     {
-      "library": "d3@7.0.0",
+      "library": "d3@7.6.1",
       "destination": "Libraries/d3/"
     },
     {
-      "library": "signalr.js@2.4.2",
+      "library": "signalr.js@2.4.3",
       "destination": "Libraries/signalr.js/"
     },
     {
