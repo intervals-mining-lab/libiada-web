@@ -135,8 +135,6 @@
                     var accordance = IntervalsDistributionExtractor.GetOrdersIntervalsDistributionsAccordance(orders.ToArray(), link);
                     var resultAccordance = new Dictionary<IntervalsDistribution, Dictionary<int[], SequenceCharacteristics>>();
                     foreach(var element in accordance)
-                        var alphabet = sequence.Alphabet.ToList();
-                        foreach (var el in alphabet)
                     {
                         resultAccordance.Add(element.Key, new Dictionary<int[], SequenceCharacteristics>());
                         foreach(var order in element.Value)
