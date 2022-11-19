@@ -53,16 +53,6 @@
             tooltipHtml.push(d.y);
             tooltipHtml.push("Distribution intervals: ");
             var intervals = [];
-            //var pointsIntervals = [];
-            //for (var i = 0; i < d.distributionIntervals.length; i++) {
-            //    pointsIntervals.push(d.distributionIntervals[i].interval)
-            //}
-            //tooltipContent.push(pointsIntervals.join("|"));
-            //var pointsCounts = [];
-            //for (var i = 0; i < d.distributionIntervals.length; i++) {
-            //    pointsCounts.push(d.distributionIntervals[i].count)
-            //}
-            //tooltipContent.push(pointsCounts.join("|"));
             for (var i = 0; i < d.distributionIntervals.length; i++) {
                 intervals.push([d.distributionIntervals[i].interval, d.distributionIntervals[i].count]);
                 tooltipHtml.push(intervals[i].join("|"));

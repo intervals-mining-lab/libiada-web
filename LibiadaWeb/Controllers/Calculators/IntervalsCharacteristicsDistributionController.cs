@@ -107,8 +107,6 @@
                                                                                      double.IsNegativeInfinity(v) ||
                                                                                      double.IsPositiveInfinity(v)));
 
-
-
                 var characteristicNames = new string[characteristicLinkIds.Length];
                 var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
 
@@ -134,10 +132,10 @@
                     }
                     var accordance = IntervalsDistributionExtractor.GetOrdersIntervalsDistributionsAccordance(orders.ToArray(), link);
                     var resultAccordance = new Dictionary<IntervalsDistribution, Dictionary<int[], SequenceCharacteristics>>();
-                    foreach(var element in accordance)
+                    foreach (var element in accordance)
                     {
                         resultAccordance.Add(element.Key, new Dictionary<int[], SequenceCharacteristics>());
-                        foreach(var order in element.Value)
+                        foreach (var order in element.Value)
                         {
                             // TODO refactor this
                             var characteristic = sequencesCharacteristics
@@ -145,6 +143,7 @@
                             resultAccordance[element.Key].Add(order, characteristic);
                         }
                     }
+
                     resultIntervals.Add(link.GetDisplayValue(), resultAccordance);
                 }
 
@@ -154,21 +153,21 @@
                 var result = new Dictionary<string, object>
                 {
                     { "result", resultIntervals.Select(r => new
-                    {
-                        link = r.Key,
-                        accordance = r.Value.Select(d => new {
-                            distributionIntervals = d.Key.Distribution.Select(pair => new
-                            {
-                                interval = pair.Key,
-                                count = pair.Value
-                            }).ToArray(),
-                            orders = d.Value.Select(o => new
-                            {
-                                order = o.Key,
-                                characteristics = o.Value
+                        {
+                            link = r.Key,
+                            accordance = r.Value.Select(d => new {
+                                distributionIntervals = d.Key.Distribution.Select(pair => new
+                                {
+                                    interval = pair.Key,
+                                    count = pair.Value
+                                }).ToArray(),
+                                orders = d.Value.Select(o => new
+                                {
+                                    order = o.Key,
+                                    characteristics = o.Value
+                                })
                             })
                         })
-                    })
                     },
                     {"linkList",list },
                     { "characteristicNames", characteristicNames },
