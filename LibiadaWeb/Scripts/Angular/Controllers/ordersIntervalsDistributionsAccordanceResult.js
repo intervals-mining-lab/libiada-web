@@ -51,16 +51,6 @@
             var tooltipContent = [];
             tooltipContent.push("Distribution intervals: ");
             var intervals = [];
-            //var pointsIntervals = [];
-            //for (var i = 0; i < d.distributionIntervals.length; i++) {
-            //    pointsIntervals.push(d.distributionIntervals[i].interval)
-            //}
-            //tooltipContent.push(pointsIntervals.join("|"));
-            //var pointsCounts = [];
-            //for (var i = 0; i < d.distributionIntervals.length; i++) {
-            //    pointsCounts.push(d.distributionIntervals[i].count)
-            //}
-            //tooltipContent.push(pointsCounts.join("|"));
             for (var i = 0; i < d.distributionIntervals.length; i++) {
                 intervals.push([d.distributionIntervals[i].interval, d.distributionIntervals[i].count]);
                 tooltipContent.push(intervals[i].join("|"));
@@ -290,6 +280,7 @@
         $http.get(`/api/TaskManagerWebApi/${$scope.taskId}`)
             .then(function (data) {
                 MapModelFromJson($scope, JSON.parse(data.data));
+                $scope.linkType = $scope.linkList[0];
                 $scope.loading = false;
 
             }, function () {

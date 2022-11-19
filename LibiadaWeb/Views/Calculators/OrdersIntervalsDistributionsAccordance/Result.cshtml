@@ -8,54 +8,54 @@
 {
     @Html.Partial("_AngularControllerInitializer", "OrdersIntervalsDistributionsAccordanceResultController")
 
-<div ng-controller="OrdersIntervalsDistributionsAccordanceResultCtrl">
-    <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
-    <div ng-disabled="loading">
-        <div class="form-group">
-            <label class="control-label col-md-2" for="linkType">Link:</label>
-            <div class="col-md-10">
+    <div ng-controller="OrdersIntervalsDistributionsAccordanceResultCtrl">
+        <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
+        <div ng-disabled="loading">
+            <div class="form-group">
+                <label class="control-label col-md-2" for="linkType">Link:</label>
+                <div class="col-md-10">
                     <select class="form-control"
                             title="Link type"
                             ng-model="linkType"
                             ng-options="t.Text for t in ::linkList"
                             id="linkType"></select>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-2" for="height">Height:</label>
-            <div class="col-md-10">
+            <div class="form-group">
+                <label class="control-label col-md-2" for="height">Height:</label>
+                <div class="col-md-10">
                     <input class="form-control" name="height" id="height" type="number" min="500" step="20" ng-model="height" />
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-2" for="width">Width:</label>
-            <div class="col-md-10">
+            <div class="form-group">
+                <label class="control-label col-md-2" for="width">Width:</label>
+                <div class="col-md-10">
                     <input class="form-control" name="width" id="width" type="number" min="400" step="20" ng-model="width" />
+                </div>
             </div>
-        </div>
-        <br />
-        <input type="button" class="btn btn-default" ng-click="draw()" value="Draw" />
-        <br />
-        <table class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>Уровни</th>
-                    <th>Количество распределений</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="level in accordanceLevels">
-                    <td ng-bind="level.level"></td>
-                    <td ng-bind="level.distributionsCount"></td>
-                </tr>
-            </tbody>
-        </table>
-        <br />
-        <div id="chart">
-        </div>
+            <br />
+            <input type="button" class="btn btn-default" ng-click="draw()" value="Draw" />
+            <br />
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Number of orders per distribution</th>
+                        <th>Number of distributions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="level in accordanceLevels">
+                        <td ng-bind="level.level"></td>
+                        <td ng-bind="level.distributionsCount"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <br />
+            <div id="chart">
+            </div>
 
+        </div>
     </div>
-</div>
     <br />
 }
 
