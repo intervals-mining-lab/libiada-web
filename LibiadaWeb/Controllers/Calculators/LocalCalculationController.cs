@@ -1,5 +1,6 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
@@ -147,7 +148,7 @@
 
                 var calculators = new IFullCalculator[characteristicLinkIds.Length];
                 var links = new Link[characteristicLinkIds.Length];
-                matterIds = matterIds.OrderBy(m => m).ToArray();
+                Array.Sort(matterIds);
                 Dictionary<long, Matter> matters = Cache.GetInstance().Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id);
 
                 for (int k = 0; k < matterIds.Length; k++)
