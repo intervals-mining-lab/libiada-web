@@ -286,13 +286,6 @@
         /// </summary>
         [Display(Name = "GenBank accession versions update check")]
         [TaskClass(typeof(GenBankAccessionVersionUpdateCheckerController))]
-        GenBankAccessionVersionUpdateChecker = 39,
-
-        /// <summary>
-        /// Concatenates sequences into multisequences.
-        /// </summary>
-        [Display(Name = "Multisequence concatenator")]
-        [TaskClass(typeof(MultisequenceController))]
-        Multisequence = 40
+        GenBankAccessionVersionUpdateChecker = 39
     }
 }

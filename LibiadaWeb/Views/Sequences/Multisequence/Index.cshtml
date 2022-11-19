@@ -1,21 +1,27 @@
-﻿@model IEnumerable<Multisequence>
+﻿@using LibiadaWeb.Helpers
+@model IEnumerable<Multisequence>
 
 @{
     ViewBag.Title = "Multisequences List";
 }
 
 <h2>@ViewBag.Title</h2>
-@using (Html.BeginForm("Group","Multisequence"))
-{
-    @Html.AntiForgeryToken()
-    <div class="form-horizontal">
-        <div class="form-group">
-            <div class="col-md-10">
-                <input type="submit" value="Group matters into multisequences" class="btn btn-default" />
+<p>
+    @using (Html.BeginForm("Group", "Multisequence"))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="col-md-10">
+                    <input type="submit" value="Group matters into multisequences" class="btn btn-default" />
+                </div>
             </div>
         </div>
-    </div>
-}
+    }
+</p>
+<p>
+    @Html.ActionLink("Create New multisequence", "Create")
+</p>
 <table class="table table-bordered table-hover">
     <tr>
         <th>
@@ -24,6 +30,10 @@
         <th>
             @Html.DisplayNameFor(model => model.Matters)
         </th>
+        @if (AccountHelper.IsAdmin())
+        {
+            <th />
+        }
     </tr>
     @foreach (var item in Model)
     {
@@ -34,9 +44,18 @@
             <td>
                 @foreach (var matter in item.Matters)
                 {
-                    @Html.DisplayFor(modelItem => matter.Name)
+                    <b>@Html.DisplayFor(modelItem => matter.MultisequenceNumber).</b> <nbsp /> @Html.DisplayFor(modelItem => matter.Name)
+                    <br />
                 }
             </td>
+            @if (AccountHelper.IsAdmin())
+            {
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>
+            }
         </tr>
     }
 </table>

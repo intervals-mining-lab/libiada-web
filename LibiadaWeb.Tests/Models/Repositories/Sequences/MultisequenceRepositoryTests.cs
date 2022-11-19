@@ -1,4 +1,4 @@
-﻿namespace LibiadaWeb.Tests
+﻿namespace LibiadaWeb.Tests.Models.Repositories.Sequences
 {
     using LibiadaWeb.Models.Repositories.Sequences;
 
@@ -30,13 +30,13 @@
         };
 
 
-        [TestCase(1, new[] { 1, 1, 6 })]
-        [TestCase(2, new[] { 1, 2, 0 })]
-        [TestCase(3, new[] { 1, 1, 1 })]
-        public void GetSequenceSegmentNumberTest(int testDataIndex, int[] expectedResults)
+        [TestCase(0, new[] { 1, 1, 6 })]
+        [TestCase(1, new[] { 1, 2, 0 })]
+        [TestCase(2, new[] { 1, 1, 1 })]
+        public void GetSequenceNumberTest(int testDataIndex, int[] expectedResults)
         {
             var names = testData[testDataIndex];
-            for (int i =0; i < names.Length; i++)
+            for (int i = 0; i < names.Length; i++)
             {
                 var result = MultisequenceRepository.GetSequenceNumberByName(MultisequenceRepository.GetMatterNameSplit(names[i]));
                 Assert.That(expectedResults[i], Is.EqualTo(result));

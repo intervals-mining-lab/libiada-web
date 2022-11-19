@@ -229,6 +229,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             ImageOrderExtractor? imageOrderExtractor)
         {
             var sequenceIds = new long[matterIds.Length];
+
+
+            // TODO: fix this cycle return values 
             for (int i = 0; i < matterIds.Length; i++)
             {
                 switch (notation.GetNature())

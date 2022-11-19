@@ -95,6 +95,10 @@
             bundles.Add(new ScriptBundle("~/bundles/controllers/MatterSequenceCreateController").Include(
                         "~/Scripts/Angular/Controllers/matterSequenceCreate.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/controllers/MultisequenceCreateController").Include(
+                        "~/Scripts/Angular/Controllers/multisequenceCreate.js",
+                        "~/Scripts/Angular/Components/mattersTable.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/controllers/MultisequenceGroupingController").Include(
                 "~/Scripts/Angular/Controllers/multisequenceGrouping.js"));
 

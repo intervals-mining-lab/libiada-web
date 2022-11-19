@@ -158,14 +158,11 @@
             };
             short counter = 1;
 
-            foreach (var type in sequenceTypes)
+            foreach (Matter matter in matters)
             {
-                for (int i = 0; i < matters.Length; i++)
+                if (sequenceTypes.Contains(matter.SequenceType))
                 {
-                    if (matters[i].SequenceType == type)
-                    {
-                        matters[i].MultisequenceNumber = counter++;
-                    }
+                    matter.MultisequenceNumber = counter++;
                 }
             }
         }
