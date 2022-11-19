@@ -102,7 +102,6 @@
                     {
                         for (int i = 0; i < sequencesCount; i++)
                         {
-
                             Stream sequenceStream = FileHelper.GetFileStream(Request.Files[i]);
                             sequencesNames[i] = Request.Files[i].FileName;
 
@@ -192,7 +191,6 @@
                             Characteristics = characteristics[i]
                         });
                     }
-
 
                     var characteristicNames = new string[characteristicLinkIds.Length];
                     var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
