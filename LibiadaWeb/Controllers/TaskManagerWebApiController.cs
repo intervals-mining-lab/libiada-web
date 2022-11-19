@@ -69,11 +69,11 @@
         /// <exception cref="Exception">
         /// Thrown if task is not complete or doesn't have additional data.
         /// </exception>
-        public string GetSubsequencesComparerDataElement(int taskId, int firstIndex, int secondIndex)
+        public string GetSubsequencesComparerDataElement(int taskId, int firstIndex, int secondIndex, bool filtered)
         {
             try
             {
-                var taskData = GetTaskData(taskId, "similarityMatrix");
+                var taskData = GetTaskData(taskId, filtered ? "filteredSimilarityMatrix" : "similarityMatrix");
 
                 var similarityMatrix = JsonConvert.DeserializeObject<List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>[,]>(taskData);
 

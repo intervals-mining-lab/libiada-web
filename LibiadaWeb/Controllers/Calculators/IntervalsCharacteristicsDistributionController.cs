@@ -7,10 +7,10 @@
     using System.Web.Mvc.Html;
 
     using LibiadaCore.Core;
-    using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Tasks;
@@ -88,44 +88,28 @@
                     case 1:
                         orders = orderGenerator.GenerateOrders(length, alphabetCardinality);
                         break;
-                    default: throw new ArgumentException("Invalid type of generate");
+                    default: throw new ArgumentException($"Invalid type of order generator param: {generateStrict}");
                 }
-
-                var characteristics = new double[orders.Count][];
+                var calculator = new CustomSequencesCharacterisitcsCalculator(characteristicLinkIds);
+                var characteristics = calculator.Calculate(orders.Select(order => new Chain(order))).ToList();
                 var sequencesCharacteristics = new List<SequenceCharacteristics>();
                 for (int i = 0; i < orders.Count; i++)
                 {
-                    sequencesCharacteristics.Add(new SequenceCharacteristics());
-                }
-                for (int j = 0; j < orders.Count; j++)
-                {
-                    var sequence = new Chain(orders[j].Select(Convert.ToInt16).ToArray());
-                    characteristics[j] = new double[characteristicLinkIds.Length];
-                    for (int k = 0; k < characteristicLinkIds.Length; k++)
+                    sequencesCharacteristics.Add(new SequenceCharacteristics
                     {
-
-                        Link characteristicLink = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkIds[k]);
-                        FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkIds[k]);
-                        IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
-
-                        characteristics[j][k] = calculator.Calculate(sequence, characteristicLink);
-                    }
-
-                    sequencesCharacteristics[j] = new SequenceCharacteristics
-                    {
-                        MatterName = String.Join(",", orders[j].Select(n => n.ToString()).ToArray()),
-                        Characteristics = characteristics[j]
-                    };
+                        MatterName = string.Join(",", orders[i].Select(n => n.ToString()).ToArray()),
+                        Characteristics = characteristics[i]
+                    });
                 }
-                sequencesCharacteristics.RemoveAll(el => el.Characteristics.Any(v => Double.IsInfinity(v) ||
-                                                                                           Double.IsNaN(v) ||
-                                                                                           Double.IsNegativeInfinity(v) ||
-                                                                                           Double.IsPositiveInfinity(v)));
 
-
+                sequencesCharacteristics.RemoveAll(el => el.Characteristics.Any(v => double.IsInfinity(v) ||
+                                                                                     double.IsNaN(v) ||
+                                                                                     double.IsNegativeInfinity(v) ||
+                                                                                     double.IsPositiveInfinity(v)));
 
                 var characteristicNames = new string[characteristicLinkIds.Length];
                 var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
+
                 for (int k = 0; k < characteristicLinkIds.Length; k++)
                 {
                     characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[k]);
@@ -136,56 +120,31 @@
                         Selected = false
                     };
                 }
-                var index = new int[characteristicsList.Length];
-                for (int i = 0; i < index.Length; i++)
-                {
-                    index[i] = i;
-                }
 
-                var resultIntervals = new Dictionary<string, Dictionary<Dictionary<int, int>, Dictionary<int[], SequenceCharacteristics>>>();
+                var index = Enumerable.Range(0, characteristicLinkIds.Length);
+
+                var resultIntervals = new Dictionary<string, Dictionary<IntervalsDistribution, Dictionary<int[], SequenceCharacteristics>>>();
                 foreach (var link in EnumExtensions.ToArray<Link>())
                 {
                     if (link == Link.NotApplied)
                     {
                         continue;
                     }
-                    var accordance = new Dictionary<Dictionary<int, int>, Dictionary<int[], SequenceCharacteristics>>();
-                    for (int j = 0; j < orders.Count; j++)
+                    var accordance = IntervalsDistributionExtractor.GetOrdersIntervalsDistributionsAccordance(orders.ToArray(), link);
+                    var resultAccordance = new Dictionary<IntervalsDistribution, Dictionary<int[], SequenceCharacteristics>>();
+                    foreach (var element in accordance)
                     {
-                        var order = orders[j];
-                        var sequence = new Chain(order.Select(Convert.ToInt16).ToArray());
-                        var fullIntervals = new Dictionary<int, int>();
-                        var alphabet = sequence.Alphabet.ToList();
-                        foreach (var el in alphabet)
+                        resultAccordance.Add(element.Key, new Dictionary<int[], SequenceCharacteristics>());
+                        foreach (var order in element.Value)
                         {
-                            var congIntervals = sequence.CongenericChain(el).GetArrangement(link);
-                            foreach (var interval in congIntervals)
-                            {
-                                if (fullIntervals.Any(e => e.Key == interval))
-                                {
-                                    fullIntervals[interval]++;
-                                }
-                                else
-                                {
-                                    fullIntervals.Add(interval, 1);
-                                }
-                            }
-                        }
-                        if (accordance.Keys.Any(intervals => intervals.All(i1 => fullIntervals.Any(i2 => i2.Key == i1.Key && i2.Value == i1.Value))))
-                        {
-                            accordance[accordance.Keys.First(intervals => intervals.All(i1 => fullIntervals.Any(i2 => i2.Key == i1.Key && i2.Value == i1.Value)))].Add(order, sequencesCharacteristics.First(el => el.MatterName.SequenceEqual(String.Join(",", orders[j].Select(n => n.ToString()).ToArray()))));
-                        }
-                        else
-                        {
-                            accordance.Add(fullIntervals, new Dictionary<int[], SequenceCharacteristics> {
-                                {
-                                    order,
-                                    sequencesCharacteristics.First(el => el.MatterName.SequenceEqual(String.Join(",", orders[j].Select(n => n.ToString()).ToArray())))
-                                }
-                            });
+                            // TODO refactor this
+                            var characteristic = sequencesCharacteristics
+                                              .FirstOrDefault(el => el.MatterName.SequenceEqual(string.Join(",", order.Select(n => n.ToString()).ToArray())));
+                            resultAccordance[element.Key].Add(order, characteristic);
                         }
                     }
-                    resultIntervals.Add(EnumExtensions.GetDisplayValue<Link>(link), accordance);
+
+                    resultIntervals.Add(link.GetDisplayValue(), resultAccordance);
                 }
 
 
@@ -194,21 +153,21 @@
                 var result = new Dictionary<string, object>
                 {
                     { "result", resultIntervals.Select(r => new
-                    {
-                        link = r.Key,
-                        accordance = r.Value.Select(d => new {
-                            distributionIntervals = d.Key.Select(pair => new
-                            {
-                                interval = pair.Key,
-                                count = pair.Value
-                            }).ToArray(),
-                            orders = d.Value.Select(o => new
-                            {
-                                order = o.Key,
-                                characteristics = o.Value
+                        {
+                            link = r.Key,
+                            accordance = r.Value.Select(d => new {
+                                distributionIntervals = d.Key.Distribution.Select(pair => new
+                                {
+                                    interval = pair.Key,
+                                    count = pair.Value
+                                }).ToArray(),
+                                orders = d.Value.Select(o => new
+                                {
+                                    order = o.Key,
+                                    characteristics = o.Value
+                                })
                             })
                         })
-                    })
                     },
                     {"linkList",list },
                     { "characteristicNames", characteristicNames },

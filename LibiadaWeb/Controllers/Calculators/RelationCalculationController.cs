@@ -303,7 +303,7 @@
             }
 
             // ordering alphabet by frequencies
-            frequencies = frequencies.OrderBy(pair => pair.frequency).ToArray();
+            Array.Sort(frequencies, (x,y) => x.frequency.CompareTo(y.frequency));
 
             // calculating relation characteristic only for elements with maximum frequency
             for (int i = 0; i < frequencyCount; i++)

@@ -65,6 +65,9 @@
         /// <param name="generateStrict">
         /// The generate strict.
         /// </param>
+        /// <param name="characteristicLinkIds">
+        /// CharacteristicLinks ids.
+        /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
@@ -100,13 +103,14 @@
 
                     sequencesCharacteristics[j] = new SequenceCharacteristics
                     {
-                        MatterName = String.Join(",", orders[j].Select(n => n.ToString()).ToArray()),
+                        MatterName = string.Join(",", orders[j].Select(n => n.ToString()).ToArray()),
                         Characteristics = characteristics[j]
                     };
                 }
 
                 var characteristicNames = new string[characteristicLinkIds.Length];
                 var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
+
                 for (int k = 0; k < characteristicLinkIds.Length; k++)
                 {
                     characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[k]);
@@ -118,10 +122,10 @@
                     };
                 }
 
-                sequencesCharacteristics.RemoveAll(el => el.Characteristics.Any(v => Double.IsInfinity(v) ||
-                                                                                     Double.IsNaN(v) ||
-                                                                                     Double.IsNegativeInfinity(v) ||
-                                                                                     Double.IsPositiveInfinity(v)));
+                sequencesCharacteristics.RemoveAll(el => el.Characteristics.Any(v => double.IsInfinity(v) ||
+                                                                                     double.IsNaN(v) ||
+                                                                                     double.IsNegativeInfinity(v) ||
+                                                                                     double.IsPositiveInfinity(v)));
                 var index = new int[characteristicsList.Length];
                 for (int i = 0; i < index.Length; i++)
                 {

@@ -17,6 +17,8 @@
             <br />
             @if (AccountHelper.IsAdmin())
             {
+                @Html.ActionLink("Multisequences", "Index", "Multisequence")
+                <br />
                 @Html.ActionLink("Sequences", "Index", "CommonSequences")
                 <br />
                 @Html.ActionLink("Batch poems import", "Index", "BatchPoemsImport")

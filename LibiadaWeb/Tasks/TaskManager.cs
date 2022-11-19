@@ -301,7 +301,7 @@
         /// Removes not finished and not started tasks from database
         /// on task manager initialization.
         /// </summary>
-        private void RemoveGarbageFromDb()
+        private static void RemoveGarbageFromDb()
         {
             using (var db = new LibiadaWebEntities())
             {

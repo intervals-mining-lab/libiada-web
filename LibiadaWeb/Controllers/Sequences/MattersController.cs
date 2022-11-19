@@ -145,6 +145,7 @@
                 {
                     db.Entry(matter).State = EntityState.Modified;
                     await db.SaveChangesAsync();
+                    Cache.Clear();
                     return RedirectToAction("Index");
                 }
 

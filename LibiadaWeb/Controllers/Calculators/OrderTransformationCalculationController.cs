@@ -1,5 +1,6 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
@@ -129,7 +130,7 @@
 
                 var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
                 var sequencesCharacteristics = new SequenceCharacteristics[matterIds.Length];
-                matterIds = matterIds.OrderBy(m => m).ToArray();
+                Array.Sort(matterIds);
 
                 for (int i = 0; i < matterIds.Length; i++)
                 {

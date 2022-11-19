@@ -108,10 +108,13 @@
                             accordance.Add(fullIntervals, new List<int[]> { order });
                         }
                     }
+                    
                     distributionsAccordance.Add(link.GetDisplayValue(), accordance);
                 }
-                var list = EnumHelper.GetSelectList(typeof(Link));
-                list.RemoveAt(0);
+                
+                var linksList = EnumHelper.GetSelectList(typeof(Link));
+                linksList.RemoveAt(0);
+                
                 var result = new Dictionary<string, object>
                 {
                     { "result", distributionsAccordance.Select(r => new
@@ -127,7 +130,7 @@
                             })
                         })
                     },
-                    { "linkList", list }
+                    { "linkList", linksList }
                 };
 
                 return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };

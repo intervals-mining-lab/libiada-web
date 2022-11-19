@@ -52,16 +52,11 @@
             tooltipHtml.push("Characterisctic value: ");
             tooltipHtml.push(d.y);
             tooltipHtml.push("Distribution intervals: ");
-            var pointsIntervals = [];
+            var intervals = [];
             for (var i = 0; i < d.distributionIntervals.length; i++) {
-                pointsIntervals.push(d.distributionIntervals[i].interval)
+                intervals.push([d.distributionIntervals[i].interval, d.distributionIntervals[i].count]);
+                tooltipHtml.push(intervals[i].join("|"));
             }
-            tooltipHtml.push(pointsIntervals.join("|"));
-            var pointsCounts = [];
-            for (var i = 0; i < d.distributionIntervals.length; i++) {
-                pointsCounts.push(d.distributionIntervals[i].count)
-            }
-            tooltipHtml.push(pointsCounts.join("|"));
             tooltipHtml.push("Orders: ");
 
 
@@ -265,6 +260,7 @@
         $http.get(`/api/TaskManagerWebApi/${$scope.taskId}`)
             .then(function (data) {
                 MapModelFromJson($scope, JSON.parse(data.data));
+                $scope.characteristic = $scope.characteristicsList[0];
                 $scope.loading = false;
 
             }, function () {

@@ -13,6 +13,7 @@
     using LibiadaCore.TimeSeries.OneDimensional.DistanceCalculators;
 
     using LibiadaWeb.Models;
+    using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Tasks;
@@ -49,51 +50,8 @@
             int windowSize,
             int step)
         {
-            Chain chain;
-            IFullCalculator calculator;
-            Link link;
-
-            using (var db = new LibiadaWebEntities())
-            {
-                var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
-
-                FullCharacteristic characteristic =
-                    characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
-                calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
-                link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
-
-                var subsequenceExtractor = new SubsequenceExtractor(db);
-
-                Subsequence subsequence = db.Subsequence.Single(s => s.Id == subsequenceId);
-                chain = subsequenceExtractor.GetSubsequenceSequence(subsequence);
-            }
-
-            CutRule cutRule = new SimpleCutRule(chain.Length, step, windowSize);
-
-            CutRuleIterator iterator = cutRule.GetIterator();
-
-            var fragments = new List<Chain>();
-
-            while (iterator.Next())
-            {
-                int start = iterator.GetStartPosition();
-                int end = iterator.GetEndPosition();
-
-                var fragment = new List<IBaseObject>();
-                for (int k = 0; start + k < end; k++)
-                {
-                    fragment.Add(chain[start + k]);
-                }
-
-                fragments.Add(new Chain(fragment));
-            }
-
-            var characteristics = new double[fragments.Count];
-
-            for (int k = 0; k < fragments.Count; k++)
-            {
-                characteristics[k] = calculator.Calculate(fragments[k], link);
-            }
+            var calculator = new LocalCharacteristicsCalculator();
+            var characteristics = calculator.GetSubsequenceCharacteristic(subsequenceId, characteristicLinkId, windowSize, step);
 
             return JsonConvert.SerializeObject(characteristics);
         }

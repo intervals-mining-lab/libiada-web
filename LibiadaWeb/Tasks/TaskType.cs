@@ -194,14 +194,14 @@
         BatchPoemsImport = 26,
 
         /// <summary>
-        /// Order calculation.
+        /// Calculates distribution of sequences by order.
         /// </summary>
         [Display(Name = "Order calculation")]
         [TaskClass(typeof(OrderCalculationController))]
         OrderCalculation = 27,
 
         /// <summary>
-        /// Order transformation convergence.
+        /// Cflcelftes order transformations convergence.
         /// </summary>
         [Display(Name = "Order transformation convergence")]
         [TaskClass(typeof(OrderTransformationConvergenceController))]
@@ -215,7 +215,7 @@
         BatchMusicImport = 29,
 
         /// <summary>
-        /// Order calculation.
+        /// Visualizes order transformations.
         /// </summary>
         [Display(Name = "Order transformation visualization")]
         [TaskClass(typeof(OrderTransformationVisualizationController))]
@@ -229,22 +229,21 @@
         FmotifsDictionary = 31,
 
         /// <summary>
-        /// Order transformation characteristics dynamic visualization.
+        /// Calculates dynamic visualization of order transformations characteristics.
         /// </summary>
         [Display(Name = "Order transformation characteristics dynamic visualization")]
         [TaskClass(typeof(OrderTransformationCharacteristicsDynamicVisualizationController))]
         OrderTransformationCharacteristicsDynamicVisualization = 32,
 
         /// <summary>
-        /// Custom sequence segmentation task.
-        /// Accordance of orders by intervals distributions.
+        /// Calculates accordance of orders by intervals distributions.
         /// </summary>
         [Display(Name = "Calculate accordance of orders by intervals distributions")]
         [TaskClass(typeof(OrdersIntervalsDistributionsAccordanceController))]
         OrdersIntervalsDistributionsAccordance = 33,
 
         /// <summary>
-        /// Calculate characteristics of intervals distributions.
+        /// Calculates characteristics of intervals distributions.
         /// </summary>
         [Display(Name = "Calculate characteristics of intervals distributions")]
         [TaskClass(typeof(IntervalsCharacteristicsDistributionController))]

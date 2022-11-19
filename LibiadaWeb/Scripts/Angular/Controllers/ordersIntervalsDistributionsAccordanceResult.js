@@ -6,12 +6,15 @@
         // initializes data for chart
         function fillPoints() {
             $scope.points = [];
-
+            $scope.maxLevel = 1;
             for (var i = 0; i < $scope.result.length; i++) {
                 if ($scope.result[i].link === $scope.linkType.Text) {
                     for (var j = 0; j < $scope.result[i].accordance.length; j++) {
                         var distributionIntervals = $scope.result[i].accordance[j].distributionIntervals;
                         var orders = $scope.result[i].accordance[j].orders;
+                    if (orders.length > $scope.maxLevel) {
+                        $scope.maxLevel = orders.length;
+                    }
                         $scope.points.push({
                             id: j,
                             distributionIntervals: distributionIntervals,
@@ -24,21 +27,34 @@
             }
         }
 
+        function fillAccordanceLevels() {
+            $scope.accordanceLevels = [];
+            for (var i = 0; i <= $scope.maxLevel; i++) {
+                var count = 0;
+                for (var j = 0; j < $scope.points.length; j++) {
+                    if ($scope.points[j].y === i) {
+                        count++;
+                    }
+                }
+                if (count !== 0) {
+                    $scope.accordanceLevels.push({
+                        level: i,
+                        distributionsCount: count
+                    });
+                }
+            }
+        }
+
 
         // constructs string representing tooltip text (inner html)
         function fillPointTooltip(d) {
             var tooltipContent = [];
             tooltipContent.push("Distribution intervals: ");
-            var pointsIntervals = [];
+            var intervals = [];
             for (var i = 0; i < d.distributionIntervals.length; i++) {
-                pointsIntervals.push(d.distributionIntervals[i].interval)
+                intervals.push([d.distributionIntervals[i].interval, d.distributionIntervals[i].count]);
+                tooltipContent.push(intervals[i].join("|"));
             }
-            tooltipContent.push(pointsIntervals.join("|"));
-            var pointsCounts = [];
-            for (var i = 0; i < d.distributionIntervals.length; i++) {
-                pointsCounts.push(d.distributionIntervals[i].count)
-            }
-            tooltipContent.push(pointsCounts.join("|"));
             tooltipContent.push("Count of orders: " + d.orders.length);
             tooltipContent.push("Orders: ");
 
@@ -112,7 +128,7 @@
 
         function draw() {
             $scope.fillPoints();
-
+            $scope.fillAccordanceLevels();
             // removing previous chart and tooltip if any
             d3.select(".tooltip").remove();
             d3.select(".chart-svg").remove();
@@ -158,13 +174,13 @@
                     .base(10)
                     .domain([1, Math.pow(10, Math.ceil(Math.log10(yMax)))])
                     .range([height, 0]);
-            var yAxis = yMax - yMin < 100 ?
+            var yAxis = yMax - yMin < 10 ?
                 d3.axisLeft(yScale)
+                    .ticks(yMax - yMin)
                     .tickSizeInner(-width)
                     .tickSizeOuter(0)
                     .tickPadding(10) :
                 d3.axisLeft(yScale)
-                    .tickFormat(d3.format(""))
                     .tickSizeInner(-width)
                     .tickSizeOuter(0)
                     .tickPadding(10);
@@ -251,6 +267,10 @@
         $scope.dotRadius = 4;
         $scope.selectedDotRadius = $scope.dotRadius * 2;
 
+        $scope.fillAccordanceLevels = fillAccordanceLevels;
+        $scope.accordanceLevels = [];
+        $scope.maxLevel = 1;
+
         $scope.loadingScreenHeader = "Loading Data";
         $scope.loading = true;
 
@@ -260,6 +280,7 @@
         $http.get(`/api/TaskManagerWebApi/${$scope.taskId}`)
             .then(function (data) {
                 MapModelFromJson($scope, JSON.parse(data.data));
+                $scope.linkType = $scope.linkList[0];
                 $scope.loading = false;
 
             }, function () {

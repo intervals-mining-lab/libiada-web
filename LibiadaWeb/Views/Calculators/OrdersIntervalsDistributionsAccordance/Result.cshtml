@@ -35,6 +35,22 @@
             </div>
             <br />
             <input type="button" class="btn btn-default" ng-click="draw()" value="Draw" />
+            <br />
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Number of orders per distribution</th>
+                        <th>Number of distributions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="level in accordanceLevels">
+                        <td ng-bind="level.level"></td>
+                        <td ng-bind="level.distributionsCount"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <br />
             <div id="chart">
             </div>
 

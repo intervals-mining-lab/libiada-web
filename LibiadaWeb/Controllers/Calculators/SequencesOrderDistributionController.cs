@@ -47,8 +47,8 @@
         /// <param name="alphabetCardinality">
         /// The alphabet cardinality.
         /// </param>
-        /// <param name="generateStrict">
-        /// The generate strict.
+        /// <param name="typeGenerate">
+        /// Sequence generation type.
         /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
@@ -58,9 +58,10 @@
         {
             return CreateTask(() =>
             {
-                ISequenceGenerator sequenceGenerator = null;
+                ISequenceGenerator sequenceGenerator;
                 var orderGenerator = new OrderGenerator();
-                var orders = new List<int[]>();
+                List<int[]> orders;
+                // TODO: add enum
                 switch (typeGenerate)
                 {
                     case 0:
@@ -83,12 +84,12 @@
                 }
                 var sequences = sequenceGenerator.GenerateSequences(length, alphabetCardinality);
                 var SequecesOrdersDistribution = new Dictionary<int[], List<BaseChain>>(new OrderEqualityComparer());
-                foreach (var order in orders)
+                foreach (int[] order in orders)
                 {
                     SequecesOrdersDistribution.Add(order, new List<BaseChain>());
                 }
 
-                foreach (var sequence in sequences)
+                foreach (BaseChain sequence in sequences)
                 {
                     SequecesOrdersDistribution[sequence.Building].Add(sequence);
                 }

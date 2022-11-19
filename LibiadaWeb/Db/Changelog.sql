@@ -3096,11 +3096,17 @@ ALTER TABLE IF EXISTS matter ADD COLUMN collection_date date;
 
 ALTER TABLE IF EXISTS matter ADD CONSTRAINT uk_matter_multisequence UNIQUE (multisequence_id, multisequence_number);
 
--- 13.02.22
+-- 13.02.2022
 -- Delete redundant columns result and additional_result_data from task table.
 
 ALTER TABLE IF EXISTS task DROP COLUMN IF EXISTS result;
 
 ALTER TABLE IF EXISTS task DROP COLUMN IF EXISTS additional_result_data;
+
+-- 19.11.2022
+
+ALTER TABLE IF EXISTS matter DROP CONSTRAINT IF EXISTS uk_matter_multisequence;
+
+ALTER TABLE IF EXISTS matter ADD CONSTRAINT uk_matter_multisequence UNIQUE (multisequence_id, multisequence_number) DEFERRABLE INITIALLY DEFERRED;
 
 COMMIT;

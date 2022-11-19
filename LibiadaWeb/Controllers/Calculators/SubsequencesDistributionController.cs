@@ -29,6 +29,7 @@
 
     using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
     using Attribute = LibiadaWeb.Attribute;
+    using System.Security.Cryptography.X509Certificates;
 
 
     /// <summary>
@@ -85,7 +86,7 @@
         {
             return CreateTask(() =>
                 {
-                    matterIds = matterIds.OrderBy(m => m).ToArray();
+                    Array.Sort(matterIds);
 
                     var matterNames = new string[matterIds.Length];
                     var remoteIds = new string[matterIds.Length];
@@ -143,7 +144,7 @@
                     }
 
                     // sorting organisms by their characteristic
-                    sequencesData = sequencesData.OrderBy(r => r.Characteristic).ToArray();
+                    Array.Sort(sequencesData, (x,y) => x.Characteristic.CompareTo(y.Characteristic));
                     List<AttributeValue> allAttributeValues = attributeValuesCache.AllAttributeValues;
                     var result = new Dictionary<string, object>
                                  {

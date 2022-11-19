@@ -1,5 +1,6 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
@@ -106,7 +107,7 @@
                 var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
                 var commonSequenceRepository = new CommonSequenceRepository(db);
                 var mattersCharacteristics = new object[matterIds.Length];
-                matterIds = matterIds.OrderBy(m => m).ToArray();
+                Array.Sort(matterIds);
                 Dictionary<long, Matter> matters = Cache.GetInstance().Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id);
 
                 for (int i = 0; i < matterIds.Length; i++)

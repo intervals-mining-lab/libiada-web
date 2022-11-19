@@ -7,7 +7,6 @@
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
 
-    using LibiadaCore.Extensions;
     using LibiadaCore.Music;
     using LibiadaWeb.Attributes;
     using LibiadaWeb.Extensions;
@@ -99,9 +98,42 @@
         /// <returns>
         /// The <see cref="Dictionary{String, Object}"/>.
         /// </returns>
-        public Dictionary<string, object> FillViewData(int minSelectedMatters, int maxSelectedMatters, Func<Matter, bool> filter, string submitName)
+        public Dictionary<string, object> FillViewData(int minSelectedMatters,
+                                                       int maxSelectedMatters,
+                                                       Func<Matter, bool> filter,
+                                                       string submitName)
         {
-            Dictionary<string, object> data = GetMattersData(minSelectedMatters, maxSelectedMatters, filter);
+            return FillViewData(minSelectedMatters, maxSelectedMatters, filter, m => false, submitName);
+        }
+
+        /// <summary>
+        /// Fills view data.
+        /// </summary>
+        /// <param name="minSelectedMatters">
+        /// The minimum selected matters.
+        /// </param>
+        /// <param name="maxSelectedMatters">
+        /// The maximum selected matters.
+        /// </param>
+        /// <param name="filter">
+        /// The matters filter.
+        /// </param>
+        /// /// <param name="selectionFilter">
+        /// The matters selection filter.
+        /// </param>
+        /// <param name="submitName">
+        /// The submit button name.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Dictionary{String, Object}"/>.
+        /// </returns>
+        public Dictionary<string, object> FillViewData(int minSelectedMatters,
+                                                       int maxSelectedMatters,
+                                                       Func<Matter, bool> filter,
+                                                       Func<Matter, bool> selectionFilter,
+                                                       string submitName)
+        {
+            Dictionary<string, object> data = GetMattersData(minSelectedMatters, maxSelectedMatters, filter, selectionFilter);
 
             IEnumerable<SelectListItem> natures;
             IEnumerable<Notation> notations;
@@ -217,13 +249,7 @@
         public Dictionary<string, object> FillViewData(CharacteristicCategory characteristicsType, int minSelectedMatters, int maxSelectedMatters, string submitName)
         {
             Dictionary<string, object> data = FillViewData(minSelectedMatters, maxSelectedMatters, submitName);
-            Dictionary<string, object> characteristicsData = GetCharacteristicsData(characteristicsType);
-            foreach ((string key, object value) in characteristicsData)
-            {
-                data.Add(key, value);
-            }
-
-            return data;
+            return data.Concat(GetCharacteristicsData(characteristicsType)).ToDictionary(x => x.Key, y => y.Value);
         }
 
         /// <summary>
@@ -253,12 +279,7 @@
             var groups = EnumExtensions.ToArray<Group>().Where(g => g.GetNature() == Nature.Genetic);
             var features = EnumExtensions.ToArray<Feature>().Where(f => f.GetNature() == Nature.Genetic).ToArray();
             var selectedFeatures = features.Where(f => f != Feature.NonCodingSequence);
-            Dictionary<string, object> characteristicsData = GetCharacteristicsData(CharacteristicCategory.Full);
-            foreach ((string key, object value) in characteristicsData)
-            {
-                data.Add(key, value);
-            }
-
+            data = data.Concat(GetCharacteristicsData(CharacteristicCategory.Full)).ToDictionary(x => x.Key, y => y.Value); ;
             data.Add("submitName", submitName);
             data.Add("notations", geneticNotations.ToSelectListWithNature());
             data.Add("nature", ((byte)Nature.Genetic).ToString());
@@ -291,27 +312,33 @@
                 case CharacteristicCategory.Full:
                     characteristicTypes = FullCharacteristicRepository.Instance.GetCharacteristicTypes();
 
-                    var fullCharacteristics = FullCharacteristicRepository.Instance.CharacteristicLinks.ToArray();
+                    var fullCharacteristics = FullCharacteristicRepository.Instance.CharacteristicLinks;
                     foreach (var characteristic in fullCharacteristics)
                     {
-                        characteristicsDictionary.Add(((short)characteristic.FullCharacteristic, (short)characteristic.Link, (short)characteristic.ArrangementType), characteristic.Id);
+                        characteristicsDictionary.Add(((short)characteristic.FullCharacteristic,
+                                                       (short)characteristic.Link,
+                                                       (short)characteristic.ArrangementType),
+                                                      characteristic.Id);
                     }
 
                     break;
                 case CharacteristicCategory.Congeneric:
                     characteristicTypes = CongenericCharacteristicRepository.Instance.GetCharacteristicTypes();
 
-                    var congenericCharacteristics = CongenericCharacteristicRepository.Instance.CharacteristicLinks.ToArray();
+                    var congenericCharacteristics = CongenericCharacteristicRepository.Instance.CharacteristicLinks;
                     foreach (var characteristic in congenericCharacteristics)
                     {
-                        characteristicsDictionary.Add(((short)characteristic.CongenericCharacteristic, (short)characteristic.Link, (short)characteristic.ArrangementType), characteristic.Id);
+                        characteristicsDictionary.Add(((short)characteristic.CongenericCharacteristic,
+                                                       (short)characteristic.Link,
+                                                       (short)characteristic.ArrangementType),
+                                                      characteristic.Id);
                     }
 
                     break;
                 case CharacteristicCategory.Accordance:
                     characteristicTypes = AccordanceCharacteristicRepository.Instance.GetCharacteristicTypes();
 
-                    var accordanceCharacteristics = AccordanceCharacteristicRepository.Instance.CharacteristicLinks.ToArray();
+                    var accordanceCharacteristics = AccordanceCharacteristicRepository.Instance.CharacteristicLinks;
                     foreach (var characteristic in accordanceCharacteristics)
                     {
                         characteristicsDictionary.Add(((short)characteristic.AccordanceCharacteristic, (short)characteristic.Link, 0), characteristic.Id);
@@ -321,7 +348,7 @@
                 case CharacteristicCategory.Binary:
                     characteristicTypes = BinaryCharacteristicRepository.Instance.GetCharacteristicTypes();
 
-                    var binaryCharacteristics = BinaryCharacteristicRepository.Instance.CharacteristicLinks.ToArray();
+                    var binaryCharacteristics = BinaryCharacteristicRepository.Instance.CharacteristicLinks;
                     foreach (var characteristic in binaryCharacteristics)
                     {
                         characteristicsDictionary.Add(((short)characteristic.BinaryCharacteristic, (short)characteristic.Link, 0), characteristic.Id);
@@ -333,10 +360,10 @@
             }
 
             return new Dictionary<string, object>()
-                       {
-                           { "characteristicTypes", characteristicTypes },
-                           { "characteristicsDictionary", characteristicsDictionary }
-                       };
+            {
+                { "characteristicTypes", characteristicTypes },
+                { "characteristicsDictionary", characteristicsDictionary }
+            };
         }
 
         /// <summary>
@@ -354,14 +381,42 @@
         /// <returns>
         /// The <see cref="Dictionary{String, Object}"/>.
         /// </returns>
-        private Dictionary<string, object> GetMattersData(int minSelectedMatters, int maxSelectedMatters, Func<Matter, bool> filter)
+        private Dictionary<string, object> GetMattersData(int minSelectedMatters,
+                                                          int maxSelectedMatters,
+                                                          Func<Matter, bool> filter)
+        {
+            return GetMattersData(minSelectedMatters, maxSelectedMatters, filter, m => false);
+        }
+
+        /// <summary>
+        /// Fills matters data dictionary.
+        /// </summary>
+        /// <param name="minSelectedMatters">
+        /// The minimum selected matters.
+        /// </param>
+        /// <param name="maxSelectedMatters">
+        /// The maximum selected matters.
+        /// </param>
+        /// <param name="filter">
+        /// Filter for matters.
+        /// </param>
+        /// <param name="selectionFilter">
+        /// Filter for matter selection.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Dictionary{String, Object}"/>.
+        /// </returns>
+        private Dictionary<string, object> GetMattersData(int minSelectedMatters,
+                                                          int maxSelectedMatters,
+                                                          Func<Matter, bool> filter,
+                                                          Func<Matter, bool> selectionFilter)
         {
             return new Dictionary<string, object>
-                {
-                    { "minimumSelectedMatters", minSelectedMatters },
-                    { "maximumSelectedMatters", maxSelectedMatters },
-                    { "matters", SelectListHelper.GetMatterSelectList(filter, db) }
-                };
+            {
+                { "minimumSelectedMatters", minSelectedMatters },
+                { "maximumSelectedMatters", maxSelectedMatters },
+                { "matters", SelectListHelper.GetMatterSelectList(filter, selectionFilter, db) }
+            };
         }
     }
 }

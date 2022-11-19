@@ -252,7 +252,7 @@
                                     <a target="_blank"
                                        rel="noopener"
                                        ng-if="::tooltipElement.sequenceRemoteId"
-                                       ng-href="::https://www.ncbi.nlm.nih.gov/nuccore/{{tooltipElement.sequenceRemoteId}}"
+                                       ng-href="https://www.ncbi.nlm.nih.gov/nuccore/{{::tooltipElement.sequenceRemoteId}}"
                                        ng-bind="::tooltipElement.name">
                                     </a>
                                     <span ng-if="::!tooltipElement.sequenceRemoteId" ng-bind="::tooltipElement.name"></span>
@@ -260,7 +260,7 @@
                                     <a target="_blank"
                                        rel="noopener"
                                        ng-if="::tooltipElement.remoteId"
-                                       ng-href="::https://www.ncbi.nlm.nih.gov/nuccore/{{tooltipElement.remoteId}}">
+                                       ng-href="https://www.ncbi.nlm.nih.gov/nuccore/{{::tooltipElement.remoteId}}">
                                         Peptide ncbi page
                                     </a>
                                     <div ng-bind="::tooltipElement.feature"></div>
@@ -271,7 +271,7 @@
                                         <a target="_blank"
                                            rel="noopener"
                                            ng-if="::tooltipElement.sequenceRemoteId"
-                                           ng-href="::https://www.ncbi.nlm.nih.gov/nuccore/{{tooltipElement.sequenceRemoteId}}?from={{tooltipElement.positions[0]+1}}&to={{tooltipElement.positions[0]+tooltipElement.lengths[0]}}"
+                                           ng-href="https://www.ncbi.nlm.nih.gov/nuccore/{{::tooltipElement.sequenceRemoteId}}?from={{::tooltipElement.positions[0]+1}}&to={{::tooltipElement.positions[0]+tooltipElement.lengths[0]}}"
                                            ng-bind="::tooltipElement.position">
                                         </a>
                                         <span ng-if="::!tooltipElement.sequenceRemoteId" ng-bind="::tooltipElement.position"></span>

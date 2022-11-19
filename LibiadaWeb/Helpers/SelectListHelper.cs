@@ -19,14 +19,17 @@
         /// </returns>
         public static IEnumerable<MattersTableRow> GetMatterSelectList(LibiadaWebEntities db)
         {
-            return GetMatterSelectList(m => true, db);
+            return GetMatterSelectList(m => true, m => false, db);
         }
 
         /// <summary>
         /// Creates filtered list of matter table rows.
         /// </summary>
         /// <param name="filter">
-        /// The filter.
+        /// The matters filter.
+        /// </param>
+        /// /// <param name="selectionFilter">
+        /// The matters selection filter.
         /// </param>
         /// <param name="db">
         /// The database connection.
@@ -34,9 +37,9 @@
         /// <returns>
         /// The <see cref="IEnumerable{MattersTableRow}"/>.
         /// </returns>
-        public static IEnumerable<MattersTableRow> GetMatterSelectList(Func<Matter, bool> filter, LibiadaWebEntities db)
+        public static IEnumerable<MattersTableRow> GetMatterSelectList(Func<Matter, bool> filter, Func<Matter, bool> selectionFilter, LibiadaWebEntities db)
         {
-            return GetMatterSelectList(db.Matter.Where(filter));
+            return GetMatterSelectList(db.Matter.Where(filter), selectionFilter);
         }
 
         /// <summary>
@@ -68,25 +71,12 @@
         /// </returns>
         public static IEnumerable<SelectListItemWithNature> GetMultisequenceSelectList(LibiadaWebEntities db)
         {
-            return db.Multisequence.Select(ms => new SelectListItemWithNature { 
+            return db.Multisequence.Select(ms => new SelectListItemWithNature
+            {
                 Value = ms.Id.ToString(), 
                 Text = ms.Name, 
                 Nature = (byte)ms.Nature 
             });
-        }
-
-        /// <summary>
-        /// Creates list of matter table rows from given matters.
-        /// </summary>
-        /// <param name="matters">
-        /// The matters.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IEnumerable{MattersTableRow}"/>.
-        /// </returns>
-        private static IEnumerable<MattersTableRow> GetMatterSelectList(IEnumerable<Matter> matters)
-        {
-            return GetMatterSelectList(matters, m => false);
         }
     }
 }

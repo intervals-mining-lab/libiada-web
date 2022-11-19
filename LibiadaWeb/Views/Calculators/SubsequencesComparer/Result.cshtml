@@ -19,6 +19,19 @@
         <div>
             Subsequences characteristic: <b>{{characteristicName}}</b>
         </div>
+        <br />
+
+        <div ng-show="filteredSimilarities" class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="checkbox"
+                           name="displayFiltered"
+                           ng-model="flags.displayFiltered"
+                           value="false" />
+                    Display filtered matrix
+                </label>
+            </div>
+        </div>
 
         <table class="table table-bordered">
             <tbody>
@@ -26,7 +39,7 @@
                     <td />
                     <td ng-repeat="matterName in mattersNames" title="{{matterName}}">{{$index + 1}}</td>
                 </tr>
-                <tr ng-repeat="similarity in similarities">
+                <tr ng-repeat="similarity in flags.displayFiltered ? filteredSimilarities : similarities">
                     <td title="{{mattersNames[$index]}}">{{$index + 1}}</td>
                     <td ng-repeat="value in similarity"
                         ng-click="showEqualPairs($parent.$index, $index, value)"
