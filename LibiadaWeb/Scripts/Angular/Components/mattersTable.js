@@ -2,12 +2,12 @@
     "use strict";
 
     function MattersTableController($scope, filterFilter) {
-        var ctrl = this;
+        let ctrl = this;
 
         ctrl.$onInit = () => {
             ctrl.showRefSeqOnly = true;
             ctrl.checkboxes = ctrl.maximumSelectedMatters > 1;
-            ctrl.selectedMatters = 0;
+            ctrl.selectedMattersCount = 0;
 
             if (ctrl.checkboxes) {
                 ctrl.mattersInputName = "matterIds";
@@ -16,35 +16,88 @@
                 ctrl.mattersInputName = "matterId";
                 ctrl.mattersInputType = "radio";
             }
+
+            if (ctrl.displayMultisequenceNumber) {
+                ctrl.multisequenceNumberCounter = 1;
+                $("#mattersSelectList").on("change", `input[name="${ctrl.mattersInputName}"]`, ctrl.updateMultisequenceNumber);
+
+                // if we are editing existing multisequence there are already selected matters
+                if (ctrl.multisequenceNumbers) {
+                    ctrl.selectedMattersCount = ctrl.multisequenceNumbers.length;
+                    ctrl.multisequenceNumberCounter += ctrl.multisequenceNumbers.length;
+                    ctrl.toogleMattersVisibility(false);
+                    for (let i = 0; i < ctrl.multisequenceNumbers.length; i++) {
+                        const matterId = ctrl.multisequenceNumbers[i].Id;
+                        const number = ctrl.multisequenceNumbers[i].MultisequenceNumber;
+                        $(`#multisequenceNumberCell${matterId}`).append(
+                            `<span>${number}</span>
+                             <input type="hidden"
+                                    name="multisequenceNumbers"
+                                    id="multisequenceNumber${matterId}"
+                                    value="${number}"/>`)
+                    }
+                }
+            }
         };
 
         ctrl.$onChanges = changes => {
-            if (changes.nature) {
+            if (changes.nature && !changes.nature.isFirstChange()) {
                 ctrl.toogleMattersVisibility(true);
             }
         };
+
+        ctrl.updateMultisequenceNumber = e => {
+            const target = e.target;
+            const matterId = target.value;
+            if (target.checked) {
+                $(`#multisequenceNumberCell${matterId}`).append(
+                    `<span>${ctrl.multisequenceNumberCounter}</span>
+                     <input type="hidden"
+                            name="multisequenceNumbers"
+                            id="multisequenceNumber${matterId}"
+                            value="${ctrl.multisequenceNumberCounter++}"/>`)
+
+            } else {
+                const numberToRemove = $(`#multisequenceNumberCell${matterId}`).children()[1].value;
+
+                //decrementing all numbers higher than removed one
+                $("[id^=multisequenceNumberCell]:has(input)")
+                    .filter((index, el) => +el.children[1].value > numberToRemove)
+                    .each((index, el) => {
+                        el.children[1].value--;
+                        el.children[0].innerHTML = el.children[1].value;
+                    });
+
+                $(`#multisequenceNumberCell${matterId}`).empty();
+                ctrl.multisequenceNumberCounter--;
+            }
+        }
 
         ctrl.toogleMattersVisibility = isNewNature => {
             if (isNewNature) {
                 ctrl.matters.forEach(m => m.Selected = false);
             }
 
-            var oldVisibleMatters = ctrl.getVisibleMatters();
+            const oldVisibleMatters = ctrl.getVisibleMatters();
             ctrl.matters.forEach(m => ctrl.setMatterVisibility(m));
-            var visibleMatters = ctrl.getVisibleMatters();
+            const visibleMatters = ctrl.getVisibleMatters();
 
-            var mattersToHide = oldVisibleMatters.filter(m => !visibleMatters.includes(m));
-            var mattersToShow = visibleMatters.filter(m => !oldVisibleMatters.includes(m));
+            const mattersToHide = oldVisibleMatters.filter(m => !visibleMatters.includes(m));
+            const mattersToShow = visibleMatters.filter(m => !oldVisibleMatters.includes(m));
 
             $(mattersToHide.map(m => `#matterRow${m.Value}`).join(",")).remove();
 
             $("#mattersSelectList").append(mattersToShow.map(m =>
                 `<tr id="matterRow${m.Value}">
+                    ${ctrl.displayMultisequenceNumber ?
+                    `<td id="multisequenceNumberCell${m.Value}">
+                    </td>` : ``}
                     <td>
                         <input type="${ctrl.mattersInputType}"
                                name="${ctrl.mattersInputName}"
                                id="matter${m.Value}"
-                               value="${m.Value}" />
+                               value="${m.Value}" 
+                               ${m.Selected ? `checked` : ``} />
                         <label for="matter${m.Value}">${m.Text}</label>
                     </td>
                     <td>${m.Group}</td>
@@ -60,7 +113,6 @@
         };
 
         ctrl.setMatterVisibility = matter => {
-
             ctrl.searchMatterText = ctrl.searchMatterText || "";
             matter.Visible = matter.Selected || (ctrl.searchMatterText.length >= 4
                 && matter.Nature == ctrl.nature
@@ -71,15 +123,15 @@
         };
 
         // checks if genetic sequence is referense sequence 
-        // (its  genbank id contains "_")
+        // (its genbank id contains "_")
         ctrl.isRefSeq = matter => matter.Text.split("|").slice(-1)[0].indexOf("_") !== -1;
 
         ctrl.selectAllVisibleMatters = () => {
             ctrl.getVisibleMatters().forEach(matter => {
-                if (!matter.Selected && (ctrl.selectedMatters < ctrl.maximumSelectedMatters)) {
+                if (!matter.Selected && (ctrl.selectedMattersCount < ctrl.maximumSelectedMatters)) {
                     $(`#matter${matter.Value}`).prop("checked", true);
                     matter.Selected = true;
-                    ctrl.selectedMatters++;
+                    ctrl.selectedMattersCount++;
                 }
             });
         };
@@ -91,23 +143,23 @@
                 ctrl.setMatterVisibility(matter);
             });
 
-            ctrl.selectedMatters = 0;
+            ctrl.selectedMattersCount = 0;
             ctrl.toogleMattersVisibility(false);
         };
 
         ctrl.toggleMatterSelection = matter => {
             if (matter.Selected) {
                 matter.Selected = false;
-                ctrl.selectedMatters--;
+                ctrl.selectedMattersCount--;
             } else {
                 if (ctrl.maximumSelectedMatters == 1) {
                     ctrl.matters.forEach(m => m.Selected = false);
                     matter.Selected = true;
-                    ctrl.selectedMatters = 1;
+                    ctrl.selectedMattersCount = 1;
                 } else {
-                    if ((ctrl.selectedMatters < ctrl.maximumSelectedMatters)) {
+                    if ((ctrl.selectedMattersCount < ctrl.maximumSelectedMatters)) {
                         matter.Selected = true;
-                        ctrl.selectedMatters++;
+                        ctrl.selectedMattersCount++;
                     } else {
                         $(`#matter${matter.Value}`).prop("checked", false);
                         matter.Selected = false;
@@ -128,7 +180,9 @@
             groups: "<",
             sequenceTypes: "<",
             maximumSelectedMatters: "<",
-            selectedMatters: "="
+            selectedMattersCount: "=",
+            displayMultisequenceNumber: "<",
+            multisequenceNumbers: "<"
         }
     });
 }

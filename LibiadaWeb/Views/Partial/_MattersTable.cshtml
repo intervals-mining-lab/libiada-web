@@ -13,7 +13,7 @@
         </label>
     </div>
 </div>
-<div class="form-group" ng-if="::$ctrl.checkboxes">
+<div class="form-group" ng-if="::($ctrl.checkboxes && !$ctrl.displayMultisequenceNumber)">
     <div class="col-md-offset-2 col-md-10">
         <input type="button" class="btn btn-success" ng-click="$ctrl.selectAllVisibleMatters()" value="Select all visible sequences" />
         <input type="button" class="btn btn-default" ng-click="$ctrl.unselectAllVisibleMatters()" value="Unselect all visible sequences" />
@@ -23,6 +23,7 @@
 <table ng-cloak class="table table-bordered table-hover">
     <thead>
         <tr>
+            <th ng-if="::$ctrl.displayMultisequenceNumber"></th>
             <th>
                 <input type="text"
                        class="form-control"
@@ -49,6 +50,7 @@
             </th>
         </tr>
         <tr>
+            <th ng-if="::$ctrl.displayMultisequenceNumber">№</th>
             <th>@(Html.DisplayNameFor(model => model.Name))</th>
             <th>@(Html.DisplayNameFor(model => model.Group))</th>
             <th>@(Html.DisplayNameFor(model => model.SequenceType))</th>
