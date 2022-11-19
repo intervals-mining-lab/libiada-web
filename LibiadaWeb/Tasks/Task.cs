@@ -4,8 +4,6 @@
     using System.Collections.Generic;
     using System.Threading;
 
-    using Newtonsoft.Json;
-
     using SystemTask = System.Threading.Tasks.Task;
 
     /// <summary>
@@ -68,12 +66,6 @@
         public Task(CalculationTask task)
         {
             TaskData = new TaskData(task);
-            //Result = new Dictionary<string, string> { { "data", task.Result } };
-            //if (!string.IsNullOrEmpty(task.AdditionalResultData))
-            //{
-            //    // TODO: rewrite to use more abstract class or leave json for further parsing
-            //    Result.Add("additionalData", JsonConvert.DeserializeObject<List<(int, int, double)>[,]>(task.AdditionalResultData));
-            //}
         }
 
         /// <summary>
@@ -91,11 +83,10 @@
         /// <param name="thread">
         /// The thread.
         /// </param>
-        private Task(Func<Dictionary<string, string>> action, TaskData taskData, /*Dictionary<string, string> result,*/ SystemTask systemTask)
+        private Task(Func<Dictionary<string, string>> action, TaskData taskData, SystemTask systemTask)
         {
             Action = action;
             TaskData = taskData.Clone();
-            //Result = result;
             SystemTask = systemTask;
         }
 
@@ -107,7 +98,7 @@
         /// </returns>
         public Task Clone()
         {
-            return new Task(Action, TaskData, /*Result,*/ SystemTask);
+            return new Task(Action, TaskData, SystemTask);
         }
     }
 }

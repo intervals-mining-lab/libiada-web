@@ -63,7 +63,7 @@
         [TestCase((SequenceType)3, "CompleteText")]
         [TestCase((SequenceType)4, "CompleteNumericSequence")]
         [TestCase((SequenceType)5, "Plasmid")]
-        [TestCase((SequenceType)6, "MitochondrionGenome")]
+        [TestCase((SequenceType)6, "MitochondrialGenome")]
         [TestCase((SequenceType)7, "ChloroplastGenome")]
         [TestCase((SequenceType)8, "RRNA16S")]
         [TestCase((SequenceType)9, "RRNA18S")]
