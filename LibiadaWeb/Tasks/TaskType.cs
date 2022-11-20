@@ -12,105 +12,105 @@
     public enum TaskType : byte
     {
         /// <summary>
-        /// The accordance calculation.
+        /// The accordance characteristics calculation task.
         /// </summary>
-        [Display(Name = "Accordance calculation")]
+        [Display(Name = "Accordance characteristics calculation")]
         [TaskClass(typeof(AccordanceCalculationController))]
         AccordanceCalculation = 1,
 
         /// <summary>
-        /// The calculation.
+        /// The integral characterisctics calculation task.
         /// </summary>
         [Display(Name = "Characteristics calculation")]
         [TaskClass(typeof(CalculationController))]
         Calculation = 2,
 
         /// <summary>
-        /// The clusterization.
+        /// The cluster analysis task.
         /// </summary>
         [Display(Name = "Clusterization")]
         [TaskClass(typeof(ClusterizationController))]
         Clusterization = 3,
 
         /// <summary>
-        /// The congeneric calculation.
+        /// The congeneric characteristics calculation task.
         /// </summary>
-        [Display(Name = "Congeneric calculation")]
+        [Display(Name = "Congeneric characteristics calculation")]
         [TaskClass(typeof(CongenericCalculationController))]
         CongenericCalculation = 4,
 
         /// <summary>
-        /// The custom sequence calculation.
+        /// Calculates characteristics of custom sequences.
         /// </summary>
-        [Display(Name = "Custom sequence calculation")]
+        [Display(Name = "Custom sequences characteristics calculation")]
         [TaskClass(typeof(CustomSequenceCalculationController))]
         CustomSequenceCalculation = 5,
 
         /// <summary>
-        /// The custom sequence order transformation calculation.
+        /// Calculates characteristics for higher order / derivative of custom sequence.
         /// </summary>
         [Display(Name = "Custom sequences order transformation/derivative characteristics calculation")]
         [TaskClass(typeof(CustomSequenceOrderTransformationCalculationController))]
         CustomSequenceOrderTransformationCalculation = 6,
 
         /// <summary>
-        /// Matter creation and sequence import.
+        /// Matter creation and sequence import task.
         /// </summary>
         [Display(Name = "Music files processing")]
         [TaskClass(typeof(MusicFilesController))]
         MusicFiles = 7,
 
         /// <summary>
-        /// The local calculation.
+        /// The local characteristics calculation task.
         /// </summary>
-        [Display(Name = "Local calculation")]
+        [Display(Name = "Sliding window calculation")]
         [TaskClass(typeof(LocalCalculationController))]
         LocalCalculation = 8,
 
         /// <summary>
-        /// The order transformation calculation.
+        /// Calculates characteristics for higher order / derivative.
         /// </summary>
         [Display(Name = "Order transformation/derivative characteristics calculation")]
         [TaskClass(typeof(OrderTransformationCalculationController))]
         OrderTransformationCalculation = 9,
 
         /// <summary>
-        /// The relation calculation.
+        /// Calculates relation characteristics.
         /// </summary>
-        [Display(Name = "Relation calculation")]
+        [Display(Name = "Relation characteristics calculation")]
         [TaskClass(typeof(RelationCalculationController))]
         RelationCalculation = 10,
 
         /// <summary>
-        /// The sequences alignment.
+        /// The sequences alignment task.
         /// </summary>
         [Display(Name = "Sequences alignment")]
         [TaskClass(typeof(SequencesAlignmentController))]
         SequencesAlignment = 11,
 
         /// <summary>
-        /// The subsequences calculation.
+        /// The subsequences characteristics calculation task.
         /// </summary>
         [Display(Name = "Subsequences characteristics calculation")]
         [TaskClass(typeof(SubsequencesCalculationController))]
         SubsequencesCalculation = 12,
 
         /// <summary>
-        /// The subsequences comparer.
+        /// Calculates subsequences similarity matrix.
         /// </summary>
         [Display(Name = "Subsequences similarity matrix")]
         [TaskClass(typeof(SubsequencesComparerController))]
         SubsequencesComparer = 13,
 
         /// <summary>
-        /// The subsequences distribution.
+        /// Calculates subsequences distribution.
         /// </summary>
         [Display(Name = "Map of genes")]
         [TaskClass(typeof(SubsequencesDistributionController))]
         SubsequencesDistribution = 14,
 
         /// <summary>
-        /// The subsequences similarity.
+        /// Calculates subsequences similarity.
         /// </summary>
         [Display(Name = "Subsequences similarity")]
         [TaskClass(typeof(SubsequencesSimilarityController))]
@@ -124,35 +124,35 @@
         SequencesOrderDistribution = 16,
 
         /// <summary>
-        /// The batch genes import.
+        /// The batch genes import task.
         /// </summary>
         [Display(Name = "Batch genes import")]
         [TaskClass(typeof(BatchGenesImportController))]
         BatchGenesImport = 17,
 
         /// <summary>
-        /// The batch sequence import.
+        /// The batch sequences import task.
         /// </summary>
         [Display(Name = "Batch sequences import")]
         [TaskClass(typeof(BatchSequenceImportController))]
         BatchSequenceImport = 18,
 
         /// <summary>
-        /// The custom sequence order transformer.
+        /// The custom sequence order transformation.
         /// </summary>
         [Display(Name = "Custom sequences order transformation")]
         [TaskClass(typeof(CustomSequenceOrderTransformerController))]
         CustomSequenceOrderTransformer = 19,
 
         /// <summary>
-        /// The genes import.
+        /// The genes import task.
         /// </summary>
         [Display(Name = "Genes import")]
         [TaskClass(typeof(GenesImportController))]
         GenesImport = 20,
 
         /// <summary>
-        /// The order transformer.
+        /// The order transformation task.
         /// </summary>
         [Display(Name = "Order transformation")]
         [TaskClass(typeof(OrderTransformerController))]
@@ -173,21 +173,21 @@
         CommonSequences = 23,
 
         /// <summary>
-        /// Matter creation and sequence import.
+        /// Matter creation and sequence import task.
         /// </summary>
         [Display(Name = "Sequence import")]
         [TaskClass(typeof(MattersController))]
         Matters = 24,
 
         /// <summary>
-        /// The sequence prediction.
+        /// The sequence prediction task.
         /// </summary>
         [Display(Name = "Sequence prediction")]
         [TaskClass(typeof(SequencePredictionController))]
         SequencePrediction = 25,
 
         /// <summary>
-        /// Batch poems import.
+        /// Batch poems import task.
         /// </summary>
         [Display(Name = "Batch poems import")]
         [TaskClass(typeof(BatchPoemsImportController))]
@@ -201,14 +201,14 @@
         OrderCalculation = 27,
 
         /// <summary>
-        /// Cflcelftes order transformations convergence.
+        /// Calculates order transformations convergence.
         /// </summary>
         [Display(Name = "Order transformation convergence")]
         [TaskClass(typeof(OrderTransformationConvergenceController))]
         OrderTransformationConvergence = 28,
 
         /// <summary>
-        /// Batch music import.
+        /// Batch music import task.
         /// </summary>
         [Display(Name = "Batch music import")]
         [TaskClass(typeof(BatchMusicImportController))]
@@ -222,7 +222,7 @@
         OrderTransformationVisualization = 30,
 
         /// <summary>
-        /// Fmotifs dictionary.
+        /// Fmotifs dictionary task.
         /// </summary>
         [Display(Name = "Fmotifs dictionary")]
         [TaskClass(typeof(FmotifsDictionaryController))]
@@ -250,19 +250,21 @@
         IntervalsCharacteristicsDistribution = 34,
 
         /// <summary>
-        /// Batch images import.
+        /// Batch images import from files.
         /// </summary>
         [Display(Name = "Batch images import")]
         [TaskClass(typeof(BatchImagesImportController))]
         BatchImagesImport = 35,
 
         /// <summary>
-        /// Segmentation task.
+        /// Imports genetic sequences and their annotations
+        /// using genbank search results file.
         /// </summary>
         [Display(Name = "Batch genetic import from GenBank search file")]
         [TaskClass(typeof(BatchGeneticImportFromGenBankSearchFileController))]
         BatchGeneticImportFromGenBankSearchFile = 36,
 
+        /// <summary>
         /// Imports genetic sequences and their annotations
         /// using genbank search results query.
         /// </summary>
