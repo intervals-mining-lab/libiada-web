@@ -197,9 +197,9 @@
         private string CleanAttributeValue(string attributeValue)
         {
             return attributeValue.Replace("\"", string.Empty)
-                                 .Replace("\n", " ")
-                                 .Replace("\r", " ")
-                                 .Replace("\t", " ")
+                                 .Replace('\n', ' ')
+                                 .Replace('\r', ' ')
+                                 .Replace('\t', ' ')
                                  .Replace("  ", " ");
         }
 
@@ -220,7 +220,7 @@
         /// </returns>
         private List<SequenceAttribute> CreateComplementJoinPartialAttributes(bool complement, bool complementJoin, Subsequence subsequence)
         {
-            var result = new List<SequenceAttribute>();
+            var result = new List<SequenceAttribute>(3);
             if (complement)
             {
                 result.Add(CreateSequenceAttribute(Attribute.Complement, subsequence.Id));

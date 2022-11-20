@@ -269,6 +269,25 @@
         /// Frequency of the occurrence of a feature.
         /// </summary>
         [Display(Name = "frequency")]
-        Frequency = 44
+        Frequency = 44,
+
+        /// <summary>
+        /// Undocumented.
+        /// </summary>
+        [Display(Name = "GO_function")]
+        GOFunction = 45,
+
+        /// <summary>
+        /// Undocumented.
+        /// </summary>
+        [Display(Name = "GO_component")]
+        GOComponent = 46,
+
+        /// <summary>
+        /// Undocumented.
+        /// </summary>
+        [Display(Name = "GO_process")]
+        GOProcess = 47
+
     }
 }
