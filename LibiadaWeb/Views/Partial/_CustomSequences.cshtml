@@ -49,7 +49,7 @@
         @Html.ValidationMessage("file", "", new { @class = "text-danger" })
     </div>
 </div>
-<div class="form-group" ng-hide="localFile">
+<div ng-hide="localFile">
     <div ng-repeat="customSequence in customSequences">
         <div class="form-group">
             <label class="control-label col-md-2" for="customSequence">Sequence:</label>
@@ -71,6 +71,12 @@
             <button type="button" class="btn btn-success" ng-init="addSequence()" ng-click="addSequence()">
                 Add sequence
             </button>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-md-2" for="delimiter">Elements delimiter:</label>
+        <div class="col-md-10">
+            <input type="text" class="form-control" name="delimiter" id="delimiter" maxlength="1" placeholder="Enter delimiter">
         </div>
     </div>
 </div>

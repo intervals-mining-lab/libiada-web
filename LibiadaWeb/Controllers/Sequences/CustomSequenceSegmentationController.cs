@@ -3,8 +3,8 @@
 namespace LibiadaWeb.Controllers.Sequences
 {
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
-    using System.Web;
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
 
@@ -51,7 +51,6 @@ namespace LibiadaWeb.Controllers.Sequences
         [ValidateAntiForgeryToken]
         public ActionResult Index(
             string[] customSequences,
-            HttpPostedFileBase[] files,
             bool localFile,
             string leftBorder,
             string rightBorder,
@@ -70,7 +69,7 @@ namespace LibiadaWeb.Controllers.Sequences
 
                 var sequencesNames = new string[sequencesCount];
                 var sequences = new string[sequencesCount];
-
+                var results = new object[sequencesCount];
 
                 for (int i = 0; i < sequencesCount; i++)
                 {
@@ -97,10 +96,10 @@ namespace LibiadaWeb.Controllers.Sequences
                         Balance = balance,
                         Chain = sequences[i],
                         ChainName = sequencesNames[i],
-                        LeftBound = double.Parse(leftBorder),
-                        RightBound = double.Parse(rightBorder),
-                        Precision = double.Parse(precision),
-                        Step = double.Parse(step),
+                        LeftBound = double.Parse(leftBorder, CultureInfo.InvariantCulture),
+                        RightBound = double.Parse(rightBorder, CultureInfo.InvariantCulture),
+                        Precision = double.Parse(precision, CultureInfo.InvariantCulture),
+                        Step = double.Parse(step, CultureInfo.InvariantCulture),
                         StopCriterion = segmentationCriterion,
                         ThresholdMethod = threshold,
                         WindowDecrement = wordLengthDecrement,
@@ -110,12 +109,13 @@ namespace LibiadaWeb.Controllers.Sequences
 
                     var segmenter = new Algorithm(inputData);
 
-                    segmenter.Run();
+                    segmenter.Slot();
+                    results[i] = segmenter.Upload();
                 }
 
                 var result = new Dictionary<string, object>
                 {
-
+                    { "result", results }
                 };
 
                 return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };

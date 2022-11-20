@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -104,7 +105,7 @@
                 AverageRemoteness averageRemotenessCalc = new AverageRemoteness();
                 double averageRemoteness = averageRemotenessCalc.Calculate(sequence, Link.Start);
                 Alphabet alphabet = sequence.Alphabet;
-                var doubleAccuracy = double.Parse(accuracy);
+                var doubleAccuracy = double.Parse(accuracy, CultureInfo.InvariantCulture);
 
                 List<SequencePredictionData> sequencePredictionResult;
                 Chain chain;

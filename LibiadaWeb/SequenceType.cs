@@ -107,7 +107,7 @@
         MitochondrialPlasmid = 12,
 
         /// <summary>
-        /// Complete poem text.
+        /// Complete image.
         /// </summary>
         [Display(Name = "Complete image")]
         [Description("Complete image")]

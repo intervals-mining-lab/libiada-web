@@ -91,7 +91,13 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(short[] characteristicLinkIds, string[] customSequences, bool localFile, string fileType, bool? toLower, bool? removePunctuation, char delimiter)
+        public ActionResult Index(short[] characteristicLinkIds,
+                                  string[] customSequences,
+                                  bool localFile,
+                                  string fileType,
+                                  bool? toLower,
+                                  bool? removePunctuation,
+                                  char? delimiter)
         {
             return CreateTask(() =>
                 {
@@ -177,7 +183,7 @@
                     {
                         for (int i = 0; i < sequencesCount; i++)
                         {
-                            sequences[i] = new Chain(customSequences[i].Split(delimiter).Select(el => (IBaseObject)new ValueString(el)).ToList());
+                            sequences[i] = delimiter != null ? new Chain(customSequences[i].Split((char)delimiter).Select(el => (IBaseObject)new ValueString(el)).ToList()) : new Chain(customSequences[i]);
                             sequencesNames[i] = $"Custom sequence {i + 1}. Length: {customSequences[i].Length}";
                         }
                     }
