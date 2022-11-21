@@ -15,7 +15,7 @@
         /// <summary>
         /// The attributes count.
         /// </summary>
-        private const int AttributesCount = 44;
+        private const int AttributesCount = 47;
 
         /// <summary>
         /// Array of all attributes.
@@ -93,6 +93,9 @@
         [TestCase((Attribute)42, "allele")]
         [TestCase((Attribute)43, "trans_splicing")]
         [TestCase((Attribute)44, "frequency")]
+        [TestCase((Attribute)45, "GO_function")]
+        [TestCase((Attribute)46, "GO_component")]
+        [TestCase((Attribute)47, "GO_process")]
         public void AttributesDisplayValuesTest(Attribute attribute, string name) => Assert.AreEqual(name, attribute.GetDisplayValue());
 
         /// <summary>

@@ -262,6 +262,7 @@
           <Property Name="source" Type="bytea" />
           <Property Name="collection_country" Type="text" />
           <Property Name="collection_date" Type="date" />
+          <Property Name="collection_location" Type="text" />
         </EntityType>
         <EntityType Name="measure">
           <Key>
@@ -1412,6 +1413,7 @@
           <NavigationProperty Name="SequenceGroup" Relationship="Self.sequence_group_matter" FromRole="Matter" ToRole="SequenceGroup" />
           <NavigationProperty Name="Multisequence" Relationship="Self.fk_matter_multisequence" FromRole="Matter" ToRole="Multisequence" />
           <NavigationProperty Name="ImageSequence" Relationship="Self.fk_image_sequence_matter" FromRole="Matter" ToRole="ImageSequence" />
+          <Property Name="collection_location" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
 
         <EntityType Name="SequenceAttribute">
@@ -2547,6 +2549,7 @@
           <EntitySetMapping Name="Matter">
             <EntityTypeMapping TypeName="LibiadaWebModel.Matter">
               <MappingFragment StoreEntitySet="matter">
+                <ScalarProperty Name="collection_location" ColumnName="collection_location" />
                 <ScalarProperty Name="CollectionDate" ColumnName="collection_date" />
                 <ScalarProperty Name="CollectionCountry" ColumnName="collection_country" />
                 <ScalarProperty Name="Source" ColumnName="source" />

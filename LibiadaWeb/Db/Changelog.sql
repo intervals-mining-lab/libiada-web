@@ -3104,9 +3104,15 @@ ALTER TABLE IF EXISTS task DROP COLUMN IF EXISTS result;
 ALTER TABLE IF EXISTS task DROP COLUMN IF EXISTS additional_result_data;
 
 -- 19.11.2022
+-- Recreate matter-multisequence unique constraint as deferred.
 
 ALTER TABLE IF EXISTS matter DROP CONSTRAINT IF EXISTS uk_matter_multisequence;
 
 ALTER TABLE IF EXISTS matter ADD CONSTRAINT uk_matter_multisequence UNIQUE (multisequence_id, multisequence_number) DEFERRABLE INITIALLY DEFERRED;
+
+-- 21.11.2022
+-- Add collection coordinates column for GenBank sequences.
+
+ALTER TABLE IF EXISTS matter ADD COLUMN collection_location text;
 
 COMMIT;
