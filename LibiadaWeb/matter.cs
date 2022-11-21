@@ -38,7 +38,7 @@ namespace LibiadaWeb
         public byte[] Source { get; set; }
         public string CollectionCountry { get; set; }
         public Nullable<System.DateTime> CollectionDate { get; set; }
-        public string collection_location { get; set; }
+        public string CollectionLocation { get; set; }
     
         public virtual ICollection<CommonSequence> Sequence { get; set; }
         public virtual ICollection<DnaSequence> DnaSequence { get; set; }

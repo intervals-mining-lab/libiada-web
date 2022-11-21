@@ -1405,6 +1405,7 @@
           <Property Name="Source" Type="Binary" MaxLength="2147483647" FixedLength="false" />
           <Property Name="CollectionCountry" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CollectionDate" Type="DateTime" Precision="0" />
+	      <Property Name="CollectionLocation" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Sequence" Relationship="Self.fk_chain_matter" FromRole="Matter" ToRole="CommonSequence" />
           <NavigationProperty Name="DnaSequence" Relationship="Self.fk_dna_chain_matter" FromRole="Matter" ToRole="DnaSequence" />
           <NavigationProperty Name="LiteratureSequence" Relationship="Self.fk_literature_chain_matter" FromRole="Matter" ToRole="LiteratureSequence" />
@@ -1413,7 +1414,6 @@
           <NavigationProperty Name="SequenceGroup" Relationship="Self.sequence_group_matter" FromRole="Matter" ToRole="SequenceGroup" />
           <NavigationProperty Name="Multisequence" Relationship="Self.fk_matter_multisequence" FromRole="Matter" ToRole="Multisequence" />
           <NavigationProperty Name="ImageSequence" Relationship="Self.fk_image_sequence_matter" FromRole="Matter" ToRole="ImageSequence" />
-          <Property Name="collection_location" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
 
         <EntityType Name="SequenceAttribute">
@@ -2549,7 +2549,7 @@
           <EntitySetMapping Name="Matter">
             <EntityTypeMapping TypeName="LibiadaWebModel.Matter">
               <MappingFragment StoreEntitySet="matter">
-                <ScalarProperty Name="collection_location" ColumnName="collection_location" />
+                <ScalarProperty Name="CollectionLocation" ColumnName="collection_location" />
                 <ScalarProperty Name="CollectionDate" ColumnName="collection_date" />
                 <ScalarProperty Name="CollectionCountry" ColumnName="collection_country" />
                 <ScalarProperty Name="Source" ColumnName="source" />
