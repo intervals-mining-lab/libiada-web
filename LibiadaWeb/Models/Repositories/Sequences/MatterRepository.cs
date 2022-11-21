@@ -145,8 +145,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         {
             var sources = metadata.Features.All.Where(f => f.Key == "source").ToArray();
             string collectionCountry = SequenceAttributeRepository.GetAttributeSingleValue(sources, "country");
-            
-            string collectionDateValue = SequenceAttributeRepository.GetAttributeSingleValue(sources, "collection_date").Split('/')[0];
+            string collectionCoordinates = SequenceAttributeRepository.GetAttributeSingleValue(sources, "lat_lon");
+
+            string collectionDateValue = SequenceAttributeRepository.GetAttributeSingleValue(sources, "collection_date")?.Split('/')[0];
             bool hasCollectionDate = DateTime.TryParseExact(collectionDateValue, GenBankDateFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime collectionDate);
             if(!string.IsNullOrEmpty(collectionDateValue) && !hasCollectionDate)
             {
@@ -158,6 +159,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 Name = $"{ExtractMatterName(metadata)} | {metadata.Version.CompoundAccession}",
                 Nature = Nature.Genetic,
                 CollectionCountry = collectionCountry,
+                CollectionLocation = collectionCoordinates,
                 CollectionDate = hasCollectionDate ? (DateTime?)collectionDate : null
             };
 
