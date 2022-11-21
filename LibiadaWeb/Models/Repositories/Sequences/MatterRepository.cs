@@ -3,17 +3,24 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using System;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
+    using System.Globalization;
     using System.Linq;
 
     using Bio.IO.GenBank;
 
     using LibiadaCore.Extensions;
+    using LibiadaWeb.Models.Repositories.Catalogs;
 
     /// <summary>
     /// The matter repository.
     /// </summary>
     public class MatterRepository : IMatterRepository
     {
+        /// <summary>
+        /// GenBank date formats.
+        /// </summary>
+        private readonly string[] GenBankDateFormats = new[] { "dd-MMM-yyyy", "MMM-yyyy", "yyyy", "yyyy-MM-ddTHH:mmZ", "yyyy-MM-ddTHHZ", "yyyy-MM-dd", "yyyy-MM" };
+
         /// <summary>
         /// The db.
         /// </summary>
@@ -136,11 +143,23 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public Matter CreateMatterFromGenBankMetadata(GenBankMetadata metadata)
         {
+            var sources = metadata.Features.All.Where(f => f.Key == "source").ToArray();
+            string collectionCountry = SequenceAttributeRepository.GetAttributeSingleValue(sources, "country");
+            
+            string collectionDateValue = SequenceAttributeRepository.GetAttributeSingleValue(sources, "collection_date").Split('/')[0];
+            bool hasCollectionDate = DateTime.TryParseExact(collectionDateValue, GenBankDateFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime collectionDate);
+            if(!string.IsNullOrEmpty(collectionDateValue) && !hasCollectionDate)
+            {
+                throw new Exception($"Collection date was invalid. Value: {collectionDateValue}.");
+            }
+            
             var matter = new Matter
-                             {
-                                 Name = $"{ExtractMatterName(metadata)} | {metadata.Version.CompoundAccession}",
-                                 Nature = Nature.Genetic
-                             };
+            {
+                Name = $"{ExtractMatterName(metadata)} | {metadata.Version.CompoundAccession}",
+                Nature = Nature.Genetic,
+                CollectionCountry = collectionCountry,
+                CollectionDate = hasCollectionDate ? (DateTime?)collectionDate : null
+            };
 
             FillGroupAndSequenceType(matter);
 
