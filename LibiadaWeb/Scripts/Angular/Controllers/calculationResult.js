@@ -218,6 +218,7 @@
                 .style("fill", d => color(d.id))
                 .style("stroke", d => color(d.id))
                 .on("click", (event, d) => $scope.showTooltip(event, d, tooltip, svg));
+
             if ($scope.legendSettings.show) {
                 // draw legend
                 var legend = svg.selectAll(".legend")
@@ -266,7 +267,7 @@
             const font = { name: 'Courier New' };
             const border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } }
             var columns = [
-                { header: '№', key: 'id', width: 10, style: { font: font, border: border }  },
+                { header: '№', key: 'id', width: 10, style: { font: font, border: border } },
                 { header: 'Sequence name', key: 'name', width: 32, style: { font: font, border: border } }
             ];
 
