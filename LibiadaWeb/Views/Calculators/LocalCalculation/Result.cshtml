@@ -10,7 +10,7 @@
 
     <div ng-controller="LocalCalculationResultCtrl">
         <div ng-disabled="loading">
-            <input type="button" class="btn btn-default" ng-click="changeCharacteristicsTableVisibility()" value="Show characteristics table" />
+            <input type="button" class="btn btn-secondary" ng-click="changeCharacteristicsTableVisibility()" value="Show characteristics table" />
             <br />
             <div ng-repeat="chainsCharacteristics in ::characteristics">
                 <h3>{{::$index+1}}. {{::chainsCharacteristics.MatterName}}</h3>
@@ -34,37 +34,37 @@
                 </table>
             </div>
             <br />
-            <div class="form-group">
-                <label class="control-label col-md-2" for="aligner">Aligner:</label>
+            <div class="row mb-1">
+                <label class="col-form-label col-md-2" for="aligner">Aligner:</label>
                 <div class="col-md-10">
-                    <select class="form-control"
+                    <select class="form-select"
                             title="Aligner"
                             ng-model="aligner"
                             ng-options="c.Text for c in ::aligners"
                             id="aligner"></select>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="control-label col-md-2" for="distancesCalculator">Distances calculator:</label>
+            <div class="row mb-1">
+                <label class="col-form-label col-md-2" for="distancesCalculator">Distances calculator:</label>
                 <div class="col-md-10">
-                    <select class="form-control"
+                    <select class="form-select"
                             title="Distances calculator"
                             ng-model="distanceCalculator"
                             ng-options="c.Text for c in ::distanceCalculators"
                             id="distancesCalculator"></select>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="control-label col-md-2" for="aggregator">Aggregator:</label>
+            <div class="row mb-1">
+                <label class="col-form-label col-md-2" for="aggregator">Aggregator:</label>
                 <div class="col-md-10">
-                    <select class="form-control"
+                    <select class="form-select"
                             title="Aggregator"
                             ng-model="aggregator"
                             ng-options="c.Text for c in ::aggregators"
                             id="aggregator"></select>
                 </div>
             </div>
-            <input type="button" class="btn btn-default" ng-click="calculateLocalCharacteristicsSimilarityMatrix()" value="Calculate similarity matrix" />
+            <input type="button" class="btn btn-secondary" ng-click="calculateLocalCharacteristicsSimilarityMatrix()" value="Calculate similarity matrix" />
             <br />
             <table class="table table-bordered" ng-show="comparisonMatrix">
                 <caption>Aligner: {{usedAligner}}, Distances calculator: {{usedDistanceCalculator}}, Aggregator: {{usedAggregator}}</caption>
@@ -82,28 +82,26 @@
                 </tbody>
             </table>
             <br />
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="checkbox" name="lineChart" id="lineChart" ng-model="lineChart" value="false" />
-                    <label for="lineChart">
-                        Draw linechart
-                    </label>
-                </div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" name="lineChart" id="lineChart" ng-model="lineChart" value="false" />
+                <label class="form-check-label" for="lineChart">
+                    Draw linechart
+                </label>
             </div>
-            <div class="form-group">
-                <label class="control-label col-md-2" for="firstCharacteristic">First characteristic:</label>
+            <div class="row mb-1">
+                <label class="col-form-label col-md-2" for="firstCharacteristic">First characteristic:</label>
                 <div class="col-md-10">
-                    <select class="form-control"
+                    <select class="form-select"
                             title="First characteristic"
                             ng-model="firstCharacteristic"
                             ng-options="c.Text for c in ::characteristicsList"
                             id="firstCharacteristic"></select>
                 </div>
             </div>
-            <div class="form-group" ng-hide="lineChart">
-                <label class="control-label col-md-2" for="secondCharacteristic">Second characteristic:</label>
+            <div class="row mb-1" ng-hide="lineChart">
+                <label class="col-form-label col-md-2" for="secondCharacteristic">Second characteristic:</label>
                 <div class="col-md-10">
-                    <select class="form-control"
+                    <select class="form-select"
                             title="Second characteristic"
                             ng-model="secondCharacteristic"
                             ng-options="c.Text for c in ::characteristicsList"
@@ -111,21 +109,21 @@
                 </div>
             </div>
             <br />
-            <div class="form-group">
-                <label class="control-label col-md-2" for="height">Height:</label>
+            <div class="row mb-1">
+                <label class="col-form-label col-md-2" for="height">Height:</label>
                 <div class="col-md-10">
                     <input class="form-control" name="height" id="height" type="number" min="{{::500 + legendHeight}}" step="20" ng-model="height" />
                 </div>
             </div>
-            <div class="form-group">
-                <label class="control-label col-md-2" for="width">Width:</label>
+            <div class="row mb-1">
+                <label class="col-form-label col-md-2" for="width">Width:</label>
                 <div class="col-md-10">
                     <input class="form-control" name="width" id="width" type="number" min="400" step="20" ng-model="width" />
                 </div>
             </div>
             <br />
-            <input type="button" class="btn btn-default" ng-click="draw()" value="Draw" />
-            <div id="chart">
+            <input type="button" class="btn btn-secondary" ng-click="draw()" value="Draw" />
+            <div id="chart" class="font-monospace">
             </div>
         </div>
     </div>

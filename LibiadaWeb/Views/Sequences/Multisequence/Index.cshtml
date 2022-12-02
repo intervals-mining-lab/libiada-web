@@ -10,11 +10,9 @@
     @using (Html.BeginForm("Group", "Multisequence"))
     {
         @Html.AntiForgeryToken()
-        <div class="form-horizontal">
-            <div class="form-group">
-                <div class="col-md-10">
-                    <input type="submit" value="Group matters into multisequences" class="btn btn-default" />
-                </div>
+        <div class="row mb-1">
+            <div class="col-md-10">
+                <input type="submit" value="Group matters into multisequences" class="btn btn-secondary" />
             </div>
         </div>
     }

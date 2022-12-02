@@ -25,7 +25,7 @@
             // Define 'div' for tooltips
             var div = d3.select("body")
                 .append("div")  // declare the tooltip div
-                .attr("class", "tooltip")              // apply the 'tooltip' class
+                .attr("class", "chart-tooltip position-absolute text-bg-light font-monospace small lh-sm p-1 rounded")
                 .style("opacity", 0);                  // set the opacity to nil
 
             // Adds the svg canvas

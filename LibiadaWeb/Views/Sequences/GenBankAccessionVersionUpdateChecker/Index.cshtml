@@ -10,20 +10,22 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal" ng-controller="BatchGeneticImportFromGenBankSearchFileCtrl">
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="checkbox" name="reinmportSequences" id="reinmportSequences" value="true" />
-                <input type="hidden" name="reinmportSequences" value="false" />
-                <label for="reinmportSequences">
-                    Reimport updated sequences
-                </label>
-            </div>
+    <div ng-controller="BatchGeneticImportFromGenBankSearchFileCtrl">
+        <div class="form-check">
+            <input type="checkbox"
+                   class="form-check-input"
+                   name="reinmportSequences"
+                   id="reinmportSequences"
+                   value="true" />
+            <input type="hidden" name="reinmportSequences" value="false" />
+            <label class="form-check-label" for="reinmportSequences">
+                Reimport updated sequences
+            </label>
         </div>
         <hr />
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Check" class="btn btn-default" />
+        <div class="row mb-1">
+            <div class="offset-md-2 col-md-10">
+                <input type="submit" value="Check" class="btn btn-secondary" />
             </div>
         </div>
     </div>

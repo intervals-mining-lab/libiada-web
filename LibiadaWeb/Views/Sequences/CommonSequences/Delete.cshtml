@@ -11,7 +11,7 @@
 <div>
     <h4>Sequence</h4>
     <hr />
-    <dl class="dl-horizontal">
+    <dl>
         <dt>
             @Html.DisplayNameFor(model => model.Created)
         </dt>
@@ -92,7 +92,7 @@
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
+            <input type="submit" value="Delete" class="btn btn-secondary" /> |
             @Html.ActionLink("Back to List", "Index")
         </div>
     }

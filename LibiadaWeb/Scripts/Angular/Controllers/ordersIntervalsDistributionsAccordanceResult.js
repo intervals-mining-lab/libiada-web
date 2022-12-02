@@ -91,12 +91,7 @@
 
             tooltip.html(tooltipHtml.join("</br></br>"));
 
-            tooltip.style("background", "#eee")
-                .style("color", "#000")
-                .style("border-radius", "5px")
-                .style("font-family", "monospace")
-                .style("padding", "5px")
-                .style("left", (event.pageX + 10) + "px")
+            tooltip.style("left", (event.pageX + 10) + "px")
                 .style("top", (event.pageY - 8) + "px");
 
             tooltip.hideTooltip = false;
@@ -130,7 +125,7 @@
             $scope.fillPoints();
             $scope.fillAccordanceLevels();
             // removing previous chart and tooltip if any
-            d3.select(".tooltip").remove();
+            d3.select(".chart-tooltip").remove();
             d3.select(".chart-svg").remove();
 
             // chart size and margin settings
@@ -200,7 +195,7 @@
 
             // add the tooltip area to the webpage
             var tooltip = d3.select("#chart").append("div")
-                .attr("class", "tooltip")
+                .attr("class", "chart-tooltip position-absolute text-bg-light font-monospace small lh-sm p-1 rounded")
                 .style("opacity", 0);
 
             // preventing tooltip hiding if dot clicked

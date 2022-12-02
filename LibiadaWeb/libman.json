@@ -24,7 +24,7 @@
       "destination": "Libraries/midi.js/"
     },
     {
-      "library": "plotly.js@2.14.0",
+      "library": "plotly.js@2.16.3",
       "destination": "Libraries/plotly.js/"
     },
     {
@@ -40,8 +40,12 @@
       "destination": "Libraries/signalr.js/"
     },
     {
-      "library": "twitter-bootstrap@3.3.7",
+      "library": "twitter-bootstrap@5.2.3",
       "destination": "Libraries/twitter-bootstrap/"
+    },
+    {
+      "library": "bootstrap-icons@1.10.2",
+      "destination": "Libraries/bootstrap-icons/"
     },
     {
       "library": "exceljs@4.3.0",

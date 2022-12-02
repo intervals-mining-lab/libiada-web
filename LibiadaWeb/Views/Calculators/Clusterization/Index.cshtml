@@ -11,7 +11,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    <div class="form-horizontal" ng-controller="CalculationCtrl">
+    <div ng-controller="CalculationCtrl">
         <h4>Sequences and parameters</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -33,8 +33,8 @@
                          trajectories="::trajectories">
         </characteristics>
 
-        <div class="form-group">
-            <label class="control-label col-md-2" for="clustersCount">
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="clustersCount">
                 Clusters count {{ClusterizationType.Text == 'FRiS-Cluster' ? '(Minimum clusters)' : ''}}:
             </label>
             <div class="col-md-10">
@@ -42,10 +42,10 @@
                 @Html.ValidationMessage("clustersCount", "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="form-group">
-            <label class="control-label col-md-2" for="ClusterizationType">Clusterization type:</label>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="ClusterizationType">Clusterization type:</label>
             <div class="col-md-10">
-                <select class="form-control" 
+                <select class="form-select" 
                         id="ClusterizationType" 
                         ng-model="ClusterizationType" 
                         ng-options="n.Text for n in ::ClusterizatorsTypes"></select>
@@ -54,22 +54,22 @@
         </div>
         <div ng-switch="ClusterizationType.Text">
             <div ng-switch-when="KRAB clusterization">
-                <div class="form-group">
-                    <label class="control-label col-md-2" for="equipotencyWeight">Equipotency weight:</label>
+                <div class="row mb-1">
+                    <label class="col-form-label col-md-2" for="equipotencyWeight">Equipotency weight:</label>
                     <div class="col-md-10">
                         <input class="form-control" name="equipotencyWeight" type="number" value="4" min="0" id="equipotencyWeight" />
                         @Html.ValidationMessage("equipotencyWeight", "", new { @class = "text-danger" })
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="control-label col-md-2" for="normalizedDistanceWeight">Normalized distance weight:</label>
+                <div class="row mb-1">
+                    <label class="col-form-label col-md-2" for="normalizedDistanceWeight">Normalized distance weight:</label>
                     <div class="col-md-10">
                         <input class="form-control" name="normalizedDistanceWeight" type="number" value="2" min="0" id="normalizedDistanceWeight" />
                         @Html.ValidationMessage("normalizedDistanceWeight", "", new { @class = "text-danger" })
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="control-label col-md-2" for="distanceWeight">Distance weight:</label>
+                <div class="row mb-1">
+                    <label class="col-form-label col-md-2" for="distanceWeight">Distance weight:</label>
                     <div class="col-md-10">
                         <input class="form-control" name="distanceWeight" type="number" value="1" min="0" id="distanceWeight" />
                         @Html.ValidationMessage("distanceWeight", "", new { @class = "text-danger" })
@@ -77,8 +77,8 @@
                 </div>
             </div>
             <div ng-switch-when="Mean shift">
-                <div class="form-group">
-                    <label class="control-label col-md-2" for="bandwidth">Bandwidth:</label>
+                <div class="row mb-1">
+                    <label class="col-form-label col-md-2" for="bandwidth">Bandwidth:</label>
                     <div class="col-md-10">
                         <input class="form-control" name="bandwidth" type="number" value="4" min="0" id="bandwidth" />
                         @Html.ValidationMessage("bandwidth", "", new { @class = "text-danger" })
@@ -86,8 +86,8 @@
                 </div>
             </div>
             <div ng-switch-when="FRiS-Cluster">
-                <div class="form-group">
-                    <label class="control-label col-md-2" for="maximumClusters">Maximum Clusters:</label>
+                <div class="row mb-1">
+                    <label class="col-form-label col-md-2" for="maximumClusters">Maximum Clusters:</label>
                     <div class="col-md-10">
                         <input class="form-control" name="maximumClusters" type="number" value="2" min="2" id="maximumClusters" />
                         @Html.ValidationMessage("Maximum Clusters", "", new { @class = "text-danger" })

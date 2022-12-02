@@ -1,49 +1,53 @@
-﻿<div class="form-group">
-    <div class="col-md-offset-2 col-md-10">
-        <input type="checkbox" name="localFile" id="localFile" ng-model="localFile" value="true" />
-        <input type="hidden" name="localFile" value="false" />
-        <label for="localFile">
-            Load sequence from local file(s)
-        </label>
-    </div>
+﻿<div class="form-check">
+    <input type="checkbox"
+           class="form-check-input"
+           name="localFile"
+           id="localFile"
+           ng-model="localFile"
+           value="true" />
+    <input type="hidden" name="localFile" value="false" />
+    <label class="form-check-label" for="localFile">
+        Load sequence from local file(s)
+    </label>
 </div>
-<div class="form-group" ng-show="localFile">
+<div class="row mb-1" ng-show="localFile">
     <fieldset>
         <legend>File type:</legend>
-        <div class="col-md-offset-2 col-md-10">
+        <div class="form-check">
             <input type="radio"
+                   class="form-check-input"
                    name="fileType"
                    id="fileTypeGenetic"
                    ng-model="fileType"
                    ng-init="fileType = 'genetic'"
                    value="genetic"
                    checked />
-            <label for="fileTypeGenetic">
+            <label class="form-check-label" for="fileTypeGenetic">
                 FASTA file (contains genetic sequence)
             </label>
         </div>
-        <div class="col-md-offset-2 col-md-10">
-            <input type="radio" name="fileType" id="fileTypeText" ng-model="fileType" value="text" />
-            <label for="fileTypeText">
+        <div class="form-check">
+            <input type="radio" class="form-check-input" name="fileType" id="fileTypeText" ng-model="fileType" value="text" />
+            <label class="form-check-label" for="fileTypeText">
                 Text file (read by letters)
             </label>
         </div>
-        <div class="col-md-offset-2 col-md-10">
-            <input type="radio" name="fileType" id="fileTypeImage" ng-model="fileType" value="image" />
-            <label for="fileTypeImage">
+        <div class="form-check">
+            <input type="radio" class="form-check-input" name="fileType" id="fileTypeImage" ng-model="fileType" value="image" />
+            <label class="form-check-label" for="fileTypeImage">
                 Image file
             </label>
         </div>
-        <div class="col-md-offset-2 col-md-10">
-            <input type="radio" name="fileType" id="fileTypeWavFile" ng-model="fileType" value="wavFile" />
-            <label for="fileTypeWavFile">
+        <div class="form-check">
+            <input type="radio" class="form-check-inline" name="fileType" id="fileTypeWavFile" ng-model="fileType" value="wavFile" />
+            <label class="form-check-label" for="fileTypeWavFile">
                 WAV file
             </label>
         </div>
     </fieldset>
 </div>
-<div class="form-group" ng-show="localFile">
-    <label class="control-label col-md-2" for="file">Sequence file(s):</label>
+<div class="row mb-1" ng-show="localFile">
+    <label class="col-form-label col-md-2" for="file">Sequence file(s):</label>
     <div class="col-md-10">
         <input type="file" name="file" id="file" multiple />
         @Html.ValidationMessage("file", "", new { @class = "text-danger" })
@@ -51,14 +55,14 @@
 </div>
 <div ng-hide="localFile">
     <div ng-repeat="customSequence in customSequences">
-        <div class="form-group">
-            <label class="control-label col-md-2" for="customSequence">Sequence:</label>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="customSequence">Sequence:</label>
             <div class="col-md-10">
                 <textarea class="form-control" rows="1" id="customSequence" ng-model="customSequence.sequence" name="customSequences"></textarea>
             </div>
         </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
+        <div class="row mb-1">
+            <div class="offset-md-2 col-md-10">
                 <button type="button" class="btn btn-danger" ng-click="deleteSequence(customSequence)" ng-disabled="customSequences.length <= 1">
                     Delete sequence
                 </button>
@@ -66,15 +70,15 @@
         </div>
         <br />
     </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
+    <div class="row mb-1">
+        <div class="offset-md-2 col-md-10">
             <button type="button" class="btn btn-success" ng-init="addSequence()" ng-click="addSequence()">
                 Add sequence
             </button>
         </div>
     </div>
-    <div class="form-group">
-        <label class="control-label col-md-2" for="delimiter">Elements delimiter:</label>
+    <div class="row mb-1">
+        <label class="col-form-label col-md-2" for="delimiter">Elements delimiter:</label>
         <div class="col-md-10">
             <input type="text" class="form-control" name="delimiter" id="delimiter" maxlength="1" placeholder="Enter delimiter">
         </div>
@@ -82,24 +86,30 @@
 </div>
 <div ng-if="fileType=='text'">
     <br />
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="checkbox" name="toLower" id="toLower" ng-model="toLower" value="true" />
-            <input type="hidden" name="toLower" value="false" />
-            <label for="toLower">
-                Convert to lower case
-            </label>
-        </div>
+    <div class="form-check">
+        <input type="checkbox"
+               class="form-check-input"
+               name="toLower"
+               id="toLower"
+               ng-model="toLower"
+               value="true" />
+        <input type="hidden" name="toLower" value="false" />
+        <label class="formv-label" for="toLower">
+            Convert to lower case
+        </label>
     </div>
     <br />
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="checkbox" name="removePunctuation" id="removePunctuation" ng-model="removePunctuation" value="true" />
-            <input type="hidden" name="removePunctuation" value="false" />
-            <label for="removePunctuation">
-                Remove punctuation
-            </label>
-        </div>
+    <div class="form-check">
+        <input type="checkbox"
+               class="form-check-input"
+               name="removePunctuation"
+               id="removePunctuation"
+               ng-model="removePunctuation"
+               value="true" />
+        <input type="hidden" name="removePunctuation" value="false" />
+        <label class="form-check-label" for="removePunctuation">
+            Remove punctuation
+        </label>
     </div>
     <hr />
     <br />

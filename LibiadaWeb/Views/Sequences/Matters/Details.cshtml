@@ -11,7 +11,7 @@
 <div>
     <h4>Matter</h4>
     <hr />
-    <dl class="dl-horizontal">
+    <dl>
         <dt>@Html.DisplayNameFor(model => model.Name)</dt>
         <dd>@Html.DisplayFor(model => model.Name)</dd>
 
@@ -33,11 +33,14 @@
         <dt>@Html.DisplayNameFor(model => model.SequenceType)</dt>
         <dd>@Model.SequenceType.GetDisplayValue()</dd>
 
-        <dt>@Html.DisplayNameFor(model => model.Multisequence)</dt>
-        <dd>@Html.DisplayFor(model => model.Multisequence.Name)</dd>
+        @if (Model.Multisequence != null)
+        {
+            <dt>@Html.DisplayNameFor(model => model.Multisequence)</dt>
+            <dd>@Html.DisplayFor(model => model.Multisequence.Name)</dd>
 
-        <dt>@Html.DisplayNameFor(model => model.MultisequenceNumber)</dt>
-        <dd>@Html.DisplayFor(model => model.MultisequenceNumber)</dd>
+            <dt>@Html.DisplayNameFor(model => model.MultisequenceNumber)</dt>
+            <dd>@Html.DisplayFor(model => model.MultisequenceNumber)</dd>
+        }
 
         <dt>@Html.DisplayNameFor(model => model.CollectionCountry)</dt>
         <dd>@Html.DisplayFor(model => model.CollectionCountry)</dd>

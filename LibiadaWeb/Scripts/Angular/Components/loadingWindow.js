@@ -4,17 +4,17 @@
     function LoadingWindowController() {
         var ctrl = this;
 
-        ctrl.loadingModalWindow = $("#loadingDialog");
+        ctrl.loadingWindow = new bootstrap.Modal("#loadingDialog");
 
         ctrl.$onInit = () => { };
 
-        ctrl.$onChanges = changes => {
+        ctrl.$onChanges = async changes => {
             if (changes.loading) {
                 if (ctrl.loading) {
-                    ctrl.loadingModalWindow.modal("show");
+                    ctrl.loadingWindow.show();
                 }
                 else {
-                    ctrl.loadingModalWindow.modal("hide");
+                    ctrl.loadingWindow.hide();
                 }
             }
         };

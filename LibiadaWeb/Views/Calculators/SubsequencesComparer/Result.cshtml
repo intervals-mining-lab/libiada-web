@@ -10,30 +10,27 @@
     <h2>@ViewBag.Title</h2>
 
     @Html.Partial("_AngularControllerInitializer", "SubsequencesComparerResultController")
-    <div class="form-horizontal" ng-controller="SubsequencesComparerResultCtrl">
+    <div ng-controller="SubsequencesComparerResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <div>
             Sequences characteristic: <b>{{sequenceCharacteristicName}}</b>
         </div>
-
         <div>
             Subsequences characteristic: <b>{{characteristicName}}</b>
         </div>
         <br />
-
-        <div ng-show="filteredSimilarities" class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <label>
-                    <input type="checkbox"
-                           name="displayFiltered"
-                           ng-model="flags.displayFiltered"
-                           value="false" />
-                    Display filtered matrix
-                </label>
-            </div>
+        <div ng-show="filteredSimilarities" class="form-check">
+            <input type="checkbox"
+                   class="form-check-input"
+                   name="displayFiltered"
+                   id="displayFiltered"
+                   ng-model="flags.displayFiltered"
+                   value="false" />
+            <label class="form-check-label" for="displayFiltered">
+                Display filtered matrix
+            </label>
         </div>
-
-        <table class="table table-bordered">
+        <table class="table table-bordered table-sm">
             <tbody>
                 <tr>
                     <td />
@@ -59,27 +56,21 @@
                 </tr>
             </tbody>
         </table>
-
         <hr />
-
         <ul class="list-group">
             <li class="list-group-item" ng-repeat="matterName in mattersNames"> <b> {{$index + 1}} - {{matterName}} </b> </li>
         </ul>
-
         <hr />
-
-        <div class="form-group">
+        <div class="row mb-1">
             <p>Maximum difference = {{::maxPercentageDifference}}%</p>
         </div>
-
-        <div class="form-group" ng-show="similarityValueSelected">
+        <div class="row mb-1" ng-show="similarityValueSelected">
             <p>
                 Number of equal subsequences from first sequence = {{similarityValue.firstAbsolutelyEqualElementsCount}}
                 <br />
                 Number of similar subsequences from first sequence = {{similarityValue.firstNearlyEqualElementsCount}}
                 <br />
                 Number of not equal subsequences from first sequence = {{similarityValue.firstNotEqualElementsCount}}
-
                 <br />
                 Number of equal subsequences from second sequence = {{similarityValue.secondAbsolutelyEqualElementsCount}}
                 <br />
@@ -88,9 +79,7 @@
                 Number of not equal subsequences from second sequence = {{similarityValue.secondNotEqualElementsCount}}
             </p>
         </div>
-
         @Html.Partial("_Filters")
-
         <table class="table table-bordered table-striped" ng-repeat="equalElement in equalElementsToShow" ng-show="elementVisible(equalElement)">
             <tbody>
                 <tr>
@@ -111,7 +100,6 @@
                         <i> Characteristic value = {{characteristics[firstMatterIndex][equalElement.Item1].CharacteristicsValues[0]}} </i>
                         <br />
                         <br />
-
                         Second sequence: <b> {{mattersNames[secondMatterIndex]}} </b>
                         <br />
                         Feature: {{features[characteristics[secondMatterIndex][equalElement.Item2].FeatureId]}}
@@ -129,20 +117,19 @@
                         <i> Absolute difference = {{characteristics[firstMatterIndex][equalElement.Item1].CharacteristicsValues[0] - characteristics[secondMatterIndex][equalElement.Item2].CharacteristicsValues[0] | makePositive}}</i>
                         <br />
                         <i> Percentage difference = {{equalElement.Item3 * 100}}%</i>
-
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
+                        <div class="card">
+                            <div class="card-hader">
                                 <button type="button"
-                                        class="btn btn-default btn-xs"
-                                        data-toggle="collapse"
-                                        data-target="#additionalActions{{$index + 1}}"
+                                        class="btn btn-secondary btn-sm"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#additionalActions{{$index + 1}}"
                                         aria-controls="additionalActions{{$index + 1}}"
                                         aria-expanded="false">
                                     +
                                 </button>
                             </div>
-                            <div class="panel-collapse collapse" id="additionalActions{{$index + 1}}">
-                                <div class="panel-body">
+                            <div class="card-collapse collapse" id="additionalActions{{$index + 1}}">
+                                <div class="card-body">
                                     <characteristic characteristic-types="characteristicTypes"
                                                     characteristics-dictionary="characteristicsDictionary"
                                                     nature="nature"
@@ -152,23 +139,23 @@
                                                     pause-treatments="pauseTreatments"
                                                     trajectories="::trajectories">
                                     </characteristic>
-                                    <div class="form-group">
-                                        <label class="control-label col-md-2" for="windowSize">Window size:</label>
+                                    <div class="row mb-1">
+                                        <label class="col-form-label col-md-2" for="windowSize">Window size:</label>
                                         <div class="col-md-10">
                                             <input class="form-control" ng-model="slidingWindowParams.windowSize" type="number" min="1" id="windowSize" />
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-md-2" for="step">Step size:</label>
+                                    <div class="row mb-1">
+                                        <label class="col-form-label col-md-2" for="step">Step size:</label>
                                         <div class="col-md-10">
                                             <input class="form-control" ng-model="slidingWindowParams.step" type="number" min="1" id="step" />
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <div class="col-md-offset-2 col-md-10">
-                                            <input type="button" 
-                                                   class="btn btn-default" 
-                                                   ng-click="calculateLocalCharacteristics(characteristics[firstMatterIndex][equalElement.Item1].Id, characteristics[secondMatterIndex][equalElement.Item2].Id, $index)" 
+                                    <div class="row mb-1">
+                                        <div class="offset-md-2 col-md-10">
+                                            <input type="button"
+                                                   class="btn btn-secondary"
+                                                   ng-click="calculateLocalCharacteristics(characteristics[firstMatterIndex][equalElement.Item1].Id, characteristics[secondMatterIndex][equalElement.Item2].Id, $index)"
                                                    value="CalculateLocalCharacteristics" />
                                         </div>
                                     </div>

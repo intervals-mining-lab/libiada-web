@@ -10,7 +10,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    <div class="form-horizontal" ng-controller="CalculationCtrl">
+    <div ng-controller="CalculationCtrl">
         <h4>Sequences and parameters</h4>
         <hr />
         @Html.Partial("_NatureSelect")
@@ -30,20 +30,20 @@
                         pause-treatments="::pauseTreatments"
                         trajectories="::trajectories">
         </characteristic>
-        <div class="form-group">
-            <label class="control-label col-md-2" for="step">Step size:</label>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="step">Step size:</label>
             <div class="col-md-10">
                 <input class="form-control" name="step" type="number" value="1" min="1" id="step" />
             </div>
         </div>
-        <div class="form-group">
-            <label class="control-label col-md-2" for="initialLength">Initial sequence length:</label>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="initialLength">Initial sequence length:</label>
             <div class="col-md-10">
                     <input class="form-control" name="initialLength" type="number" value="1000" min="1" id="initialLength" />
             </div>
         </div>
-        <div class="form-group">
-            <label class="control-label col-md-2" for="accuracy">Accuracy:</label>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="accuracy">Accuracy:</label>
             <div class="col-md-10">
                 <input class="form-control" name="accuracy" type="number" value="1" min="1" id="accuracy" />
             </div>

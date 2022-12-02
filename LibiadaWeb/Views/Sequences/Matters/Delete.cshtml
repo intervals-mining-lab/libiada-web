@@ -12,7 +12,7 @@
 <div>
     <h4>Matter</h4>
     <hr />
-    <dl class="dl-horizontal">
+    <dl>
         <dt>@Html.DisplayNameFor(model => model.Name)</dt>
         <dd>@Html.DisplayFor(model => model.Name)</dd>
 
@@ -61,7 +61,7 @@
             }
             else
             {
-                <input type="submit" value="Delete" class="btn btn-default" />
+                <input type="submit" value="Delete" class="btn btn-secondary" />
             }
             <br />
             @Html.ActionLink("Back to List", "Index")

@@ -9,7 +9,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-<div class="form-horizontal" ng-controller="CalculationCtrl">
+<div ng-controller="CalculationCtrl">
     <h4>Sequences and parameters</h4>
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -22,8 +22,8 @@
                    selected-matters="selectedMatters">
     </matters-table>
     <hr />
-    <div class="form-group">
-        <label class="control-label col-md-2" for="wordLength">Max word length:</label>
+    <div class="row mb-1">
+        <label class="col-form-label col-md-2" for="wordLength">Max word length:</label>
         <div class="col-md-10">
             <input class="form-control"
                    name="wordLength"
@@ -36,8 +36,8 @@
         </div>
     </div>
     <br />
-    <div class="form-group">
-        <label class="control-label col-md-2" for="wordLength">Start threshold value:</label>
+    <div class="row mb-1">
+        <label class="col-form-label col-md-2" for="wordLength">Start threshold value:</label>
         <div class="col-md-10">
             <input class="form-control"
                    name="startThreshold"
@@ -51,8 +51,8 @@
         </div>
     </div>
     <br />
-    <div class="form-group">
-        <label class="control-label col-md-2" for="wordLength">Balance ratio:</label>
+    <div class="row mb-1">
+        <label class="col-form-label col-md-2" for="wordLength">Balance ratio:</label>
         <div class="col-md-10">
             <input class="form-control"
                    name="balance"

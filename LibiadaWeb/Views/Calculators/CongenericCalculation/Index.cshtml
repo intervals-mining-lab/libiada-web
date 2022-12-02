@@ -11,7 +11,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    <div class="form-horizontal" ng-controller="CalculationCtrl">
+    <div ng-controller="CalculationCtrl">
         <h4>Sequences and parameters</h4>
         <hr />
         @(Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" }))
@@ -32,23 +32,19 @@
                          pause-treatments="::pauseTreatments"
                          trajectories="::trajectories">
         </characteristics>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="checkbox" name="sort" id="sort" value="true" />
-                <input type="hidden" name="sort" value="false" />
-                <label for="sort">
-                    Sort results in descending order
-                </label>
-            </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" name="sort" id="sort" value="true" />
+            <input type="hidden" name="sort" value="false" />
+            <label class="form-check-label" for="sort">
+                Sort results in descending order
+            </label>
         </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="checkbox" name="theoretical" id="theoretical" value="true" />
-                <input type="hidden" name="theoretical" value="false" />
-                <label for="theoretical">
-                    Calculate theoretical rank distribution
-                </label>
-            </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" name="theoretical" id="theoretical" value="true" />
+            <input type="hidden" name="theoretical" value="false" />
+            <label class="form-check-label" for="theoretical">
+                Calculate theoretical rank distribution
+            </label>
         </div>
         <br />
         @Html.Partial("_MattersSubmit")

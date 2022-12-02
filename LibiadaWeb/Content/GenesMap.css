@@ -1,60 +1,40 @@
-﻿body, html {
-    width: 100vw;
-    height: 100vh;
-    padding: 0;
-    margin: 0;
-}
-
-#container {
-    display: flex;
-}
-
-#main {
+#chart {
     width: 70vw;
     min-width: 300px;
+    margin: 0 auto;
+    min-height: 300px;
 }
 
 #sidebar {
     flex: 1;
     width: 30vw;
+    min-width: 225px;
 }
 
 #nav {
-    display: flex;
     justify-content: space-around;
-    padding-top: 5px;
 }
 
 .tab-content {
-    padding-left: 10px;
-    padding-top: 10px;
     overflow-y: auto;
     height: calc(100vh - 60px);
 }
 
 #dragbar {
-    background-color: darkgray;
-    height: 100vh;
     width: 3px;
     cursor: col-resize;
     margin-left: 1px;
 }
 
-.form-horizontal .form-group {
+.genes-map .row {
     margin: 0 !important;
 }
 
-.roundedOne {
-    width: 100%;
-    height: 100%;
-    display: flex;
-}
-
-label {
+.check-color {
     cursor: pointer;
 }
 
-.roundedOne label:after {
+.rounded-check .check-color:after {
     cursor: pointer;
     content: "";
     width: 20px;
@@ -62,17 +42,17 @@ label {
     display: flex;
     opacity: 0;
     border-radius: 50px;
-    box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0, 0, 0, 0.5);
+    box-shadow: inset 0px 1px 1px white, 0px 1px 5px rgba(0, 0, 0, 0.5);
 }
 
-.roundedOne label:hover::after {
+.rounded-check .check-color:hover::after {
     opacity: 0.3;
 }
 
-.roundedOne input[type=checkbox] {
+.rounded-check input[type=checkbox] {
     visibility: hidden;
 }
 
-    .roundedOne input[type=checkbox]:checked + label:after {
+    .rounded-check input[type=checkbox]:checked + .check-color:after {
         opacity: 1;
     }

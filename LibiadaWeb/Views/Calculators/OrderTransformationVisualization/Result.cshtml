@@ -28,20 +28,20 @@
                 </tbody>
             </table>
             <br />
-            <div class="form-group">
-                <label class="control-label col-md-2" for="initialOrder">Initial order Id:</label>
+            <div class="row mb-1">
+                <label class="col-form-label col-md-2" for="initialOrder">Initial order Id:</label>
                 <div class="col-md-10">
-                    <select class="form-control"
+                    <select class="form-select"
                             title="Initial order"
                             ng-model="initialOrder"
                             ng-options="orderId.id for orderId in ::ordersIds"
                             id="initialOrder"></select>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="control-label col-md-2" for="transformationType">Transformation type:</label>
+            <div class="row mb-1">
+                <label class="col-form-label col-md-2" for="transformationType">Transformation type:</label>
                 <div class="col-md-10">
-                    <select class="form-control"
+                    <select class="form-select"
                             title="Transformation type"
                             ng-model="transformationType"
                             ng-options="t.Text for t in ::transformationsList"
@@ -49,21 +49,21 @@
                 </div>
             </div>
             <br />
-            <div class="form-group">
-                <label class="control-label col-md-2" for="height">Height:</label>
+            <div class="row mb-1">
+                <label class="col-form-label col-md-2" for="height">Height:</label>
                 <div class="col-md-10">
                     <input class="form-control" name="height" id="height" type="number" min="{{::500 + legendHeight}}" step="20" ng-model="height" />
                 </div>
             </div>
-            <div class="form-group">
-                <label class="control-label col-md-2" for="width">Width:</label>
+            <div class="row mb-1">
+                <label class="col-form-label col-md-2" for="width">Width:</label>
                 <div class="col-md-10">
                     <input class="form-control" name="width" id="width" type="number" min="400" step="20" ng-model="width" />
                 </div>
             </div>
             <br />
-            <input type="button" class="btn btn-default" ng-click="draw()" value="Draw" />
-            <div id="chart">
+            <input type="button" class="btn btn-secondary" ng-click="draw()" value="Draw" />
+            <div id="chart" class="font-monospace">
             </div>
         </div>
     </div>

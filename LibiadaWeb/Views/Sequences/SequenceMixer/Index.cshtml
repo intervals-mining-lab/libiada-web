@@ -12,7 +12,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    <div class="form-horizontal" ng-controller="BuildingsSimilarityCtrl">
+    <div ng-controller="BuildingsSimilarityCtrl">
         <h4>Sequences and parameters</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -25,9 +25,9 @@
                        maximum-selected-matters="::maximumSelectedMatters"
                        selected-matters-count="selectedMattersCount">
         </matters-table>
-        <div class="form-group">
+        <div class="row mb-1">
             <div class="col-md-10">
-                <select class="form-control"
+                <select class="form-select"
                         title="Notation"
                         ng-model="notation"
                         ng-options="n.Text for n in notations | filter:{ Nature: nature }">
@@ -43,8 +43,8 @@
                                       pauseTreatments="::pauseTreatments"
                                       trajectories="::trajectories">
         </characteristic-nature-params>
-        <div class="form-group">
-            <label class="control-label col-md-2" for="scrambling">Scrambling count:</label>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="scrambling">Scrambling count:</label>
             <div class="col-md-10">
                 <input class="form-control" name="scrambling" id="scrambling" type="number" value="10" min="1" />
                 @Html.ValidationMessage("scrambling", "", new { @class = "text-danger" })

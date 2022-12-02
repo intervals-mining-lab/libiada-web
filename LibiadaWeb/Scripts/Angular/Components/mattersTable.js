@@ -93,12 +93,15 @@
                     `<td id="multisequenceNumberCell${m.Value}">
                     </td>` : ``}
                     <td>
-                        <input type="${ctrl.mattersInputType}"
-                               name="${ctrl.mattersInputName}"
-                               id="matter${m.Value}"
-                               value="${m.Value}" 
-                               ${m.Selected ? `checked` : ``} />
-                        <label for="matter${m.Value}">${m.Text}</label>
+                        <div class="form-check">
+                            <input type="${ctrl.mattersInputType}"
+                                   class="form-check-input"
+                                   name="${ctrl.mattersInputName}"
+                                   id="matter${m.Value}"
+                                   value="${m.Value}" 
+                                   ${m.Selected ? `checked` : ``} />
+                            <label class="form-check-label" for="matter${m.Value}">${m.Text}</label>
+                        </div>
                     </td>
                     <td>${m.Group}</td>
                     <td>${m.SequenceType}</td>

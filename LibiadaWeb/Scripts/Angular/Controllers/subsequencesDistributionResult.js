@@ -21,7 +21,8 @@
             $scope.alignmentInProcess = false;
             $scope.pointsSimilarity = Object.freeze({ "same": 0, "similar": 1, "different": 2 });
 
-            $('[data-toggle="tooltip"]').tooltip();
+            // initialyzing tooltips for tabs
+            $('[data-bs-toggle="tooltip"]').tooltip();
 
             // preventing scroll in key up and key down
             window.addEventListener("keydown", e => {
@@ -230,7 +231,7 @@
 
         // shows tooltip for dot or group of dots
         function showTooltip(selectedPoint) {
-            $("a[href='#tooltip']").tab("show");
+            $("button[data-bs-target='#tooltip-tab-pane']").tab("show");
 
             $scope.tooltipVisible = true;
             $scope.tooltipElements.length = 0;
@@ -457,13 +458,13 @@
 
         // dragbar
         function dragbarMouseDown() {
-            var main = document.getElementById('main');
+            var chart = document.getElementById('chart');
             var right = document.getElementById('sidebar');
             var bar = document.getElementById('dragbar');
 
             const drag = (e) => {
                 document.selection ? document.selection.empty() : window.getSelection().removeAllRanges();
-                var chart_width = main.style.width = (e.pageX - bar.offsetWidth / 2) + 'px';
+                var chart_width = chart.style.width = (e.pageX - bar.offsetWidth / 2) + 'px';
 
                 Plotly.relayout('chart', { autosize: true });
             };
@@ -569,5 +570,4 @@
     }
 
     angular.module("libiada", []).controller("SubsequencesDistributionResultCtrl", ["$scope", "$http", subsequencesDistributionResult]);
-
 }

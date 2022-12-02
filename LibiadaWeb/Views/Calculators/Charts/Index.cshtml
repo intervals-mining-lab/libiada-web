@@ -9,7 +9,7 @@
 <div ng-controller="ChartsCtrl">
     <table-parse ng-model="rawPaste" ng-array="parsedPaste" />
 
-    <div class="row">
+    <div class="row mb-1">
         <table class="table table-bordered table-hover">
             <tr ng-repeat="row in parsedPaste">
                 <td ng-repeat="col in row">{{col}}</td>
@@ -21,8 +21,10 @@
 
         <div class="eleven columns">
             <form ng-submit="addY(l)">
-                <select ng-model="l" ng-options="parsedPaste[0].indexOf(row) as row for row in parsedPaste[0]" class="form-control"></select>
-                <input class="btn btn-default" type="submit" value="Submit">
+                <select class="form-select"
+                        ng-model="l" 
+                        ng-options="parsedPaste[0].indexOf(row) as row for row in parsedPaste[0]"></select>
+                <input class="btn btn-secondary" type="submit" value="Submit">
             </form>
         </div>
 
@@ -30,9 +32,13 @@
 
         <div class="eleven columns">
             <form ng-submit="addX(i,j)">
-                <select ng-model="i" ng-options="parsedPaste[0].indexOf(row) as row for row in parsedPaste[0]" class="form-control"></select>
-                <select ng-model="j" ng-options="parsedPaste[0].indexOf(row) as row for row in parsedPaste[0]" class="form-control"></select>
-                <input class="btn btn-default" type="submit" value="Submit">
+                <select class="form-select"
+                        ng-model="i" 
+                        ng-options="parsedPaste[0].indexOf(row) as row for row in parsedPaste[0]"></select>
+                <select class="form-select"
+                        ng-model="j" 
+                        ng-options="parsedPaste[0].indexOf(row) as row for row in parsedPaste[0]"></select>
+                <input class="btn btn-secondary" type="submit" value="Submit">
             </form>
         </div>
     </div>

@@ -8,19 +8,19 @@
 
 @using (Html.BeginForm())
 {
-<div ng-controller="SequencesOrderDistributionCtrl" class="form-horizontal">
+<div ng-controller="SequencesOrderDistributionCtrl">
     @Html.AntiForgeryToken()
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="form-group">
-        <label class="control-label col-md-2" for="length">Generated sequnces length:</label>
+    <div class="row mb-1">
+        <label class="col-form-label col-md-2" for="length">Generated sequnces length:</label>
         <div class="col-md-10">
             <input class="form-control" name="length" type="number" value="4" min="0" id="length" />
             @Html.ValidationMessage("length", "", new { @class = "text-danger" })
         </div>
     </div>
-    <div class="form-group">
-        <label class="control-label col-md-2" for="alphabetCardinality">Generated sequnces alphabet cardinality:</label>
+    <div class="row mb-1">
+        <label class="col-form-label col-md-2" for="alphabetCardinality">Generated sequnces alphabet cardinality:</label>
         <div class="col-md-10">
             <input class="form-control" name="alphabetCardinality" type="number" value="4" min="0" id="alphabetCardinality" />
             @Html.ValidationMessage("alphabetCardinality", "", new { @class = "text-danger" })
@@ -28,27 +28,27 @@
     </div>
     <fieldset>
         <legend>Sequences generation settings:</legend>
-        <div class="col-md-offset-2 col-md-10">
-            <input type="radio" name="typeGenerate" id="generationTypeStrict" value="0" checked />
-            <label for="generationTypeStrict">
+        <div class="form-check">
+            <input type="radio" class="form-check-input" name="typeGenerate" id="generationTypeStrict" value="0" checked />
+            <label class="form-check-label" for="generationTypeStrict">
                 Generate all possible sequences with only given alphabet cardinality
             </label>
         </div>
-        <div class="col-md-offset-2 col-md-10">
-            <input type="radio" name="typeGenerate" id="generationTypeAll" value="1" />
-            <label for="generationTypeAll">
+        <div class="form-check">
+            <input type="radio" class="form-check-input" name="typeGenerate" id="generationTypeAll" value="1" />
+            <label class="form-check-label" for="generationTypeAll">
                 Generate all possible sequences with alphabet cardinality less or equal to given
             </label>
         </div>
-        <div class="col-md-offset-2 col-md-10">
-            <input type="radio" name="typeGenerate" id="generationTypeNonRedundantStrict" value="2" />
-            <label for="generationTypeNonRedundantStrict">
+        <div class="form-check">
+            <input type="radio" class="form-check-input" name="typeGenerate" id="generationTypeNonRedundantStrict" value="2" />
+            <label class="form-check-label" for="generationTypeNonRedundantStrict">
                 Generate only non-redundant sequences with only given alphabet cardinality
             </label>
         </div>
-        <div class="col-md-offset-2 col-md-10">
-            <input type="radio" name="typeGenerate" id="generationTypeNonRedundant" value="3" />
-            <label for="generationTypeNonRedundant">
+        <div class="form-check">
+            <input type="radio" class="form-check-input" name="typeGenerate" id="generationTypeNonRedundant" value="3" />
+            <label class="form-check-label" for="generationTypeNonRedundant">
                 Generate only non-redundant sequences with alphabet cardinality less or equal to given
             </label>
         </div>

@@ -1,10 +1,10 @@
 ﻿@using LibiadaWeb.Helpers
 
 <br />
-<div class="form-group">
-    <label class="control-label col-md-2" for="characteristic" ng-bind="::$ctrl.title">:</label>
+<div class="row mb-1">
+    <label class="col-form-label col-md-2" for="characteristic" ng-bind="::$ctrl.title">:</label>
     <div class="col-md-10">
-        <select class="form-control"
+        <select class="form-select"
                 title="{{::$ctrl.title}}"
                 ng-model="$ctrl.characteristic.characteristicType"
                 ng-options="c.Text for c in $ctrl.characteristicTypes"
@@ -12,10 +12,10 @@
                 id="characteristic"></select>
     </div>
 </div>
-<div class="form-group" ng-show="$ctrl.characteristic.characteristicType.Links.length > 1">
-    <label class="control-label col-md-2" for="link">Link:</label>
+<div class="row mb-1" ng-show="$ctrl.characteristic.characteristicType.Links.length > 1">
+    <label class="col-form-label col-md-2" for="link">Link:</label>
     <div class="col-md-10">
-        <select class="form-control"
+        <select class="form-select"
                 title="Link"
                 ng-model="$ctrl.characteristic.link"
                 ng-options="l.Text for l in $ctrl.characteristic.characteristicType.Links"
@@ -24,10 +24,10 @@
 </div>
 @if (AccountHelper.IsAdmin())
 {
-    <div class="form-group" ng-show="$ctrl.characteristic.characteristicType.ArrangementTypes.length > 1">
-        <label class="control-label col-md-2" for="arrangementType">Arrangement type:</label>
+    <div class="row mb-1" ng-show="$ctrl.characteristic.characteristicType.ArrangementTypes.length > 1">
+        <label class="col-form-label col-md-2" for="arrangementType">Arrangement type:</label>
         <div class="col-md-10">
-            <select class="form-control"
+            <select class="form-select"
                     title="Arrangement type"
                     ng-model="$ctrl.characteristic.arrangementType"
                     ng-options="a.Text for a in $ctrl.characteristic.characteristicType.ArrangementTypes"
@@ -35,10 +35,10 @@
 
         </div>
     </div>
-    <div class="form-group" ng-hide="$ctrl.hideNotation">
-        <label class="control-label col-md-2" for="notation">Notation:</label>
+    <div class="row mb-1" ng-hide="$ctrl.hideNotation">
+        <label class="col-form-label col-md-2" for="notation">Notation:</label>
         <div class="col-md-10">
-            <select class="form-control"
+            <select class="form-select"
                     title="Notation"
                     ng-model="$ctrl.characteristic.notation"
                     ng-options="n.Text for n in $ctrl.notations | filter:{ Nature: $ctrl.nature }"
@@ -57,10 +57,10 @@
     <div ng-switch-when="@((byte)Nature.Genetic)">
     </div>
     <div ng-switch-when="@((byte)Nature.Music)">
-        <div class="form-group">
-            <label class="control-label col-md-2" for="pauseTreatment">Pause treatment:</label>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="pauseTreatment">Pause treatment:</label>
             <div class="col-md-10">
-                <select class="form-control"
+                <select class="form-select"
                         title="PauseTreatment"
                         ng-model="$ctrl.characteristic.pauseTreatment"
                         ng-options="t.Text for t in ::$ctrl.pauseTreatments"
@@ -68,23 +68,24 @@
                 <input type="hidden" name="pauseTreatment" ng-value="$ctrl.characteristic.pauseTreatment.Value" />
             </div>
         </div>
-        <div class="col-md-offset-2 col-md-10">
+        <div class="form-check">
             <input type="checkbox"
+                   class="form-check-input"
                    name="sequentialTransfer"
                    id="sequentialTransfer"
                    ng-model="$ctrl.sequentialTransfer"
                    value="true" />
             <input type="hidden" name="sequentialTransfer" value="false" />
-            <label for="sequentialTransfer">
+            <label class="form-check-label" for="sequentialTransfer">
                 Sequential transfer
             </label>
         </div>
     </div>
     <div ng-switch-when="@((byte)Nature.Literature)">
-        <div class="form-group">
-            <label class="control-label col-md-2" for="language">Language:</label>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="language">Language:</label>
             <div class="col-md-10">
-                <select class="form-control"
+                <select class="form-select"
                         title="Language"
                         ng-model="$ctrl.characteristic.language"
                         ng-options="l.Text for l in ::$ctrl.languages"
@@ -92,10 +93,10 @@
                 <input type="hidden" name="language" ng-value="$ctrl.characteristic.language.Value" />
             </div>
         </div>
-        <div class="form-group">
-            <label class="control-label col-md-2" for="translator">Translator:</label>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="translator">Translator:</label>
             <div class="col-md-10">
-                <select class="form-control"
+                <select class="form-select"
                         title="Translator"
                         ng-model="$ctrl.characteristic.translator"
                         ng-options="t.Text for t in ::$ctrl.translators"
@@ -107,10 +108,10 @@
     <div ng-switch-when="@((byte)Nature.MeasurementData)">
     </div>
     <div ng-switch-when="@((byte)Nature.Image)">
-        <div class="form-group">
-            <label class="control-label col-md-2" for="trajectory">Reading trajectory:</label>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="trajectory">Reading trajectory:</label>
             <div class="col-md-10">
-                <select class="form-control"
+                <select class="form-select"
                         title="Reading trajectory"
                         ng-model="$ctrl.characteristic.trajectory"
                         ng-options="t.Text for t in ::$ctrl.trajectories"

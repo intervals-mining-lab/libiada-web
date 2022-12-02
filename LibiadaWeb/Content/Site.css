@@ -1,12 +1,10 @@
-﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+﻿:root {
+    --navbar-height: 56px;
+    --sidebar-width: 30px;
 }
 
-/* Set padding to keep content from hitting the edges */
-.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+body {
+    padding-top: var(--navbar-height);
 }
 
 /* Set width on the form input elements since they're 100% wide by default */
@@ -18,11 +16,11 @@ textarea {
 
 table {
     font-family: monospace;
-	font-size: 16px;
-	font-style: normal;
-	font-variant: normal;
-	font-weight: 400;
-	line-height: 30px;
+    font-size: 16px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    line-height: 30px;
 }
 
 /* styles for validation helpers */
@@ -60,10 +58,6 @@ input[type="checkbox"].input-validation-error {
     display: none;
 }
 
-.text-bold {
-    font-weight: bold;
-}
-
 .empty-table {
     font-weight: bold;
     text-align: center;
@@ -71,21 +65,15 @@ input[type="checkbox"].input-validation-error {
 
 .axis path,
 .axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
 }
 
 .dot {
-  stroke: #000;
+    stroke: #000;
 }
 
-#chart, .monospace {
-  font-family: monospace;
-}
-
-.responsive-chart {
-    margin: 0 auto;
-    height: 85vh;
-    min-height: 300px;
+.chart-tooltip {
+    z-index: 900; /*prevent tooltip from hiding navbar*/
 }

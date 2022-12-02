@@ -10,68 +10,79 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal" ng-controller="BatchGeneticImportFromGenBankSearchFileCtrl">
-        <div class="form-group">
-            <label class="control-label col-md-2" for="file">GenBank search results file:</label>
+    <div ng-controller="BatchGeneticImportFromGenBankSearchFileCtrl">
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="file">GenBank search results file:</label>
             <div class="col-md-10">
                 <input type="file" name="file" id="file" onchange="angular.element(this).scope().fileChanged(this)" />
                 @Html.ValidationMessage("file", "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="checkbox" name="importGenes" id="importGenes" value="true" checked />
-                <input type="hidden" name="importGenes" value="false" />
-                <label for="importGenes">
-                    Also import genes
-                </label>
-            </div>
+        <div class="form-check">
+            <input type="checkbox"
+                   class="form-check-input"
+                   name="importGenes"
+                   id="importGenes"
+                   value="true"
+                   checked />
+            <input type="hidden" name="importGenes" value="false" />
+            <label class="form-check-label" for="importGenes">
+                Also import genes
+            </label>
         </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="checkbox" name="importPartial" id="importPartial" value="true" />
-                <input type="hidden" name="importPartial" value="false" />
-                <label for="importPartial">
-                    Import partial sequences
-                </label>
-            </div>
+        <div class="form-check">
+            <input type="checkbox"
+                   class="form-check-input"
+                   name="importPartial"
+                   id="importPartial"
+                   value="true" />
+            <input type="hidden" name="importPartial" value="false" />
+            <label class="form-check-label" for="importPartial">
+                Import partial sequences
+            </label>
         </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="checkbox" name="filterMinLength" id="filterMinLength" value="true" ng-model="filterMinLength" />
-                <input type="hidden" name="filterMinLength" value="false" />
-                <label for="filterMinLength">
-                    Filter sequences by min length
-                </label>
-            </div>
+        <div class="form-check">
+            <input type="checkbox"
+                   class="form-check-input"
+                   name="filterMinLength"
+                   id="filterMinLength"
+                   value="true"
+                   ng-model="filterMinLength" />
+            <input type="hidden" name="filterMinLength" value="false" />
+            <label class="form-check-label" for="filterMinLength">
+                Filter sequences by min length
+            </label>
         </div>
-        <div class="form-group" ng-show="filterMinLength">
-            <label class="control-label col-md-2" for="minLength">Minimum length:</label>
+        <div class="row mb-1" ng-show="filterMinLength">
+            <label class="col-form-label col-md-2" for="minLength">Minimum length:</label>
             <div class="col-md-10">
                 <input class="form-control" name="minLength" type="number" value="1000" min="1" id="minLength" />
                 @Html.ValidationMessage("minLength", "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="checkbox" name="filterMaxLength" id="filterMaxLength" value="true" ng-model="filterMaxLength" />
-                <input type="hidden" name="filterMaxLength" value="false" />
-                <label for="filterMaxLength">
-                    Filter sequences by max length
-                </label>
-            </div>
+        <div class="form-check">
+            <input type="checkbox"
+                   class="form-check-input"
+                   name="filterMaxLength"
+                   id="filterMaxLength"
+                   value="true"
+                   ng-model="filterMaxLength" />
+            <input type="hidden" name="filterMaxLength" value="false" />
+            <label class="form-check-label" for="filterMaxLength">
+                Filter sequences by max length
+            </label>
         </div>
-        <div class="form-group" ng-show="filterMaxLength">
-            <label class="control-label col-md-2" for="maxLength">Maximum length:</label>
+        <div class="row mb-1" ng-show="filterMaxLength">
+            <label class="col-form-label col-md-2" for="maxLength">Maximum length:</label>
             <div class="col-md-10">
                 <input class="form-control" name="maxLength" type="number" value="1000000" min="1" id="maxLength" />
                 @Html.ValidationMessage("maxLength", "", new { @class = "text-danger" })
             </div>
         </div>
         <hr />
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" ng-disabled="!fileSelected.value" />
+        <div class="row mb-1">
+            <div class="offset-md-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-secondary" ng-disabled="!fileSelected.value" />
             </div>
         </div>
     </div>

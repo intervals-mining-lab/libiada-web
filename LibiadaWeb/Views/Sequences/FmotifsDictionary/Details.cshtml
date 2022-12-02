@@ -18,7 +18,7 @@
         <div>
             <h4>Music sequence</h4>
             <hr />
-            <dl class="dl-horizontal">
+            <dl>
                 <dt>@Html.DisplayNameFor(model => model.Matter.Name)</dt>
                 <dd>@Html.DisplayFor(model => model.Matter.Name)</dd>
 
@@ -54,7 +54,7 @@
                             <div id="visualization_{{::fmotif.Id}}"></div>
                         </td>
                         <td>
-                            <input type="button" class="btn btn-default" ng-click="play($index)" value="Play" />
+                            <input type="button" class="btn btn-secondary" ng-click="play($index)" value="Play" />
                         </td>
                     </tr>
                 </tbody>

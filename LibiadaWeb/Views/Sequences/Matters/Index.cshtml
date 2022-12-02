@@ -33,13 +33,12 @@
     {
         <tr>
             <td>@Html.DisplayFor(modelItem => item.Name)</td>
-            <td>@Html.DisplayFor(modelItem => item.Description)</td>
             <td>@Html.DisplayFor(modelItem => item.Created)</td>
             <td>@Html.DisplayFor(modelItem => item.Modified)</td>
             <td>@item.Nature.GetDisplayValue()</td>
             <td>@item.Group.GetDisplayValue()</td>
             <td>@item.SequenceType.GetDisplayValue()</td>
-            <td>@Html.DisplayFor(modelItem => item.Multisequence.Name)</td>
+            <td>@(item.Multisequence == null ? MvcHtmlString.Empty : Html.DisplayFor(modelItem => item.Multisequence.Name))</td>
             <td>@Html.DisplayFor(modelItem => item.MultisequenceNumber)</td>
             <td>@Html.DisplayFor(modelItem => item.CollectionCountry)</td>
             <td>@Html.DisplayFor(modelItem => item.CollectionDate)</td>

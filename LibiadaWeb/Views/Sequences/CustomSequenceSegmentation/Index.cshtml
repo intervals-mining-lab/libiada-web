@@ -9,20 +9,20 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    <div class="form-horizontal" ng-controller="CustomCalculationCtrl">
+    <div ng-controller="CustomCalculationCtrl">
         <h4>Sequences and parameters</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.Partial("_CustomSequences")
         <br />
-        <div class="form-group">
-            <label class="control-label col-md-2" for="leftBorder">Left border:</label>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="leftBorder">Left border:</label>
             <div class="col-md-10">
                 <input class="form-control" name="leftBorder" id="leftBorder" type="text" min="0" max="0.99999" step="0.1" ng-model="leftBorder" ng-init="leftBorder=0" />
             </div>
         </div>
-        <div class="form-group">
-            <label class="control-label col-md-2" for="rightBorder">Right border:</label>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="rightBorder">Right border:</label>
             <div class="col-md-10">
                 <input class="form-control" name="rightBorder" id="rightBorder" type="text" min="0.000000001" max="1" step="0.1" ng-model="rightBorder" ng-init="rightBorder=1" />
             </div>
@@ -30,24 +30,24 @@
         <br />
         <hr />
         <br />
-        <div class="form-group">
-            <label class="control-label col-md-2" for="step">Step:</label>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="step">Step:</label>
             <div class="col-md-10">
                 <input class="form-control" name="step" id="step" type="text" min="0.00000000001" max="0.99999999" step="0.000001" ng-model="step" ng-init="step=0.01" />
             </div>
         </div>
-        <div class="form-group">
-            <label class="control-label col-md-2" for="precision">Precision:</label>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="precision">Precision:</label>
             <div class="col-md-10">
                 <input class="form-control" name="precision" id="precision" type="text" min="0.000000001" max="1" step="0.1" ng-model="precision" ng-init="precision=0.01" />
             </div>
         </div>
         <br />
         <hr />
-        <div class="form-group">
-            <label class="control-label col-md-2" for="threshold">Threshold:</label>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="threshold">Threshold:</label>
             <div class="col-md-10">
-                <select class="form-control"
+                <select class="form-select"
                         title="Threshold"
                         ng-model="threshold"
                         ng-options="c.Text for c in thresholds"
@@ -56,8 +56,8 @@
                 <input type="hidden" name="threshold" ng-value="threshold.Value" />
             </div>
         </div>
-        <div class="form-group">
-            <label class="control-label col-md-2" for="wordLengthDecrement">Word length decrement:</label>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="wordLengthDecrement">Word length decrement:</label>
             <div class="col-md-10">
                 <input class="form-control"
                        name="wordLengthDecrement"
@@ -72,10 +72,10 @@
         </div>
         <br />
         <hr />
-        <div class="form-group">
-            <label class="control-label col-md-2" for="segmentationCriterion">Segmentation criterion:</label>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="segmentationCriterion">Segmentation criterion:</label>
             <div class="col-md-10">
-                <select class="form-control"
+                <select class="form-select"
                         title="Segmentation criterion"
                         ng-model="segmentationCriterion"
                         ng-options="c.Text for c in segmentationCriteria"
@@ -84,8 +84,8 @@
                 <input type="hidden" name="segmentationCriterion" ng-value="segmentationCriterion.Value" />
             </div>
         </div>
-        <div class="form-group">
-            <label class="control-label col-md-2" for="wordLength">Word length:</label>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="wordLength">Word length:</label>
             <div class="col-md-10">
                 <input class="form-control"
                        name="wordLength"
@@ -100,10 +100,10 @@
         <br />
         <br />
         <hr />
-        <div class="form-group">
-            <label class="control-label col-md-2" for="deviationCalculationMethod">Deviation calculation method:</label>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="deviationCalculationMethod">Deviation calculation method:</label>
             <div class="col-md-10">
-                <select class="form-control"
+                <select class="form-select"
                         title="Deviation calculation method"
                         ng-model="deviationCalculationMethod"
                         ng-options="c.Text for c in deviationCalculationMethods"
@@ -112,8 +112,8 @@
                 <input type="hidden" name="deviationCalculationMethod" ng-value="deviationCalculationMethod.Value" />
             </div>
         </div>
-        <div class="form-group">
-            <label class="control-label col-md-2" for="balance">Balance:</label>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="balance">Balance:</label>
             <div class="col-md-10">
                 <input class="form-control"
                        name="balance"
@@ -127,9 +127,9 @@
             </div>
         </div>
         <br />
-        <div class="form-group">
+        <div class="row mb-1">
             <div class="col-md-10">
-                <input type="submit" value="Calculate" class="btn btn-default" />
+                <input type="submit" value="Calculate" class="btn btn-secondary" />
             </div>
         </div>
     </div>

@@ -8,23 +8,21 @@
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
-    <div class="form-horizontal">
-        <div class="form-group" ng-hide="original">
-            <label class="control-label col-md-2" for="matterId">Sequence:</label>
-            <div class="col-md-10">
-                @Html.DropDownList("matterId", string.Empty)
-            </div>
+    <div class="row mb-1" ng-hide="original">
+        <label class="col-form-label col-md-2" for="matterId">Sequence:</label>
+        <div class="col-md-10">
+            @Html.DropDownList("matterId", null, htmlAttributes: new { @class="form-select" })
         </div>
-        <div class="form-group" ng-show="localFile">
-            <label class="control-label col-md-2" for="file">Sequence file:</label>
-            <div class="col-md-10">
-                <input type="file" name="file" id="file" />
-            </div>
+    </div>
+    <div class="row mb-1" ng-show="localFile">
+        <label class="col-form-label col-md-2" for="file">Sequence file:</label>
+        <div class="col-md-10">
+            <input type="file" name="file" id="file" />
         </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Check" class="btn btn-default" />
-            </div>
+    </div>
+    <div class="row mb-1">
+        <div class="offset-md-2 col-md-10">
+            <input type="submit" value="Check" class="btn btn-secondary" />
         </div>
     </div>
 }

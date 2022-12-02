@@ -19,7 +19,7 @@
             </tbody>
         </table>
         <br />
-        <div class="monospace">
+        <div class="font-monospace">
             Transformations repeated {{::iterationsCount}} times
         </div>
         <table st-table="characteristics" class="table table-bordered table-hover" ng-cloak>
@@ -37,43 +37,41 @@
             </tbody>
         </table>
         <br />
-        <div class="form-group">
-            <label class="control-label col-md-2" for="firstCharacteristic">First characteristic:</label>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="firstCharacteristic">First characteristic:</label>
             <div class="col-md-10">
-                <select class="form-control"
+                <select class="form-select"
                         title="First characteristic"
                         ng-model="firstCharacteristic"
                         ng-options="c.Text for c in ::characteristicsList"
                         id="firstCharacteristic"></select>
             </div>
         </div>
-        <div class="form-group">
-            <label class="control-label col-md-2" for="secondCharacteristic">Second characteristic:</label>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="secondCharacteristic">Second characteristic:</label>
             <div class="col-md-10">
-                <select class="form-control"
+                <select class="form-select"
                         title="Second characteristic"
                         ng-model="secondCharacteristic"
                         ng-options="c.Text for c in ::characteristicsList"
                         id="secondCharacteristic"></select>
             </div>
         </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="checkbox"
-                       name="showLegend"
-                       id="showLegend"
-                       ng-model="legendSettings.show" />
-                <label for="showLegend">
-                    Draw legend
-                </label>
-            </div>
+        <div class="form-check">
+            <input type="checkbox"
+                   class="form-check-input"
+                   name="showLegend"
+                   id="showLegend"
+                   ng-model="legendSettings.show" />
+            <label class="form-check-label" for="showLegend">
+                Draw legend
+            </label>
         </div>
         <br />
-        <input type="button" class="btn btn-default" ng-click="draw()" value="Draw" />
-        <div id="chart">
+        <input type="button" class="btn btn-secondary" ng-click="draw()" value="Draw" />
+        <div id="chart" class="font-monospace">
         </div>
     </div>
-    <br />
 }
 
 @section Scripts {

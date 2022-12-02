@@ -1,28 +1,18 @@
-﻿/* "Up" scroll button */
-#buttonScrollUp {
-    height: 50%;
-    top: 0px;
-    text-align: center;
+﻿.body-content {
+    padding-left: var(--sidebar-width);
 }
 
-/* "Down" scroll button */
-#buttonScrollDown {
-    height: 50%;
-    bottom: 0px;
-    text-align: center;
+footer {
+    padding-left: var(--sidebar-width);
 }
 
-/* scroll buttons panel */
-#scrollUpDown {
-    position: fixed;
-    height: 100%;
-    width: 30px;
-    font-size: 2em;
+.scroll-up-down {
+    margin-top: var(--navbar-height);
 }
 
 .arrow-button {
     fill: #337ab7;
-    height: 50%;
+    width: var(--sidebar-width);
 }
 
 .arrow-button:hover {

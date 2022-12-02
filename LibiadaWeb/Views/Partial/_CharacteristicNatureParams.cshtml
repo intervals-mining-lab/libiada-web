@@ -2,10 +2,10 @@
     <div ng-switch-when="@((byte)Nature.Genetic)">
     </div>
     <div ng-switch-when="@((byte)Nature.Music)">
-        <div class="form-group">
-            <label class="control-label col-md-2" for="pauseTreatment">Pause treatment:</label>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="pauseTreatment">Pause treatment:</label>
             <div class="col-md-10">
-                <select class="form-control"
+                <select class="form-select"
                         title="PauseTreatment"
                         ng-model="$ctrl.characteristic.pauseTreatment"
                         ng-options="t.Text for t in ::$ctrl.pauseTreatments"
@@ -15,8 +15,9 @@
                        ng-value="$ctrl.characteristic.pauseTreatment.Value" />
             </div>
         </div>
-        <div class="col-md-offset-2 col-md-10">
+        <div class="offset-md-2 col-md-10">
             <input type="checkbox"
+                   class="form-check-input"
                    name="sequentialTransfer"
                    id="sequentialTransfer"
                    ng-model="$ctrl.sequentialTransfer"
@@ -28,10 +29,10 @@
         </div>
     </div>
     <div ng-switch-when="@((byte)Nature.Literature)">
-        <div class="form-group">
-            <label class="control-label col-md-2" for="language">Language:</label>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="language">Language:</label>
             <div class="col-md-10">
-                <select class="form-control"
+                <select class="form-select"
                         title="Language"
                         ng-model="$ctrl.characteristic.language"
                         ng-options="l.Text for l in ::$ctrl.languages"
@@ -41,10 +42,10 @@
                        ng-value="$ctrl.characteristic.language.Value" />
             </div>
         </div>
-        <div class="form-group">
-            <label class="control-label col-md-2" for="translator">Translator:</label>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="translator">Translator:</label>
             <div class="col-md-10">
-                <select class="form-control"
+                <select class="form-select"
                         title="Translator"
                         ng-model="$ctrl.characteristic.translator"
                         ng-options="t.Text for t in ::$ctrl.translators"
@@ -58,10 +59,10 @@
     <div ng-switch-when="@((byte)Nature.MeasurementData)">
     </div>
     <div ng-switch-when="@((byte)Nature.Image)">
-        <div class="form-group">
-            <label class="control-label col-md-2" for="trajectory">Reading trajectory:</label>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="trajectory">Reading trajectory:</label>
             <div class="col-md-10">
-                <select class="form-control"
+                <select class="form-select"
                         title="Reading trajectory"
                         ng-model="$ctrl.characteristic.trajectory"
                         ng-options="t.Text for t in ::$ctrl.trajectories"

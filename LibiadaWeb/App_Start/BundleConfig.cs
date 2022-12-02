@@ -22,7 +22,7 @@
                         "~/Libraries/jquery-validate/jquery.validate.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                        "~/Libraries/twitter-bootstrap/js/bootstrap.js"));
+                        "~/Libraries/twitter-bootstrap/js/bootstrap.bundle.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/angularjs").Include(
                         "~/Scripts/Angular/functions.js",
@@ -170,7 +170,6 @@
             bundles.Add(new ScriptBundle("~/bundles/controllers/SubsequencesDistributionResultController").Include(
                         "~/Scripts/Angular/Controllers/subsequencesDistributionResult.js"));
 
-
             bundles.Add(new ScriptBundle("~/bundles/controllers/TaskManagerController").Include(
                         "~/Libraries/signalr.js/jquery.signalR.js",
                         "~/Scripts/Angular/Controllers/taskManager.js"));
@@ -201,7 +200,8 @@
                         "~/Content/site.css",
                         "~/Content/scrollUpDown.css",
                         "~/Libraries/AlertifyJS/css/alertify.css",
-                        "~/Libraries/AlertifyJS/css/themes/bootstrap.css"
+                        "~/Libraries/AlertifyJS/css/themes/bootstrap.css",
+                        "~/Libraries/bootstrap-icons/font/bootstrap-icons.css"
                         ));
 
             bundles.Add(new StyleBundle("~/Content/genesMap").Include(

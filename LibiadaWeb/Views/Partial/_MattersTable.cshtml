@@ -1,22 +1,21 @@
 ﻿@model IEnumerable<Matter>
 
-<div class="form-group" ng-init="$ctrl.geneticNature = @((byte)Nature.Genetic)" ng-show="$ctrl.nature == $ctrl.geneticNature">
-    <div class="col-md-offset-2 col-md-10">
-        <input type="checkbox"
-               name="showRefSeqOnly"
-               id="showRefSeqOnly"
-               checked
-               ng-model="$ctrl.showRefSeqOnly"
-               ng-change="$ctrl.toogleMattersVisibility()" />
-        <label for="showRefSeqOnly">
-            Show only reference sequences
-        </label>
-    </div>
+<div class="form-check my-2" ng-init="$ctrl.geneticNature = @((byte)Nature.Genetic)" ng-show="$ctrl.nature == $ctrl.geneticNature">
+    <input type="checkbox"
+           class="form-check-input"
+           name="showRefSeqOnly"
+           id="showRefSeqOnly"
+           checked
+           ng-model="$ctrl.showRefSeqOnly"
+           ng-change="$ctrl.toogleMattersVisibility()" />
+    <label class="form-check-label" for="showRefSeqOnly">
+        Show only reference sequences
+    </label>
 </div>
-<div class="form-group" ng-if="::($ctrl.checkboxes && !$ctrl.displayMultisequenceNumber)">
-    <div class="col-md-offset-2 col-md-10">
+<div class="mb-1" ng-if="::($ctrl.checkboxes && !$ctrl.displayMultisequenceNumber)">
+    <div class="btn-group" role="group" aria-label="Select / unselect vsible matters">
         <input type="button" class="btn btn-success" ng-click="$ctrl.selectAllVisibleMatters()" value="Select all visible sequences" />
-        <input type="button" class="btn btn-default" ng-click="$ctrl.unselectAllVisibleMatters()" value="Unselect all visible sequences" />
+        <input type="button" class="btn btn-secondary" ng-click="$ctrl.unselectAllVisibleMatters()" value="Unselect all visible sequences" />
     </div>
 </div>
 <h4>Sequences:</h4>
@@ -33,7 +32,7 @@
                        ng-change="$ctrl.toogleMattersVisibility()" />
             </th>
             <th>
-                <select class="form-control"
+                <select class="form-select"
                         ng-model="$ctrl.group"
                         ng-options="g.Value as g.Text for g in $ctrl.groups | filter:{ Nature: $ctrl.nature }"
                         ng-change="$ctrl.toogleMattersVisibility()">
@@ -41,7 +40,7 @@
                 </select>
             </th>
             <th>
-                <select class="form-control"
+                <select class="form-select"
                         ng-model="$ctrl.sequenceType"
                         ng-options="s.Value as s.Text for s in $ctrl.sequenceTypes | filter:{ Nature: $ctrl.nature }"
                         ng-change="$ctrl.toogleMattersVisibility()">

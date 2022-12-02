@@ -11,7 +11,7 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal" ng-controller="SequencesAlignmentCtrl">
+    <div ng-controller="SequencesAlignmentCtrl">
         <h4>Sequences and parameters</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -43,8 +43,8 @@
         </characteristic>
 
         <hr />
-        <div class="form-group">
-            <label class="control-label col-md-2" for="maxPercentageDifference">Maximum difference (%):</label>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="maxPercentageDifference">Maximum difference (%):</label>
             <div class="col-md-10">
                 <input class="form-control" name="maxPercentageDifference" id="maxPercentageDifference" type="number" value="0" step="any" min="0" max="100" />
                 @Html.ValidationMessage("maxPercentageDifference", "", new { @class = "text-danger" })
@@ -52,13 +52,16 @@
         </div>
         @if (AccountHelper.IsAdmin())
         {
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="checkbox" name="filterMatrix" ng-model="filterMatrix" value="true" />
-                        Filter matrix using similarity metrics
-                    </label>
-                </div>
+            <div class="form-check">
+                <input type="checkbox"
+                       class="form-check-input"
+                       name="filterMatrix"
+                       id="filterMatrix"
+                       ng-model="filterMatrix"
+                       value="true" />
+                <label class="form-check-label" for="filterMatrix">
+                    Filter matrix using similarity metrics
+                </label>
             </div>
         }
         <input type="hidden" name="filterMatrix" value="false" />

@@ -24,19 +24,18 @@
                     </tr>
                 </tbody>
             </table>
-
-            <br />
-            <div class="monospace">
-                Loop iteration = {{::loopIteration}}
+            <div class="font-monospace mt-3">
+                <div>
+                    Loop iteration = {{::loopIteration}}
+                </div>
+                <div>
+                    Last iteration = {{::lastIteration}}
+                </div>
+                <div class="mb-3">
+                    Transformations repeated {{::iterationsCount}} times
+                </div>
+                <div ng-bind="::chain"></div>
             </div>
-            <div class="monospace">
-                Last iteration = {{::lastIteration}}
-            </div>
-            <div class="monospace">
-                Transformations repeated {{::iterationsCount}} times
-            </div>
-            <br />
-            <div class="monospace" ng-bind="::chain"></div>
         </div>
     </div>
 }
