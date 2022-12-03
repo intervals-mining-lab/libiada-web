@@ -21,12 +21,12 @@
             <div class="container-fluid">
                 @Html.ActionLink("LibiadaWeb", "Index", "Home", null, new { @class = "navbar-brand" })
                 @*<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">AspNetCoreMVCProject</a>*@
-                <button class="navbar-toggler m-2" 
-                        type="button" 
-                        data-bs-toggle="collapse" 
-                        data-bs-target=".navbar-collapse" 
+                <button class="navbar-toggler m-2"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target=".navbar-collapse"
                         aria-controls="navbarSupportedContent"
-                        aria-expanded="false" 
+                        aria-expanded="false"
                         aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -40,11 +40,11 @@
                             @Html.ActionLink("Task manager", "Index", "TaskManager", routeValues: null, htmlAttributes: new { @class = "nav-link" })
                         </li>
                         @*<li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                </li>*@
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            </li>*@
                     </ul>
                     @Html.Partial("_LoginPartial")
                     @*<partial name="_LoginPartial" />*@
@@ -56,29 +56,26 @@
         <scroll-jumper></scroll-jumper>
         <div class="container pt-2 body-content">
             @RenderBody()
-            <br />
             @if (ViewBag.Error != null)
             {
+                <h1 class="text-danger">An error occurred while processing your request</h1>
                 if (AccountHelper.IsAdmin())
                 {
-                    <div class="error-message">
-                        @ViewBag.Error.Message
-                    </div>
-                    <br />
-                    <div class="stack-trace">
+                    <h3 class="text-danger mb-2">
+                        Error message: @ViewBag.Error.Message
+                    </h3>
+                    <h5 class="mt-2 text-danger">Stack trace:</h5>
+                    <div class="p-2 mb-2 border border-danger border-2 rounded text-break">
                         @ViewBag.Error.StackTrace
                     </div>
                 }
                 else
                 {
-                    <h1 class="text-danger">Error.</h1>
-                    <h2 class="text-danger">An error occurred while processing your request.</h2>
-
                     if (ViewBag.UserError != null)
                     {
-                        <div class="error-message">
+                        <h3 class="text-danger p-2 mb-2">
                             @ViewBag.UserError
-                        </div>
+                        </h3>
                     }
                 }
             }
@@ -88,9 +85,9 @@
         <div class="container">
             @if (AccountHelper.IsAdmin())
             {
-                <h2 class='@(DbHelper.ConnectionSuccessful ? "text-success" : "text-danger")'>
+                <h3 class='@(DbHelper.ConnectionSuccessful ? "text-success" : "text-danger")'>
                     Current database: @DbHelper.DbName
-                </h2>
+                </h3>
             }
             <p>All nucleotide sequences are downloaded from <a href="https://www.ncbi.nlm.nih.gov" target="_blank" rel="noopener">GenBank</a></p>
             <p>&copy; @DateTime.Now.Year - foarLab.org</p>

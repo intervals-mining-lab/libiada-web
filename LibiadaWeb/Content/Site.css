@@ -36,16 +36,6 @@ input.input-validation-error {
     border: 1px solid #b94a48;
 }
 
-.stack-trace {
-    border: 1px solid #b94a48;
-    padding: 5px;
-}
-
-.error-message {
-    color: #b94a48;
-    font-weight: bold;
-}
-
 input[type="checkbox"].input-validation-error {
     border: 0 none;
 }
