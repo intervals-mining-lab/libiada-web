@@ -325,7 +325,7 @@
                                     <div ng-class="['card', 'card-' + tooltipElement.color]">
                                         <div class="card-header">
                                             <button type="button"
-                                                    class="btn btn-secondary btn-sm"
+                                                    class="btn btn-outline-secondary btn-sm"
                                                     data-bs-toggle="collapse"
                                                     data-bs-target="#subsequenceCharacteristics{{$index + 1}}"
                                                     aria-expanded="false"
@@ -334,7 +334,7 @@
                                             </button>
                                         </div>
                                         <div class="card-collapse collapse" id="subsequenceCharacteristics{{$index + 1}}">
-                                            <table class="table table-bordered table-sm fs-6" ng-class="::'table-'+tooltipElement.color">
+                                            <table class="table table-bordered table-sm fs-6 small" ng-class="::'table-'+tooltipElement.color">
                                                 <thead ng-repeat="value in ::tooltipElement.characteristics">
                                                     <tr>
                                                         <td align=center scope="col" ng-bind="::subsequencesCharacteristicsNames[$index]" />

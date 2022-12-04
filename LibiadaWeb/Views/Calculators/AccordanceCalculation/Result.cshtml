@@ -9,9 +9,8 @@
     @Html.Partial("_AngularControllerInitializer", "CalculationResultController")
 
     <div ng-controller="CalculationResultCtrl">
-        <p ng-bind="::matterNames[0]"></p>
-        <br />
-        <p ng-bind="::matterNames[1]"></p>
+        <h4 class="mb-2" ng-bind="::matterNames[0]"></h4>
+        <h4 ng-bind="::matterNames[1]"></h4>
         <div ng-switch="calculationType">
             <div ng-switch-when="Equality">
                 <table class="table table-bordered table-hover">

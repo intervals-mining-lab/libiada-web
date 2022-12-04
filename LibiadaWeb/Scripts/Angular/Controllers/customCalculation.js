@@ -13,11 +13,11 @@
         }
 
         function addImageTransformation() {
-            $scope.selectedImageTransformers.push({ value: $scope.imageTransformers[0].Value });
+            $scope.selectedImageTransformers.push($scope.imageTransformers[0]);
         }
 
         function deleteImageTransformation(transformation) {
-            $scope.selectedImageTransformers.splice($scope.transformations.indexOf(transformation), 1);
+            $scope.selectedImageTransformers.splice($scope.selectedImageTransformers.indexOf(transformation), 1);
         }
 
         $scope.addSequence = addSequence;

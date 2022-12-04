@@ -10,7 +10,7 @@
         Load sequence from local file(s)
     </label>
 </div>
-<div class="row mb-1" ng-show="localFile">
+<div class="row mb-2" ng-show="localFile">
     <fieldset>
         <legend>File type:</legend>
         <div class="form-check">
@@ -39,14 +39,14 @@
             </label>
         </div>
         <div class="form-check">
-            <input type="radio" class="form-check-inline" name="fileType" id="fileTypeWavFile" ng-model="fileType" value="wavFile" />
+            <input type="radio" class="form-check-input" name="fileType" id="fileTypeWavFile" ng-model="fileType" value="wavFile" />
             <label class="form-check-label" for="fileTypeWavFile">
                 WAV file
             </label>
         </div>
     </fieldset>
 </div>
-<div class="row mb-1" ng-show="localFile">
+<div class="row mb-2" ng-show="localFile">
     <label class="col-form-label col-md-2" for="file">Sequence file(s):</label>
     <div class="col-md-10">
         <input type="file" name="file" id="file" multiple />
@@ -55,13 +55,13 @@
 </div>
 <div ng-hide="localFile">
     <div ng-repeat="customSequence in customSequences">
-        <div class="row mb-1">
+        <div class="row mb-2">
             <label class="col-form-label col-md-2" for="customSequence">Sequence:</label>
             <div class="col-md-10">
                 <textarea class="form-control" rows="1" id="customSequence" ng-model="customSequence.sequence" name="customSequences"></textarea>
             </div>
         </div>
-        <div class="row mb-1">
+        <div class="row mb-2">
             <div class="offset-md-2 col-md-10">
                 <button type="button" class="btn btn-danger" ng-click="deleteSequence(customSequence)" ng-disabled="customSequences.length <= 1">
                     Delete sequence
@@ -70,14 +70,14 @@
         </div>
         <br />
     </div>
-    <div class="row mb-1">
+    <div class="row mb-2">
         <div class="offset-md-2 col-md-10">
             <button type="button" class="btn btn-success" ng-init="addSequence()" ng-click="addSequence()">
                 Add sequence
             </button>
         </div>
     </div>
-    <div class="row mb-1">
+    <div class="row mb-2">
         <label class="col-form-label col-md-2" for="delimiter">Elements delimiter:</label>
         <div class="col-md-10">
             <input type="text" class="form-control" name="delimiter" id="delimiter" maxlength="1" placeholder="Enter delimiter">
@@ -98,7 +98,6 @@
             Convert to lower case
         </label>
     </div>
-    <br />
     <div class="form-check">
         <input type="checkbox"
                class="form-check-input"

@@ -5,7 +5,7 @@
             <label class="col-form-label col-md-2" for="transformer">Transformer:</label>
             <div class="col-md-10">
                 <select class="form-select"
-                        ng-model="transformer.value"
+                        ng-model="transformer.Value"
                         ng-options="s.Value as s.Text for s in ::imageTransformers"
                         id="transformer"></select>
             </div>
@@ -13,7 +13,7 @@
         <div class="row mb-1">
             <div class="offset-md-2 col-md-10">
                 <button type="button" class="btn btn-danger" ng-click="deleteImageTransformation(transformer)">
-                    Delete characteristic
+                    Delete transformation
                 </button>
             </div>
         </div>
