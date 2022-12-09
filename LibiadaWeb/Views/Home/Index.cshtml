@@ -7,7 +7,7 @@
 
 @if (Request.IsAuthenticated)
 {
-    <div class="row">
+    <div class="row mb-3">
         <div class="col-md-4">
             <h2>Data</h2>
             @Html.ActionLink(AccountHelper.IsAdmin() ? "Matters" : "Sequences", "Index", "Matters")

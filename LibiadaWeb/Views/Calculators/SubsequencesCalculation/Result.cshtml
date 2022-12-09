@@ -40,7 +40,6 @@
                         id="secondCharacteristic"></select>
             </div>
         </div>
-        <br />
         <div class="row mb-1">
             <label class="col-form-label col-md-2" for="height">Height:</label>
             <div class="col-md-10">
@@ -53,9 +52,8 @@
                 <input class="form-control" name="width" id="width" type="number" min="400" step="20" ng-model="width" />
             </div>
         </div>
-        <br />
-        <input type="button" class="btn btn-secondary" ng-click="draw()" value="Draw" />
-        <div id="chart" class="font-monospace">
+        <input type="button" class="btn btn-secondary mb-2" ng-click="draw()" value="Draw" />
+        <div id="chart" class="font-monospace mb-2">
         </div>
 
         @*  @Html.Partial("_Filters")
@@ -81,7 +79,6 @@
                         </tr>
                     </tbody>
                 </table>
-                <br />
             </div>*@
     </div>
     @section Scripts {

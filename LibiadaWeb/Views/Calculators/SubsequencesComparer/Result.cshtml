@@ -83,7 +83,7 @@
         <table class="table table-bordered table-striped" ng-repeat="equalElement in equalElementsToShow" ng-show="elementVisible(equalElement)">
             <tbody>
                 <tr>
-                    <td>
+                    <td class="lh-sm">
                         <b> {{$index + 1}}. </b>
                         <br />
                         First sequence: <b> {{mattersNames[firstMatterIndex]}} </b>
@@ -120,7 +120,7 @@
                         <div class="card">
                             <div class="card-hader">
                                 <button type="button"
-                                        class="btn btn-secondary btn-sm"
+                                        class="btn btn-outline-secondary btn-sm"
                                         data-bs-toggle="collapse"
                                         data-bs-target="#additionalActions{{$index + 1}}"
                                         aria-controls="additionalActions{{$index + 1}}"

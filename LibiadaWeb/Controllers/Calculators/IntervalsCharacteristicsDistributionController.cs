@@ -79,7 +79,7 @@
             return CreateTask(() =>
             {
                 var orderGenerator = new OrderGenerator();
-                var orders = new List<int[]>();
+                List<int[]> orders;
                 switch (generateStrict)
                 {
                     case 0:
@@ -169,7 +169,7 @@
                             })
                         })
                     },
-                    {"linkList",list },
+                    {"linkList", list },
                     { "characteristicNames", characteristicNames },
                     { "characteristicsList", characteristicsList },
                     { "characteristicsIndex", index }

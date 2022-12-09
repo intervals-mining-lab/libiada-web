@@ -10,10 +10,9 @@
 
     <div ng-controller="LocalCalculationResultCtrl">
         <div ng-disabled="loading">
-            <input type="button" class="btn btn-secondary" ng-click="changeCharacteristicsTableVisibility()" value="Show characteristics table" />
-            <br />
+            <input type="button" class="btn btn-secondary mb-2" ng-click="changeCharacteristicsTableVisibility()" value="Show characteristics table" />
             <div ng-repeat="chainsCharacteristics in ::characteristics">
-                <h3>{{::$index+1}}. {{::chainsCharacteristics.MatterName}}</h3>
+                <h4>{{::$index+1}}. {{::chainsCharacteristics.MatterName}}</h4>
                 <table ng-if="isCharacteristicsTableVisible" st-table="characteristics" class="table table-bordered table-hover" ng-cloak>
                     <thead>
                         <tr>
@@ -33,8 +32,8 @@
                     </tbody>
                 </table>
             </div>
-            <br />
-            <div class="row mb-1">
+            <hr />
+            <div class="row mb-2">
                 <label class="col-form-label col-md-2" for="aligner">Aligner:</label>
                 <div class="col-md-10">
                     <select class="form-select"
@@ -44,7 +43,7 @@
                             id="aligner"></select>
                 </div>
             </div>
-            <div class="row mb-1">
+            <div class="row mb-2">
                 <label class="col-form-label col-md-2" for="distancesCalculator">Distances calculator:</label>
                 <div class="col-md-10">
                     <select class="form-select"
@@ -54,7 +53,7 @@
                             id="distancesCalculator"></select>
                 </div>
             </div>
-            <div class="row mb-1">
+            <div class="row mb-2">
                 <label class="col-form-label col-md-2" for="aggregator">Aggregator:</label>
                 <div class="col-md-10">
                     <select class="form-select"
@@ -64,8 +63,11 @@
                             id="aggregator"></select>
                 </div>
             </div>
-            <input type="button" class="btn btn-secondary" ng-click="calculateLocalCharacteristicsSimilarityMatrix()" value="Calculate similarity matrix" />
-            <br />
+            <div class="row mb-2">
+                <div class="col-md-10">
+                    <input type="button" class="btn btn-secondary mb-2" ng-click="calculateLocalCharacteristicsSimilarityMatrix()" value="Calculate similarity matrix" />
+                </div>
+            </div>
             <table class="table table-bordered" ng-show="comparisonMatrix">
                 <caption>Aligner: {{usedAligner}}, Distances calculator: {{usedDistanceCalculator}}, Aggregator: {{usedAggregator}}</caption>
                 <tbody>
@@ -81,14 +83,14 @@
                     </tr>
                 </tbody>
             </table>
-            <br />
+            <hr />
             <div class="form-check">
                 <input type="checkbox" class="form-check-input" name="lineChart" id="lineChart" ng-model="lineChart" value="false" />
                 <label class="form-check-label" for="lineChart">
                     Draw linechart
                 </label>
             </div>
-            <div class="row mb-1">
+            <div class="row mb-2">
                 <label class="col-form-label col-md-2" for="firstCharacteristic">First characteristic:</label>
                 <div class="col-md-10">
                     <select class="form-select"
@@ -98,7 +100,7 @@
                             id="firstCharacteristic"></select>
                 </div>
             </div>
-            <div class="row mb-1" ng-hide="lineChart">
+            <div class="row mb-2" ng-hide="lineChart">
                 <label class="col-form-label col-md-2" for="secondCharacteristic">Second characteristic:</label>
                 <div class="col-md-10">
                     <select class="form-select"
@@ -108,26 +110,23 @@
                             id="secondCharacteristic"></select>
                 </div>
             </div>
-            <br />
-            <div class="row mb-1">
+            <div class="row mb-2">
                 <label class="col-form-label col-md-2" for="height">Height:</label>
                 <div class="col-md-10">
                     <input class="form-control" name="height" id="height" type="number" min="{{::500 + legendHeight}}" step="20" ng-model="height" />
                 </div>
             </div>
-            <div class="row mb-1">
+            <div class="row mb-2">
                 <label class="col-form-label col-md-2" for="width">Width:</label>
                 <div class="col-md-10">
                     <input class="form-control" name="width" id="width" type="number" min="400" step="20" ng-model="width" />
                 </div>
             </div>
-            <br />
-            <input type="button" class="btn btn-secondary" ng-click="draw()" value="Draw" />
-            <div id="chart" class="font-monospace">
+            <input type="button" class="btn btn-secondary mb-2" ng-click="draw()" value="Draw" />
+            <div id="chart" class="font-monospace mb-3">
             </div>
         </div>
     </div>
-    <br />
 
     @section Scripts {
         @Scripts.Render("~/bundles/d3js")

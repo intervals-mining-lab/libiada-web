@@ -15,9 +15,8 @@
             .then(function (data) {
                 MapModelFromJson($scope, JSON.parse(data.data));
 
-             
-                $scope.firstCharacteristic = $scope.characteristicsList[0];
-                $scope.secondCharacteristic = $scope.characteristicsList.length > 1 ? $scope.characteristicsList[1] : $scope.characteristicsList[0];
+                //$scope.firstCharacteristic = $scope.characteristicsList[0];
+                //$scope.secondCharacteristic = $scope.characteristicsList.length > 1 ? $scope.characteristicsList[1] : $scope.characteristicsList[0];
 
                 $scope.legendHeight = $scope.legend.length * 20;
                 $scope.height = 800 + $scope.legendHeight;

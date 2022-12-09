@@ -9,9 +9,9 @@
     @Html.Partial("_AngularControllerInitializer", "CalculationResultController")
 
     <div ng-controller="CalculationResultCtrl">
-        <h2 ng-bind="::matterName"></h2>
-        <h2 ng-bind="::characteristicName"></h2>
-        <h2 ng-bind="::notationName"></h2>
+        <h3 ng-bind="::matterName"></h3>
+        <h4 ng-bind="::characteristicName"></h4>
+        <h4 ng-bind="::notationName"></h4>
         <div ng-if="!isFilter">
             <table class="table table-bordered table-hover">
                 <thead>

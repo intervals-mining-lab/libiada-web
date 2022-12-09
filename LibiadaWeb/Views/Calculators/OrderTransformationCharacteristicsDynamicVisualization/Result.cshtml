@@ -8,36 +8,35 @@
 {
     @Html.Partial("_AngularControllerInitializer", "OrderTransformationCharacteristicsDynamicVisualizationResultController")
 
-    <div ng-controller="OrderTransformationCharacteristicsDynamicVisualizationResultCtrl">
-        <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
-
-        <table class="table table-bordered table-hover" ng-cloak>
-            <tbody>
-                <tr ng-repeat="transformation in ::transformationsList">
-                    <td ng-bind="::transformation" />
-                </tr>
-            </tbody>
-        </table>
-        <div class="font-monospace my-3">
-            Transformations repeated {{::iterationsCount}} times
-        </div>
-        <div class="row mb-1">
-            <label class="col-form-label col-md-2" for="height">Height:</label>
-            <div class="col-md-10">
-                <input class="form-control" name="height" id="height" type="number" min="{{::500 + legendHeight}}" step="20" ng-model="height" />
-            </div>
-        </div>
-        <div class="row mb-1">
-            <label class="col-form-label col-md-2" for="width">Width:</label>
-            <div class="col-md-10">
-                <input class="form-control" name="width" id="width" type="number" min="400" step="20" ng-model="width" />
-            </div>
-        </div>
-        <br />
-        <input type="button" class="btn btn-secondary" ng-click="draw()" value="Draw" />
-        <div id="chart" class="font-monospace">
+<div ng-controller="OrderTransformationCharacteristicsDynamicVisualizationResultCtrl">
+    <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
+    <h4 class="font-monospace">
+        Transformations repeated {{::iterationsCount}} times:
+    </h4>
+    <table class="table table-bordered table-hover" ng-cloak>
+        <tbody>
+            <tr ng-repeat="transformation in ::transformationsList">
+                <td ng-bind="::transformation" />
+            </tr>
+        </tbody>
+    </table>
+    <hr/>
+    <div class="row mb-1">
+        <label class="col-form-label col-md-2" for="height">Height:</label>
+        <div class="col-md-10">
+            <input class="form-control" name="height" id="height" type="number" min="{{::500 + legendHeight}}" step="20" ng-model="height" />
         </div>
     </div>
+    <div class="row mb-1">
+        <label class="col-form-label col-md-2" for="width">Width:</label>
+        <div class="col-md-10">
+            <input class="form-control" name="width" id="width" type="number" min="400" step="20" ng-model="width" />
+        </div>
+    </div>
+    <input type="button" class="btn btn-secondary mb-2" ng-click="draw()" value="Draw" />
+    <div id="chart" class="font-monospace mb-2">
+    </div>
+</div>
 }
 
 @section Scripts {

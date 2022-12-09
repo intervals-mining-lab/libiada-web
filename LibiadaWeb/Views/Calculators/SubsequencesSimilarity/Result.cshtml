@@ -8,19 +8,11 @@
 {
     @Html.Partial("_AngularControllerInitializer", "SubsequencesCalculationResultController")
     <div ng-controller="SubsequencesCalculationResultCtrl">
-        <h3>
-            {{::firstSequenceName}} and {{::secondSequenceName}} using {{::characteristicName}}
-        </h3>
-        <br />
-        <div>
-            {{::similarity}} % of subsequences are similar:
-            <br />
-            {{::firstSequenceSimilarity}} % of first sequence.
-            <br />
-            {{::secondSequenceSimilarity}} % of second sequence.
-        </div>
-        <br />
-        <table class="table table-bordered table-hover">
+        <h4>{{::firstSequenceName}} and {{::secondSequenceName}} using {{::characteristicName}}</h4>
+        <h5>{{::similarity}} % of subsequences are similar:</h5>
+        <h5>{{::firstSequenceSimilarity}} % of the first sequence</h5>
+        <h5>{{::secondSequenceSimilarity}} % of the second sequence</h5>
+        <table class="table table-bordered table-hover table-sm lh-sm">
             <thead>
                 <tr>
                     <th>First sequence subsequence feature</th>
@@ -34,7 +26,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="similarSubsequence in ::similarSubsequences" 
+                <tr ng-repeat="similarSubsequence in ::similarSubsequences"
                     ng-init="first = firstSequenceSubsequences[similarSubsequence.Item1]; second = secondSequenceSubsequences[similarSubsequence.Item2]">
                     <td ng-bind="::features[first.FeatureId]" />
                     <td>
@@ -43,15 +35,13 @@
                         </ul>
                     </td>
                     <td>
-                        {{::first.Starts.join(", ")}}
-                        <br />
+                        <span>{{::first.Starts.join(", ")}}</span>
                         <ul class="list-unstyled">
                             <li ng-repeat="position in ::first.Position" ng-bind="::position.Start"></li>
                         </ul>
                     </td>
                     <td>
-                        {{::first.Lengths.join(", ")}}
-                        <br />
+                        <span>{{::first.Lengths.join(", ")}}</span>
                         <ul class="list-unstyled">
                             <li ng-repeat="position in ::first.Position" ng-bind="::position.Length"></li>
                         </ul>
@@ -63,15 +53,13 @@
                         </ul>
                     </td>
                     <td>
-                        {{::second.Starts.join(", ")}}
-                        <br />
+                        <span>{{::second.Starts.join(", ")}}</span>
                         <ul class="list-unstyled">
                             <li ng-repeat="position in ::second.Position" ng-bind="::position.Start"></li>
                         </ul>
                     </td>
                     <td>
-                        {{::second.Lengths.join(", ")}}
-                        <br />
+                        <span>{{::second.Lengths.join(", ")}}</span>
                         <ul class="list-unstyled">
                             <li ng-repeat="position in ::second.Position" ng-bind="::position.Length"></li>
                         </ul>

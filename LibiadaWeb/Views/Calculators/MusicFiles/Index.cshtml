@@ -11,16 +11,14 @@
     @Html.AntiForgeryToken()
     <div ng-controller="CustomCalculationCtrl">
         <h4>Sequence and parameters</h4>
-        <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="row mb-1" >
+        <div class="row mb-2">
+            <label class="col-form-label col-md-2" for="file">WAV files:</label>
             <div class="col-md-10">
-                <label class="col-form-label col-md-2" for="file">WAV files:</label>
-                <input type="file" name="file" id="file" multiple />
+                <input class="form-control" type="file" name="file" id="file" multiple />
             </div>
         </div>
-        <br />
-        <div class="row mb-1">
+        <div class="row mb-2">
             <div class="col-md-10">
                 <input type="submit" value="Calculate" class="btn btn-secondary" />
             </div>

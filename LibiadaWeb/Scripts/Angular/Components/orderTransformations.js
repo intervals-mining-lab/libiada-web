@@ -15,7 +15,7 @@
         };
 
         ctrl.deleteTransformation = transformation => 
-            ctrl.transformations.splice(ctrl.transformationsSequence.indexOf(transformation), 1);
+            ctrl.transformationsSequence.splice(ctrl.transformationsSequence.indexOf(transformation), 1);
     }
 
     angular.module("libiada").component("orderTransformations", {

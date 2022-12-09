@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Characteristics";
+    ViewBag.Title = "Sequence prediction result";
 }
 
 <h2>@ViewBag.Title</h2>
@@ -11,9 +11,8 @@
     <div ng-controller="SequencePredictionResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <div ng-disabled="loading">
-            <h2> Sequence prediction result </h2>
-            <h3>Sequence name: {{matterName}} </h3>
-            <div> Correct prediction % {{matching}} </div>
+            <h4>Sequence name: {{matterName}} </h4>
+            <h5> Correct prediction: {{matching.toFixed(4)}} % </h5>
             <table class="table table-bordered table-hover" ng-cloak>
                 <thead>
                     <tr>
@@ -33,27 +32,8 @@
                     </tr>
                 </tbody>
             </table>
-            <br />
-
-            <div class="row mb-1">
-                <label class="col-form-label col-md-2" for="height">Height:</label>
-                <div class="col-md-10">
-                    <input class="form-control" name="height" id="height" type="number" min="{{::500 + legendHeight}}" step="20" ng-model="height" />
-                </div>
-            </div>
-            <div class="row mb-1">
-                <label class="col-form-label col-md-2" for="width">Width:</label>
-                <div class="col-md-10">
-                    <input class="form-control" name="width" id="width" type="number" min="400" step="20" ng-model="width" />
-                </div>
-            </div>
-            <br />
-            <input type="button" class="btn btn-secondary" ng-click="draw()" value="Draw" />
-            <div id="chart" class="font-monospace">
-            </div>
         </div>
     </div>
-    <br />
 }
 
 @section Scripts {

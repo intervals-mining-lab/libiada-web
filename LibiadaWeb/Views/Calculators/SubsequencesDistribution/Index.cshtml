@@ -24,6 +24,7 @@
                        selected-matters-count="selectedMattersCount">
         </matters-table>
         @Html.Partial("_FeaturesSelect")
+        <hr/>
         <characteristic characteristic-types="::characteristicTypes"
                         characteristics-dictionary="::characteristicsDictionary"
                         nature="nature"
@@ -32,7 +33,6 @@
                         translators="::translators"
                         pause-treatments="::pauseTreatments">
         </characteristic>
-        <hr />
         <characteristics characteristic-types="::characteristicTypes"
                          characteristics-dictionary="::characteristicsDictionary"
                          nature="nature"
@@ -43,7 +43,6 @@
                          trajectories="::trajectories"
                          hide-notation="true">
         </characteristics>
-        <hr />
         @Html.Partial("_MattersSubmit")
     </div>
 }

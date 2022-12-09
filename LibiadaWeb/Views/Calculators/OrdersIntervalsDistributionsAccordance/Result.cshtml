@@ -27,15 +27,13 @@
                     <input class="form-control" name="height" id="height" type="number" min="500" step="20" ng-model="height" />
                 </div>
             </div>
-            <div class="row mb-1">
+            <div class="row mb-2">
                 <label class="col-form-label col-md-2" for="width">Width:</label>
                 <div class="col-md-10">
                     <input class="form-control" name="width" id="width" type="number" min="400" step="20" ng-model="width" />
                 </div>
             </div>
-            <br />
-            <input type="button" class="btn btn-secondary" ng-click="draw()" value="Draw" />
-            <br />
+            <input type="button" class="btn btn-secondary mb-3" ng-click="draw()" value="Draw" />
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
@@ -50,13 +48,10 @@
                     </tr>
                 </tbody>
             </table>
-            <br />
-            <div id="chart" class="font-monospace">
+            <div id="chart" class="font-monospace mb-2">
             </div>
-
         </div>
     </div>
-    <br />
 }
 
 @section Scripts {

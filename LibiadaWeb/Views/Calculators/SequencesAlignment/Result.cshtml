@@ -8,15 +8,12 @@
 {
     @Html.Partial("_AngularControllerInitializer", "CalculationResultController")
     <div ng-controller="CalculationResultCtrl">
-        <div>Alignment type: {{::validationType}}</div>
-        <div>Optimal shift: {{::optimalRotation}}</div>
-        <div ng-if="sort">Characteristics sorted descending</div>
-        <div ng-if="cyclicShift">Cyclic shift is used</div>
-        <div ng-bind="::firstSequenceName"></div>
-        <br />
-        <div ng-bind="::secondSequenceName"></div>
-        <br />
-        <div ng-bind="::characteristicName"></div>
+        <h4>Alignment type: {{::validationType}} using {{characteristicName}}</h4>
+        <h4>Optimal shift: {{::optimalRotation}}</h4>
+        <h4 ng-if="sort">Characteristics sorted descending</h4>
+        <h4 ng-if="cyclicShift">Cyclic shift is used</h4>
+        <h5 ng-bind="::firstSequenceName"></h5>
+        <h5 ng-bind="::secondSequenceName"></h5>
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>

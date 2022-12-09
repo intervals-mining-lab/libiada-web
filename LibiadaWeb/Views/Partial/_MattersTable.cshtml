@@ -12,14 +12,12 @@
         Show only reference sequences
     </label>
 </div>
-<div class="mb-1" ng-if="::($ctrl.checkboxes && !$ctrl.displayMultisequenceNumber)">
-    <div class="btn-group" role="group" aria-label="Select / unselect vsible matters">
-        <input type="button" class="btn btn-success" ng-click="$ctrl.selectAllVisibleMatters()" value="Select all visible sequences" />
-        <input type="button" class="btn btn-secondary" ng-click="$ctrl.unselectAllVisibleMatters()" value="Unselect all visible sequences" />
-    </div>
+<div class="mb-1 btn-group" ng-if="::($ctrl.checkboxes && !$ctrl.displayMultisequenceNumber)" role="group" aria-label="Select / unselect vsible matters">
+    <input type="button" class="btn btn-success" ng-click="$ctrl.selectAllVisibleMatters()" value="Select all visible sequences" />
+    <input type="button" class="btn btn-secondary" ng-click="$ctrl.unselectAllVisibleMatters()" value="Unselect all visible sequences" />
 </div>
 <h4>Sequences:</h4>
-<table ng-cloak class="table table-bordered table-hover">
+<table ng-cloak class="table table-bordered table-hover table-sm mb-3">
     <thead>
         <tr>
             <th ng-if="::$ctrl.displayMultisequenceNumber"></th>
@@ -58,4 +56,3 @@
     <tbody id="mattersSelectList">
     </tbody>
 </table>
-<br />

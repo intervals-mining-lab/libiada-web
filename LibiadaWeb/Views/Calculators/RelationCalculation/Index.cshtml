@@ -22,6 +22,7 @@
                        maximum-selected-matters="::maximumSelectedMatters"
                        selected-matters-count="selectedMattersCount">
         </matters-table>
+        <hr/>
         <characteristic characteristic-types="::characteristicTypes"
                         characteristics-dictionary="::characteristicsDictionary"
                         nature="nature"
@@ -31,7 +32,7 @@
                         pause-treatments="::pauseTreatments"
                         trajectories="::trajectories">
         </characteristic>
-        <div class="form-check">
+        <div class="form-check mb-2">
             <input type="checkbox"
                    class="form-check-input"
                    name="filter"
@@ -44,14 +45,14 @@
             </label>
         </div>
         <div ng-show="showFilters">
-            <div class="row mb-1">
+            <div class="row mb-2">
                 <label class="col-form-label col-md-2" for="filterSize">Count of strongest dependencies to show:</label>
                 <div class="col-md-10">
                     <input class="form-control" name="filterSize" type="number" value="10" min="1" id="filterSize" />
                     @Html.ValidationMessage("filterSize", "", new { @class = "text-danger" })
                 </div>
             </div>
-            <div class="form-check">
+            <div class="form-check mb-2">
                 <input type="checkbox"
                        class="form-check-input"
                        name="frequencyFilter"
@@ -63,7 +64,7 @@
                     Calculate only for X most frequent elements
                 </label>
             </div>
-            <div class="row mb-1" ng-show="frequencyFilter">
+            <div class="row mb-2" ng-show="frequencyFilter">
                 <label class="col-form-label col-md-2" for="frequencyCount">X:</label>
                 <div class="col-md-10">
                     <input class="form-control" name="frequencyCount" type="number" value="10" min="1" id="frequencyCount" />
@@ -71,7 +72,6 @@
                 </div>
             </div>
         </div>
-        <br />
         @Html.Partial("_MattersSubmit")
     </div>
 }
