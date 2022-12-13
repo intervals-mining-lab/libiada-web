@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+    using LibiadaCore.Extensions;
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Sequences;
@@ -58,7 +59,11 @@
 
                             if (matters.Any(m => m.Name == sequenceName))
                             {
-                                sequence.MatterId = matters.Single(m => m.Name == sequenceName).Id;
+                                var matter = matters.Single(m => m.Name == sequenceName);
+                                sequence.MatterId = matter.Id;
+                                importResult.MatterName = matter.Name;
+                                importResult.SequenceType = matter.SequenceType.GetDisplayValue();
+                                importResult.Group = matter.Group.GetDisplayValue();
                                 importResult.Result = "Successfully imported poem for existing matter";
                             }
                             else
@@ -71,6 +76,9 @@
                                     SequenceType = SequenceType.CompleteText
                                 };
 
+                                importResult.MatterName = sequence.Matter.Name;
+                                importResult.SequenceType = sequence.Matter.SequenceType.GetDisplayValue();
+                                importResult.Group = sequence.Matter.Group.GetDisplayValue();
                                 importResult.Result = "Successfully imported poem and created matter";
                             }
 
@@ -78,6 +86,7 @@
 
                             repository.Create(sequence, Request.Files[i].InputStream, Language.Russian, true, Translator.NoneOrManual, dropPunctuation);
                             importResult.Status = "Success";
+                            
                             importResults.Add(importResult);
                         }
                         catch (Exception exception)

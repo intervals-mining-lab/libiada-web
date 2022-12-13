@@ -38,11 +38,13 @@
         /// </returns>
         public ActionResult Index()
         {
-            var data = new Dictionary<string, object>();
-
             var transformations = EnumHelper.GetSelectList(typeof(OrderTransformation));
-            data.Add("transformations", transformations);
-
+            var imageTransformers = EnumHelper.GetSelectList(typeof(ImageTransformer));
+            var data = new Dictionary<string, object>
+            {
+                { "transformations", transformations },
+                { "imageTransformers", imageTransformers }
+            };
             ViewBag.data = JsonConvert.SerializeObject(data);
             return View();
         }

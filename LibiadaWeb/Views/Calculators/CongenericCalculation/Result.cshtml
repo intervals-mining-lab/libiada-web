@@ -27,12 +27,8 @@
                 </tbody>
             </table>
         </div>
-
-        <br />
         <div id="visualization_container" style="width: 800px; height: 500px"></div>
-        <br />
-        <br />
-        <div class="form-check">
+        <div class="form-check by-2">
             <input type="checkbox"
                    class="form-check-input"
                    name="Rank"
@@ -41,8 +37,7 @@
                    onclick="SwitchXAxis()" />
             <label class="form-check-label" for="Rank">Rank distribution</label>
         </div>
-        <br />
-        <div class="form-check">
+        <div class="form-check mb-2">
             <input type="checkbox"
                    class="form-check-input"
                    name="allGraphics"
@@ -52,8 +47,7 @@
                    onclick="SwitchYAxis()" />
             <label class="form-check-label" for="allGraphics">Show all charts</label>
         </div>
-        <br />
-        <div class="form-check">
+        <div class="form-check mb-3">
             <input type="checkbox"
                    class="form-check-input"
                    name="logarithmicScale"
@@ -62,9 +56,6 @@
                    disabled="disabled" />
             <label class="form-check-label" for="logarithmicScale">Log scale</label>
         </div>
-        <br />
-        <br />
-
         <div class="row mb-1">
             <label class="col-form-label col-md-2" for="firstCharacteristic">First characteristic:</label>
             <div class="col-md-10">
@@ -85,7 +76,7 @@
                         id="secondCharacteristic"></select>
             </div>
         </div>
-        <div class="form-check">
+        <div class="form-check mb-2">
             <input type="checkbox"
                    class="form-check-input"
                    name="showLegend"
@@ -95,8 +86,7 @@
                 Draw legend
             </label>
         </div>
-        <br />
-        <input type="button" class="btn btn-secondary" ng-click="draw()" value="Draw" />
+        <input type="button" class="btn btn-secondary mb-2" ng-click="draw()" value="Draw" />
     </div>
 }
 

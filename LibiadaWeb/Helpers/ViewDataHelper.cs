@@ -172,46 +172,6 @@
         /// Fills view data.
         /// </summary>
         /// <param name="minSelectedMatters">
-        /// The minimum selected matters.
-        /// </param>
-        /// <param name="maxSelectedMatters">
-        /// The maximum selected matters.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Dictionary{String, Object}"/>.
-        /// </returns>
-        public Dictionary<string, object> FillViewData(int minSelectedMatters, int maxSelectedMatters)
-        {
-            Dictionary<string, object> data = GetMattersData(minSelectedMatters, maxSelectedMatters, m => true);
-
-            IEnumerable<SelectListItem> natures;
-            IEnumerable<SequenceType> sequenceTypes;
-            IEnumerable<Group> groups;
-
-            if (AccountHelper.IsAdmin())
-            {
-                natures = EnumHelper.GetSelectList(typeof(Nature));
-                sequenceTypes = EnumExtensions.ToArray<SequenceType>();
-                groups = EnumExtensions.ToArray<Group>();
-            }
-            else
-            {
-                natures = new[] { Nature.Genetic }.ToSelectList();
-                sequenceTypes = EnumExtensions.ToArray<SequenceType>().Where(st => st.GetNature() == Nature.Genetic);
-                groups = EnumExtensions.ToArray<Group>().Where(g => g.GetNature() == Nature.Genetic);
-            }
-
-            data.Add("natures", natures);
-            data.Add("sequenceTypes", sequenceTypes.ToSelectListWithNature(true));
-            data.Add("groups", groups.ToSelectListWithNature(true));
-
-            return data;
-        }
-
-        /// <summary>
-        /// Fills view data.
-        /// </summary>
-        /// <param name="minSelectedMatters">
         /// The minimum Selected Matters.
         /// </param>
         /// <param name="maxSelectedMatters">
@@ -364,6 +324,47 @@
                 { "characteristicTypes", characteristicTypes },
                 { "characteristicsDictionary", characteristicsDictionary }
             };
+        }
+
+        /// <summary>
+        /// Fills matters data dictionary.
+        /// </summary>
+        /// <param name="minSelectedMatters">
+        /// The minimum selected matters.
+        /// </param>
+        /// <param name="maxSelectedMatters">
+        /// The maximum selected matters.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Dictionary{String, Object}"/>.
+        /// </returns>
+        public Dictionary<string, object> GetMattersData(int minSelectedMatters, int maxSelectedMatters)
+        {
+            Dictionary<string, object> data = GetMattersData(minSelectedMatters, maxSelectedMatters, m => true);
+
+            // TODO: refactor to remume duplication with other methods or rewrite this whole class as builder
+            IEnumerable<SelectListItem> natures;
+            IEnumerable<SequenceType> sequenceTypes;
+            IEnumerable<Group> groups;
+
+            if (AccountHelper.IsAdmin())
+            {
+                natures = EnumHelper.GetSelectList(typeof(Nature));
+                sequenceTypes = EnumExtensions.ToArray<SequenceType>();
+                groups = EnumExtensions.ToArray<Group>();
+            }
+            else
+            {
+                natures = new[] { Nature.Genetic }.ToSelectList();
+                sequenceTypes = EnumExtensions.ToArray<SequenceType>().Where(st => st.GetNature() == Nature.Genetic);
+                groups = EnumExtensions.ToArray<Group>().Where(g => g.GetNature() == Nature.Genetic);
+            }
+
+            data.Add("natures", natures);
+            data.Add("sequenceTypes", sequenceTypes.ToSelectListWithNature(true));
+            data.Add("groups", groups.ToSelectListWithNature(true));
+
+            return data;
         }
 
         /// <summary>

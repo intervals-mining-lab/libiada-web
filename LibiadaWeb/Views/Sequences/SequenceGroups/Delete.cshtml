@@ -1,4 +1,5 @@
-﻿@model SequenceGroup
+﻿@using LibiadaCore.Extensions
+@model SequenceGroup
 
 @{
     ViewBag.Title = "Sequences group";
@@ -6,9 +7,8 @@
 
 <h2>@ViewBag.Title</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Are you sure you want to delete this group?</h3>
 <div>
-    <h4>SequenceGroup</h4>
     <hr />
     <dl>
         <dt>@Html.DisplayNameFor(model => model.Name)</dt>
@@ -32,14 +32,39 @@
         <dt>@Html.DisplayNameFor(model => model.Modified)</dt>
         <dd>@Html.DisplayFor(model => model.Modified)</dd>
     </dl>
-
+    @if (Model.Matters.Count > 0)
+    {
+        <h5>Matters list:</h5>
+        <table class="table table-bordered table-hover table-sm">
+            <thead>
+                <tr>
+                    <th>@(Html.DisplayNameFor(model => model.Matters.First().Name))</th>
+                    <th>@(Html.DisplayNameFor(model => model.Matters.First().Group))</th>
+                    <th>@(Html.DisplayNameFor(model => model.Matters.First().SequenceType))</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var matter in Model.Matters)
+                {
+                    <tr>
+                        <td>@matter.Name</td>
+                        <td>@matter.Group.GetDisplayValue()</td>
+                        <td>@matter.SequenceType.GetDisplayValue()</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
 
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-secondary" /> |
-            @Html.ActionLink("Back to List", "Index")
+        <div class="row mb-3">
+            <div class="col-md-10">
+                <input type="submit" value="Delete" class="btn btn-danger" />
+                <div class="vr"></div>
+                @Html.ActionLink("Back to List", "Index")
+            </div>
         </div>
     }
 </div>

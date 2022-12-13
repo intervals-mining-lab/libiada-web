@@ -14,6 +14,7 @@
         }
 
         $scope.fileChanged = fileChanged;
+
         $scope.fileSelected = { value: false };
     }
     

@@ -26,7 +26,6 @@
             var viewDataHelper = new ViewDataHelper(db);
             var data = viewDataHelper.FillViewData(1, 1, m => m.SequenceType == SequenceType.CompletePoem, "Segment");
             data.Add("nature", (byte)Nature.Literature);
-            data.Remove("natures");
             ViewBag.data = JsonConvert.SerializeObject(data);
             return View();
         }

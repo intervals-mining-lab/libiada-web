@@ -36,72 +36,72 @@
                     <div id="sidebar">
                         <ul id='nav' class="nav nav-tabs d-flex pt-1" role="tablist">
                             <li class="nav-item" role="presentation" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Legend">
-                                <button class="nav-link active p-1" 
-                                        id="legend-tab" data-bs-toggle="tab" 
-                                        data-bs-target="#legend-tab-pane" 
-                                        type="button" 
-                                        role="tab" 
-                                        aria-controls="legend-tab-pane" 
+                                <button class="nav-link active p-1"
+                                        id="legend-tab" data-bs-toggle="tab"
+                                        data-bs-target="#legend-tab-pane"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="legend-tab-pane"
                                         aria-selected="true">
                                     <i class="bi-list-ul fs-3" aria-label="Legend" role="img"></i>
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Display settings">
-                                <button class="nav-link p-1" 
-                                        id="characteristic-tab" 
-                                        data-bs-toggle="tab" 
-                                        data-bs-target="#characteristic-tab-pane" 
-                                        type="button" 
-                                        role="tab" 
-                                        aria-controls="characteristic-tab-pane" 
+                                <button class="nav-link p-1"
+                                        id="characteristic-tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#characteristic-tab-pane"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="characteristic-tab-pane"
                                         aria-selected="false">
                                     <i class="bi-display fs-3" aria-label="Display settings" role="img"></i>
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Similar sequences selection">
-                                <button class="nav-link p-1" 
-                                        id="similar-sequences-tab" 
-                                        data-bs-toggle="tab" 
-                                        data-bs-target="#similar-sequences-tab-pane" 
-                                        type="button" 
-                                        role="tab" 
-                                        aria-controls="similar-sequences-tab-pane" 
+                                <button class="nav-link p-1"
+                                        id="similar-sequences-tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#similar-sequences-tab-pane"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="similar-sequences-tab-pane"
                                         aria-selected="false">
                                     <i class="bi-link fs-3" aria-label="Similar sequences selection" role="img"></i>
                                 </button>
                             </li>
-                            <li class="nav-item" role="presentation"data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Find by product">
-                                <button class="nav-link p-1" 
-                                        id="filter-tab" 
-                                        data-bs-toggle="tab" 
-                                        data-bs-target="#filter-tab-pane" 
-                                        type="button" 
-                                        role="tab" 
-                                        aria-controls="filter-tab-pane" 
+                            <li class="nav-item" role="presentation" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Find by product">
+                                <button class="nav-link p-1"
+                                        id="filter-tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#filter-tab-pane"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="filter-tab-pane"
                                         aria-selected="false">
                                     <i class="bi-search fs-3" aria-label="Find by products" role="img"></i>
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Features select">
-                                <button class="nav-link p-1" 
-                                        id="features-tab" 
-                                        data-bs-toggle="tab" 
-                                        data-bs-target="#features-tab-pane" 
-                                        type="button" 
-                                        role="tab" 
-                                        aria-controls="features-tab-pane" 
+                                <button class="nav-link p-1"
+                                        id="features-tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#features-tab-pane"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="features-tab-pane"
                                         aria-selected="false">
                                     <i class="bi-filter fs-3" aria-label="Features select" role="img"></i>
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Tooltip">
-                                <button class="nav-link p-1" 
-                                        id="tooltip-tab" 
-                                        data-bs-toggle="tab" 
-                                        data-bs-target="#tooltip-tab-pane" 
-                                        type="button" 
-                                        role="tab" 
-                                        aria-controls="tooltip-tab-pane" 
+                                <button class="nav-link p-1"
+                                        id="tooltip-tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#tooltip-tab-pane"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="tooltip-tab-pane"
                                         aria-selected="false">
                                     <i class="bi-info-circle fs-3" aria-label="Tooltip" role="img"></i>
                                 </button>
@@ -109,7 +109,7 @@
                         </ul>
                         <div class="tab-content px-2 pt-2">
                             <div id="legend-tab-pane" class="tab-pane fade show active" role="tabpanel" aria-labelledby="legend-tab" tabindex="0">
-                                <div class="row mb-1">
+                                <div class="row">
                                     <div class="col-md-12 mb-2 btn-group" role="group" aria-label="Legend control buttons">
                                         <button type="button" class="btn btn-outline-secondary btn-sm" ng-click="legendSetVisibilityForAll(true)">
                                             Show all
@@ -119,7 +119,6 @@
                                         </button>
                                     </div>
                                 </div>
-
                                 <!-- .roundedOne -->
                                 <div ng-repeat="legendItem in matters">
                                     <div class="rounded-check form-check d-flex mb-2 lh-sm w-100 h-100">
@@ -130,11 +129,11 @@
                                                id="{{::'matter' + legendItem.id}}"
                                                name="check"
                                                checked />
-                                        <label class="me-1 check-color text-start" 
-                                               for="{{::'matter' + legendItem.id}}" 
+                                        <label class="me-1 check-color text-start"
+                                               for="{{::'matter' + legendItem.id}}"
                                                ng-class="'legend' + legendItem.id"></label>
-                                        <label class="form-check-label font-monospace" 
-                                               for="{{::'matter' + legendItem.id}}" 
+                                        <label class="form-check-label font-monospace"
+                                               for="{{::'matter' + legendItem.id}}"
                                                ng-bind="::legendItem.name"></label>
                                     </div>
                                 </div>
@@ -189,7 +188,7 @@
                                 </div>
                             </div>
                             <div id="similar-sequences-tab-pane" class="tab-pane fade" role="tabpanel" aria-labelledby="similar-sequences-tab" tabindex="0">
-                                <div class="form-check">
+                                <div class="form-check mb-2">
                                     <input type="checkbox"
                                            class="form-check-input"
                                            name="highlight"
@@ -203,7 +202,7 @@
                                 <div ng-show="highlight">
                                     <div ng-repeat="characteristicComparer in characteristicComparers">
                                         <div class="row">
-                                            <div class="col-md-10">
+                                            <div class="col-md-10 mb-2">
                                                 <select class="form-select"
                                                         ng-model="characteristicComparer.characteristic"
                                                         ng-options="c.Text for c in ::subsequencesCharacteristicsList"
@@ -226,16 +225,15 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-10">
+                                            <div class="col-md-10 my-2">
                                                 <button type="button"
-                                                        class="btn btn-danger btn-sm col-md-10 mt-3"
+                                                        class="btn btn-danger btn-sm"
                                                         ng-click="deleteCharacteristicComparer(characteristicComparer)"
                                                         ng-disabled="characteristicComparers.length <= 1">
                                                     Delete characteristic comparer
                                                 </button>
                                             </div>
                                         </div>
-                                        <br />
                                     </div>
                                     <div class="row">
                                         <div class="col-md-10">
@@ -255,7 +253,7 @@
                                 @Html.Partial("_FeaturesSelect")
                             </div>
                             <div id="tooltip-tab-pane" class="tab-pane fade" role="tabpanel" aria-labelledby="tooltip-tab" tabindex="0">
-                                <div class="row mb-1" ng-if="tooltipElements.length > 1">
+                                <div class="row" ng-if="tooltipElements.length > 1">
                                     <div class="col-md-12 mb-2 btn-group-vertical" role="group" aria-label="Clustal alignment buttons">
                                         <button type="button"
                                                 class="btn btn-outline-secondary btn-sm"
@@ -288,8 +286,7 @@
                                        ng-href="https://www.ncbi.nlm.nih.gov/nuccore/{{::tooltipElement.sequenceRemoteId}}"
                                        ng-bind="::tooltipElement.name">
                                     </a>
-                                    <span ng-if="::!tooltipElement.sequenceRemoteId" ng-bind="::tooltipElement.name"></span>
-                                    <br />
+                                    <p ng-if="::!tooltipElement.sequenceRemoteId" ng-bind="::tooltipElement.name"></p>
                                     <a target="_blank"
                                        rel="noopener"
                                        ng-if="::tooltipElement.remoteId"
@@ -355,26 +352,25 @@
     }
     else
     {
+
+        <h1 class="text-danger">An error occurred while processing your request</h1>
         if (AccountHelper.IsAdmin())
         {
-            <div class="error-message">
-                @ViewBag.Error.Message
-            </div>
-            <br />
-            <div class="stack-trace">
+            <h3 class="text-danger mb-2">
+                Error message: @ViewBag.Error.Message
+            </h3>
+            <h5 class="mt-2 text-danger">Stack trace:</h5>
+            <div class="p-2 mb-2 border border-danger border-2 rounded text-break">
                 @ViewBag.Error.StackTrace
             </div>
         }
         else
         {
-            <h1 class="text-danger">Error.</h1>
-            <h2 class="text-danger">An error occurred while processing your request.</h2>
-
             if (ViewBag.UserError != null)
             {
-                <div class="error-message">
+                <h3 class="text-danger p-2 mb-2">
                     @ViewBag.UserError
-                </div>
+                </h3>
             }
         }
     }

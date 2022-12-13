@@ -112,17 +112,14 @@
                 @Html.ValidationMessageFor(model => model.CollectionDate, "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="row mb-1">
+        <div class="row my-2">
             <div class="offset-md-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-secondary" />
+                @Html.ActionLink("Back to List", "Index")
             </div>
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

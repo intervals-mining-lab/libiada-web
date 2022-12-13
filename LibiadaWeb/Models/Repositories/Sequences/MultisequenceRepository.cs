@@ -10,6 +10,19 @@
     /// </summary>
     public class MultisequenceRepository
     {
+        /// <summary>
+        /// Array of sequence types used in multisequence grouping.
+        /// </summary>
+        public static readonly SequenceType[] SequenceTypesFilter = new[]
+        {
+                SequenceType.CompleteGenome,
+                SequenceType.MitochondrialGenome,
+                SequenceType.ChloroplastGenome,
+                SequenceType.Plasmid,
+                SequenceType.Plastid,
+                SequenceType.MitochondrialPlasmid
+        };
+
         private static readonly Dictionary<int, string> RomanDigits = new Dictionary<int, string>
         {
             { 1000, "M" },
@@ -147,20 +160,11 @@
         /// </param>
         public static void SetSequenceNumbers(Matter[] matters)
         {
-            var sequenceTypes = new SequenceType[]
-            {
-                SequenceType.CompleteGenome,
-                SequenceType.MitochondrialGenome,
-                SequenceType.ChloroplastGenome,
-                SequenceType.Plasmid,
-                SequenceType.Plastid,
-                SequenceType.MitochondrialPlasmid
-            };
             short counter = 1;
 
             foreach (Matter matter in matters)
             {
-                if (sequenceTypes.Contains(matter.SequenceType))
+                if (SequenceTypesFilter.Contains(matter.SequenceType))
                 {
                     matter.MultisequenceNumber = counter++;
                 }

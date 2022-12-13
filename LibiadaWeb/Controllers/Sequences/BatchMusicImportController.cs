@@ -3,14 +3,16 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Web;
     using System.Web.Mvc;
 
     using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Sequences;
     using LibiadaWeb.Tasks;
+
     using Newtonsoft.Json;
 
-    using System.Web;
+    using LibiadaCore.Extensions;
 
     [Authorize(Roles = "Admin")]
     public class BatchMusicImportController : AbstractResultController
@@ -61,7 +63,11 @@
 
                             if (matters.Any(m => m.Name == sequenceName))
                             {
-                                sequence.MatterId = matters.Single(m => m.Name == sequenceName).Id;
+                                var matter = matters.Single(m => m.Name == sequenceName);
+                                sequence.MatterId = matter.Id;
+                                importResult.MatterName = matter.Name;
+                                importResult.SequenceType = matter.SequenceType.GetDisplayValue();
+                                importResult.Group = matter.Group.GetDisplayValue();
                                 importResult.Result = "Successfully imported music for existing matter";
                             }
                             else
@@ -74,6 +80,9 @@
                                     SequenceType = SequenceType.CompleteMusicalComposition
                                 };
 
+                                importResult.MatterName = sequence.Matter.Name;
+                                importResult.SequenceType = sequence.Matter.SequenceType.GetDisplayValue();
+                                importResult.Group = sequence.Matter.Group.GetDisplayValue();
                                 importResult.Result = "Successfully imported music and created matter";
                             }
 

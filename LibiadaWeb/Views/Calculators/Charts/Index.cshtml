@@ -8,7 +8,6 @@
 
 <div ng-controller="ChartsCtrl">
     <table-parse ng-model="rawPaste" ng-array="parsedPaste" />
-
     <div class="row mb-1">
         <table class="table table-bordered table-hover">
             <tr ng-repeat="row in parsedPaste">
@@ -18,8 +17,7 @@
                 <td>Paste data from excel onto this page using Ctrl + V</td>
             </tr>
         </table>
-
-        <div class="eleven columns">
+        <div class="mb-2">
             <form ng-submit="addY(l)">
                 <select class="form-select"
                         ng-model="l" 
@@ -27,10 +25,7 @@
                 <input class="btn btn-secondary" type="submit" value="Submit">
             </form>
         </div>
-
-        <br/>
-
-        <div class="eleven columns">
+        <div class="mb-2">
             <form ng-submit="addX(i,j)">
                 <select class="form-select"
                         ng-model="i" 

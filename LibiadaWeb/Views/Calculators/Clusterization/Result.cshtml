@@ -9,7 +9,7 @@
     @Html.Partial("_AngularControllerInitializer", "CalculationResultController")
 
     <div ng-controller="CalculationResultCtrl">
-        <table st-table="characteristics" class="table table-bordered table-hover" ng-cloak>
+        <table st-table="characteristics" class="table table-bordered table-hover table-sm" ng-cloak>
             <thead>
                 <tr>
                     <th>Sequence name</th>
@@ -25,7 +25,6 @@
                 </tr>
             </tbody>
         </table>
-        <br />
         <div class="row mb-1">
             <label class="col-form-label col-md-2" for="firstCharacteristic">First characteristic:</label>
             <div class="col-md-10">
@@ -46,7 +45,6 @@
                         id="secondCharacteristic"></select>
             </div>
         </div>
-        <br />
         <div class="row mb-1">
             <label class="col-form-label col-md-2" for="height">Height:</label>
             <div class="col-md-10">
@@ -59,7 +57,7 @@
                 <input class="form-control" name="width" id="width" type="number" min="400" step="20" ng-model="width" />
             </div>
         </div>
-        <div class="form-check">
+        <div class="form-check mb-2">
             <input type="checkbox"
                    class="form-check-input"
                    name="showLegend"
@@ -69,8 +67,7 @@
                 Draw legend
             </label>
         </div>
-        <br />
-        <input type="button" class="btn btn-secondary" ng-click="draw()" value="Draw" />
+        <input type="button" class="btn btn-secondary mb-2" ng-click="draw()" value="Draw" />
         <div id="chart" class="font-monospace">
         </div>
     </div>

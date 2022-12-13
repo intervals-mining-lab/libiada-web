@@ -11,39 +11,37 @@
     @Html.AntiForgeryToken()
 
     <div ng-controller="BatchSequenceImportCtrl">
-        <div class="row mb-1">
-            <label class="col-form-label col-md-2" for="accessionsField">Input accession numbers:</label>
+        <div class="row mb-2">
             <div class="col-md-10">
+                <label class="form-label" for="accessionsField">Input accession numbers:</label>
                 <textarea class="form-control" rows="1" id="accessionsField" ng-model="accessionsField" name="accessionsField"></textarea>
             </div>
         </div>
-        <div class="row mb-1">
-            <div class="offset-md-2 col-md-10">
+        <div class="row mb-2">
+            <div class="col-md-10">
+                <h6>Warning: accession's version will be ignored</h6>
                 <button type="button" class="btn btn-success" ng-click="parseIds()">Add sequences</button>
             </div>
         </div>
-        <br />
-        <div class="row mb-1">
-            <div class="offset-md-2 col-md-10">
+        <div class="row mb-2">
+            <div class="col-md-10">
                 acessions count={{accessions.length}}
             </div>
         </div>
-        <br />
         <div ng-repeat="accession in accessions">
             <div class="row mb-1">
-                <div class="offset-md-2 col-md-10">
+                <div class="col-md-10">
                     <input type="hidden" name="accessions" ng-value="::accession.value" />
                     <div ng-bind="::accession.value"></div>
                 </div>
             </div>
-            <div class="row mb-1">
-                <div class="offset-md-2 col-md-10">
-                    <button type="button" class="btn btn-danger" ng-click="deleteId(accession)">Delete accession</button>
+            <div class="row mb-2">
+                <div class="col-md-10">
+                    <button type="button" class="btn btn-danger btn-sm" ng-click="deleteId(accession)">Delete accession</button>
                 </div>
             </div>
-            <br />
         </div>
-        <div class="form-check">
+        <div class="form-check my-3">
             <input type="checkbox"
                    class="form-check-input"
                    name="importGenes"
@@ -55,8 +53,8 @@
                 Also import genes
             </label>
         </div>
-        <div class="row mb-1">
-            <div class="offset-md-2 col-md-10">
+        <div class="row mb-3">
+            <div class="col-md-10">
                 <input type="submit" value="Create" class="btn btn-secondary" ng-disabled="accessions.length < 1" />
             </div>
         </div>

@@ -18,7 +18,7 @@
         $scope.filterByNature = filterByNature;
 
         $scope.disableSubmit = $scope.minimumSelectedMatters > 0;
-        $scope.nature = $scope.natures[0].Value;
+        if (!$scope.nature) $scope.nature = $scope.natures[0].Value;
 
         // if notation is not linked to characteristic
         $scope.notation = filterFilter($scope.notations, { Nature: $scope.nature })[0];

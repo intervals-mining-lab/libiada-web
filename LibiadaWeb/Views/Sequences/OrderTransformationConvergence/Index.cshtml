@@ -1,8 +1,9 @@
 ﻿@{
-    ViewBag.Title = "Transformation of order of sequences";
+    ViewBag.Title = "Order transformation convergence";
 }
 
 @Scripts.Render("~/bundles/orderTransformations")
+@Scripts.Render("~/bundles/CharacteristicNatureParams")
 @Html.Partial("_AngularControllerInitializer", "OrderTransformerController")
 
 <h2>@ViewBag.Title</h2>
@@ -11,8 +12,7 @@
 {
     @Html.AntiForgeryToken()
     <div ng-controller="OrderTransformerCtrl">
-        <h4>Sequences and parameters</h4>
-        <hr />
+        @Html.Partial("_NatureSelect")
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <matters-table matters="matters"
                        nature="nature"
@@ -21,6 +21,14 @@
                        maximum-selected-matters="::maximumSelectedMatters"
                        selected-matters-count="selectedMattersCount">
         </matters-table>
+        <characteristic-nature-params characteristic="characteristic"
+                                      nature="nature"
+                                      notations="notations"
+                                      languages="::languages"
+                                      translators="::translators"
+                                      pause-treatments="::pauseTreatments"
+                                      trajectories="::trajectories">
+        </characteristic-nature-params>
         <order-transformations transformations="::transformations">
         </order-transformations>
         @Html.Partial("_MattersSubmit")

@@ -38,12 +38,14 @@ namespace LibiadaWeb.Controllers.Sequences
         /// </returns>
         public ActionResult Index()
         {
+            var imageTransformers = EnumHelper.GetSelectList(typeof(ImageTransformer));
             ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object>
-                {
-                    { "thresholds", EnumHelper.GetSelectList(typeof(Threshold)) },
-                    { "segmentationCriteria", EnumHelper.GetSelectList(typeof(SegmentationCriterion)) },
-                    { "deviationCalculationMethods", EnumHelper.GetSelectList(typeof(DeviationCalculationMethod)) }
-                });
+            {
+                { "thresholds", EnumHelper.GetSelectList(typeof(Threshold)) },
+                { "segmentationCriteria", EnumHelper.GetSelectList(typeof(SegmentationCriterion)) },
+                { "deviationCalculationMethods", EnumHelper.GetSelectList(typeof(DeviationCalculationMethod)) },
+                {"imageTransformers", imageTransformers }
+            });
             return View();
         }
 

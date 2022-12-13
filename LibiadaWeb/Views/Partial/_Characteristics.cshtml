@@ -32,10 +32,8 @@
                         ng-model="characteristic.arrangementType"
                         ng-options="a.Text for a in characteristic.characteristicType.ArrangementTypes"
                         id="arrangementType{{$index}}"></select>
-
             </div>
         </div>
-
         <div class="row mb-1" ng-hide="$ctrl.hideNotation">
             <label class="col-form-label col-md-2" for="notation">Notation:</label>
             <div class="col-md-10">

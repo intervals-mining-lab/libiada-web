@@ -10,7 +10,7 @@
 
     <div ng-controller="BatchSequenceImportResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
-        <div ng-disabled="loading">
+        <div class="mb-3" ng-disabled="loading">
             <h3>Found sequences:</h3>
             <table class="table table-bordered table-hover" ng-cloak>
                 <thead>
@@ -28,9 +28,7 @@
                     </tr>
                 </tbody>
             </table>
-            <hr />
             <h3>Found accessions:</h3>
-            <br/>
             <div ng-repeat="accession in ::accessions">
                 {{::accession}}
             </div>

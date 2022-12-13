@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Segmentation result";
+    ViewBag.Title = "Segmentation results";
 }
 @Scripts.Render("~/bundles/loadingWindow")
 
@@ -8,17 +8,12 @@
 {
     @Html.Partial("_AngularControllerInitializer", "CalculationResultController")
     <h3>@ViewBag.poemName</h3>
-    <br />
     <div ng-controller="CalculationResultCtrl">
         <table class="table table-bordered table-hover" ng-cloak>
             <thead>
                 <tr>
-                    <th>
-                        Consonance
-                    </th>
-                    <th>
-                        Count
-                    </th>
+                    <th>Consonance</th>
+                    <th>Count</th>
                 </tr>
             </thead>
             <tbody>
@@ -28,17 +23,14 @@
                 </tr>
             </tbody>
         </table>
+        <h4>Segmented Text</h4>
         <p>
-            <h4>Segmented Text</h4>
-            <br />
             {{segmentedText}}
         </p>
         <hr />
+        <h4>Chain</h4>
         <p>
-            <h4>Chain</h4>
-            <br />
             {{poemChain}}
         </p>
     </div>
-
 }

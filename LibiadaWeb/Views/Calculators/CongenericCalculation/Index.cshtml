@@ -12,8 +12,6 @@
 {
     @Html.AntiForgeryToken()
     <div ng-controller="CalculationCtrl">
-        <h4>Sequences and parameters</h4>
-        <hr />
         @(Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" }))
         @Html.Partial("_NatureSelect")
         <matters-table matters="matters"
@@ -39,14 +37,13 @@
                 Sort results in descending order
             </label>
         </div>
-        <div class="form-check">
+        <div class="form-check mb-2">
             <input type="checkbox" class="form-check-input" name="theoretical" id="theoretical" value="true" />
             <input type="hidden" name="theoretical" value="false" />
             <label class="form-check-label" for="theoretical">
                 Calculate theoretical rank distribution
             </label>
         </div>
-        <br />
         @Html.Partial("_MattersSubmit")
     </div>
 }

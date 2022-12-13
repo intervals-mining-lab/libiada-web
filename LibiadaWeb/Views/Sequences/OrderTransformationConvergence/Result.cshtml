@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Order transformation result";
+    ViewBag.Title = "Order transformation convergence result";
 }
 @Scripts.Render("~/bundles/loadingWindow")
 
@@ -10,7 +10,7 @@
     <div ng-controller="OrderTransformationResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <div ng-disabled="loading">
-            <table class="table table-bordered table-hover" ng-cloak>
+            <table class="table table-bordered table-hover table-sm" ng-cloak>
                 <thead>
                     <tr>
                         <th>#</th>
@@ -24,16 +24,11 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="font-monospace mt-3">
-                <div>
-                    Loop iteration = {{::loopIteration}}
-                </div>
-                <div>
-                    Last iteration = {{::lastIteration}}
-                </div>
-                <div class="mb-3">
-                    Transformations repeated {{::iterationsCount}} times
-                </div>
+            <div class="font-monospace my-3">
+                <h6>Loop iteration = {{::loopIteration}}</h6>
+                <h6>Last iteration = {{::lastIteration}}</h6>
+                <h6 class="mb-3">Transformations repeated {{::iterationsCount}} times</h6>
+                <h5>Resulting sequence:</h5>
                 <div ng-bind="::chain"></div>
             </div>
         </div>

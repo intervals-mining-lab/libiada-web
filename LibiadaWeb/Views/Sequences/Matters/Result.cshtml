@@ -10,11 +10,9 @@
 
     <div ng-controller="BatchSequenceImportResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
-        <br />
-        <div>
+        <h5>
             Sequence <strong ng-bind="::Name"></strong> imported successfully
-        </div>
-        <br />
+        </h5>
         <ul class="list-group">
             <li class="list-group-item">
                 Nature: {{::Nature}}
@@ -62,7 +60,7 @@
                 Data precision: {{::Precision}}
             </li>
         </ul>
-        <div>
+        <div class="mb-2">
             @Html.ActionLink("Import another sequence", "Create") or go @Html.ActionLink("back to List", "Index").
         </div>
     </div>

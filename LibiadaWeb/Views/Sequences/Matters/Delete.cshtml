@@ -33,19 +33,24 @@
 
         <dt>@Html.DisplayNameFor(model => model.SequenceType)</dt>
         <dd>@Model.SequenceType.GetDisplayValue()</dd>
+        @if (Model.Multisequence != null)
+        {
+            <dt>@Html.DisplayNameFor(model => model.Multisequence)</dt>
+            <dd>@Html.DisplayFor(model => model.Multisequence.Name)</dd>
 
-        <dt>@Html.DisplayNameFor(model => model.Multisequence)</dt>
-        <dd>@Html.DisplayFor(model => model.Multisequence.Name)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.MultisequenceNumber)</dt>
-        <dd>@Html.DisplayFor(model => model.MultisequenceNumber)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.CollectionCountry)</dt>
-        <dd>@Html.DisplayFor(model => model.CollectionCountry)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.CollectionDate)</dt>
-        <dd>@Html.DisplayFor(model => model.CollectionDate)</dd>
-
+            <dt>@Html.DisplayNameFor(model => model.MultisequenceNumber)</dt>
+            <dd>@Html.DisplayFor(model => model.MultisequenceNumber)</dd>
+        }
+        @if (Model.CollectionCountry != null)
+        {
+            <dt>@Html.DisplayNameFor(model => model.CollectionCountry)</dt>
+            <dd>@Html.DisplayFor(model => model.CollectionCountry)</dd>
+        }
+        @if (Model.CollectionDate != null)
+        {
+            <dt>@Html.DisplayNameFor(model => model.CollectionDate)</dt>
+            <dd>@Html.DisplayFor(model => model.CollectionDate)</dd>
+        }
         <dt>Sequences count</dt>
         <dd>@ViewBag.SequencesCount</dd>
     </dl>
@@ -54,16 +59,15 @@
     {
         @Html.AntiForgeryToken()
 
-        <div class="form-actions no-color">
+        <div class="mb-2">
             @if (ViewBag.SequencesCount > 0)
             {
-                <p class="text-danger"> Sorry, matter with child sequences cannot be deleted</p>
+                <h6 class="text-danger"> Sorry, matter with child sequences cannot be deleted</h6>
             }
             else
             {
                 <input type="submit" value="Delete" class="btn btn-secondary" />
             }
-            <br />
             @Html.ActionLink("Back to List", "Index")
         </div>
     }

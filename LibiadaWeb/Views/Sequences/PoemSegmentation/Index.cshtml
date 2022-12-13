@@ -9,64 +9,56 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-<div ng-controller="CalculationCtrl">
-    <h4>Sequences and parameters</h4>
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-    <matters-table matters="matters"
-                   nature="nature"
-                   groups="groups"
-                   sequence-types="sequenceTypes"
-                   maximum-selected-matters="maximumSelectedMatters"
-                   selected-matters="selectedMatters">
-    </matters-table>
-    <hr />
-    <div class="row mb-1">
-        <label class="col-form-label col-md-2" for="wordLength">Max word length:</label>
-        <div class="col-md-10">
-            <input class="form-control"
-                   name="wordLength"
-                   id="wordLength"
-                   type="number"
-                   min="1"
-                   step="1"
-                   ng-model="wordLength"
-                   ng-init="wordLength=6" />
+    <div ng-controller="CalculationCtrl">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <matters-table matters="matters"
+                       nature="nature"
+                       groups="groups"
+                       sequence-types="sequenceTypes"
+                       maximum-selected-matters="maximumSelectedMatters"
+                       selected-matters-count="selectedMattersCount">
+        </matters-table>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="wordLength">Max word length:</label>
+            <div class="col-md-10">
+                <input class="form-control"
+                       name="wordLength"
+                       id="wordLength"
+                       type="number"
+                       min="1"
+                       step="1"
+                       ng-model="wordLength"
+                       ng-init="wordLength=6" />
+            </div>
         </div>
-    </div>
-    <br />
-    <div class="row mb-1">
-        <label class="col-form-label col-md-2" for="wordLength">Start threshold value:</label>
-        <div class="col-md-10">
-            <input class="form-control"
-                   name="startThreshold"
-                   id="startThreshold"
-                   type="number"
-                   min="0"
-                   max="1"
-                   step="0.001"
-                   ng-model="startThreshold"
-                   ng-init="startThreshold=0.5" />
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="wordLength">Start threshold value:</label>
+            <div class="col-md-10">
+                <input class="form-control"
+                       name="startThreshold"
+                       id="startThreshold"
+                       type="number"
+                       min="0"
+                       max="1"
+                       step="0.001"
+                       ng-model="startThreshold"
+                       ng-init="startThreshold=0.5" />
+            </div>
         </div>
-    </div>
-    <br />
-    <div class="row mb-1">
-        <label class="col-form-label col-md-2" for="wordLength">Balance ratio:</label>
-        <div class="col-md-10">
-            <input class="form-control"
-                   name="balance"
-                   id="balance"
-                   type="number"
-                   min="0"
-                   max="1"
-                   step="0.1"
-                   ng-model="balance"
-                   ng-init="balance=0.5" />
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="wordLength">Balance ratio:</label>
+            <div class="col-md-10">
+                <input class="form-control"
+                       name="balance"
+                       id="balance"
+                       type="number"
+                       min="0"
+                       max="1"
+                       step="0.1"
+                       ng-model="balance"
+                       ng-init="balance=0.5" />
+            </div>
         </div>
+        @Html.Partial("_MattersSubmit")
     </div>
-
-    @Html.Partial("_MattersSubmit")
-
-</div>
 }

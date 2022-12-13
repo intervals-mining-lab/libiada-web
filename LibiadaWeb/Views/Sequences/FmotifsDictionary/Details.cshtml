@@ -1,63 +1,58 @@
-﻿    ﻿@model MusicSequence
+﻿﻿@model MusicSequence
 
-    @section Scripts {
-        @Scripts.Render("~/bundles/loadingWindow")
-        @Scripts.Render("~/bundles/midijs")
-        @Scripts.Render("~/bundles/d3js")
-    }
+@section Scripts {
+    @Scripts.Render("~/bundles/loadingWindow")
+    @Scripts.Render("~/bundles/midijs")
+    @Scripts.Render("~/bundles/d3js")
+}
 
-    @{
-        ViewBag.Title = "Fmotifs dictionary";
-    }
+@{
+    ViewBag.Title = "Fmotifs dictionary";
+}
 
-    <h2>@ViewBag.Title</h2>
+<h2>@ViewBag.Title</h2>
 
-    @Html.Partial("_AngularControllerInitializer", "FmotifsDictionaryController")
+@Html.Partial("_AngularControllerInitializer", "FmotifsDictionaryController")
 
-    <div ng-controller="FmotifsDictionaryCtrl" ng-init="onload()">
-        <div>
-            <h4>Music sequence</h4>
-            <hr />
-            <dl>
-                <dt>@Html.DisplayNameFor(model => model.Matter.Name)</dt>
-                <dd>@Html.DisplayFor(model => model.Matter.Name)</dd>
+<div ng-controller="FmotifsDictionaryCtrl" ng-init="onload()">
+    <div>
+        <h4>Music sequence</h4>
+        <hr />
+        <dl>
+            <dt>@Html.DisplayNameFor(model => model.Matter.Name)</dt>
+            <dd>@Html.DisplayFor(model => model.Matter.Name)</dd>
 
-                <dt>@Html.DisplayNameFor(model => model.Notation)</dt>
-                <dd>@Html.DisplayFor(model => model.Notation)</dd>
+            <dt>@Html.DisplayNameFor(model => model.PauseTreatment)</dt>
+            <dd>@Html.DisplayFor(model => model.PauseTreatment)</dd>
 
-                <dt>@Html.DisplayNameFor(model => model.PauseTreatment)</dt>
-                <dd>@Html.DisplayFor(model => model.PauseTreatment)</dd>
+            <dt>@Html.DisplayNameFor(model => model.SequentialTransfer)</dt>
+            <dd>@(Model.SequentialTransfer ? "Yes" : "No")</dd>
 
-                <dt>@Html.DisplayNameFor(model => model.SequentialTransfer)</dt>
-                <dd>@(Model.SequentialTransfer ? "Yes" : "No")</dd>
-
-                <dt>@Html.DisplayNameFor(model => model.Created)</dt>
-                <dd>@Html.DisplayFor(model => model.Created)</dd>
-            </dl>
-        </div>
-        <div>
-            <h4>Formal motifs</h4>
-            <table class="table table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th>Notation</th>
-                        <th>Visualization</th>
-                        <th>Acoustic</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="fmotif in ::data.fmotifs">
-                        <td>
-                            <div id="notation_{{::fmotif.Id}}"></div>
-                        </td>
-                        <td>
-                            <div id="visualization_{{::fmotif.Id}}"></div>
-                        </td>
-                        <td>
-                            <input type="button" class="btn btn-secondary" ng-click="play($index)" value="Play" />
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+            <dt>@Html.DisplayNameFor(model => model.Created)</dt>
+            <dd>@Html.DisplayFor(model => model.Created)</dd>
+        </dl>
     </div>
+    <h4>Formal motifs</h4>
+    <table class="table table-bordered table-hover table-sm">
+        <thead>
+            <tr>
+                <th>Notation</th>
+                <th>Visualization</th>
+                <th>Acoustic</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="fmotif in ::data.fmotifs">
+                <td>
+                    <div id="notation_{{::fmotif.Id}}"></div>
+                </td>
+                <td>
+                    <div id="visualization_{{::fmotif.Id}}"></div>
+                </td>
+                <td>
+                    <input type="button" class="btn btn-secondary" ng-click="play($index)" value="Play" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

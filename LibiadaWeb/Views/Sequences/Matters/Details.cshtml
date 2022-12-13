@@ -41,13 +41,16 @@
             <dt>@Html.DisplayNameFor(model => model.MultisequenceNumber)</dt>
             <dd>@Html.DisplayFor(model => model.MultisequenceNumber)</dd>
         }
-
-        <dt>@Html.DisplayNameFor(model => model.CollectionCountry)</dt>
-        <dd>@Html.DisplayFor(model => model.CollectionCountry)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.CollectionDate)</dt>
-        <dd>@Html.DisplayFor(model => model.CollectionDate)</dd>
-
+        @if (Model.CollectionCountry != null)
+        {
+            <dt>@Html.DisplayNameFor(model => model.CollectionCountry)</dt>
+            <dd>@Html.DisplayFor(model => model.CollectionCountry)</dd>
+        }
+        @if (Model.CollectionDate != null)
+        {
+            <dt>@Html.DisplayNameFor(model => model.CollectionDate)</dt>
+            <dd>@Html.DisplayFor(model => model.CollectionDate)</dd>
+        }
         <dt>Sequences count</dt>
         <dd>@ViewBag.SequencesCount</dd>
     </dl>

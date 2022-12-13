@@ -1,18 +1,18 @@
-﻿<div class="row my-2">
-    <div class="col-auto">
+﻿<div class="row">
+    <div class="col-auto my-2">
         <label class="form-label" for="filterInput">Filter subsequences by product and locus_tag:</label>
         <input class="form-control" type="text" ng-model="newFilter" id="filterInput" name="filterInput" />
     </div>
 </div>
-<div class="row mb-3">
-    <div class="col-md-10">
+<div class="row">
+    <div class="col-md-10 mb-3">
         <button type="button" class="btn btn-success" ng-click="addFilter()">Add filter</button>
     </div>
 </div>
 <h6 ng-show="filters.length > 0">Added filters:</h6>
 <div ng-repeat="filter in filters">
-    <div class="row mb-2">
-        <div class="col-md-10">
+    <div class="row">
+        <div class="col-md-10 mb-2">
             <input type="text" readonly class="form-control-plaintext" name="filters" ng-bind="::filter.value" ng-value="::filter.value">
             <button type="button" class="btn btn-danger" ng-click="deleteFilter(filter)">Delete filter</button>
         </div>

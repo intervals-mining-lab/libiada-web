@@ -11,7 +11,7 @@
     <div ng-controller="OrderTransformationResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <div ng-disabled="loading">
-            <table class="table table-bordered table-hover" ng-cloak>
+            <table class="table table-bordered table-hover table-sm" ng-cloak>
                 <thead>
                     <tr>
                         <th>#</th>
@@ -25,18 +25,13 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="font-monospace my-3">
-                Transformations repeated {{::iterationsCount}} times
-            </div>
-            <table class="table table-bordered table-hover" ng-cloak>
+            <h6 class="font-monospace mb-3">Transformations repeated {{::iterationsCount}} times</h6>
+            <h5>Resulting sequences:</h5>
+            <table class="table table-bordered table-hover table-sm" ng-cloak>
                 <thead>
                     <tr>
-                        <th>
-                            Name
-                        </th>
-                        <th>
-                            Sequence
-                        </th>
+                        <th>Name</th>
+                        <th>Sequence</th>
                     </tr>
                 </thead>
                 <tbody>

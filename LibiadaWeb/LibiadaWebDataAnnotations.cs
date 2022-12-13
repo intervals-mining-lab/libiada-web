@@ -54,6 +54,10 @@
         /// </summary>
         [Display(Name = "Modifier")]
         public AspNetUser Modifier { get; set; }
+
+        [Display(Name = "Sequence group type")]
+        [DisplayFormat(ConvertEmptyStringToNull = true, NullDisplayText = "None")]
+        public SequenceGroupType SequenceGroupType { get; set; }
     }
 
     [MetadataType(typeof(MatterDataAnnotations))]

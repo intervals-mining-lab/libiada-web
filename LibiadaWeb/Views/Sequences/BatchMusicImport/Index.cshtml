@@ -14,13 +14,12 @@
         <div class="row mb-1">
             <label class="col-form-label col-md-2" for="file">Music xml files:</label>
             <div class="col-md-10">
-                <input type="file" name="file" id="file" multiple />
+                <input type="file" name="file" id="file" multiple onchange="angular.element(this).scope().fileChanged(this)" />
             </div>
         </div>
-
-        <div class="row mb-1">
+        <div class="row mb-3">
             <div class="offset-md-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-secondary" ng-disabled="files.length < 1" />
+                <input type="submit" value="Create" class="btn btn-secondary" ng-disabled="!fileSelected.value" />
             </div>
         </div>
     </div>

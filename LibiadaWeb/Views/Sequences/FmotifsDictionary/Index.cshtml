@@ -8,10 +8,9 @@
 <p>
     @Html.ActionLink("Add new compositions", "Index", "BatchMusicImport")
 </p>
-<table class="table table-bordered table-hover">
+<table class="table table-bordered table-hover table-sm">
     <tr>
         <th>@Html.DisplayNameFor(model => model.MatterId)</th>
-        <th>@Html.DisplayNameFor(model => model.Notation)</th>
         <th>@Html.DisplayNameFor(model => model.PauseTreatment)</th>
         <th>@Html.DisplayNameFor(model => model.SequentialTransfer)</th>
         <th>@Html.DisplayNameFor(model => model.Created)</th>
@@ -22,7 +21,6 @@
     {
         <tr>
             <td>@Html.DisplayFor(modelItem => item.Matter.Name)</td>
-            <td>@Html.DisplayFor(modelItem => item.Notation)</td>
             <td>@Html.DisplayFor(modelItem => item.PauseTreatment)</td>
             <td>@(item.SequentialTransfer ? "Yes" : "No")</td>
             <td>@Html.DisplayFor(modelItem => item.Created)</td>

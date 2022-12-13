@@ -8,7 +8,6 @@
 <h2>@ViewBag.Title</h2>
 
 <div>
-    <h4>SequenceGroup</h4>
     <hr />
     <dl>
         <dt>@Html.DisplayNameFor(model => model.Name)</dt>
@@ -35,7 +34,8 @@
 </div>
 @if (Model.Matters.Count > 0)
 {
-    <table class="table table-bordered table-hover">
+    <h5>Matters list:</h5>
+    <table class="table table-bordered table-hover table-sm">
         <thead>
             <tr>
                 <th>@(Html.DisplayNameFor(model => model.Matters.First().Name))</th>

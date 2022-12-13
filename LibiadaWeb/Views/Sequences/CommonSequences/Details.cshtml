@@ -8,13 +8,10 @@
 <h2>@ViewBag.Title</h2>
 
 <div>
-    <h4>Sequence</h4>
-    <hr />
     <dl>
         <dt>
             @Html.DisplayNameFor(model => model.Created)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Created)
         </dd>
@@ -22,7 +19,6 @@
         <dt>
             @Html.DisplayNameFor(model => model.Modified)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Modified)
         </dd>
@@ -30,7 +26,6 @@
         <dt>
             @Html.DisplayNameFor(model => model.RemoteDb)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.RemoteDb)
         </dd>
@@ -38,7 +33,6 @@
         <dt>
             @Html.DisplayNameFor(model => model.RemoteId)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.RemoteId)
         </dd>
@@ -46,7 +40,6 @@
         <dt>
             @Html.DisplayNameFor(model => model.Description)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Description)
         </dd>
@@ -54,7 +47,6 @@
         <dt>
             @Html.DisplayNameFor(model => model.Matter.Name)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Matter.Name)
         </dd>
@@ -62,7 +54,6 @@
         <dt>
             @Html.DisplayNameFor(model => model.Notation)
         </dt>
-
         <dd>
             @Model.Notation.GetDisplayValue()
         </dd>
@@ -70,7 +61,6 @@
         <dt>
             @Html.DisplayNameFor(model => model.Matter.Group)
         </dt>
-
         <dd>
             @Model.Matter.Group.GetDisplayValue()
         </dd>
@@ -78,11 +68,9 @@
         <dt>
             @Html.DisplayNameFor(model => model.Matter.SequenceType)
         </dt>
-
         <dd>
             @Model.Matter.SequenceType.GetDisplayValue()
         </dd>
-
     </dl>
 </div>
 <p>

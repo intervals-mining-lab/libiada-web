@@ -21,16 +21,16 @@
         @Html.HiddenFor(model => model.Created)
 
         <div class="row mb-1">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "col-form-label col-md-2" })
             <div class="col-md-10">
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "form-label" })
                 @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
         </div>
         @Html.Partial("_NatureSelect")
         <div class="row mb-1">
-            <label class="col-form-label col-md-2" for="sequenceGroupType">Sequence group type</label>
             <div class="col-md-10">
+                <label class="form-label" for="sequenceGroupType">Sequence group type</label>
                 <select class="form-select"
                         id="sequenceGroupType"
                         ng-options="n.Value as n.Text for n in sequenceGroupTypes | filter:{ Nature: nature }"
@@ -47,17 +47,14 @@
                        maximum-selected-matters="::maximumSelectedMatters"
                        selected-matters-count="selectedMattersCount">
         </matters-table>
-        <div class="row mb-1">
-            <div class="offset-md-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-secondary" />
+        @Html.Partial("_MattersSubmit")
+        <div class="row mb-2">
+            <div class="col-md-2">
+                @Html.ActionLink("Back to List", "Index")
             </div>
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

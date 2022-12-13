@@ -13,6 +13,7 @@
 
     using System.IO;
     using System.Web;
+    using LibiadaCore.Extensions;
 
     [Authorize(Roles = "Admin")]
     public class BatchImagesImportController : AbstractResultController
@@ -78,6 +79,8 @@
                             matterRepository.SaveToDatabase(matter);
                             importResult.Result = "Successfully imported image and created matter";
                             importResult.Status = "Success";
+                            importResult.SequenceType = matter.SequenceType.GetDisplayValue();
+                            importResult.Group = matter.Group.GetDisplayValue();
                             importResults.Add(importResult);
                         }
                         catch (Exception exception)

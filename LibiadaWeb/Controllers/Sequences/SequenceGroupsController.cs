@@ -72,7 +72,7 @@
             using (var db = new LibiadaWebEntities())
             {
                 var viewDataHelper = new ViewDataHelper(db);
-                var viewData = viewDataHelper.FillViewData(1, int.MaxValue);
+                var viewData = viewDataHelper.GetMattersData(1, int.MaxValue);
                 viewData["sequenceGroupTypes"] = EnumExtensions.ToArray<SequenceGroupType>().ToSelectListWithNature();
                 ViewBag.data = JsonConvert.SerializeObject(viewData);
                 return View();
@@ -129,7 +129,8 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            SequenceGroup sequenceGroup = await db.SequenceGroup.FindAsync(id);
+            SequenceGroup sequenceGroup = await db.SequenceGroup.Include(m => m.Matters)
+                                                                .SingleOrDefaultAsync(sg => sg.Id == id);
             if (sequenceGroup == null)
             {
                 return HttpNotFound();
@@ -138,11 +139,8 @@
             using (var db = new LibiadaWebEntities())
             {
                 var viewDataHelper = new ViewDataHelper(db);
-                var viewData = viewDataHelper.FillViewData(1, int.MaxValue);
-                var matterIds = sequenceGroup.Matters.Select(m => m.Id);
-                bool Selected(Matter m) => matterIds.Contains(m.Id);
-                viewData["matters"] = SelectListHelper.GetMatterSelectList(db.Matter, Selected);
-                viewData["sequenceGroupTypes"] = EnumExtensions.ToArray<SequenceGroupType>().ToSelectListWithNature();
+                var selectedMatterIds = sequenceGroup.Matters.Select(m => m.Id);
+                var viewData = viewDataHelper.FillViewData(1, int.MaxValue, m => true, m => selectedMatterIds.Contains(m.Id), "Save");
                 ViewBag.data = JsonConvert.SerializeObject(viewData);
             }
 

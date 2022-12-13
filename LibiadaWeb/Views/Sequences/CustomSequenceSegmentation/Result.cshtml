@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Order transformation result";
+    ViewBag.Title = "Segmentation results";
 }
 @Scripts.Render("~/bundles/loadingWindow")
 
@@ -11,16 +11,11 @@
     <div ng-controller="SegmentationResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <div ng-disabled="loading">
-
-            <table class="table table-bordered table-hover" ng-cloak>
+            <table class="table table-bordered table-hover table-sm" ng-cloak>
                 <thead>
                 <tr>
-                    <th>
-                        Name
-                    </th>
-                    <th>
-                        Sequence
-                    </th>
+                    <th>Name</th>
+                    <th>Sequence</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -32,5 +27,4 @@
             </table>
         </div>
     </div>
-
 }

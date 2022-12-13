@@ -17,6 +17,7 @@
                 ctrl.mattersInputType = "radio";
             }
 
+            ctrl.toogleMattersVisibility(false);
             if (ctrl.displayMultisequenceNumber) {
                 ctrl.multisequenceNumberCounter = 1;
                 $("#mattersSelectList").on("change", `input[name="${ctrl.mattersInputName}"]`, ctrl.updateMultisequenceNumber);
@@ -25,7 +26,7 @@
                 if (ctrl.multisequenceNumbers) {
                     ctrl.selectedMattersCount = ctrl.multisequenceNumbers.length;
                     ctrl.multisequenceNumberCounter += ctrl.multisequenceNumbers.length;
-                    ctrl.toogleMattersVisibility(false);
+                    
                     for (let i = 0; i < ctrl.multisequenceNumbers.length; i++) {
                         const matterId = ctrl.multisequenceNumbers[i].Id;
                         const number = ctrl.multisequenceNumbers[i].MultisequenceNumber;
@@ -107,12 +108,12 @@
                     <td>${m.SequenceType}</td>
                 </tr>`).join());
 
-            mattersToShow.forEach(m => $(`#matter${m.Value}`).change(() => {
-                ctrl.toggleMatterSelection(m);
-                $scope.$apply();
-            }
+            mattersToShow.forEach(m => $(`#matter${m.Value}`).change(
+                () => {
+                    ctrl.toggleMatterSelection(m);
+                    $scope.$apply();
+                }
             ));
-
         };
 
         ctrl.setMatterVisibility = matter => {

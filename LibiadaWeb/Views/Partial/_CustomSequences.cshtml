@@ -47,8 +47,8 @@
     </fieldset>
 </div>
 <div class="row mb-2" ng-show="localFile">
-    <label class="col-form-label col-md-2" for="file">Sequence file(s):</label>
-    <div class="col-md-10">
+    <div class="col-md-12">
+        <label class="form-label" for="file">Sequence file(s):</label>
         <input type="file" name="file" id="file" multiple />
         @Html.ValidationMessage("file", "", new { @class = "text-danger" })
     </div>
@@ -56,36 +56,34 @@
 <div ng-hide="localFile">
     <div ng-repeat="customSequence in customSequences">
         <div class="row mb-2">
-            <label class="col-form-label col-md-2" for="customSequence">Sequence:</label>
-            <div class="col-md-10">
+            <div class="col-md-12">
+                <label class="form-label" for="customSequence">Sequence:</label>
                 <textarea class="form-control" rows="1" id="customSequence" ng-model="customSequence.sequence" name="customSequences"></textarea>
             </div>
         </div>
         <div class="row mb-2">
-            <div class="offset-md-2 col-md-10">
+            <div class="col-md-10">
                 <button type="button" class="btn btn-danger" ng-click="deleteSequence(customSequence)" ng-disabled="customSequences.length <= 1">
                     Delete sequence
                 </button>
             </div>
         </div>
-        <br />
     </div>
     <div class="row mb-2">
-        <div class="offset-md-2 col-md-10">
+        <div class="col-md-10">
             <button type="button" class="btn btn-success" ng-init="addSequence()" ng-click="addSequence()">
                 Add sequence
             </button>
         </div>
     </div>
     <div class="row mb-2">
-        <label class="col-form-label col-md-2" for="delimiter">Elements delimiter:</label>
-        <div class="col-md-10">
+        <div class="col-md-12">
+            <label class="form-label" for="delimiter">Elements delimiter:</label>
             <input type="text" class="form-control" name="delimiter" id="delimiter" maxlength="1" placeholder="Enter delimiter">
         </div>
     </div>
 </div>
 <div ng-if="fileType=='text'">
-    <br />
     <div class="form-check">
         <input type="checkbox"
                class="form-check-input"
@@ -111,8 +109,6 @@
         </label>
     </div>
     <hr />
-    <br />
 </div>
-
 @Html.Partial("_ImageTransformers")
 <hr />

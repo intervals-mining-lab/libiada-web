@@ -2,23 +2,23 @@
     ViewBag.Title = "Batch images import";
 }
 
-@Html.Partial("_AngularControllerInitializer", "BatchPoemsImportController")
+@Html.Partial("_AngularControllerInitializer", "BatchMusicImportController")
 
 <h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm("Index", "BatchImagesImport", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    <div ng-controller="BatchPoemsImportCtrl">
+    <div ng-controller="BatchMusicImportCtrl">
         <div class="row mb-1">
             <label class="col-form-label col-md-2" for="files">Images files:</label>
             <div class="col-md-10">
-                <input type="file" name="files" id="files" multiple />
+                <input type="file" name="files" id="files" multiple onchange="angular.element(this).scope().fileChanged(this)" />
             </div>
         </div>
-        <div class="row mb-1">
+        <div class="row mb-2">
             <div class="offset-md-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-secondary" ng-disabled="files.length < 1" />
+                <input type="submit" value="Create" class="btn btn-secondary" ng-disabled="!fileSelected.value" />
             </div>
         </div>
     </div>

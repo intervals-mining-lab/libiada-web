@@ -93,5 +93,18 @@
             Notation.AminoAcids,
             Notation.Letters
         });
+
+        /// <summary>
+        /// Sequence types with subsequences.
+        /// </summary>
+        public static readonly SequenceType[] SequenceTypesWithSubsequences = new[]
+        {
+                SequenceType.CompleteGenome,
+                SequenceType.MitochondrialGenome,
+                SequenceType.ChloroplastGenome,
+                SequenceType.Plasmid,
+                SequenceType.Plastid,
+                SequenceType.MitochondrialPlasmid
+        };
     }
 }

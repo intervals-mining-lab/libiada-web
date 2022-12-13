@@ -22,19 +22,6 @@
     public class MultisequenceController : Controller
     {
         /// <summary>
-        /// Array of sequence type used in multisequence grouping.
-        /// </summary>
-        private readonly SequenceType[] sequenceTypeFilter = new SequenceType[]
-        {
-            SequenceType.ChloroplastGenome,
-            SequenceType.CompleteGenome,
-            SequenceType.MitochondrialPlasmid,
-            SequenceType.MitochondrialGenome,
-            SequenceType.Plasmid,
-            SequenceType.Plastid
-        };
-
-        /// <summary>
         /// Gets page with list of all multisequences.
         /// </summary>
         /// <returns></returns>
@@ -58,7 +45,7 @@
             using (var db = new LibiadaWebEntities())
             {
                 var viewDataHelper = new ViewDataHelper(db);
-                var data = viewDataHelper.FillViewData(2, int.MaxValue, m => sequenceTypeFilter.Contains(m.SequenceType) && m.MultisequenceId == null, "Create");
+                var data = viewDataHelper.FillViewData(2, int.MaxValue, m => MultisequenceRepository.SequenceTypesFilter.Contains(m.SequenceType) && m.MultisequenceId == null, "Create");
                 ViewBag.data = JsonConvert.SerializeObject(data);
             }
 
@@ -150,14 +137,14 @@
                 }
 
                 var viewDataHelper = new ViewDataHelper(db);
-                var sellectedMatterIds = multisequence.Matters.Select(m => m.Id);
+                var selectedMatterIds = multisequence.Matters.Select(m => m.Id);
                 var data = viewDataHelper.FillViewData(2,
                                                        int.MaxValue,
-                                                       m => (sequenceTypeFilter.Contains(m.SequenceType)
+                                                       m => (MultisequenceRepository.SequenceTypesFilter.Contains(m.SequenceType)
                                                             && m.MultisequenceId == null)
-                                                            || sellectedMatterIds.Contains(m.Id),
-                                                       m => sellectedMatterIds.Contains(m.Id),
-                                                       "Create");
+                                                            || selectedMatterIds.Contains(m.Id),
+                                                       m => selectedMatterIds.Contains(m.Id),
+                                                       "Save");
                 data.Add("multisequenceNumbers", multisequence.Matters.Select(m => new { m.Id, m.MultisequenceNumber }));
                 ViewBag.data = JsonConvert.SerializeObject(data);
 
@@ -203,7 +190,7 @@
                 var sellectedMatterIds = multisequence.Matters.Select(m => m.Id);
                 var data = viewDataHelper.FillViewData(2,
                                                        int.MaxValue,
-                                                       m => (sequenceTypeFilter.Contains(m.SequenceType)
+                                                       m => (MultisequenceRepository.SequenceTypesFilter.Contains(m.SequenceType)
                                                             && m.MultisequenceId == null)
                                                             || sellectedMatterIds.Contains(m.Id),
                                                        m => sellectedMatterIds.Contains(m.Id),
@@ -285,7 +272,7 @@
         /// </returns>
         private Dictionary<string, long[]> SplitMattersIntoReferenceAnsNotReference(Matter[] matters)
         {
-            matters = matters.Where(m => m.Nature == Nature.Genetic && sequenceTypeFilter.Contains(m.SequenceType)).ToArray();
+            matters = matters.Where(m => m.Nature == Nature.Genetic && MultisequenceRepository.SequenceTypesFilter.Contains(m.SequenceType)).ToArray();
             var matterNameSpliters = new[] { "|", "chromosome", "plasmid", "segment" };
             var mattersNames = matters.Select(m => (m.Id, m.Name.Split(matterNameSpliters, StringSplitOptions.RemoveEmptyEntries)[0].Trim())).ToArray();
             var accessions = new string[matters.Length];
@@ -338,7 +325,7 @@
 
             using (var db = new LibiadaWebEntities())
             {
-                Matter[] matters = db.Matter.Where(m => sequenceTypeFilter.Contains(m.SequenceType)).ToArray();
+                Matter[] matters = db.Matter.Where(m => MultisequenceRepository.SequenceTypesFilter.Contains(m.SequenceType)).ToArray();
                 Dictionary<string, long[]> multisequences = SplitMattersIntoReferenceAnsNotReference(matters);
                 var result = multisequences.Select(m => new { name = m.Key, matterIds = m.Value }).ToArray();
                 var matterIds = result.SelectMany(r => r.matterIds);

@@ -23,15 +23,6 @@
             @Html.ValidationMessageFor(model => model.Notation, "", new { @class = "text-danger" })
         </div>
     </div>
-
-    <div class="row mb-1">
-        @Html.LabelFor(model => model.Created, htmlAttributes: new { @class = "col-form-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Created, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Created, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
     <div class="row mb-1">
         @Html.LabelFor(model => model.MatterId, "Matter", htmlAttributes: new { @class = "col-form-label col-md-2" })
         <div class="col-md-10">
@@ -39,7 +30,6 @@
             @Html.ValidationMessageFor(model => model.MatterId, "", new { @class = "text-danger" })
         </div>
     </div>
-
     <div class="row mb-1">
         @Html.LabelFor(model => model.RemoteDb, "Remote database", htmlAttributes: new { @class = "col-form-label col-md-2" })
         <div class="col-md-10">
@@ -47,15 +37,6 @@
             @Html.ValidationMessageFor(model => model.RemoteDb, "", new { @class = "text-danger" })
         </div>
     </div>
-
-    <div class="row mb-1">
-        @Html.LabelFor(model => model.Modified, htmlAttributes: new { @class = "col-form-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Modified, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Modified, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
     <div class="row mb-1">
         @Html.LabelFor(model => model.RemoteId, htmlAttributes: new { @class = "col-form-label col-md-2" })
         <div class="col-md-10">
@@ -63,7 +44,6 @@
             @Html.ValidationMessageFor(model => model.RemoteId, "", new { @class = "text-danger" })
         </div>
     </div>
-
     <div class="row mb-1">
         @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "col-form-label col-md-2" })
         <div class="col-md-10">
@@ -71,17 +51,13 @@
             @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
         </div>
     </div>
-
-    <div class="row mb-1">
+    <div class="row mb-2">
         <div class="offset-md-2 col-md-10">
             <input type="submit" value="Save" class="btn btn-secondary" />
+            @Html.ActionLink("Back to List", "Index")
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

@@ -35,7 +35,7 @@
         {
             using (var db = new LibiadaWebEntities())
             {
-                ViewBag.matterId = new SelectList(Cache.GetInstance().Matters.ToArray(), "id", "name");
+                ViewBag.matterId = new SelectList(Cache.GetInstance().Matters.Where(m => m.Nature == Nature.Genetic).ToArray(), "id", "name");
                 return View();
             }
         }

@@ -39,14 +39,11 @@
             {
                 var genesSequenceIds = db.Subsequence.Select(s => s.SequenceId).Distinct();
 
-                // TODO: extract list of applicable SequenceTypes into separate entity
                 var matterIds = db.DnaSequence
                                   .Include(c => c.Matter)
-                                  .Where(c => !string.IsNullOrEmpty(c.RemoteId) &&
-                                                                                 !genesSequenceIds.Contains(c.Id) &&
-                                                                                 (c.Matter.SequenceType == SequenceType.CompleteGenome
-                                                                               || c.Matter.SequenceType == SequenceType.MitochondrialGenome
-                                                                               || c.Matter.SequenceType == SequenceType.Plasmid))
+                                  .Where(c => !string.IsNullOrEmpty(c.RemoteId)
+                                           && !genesSequenceIds.Contains(c.Id)
+                                           && Aliases.SequenceTypesWithSubsequences.Contains(c.Matter.SequenceType))
                                   .Select(c => c.MatterId).ToList();
 
                 var viewDataHelper = new ViewDataHelper(db);

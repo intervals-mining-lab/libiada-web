@@ -39,7 +39,7 @@
                     throw new NotImplementedException();
                 }
 
-                Dictionary<string, AccessionUpdateSearchResult> sequencesData = new Dictionary<string, AccessionUpdateSearchResult>();
+                Dictionary<string, AccessionUpdateSearchResult> sequencesData;
                 using (var db = new LibiadaWebEntities())
                 {
                     var dnaSequenceRepository = new GeneticSequenceRepository(db);
@@ -64,7 +64,7 @@
 
                 // slicing accessions into chunks to prevent "too long request" error
                 string[] accessions = sequencesData.Keys.ToArray();
-                const int maxChunkSize = 10000;
+                const int maxChunkSize = 1000;
 
                 for (int i = 0; i < accessions.Length; i += maxChunkSize)
                 {
@@ -74,7 +74,6 @@
                     (string ncbiWebEnvironment, string queryKey) = NcbiHelper.ExecuteEPostRequest(string.Join(",", accessionsChunk));
                     searchResults.AddRange(NcbiHelper.ExecuteESummaryRequest(ncbiWebEnvironment, queryKey, true));
                 }
-
 
                 for (int i = 0; i < searchResults.Count; i++)
                 {
@@ -96,7 +95,7 @@
                     sequenceData.NameUpdated = !(sequenceData.Name.Contains(searchResult.Title) && sequenceData.Name.Contains(searchResult.Organism));
                 }
 
-
+                // TODO: add status for results table coloring
                 var result = new Dictionary<string, object>
                 {
                     {

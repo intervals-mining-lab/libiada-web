@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Batch sequences import result";
+    ViewBag.Title = "GenBank accessions update check result";
 }
 @Scripts.Render("~/bundles/loadingWindow")
 <h2>@ViewBag.Title</h2>
@@ -26,7 +26,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="result in ::results" ng-class="::result.Updated ? result.NameUpdated ? 'warning' : 'danger' : result.NameUpdated ? '' : 'info'">
+                    <tr ng-repeat="result in ::results" ng-class="::result.Updated ? result.NameUpdated ? 'table-warning' : 'table-danger' : result.NameUpdated ? '' : 'table-info'">
                         <td ng-bind="::$index + 1" />
                         <td ng-bind="::result.Name" />
                         <td ng-bind="::result.RemoteName" />

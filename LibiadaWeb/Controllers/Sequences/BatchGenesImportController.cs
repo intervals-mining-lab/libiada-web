@@ -38,12 +38,11 @@
             {
                 var sequencesWithSubsequencesIds = db.Subsequence.Select(s => s.SequenceId).Distinct();
 
-                // TODO: Move list of sequenceTypes into separate entity
                 var matterIds = db.DnaSequence.Include(c => c.Matter)
-                    .Where(c => !string.IsNullOrEmpty(c.RemoteId) && !sequencesWithSubsequencesIds.Contains(c.Id)
-                                && (c.Matter.SequenceType == SequenceType.CompleteGenome
-                                    || c.Matter.SequenceType == SequenceType.MitochondrialGenome
-                                    || c.Matter.SequenceType == SequenceType.Plasmid)).Select(c => c.MatterId).ToArray();
+                    .Where(c => !string.IsNullOrEmpty(c.RemoteId) 
+                             && !sequencesWithSubsequencesIds.Contains(c.Id)
+                             && Aliases.SequenceTypesWithSubsequences.Contains(c.Matter.SequenceType))
+                    .Select(c => c.MatterId).ToArray();
 
                 var viewDataHelper = new ViewDataHelper(db);
                 var data = viewDataHelper.FillViewData(1, int.MaxValue, m => matterIds.Contains(m.Id), "Import");
