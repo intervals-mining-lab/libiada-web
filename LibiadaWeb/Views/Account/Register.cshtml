@@ -3,7 +3,7 @@
     ViewBag.Title = "Register";
 }
 
-<h2>@ViewBag.Title.</h2>
+<h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { role = "form" }))
 {
@@ -29,7 +29,7 @@
             @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
         </div>
     </div>
-    <div class="row mb-1">
+    <div class="row mb-2">
         <div class="offset-md-2 col-md-10">
             <input type="submit" class="btn btn-secondary" value="Register" />
         </div>
