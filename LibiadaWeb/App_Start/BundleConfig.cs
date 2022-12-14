@@ -200,8 +200,7 @@
                         "~/Content/site.css",
                         "~/Content/scrollUpDown.css",
                         "~/Libraries/AlertifyJS/css/alertify.css",
-                        "~/Libraries/AlertifyJS/css/themes/bootstrap.css",
-                        "~/Libraries/bootstrap-icons/font/bootstrap-icons.css"
+                        "~/Libraries/AlertifyJS/css/themes/bootstrap.css"
                         ));
 
             bundles.Add(new StyleBundle("~/Content/genesMap").Include(
