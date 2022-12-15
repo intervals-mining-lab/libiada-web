@@ -287,7 +287,12 @@
         /// Undocumented.
         /// </summary>
         [Display(Name = "GO_process")]
-        GOProcess = 47
+        GOProcess = 47,
 
+        /// <summary>
+        /// Satellite.
+        /// </summary>
+        [Display(Name = "satellite")]
+        Satellite = 48
     }
 }

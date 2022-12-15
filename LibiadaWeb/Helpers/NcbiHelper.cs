@@ -273,7 +273,7 @@
         /// <returns></returns>
         public static (string, string) ExecuteEPostRequest(string ids)
         {
-            var urlEPost = $"epost.fcgi";
+            string urlEPost = $"epost.fcgi";
             string requestResult;
             using (var webClient = new WebClient())
             {

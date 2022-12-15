@@ -37,18 +37,13 @@
         [TestCase("rf4hurccjke", Nature.Music, Group.ClassicalMusic, SequenceType.CompleteMusicalComposition)]
         [TestCase("rf4hurccjke", Nature.MeasurementData, Group.ObservationData, SequenceType.CompleteNumericSequence)]
         [TestCase("rf4hurccjke", Nature.Image, Group.Picture, SequenceType.CompleteImage)]
-        public void FillGroupAndSequenceTypeTest(string name, Nature nature, Group group, SequenceType sequenceType)
+        public void GetGroupAndSequenceTypeTest(string name, Nature nature, Group expectedGroup, SequenceType expectedSequenceType)
         {
-            var matter = new Matter
-            {
-                Name = name,
-                Nature = nature
-            };
 
-            MatterRepository.FillGroupAndSequenceType(matter);
+            (Group group, SequenceType sequenceType) = MatterRepository.GetGroupAndSequenceType(name, nature);
 
-            Assert.AreEqual(group, matter.Group);
-            Assert.AreEqual(sequenceType, matter.SequenceType);
+            Assert.AreEqual(expectedGroup, group);
+            Assert.AreEqual(expectedSequenceType, sequenceType);
         }
     }
 }

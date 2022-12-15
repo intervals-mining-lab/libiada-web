@@ -10,17 +10,16 @@
 
     <div ng-controller="CalculationResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
-        <h4 class="font-monospace">
-            Transformations repeated {{::iterationsCount}} times:
-        </h4>
-        <table class="table table-bordered table-hover" ng-cloak>
+        <h4 class="font-monospace">Transformations repeated {{::iterationsCount}} times:</h4>
+        <table class="table table-bordered table-hover table-sm" ng-cloak>
             <tbody>
                 <tr ng-repeat="transformation in ::transformationsList">
                     <td ng-bind="::transformation" />
                 </tr>
             </tbody>
         </table>
-        <table st-table="characteristics" class="table table-bordered table-hover" ng-cloak>
+        <h4>Calculated characteristics:</h4>
+        <table st-table="characteristics" class="table table-bordered table-hover table-sm" ng-cloak>
             <thead>
                 <tr>
                     <th>Sequence name</th>

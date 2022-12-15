@@ -19,7 +19,7 @@
         /// <summary>
         /// The features count.
         /// </summary>
-        private const int FeaturesCount = 35;
+        private const int FeaturesCount = 39;
 
         /// <summary>
         /// Array of all features.
@@ -96,6 +96,10 @@
         [TestCase((Feature)32, "MiscellaneousRecombination", "misc_recomb")]
         [TestCase((Feature)33, "Exon", "exon")]
         [TestCase((Feature)34, "Unsure", "unsure")]
+        [TestCase((Feature)35, "PrecursorRNA", "precursor_RNA")]
+        [TestCase((Feature)36, "Telomere", "telomere")]
+        [TestCase((Feature)37, "ConstantRegion", "C_region")]
+        [TestCase((Feature)38, "MiscellaneousStructure", "misc_structure")]
         public void FeatureNameAndGenBankNameTest(Feature feature, string name, string genBankName)
         {
             Assert.AreEqual(name, feature.GetName());

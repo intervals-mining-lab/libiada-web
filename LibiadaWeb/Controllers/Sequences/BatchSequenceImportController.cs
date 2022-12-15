@@ -198,7 +198,7 @@
             }
             catch (Exception exception)
             {
-                string result = $"successfully imported sequence but failed to import genes: {exception.Message}";
+                string result = $"Successfully imported sequence but failed to import genes: {exception.Message}";
                 while (exception.InnerException != null)
                 {
                     exception = exception.InnerException;

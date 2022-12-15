@@ -15,7 +15,7 @@
         /// <summary>
         /// The attributes count.
         /// </summary>
-        private const int AttributesCount = 47;
+        private const int AttributesCount = 48;
 
         /// <summary>
         /// Array of all attributes.
@@ -96,6 +96,7 @@
         [TestCase((Attribute)45, "GO_function")]
         [TestCase((Attribute)46, "GO_component")]
         [TestCase((Attribute)47, "GO_process")]
+        [TestCase((Attribute)48, "satellite")]
         public void AttributesDisplayValuesTest(Attribute attribute, string name) => Assert.AreEqual(name, attribute.GetDisplayValue());
 
         /// <summary>

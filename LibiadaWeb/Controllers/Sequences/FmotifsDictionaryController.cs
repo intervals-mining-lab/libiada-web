@@ -16,7 +16,7 @@
     /// The Fmotifs dictionary controller.
     /// </summary>
     [Authorize(Roles = "Admin")]
-    public class FmotifsDictionaryController: SequencesMattersController
+    public class FmotifsDictionaryController : SequencesMattersController
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="FmotifsDictionaryController"/> class.
@@ -73,6 +73,7 @@
                 {
                     sortedFmotifs.Add(musicChainAlphabet[i], musicChainBuilding.Count(el => el == i + 1));
                 }
+
                 sortedFmotifs = sortedFmotifs.OrderByDescending(pair => pair.Value)
                                              .ToDictionary(pair => pair.Key, pair => pair.Value);
 
@@ -100,10 +101,15 @@
                         newNote.Id = dbNote.Id;
                         newFmotif.NoteList.Add(newNote);
                     }
+
                     fmotifsChain.Add(newFmotif);
                 }
-                var result = new Dictionary<string, object> { { "fmotifs", fmotifsChain },
-                                                              { "sequentialTransfer", musicSequence.SequentialTransfer} };
+
+                var result = new Dictionary<string, object> 
+                {
+                    { "fmotifs", fmotifsChain },
+                    { "sequentialTransfer", musicSequence.SequentialTransfer }
+                };
                 ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object> { { "data", result } });
                 return View(musicSequence);
             }

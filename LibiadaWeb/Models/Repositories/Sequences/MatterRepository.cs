@@ -38,78 +38,86 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         }
 
         /// <summary>
-        /// Fills group and sequence type params in matter.
+        /// Determines group and sequence type params for matter.
         /// </summary>
-        /// <param name="matter">
-        /// The matter.
+        /// <param name="name">
+        /// The matter's name.
         /// </param>
-        public static void FillGroupAndSequenceType(Matter matter)
+        /// <param name="nature">
+        /// Nature of the matter.
+        /// </param>
+        /// <returns>
+        /// Tuple of <see cref="Group"/> and <see cref="SequenceType"/>.
+        /// </returns>
+        public static (Group, SequenceType) GetGroupAndSequenceType(string name, Nature nature)
         {
-            string name = matter.Name.ToLower();
-            switch (matter.Nature)
+            name = name.ToLower();
+            switch (nature)
             {
                 case Nature.Literature:
-                    matter.Group = Group.ClassicalLiterature;
-                    matter.SequenceType = SequenceType.CompleteText;
-                    break;
+                    return (Group.ClassicalLiterature, SequenceType.CompleteText);
                 case Nature.Music:
-                    matter.Group = Group.ClassicalMusic;
-                    matter.SequenceType = SequenceType.CompleteMusicalComposition;
-                    break;
+                    return (Group.ClassicalMusic, SequenceType.CompleteMusicalComposition);
                 case Nature.MeasurementData:
-                    matter.Group = Group.ObservationData;
-                    matter.SequenceType = SequenceType.CompleteNumericSequence;
-                    break;
+                    return (Group.ObservationData, SequenceType.CompleteNumericSequence);
                 case Nature.Image:
                     // TODO: add distinction between photo and picture, painting and photo
-                    matter.Group = Group.Picture;
-                    matter.SequenceType = SequenceType.CompleteImage;
-                    break;
-
+                    return (Group.Picture, SequenceType.CompleteImage);
                 case Nature.Genetic:
                     if (name.Contains("mitochondrion") || name.Contains("mitochondrial"))
                     {
-                        matter.Group = Group.Eucariote;
-                        matter.SequenceType = name.Contains("16s") ? SequenceType.Mitochondrion16SRRNA
-                                            : name.Contains("plasmid") ? SequenceType.MitochondrialPlasmid
-                                            : SequenceType.MitochondrialGenome;
+                        SequenceType sequenceType = name.Contains("16s") ? SequenceType.Mitochondrion16SRRNA
+                                                  : name.Contains("plasmid") ? SequenceType.MitochondrialPlasmid
+                                                  : SequenceType.MitochondrialGenome;
+                        return (Group.Eucariote, sequenceType);
                     }
                     else if (name.Contains("18s"))
                     {
-                        matter.Group = Group.Eucariote;
-                        matter.SequenceType = SequenceType.RRNA18S;
+                        return (Group.Eucariote, SequenceType.RRNA18S);
                     }
                     else if (name.Contains("chloroplast"))
                     {
-                        matter.Group = Group.Eucariote;
-                        matter.SequenceType = SequenceType.ChloroplastGenome;
+                        return (Group.Eucariote, SequenceType.ChloroplastGenome);
                     }
                     else if (name.Contains("plastid") || name.Contains("apicoplast"))
                     {
-                        matter.Group = Group.Eucariote;
-                        matter.SequenceType = SequenceType.Plastid;
+                        return (Group.Eucariote, SequenceType.Plastid);
                     }
                     else if (name.Contains("plasmid"))
                     {
-                        matter.Group = Group.Bacteria;
-                        matter.SequenceType = SequenceType.Plasmid;
+                        return (Group.Bacteria, SequenceType.Plasmid);
                     }
                     else if (name.Contains("16s"))
                     {
-                        matter.Group = Group.Bacteria;
-                        matter.SequenceType = SequenceType.RRNA16S;
+                        return (Group.Bacteria, SequenceType.RRNA16S);
                     }
                     else
                     {
-                        matter.Group = name.Contains("virus") || name.Contains("viroid") || name.Contains("phage") ?
-                                           Group.Virus : Group.Bacteria;
-                        matter.SequenceType = SequenceType.CompleteGenome;
+                        Group group = name.Contains("virus") || name.Contains("viroid") || name.Contains("phage") ? Group.Virus
+                                    : name.Contains("archaea") ? Group.Archaea
+                                                               : Group.Bacteria;
+                        return (group, SequenceType.CompleteGenome);
                     }
-
-                    break;
                 default:
-                    throw new InvalidEnumArgumentException(nameof(matter.Nature), (int)matter.Nature, typeof(Nature));
+                    throw new InvalidEnumArgumentException(nameof(nature), (int)nature, typeof(Nature));
             }
+        }
+
+        /// <summary>
+        /// Trims the name ending of the GenBank sequence.
+        /// </summary>
+        /// <param name="name">The source name.</param>
+        /// <returns>
+        /// Trimmed name as <see cref="string"/>
+        /// </returns>
+        public static string TrimGenBankNameEnding(string name)
+        {
+            return name.TrimEnd('.')
+                       .TrimEnd(", complete genome")
+                       .TrimEnd(", complete sequence")
+                       .TrimEnd(", complete CDS")
+                       .TrimEnd(", complete cds")
+                       .TrimEnd(", genome");
         }
 
         /// <summary>
@@ -149,21 +157,25 @@ namespace LibiadaWeb.Models.Repositories.Sequences
 
             string collectionDateValue = SequenceAttributeRepository.GetAttributeSingleValue(sources, "collection_date")?.Split('/')[0];
             bool hasCollectionDate = DateTime.TryParseExact(collectionDateValue, GenBankDateFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime collectionDate);
-            if(!string.IsNullOrEmpty(collectionDateValue) && !hasCollectionDate)
+            if (!string.IsNullOrEmpty(collectionDateValue) && !hasCollectionDate)
             {
                 throw new Exception($"Collection date was invalid. Value: {collectionDateValue}.");
             }
-            
+
+            string species = metadata.Source.Organism.Species;
+            string commonName = metadata.Source.CommonName;
+            string definition = metadata.Definition;
+
             var matter = new Matter
             {
-                Name = $"{ExtractMatterName(metadata)} | {metadata.Version.CompoundAccession}",
+                Name = $"{ExtractMatterName(species, commonName, definition)} | {metadata.Version.CompoundAccession}",
                 Nature = Nature.Genetic,
                 CollectionCountry = collectionCountry,
                 CollectionLocation = collectionCoordinates,
                 CollectionDate = hasCollectionDate ? (DateTime?)collectionDate : null
             };
 
-            FillGroupAndSequenceType(matter);
+            (matter.Group, matter.SequenceType) = GetGroupAndSequenceType($"{species} {commonName} {definition}", matter.Nature);
 
             return matter;
         }
@@ -193,6 +205,23 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         }
 
         /// <summary>
+        /// Removes sequence type from the the sequence name.
+        /// </summary>
+        /// <param name="name">The GenBank sequence name.</param>
+        /// <returns>
+        /// Cleaned up name as <see cref="string"/>.
+        /// </returns>
+        private static string RemoveSequenceTypeFromName(string name)
+        {
+            return name.Replace("mitochondrion", "")
+                       .Replace("plastid", "")
+                       .Replace("plasmid", "")
+                       .Replace("chloroplast", "")
+                       .Replace("  ", " ")
+                       .Trim();
+        }
+
+        /// <summary>
         /// Extracts supposed sequence name from metadata.
         /// </summary>
         /// <param name="metadata">
@@ -204,44 +233,55 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <exception cref="Exception">
         /// Thrown if all name fields are contradictory.
         /// </exception>
-        private static string ExtractMatterName(GenBankMetadata metadata)
+        private static string ExtractMatterName(string species, string commonName, string definition)
         {
-            string species = metadata.Source.Organism.Species.GetLargestRepeatingSubstring();
-            string commonName = metadata.Source.CommonName;
-            string definition = metadata.Definition.TrimEnd(", complete genome.")
-                                                   .TrimEnd(", complete sequence.")
-                                                   .TrimEnd(", complete CDS.")
-                                                   .TrimEnd(", complete cds.")
-                                                   .TrimEnd(", genome.");
+            species = RemoveSequenceTypeFromName(species.GetLargestRepeatingSubstring());
+            commonName = RemoveSequenceTypeFromName(commonName);
+            definition = RemoveSequenceTypeFromName(TrimGenBankNameEnding(definition));
 
-            if (commonName.Contains(species) || species.IsSubsetOf(commonName))
+            if (commonName.Contains(definition) || definition.IsSubsetOf(commonName))
             {
-                if (definition.Contains(commonName) || commonName.IsSubsetOf(definition))
+                if (species.Contains(commonName) || commonName.IsSubsetOf(species))
                 {
-                    return definition;
+                    return species;
                 }
 
-                if (commonName.Contains(definition) || definition.IsSubsetOf(commonName))
+                if (commonName.Contains(species) || species.IsSubsetOf(commonName))
                 {
                     return commonName;
                 }
 
-                return $"{commonName} | {definition}";
+                return $"{commonName} | {species}";
             }
 
-            if (species.Contains(commonName) || commonName.IsSubsetOf(species))
+            if (definition.Contains(commonName) || commonName.IsSubsetOf(definition))
             {
-                if (definition.Contains(species) || species.IsSubsetOf(definition))
-                {
-                    return definition;
-                }
-
                 if (species.Contains(definition) || definition.IsSubsetOf(species))
                 {
                     return species;
                 }
 
+                if (definition.Contains(species) || species.IsSubsetOf(definition))
+                {
+                    return definition;
+                }
+
                 return $"{species} | {definition}";
+            }
+
+            if (commonName.Contains(species) || species.IsSubsetOf(commonName))
+            {
+                return $"{commonName} | {definition}";
+            }
+
+            if (species.Contains(commonName) || commonName.IsSubsetOf(species))
+            {
+                return $"{species} | {definition}";
+            }
+
+            if (species.Contains(definition) || definition.IsSubsetOf(species))
+            {
+                return $"{commonName} | {species}";
             }
 
             throw new Exception($"Sequences names are not equal. CommonName = {commonName}, Species = {species}, Definition = {definition}");

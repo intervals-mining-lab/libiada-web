@@ -8,7 +8,7 @@
     using Newtonsoft.Json;
 
     /// <summary>
-    /// The feature.
+    /// Types of genetic subsequences.
     /// </summary>
     [JsonConverter(typeof(StringEnumConverter))]
     public enum Feature : byte
@@ -224,7 +224,7 @@
         /// The miscellaneous difference.
         /// </summary>
         [Display(Name = "Miscellaneous difference")]
-        [Description("feature sequence is different from that presented in the entry and cannot be described by any other difference key (old_sequence, variation, or modified_base).")]
+        [Description("Feature sequence is different from that presented in the entry and cannot be described by any other difference key (old_sequence, variation, or modified_base).")]
         [Nature(Nature.Genetic)]
         [GenBankFeatureName("misc_difference")]
         MiscellaneousDifference = 23,
@@ -326,6 +326,42 @@
         [Description("A small region of sequenced bases, generally 10 or fewer in its length, which could not be confidently identified. Such a region might contain called bases (A, T, G, or C), or a mixture of called-bases and uncalled-bases ('N'). The unsure feature should not be used when annotating gaps in genome assemblies. Please refer to assembly_gap feature for gaps within the sequence of an assembled genome. For annotation of gaps in other sequences than assembled genomes use the gap feature.")]
         [Nature(Nature.Genetic)]
         [GenBankFeatureName("unsure")]
-        Unsure = 34
+        Unsure = 34,
+
+        /// <summary>
+        /// The precursor RNA.
+        /// </summary>
+        [Display(Name = "Precursor RNA")]
+        [Description("Any RNA species that is not yet the mature RNA product; may include ncRNA, rRNA, tRNA, 5' untranslated region (5'UTR), coding sequences (CDS, exon), intervening sequences (intron) and 3' untranslated region (3'UTR).")]
+        [Nature(Nature.Genetic)]
+        [GenBankFeatureName("precursor_RNA")]
+        PrecursorRNA = 35,
+
+        /// <summary>
+        /// The telomere.
+        /// </summary>
+        [Display(Name = "Telomere")]
+        [Description("Region of biological interest identified as a telomere and which has been experimentally characterized. The telomere feature describes the interval of DNA that corresponds to a specific structure at the end of the linear eukaryotic chromosome which is required for the integrity and maintenance of the end; this region is unique compared to the rest of the chromosome and represent the physical end of the chromosome.")]
+        [Nature(Nature.Genetic)]
+        [GenBankFeatureName("telomere")]
+        Telomere = 36,
+
+        /// <summary>
+        /// The constant region.
+        /// </summary>
+        [Display(Name = "Constant region")]
+        [Description("Constant region of immunoglobulin light and heavy chains, and T-cell receptor alpha, beta, and gamma chains; includes one or more exons depending on the particular chain.")]
+        [Nature(Nature.Genetic)]
+        [GenBankFeatureName("C_region")]
+        ConstantRegion = 37,
+
+        /// <summary>
+        /// The miscellaneous structure.
+        /// </summary>
+        [Display(Name = "Miscellaneous structure")]
+        [Description("Any secondary or tertiary nucleotide structure or conformation that cannot be described by other Structure keys (stem_loop and D-loop).")]
+        [Nature(Nature.Genetic)]
+        [GenBankFeatureName("misc_structure")]
+        MiscellaneousStructure = 38
     }
 }
