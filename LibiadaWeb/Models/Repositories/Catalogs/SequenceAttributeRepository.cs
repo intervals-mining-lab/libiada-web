@@ -81,7 +81,7 @@
             {
                 result = source.Select(s => s.Qualifiers.SingleOrDefault(q => q.Key == attributeName)
                                              .Value?.SingleOrDefault())
-                               .SingleOrDefault();
+                               .SingleOrDefault(s => s != null);
             }
             catch(Exception ex)
             {
