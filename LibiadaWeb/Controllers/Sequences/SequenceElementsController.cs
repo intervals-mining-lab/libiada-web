@@ -47,7 +47,12 @@
         public IEnumerable<SelectListItem> Get(int id)
         {
             List<Element> sequenceElements = sequenceRepository.GetElements(id);
-            return elementRepository.GetSelectListItems(sequenceElements, null);
+            return sequenceElements.ConvertAll(e => new SelectListItem
+            {
+                Value = e.Id.ToString(),
+                Text = e.Name,
+                Selected = false
+            });
         }
     }
 }

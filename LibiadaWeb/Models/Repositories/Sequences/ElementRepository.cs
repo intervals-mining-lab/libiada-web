@@ -3,7 +3,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web.Mvc;
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.SimpleTypes;
@@ -201,40 +200,10 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// The <see cref="IReadOnlyList{Element}"/>.
         /// </returns>
         public List<Element> GetElements(long[] elementIds) => db.Element
-                                                                     .Where(e => elementIds.Contains(e.Id))
-                                                                     .ToList()
-                                                                     .OrderBy(e => Array.IndexOf(elementIds, e.Id))
-                                                                     .ToList();
-
-        /// <summary>
-        /// The get select list items.
-        /// </summary>
-        /// <param name="allElements">
-        /// The all elements.
-        /// </param>
-        /// <param name="selectedElements">
-        /// The selected elements.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IEnumerable{SelectListItem}"/>.
-        /// </returns>
-        public List<SelectListItem> GetSelectListItems(List<Element> allElements, IEnumerable<Element> selectedElements)
-        {
-            HashSet<long> elementIds = selectedElements != null
-                                     ? new HashSet<long>(selectedElements.Select(c => c.Id))
-                                     : new HashSet<long>();
-            if (allElements == null)
-            {
-                allElements = db.Element.ToList();
-            }
-
-            return allElements.ConvertAll(e => new SelectListItem
-                                                   {
-                                                       Value = e.Id.ToString(),
-                                                       Text = e.Name,
-                                                       Selected = elementIds.Contains(e.Id)
-                                                   });
-        }
+                                                                 .Where(e => elementIds.Contains(e.Id))
+                                                                 .ToList()
+                                                                 .OrderBy(e => Array.IndexOf(elementIds, e.Id))
+                                                                 .ToList();
 
         /// <summary>
         /// The get or create pitches in db.
@@ -305,11 +274,11 @@ namespace LibiadaWeb.Models.Repositories.Sequences
 
             List<string> newElements = elements.Where(e => !existingElements.Contains(e)).ToList();
             db.Element.AddRange(newElements.ConvertAll(e => new Element
-                                                                {
-                                                                    Value = e,
-                                                                    Name = e,
-                                                                    Notation = notation
-                                                                }));
+            {
+                Value = e,
+                Name = e,
+                Notation = notation
+            }));
             db.SaveChanges();
         }
     }

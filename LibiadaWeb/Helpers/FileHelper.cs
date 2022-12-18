@@ -26,7 +26,7 @@
         {
             if (file == null || file.ContentLength == 0)
             {
-                throw new ArgumentNullException("file", "File is null or empty.");
+                throw new ArgumentNullException(nameof(file), "File is null or empty.");
             }
 
             return file.InputStream;
