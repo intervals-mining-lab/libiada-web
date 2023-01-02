@@ -2,34 +2,34 @@
     .controller("ChartsCtrl", ["$scope", function ($scope) {
 
         function draw() {
-            var margin = { top: 30, right: 20, bottom: 30, left: 200 },
+            let margin = { top: 30, right: 20, bottom: 30, left: 200 },
                 width = 800 - margin.left - margin.right,
                 height = 600 - margin.top - margin.bottom;
 
             // Set the ranges
-            var x = d3.scaleLinear().range([0, width]);
-            var y = d3.scaleLinear().range([height, 0]);
+            let x = d3.scaleLinear().range([0, width]);
+            let y = d3.scaleLinear().range([height, 0]);
 
             // Define the axes
-            var xAxis = d3.svg.axis().scale(x)
+            let xAxis = d3.svg.axis().scale(x)
                 .orient("bottom").ticks(5);
 
-            var yAxis = d3.svg.axis().scale(y)
+            let yAxis = d3.svg.axis().scale(y)
                 .orient("left").ticks(5);
 
             // Define the line
-            var valueline = d3.svg.line()
+            let valueline = d3.svg.line()
                 .x(d => x(d.date))
                 .y(d => y(d.close));
 
             // Define 'div' for tooltips
-            var div = d3.select("body")
+            let div = d3.select("body")
                 .append("div")  // declare the tooltip div
                 .attr("class", "chart-tooltip position-absolute text-bg-light font-monospace small lh-sm p-1 rounded")
                 .style("opacity", 0);                  // set the opacity to nil
 
             // Adds the svg canvas
-            var svg = d3.select("body")
+            let svg = d3.select("body")
                 .append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
@@ -37,7 +37,7 @@
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
             // Get the data
-            var data = $scope.data;
+            let data = $scope.data;
 
             data.forEach(function (d) {
                 d.date = +d.date;
@@ -103,7 +103,7 @@
 
         $scope.addX = (i, j) => {
             $scope.data = [];
-            for (var k = 1; k < $scope.parsedPaste.length; k++) {
+            for (let k = 1; k < $scope.parsedPaste.length; k++) {
                 $scope.data.push({ date: $scope.parsedPaste[k][i].replace(",", "."), close: $scope.parsedPaste[k][j].replace(",", "."), name: $scope.parsedPaste[k][0] });
             }
             draw();
@@ -111,7 +111,7 @@
         $scope.addY = (l) => {
             $scope.data = [];
 
-            for (var k = 1; k < $scope.parsedPaste.length; k++) {
+            for (let k = 1; k < $scope.parsedPaste.length; k++) {
                 $scope.data.push({ date: k, close: $scope.parsedPaste[k][l].replace(",", "."), name: $scope.parsedPaste[k][0] });
             }
             draw();

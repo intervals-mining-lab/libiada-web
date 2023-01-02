@@ -21,17 +21,17 @@
 
         };
 
-        var chordIndex;
+        let chordIndex;
 
         // plays chords with animation
-        var player = {
+        let player = {
             barDuration: 8,
             timeline: 0,
             velocity: 127,
             play: function(note, minOctave, moveTime, event) {
-                var chord = [];
-                var duration = note.Duration.Value;
-                for (var i = 0; i < note.Pitches.length; i++) {
+                let chord = [];
+                let duration = note.Duration.Value;
+                for (let i = 0; i < note.Pitches.length; i++) {
                     if ($scope.data.sequentialTransfer) {
                         chord[i] = note.Pitches[i].MidiNumber + 60;
                     } else {
@@ -52,11 +52,11 @@
                 this.timeline += this.barDuration * duration;
             },
             keyOn: function(event, note, min) {
-                for (var i = 0; i < note.Pitches.length; i++) {
-                    var pitch = note.Pitches[i];
-                    var step = pitch.MidiNumber % 12;
-                    var currentOctave = pitch.Octave > min ? 1 : 0;
-                    var key = d3.select("#visualization_" + $scope.data.fmotifs[event].Id)
+                for (let i = 0; i < note.Pitches.length; i++) {
+                    let pitch = note.Pitches[i];
+                    let step = pitch.MidiNumber % 12;
+                    let currentOctave = pitch.Octave > min ? 1 : 0;
+                    let key = d3.select("#visualization_" + $scope.data.fmotifs[event].Id)
                         .select(".key_" + (step + currentOctave * 12))
                         .selectAll("rect");
                     key.style("fill", "blue")
@@ -64,8 +64,8 @@
                 }
             },
             keyOff: function(event) {
-                for (var i = 0; i < 24; i++) {
-                    var key = d3.select("#visualization_" + $scope.data.fmotifs[event].Id)
+                for (let i = 0; i < 24; i++) {
+                    let key = d3.select("#visualization_" + $scope.data.fmotifs[event].Id)
                         .select(".key_" + (i))
                         .selectAll("rect");
                     if (getLine(i % 12).alter === 0) {
@@ -76,7 +76,7 @@
                 }
             },
             noteOn: function(event) {
-                var chord = d3.select("#notation_" + $scope.data.fmotifs[event].Id)
+                let chord = d3.select("#notation_" + $scope.data.fmotifs[event].Id)
                     .select(".chord_" + (chordIndex));
                 chord.selectAll("ellipse")
                     .style("fill", "blue");
@@ -92,7 +92,7 @@
                     .style("stroke", "black");
             },
             noteOff: function(event) {
-                var chord = d3.select("#notation_" + $scope.data.fmotifs[event].Id)
+                let chord = d3.select("#notation_" + $scope.data.fmotifs[event].Id)
                     .select(".chord_" + (chordIndex));
                 chord.selectAll("ellipse")
                     .style("fill", "black");
@@ -112,17 +112,17 @@
         $scope.play = event => {
             MIDI.setVolume(0, 80);
             player.timeline = 0;
-            var notes = $scope.data.fmotifs[event].NoteList;
-            var min = 9;
+            let notes = $scope.data.fmotifs[event].NoteList;
+            let min = 9;
             chordIndex = 0;
-            for (var i = 0; i < notes.length; i++) {
+            for (let i = 0; i < notes.length; i++) {
                 if (notes[i].Pitches.length > 0) {
-                    for (var j = 0; j < notes[i].Pitches.length; j++) {
+                    for (let j = 0; j < notes[i].Pitches.length; j++) {
                         min = notes[i].Pitches[j].Octave < min ? notes[i].Pitches[j].Octave : min;
                     }
                 }
             }
-            for (var i = 0; i < notes.length; i++) {
+            for (let i = 0; i < notes.length; i++) {
                 player.play(notes[i], min, true, event);
             }
         };
@@ -153,8 +153,8 @@
 
         // draws piano keyboard
         function drawKeyboard() {
-            var rectPosX = 0;
-            for (var i = 0; i < 24; i++) {
+            let rectPosX = 0;
+            for (let i = 0; i < 24; i++) {
                 if (getLine(i % 12).alter === 0) {
                     visualization.append("g")
                         .attr("class", "key_" + i)
@@ -168,7 +168,7 @@
                     rectPosX += 25;
                 }
             }
-            for (var i = 0; i < 24; i++) {
+            for (let i = 0; i < 24; i++) {
                 if (getLine(i % 12).alter === 1) {
                     visualization.append("g")
                         .attr("class", "key_" + i)
@@ -185,7 +185,7 @@
 
         // draws notation staff
         function drawStaff() {
-            for (var i = 3; i < 12; i++) {
+            for (let i = 3; i < 12; i++) {
                 if (i % 2 !== 0) {
                     notation.append("line")
                         .attr("x1", 0)
@@ -214,7 +214,7 @@
 
         // draws note
         function drawNote(group, note, octave, iterator, x, y) {
-            var step = note.Pitches[iterator].MidiNumber % 12;
+            let step = note.Pitches[iterator].MidiNumber % 12;
             if (octave === 0 && (step === 0 || step === 1)) {
                 group.append("line")
                     .attr("class", "blackline")
@@ -374,14 +374,14 @@
 
         $scope.margin = 40;
         $scope.verticalInterval = (140 - $scope.margin * 2) / 14;
-        var notation;
-        var visualization;
+        let notation;
+        let visualization;
 
         // draws everything
         $(function () {
-            for (var i = 0; i < $scope.data.fmotifs.length; i++) {
-                var fmotif = $scope.data.fmotifs[i];
-                var horizontalInterval = getHorizontalInterval(fmotif);
+            for (let i = 0; i < $scope.data.fmotifs.length; i++) {
+                let fmotif = $scope.data.fmotifs[i];
+                let horizontalInterval = getHorizontalInterval(fmotif);
                 notation = d3.select("#notation_" + fmotif.Id)
                     .append("svg")
                     .attr("width", 450)
@@ -396,31 +396,31 @@
                     .style("margin", "auto");
                 drawKeyboard();
                 drawStaff();
-                var min = 9;
-                for (var j = 0; j < fmotif.NoteList.length; j++) {
-                    var note = fmotif.NoteList[j];
-;                    for (var k = 0; k < note.Pitches.length; k++) {
-                        var pitch = note.Pitches[k];
+                let min = 9;
+                for (let j = 0; j < fmotif.NoteList.length; j++) {
+                    let note = fmotif.NoteList[j];
+;                    for (let k = 0; k < note.Pitches.length; k++) {
+                        let pitch = note.Pitches[k];
                         min = pitch.Octave < min ? pitch.Octave : min;
                     }
                 }
-                for (var j = 0; j < fmotif.NoteList.length; j++) {
-                    var note = fmotif.NoteList[j];
-                    var chord = notation.append("g")
+                for (let j = 0; j < fmotif.NoteList.length; j++) {
+                    let note = fmotif.NoteList[j];
+                    let chord = notation.append("g")
                         .attr("class", "chord_" + j);
-                    var x = (j + 1) * horizontalInterval;
+                    let x = (j + 1) * horizontalInterval;
                     if (note.Pitches.length === 0) {
                         drawPause(chord, note, x);
                     }
                     else {
-                        var lineUp = false;
-                        var miny = 1000;
-                        var maxy = -1000;
-                        for (var k = 0; k < note.Pitches.length; k++) {
-                            var pitch = note.Pitches[k];
-                            var currentOctave = pitch.Octave > min ? 1 : 0;
-                            var step = getLine(pitch.Step);
-                            var y = $scope.margin + (13 - (step.line + 7 * currentOctave)) * $scope.verticalInterval;
+                        let lineUp = false;
+                        let miny = 1000;
+                        let maxy = -1000;
+                        for (let k = 0; k < note.Pitches.length; k++) {
+                            let pitch = note.Pitches[k];
+                            let currentOctave = pitch.Octave > min ? 1 : 0;
+                            let step = getLine(pitch.Step);
+                            let y = $scope.margin + (13 - (step.line + 7 * currentOctave)) * $scope.verticalInterval;
                             if (currentOctave === 0 && pitch.Step < 10) {
                                 lineUp = true;
                             }
@@ -428,7 +428,7 @@
                             maxy = y < maxy ? maxy : y;
                             drawNote(chord, note, currentOctave, k, x, y);
                         }
-                        var flagx, flagy;
+                        let flagx, flagy;
                         if (!lineUp && note.Duration.Denominator > 1) {
                             flagx = x - 6;
                             flagy = maxy + 48;
@@ -451,7 +451,7 @@
                                 .style("stroke", "black")
                                 .style("stroke-width", 2);
                         }
-                        var flags = 0;
+                        let flags = 0;
                         switch (note.Duration.Denominator) {
                             case 8: flags = 1; break;
                             case 16: flags = 2; break;
@@ -460,7 +460,7 @@
                             case 128: flags = 5; break;
                         }
                         if (flags > 0) {
-                            for (var k = 0; k < flags; k++) {
+                            for (let k = 0; k < flags; k++) {
                                 if (lineUp) {
                                     chord.append("line")
                                         .attr("x1", flagx)

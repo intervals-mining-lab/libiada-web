@@ -11,8 +11,8 @@
         function onHubStart() {
             $scope.$apply();
             $scope.tasksHub.server.getAllTasks().done(tasksJson => {
-                var tasks = JSON.parse(tasksJson);
-                for (var i = 0; i < tasks.length; i++) {
+                let tasks = JSON.parse(tasksJson);
+                for (let i = 0; i < tasks.length; i++) {
                     $scope.tasks.push(tasks[i]);
 
                     $scope.tryRedirectToResult(tasks[i]);
@@ -31,11 +31,11 @@
                     $scope.tasks.push(data);
                     break;
                 case "DeleteTask":
-                    var taskToDelete = $scope.tasks.find(t => t.Id === data.Id);
+                    let taskToDelete = $scope.tasks.find(t => t.Id === data.Id);
                     $scope.tasks.splice($scope.tasks.indexOf(taskToDelete), 1);
                     break;
                 case "ChangeStatus":
-                    var taskToChange = $scope.tasks.find(t => t.Id === data.Id);
+                    let taskToChange = $scope.tasks.find(t => t.Id === data.Id);
                     if (taskToChange) {
                         taskToChange.Created = data.Created;
                         taskToChange.Started = data.Started;
@@ -74,7 +74,7 @@
         }
 
         function getTaskCountWithStatus(state) {
-            var count = $scope.tasks.filter(task => task.TaskState === state).length;
+            let count = $scope.tasks.filter(task => task.TaskState === state).length;
             return count;
         }
 
@@ -127,7 +127,7 @@
         $.connection.hub.stateChanged($scope.onStateChange);
         $.connection.hub.start().done($scope.onHubStart);
 
-        var location = window.location.href.split("/");
+        let location = window.location.href.split("/");
         if (location[location.length - 1] != "TaskManager")
             $scope.RedirectTaskId = location[location.length - 1];
         else $scope.RedirectTaskId = null;

@@ -6,7 +6,7 @@
 
         function filterByNature() {
             if (!$scope.hideNotation) {
-                var notation = filterFilter($scope.notations, { Nature: $scope.nature })[0];
+                let notation = filterFilter($scope.notations, { Nature: $scope.nature })[0];
                 $scope.notation = notation;
                 // if notation is not linked to characteristic
                 angular.forEach($scope.characteristics, characteristic => {

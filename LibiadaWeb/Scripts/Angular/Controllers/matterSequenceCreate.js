@@ -5,7 +5,7 @@
         MapModelFromJson($scope, data);
 
         function filterByNature() {
-            var arraysForFiltration = ["notations", "remoteDbs", "matters", "groups", "sequenceTypes"];
+            let arraysForFiltration = ["notations", "remoteDbs", "matters", "groups", "sequenceTypes"];
 
             arraysForFiltration.forEach(arrayName => {
                 if (angular.isDefined($scope[arrayName])) {
@@ -22,7 +22,7 @@
         }
 
         function remoteIdChanged(remoteId) {
-            var nameParts = $scope.name.split(" | ");
+            let nameParts = $scope.name.split(" | ");
             if (nameParts.length <= 2) {
                 $scope.name = nameParts[0] + (remoteId ? " | " + remoteId : "");
             }

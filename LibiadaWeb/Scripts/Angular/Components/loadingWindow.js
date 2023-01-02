@@ -2,7 +2,7 @@
     "use strict";
 
     function LoadingWindowController() {
-        var ctrl = this;
+        let ctrl = this;
 
         ctrl.loadingWindow = new bootstrap.Modal("#loadingDialog");
 

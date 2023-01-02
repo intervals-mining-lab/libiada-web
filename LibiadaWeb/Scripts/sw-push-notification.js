@@ -20,8 +20,8 @@ self.addEventListener('notificationclick', event => {
 
     event.waitUntil(clients.matchAll({ type: "window" })
         .then(clientList => {
-            for (var i = 0; i < clientList.length; i++) {
-                var client = clientList[i];
+            for (let i = 0; i < clientList.length; i++) {
+                let client = clientList[i];
                 if (client.url == target && 'focus' in client) {
                     return client.focus();
                 }

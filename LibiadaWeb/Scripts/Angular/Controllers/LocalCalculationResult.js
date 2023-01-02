@@ -6,7 +6,7 @@
         function fillLegend() {
             $scope.legend = [];
 
-            for (var k = 0; k < $scope.characteristics.length; k++) {
+            for (let k = 0; k < $scope.characteristics.length; k++) {
                 $scope.legend.push({ id: k, name: $scope.characteristics[k].MatterName, visible: true });
             }
         }
@@ -14,13 +14,13 @@
         // initializes data for chart
         function fillPoints() {
             $scope.points = [];
-            var first = +$scope.firstCharacteristic.Value;
-            var second = +$scope.secondCharacteristic.Value;
+            let first = +$scope.firstCharacteristic.Value;
+            let second = +$scope.secondCharacteristic.Value;
 
-            for (var i = 0; i < $scope.characteristics.length; i++) {
-                var characteristic = $scope.characteristics[i];
-                for (var j = 0; j < characteristic.FragmentsData.length; j++) {
-                    var fragmentData = characteristic.FragmentsData[j];
+            for (let i = 0; i < $scope.characteristics.length; i++) {
+                let characteristic = $scope.characteristics[i];
+                for (let j = 0; j < characteristic.FragmentsData.length; j++) {
+                    let fragmentData = characteristic.FragmentsData[j];
                     $scope.points.push({
                         id: j,
                         characteristicId: i,
@@ -35,13 +35,13 @@
 
         // constructs string representing tooltip text (inner html)
         function fillPointTooltip(d) {
-            var tooltipContent = [];
+            let tooltipContent = [];
             tooltipContent.push(d.matterName);
             tooltipContent.push("Name: " + d.name);
             tooltipContent.push("Fragment №: " + d.id);
-            var pointSharacteristics = [];
-            var characteristics = $scope.characteristics[d.characteristicId].FragmentsData[d.id].Characteristics;
-            for (var i = 0; i < characteristics.length; i++) {
+            let pointSharacteristics = [];
+            let characteristics = $scope.characteristics[d.characteristicId].FragmentsData[d.id].Characteristics;
+            for (let i = 0; i < characteristics.length; i++) {
                 pointSharacteristics.push($scope.characteristicsList[i].Text + ": " + characteristics[i]);
             }
 
@@ -56,7 +56,7 @@
 
             tooltip.style("opacity", 0.9);
 
-            var tooltipHtml = [];
+            let tooltipHtml = [];
 
             tooltip.selectedDots = svg.selectAll(".dot")
                 .filter(dot => {
@@ -136,20 +136,20 @@
             d3.select(".chart-svg").remove();
 
             // chart size and margin settings
-            var margin = { top: 30 + $scope.legendHeight, right: 30, bottom: 30, left: 60 };
-            var width = $scope.width - margin.left - margin.right;
-            var height = $scope.height - margin.top - margin.bottom;
+            let margin = { top: 30 + $scope.legendHeight, right: 30, bottom: 30, left: 60 };
+            let width = $scope.width - margin.left - margin.right;
+            let height = $scope.height - margin.top - margin.bottom;
 
             // setup x
             // calculating margins for dots
-            var xMin = d3.min($scope.points, $scope.xValue);
-            var xMax = d3.max($scope.points, $scope.xValue);
-            var xMargin = (xMax - xMin) * 0.05;
+            let xMin = d3.min($scope.points, $scope.xValue);
+            let xMax = d3.max($scope.points, $scope.xValue);
+            let xMargin = (xMax - xMin) * 0.05;
 
-            var xScale = d3.scaleLinear()
+            let xScale = d3.scaleLinear()
                 .domain([xMin - xMargin, xMax + xMargin])
                 .range([0, width]);
-            var xAxis = d3.axisBottom(xScale)
+            let xAxis = d3.axisBottom(xScale)
                 .tickSizeInner(-height)
                 .tickSizeOuter(0)
                 .tickPadding(10);
@@ -158,14 +158,14 @@
 
             // setup y
             // calculating margins for dots
-            var yMax = d3.max($scope.points, $scope.yValue);
-            var yMin = d3.min($scope.points, $scope.yValue);
-            var yMargin = (yMax - yMin) * 0.05;
+            let yMax = d3.max($scope.points, $scope.yValue);
+            let yMin = d3.min($scope.points, $scope.yValue);
+            let yMargin = (yMax - yMin) * 0.05;
 
-            var yScale = d3.scaleLinear()
+            let yScale = d3.scaleLinear()
                 .domain([yMin - yMargin, yMax + yMargin])
                 .range([height, 0]);
-            var yAxis = d3.axisLeft(yScale)
+            let yAxis = d3.axisLeft(yScale)
                 .tickSizeInner(-width)
                 .tickSizeOuter(0)
                 .tickPadding(10);
@@ -173,10 +173,10 @@
             $scope.yMap = d => yScale($scope.yValue(d));
 
             // setup fill color
-            var color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.legend.length]);
+            let color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.legend.length]);
 
             // add the graph canvas to the body of the webpage
-            var svg = d3.select("#chart").append("svg")
+            let svg = d3.select("#chart").append("svg")
                 .attr("width", $scope.width)
                 .attr("height", $scope.height)
                 .attr("class", "chart-svg")
@@ -184,7 +184,7 @@
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
             // add the tooltip area to the webpage
-            var tooltip = d3.select("#chart").append("div")
+            let tooltip = d3.select("#chart").append("div")
                 .attr("class", "chart-tooltip position-absolute text-bg-light font-monospace small lh-sm p-1 rounded")
                 .style("opacity", 0);
 
@@ -223,12 +223,12 @@
                 .style("font-size", "12pt");
 
             if ($scope.lineChart) {
-                var line = d3.line()
+                let line = d3.line()
                     .x($scope.xMap)
                     .y($scope.yMap);
 
                 // Group the entries by symbol
-                var dataGroups = d3.group($scope.points, d => d.matterName);
+                let dataGroups = d3.group($scope.points, d => d.matterName);
 
                 // Loop through each symbol / key
                 dataGroups.forEach(value => {
@@ -259,7 +259,7 @@
                 .on("click", (event, d) => $scope.showTooltip(event, d, tooltip, svg));
 
             // draw legend
-            var legend = svg.selectAll(".legend")
+            let legend = svg.selectAll(".legend")
                 .data($scope.legend)
                 .enter()
                 .append("g")
@@ -267,7 +267,7 @@
                 .attr("transform", (_d, i) => "translate(0," + i * 20 + ")")
                 .on("click", function (event, d) {
                     d.visible = !d.visible;
-                    var legendEntry = d3.select(event.currentTarget);
+                    let legendEntry = d3.select(event.currentTarget);
                     legendEntry.select("text")
                         .style("opacity", () => d.visible ? 1 : 0.5);
                     legendEntry.select("rect")
@@ -318,7 +318,7 @@
 
         $scope.loadingScreenHeader = "Loading data";
 
-        var location = window.location.href.split("/");
+        let location = window.location.href.split("/");
         $scope.taskId = location[location.length - 1];
 
         $http.get(`/api/TaskManagerWebApi/${$scope.taskId}`)

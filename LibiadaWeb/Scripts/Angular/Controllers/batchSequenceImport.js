@@ -5,8 +5,8 @@
         MapModelFromJson($scope, data);
 
         function parseIds() {
-            var splitted = $scope.accessionsField.split(/[^\w.]/);
-            for (var i = 0; i < splitted.length; i++) {
+            let splitted = $scope.accessionsField.split(/[^\w.]/);
+            for (let i = 0; i < splitted.length; i++) {
                 if (splitted[i]) {
                     $scope.accessions.push({ value: splitted[i] });
                 }

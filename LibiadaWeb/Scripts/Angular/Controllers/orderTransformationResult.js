@@ -5,7 +5,7 @@
 
         $scope.loadingScreenHeader = "Loading order transformation results";
 
-        var location = window.location.href.split("/");
+        let location = window.location.href.split("/");
         $scope.taskId = location[location.length - 1];
 
         $scope.loading = true;

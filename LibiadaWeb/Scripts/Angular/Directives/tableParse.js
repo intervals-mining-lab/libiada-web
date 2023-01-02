@@ -4,17 +4,17 @@
             return {
                 restrict: "E",
                 link: function (scope, element, attrs) {
-                    var inFocus = false;
+                    let inFocus = false;
                     function parseTabular(text) {
                         //The array we will return
-                        var toReturn = [];
+                        let toReturn = [];
                         try {
                             //Pasted data split into rows
-                            var rows = text.split(/[\n\f\r]/);
+                            let rows = text.split(/[\n\f\r]/);
                             rows.forEach(thisRow => {
-                                var row = thisRow.trim();
+                                let row = thisRow.trim();
                                 if (row != "") {
-                                    var cols = row.split("\t");
+                                    let cols = row.split("\t");
                                     toReturn.push(cols);
                                 }
                             });
@@ -27,7 +27,7 @@
                         return toReturn;
                     }
                     function textChanged() {
-                        var text = $("#myPasteBox").val();
+                        let text = $("#myPasteBox").val();
                         if (text != "") {
                             //We need to change the scope values
                             scope.$apply(() => {
@@ -35,7 +35,7 @@
                                     $parse(attrs.ngModel).assign(scope, text);
                                 }
                                 if (attrs.ngArray != undefined && attrs.ngArray != "") {
-                                    var asArray = parseTabular(text);
+                                    let asArray = parseTabular(text);
                                     if (asArray != null) {
                                         $parse(attrs.ngArray).assign(scope, asArray);
                                     }
@@ -56,7 +56,7 @@
                         //We add a text area to the body only if it is not already created by another myPaste directive
                         if ($("#myPasteBox").length == 0) {
                             $("body").append($('<textarea id=\"myPasteBox\" style=\"position:absolute; left:-1000px; top:-1000px;\"></textarea>'));
-                            var keyCodes = {
+                            let keyCodes = {
                                 'C': 67,
                                 'V': 86
                             };

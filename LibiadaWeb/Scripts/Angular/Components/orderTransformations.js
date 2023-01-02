@@ -2,7 +2,7 @@
     "use strict";
 
     function OrderTransformationsController() {
-        var ctrl = this;
+        let ctrl = this;
 
         ctrl.$onInit = () => {
             ctrl.transformationsSequence = [];

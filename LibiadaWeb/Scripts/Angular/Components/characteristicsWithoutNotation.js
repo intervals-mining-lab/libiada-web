@@ -2,7 +2,7 @@
     "use strict";
 
     function CharacteristicsWithoutNotation() {
-        var ctrl = this;
+        let ctrl = this;
 
         ctrl.characteristics = [];
 

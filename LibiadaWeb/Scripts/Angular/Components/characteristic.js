@@ -2,7 +2,7 @@
     "use strict";
 
     function Characteristic(filterFilter) {
-        var ctrl = this;
+        let ctrl = this;
 
         ctrl.$onInit = () => {
             ctrl.characteristicName = ctrl.characteristicName || "characteristicLinkId";

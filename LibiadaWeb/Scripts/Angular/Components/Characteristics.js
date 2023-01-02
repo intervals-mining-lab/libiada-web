@@ -2,7 +2,7 @@
     "use strict";
 
     function Characteristics(filterFilter) {
-        var ctrl = this;
+        let ctrl = this;
 
         ctrl.characteristics = [];
 
@@ -10,7 +10,7 @@
 
         ctrl.filterByNature = () => {
             if (!ctrl.hideNotation) {
-                var notation = filterFilter(ctrl.notations, { Nature: ctrl.nature })[0];
+                let notation = filterFilter(ctrl.notations, { Nature: ctrl.nature })[0];
                 ctrl.notation = notation;
 
                 // if notation is not linked to characteristic

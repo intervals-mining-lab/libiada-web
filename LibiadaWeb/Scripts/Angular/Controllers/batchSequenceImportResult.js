@@ -14,7 +14,7 @@
 
         $scope.loadingScreenHeader = "Loading import results";
 
-        var location = window.location.href.split("/");
+        let location = window.location.href.split("/");
         $scope.taskId = location[location.length - 1];
 
         $scope.loading = true;

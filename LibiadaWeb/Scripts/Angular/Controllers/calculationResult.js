@@ -6,11 +6,11 @@
         function fillLegend() {
             $scope.legend = [];
             if ($scope.clustersCount) {
-                for (var j = 0; j < $scope.clustersCount; j++) {
+                for (let j = 0; j < $scope.clustersCount; j++) {
                     $scope.legend.push({ id: j, name: j + 1, visible: true });
                 }
             } else {
-                for (var k = 0; k < $scope.characteristics.length; k++) {
+                for (let k = 0; k < $scope.characteristics.length; k++) {
                     $scope.legend.push({ id: k, name: $scope.characteristics[k].MatterName, visible: true });
                 }
             }
@@ -19,11 +19,11 @@
         // initializes data for chart
         function fillPoints() {
             $scope.points = [];
-            var first = +$scope.firstCharacteristic.Value;
-            var second = +$scope.secondCharacteristic.Value;
+            let first = +$scope.firstCharacteristic.Value;
+            let second = +$scope.secondCharacteristic.Value;
 
-            for (var i = 0; i < $scope.characteristics.length; i++) {
-                var characteristic = $scope.characteristics[i];
+            for (let i = 0; i < $scope.characteristics.length; i++) {
+                let characteristic = $scope.characteristics[i];
                 $scope.points.push({
                     id: i,
                     name: characteristic.MatterName,
@@ -37,12 +37,12 @@
 
         // constructs string representing tooltip text (inner html)
         function fillPointTooltip(d) {
-            var tooltipContent = [];
+            let tooltipContent = [];
             tooltipContent.push("Name: " + d.name);
 
 
-            var pointsCharacteristics = [];
-            for (var i = 0; i < $scope.characteristics[d.id].Characteristics.length; i++) {
+            let pointsCharacteristics = [];
+            for (let i = 0; i < $scope.characteristics[d.id].Characteristics.length; i++) {
                 pointsCharacteristics.push($scope.characteristicsList[i].Text + ": " + $scope.characteristics[d.id].Characteristics[i]);
             }
 
@@ -57,7 +57,7 @@
 
             tooltip.style("opacity", 0.9);
 
-            var tooltipHtml = [];
+            let tooltipHtml = [];
 
             tooltip.selectedDots = svg.selectAll(".dot")
                 .filter((dot) => {
@@ -110,23 +110,23 @@
             d3.select(".chart-tooltip").remove();
             d3.select(".chart-svg").remove();
 
-            var actualLegendHeight = $scope.legendSettings.show ? $scope.legendHeight : 0;
+            let actualLegendHeight = $scope.legendSettings.show ? $scope.legendHeight : 0;
 
             // chart size and margin settings
-            var margin = { top: 30 + actualLegendHeight, right: 30, bottom: 35, left: 50 };
-            var width = $scope.width - margin.left - margin.right;
-            var height = $scope.height + actualLegendHeight - margin.top - margin.bottom;
+            let margin = { top: 30 + actualLegendHeight, right: 30, bottom: 35, left: 50 };
+            let width = $scope.width - margin.left - margin.right;
+            let height = $scope.height + actualLegendHeight - margin.top - margin.bottom;
 
             // setup x
             // calculating margins for dots
-            var xMin = d3.min($scope.points, $scope.xValue);
-            var xMax = d3.max($scope.points, $scope.xValue);
-            var xMargin = (xMax - xMin) * 0.05;
+            let xMin = d3.min($scope.points, $scope.xValue);
+            let xMax = d3.max($scope.points, $scope.xValue);
+            let xMargin = (xMax - xMin) * 0.05;
 
-            var xScale = d3.scaleLinear()
+            let xScale = d3.scaleLinear()
                 .domain([xMin - xMargin, xMax + xMargin])
                 .range([0, width]);
-            var xAxis = d3.axisBottom(xScale)
+            let xAxis = d3.axisBottom(xScale)
                 .tickSizeInner(-height)
                 .tickSizeOuter(0)
                 .tickPadding(10);
@@ -135,14 +135,14 @@
 
             // setup y
             // calculating margins for dots
-            var yMax = d3.max($scope.points, $scope.yValue);
-            var yMin = d3.min($scope.points, $scope.yValue);
-            var yMargin = (yMax - yMin) * 0.05;
+            let yMax = d3.max($scope.points, $scope.yValue);
+            let yMin = d3.min($scope.points, $scope.yValue);
+            let yMargin = (yMax - yMin) * 0.05;
 
-            var yScale = d3.scaleLinear()
+            let yScale = d3.scaleLinear()
                 .domain([yMin - yMargin, yMax + yMargin])
                 .range([height, 0]);
-            var yAxis = d3.axisLeft(yScale)
+            let yAxis = d3.axisLeft(yScale)
                 .tickSizeInner(-width)
                 .tickSizeOuter(0)
                 .tickPadding(10);
@@ -150,10 +150,10 @@
             $scope.yMap = function (d) { return yScale($scope.yValue(d)); };
 
             // setup fill color
-            var color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.legend.length]);
+            let color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.legend.length]);
 
             // add the graph canvas to the body of the webpage
-            var svg = d3.select("#chart").append("svg")
+            let svg = d3.select("#chart").append("svg")
                 .attr("width", $scope.width)
                 .attr("height", $scope.height + actualLegendHeight)
                 .attr("class", "chart-svg")
@@ -161,7 +161,7 @@
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
             // add the tooltip area to the webpage
-            var tooltip = d3.select("#chart").append("div")
+            let tooltip = d3.select("#chart").append("div")
                 .attr("class", "chart-tooltip position-absolute text-bg-light font-monospace small lh-sm p-1 rounded")
                 .style("opacity", 0);
 
@@ -216,7 +216,7 @@
 
             if ($scope.legendSettings.show) {
                 // draw legend
-                var legend = svg.selectAll(".legend")
+                let legend = svg.selectAll(".legend")
                     .data($scope.legend)
                     .enter()
                     .append("g")
@@ -224,7 +224,7 @@
                     .attr("transform", (_d, i) => "translate(0," + i * 20 + ")")
                     .on("click", (event, d) => {
                         d.visible = !d.visible;
-                        var legendEntry = d3.select(event.currentTarget);
+                        let legendEntry = d3.select(event.currentTarget);
                         legendEntry.select("text")
                             .style("opacity", () => d.visible ? 1 : 0.5);
                         legendEntry.select("rect")
@@ -261,7 +261,7 @@
             const worksheet = workbook.addWorksheet("My Sheet");
             const font = { name: 'Courier New' };
             const border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } }
-            var columns = [
+            let columns = [
                 { header: '№', key: 'id', width: 10, style: { font: font, border: border } },
                 { header: 'Sequence name', key: 'name', width: 32, style: { font: font, border: border } }
             ];
@@ -270,8 +270,8 @@
 
             worksheet.columns = columns;
 
-            for (var i = 0; i < $scope.characteristics.length; i++) {
-                var row = { id: i + 1, name: $scope.characteristics[i].MatterName };
+            for (let i = 0; i < $scope.characteristics.length; i++) {
+                let row = { id: i + 1, name: $scope.characteristics[i].MatterName };
                 $scope.characteristics[i].Characteristics.forEach((cv, j) => row[$scope.characteristicNames[j]] = cv);
                 worksheet.addRow(row).commit();
             }
@@ -281,11 +281,11 @@
             const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
 
             // TODO: rewrite it using browser file API
-            var saveBlobAsFile = function (blob) {
-                var a = document.createElement("a");
+            let saveBlobAsFile = function (blob) {
+                let a = document.createElement("a");
                 document.body.appendChild(a);
                 a.style = "display: none";
-                var url = window.URL.createObjectURL(blob);
+                let url = window.URL.createObjectURL(blob);
                 a.href = url;
                 a.download = $scope.excelFileName || "Results";
                 a.click();
@@ -329,7 +329,7 @@
 
         $scope.loadingScreenHeader = "Loading data";
 
-        var location = window.location.href.split("/");
+        let location = window.location.href.split("/");
         $scope.taskId = location[location.length - 1];
 
         $scope.loading = true;

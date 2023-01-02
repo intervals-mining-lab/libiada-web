@@ -2,7 +2,7 @@
     "use strict";
 
     function ScrollJumperController() {
-        var ctrl = this;
+        let ctrl = this;
 
         ctrl.$onInit = () => {
             ctrl.scrolledUp = false;

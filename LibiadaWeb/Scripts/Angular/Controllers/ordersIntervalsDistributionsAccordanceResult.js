@@ -7,11 +7,11 @@
         function fillPoints() {
             $scope.points = [];
             $scope.maxLevel = 1;
-            for (var i = 0; i < $scope.result.length; i++) {
+            for (let i = 0; i < $scope.result.length; i++) {
                 if ($scope.result[i].link === $scope.linkType.Text) {
-                    for (var j = 0; j < $scope.result[i].accordance.length; j++) {
-                        var distributionIntervals = $scope.result[i].accordance[j].distributionIntervals;
-                        var orders = $scope.result[i].accordance[j].orders;
+                    for (let j = 0; j < $scope.result[i].accordance.length; j++) {
+                        let distributionIntervals = $scope.result[i].accordance[j].distributionIntervals;
+                        let orders = $scope.result[i].accordance[j].orders;
                     if (orders.length > $scope.maxLevel) {
                         $scope.maxLevel = orders.length;
                     }
@@ -29,9 +29,9 @@
 
         function fillAccordanceLevels() {
             $scope.accordanceLevels = [];
-            for (var i = 0; i <= $scope.maxLevel; i++) {
-                var count = 0;
-                for (var j = 0; j < $scope.points.length; j++) {
+            for (let i = 0; i <= $scope.maxLevel; i++) {
+                let count = 0;
+                for (let j = 0; j < $scope.points.length; j++) {
                     if ($scope.points[j].y === i) {
                         count++;
                     }
@@ -48,10 +48,10 @@
 
         // constructs string representing tooltip text (inner html)
         function fillPointTooltip(d) {
-            var tooltipContent = [];
+            let tooltipContent = [];
             tooltipContent.push("Distribution intervals: ");
-            var intervals = [];
-            for (var i = 0; i < d.distributionIntervals.length; i++) {
+            let intervals = [];
+            for (let i = 0; i < d.distributionIntervals.length; i++) {
                 intervals.push([d.distributionIntervals[i].interval, d.distributionIntervals[i].count]);
                 tooltipContent.push(intervals[i].join("|"));
             }
@@ -59,8 +59,8 @@
             tooltipContent.push("Orders: ");
 
 
-            var pointsOrders = [];
-            for (var i = 0; i < d.orders.length && i < 20; i++) {
+            let pointsOrders = [];
+            for (let i = 0; i < d.orders.length && i < 20; i++) {
                 pointsOrders.push(d.orders[i]);
             }
 
@@ -75,7 +75,7 @@
 
             tooltip.style("opacity", 0.9);
 
-            var tooltipHtml = [];
+            let tooltipHtml = [];
 
             tooltip.selectedDots = svg.selectAll(".dot")
                 .filter(dot => {
@@ -129,20 +129,20 @@
             d3.select(".chart-svg").remove();
 
             // chart size and margin settings
-            var margin = { top: 30, right: 30, bottom: 30, left: 60 };
-            var width = $scope.width - margin.left - margin.right;
-            var height = $scope.height - margin.top - margin.bottom;
+            let margin = { top: 30, right: 30, bottom: 30, left: 60 };
+            let width = $scope.width - margin.left - margin.right;
+            let height = $scope.height - margin.top - margin.bottom;
 
             // setup x
             // calculating margins for dots
-            var xMin = d3.min($scope.points, $scope.xValue);
-            var xMax = d3.max($scope.points, $scope.xValue);
-            var xMargin = (xMax - xMin) * 0.05;
+            let xMin = d3.min($scope.points, $scope.xValue);
+            let xMax = d3.max($scope.points, $scope.xValue);
+            let xMargin = (xMax - xMin) * 0.05;
 
-            var xScale = d3.scaleLinear()
+            let xScale = d3.scaleLinear()
                 .domain([xMin - xMargin, xMax + xMargin])
                 .range([0, width]);
-            var xAxis = $scope.points.length > 10 ?
+            let xAxis = $scope.points.length > 10 ?
                 d3.axisBottom(xScale)
                     .tickSizeInner(-height)
                     .tickSizeOuter(0)
@@ -157,11 +157,11 @@
 
             // setup y
             // calculating margins for dots
-            var yMax = d3.max($scope.points, $scope.yValue);
-            var yMin = d3.min($scope.points, $scope.yValue);
-            var yMargin = (yMax - yMin) * 0.05;
+            let yMax = d3.max($scope.points, $scope.yValue);
+            let yMin = d3.min($scope.points, $scope.yValue);
+            let yMargin = (yMax - yMin) * 0.05;
 
-            var yScale = yMax - yMin < 100 ?
+            let yScale = yMax - yMin < 100 ?
                 d3.scaleLinear()
                     .domain([yMin - yMargin, yMax + yMargin])
                     .range([height, 0]) :
@@ -169,7 +169,7 @@
                     .base(10)
                     .domain([1, Math.pow(10, Math.ceil(Math.log10(yMax)))])
                     .range([height, 0]);
-            var yAxis = yMax - yMin < 10 ?
+            let yAxis = yMax - yMin < 10 ?
                 d3.axisLeft(yScale)
                     .ticks(yMax - yMin)
                     .tickSizeInner(-width)
@@ -183,10 +183,10 @@
             $scope.yMap = d => yScale($scope.yValue(d));
 
             // setup fill color
-            var color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.points.length]);
+            let color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.points.length]);
 
             // add the graph canvas to the body of the webpage
-            var svg = d3.select("#chart").append("svg")
+            let svg = d3.select("#chart").append("svg")
                 .attr("width", $scope.width)
                 .attr("height", $scope.height)
                 .attr("class", "chart-svg")
@@ -194,7 +194,7 @@
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
             // add the tooltip area to the webpage
-            var tooltip = d3.select("#chart").append("div")
+            let tooltip = d3.select("#chart").append("div")
                 .attr("class", "chart-tooltip position-absolute text-bg-light font-monospace small lh-sm p-1 rounded")
                 .style("opacity", 0);
 
@@ -269,7 +269,7 @@
         $scope.loadingScreenHeader = "Loading Data";
         $scope.loading = true;
 
-        var location = window.location.href.split("/");
+        let location = window.location.href.split("/");
         $scope.taskId = location[location.length - 1];
 
         $http.get(`/api/TaskManagerWebApi/${$scope.taskId}`)

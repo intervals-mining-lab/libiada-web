@@ -8,8 +8,8 @@
             if ($scope.newFilter.length > 0) {
                 $scope.filters.push({ value: $scope.newFilter });
 
-                for (var i = 0; i < $scope.equalElements.length; i++) {
-                    for (var j = 0; j < $scope.equalElements[i].length; j++) {
+                for (let i = 0; i < $scope.equalElements.length; i++) {
+                    for (let j = 0; j < $scope.equalElements[i].length; j++) {
                         if ($scope.equalElements[i][j]) {
                             $scope.applyFilters($scope.equalElements[i][j]);
                         }
@@ -28,12 +28,12 @@
 
         // deletes given filter
         function deleteFilter(filter) {
-            var filterIndex = $scope.filters.indexOf(filter);
+            let filterIndex = $scope.filters.indexOf(filter);
             $scope.filters.splice(filterIndex, 1);
-            for (var i = 0; i < $scope.equalElements.length; i++) {
-                for (var j = 0; j < $scope.equalElements[i].length; j++) {
+            for (let i = 0; i < $scope.equalElements.length; i++) {
+                for (let j = 0; j < $scope.equalElements[i].length; j++) {
                     if ($scope.equalElements[i][j]) {
-                        for (var k = 0; k < $scope.equalElements[i][j].length; k++) {
+                        for (let k = 0; k < $scope.equalElements[i][j].length; k++) {
                             $scope.equalElements[i][j][k].filtersVisible.splice(filterIndex, 1);
                         }
                     }
@@ -43,17 +43,17 @@
 
         // applies filters
         function applyFilters(elements) {
-            for (var i = 0; i < elements.length; i++) {
+            for (let i = 0; i < elements.length; i++) {
                 elements[i].filtersVisible = [];
-                for (var j = 0; j < $scope.filters.length; j++) {
-                    var filterValue = $scope.filters[j].value.toUpperCase();
+                for (let j = 0; j < $scope.filters.length; j++) {
+                    let filterValue = $scope.filters[j].value.toUpperCase();
 
-                    var firstSubsequenceIndex = elements[i].firstSubsequenceIndex;
-                    var firstVisible = $scope.isAttributeEqual($scope.firstMatterIndex, firstSubsequenceIndex, "product", filterValue);
+                    let firstSubsequenceIndex = elements[i].firstSubsequenceIndex;
+                    let firstVisible = $scope.isAttributeEqual($scope.firstMatterIndex, firstSubsequenceIndex, "product", filterValue);
                     firstVisible = firstVisible || $scope.isAttributeEqual($scope.firstMatterIndex, firstSubsequenceIndex, "locus_tag", filterValue);
 
-                    var secondSubsequenceIndex = elements[i].secondSubsequenceIndex;
-                    var secondVisible = $scope.isAttributeEqual($scope.secondMatterIndex, secondSubsequenceIndex, "product", filterValue);
+                    let secondSubsequenceIndex = elements[i].secondSubsequenceIndex;
+                    let secondVisible = $scope.isAttributeEqual($scope.secondMatterIndex, secondSubsequenceIndex, "product", filterValue);
                     secondVisible = secondVisible || $scope.isAttributeEqual($scope.secondMatterIndex, secondSubsequenceIndex, "locus_tag", filterValue);
 
                     elements[i].filtersVisible.push(firstVisible || secondVisible);
@@ -70,9 +70,9 @@
 
         // returns true if dot has given attribute and its value equal to the given value
         function isAttributeEqual(matterIndex, subsequenceIndex, attributeName, expectedValue) {
-            var attributeId = $scope.getAttributeIdByName(matterIndex, subsequenceIndex, attributeName);
+            let attributeId = $scope.getAttributeIdByName(matterIndex, subsequenceIndex, attributeName);
             if (attributeId) {
-                var product = $scope.attributeValues[attributeId].value.toUpperCase();
+                let product = $scope.attributeValues[attributeId].value.toUpperCase();
                 return product.indexOf(expectedValue) !== -1;
             }
 
@@ -135,7 +135,7 @@
 
         // calculates cell highlight color using d3.js color scale
         function getHighlightColor(value) {
-            var color = d3.scaleLinear()
+            let color = d3.scaleLinear()
                 .domain([0, 0.1, 0.5, 1])
                 .range(["lightcoral", "gold", "yellow", "limegreen"]);
             return { 'background-color': color(value) };
@@ -146,10 +146,10 @@
             $scope.loading = true;
             $scope.loadingScreenHeader = "Loading local characteristics...";
 
-            var characteristicType = $scope.characteristic.characteristicType.Value;
-            var link = $scope.characteristic.link.Value;
-            var arrangementType = $scope.characteristic.arrangementType.Value;
-            var characteristicId = $scope.characteristicsDictionary["(" + characteristicType + ", " + link + ", " + arrangementType + ")"];
+            let characteristicType = $scope.characteristic.characteristicType.Value;
+            let link = $scope.characteristic.link.Value;
+            let arrangementType = $scope.characteristic.arrangementType.Value;
+            let characteristicId = $scope.characteristicsDictionary["(" + characteristicType + ", " + link + ", " + arrangementType + ")"];
 
             $http.get("/api/LocalCalculationWebApi/GetSubsequenceCharacteristic", {
                 params: {
@@ -187,11 +187,11 @@
 
         // draws local characteristics line-chart
         function drawLocalCharacteristics(firstSubsequenceId, secondSubsequenceId, index) {
-            var legendData = [
+            let legendData = [
                 { id: firstSubsequenceId, name: "First", visible: true, points: [] },
                 { id: secondSubsequenceId, name: "Second", visible: true, points: [] }];
 
-            for (var j = 0; j < $scope.firstSubsequenceLocalCharacteristics.length; j++) {
+            for (let j = 0; j < $scope.firstSubsequenceLocalCharacteristics.length; j++) {
                 legendData[0].points.push({
                     id: firstSubsequenceId,
                     x: j,
@@ -199,7 +199,7 @@
                 });
             }
 
-            for (var k = 0; k < $scope.secondSubsequenceLocalCharacteristics.length; k++) {
+            for (let k = 0; k < $scope.secondSubsequenceLocalCharacteristics.length; k++) {
                 legendData[1].points.push({
                     id: secondSubsequenceId,
                     x: k,
@@ -211,15 +211,15 @@
             d3.select(".chart" + index).remove();
 
             // chart size and margin settings
-            var margin = { top: 30 + $scope.legendHeight, right: 30, bottom: 30, left: 60 };
-            var width = $scope.width - margin.left - margin.right;
-            var height = $scope.height - margin.top - margin.bottom;
+            let margin = { top: 30 + $scope.legendHeight, right: 30, bottom: 30, left: 60 };
+            let width = $scope.width - margin.left - margin.right;
+            let height = $scope.height - margin.top - margin.bottom;
 
             // calculating margins for dots
-            var xMinArray = [];
-            var xMaxArray = [];
-            var yMaxArray = [];
-            var yMinArray = [];
+            let xMinArray = [];
+            let xMaxArray = [];
+            let yMaxArray = [];
+            let yMinArray = [];
 
             legendData.forEach(data => {
                 xMinArray.push(d3.min(data.points, d => d.x));
@@ -230,41 +230,41 @@
 
             // setup x
             // calculating margins for dots
-            var xMin = d3.min(xMinArray);
-            var xMax = d3.max(xMaxArray);
-            var xMargin = (xMax - xMin) * 0.05;
+            let xMin = d3.min(xMinArray);
+            let xMax = d3.max(xMaxArray);
+            let xMargin = (xMax - xMin) * 0.05;
 
-            var xScale = d3.scaleLinear()
+            let xScale = d3.scaleLinear()
                 .domain([xMin - xMargin, xMax + xMargin])
                 .range([0, width]);
-            var xAxis = d3.axisBottom(xScale)
+            let xAxis = d3.axisBottom(xScale)
                 .tickSizeInner(-height)
                 .tickSizeOuter(0)
                 .tickPadding(10);
 
 
-            var xMap = d => xScale(d.x);
+            let xMap = d => xScale(d.x);
 
             // setup y
-            var yMin = d3.min(yMinArray);
-            var yMax = d3.max(yMaxArray);
-            var yMargin = (yMax - yMin) * 0.05;
+            let yMin = d3.min(yMinArray);
+            let yMax = d3.max(yMaxArray);
+            let yMargin = (yMax - yMin) * 0.05;
 
-            var yScale = d3.scaleLinear()
+            let yScale = d3.scaleLinear()
                 .domain([yMin - yMargin, yMax + yMargin])
                 .range([height, 0]);
-            var yAxis = d3.axisLeft(yScale)
+            let yAxis = d3.axisLeft(yScale)
                 .tickSizeInner(-width)
                 .tickSizeOuter(0)
                 .tickPadding(10);
 
-            var yMap = d => yScale(d.value);
+            let yMap = d => yScale(d.value);
 
             // setup fill color
-            var color = d3.scaleOrdinal(["red", "blue"]);
+            let color = d3.scaleOrdinal(["red", "blue"]);
 
             // add the graph canvas to the body of the webpage
-            var svg = d3.select("#chart" + index).append("svg")
+            let svg = d3.select("#chart" + index).append("svg")
                 .attr("width", $scope.width)
                 .attr("height", $scope.height)
                 .attr("class", "chart" + index)
@@ -299,13 +299,13 @@
                 .text($scope.characteristic.characteristicType.Text)
                 .style("font-size", "12pt");
 
-            var line = d3.line()
+            let line = d3.line()
                 .x(xMap)
                 .y(yMap);
 
             legendData.forEach(data => {
                 // Nest the entries by symbol
-                var dataGroups = d3.group(data.points, d => d.id);
+                let dataGroups = d3.group(data.points, d => d.id);
 
                 // Loop through each symbol / key
                 dataGroups.forEach(value => {
@@ -321,7 +321,7 @@
             });
 
             // draw legend
-            var legend = svg.selectAll(".legend")
+            let legend = svg.selectAll(".legend")
                 .data(legendData)
                 .enter()
                 .append("g")
@@ -329,7 +329,7 @@
                 .attr("transform", (_d, i) => "translate(0," + i * 20 + ")")
                 .on("click", function (event, d) {
                     d.visible = !d.visible;
-                    var legendEntry = d3.select(event.currentTarget);
+                    let legendEntry = d3.select(event.currentTarget);
                     legendEntry.select("text")
                         .style("opacity", () => d.visible ? 1 : 0.5);
                     legendEntry.select("rect")
@@ -388,7 +388,7 @@
         $scope.characteristic = {};
         $scope.flags = { displayFiltered: false };
 
-        var location = window.location.href.split("/");
+        let location = window.location.href.split("/");
         $scope.taskId = location[location.length - 1];
         $scope.loading = true;
         $http.get(`/api/TaskManagerWebApi/${$scope.taskId}`)
@@ -397,7 +397,7 @@
 
                 $scope.equalElements = new Array($scope.mattersNames.length);
 
-                for (var i = 0; i < $scope.mattersNames.length; i++) {
+                for (let i = 0; i < $scope.mattersNames.length; i++) {
                     $scope.equalElements[i] = new Array($scope.mattersNames.length);
                 }
 

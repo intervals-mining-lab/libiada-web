@@ -2,7 +2,7 @@
     "use strict";
 
     function CharacteristicNatureParams(filterFilter) {
-        var ctrl = this;
+        let ctrl = this;
 
         ctrl.$onInit = () => {
             ctrl.characteristic = ctrl.characteristic || {};

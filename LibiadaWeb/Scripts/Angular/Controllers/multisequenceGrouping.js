@@ -9,7 +9,7 @@
         }
 
         function bindMatter(multiSequence, index) {
-            var matter = $scope.ungroupedMatters[index];
+            let matter = $scope.ungroupedMatters[index];
             $scope.matters[matter.Id] = matter.Name;
             multiSequence.matterIds.push(matter.Id);
             $scope.ungroupedMatters.splice(index, 1);

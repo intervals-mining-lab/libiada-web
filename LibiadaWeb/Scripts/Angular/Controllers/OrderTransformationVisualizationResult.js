@@ -6,17 +6,17 @@
         // initializes data for chart
         function fillLegend() {
             $scope.legend = [];
-            for (var i = 1; i < $scope.transformationsList.length; i++) {
+            for (let i = 1; i < $scope.transformationsList.length; i++) {
                 $scope.legend.push({ id: i - 1, name: $scope.transformationsList[i].Text, visible: true });
             }
         }
 
         function fillPoints() {
-            var initialOrder = $scope.initialOrder.id;
-            var checkedOrders = [initialOrder];
-            var ordersForChecking = [initialOrder];
-            var transformationVisibility = [];
-            for (var l = 0; l < $scope.legend.length; l++) {
+            let initialOrder = $scope.initialOrder.id;
+            let checkedOrders = [initialOrder];
+            let ordersForChecking = [initialOrder];
+            let transformationVisibility = [];
+            for (let l = 0; l < $scope.legend.length; l++) {
                 transformationVisibility.push({ id: l, name: $scope.legend[l].name, visible: $scope.legend[l].visible });
             }
             $scope.points.push({
@@ -26,18 +26,18 @@
                 y: initialOrder,
                 transformationVisibility: transformationVisibility
             });
-            var counterIdPoints = 1;
+            let counterIdPoints = 1;
             $scope.counterIteration = 1;
             while (ordersForChecking.length > 0) {
-                var newOrdersForChecking = [];
-                for (var i = 0; i < ordersForChecking.length; i++) {
-                    var resultTransformations = $scope.transformationsData[ordersForChecking[i]].ResultTransformation;
-                    for (var j = 0; j < resultTransformations.length; j++) {
-                        var resultTransformation = resultTransformations[j];
+                let newOrdersForChecking = [];
+                for (let i = 0; i < ordersForChecking.length; i++) {
+                    let resultTransformations = $scope.transformationsData[ordersForChecking[i]].ResultTransformation;
+                    for (let j = 0; j < resultTransformations.length; j++) {
+                        let resultTransformation = resultTransformations[j];
                         if ($scope.transformationType.Text === "All" || resultTransformation.Transformation === $scope.transformationType.Text) {
-                            var pointExist = false;
-                            var orderId = resultTransformation.OrderId;
-                            for (var k = 0; k < $scope.points.length; k++) {
+                            let pointExist = false;
+                            let orderId = resultTransformation.OrderId;
+                            for (let k = 0; k < $scope.points.length; k++) {
                                 if ($scope.points[k].x === $scope.counterIteration &&
                                     $scope.points[k].y === orderId) {
                                     pointExist = true;
@@ -66,15 +66,15 @@
         }
 
         function fillLines() {
-            var counterIdLines = 0;
-            for (var i = 0; i < $scope.points.length; i++) {
-                var resultTransformation = $scope.transformationsData[$scope.points[i].value].ResultTransformation;
-                for (var j = 0; j < resultTransformation.length; j++) {
-                    var transformationType = resultTransformation[j].Transformation;
+            let counterIdLines = 0;
+            for (let i = 0; i < $scope.points.length; i++) {
+                let resultTransformation = $scope.transformationsData[$scope.points[i].value].ResultTransformation;
+                for (let j = 0; j < resultTransformation.length; j++) {
+                    let transformationType = resultTransformation[j].Transformation;
                     if ($scope.transformationType.Text === "All" || transformationType === $scope.transformationType.Text) {
-                        var colorId = $scope.legend.find(d => d.name === transformationType).id;
-                        var childOrder = resultTransformation[j].OrderId;
-                        var line = {
+                        let colorId = $scope.legend.find(d => d.name === transformationType).id;
+                        let childOrder = resultTransformation[j].OrderId;
+                        let line = {
                             x1: $scope.points[i].x,
                             y1: $scope.points[i].y,
                             x2: $scope.points[i].x + 1,
@@ -83,8 +83,8 @@
                             startOrderId: $scope.points[i].value,
                             colorId: colorId
                         };
-                        var orderExist = false;
-                        for (var k = 0; k < $scope.points.length; k++) {
+                        let orderExist = false;
+                        for (let k = 0; k < $scope.points.length; k++) {
                             if ($scope.points[k].x === $scope.points[i].x + 1 &&
                                 $scope.points[k].y === childOrder) {
                                 orderExist = true;
@@ -92,9 +92,9 @@
                             }
                         }
                         if (orderExist) {
-                            var lineExist = false;
-                            var lineIterator = 0;
-                            for (var m = 0; m < $scope.lines.length; m++) {
+                            let lineExist = false;
+                            let lineIterator = 0;
+                            for (let m = 0; m < $scope.lines.length; m++) {
                                 if ($scope.lines[m].x1 === line.x1 &&
                                     $scope.lines[m].y1 === line.y1 &&
                                     $scope.lines[m].x2 === line.x2 &&
@@ -105,11 +105,11 @@
                                 }
                             }
                             if (lineExist) {
-                                var cyline = (line.y1 + line.y2) / 2.0;
-                                var cxline = (line.x1 + line.x2) / 2.0;
-                                var yAmplitude = line.y2 - line.y1;
-                                var shifty = 0.2 * lineIterator;
-                                var shiftx = 0.05 * lineIterator * Math.abs(yAmplitude) / $scope.ordersIds.length;
+                                let cyline = (line.y1 + line.y2) / 2.0;
+                                let cxline = (line.x1 + line.x2) / 2.0;
+                                let yAmplitude = line.y2 - line.y1;
+                                let shifty = 0.2 * lineIterator;
+                                let shiftx = 0.05 * lineIterator * Math.abs(yAmplitude) / $scope.ordersIds.length;
                                 $scope.lines.push({
                                     id: counterIdLines++,
                                     value: line.value,
@@ -164,7 +164,7 @@
 
         // constructs string representing tooltip text (inner html)
         function fillPointTooltip(d) {
-            var tooltipContent = [];
+            let tooltipContent = [];
             tooltipContent.push("Order ID: " + d.value);
             tooltipContent.push("Order: " + $scope.orders[d.value]);
             return tooltipContent.join("</br>");
@@ -173,11 +173,11 @@
         // shows tooltip for dot or group of dots
         function showTooltip(event, d, tooltip, svg) {
             $scope.clearTooltip(tooltip);
-            var color = d3.scaleOrdinal(d3.schemeCategory10);
+            let color = d3.scaleOrdinal(d3.schemeCategory10);
 
             tooltip.style("opacity", 0.9);
 
-            var tooltipHtml = [];
+            let tooltipHtml = [];
 
             tooltip.selectedDots = svg.selectAll(".dot")
                 .filter(dot => {
@@ -258,20 +258,20 @@
             d3.select(".chart-svg").remove();
 
             // chart size and margin settings
-            var margin = { top: 30 + $scope.legendHeight, right: 30, bottom: 30, left: 60 };
-            var width = $scope.width - margin.left - margin.right;
-            var height = $scope.height - margin.top - margin.bottom;
+            let margin = { top: 30 + $scope.legendHeight, right: 30, bottom: 30, left: 60 };
+            let width = $scope.width - margin.left - margin.right;
+            let height = $scope.height - margin.top - margin.bottom;
 
             // setup x
             // calculating margins for dots
-            var xMin = d3.min($scope.points, $scope.xValue);
-            var xMax = d3.max($scope.points, $scope.xValue);
-            var xMargin = (xMax - xMin) * 0.05;
+            let xMin = d3.min($scope.points, $scope.xValue);
+            let xMax = d3.max($scope.points, $scope.xValue);
+            let xMargin = (xMax - xMin) * 0.05;
 
-            var xScale = d3.scaleLinear()
+            let xScale = d3.scaleLinear()
                 .domain([xMin - xMargin, xMax + xMargin])
                 .range([0, width]);
-            var xAxis = d3.axisBottom(xScale)
+            let xAxis = d3.axisBottom(xScale)
                 .ticks($scope.counterIteration)
                 .tickSizeInner(-height)
                 .tickSizeOuter(0)
@@ -281,16 +281,16 @@
 
             // setup y
             // calculating margins for dots
-            var yMax = d3.max($scope.points, $scope.yValue);
-            var yMin = d3.min($scope.points, $scope.yValue);
-            var yMargin = (yMax - yMin) * 0.05;
+            let yMax = d3.max($scope.points, $scope.yValue);
+            let yMin = d3.min($scope.points, $scope.yValue);
+            let yMargin = (yMax - yMin) * 0.05;
 
-            var yAmplitude = yMax - yMin;
+            let yAmplitude = yMax - yMin;
 
-            var yScale = d3.scaleLinear()
+            let yScale = d3.scaleLinear()
                 .domain([yMin - yMargin, yMax + yMargin])
                 .range([height, 0]);
-            var yAxis = d3.axisLeft(yScale)
+            let yAxis = d3.axisLeft(yScale)
                 .ticks(yAmplitude > 20 ? yAmplitude / 10 : yAmplitude)
                 .tickSizeInner(-width)
                 .tickSizeOuter(0)
@@ -299,20 +299,20 @@
             $scope.yMap = d => yScale($scope.yValue(d));
 
             // setup fill color
-            var color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.legend.length]);
+            let color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.legend.length]);
 
             // add the graph canvas to the body of the webpage
-            var svg = d3.select("#chart").append("svg")
+            let svg = d3.select("#chart").append("svg")
                 .attr("width", $scope.width)
                 .attr("height", $scope.height)
                 .attr("class", "chart-svg");
 
-            var g = svg.append("g")
+            let g = svg.append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
             // add defs for lines ends
-            var defs = svg.append("defs");
-            for (var i = 0; i < $scope.legend.length; i++) {
+            let defs = svg.append("defs");
+            for (let i = 0; i < $scope.legend.length; i++) {
                 defs.append("marker")
                     .attr("id", "arrow" + i)
                     .attr("viewBox", "0 -5 10 10")
@@ -328,7 +328,7 @@
             }
 
             // add the tooltip area to the webpage
-            var tooltip = d3.select("#chart").append("div")
+            let tooltip = d3.select("#chart").append("div")
                 .attr("class", "chart-tooltip position-absolute text-bg-light font-monospace small lh-sm p-1 rounded")
                 .style("opacity", 0);
 
@@ -382,7 +382,7 @@
                 .attr("visibility", "visible");
 
             // draw legend
-            var legend = g.selectAll(".legend")
+            let legend = g.selectAll(".legend")
                 .data($scope.legend)
                 .enter()
                 .append("g")
@@ -390,7 +390,7 @@
                 .attr("transform", (d, i) => "translate(0," + i * 20 + ")")
                 .on("click", function (event, d) {
                     d.visible = !d.visible;
-                    var legendEntry = d3.select(event.currentTarget);
+                    let legendEntry = d3.select(event.currentTarget);
 
                     legendEntry.select("text")
                         .style("opacity", () => d.visible ? 1 : 0.5);
@@ -402,8 +402,8 @@
                         .filter(line => line.value === d.name)
                         .attr("visibility", () => d.visible ? "visible" : "hidden");
 
-                    for (var k = 0; k < $scope.points.length; k++) {
-                        for (var j = 0; j < $scope.legend.length; j++) {
+                    for (let k = 0; k < $scope.points.length; k++) {
+                        for (let j = 0; j < $scope.legend.length; j++) {
                             if ($scope.points[k].transformationVisibility[j].name === d.name) {
                                 $scope.points[k].transformationVisibility[j].visible = d.visible;
                             }
@@ -461,7 +461,7 @@
 
         $scope.loadingScreenHeader = "Loading data";
 
-        var location = window.location.href.split("/");
+        let location = window.location.href.split("/");
         $scope.taskId = location[location.length - 1];
 
         $scope.loading = true;
@@ -471,7 +471,7 @@
                 MapModelFromJson($scope, JSON.parse(data.data));
 
                 $scope.ordersIds = [];
-                for (var i = 0; i < $scope.orders.length; i++) {
+                for (let i = 0; i < $scope.orders.length; i++) {
                     $scope.ordersIds.push({ id: i });
                 }
 

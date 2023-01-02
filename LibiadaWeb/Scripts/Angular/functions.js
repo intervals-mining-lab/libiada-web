@@ -1,7 +1,7 @@
 ﻿function MapModelFromJson($scope, data) {
     "use strict";
 
-    var param;
+    let param;
     for (param in data) {
         if (data.hasOwnProperty(param)) {
             $scope[param] = data[param];

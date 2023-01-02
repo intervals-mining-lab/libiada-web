@@ -1,8 +1,9 @@
 ﻿let hasSubscription = false;
-const SUBSCRIBE_URL = "api/TaskManagerWebApi/Subscribe";
-const UNSUBSCRIBE_URL = "api/TaskManagerWebApi/Unsubscribe";
-const APPLICATION_SERVER_KEY_URL = "api/TaskManagerWebApi/GetApplicationServerKey";
-var pushButton = $("#push-notification-button");
+const WEB_API_URL = "api/TaskManagerWebApi/";
+const SUBSCRIBE_URL = `${WEB_API_URL}Subscribe`;
+const UNSUBSCRIBE_URL = `${WEB_API_URL}Unsubscribe`;
+const APPLICATION_SERVER_KEY_URL = `${WEB_API_URL}GetApplicationServerKey`;
+const PUSH_BUTTON = $("#push-notification-button");
 
 const urlB64ToUint8Array = base64String => {
     const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
@@ -18,10 +19,10 @@ const urlB64ToUint8Array = base64String => {
 };
 
 const arrayBufferToBase64 = (buffer) => {
-    var binary = "";
-    var bytes = new Uint8Array(buffer);
-    var len = bytes.byteLength;
-    for (var i = 0; i < len; i++) {
+    let binary = "";
+    let bytes = new Uint8Array(buffer);
+    let len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
         binary += String.fromCharCode(bytes[i]);
     }
     return window.btoa(binary);
@@ -34,7 +35,7 @@ const subscribeDevice = async () => {
     const body = JSON.parse(await responseKey.json());
     const applicationServerKey = body.applicationServerKey;
     
-    var options = {
+    let options = {
         userVisibleOnly: true,
         applicationServerKey: urlB64ToUint8Array(applicationServerKey)
     };
@@ -76,7 +77,7 @@ const unsubscribeDevice = async () => {
             });
             const result = await subscription.unsubscribe();
             hasSubscription = false;
-            pushButton.addClass('hidden');
+            PUSH_BUTTON.addClass('hidden');
             return response;
         }
         catch {
@@ -92,7 +93,7 @@ const initPush = async () => {
     hasSubscription = !(subscription === null);
     
     if (hasSubscription) {
-        pushButton.removeClass('hidden');
+        PUSH_BUTTON.removeClass('hidden');
     }
     else {
         window.setTimeout(

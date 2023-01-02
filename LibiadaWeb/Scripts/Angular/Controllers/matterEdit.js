@@ -5,7 +5,7 @@
         MapModelFromJson($scope, data);
 
         function filterByNature() {
-            var arraysForFiltration = ["groups", "sequenceTypes"];
+            let arraysForFiltration = ["groups", "sequenceTypes"];
 
             arraysForFiltration.forEach(arrayName => {
                 if (angular.isDefined($scope[arrayName])) {
