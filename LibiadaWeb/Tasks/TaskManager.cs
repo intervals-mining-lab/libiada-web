@@ -5,7 +5,7 @@
     using System.Data.Entity;
     using System.Linq;
     using System.Threading;
-
+    using System.Threading.Tasks;
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Helpers;
@@ -325,40 +325,40 @@
                 List<Task> tasksToStart = tasks.FindAll(t => t.TaskData.TaskState == TaskState.InQueue);
                 if (tasksToStart.Count != 0)
                 {
-                    foreach (Task taskToStart in tasksToStart)
+                    foreach (Task task in tasksToStart)
                     {
-                        lock (taskToStart)
+                        lock (task)
                         {
-                            Task task = tasks.Single(t => t.TaskData.Id == taskToStart.TaskData.Id);
                             task.TaskData.TaskState = TaskState.InProgress;
                             var cancellationTokenSource = new CancellationTokenSource();
                             CancellationToken token = cancellationTokenSource.Token;
                             task.CancellationTokenSource = cancellationTokenSource;
-                            var systemTask = new SystemTask(() =>
+                            var systemTask = SystemTask.Factory.StartNew((t) =>
                             {
                                 using (cancellationTokenSource.Token.Register(Thread.CurrentThread.Abort))
                                 {
-                                    ExecuteTaskAction(task);
+                                    ExecuteTaskAction((Task)t);
                                 }
 
-                            }, token);
+                            }, task, token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
 
-                            SystemTask notificationTask = systemTask.ContinueWith((SystemTask t) =>
+                            systemTask.ContinueWith(t =>
                             {
                                 cancellationTokenSource.Dispose();
-
-                                var data = new Dictionary<string, string>
+                                lock (task)
                                 {
-                                    { "title", $"LibiadaWeb: Task completed" },
-                                    { "body", $"Task type: { task.TaskData.TaskType.GetDisplayValue() } \nExecution time: { task.TaskData.ExecutionTime }" },
-                                    { "icon", "/Content/DNA.png" },
-                                    { "tag", $"/{ task.TaskData.TaskType }/Result/{ task.TaskData.Id }" }
-                                };
-                                PushNotificationHelper.Send(task.TaskData.UserId, data);
+                                    var data = new Dictionary<string, string>
+                                    {
+                                        { "title", $"LibiadaWeb: Task completed" },
+                                        { "body", $"Task type: { task.TaskData.TaskType.GetDisplayValue() } \nExecution time: { task.TaskData.ExecutionTime }" },
+                                        { "icon", "/Content/DNA.png" },
+                                        { "tag", $"/{ task.TaskData.TaskType }/Result/{ task.TaskData.Id }" }
+                                    };
+                                    PushNotificationHelper.Send(task.TaskData.UserId, data);
+                                }
                             });
 
                             task.SystemTask = systemTask;
-                            systemTask.Start();
                         }
                     }
                 }
@@ -408,10 +408,10 @@
                         db.TaskResult.AddRange(results);
 
                         CalculationTask databaseTask = db.CalculationTask.Single(t => (t.Id == task.TaskData.Id));
-                        databaseTask.Completed = DateTime.Now;
+                        databaseTask.Completed = task.TaskData.Completed;
                         databaseTask.Status = TaskState.Completed;
-
                         db.Entry(databaseTask).State = EntityState.Modified;
+
                         db.SaveChanges();
                     }
 
@@ -444,7 +444,9 @@
 
                     TaskResult taskResult = new TaskResult
                     {
-                         Key = "Error", Value = JsonConvert.SerializeObject(error), TaskId = taskData.Id
+                        Key = "Error",
+                        Value = JsonConvert.SerializeObject(error),
+                        TaskId = taskData.Id
                     };
 
                     using (var db = new LibiadaWebEntities())
@@ -454,17 +456,13 @@
                         CalculationTask databaseTask = db.CalculationTask.Single(t => (t.Id == taskData.Id));
                         databaseTask.Completed = DateTime.Now;
                         databaseTask.Status = TaskState.Error;
-
                         db.Entry(databaseTask).State = EntityState.Modified;
+
                         db.SaveChanges();
                     }
 
                     signalrHub.Send(TaskEvent.ChangeStatus, taskData);
                 }
-            }
-            finally
-            {
-                ManageTasks();
             }
         }
     }
