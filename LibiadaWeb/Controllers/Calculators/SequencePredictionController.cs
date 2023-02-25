@@ -128,6 +128,7 @@
             });
         }
 
+        //[NonAction]
         //private Chain IncrementNextCharacter(Chain target, int startElement, Alphabet alphabet)
         //{
         //    if (startElement + 1 < target.Length)
@@ -153,6 +154,7 @@
         //    return target;
         //}
 
+        [NonAction]
         private IBaseObject GetElementAfter(IBaseObject element, Alphabet alphabet)
         {
             bool current = false;
@@ -171,16 +173,19 @@
             throw new Exception();
         }
 
+        [NonAction]
         private bool IsLast(IBaseObject letter, Alphabet alphabet)
         {
             return alphabet.Last().Equals(letter);
         }
 
+        [NonAction]
         private Chain ExtendAndCopy(Chain source, int extensionLength)
         {
             return Copy(source, new Chain(source.Length + extensionLength));
         }
 
+        [NonAction]
         private Chain Copy(Chain source, Chain destanation)
         {
             int commonLenth = Math.Min(source.Length, destanation.Length);
@@ -191,6 +196,7 @@
             return destanation;
         }
 
+        [NonAction]
         private Chain Concat(Chain left, Chain right, int indexStart)
         {
             var result = new List<IBaseObject>(indexStart + right.Length);
@@ -199,6 +205,7 @@
             return new Chain(result);
         }
 
+        [NonAction]
         private (List<SequencePredictionData>, Chain) Predict(
             AverageRemoteness averageRemotenessCalc,
             Chain sequence,
@@ -261,6 +268,7 @@
         }
 
         // todo fix throwing exception
+        [NonAction]
         private Chain SubChain(Chain source, int start, int end)
         {
             Chain chain = new Chain(end - start + 1);
@@ -271,6 +279,7 @@
             return chain;
         }
 
+        [NonAction]
         private double FindPercentageOfMatching(Chain first, Chain second, int startIndex)
         {
             int count = 0;

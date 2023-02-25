@@ -270,6 +270,7 @@
         /// <returns>
         /// Returns grouped matters.
         /// </returns>
+        [NonAction]
         private Dictionary<string, long[]> SplitMattersIntoReferenceAnsNotReference(Matter[] matters)
         {
             matters = matters.Where(m => m.Nature == Nature.Genetic && MultisequenceRepository.SequenceTypesFilter.Contains(m.SequenceType)).ToArray();

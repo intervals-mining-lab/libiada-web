@@ -181,7 +181,7 @@
         /// <summary>
         /// Sequence import result struct.
         /// </summary>
-        private struct ImportResult
+        private readonly struct ImportResult
         {
             /// <summary>
             /// The name.

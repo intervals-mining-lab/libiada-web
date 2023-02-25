@@ -151,11 +151,11 @@
 
                 if (frequencyFilter)
                 {
-                    FrequencyCharacteristic(characteristicLinkId, frequencyCount, currentChain, sequenceId, calculator, link);
+                    CalculateFrequencyCharacteristics(characteristicLinkId, frequencyCount, currentChain, sequenceId, calculator, link);
                 }
                 else
                 {
-                    NotFrequencyCharacteristic(characteristicLinkId, sequenceId, currentChain, calculator, link);
+                    CalculateAllCharacteristics(characteristicLinkId, sequenceId, currentChain, calculator, link);
                 }
 
                 if (filter)
@@ -231,7 +231,8 @@
         /// <param name="link">
         /// The link.
         /// </param>
-        private void NotFrequencyCharacteristic(short characteristicLinkId, long sequenceId, Chain chain, IBinaryCalculator calculator, Link link)
+        [NonAction]
+        private void CalculateAllCharacteristics(short characteristicLinkId, long sequenceId, Chain chain, IBinaryCalculator calculator, Link link)
         {
             var newCharacteristics = new List<BinaryCharacteristicValue>();
             BinaryCharacteristicValue[] databaseCharacteristics = db.BinaryCharacteristicValue
@@ -284,7 +285,8 @@
         /// <param name="link">
         /// The link.
         /// </param>
-        private void FrequencyCharacteristic(short characteristicLinkId, int frequencyCount, Chain chain, long sequenceId, IBinaryCalculator calculator, Link link)
+        [NonAction]
+        private void CalculateFrequencyCharacteristics(short characteristicLinkId, int frequencyCount, Chain chain, long sequenceId, IBinaryCalculator calculator, Link link)
         {
             long[] sequenceElements = db.GetAlphabetElementIds(sequenceId);
             var newCharacteristics = new List<BinaryCharacteristicValue>();

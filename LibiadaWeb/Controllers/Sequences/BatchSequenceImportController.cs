@@ -181,7 +181,8 @@
         /// Returns tuple where first element is import result text
         /// and second element is import status as  string.
         /// </returns>
-        private (string, string) ImportFeatures(GenBankMetadata metadata, CommonSequence sequence)
+        [NonAction]
+        private (string result, string status) ImportFeatures(GenBankMetadata metadata, CommonSequence sequence)
         {
             try
             {
@@ -191,9 +192,7 @@
 
                     string result = $"Successfully imported sequence, {featuresCount} features "
                                   + $"and {nonCodingCount} non-coding subsequences";
-                    string status = "Success";
-
-                    return (result, status);
+                    return (result, "Success");
                 }
             }
             catch (Exception exception)
@@ -205,8 +204,7 @@
                     result += $" {exception.Message}";
                 }
 
-                string status = "Error";
-                return (result, status);
+                return (result, "Error");
             }
         }
     }

@@ -89,10 +89,12 @@
 
             for (int i = 0; i < series.Length - 1; i++)
             {
+                var firstSeries = series[i];
                 for (int j = i + 1; j < series.Length; j++)
                 {
-                    result[i,j] = comparer.GetDistance(series[i], series[j]);
-                    result[j,i] = comparer.GetDistance(series[i], series[j]);
+                    var secondSeries = series[j];
+                    result[i,j] = comparer.GetDistance(firstSeries, secondSeries);
+                    result[j,i] = result[i,j];
                 }
             }
 

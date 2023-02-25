@@ -236,6 +236,7 @@
         /// <returns>
         /// The <see cref="T:short[]"/>.
         /// </returns>
+        [NonAction]
         private short[] CutAmplitude(short[] shortArray, double percent)
         {
             short max = shortArray.Max(e => (short)Math.Max(e, -e));
@@ -243,6 +244,7 @@
             return shortArray.Select(e => (e > threshold) || (e < -threshold) ? e : (short)0).ToArray();
         }
 
+        [NonAction]
         private short[] Sampling(short[] shortArray, short cardinality)
         {
             short[] result = new short[shortArray.Length];

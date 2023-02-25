@@ -183,6 +183,7 @@
         /// <exception cref="ArgumentException">
         /// Thrown if validation type is unknown.
         /// </exception>
+        [NonAction]
         private Func<double, double, double> GetDistanceCalculator(string validationType)
         {
             switch (validationType)
@@ -218,6 +219,7 @@
         /// <returns>
         /// The <see cref="int"/>.
         /// </returns>
+        [NonAction]
         private int CalculateMeasureForRotation(List<double> first, List<double> second, List<double> distances, Func<double, double, double> measure)
         {
             int optimalRotation = 0;
@@ -247,6 +249,8 @@
         /// <returns>
         /// The <see cref="List{Double}"/>.
         /// </returns>
+
+        [NonAction]
         private List<double> Rotate(List<double> list)
         {
             var first = list[0];
@@ -270,6 +274,7 @@
         /// <returns>
         /// The <see cref="double"/>.
         /// </returns>
+        [NonAction]
         private double Measure(List<double> first, List<double> second, Func<double, double, double> measure)
         {
             double result = 0;

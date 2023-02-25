@@ -222,6 +222,7 @@
             });
         }
 
+        [NonAction]
         private List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> FilterSimilarityPairs
             (
                 List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> similarPairs,
@@ -287,6 +288,7 @@
         /// <returns>
         /// The <see cref="T:long[]"/>.
         /// </returns>
+        [NonAction]
         private long[] OrderMatterIds(long[] matterIds, short characteristicLinkId, long[] chains)
         {
             double[] completeSequencesCharacteristics = SequencesCharacteristicsCalculator.Calculate(chains, characteristicLinkId);
@@ -316,6 +318,7 @@
         /// <returns>
         /// The <see cref="T:object[,]"/>.
         /// </returns>
+        [NonAction]
         private object[,] Similarities(
             List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>[,] similarityMatrix,
             SubsequenceData[][] characteristics,
@@ -414,6 +417,7 @@
         /// <returns>
         /// The <see cref="T:List{((int, int), (int, int), double)}"/>.
         /// </returns>
+        [NonAction]
         private List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> ExtractSimilarPairs(
             Dictionary<double, List<(int matterId, int subsequenceIndex)>> characteristicValueSubsequences,
             double percentageDifference)
@@ -456,6 +460,7 @@
         /// <returns>
         /// The <see cref="double"/>.
         /// </returns>
+        [NonAction]
         private double CalculateAverageDifference(double first, double second)
         {
             return Math.Abs((first - second) / ((first + second) / 2));
@@ -471,6 +476,7 @@
         /// <returns>
         /// The <see cref="T:List{((int,int), (int,int),double)}"/>.
         /// </returns>
+        [NonAction]
         private List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> ExtractAllPossiblePairs(
             List<(int matterIndex, int subsequenceIndex)> list)
         {
@@ -507,6 +513,7 @@
         /// <returns>
         /// The <see cref="T:List{((int,int), (int,int),double)}"/>.
         /// </returns>
+        [NonAction]
         private List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> ExtractAllPossiblePairs(
             List<(int matterIndex, int subsequenceIndex)> firstList,
             List<(int matterIndex, int subsequenceIndex)> secondList,
@@ -537,6 +544,7 @@
         /// <returns>
         /// The <see cref="T:List{(int, int, double)}[,]"/>.
         /// </returns>
+        [NonAction]
         private List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>[,] FillSimilarityMatrix(
             int mattersCount,
             List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> similarPairs)

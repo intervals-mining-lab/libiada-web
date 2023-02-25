@@ -60,7 +60,7 @@
             return CreateTask(() =>
             {
                 var orderGenerator = new OrderGenerator();
-                var orders = new List<int[]>();
+                List<int[]> orders;
                 switch (generateStrict)
                 {
                     case 0:

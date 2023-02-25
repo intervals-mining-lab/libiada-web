@@ -3,13 +3,16 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web;
     using System.Web.Mvc;
+
+    using LibiadaWeb.Helpers;
     using LibiadaWeb.Tasks;
-    using Newtonsoft.Json;
-    using Helpers;
-    using Segmenter.PoemsSegmenter;
     using LibiadaWeb.Models.Repositories.Sequences;
+
+    using Newtonsoft.Json;
+    
+    using Segmenter.PoemsSegmenter;
+    
 
     public class PoemSegmentationController : AbstractResultController
     {

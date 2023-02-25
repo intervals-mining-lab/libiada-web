@@ -78,7 +78,7 @@
                 string stringSequence = Encoding.ASCII.GetString(input);
                 string[] tempString = stringSequence.Split('\n', '\r');
 
-                var sequenceStringBuilder = new StringBuilder();
+                var sequenceStringBuilder = new StringBuilder(stringSequence.Length);
 
                 for (int j = 1; j < tempString.Length; j++)
                 {

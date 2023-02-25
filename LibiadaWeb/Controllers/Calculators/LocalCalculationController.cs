@@ -289,6 +289,7 @@
         /// <returns>
         /// Difference between next and current fragment characteristics as <see cref="T:double[][]"/>.
         /// </returns>
+        [NonAction]
         private double[][] CalculateDifference(double[][] characteristics)
         {
             var result = new double[characteristics.Length - 1][];

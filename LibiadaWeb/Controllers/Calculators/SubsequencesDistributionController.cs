@@ -29,7 +29,6 @@
 
     using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
     using Attribute = LibiadaWeb.Attribute;
-    using System.Security.Cryptography.X509Certificates;
 
 
     /// <summary>
