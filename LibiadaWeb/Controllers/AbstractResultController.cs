@@ -3,11 +3,12 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Mvc;
 
-    using LibiadaWeb.Tasks;
+    using Libiada.Database.Tasks;
 
     using Newtonsoft.Json;
+    using LibiadaWeb.Tasks;
 
     /// <summary>
     /// Abstract parent controller for all tasks controllers (calculators, etc.).
@@ -18,6 +19,7 @@
         /// The task type.
         /// </summary>
         private readonly TaskType taskType;
+        private readonly ITaskManager taskManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AbstractResultController"/> class.
@@ -25,7 +27,11 @@
         /// <param name="taskType">
         /// The task Type.
         /// </param>
-        protected AbstractResultController(TaskType taskType) => this.taskType = taskType;
+        protected AbstractResultController(TaskType taskType, ITaskManager taskManager)
+        {
+            this.taskType = taskType;
+            this.taskManager = taskManager;
+        }
 
         /// <summary>
         /// The result.
@@ -40,7 +46,7 @@
         {
             try
             {
-                Task task = TaskManager.Instance.GetTask(id);
+                Task task = taskManager.GetTask(id);
                 var taskStatus = task.TaskData.TaskState;
                 if (taskStatus != TaskState.Completed && taskStatus != TaskState.Error)
                 {
@@ -48,7 +54,7 @@
                 } else if(taskStatus == TaskState.Error)
                 {
                     ViewBag.Error = true;
-                    using(var db = new LibiadaWebEntities())
+                    using(var db = new LibiadaDatabaseEntities())
                     {
                         ViewBag.Error = JsonConvert.DeserializeObject(db.TaskResult.Single(tr => tr.TaskId == id && tr.Key == "Error").Value);
                     }
@@ -77,7 +83,7 @@
         /// </returns>
         protected ActionResult CreateTask(Func<Dictionary<string, string>> action)
         {
-            long taskId = TaskManager.Instance.CreateTask(action, taskType);
+            long taskId = taskManager.CreateTask(action, taskType);
             return RedirectToAction(taskId.ToString(), "TaskManager");
         }
     }

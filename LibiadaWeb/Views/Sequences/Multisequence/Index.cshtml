@@ -24,7 +24,7 @@
     <tr>
         <th>@Html.DisplayNameFor(model => model.Name)</th>
         <th>@Html.DisplayNameFor(model => model.Matters)</th>
-        @if (AccountHelper.IsAdmin())
+        @if (User.IsInRole("admin"))
         {
             <th />
         }
@@ -39,7 +39,7 @@
                     <p><span class="fw-semibold">@Html.DisplayFor(modelItem => matter.MultisequenceNumber).</span><nbsp />@Html.DisplayFor(modelItem => matter.Name)</p>
                 }
             </td>
-            @if (AccountHelper.IsAdmin())
+            @if (User.IsInRole("admin"))
             {
                 <td>
                     @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |

@@ -5,13 +5,12 @@
     
     using SequenceGenerator;
 
-    using LibiadaWeb.Models.CalculatorsData;
-
     using LibiadaCore.Core;
     using LibiadaCore.DataTransformers;
     using LibiadaCore.Extensions;
 
     using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
+    using Libiada.Database.Models.CalculatorsData;
 
     public class OrderTransformer
     {

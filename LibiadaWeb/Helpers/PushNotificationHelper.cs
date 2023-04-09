@@ -1,12 +1,12 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Diagnostics;
-using System.Linq;
-using WebPush;
-
-namespace LibiadaWeb.Helpers
+﻿namespace LibiadaWeb.Helpers
 {
+    using Newtonsoft.Json;
+
+    using System.Configuration;
+    using System.Diagnostics;
+
+    using WebPush;
+
     public static class PushNotificationHelper
     {
         /// <summary>
@@ -25,11 +25,11 @@ namespace LibiadaWeb.Helpers
         /// </param>
         public static void Send(int userId, Dictionary<string, string> data)
         {
-            using (var db = new LibiadaWebEntities())
+            using (var db = new LibiadaDatabaseEntities())
             {
                 var subscribers = db.AspNetPushNotificationSubscribers.Where(s => s.UserId == userId);
 
-                if (subscribers.Count() != 0)
+                if (subscribers.Any())
                 {
                     foreach (var subscriber in subscribers)
                     {

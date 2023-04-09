@@ -2,18 +2,22 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Mvc;
 
     using LibiadaCore.Music;
 
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models.Calculators;
-    using LibiadaWeb.Models.CalculatorsData;
-    using LibiadaWeb.Models.Repositories.Catalogs;
-    using LibiadaWeb.Models.Repositories.Sequences;
-    using LibiadaWeb.Tasks;
+    using Libiada.Database.Tasks;
 
     using Newtonsoft.Json;
+    using Microsoft.AspNetCore.Authorization;
+    using Libiada.Database;
+    using Libiada.Database.Models.Repositories.Sequences;
+    using Libiada.Database.Models.CalculatorsData;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using Libiada.Database.Models.Repositories.Catalogs;
+    using Libiada.Database.Models.Calculators;
+    using LibiadaWeb.Tasks;
 
     /// <summary>
     /// The calculation controller.
@@ -21,11 +25,16 @@
     [Authorize]
     public class CalculationController : AbstractResultController
     {
+        private readonly LibiadaDatabaseEntities db;
+        private readonly IViewDataHelper viewDataHelper;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CalculationController"/> class.
         /// </summary>
-        public CalculationController() : base(TaskType.Calculation)
+        public CalculationController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.Calculation, taskManager)
         {
+            this.db = db;
+            this.viewDataHelper = viewDataHelper;
         }
 
         /// <summary>
@@ -36,13 +45,10 @@
         /// </returns>
         public ActionResult Index()
         {
-            using (var db = new LibiadaWebEntities())
-            {
-                var viewDataHelper = new ViewDataHelper(db);
                 var viewData = viewDataHelper.FillViewData(CharacteristicCategory.Full, 1, int.MaxValue, "Calculate");
                 ViewBag.data = JsonConvert.SerializeObject(viewData);
                 return View();
-            }
+            
         }
 
         /// <summary>
@@ -104,8 +110,6 @@
                 Dictionary<long, string> mattersNames;
 
                 long[][] sequenceIds;
-                using (var db = new LibiadaWebEntities())
-                {
                     var commonSequenceRepository = new CommonSequenceRepository(db);
                     sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds, 
                                                                           notations, 
@@ -115,7 +119,6 @@
                                                                           sequentialTransfers, 
                                                                           trajectories);
                     mattersNames = Cache.GetInstance().Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
-                }
 
                 double[][] characteristics;
                 if (!rotate && !complementary)

@@ -2,8 +2,8 @@
     ViewBag.Title = "Transformation of order of sequences";
 }
 
-@Scripts.Render("~/bundles/orderTransformations")
-@Scripts.Render("~/bundles/Characteristics")
+<script src="~/js/Angular/Components/orderTransformations.js" asp-append-version="true"></script>
+<script src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
 
 @Html.Partial("_AngularControllerInitializer", "OrderTransformerController")
 

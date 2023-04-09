@@ -3,8 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web.Mvc;
-    using System.Web.Mvc.Html;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
@@ -13,11 +13,13 @@
     using LibiadaCore.Music;
 
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models.Repositories.Catalogs;
-    using LibiadaWeb.Models.Repositories.Sequences;
-    using LibiadaWeb.Tasks;
+    using Libiada.Database.Models.Repositories.Catalogs;
+    using Libiada.Database.Models.Repositories.Sequences;
+    using Libiada.Database.Tasks;
 
     using Newtonsoft.Json;
+    using Microsoft.AspNetCore.Authorization;
+    using LibiadaWeb.Tasks;
 
     /// <summary>
     /// The order transformation calculation controller.
@@ -25,11 +27,16 @@
     [Authorize(Roles = "Admin")]
     public class OrderTransformationCharacteristicsDynamicVisualizationController : AbstractResultController
     {
+        private readonly LibiadaDatabaseEntities db;
+        private readonly IViewDataHelper viewDataHelper;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderTransformationCharacteristicsDynamicVisualizationController"/> class.
         /// </summary>
-        public OrderTransformationCharacteristicsDynamicVisualizationController() : base(TaskType.OrderTransformationCharacteristicsDynamicVisualization)
+        public OrderTransformationCharacteristicsDynamicVisualizationController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.OrderTransformationCharacteristicsDynamicVisualization, taskManager)
         {
+            this.db = db;
+            this.viewDataHelper = viewDataHelper;
         }
 
         /// <summary>
@@ -40,11 +47,9 @@
         /// </returns>
         public ActionResult Index()
         {
-            var db = new LibiadaWebEntities();
-            var viewDataHelper = new ViewDataHelper(db);
             Dictionary<string, object> data = viewDataHelper.FillViewData(CharacteristicCategory.Full, 1, int.MaxValue, "Calculate");
 
-            var transformations = EnumHelper.GetSelectList(typeof(OrderTransformation));
+            var transformations = Extensions.EnumExtensions.GetSelectList<OrderTransformation>();
             data.Add("transformations", transformations);
 
             ViewBag.data = JsonConvert.SerializeObject(data);
@@ -103,7 +108,6 @@
         {
             return CreateTask(() =>
             {
-                var db = new LibiadaWebEntities();
                 var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
                 var commonSequenceRepository = new CommonSequenceRepository(db);
                 var mattersCharacteristics = new object[matterIds.Length];

@@ -1,17 +1,22 @@
 ﻿namespace LibiadaWeb.Tasks
 {
     using System;
-    using System.Web;
 
-    using AutoMapper;
 
     using LibiadaWeb.Helpers;
+
+    using Libiada.Database.Tasks;
 
     /// <summary>
     /// The task data.
     /// </summary>
     public class TaskData
     {
+        /// <summary>
+        /// The id.
+        /// </summary>
+        public readonly long Id;
+
         /// <summary>
         /// The task type.
         /// </summary>
@@ -26,11 +31,6 @@
         /// The user name.
         /// </summary>
         public readonly string UserName;
-
-        /// <summary>
-        /// The id.
-        /// </summary>
-        public readonly long Id;
 
         /// <summary>
         /// The task state.
@@ -99,15 +99,31 @@
         }
 
         /// <summary>
-        /// The clone.
+        /// Initializes a new instance of the <see cref="TaskData"/> class.
+        /// </summary>
+        /// <param name="source">The other <see cref="TaskData"/> object to clone from</param>
+        private TaskData(TaskData source)
+        {
+            Id = source.Id;
+            TaskType = source.TaskType;
+            UserId = source.UserId;
+            UserName = source.UserName;
+            Created = source.Created;
+            Started = source.Started;
+            Completed = source.Completed;
+            ExecutionTime = source.ExecutionTime;
+            TaskState = source.TaskState;
+        }
+
+        /// <summary>
+        /// Creactes copy of current object.
         /// </summary>
         /// <returns>
         /// The <see cref="TaskData"/>.
         /// </returns>
         public TaskData Clone()
         {
-
-            return Mapper.Map<TaskData>(this);
+            return new TaskData(this);
         }
     }
 }

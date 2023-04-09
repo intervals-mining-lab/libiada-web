@@ -5,8 +5,9 @@
     using System.IO;
     using System.Linq;
     using System.Text.RegularExpressions;
-    using System.Web.Mvc;
-    using System.Web.Mvc.Html;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using Microsoft.AspNetCore.Authorization;
 
     using Bio;
     using Bio.Extensions;
@@ -16,15 +17,20 @@
     using LibiadaCore.Images;
 
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models.Calculators;
-    using LibiadaWeb.Models.CalculatorsData;
-    using LibiadaWeb.Models.Repositories.Catalogs;
-    using LibiadaWeb.Tasks;
+    using Libiada.Database.Models.Calculators;
+    using Libiada.Database.Models.Repositories.Catalogs;
+    using Libiada.Database.Tasks;
 
     using Newtonsoft.Json;
 
     using SixLabors.ImageSharp;
     using SixLabors.ImageSharp.PixelFormats;
+    
+
+    using Libiada.Database;
+    using Libiada.Database.Helpers;
+    using Libiada.Database.Models.CalculatorsData;
+    using LibiadaWeb.Tasks;
 
     /// <summary>
     /// The quick calculation controller.
@@ -36,13 +42,17 @@
         /// The characteristic type link repository.
         /// </summary>
         private readonly FullCharacteristicRepository characteristicTypeLinkRepository;
+        private readonly LibiadaDatabaseEntities db;
+        private readonly IViewDataHelper viewDataHelper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomSequenceCalculationController"/> class.
         /// </summary>
-        public CustomSequenceCalculationController() : base(TaskType.CustomSequenceCalculation)
+        public CustomSequenceCalculationController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.CustomSequenceCalculation, taskManager)
         {
             characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
+            this.db = db;
+            this.viewDataHelper = viewDataHelper;
         }
 
         /// <summary>
@@ -53,16 +63,12 @@
         /// </returns>
         public ActionResult Index()
         {
-            var imageTransformers = EnumHelper.GetSelectList(typeof(ImageTransformer));
+            var imageTransformers = Extensions.EnumExtensions.GetSelectList<ImageTransformer>();
 
-            using (var db = new LibiadaWebEntities())
-            {
-                var viewDataHelper = new ViewDataHelper(db);
-                Dictionary<string, object> viewData = viewDataHelper.GetCharacteristicsData(CharacteristicCategory.Full);
-                viewData.Add("imageTransformers", imageTransformers);
-                ViewBag.data = JsonConvert.SerializeObject(viewData);
-                return View();
-            }
+            Dictionary<string, object> viewData = viewDataHelper.GetCharacteristicsData(CharacteristicCategory.Full);
+            viewData.Add("imageTransformers", imageTransformers);
+            ViewBag.data = JsonConvert.SerializeObject(viewData);
+            return View();
         }
 
         /// <summary>
@@ -97,19 +103,20 @@
                                   string fileType,
                                   bool? toLower,
                                   bool? removePunctuation,
-                                  char? delimiter)
+                                  char? delimiter,
+                                  IFormFileCollection files)
         {
             return CreateTask(() =>
                 {
-                    int sequencesCount = localFile ? Request.Files.Count : customSequences.Length;
+                    int sequencesCount = localFile ? files.Count : customSequences.Length;
                     var sequencesNames = new string[sequencesCount];
                     var sequences = new Chain[sequencesCount];
                     if (localFile)
                     {
                         for (int i = 0; i < sequencesCount; i++)
                         {
-                            Stream sequenceStream = FileHelper.GetFileStream(Request.Files[i]);
-                            sequencesNames[i] = Request.Files[i].FileName;
+                            using Stream sequenceStream = Helpers.FileHelper.GetFileStream(files[i]);
+                            sequencesNames[i] = files[i].FileName;
 
                             switch (fileType)
                             {
@@ -143,7 +150,7 @@
                                     sequencesNames[i] = fastaSequence.ID;
                                     break;
                                 case "wavFile":
-                                    var reader = new BinaryReader(Request.Files[i].InputStream);
+                                    var reader = new BinaryReader(Helpers.FileHelper.GetFileStream(files[i]));
 
                                     int chunkID = reader.ReadInt32();
                                     int fileSize = reader.ReadInt32();

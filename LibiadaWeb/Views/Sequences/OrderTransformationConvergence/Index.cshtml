@@ -2,8 +2,8 @@
     ViewBag.Title = "Order transformation convergence";
 }
 
-@Scripts.Render("~/bundles/orderTransformations")
-@Scripts.Render("~/bundles/CharacteristicNatureParams")
+<script src="~/js/Angular/Components/orderTransformations.js" asp-append-version="true"></script>
+<script src="~/js/Angular/Components/characteristicNatureParams.js" asp-append-version="true"></script>
 @Html.Partial("_AngularControllerInitializer", "OrderTransformerController")
 
 <h2>@ViewBag.Title</h2>

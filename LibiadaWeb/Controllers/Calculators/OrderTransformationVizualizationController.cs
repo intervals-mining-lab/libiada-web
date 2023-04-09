@@ -3,12 +3,14 @@
 namespace LibiadaWeb.Controllers.Calculators
 {
     using System.Collections.Generic;
-    using System.Web.Mvc;
-    using System.Web.Mvc.Html;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
 
-    using LibiadaWeb.Tasks;
+    using Libiada.Database.Tasks;
 
     using Newtonsoft.Json;
+    using Microsoft.AspNetCore.Authorization;
+    using LibiadaWeb.Tasks;
 
     /// <summary>
     /// Calculates distribution of sequences by order.
@@ -20,7 +22,7 @@ namespace LibiadaWeb.Controllers.Calculators
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderTransformationVisualizationController"/> class.
         /// </summary>
-        public OrderTransformationVisualizationController() : base(TaskType.OrderTransformationVisualization)
+        public OrderTransformationVisualizationController(ITaskManager taskManager) : base(TaskType.OrderTransformationVisualization, taskManager)
         {
         }
 
@@ -54,7 +56,7 @@ namespace LibiadaWeb.Controllers.Calculators
                 orderTransformer.CalculateTransformations(length);
 
                 var transformationsSelectList = new List<SelectListItem> { new SelectListItem { Value = 0.ToString(), Text = "All" } };
-                transformationsSelectList.AddRange(EnumHelper.GetSelectList(typeof(OrderTransformation)));
+                transformationsSelectList.AddRange(Extensions.EnumExtensions.GetSelectList<OrderTransformation>());
 
                 var result = new Dictionary<string, object>
                 {

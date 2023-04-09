@@ -2,14 +2,16 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web.Mvc;
+    using System.Security.Principal;
+
+    using Libiada.Database;
+    using Libiada.Database.Models;
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.ArrangementManagers;
     using LibiadaCore.Core.Characteristics.Calculators.BinaryCalculators;
     using LibiadaCore.Extensions;
 
-    using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.CalculatorsData;
 
     /// <summary>
@@ -38,7 +40,7 @@
         /// <param name="db">
         /// The db.
         /// </param>
-        private BinaryCharacteristicRepository(LibiadaWebEntities db)
+        private BinaryCharacteristicRepository(LibiadaDatabaseEntities db)
         {
             characteristicsLinks = db.BinaryCharacteristicLink.ToArray();
         }
@@ -56,7 +58,7 @@
                     {
                         if (instance == null)
                         {
-                            using (var db = new LibiadaWebEntities())
+                            using (var db = new LibiadaDatabaseEntities())
                             {
                                 instance = new BinaryCharacteristicRepository(db);
                             }
@@ -69,122 +71,17 @@
         }
 
         /// <summary>
-        /// Gets the binary characteristic links.
-        /// </summary>
-        public IEnumerable<BinaryCharacteristicLink> CharacteristicLinks => characteristicsLinks.ToArray();
-
-        /// <summary>
-        /// The create binary characteristic.
-        /// </summary>
-        /// <param name="sequenceId">
-        /// The sequence id.
-        /// </param>
-        /// <param name="characteristicLinkId">
-        /// The characteristic id.
-        /// </param>
-        /// <param name="firstElementId">
-        /// The first element id.
-        /// </param>
-        /// <param name="secondElementId">
-        /// The second element id.
-        /// </param>
-        /// <param name="value">
-        /// The value.
-        /// </param>
-        /// <returns>
-        /// The <see cref="BinaryCharacteristicValue"/>.
-        /// </returns>
-        public BinaryCharacteristicValue CreateCharacteristic(long sequenceId, short characteristicLinkId, long firstElementId, long secondElementId, double value)
-        {
-            var characteristic = new BinaryCharacteristicValue
-            {
-                SequenceId = sequenceId,
-                CharacteristicLinkId = characteristicLinkId,
-                FirstElementId = firstElementId,
-                SecondElementId = secondElementId,
-                Value = value
-            };
-            return characteristic;
-        }
-
-        /// <summary>
-        /// The get link for binary characteristic.
-        /// </summary>
-        /// <param name="characteristicLinkId">
-        /// The characteristic link id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Link"/>.
-        /// </returns>
-        public Link GetLinkForCharacteristic(int characteristicLinkId)
-        {
-            return characteristicsLinks.Single(c => c.Id == characteristicLinkId).Link;
-        }
-
-        /// <summary>
-        /// The get binary characteristic type.
-        /// </summary>
-        /// <param name="characteristicLinkId">
-        /// The characteristic link id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="BinaryCharacteristic"/>.
-        /// </returns>
-        public BinaryCharacteristic GetCharacteristic(int characteristicLinkId)
-        {
-            return characteristicsLinks.Single(c => c.Id == characteristicLinkId).BinaryCharacteristic;
-        }
-
-        /// <summary>
-        /// The get binary characteristic name.
-        /// </summary>
-        /// <param name="characteristicLinkId">
-        /// The characteristic link id.
-        /// </param>
-        /// <param name="notation">
-        /// The notation.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        public string GetCharacteristicName(int characteristicLinkId, Notation notation)
-        {
-            return string.Join("  ", GetCharacteristicName(characteristicLinkId), notation.GetDisplayValue());
-        }
-
-        /// <summary>
-        /// The get binary characteristic name.
-        /// </summary>
-        /// <param name="characteristicLinkId">
-        /// The characteristic link id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        public string GetCharacteristicName(int characteristicLinkId)
-        {
-            string characteristicTypeName = GetCharacteristic(characteristicLinkId).GetDisplayValue();
-
-            Link link = GetLinkForCharacteristic(characteristicLinkId);
-            string linkName = link == Link.NotApplied ? string.Empty : link.GetDisplayValue();
-
-            return string.Join("  ", characteristicTypeName, linkName);
-        }
-
-
-
-        /// <summary>
         /// The get binary characteristic types.
         /// </summary>
         /// <returns>
         /// The <see cref="List{CharacteristicData}"/>.
         /// </returns>
-        public List<CharacteristicSelectListItem> GetCharacteristicTypes()
+        public List<CharacteristicSelectListItem> GetCharacteristicTypes(IPrincipal currentUser)
         {
             Link[] links;
             BinaryCharacteristic[] characteristics;
             ArrangementType arrangementType = ArrangementType.Intervals;
-            if (AccountHelper.IsAdmin())
+            if (currentUser.IsInRole("admin"))
             {
                 links = EnumExtensions.ToArray<Link>();
                 characteristics = EnumExtensions.ToArray<BinaryCharacteristic>();

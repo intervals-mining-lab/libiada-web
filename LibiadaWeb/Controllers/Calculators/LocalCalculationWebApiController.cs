@@ -2,30 +2,34 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web.Http;
+    using Libiada.Database.Models.Calculators;
 
-    using LibiadaCore.Core;
-    using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
-    using LibiadaCore.Iterators;
     using LibiadaCore.TimeSeries.Aggregators;
     using LibiadaCore.TimeSeries.Aligners;
     using LibiadaCore.TimeSeries.OneDimensional.Comparers;
     using LibiadaCore.TimeSeries.OneDimensional.DistanceCalculators;
 
-    using LibiadaWeb.Models;
-    using LibiadaWeb.Models.Calculators;
-    using LibiadaWeb.Models.CalculatorsData;
-    using LibiadaWeb.Models.Repositories.Catalogs;
-    using LibiadaWeb.Tasks;
-
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
     using Newtonsoft.Json;
+    using Libiada.Database.Models.CalculatorsData;
+    using LibiadaWeb.Tasks;
 
     /// <summary>
     /// The local calculation web api controller.
     /// </summary>
     [Authorize]
-    public class LocalCalculationWebApiController : ApiController
+    [Route("api/[controller]")]
+    [ApiController]
+    public class LocalCalculationWebApiController : Controller
     {
+        private readonly ITaskManager taskManager;
+
+        public LocalCalculationWebApiController(ITaskManager taskManager)
+        {
+            this.taskManager = taskManager;
+        }
+
         /// <summary>
         /// The get subsequence characteristic.
         /// </summary>
@@ -63,7 +67,7 @@
             DistanceCalculator distanceCalculator,
             Aggregator aggregator)
         {
-            var data = TaskManager.Instance.GetTaskData(taskId);
+            var data = taskManager.GetTaskData(taskId);
 
             var characteristicsObject = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(data);
             var characteristics = characteristicsObject["characteristics"];

@@ -1,9 +1,10 @@
-﻿﻿@model MusicSequence
+﻿@model MusicSequence
 
 @section Scripts {
-    @Scripts.Render("~/bundles/loadingWindow")
-    @Scripts.Render("~/bundles/midijs")
-    @Scripts.Render("~/bundles/d3js")
+    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+    <script src="~/lib/midi.js/lib/midi.js" asp-append-version="true"></script>
+    <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
+
 }
 
 @{

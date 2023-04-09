@@ -4,13 +4,18 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-    using System.Web.Mvc;
+
+    using Microsoft.AspNetCore.Mvc;
+
     using LibiadaCore.Core;
-    using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models.Repositories.Sequences;
-    using LibiadaWeb.Tasks;
+
+    using Libiada.Database.Helpers;
+    using Libiada.Database.Models.Repositories.Sequences;
+    using Libiada.Database.Tasks;
 
     using Newtonsoft.Json;
+    using LibiadaWeb.Tasks;
+
 
     /// <summary>
     /// The sequence check controller.
@@ -18,11 +23,14 @@
     [Authorize(Roles = "Admin")]
     public class SequenceCheckController : AbstractResultController
     {
+        private readonly LibiadaDatabaseEntities db;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SequenceCheckController"/> class.
         /// </summary>
-        public SequenceCheckController() : base(TaskType.SequenceCheck)
+        public SequenceCheckController(LibiadaDatabaseEntities db, ITaskManager taskManager) : base(TaskType.SequenceCheck, taskManager)
         {
+            this.db = db;
         }
 
         /// <summary>
@@ -33,11 +41,8 @@
         /// </returns>
         public ActionResult Index()
         {
-            using (var db = new LibiadaWebEntities())
-            {
-                ViewBag.matterId = new SelectList(Cache.GetInstance().Matters.Where(m => m.Nature == Nature.Genetic).ToArray(), "id", "name");
-                return View();
-            }
+            ViewBag.matterId = new SelectList(Cache.GetInstance().Matters.Where(m => m.Nature == Nature.Genetic).ToArray(), "id", "name");
+            return View();
         }
 
         /// <summary>
@@ -54,25 +59,20 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(long matterId, string[] file)
+        public ActionResult Index(long matterId, IFormFile file)
         {
             return CreateTask(() =>
             {
-                var myFile = Request.Files[0];
-
-                if (myFile == null || myFile.ContentLength == 0)
+                if (file == null || file.Length == 0)
                 {
                     throw new ArgumentNullException(nameof(file), "Sequence file not found or empty.");
                 }
 
-                int fileLen = myFile.ContentLength;
-                var input = new byte[fileLen];
-
                 // Initialize the stream.
-                var fileStream = myFile.InputStream;
-
+                using var fileStream = Helpers.FileHelper.GetFileStream(file);
+                byte[] input = new byte[fileStream.Length];
                 // Read the file into the byte array.
-                fileStream.Read(input, 0, fileLen);
+                fileStream.Read(input, 0, (int)fileStream.Length);
 
                 // Copy the byte array into a string.
                 string stringSequence = Encoding.ASCII.GetString(input);
@@ -91,12 +91,11 @@
                 string message;
                 string status;
                 BaseChain dbChain;
-                using (var db = new LibiadaWebEntities())
-                {
-                    long sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId).Id;
-                    var commonSequenceRepository = new CommonSequenceRepository(db);
-                    dbChain = commonSequenceRepository.GetLibiadaBaseChain(sequenceId);
-                }
+
+                long sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId).Id;
+                var commonSequenceRepository = new CommonSequenceRepository(db);
+                dbChain = commonSequenceRepository.GetLibiadaBaseChain(sequenceId);
+
 
                 if (dbChain.Equals(chain))
                 {

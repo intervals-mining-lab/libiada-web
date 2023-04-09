@@ -3,19 +3,23 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Mvc;
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
 
-    using LibiadaWeb.Tasks;
+    using Libiada.Database.Tasks;
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models.CalculatorsData;
-    using LibiadaWeb.Models.Repositories.Catalogs;
+    using Libiada.Database.Models.CalculatorsData;
+    using Libiada.Database.Models.Repositories.Catalogs;
 
     using Newtonsoft.Json;
 
     using SequenceGenerator;
+    using Microsoft.AspNetCore.Authorization;
+    using Libiada.Database;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using LibiadaWeb.Tasks;
 
     /// <summary>
     /// Calculates distribution of sequences by order.
@@ -27,13 +31,17 @@
         /// The characteristic type link repository.
         /// </summary>
         private readonly FullCharacteristicRepository characteristicTypeLinkRepository;
+        private readonly LibiadaDatabaseEntities db;
+        private readonly IViewDataHelper viewDataHelper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderCalculationController"/> class.
         /// </summary>
-        public OrderCalculationController() : base(TaskType.OrderCalculation)
+        public OrderCalculationController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.OrderCalculation, taskManager)
         {
             characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
+            this.db = db;
+            this.viewDataHelper = viewDataHelper;
         }
 
         /// <summary>
@@ -44,13 +52,9 @@
         /// </returns>
         public ActionResult Index()
         {
-            using (var db = new LibiadaWebEntities())
-            {
-                var viewDataHelper = new ViewDataHelper(db);
-                Dictionary<string, object> viewData = viewDataHelper.GetCharacteristicsData(CharacteristicCategory.Full);
-                ViewBag.data = JsonConvert.SerializeObject(viewData);
-                return View();
-            }
+            Dictionary<string, object> viewData = viewDataHelper.GetCharacteristicsData(CharacteristicCategory.Full);
+            ViewBag.data = JsonConvert.SerializeObject(viewData);
+            return View();
         }
 
         /// <summary>

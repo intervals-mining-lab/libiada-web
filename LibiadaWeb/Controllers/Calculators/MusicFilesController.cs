@@ -2,12 +2,13 @@
 {
     using System.Collections.Generic;
     using System.IO;
-    using System.Web;
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
 
-    using LibiadaWeb.Tasks;
+    using Libiada.Database.Tasks;
 
     using Newtonsoft.Json;
+    using LibiadaWeb.Tasks;
 
     /// <summary>
     /// The music files controller.
@@ -18,7 +19,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="MusicFilesController"/> class.
         /// </summary>
-        public MusicFilesController() : base(TaskType.MusicFiles)
+        public MusicFilesController(ITaskManager taskManager) : base(TaskType.MusicFiles, taskManager)
         {
         }
 
@@ -44,18 +45,17 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(HttpPostedFileBase[] file)
+        public ActionResult Index(IFormFileCollection file)
         {
             return CreateTask(() =>
             {
-                HttpFileCollectionBase files = Request.Files;
-                var names = new string[files.Count];
-                var data = new object[files.Count];
+                var names = new string[file.Count];
+                var data = new object[file.Count];
 
-                for (int i = 0; i < files.Count; i++)
+                for (int i = 0; i < file.Count; i++)
                 {
-                    names[i] = files[i].FileName;
-                    var reader = new BinaryReader(files[i].InputStream);
+                    names[i] = file[i].FileName;
+                    using var reader = new BinaryReader(Helpers.FileHelper.GetFileStream(file[i]));
 
                     int chunkID = reader.ReadInt32();
                     int fileSize = reader.ReadInt32();
@@ -79,7 +79,7 @@
                     int dataID = reader.ReadInt32();
                     int dataSize = reader.ReadInt32();
 
-                    data[i] = new { name = files[i].FileName, sampleRate, channels, audioFormat = fmtCode, sampleSize = fmtBlockAlign };
+                    data[i] = new { name = file[i].FileName, sampleRate, channels, audioFormat = fmtCode, sampleSize = fmtBlockAlign };
 
                 }
 

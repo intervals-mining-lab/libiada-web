@@ -1,6 +1,6 @@
 ﻿namespace LibiadaWeb.Models.CalculatorsData
 {
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Mvc;
 
     /// <summary>
     /// The select list item with nature param.

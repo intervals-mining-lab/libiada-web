@@ -4,19 +4,30 @@
     using System.Collections.Generic;
     using System.Configuration;
     using System.Linq;
-    using System.Web.Http;
 
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
+    using Microsoft.AspNetCore.Mvc;
+    using LibiadaWeb.Tasks;
 
     /// <summary>
     /// The task manager web api controller.
     /// </summary>
     [Authorize]
-    public class TaskManagerWebApiController : ApiController
+    [Route("api/[controller]")]
+    [ApiController]
+    public class TaskManagerWebApiController : Controller
     {
+        private readonly LibiadaDatabaseEntities db;
+        private readonly ITaskManager taskManager;
+
+        public TaskManagerWebApiController(LibiadaDatabaseEntities db, ITaskManager taskManager)
+        {
+            this.db = db;
+            this.taskManager = taskManager;
+        }
+
         /// <summary>
         /// Gets the task data by id.
         /// </summary>
@@ -36,7 +47,7 @@
         {
             try
             {
-                return TaskManager.Instance.GetTaskData(id, key);
+                return taskManager.GetTaskData(id, key);
             }
             catch (Exception ex)
             {
@@ -103,19 +114,16 @@
         [HttpPost]
         public void Subscribe(AspNetPushNotificationSubscriber subscriberData)
         {
-            using (var db = new LibiadaWebEntities())
+            var subscriber = new AspNetPushNotificationSubscriber
             {
-                var subscriber = new AspNetPushNotificationSubscriber
-                {
-                    Auth = subscriberData.Auth,
-                    P256dh = subscriberData.P256dh,
-                    Endpoint = subscriberData.Endpoint,
-                    UserId = AccountHelper.GetUserId()
-                };
+                Auth = subscriberData.Auth,
+                P256dh = subscriberData.P256dh,
+                Endpoint = subscriberData.Endpoint,
+                UserId = User.GetUserId()
+            };
 
-                db.AspNetPushNotificationSubscribers.Add(subscriber);
-                db.SaveChanges();
-            }
+            db.AspNetPushNotificationSubscribers.Add(subscriber);
+            db.SaveChanges();
         }
 
         /// <summary>
@@ -127,15 +135,12 @@
         [HttpPost]
         public void Unsubscribe(AspNetPushNotificationSubscriber subscriberData)
         {
-            using (var db = new LibiadaWebEntities())
-            {
-                string endpoint = subscriberData.Endpoint;
-                int userId = AccountHelper.GetUserId();
-                AspNetPushNotificationSubscriber subscriber = db.AspNetPushNotificationSubscribers.Single(s => s.Endpoint == endpoint
-                                                                                                            && s.UserId == userId);
-                db.AspNetPushNotificationSubscribers.Remove(subscriber);
-                db.SaveChanges();
-            }
+            string endpoint = subscriberData.Endpoint;
+            int userId = User.GetUserId();
+            AspNetPushNotificationSubscriber subscriber = db.AspNetPushNotificationSubscribers.Single(s => s.Endpoint == endpoint
+                                                                                                        && s.UserId == userId);
+            db.AspNetPushNotificationSubscribers.Remove(subscriber);
+            db.SaveChanges();
         }
 
         public string GetApplicationServerKey()

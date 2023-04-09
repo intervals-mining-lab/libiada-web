@@ -4,8 +4,10 @@
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Linq;
+    using System.Security.Principal;
     using System.Threading;
     using System.Threading.Tasks;
+    using Libiada.Database.Tasks;
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Helpers;
@@ -17,17 +19,10 @@
     /// <summary>
     /// The task manager.
     /// </summary>
-    public class TaskManager
+    public class TaskManager : ITaskManager
     {
-        /// <summary>
-        /// The sync root.
-        /// </summary>
-        private static readonly object SyncRoot = new object();
-
-        /// <summary>
-        /// The instance.
-        /// </summary>
-        private static volatile TaskManager instance;
+        private readonly LibiadaDatabaseEntities db;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
         /// <summary>
         /// Gets the tasks.
@@ -37,47 +32,25 @@
         /// <summary>
         /// The signalr hub.
         /// </summary>
-        private readonly TasksManagerHub signalrHub = new TasksManagerHub();
+        private readonly TaskManagerHub signalrHub;
 
         /// <summary>
         /// Prevents a default instance of the <see cref="TaskManager"/> class from being created.
         /// </summary>
-        private TaskManager()
+        public TaskManager(LibiadaDatabaseEntities db, ITaskManagerHubFactory factory, IHttpContextAccessor httpContextAccessor)
         {
+
+            this.db = db;
+            this.httpContextAccessor = httpContextAccessor;
+            signalrHub = factory.Create(this);
             RemoveGarbageFromDb();
-            using (var db = new LibiadaWebEntities())
+            CalculationTask[] databaseTasks = db.CalculationTask.OrderBy(t => t.Created).ToArray();
+            lock (tasks)
             {
-                CalculationTask[] databaseTasks = db.CalculationTask.OrderBy(t => t.Created).ToArray();
-                lock (tasks)
+                foreach (CalculationTask task in databaseTasks)
                 {
-                    foreach (CalculationTask task in databaseTasks)
-                    {
-                        tasks.Add(new Task(task));
-                    }
+                    tasks.Add(new Task(task));
                 }
-            }
-
-        }
-
-        /// <summary>
-        /// Gets the instance.
-        /// </summary>
-        public static TaskManager Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    lock (SyncRoot)
-                    {
-                        if (instance == null)
-                        {
-                            instance = new TaskManager();
-                        }
-                    }
-                }
-
-                return instance;
             }
         }
 
@@ -94,21 +67,18 @@
         {
             CalculationTask databaseTask;
             Task task;
-
-            using (var db = new LibiadaWebEntities())
+            IPrincipal user = httpContextAccessor.HttpContext.User;
+            databaseTask = new CalculationTask
             {
-                databaseTask = new CalculationTask
-                {
-                    Created = DateTime.Now,
-                    Description = taskType.GetDisplayValue(),
-                    Status = TaskState.InQueue,
-                    UserId = AccountHelper.GetUserId(),
-                    TaskType = taskType
-                };
+                Created = DateTime.Now,
+                Description = taskType.GetDisplayValue(),
+                Status = TaskState.InQueue,
+                UserId = user.GetUserId(),
+                TaskType = taskType
+            };
 
-                db.CalculationTask.Add(databaseTask);
-                db.SaveChanges();
-            }
+            db.CalculationTask.Add(databaseTask);
+            db.SaveChanges();
 
             lock (tasks)
             {
@@ -163,8 +133,9 @@
         {
             lock (tasks)
             {
+                IPrincipal user = httpContextAccessor.HttpContext.User;
                 Task task = tasks.Single(t => t.TaskData.Id == id);
-                if (task.TaskData.UserId == AccountHelper.GetUserId() || AccountHelper.IsAdmin())
+                if (task.TaskData.UserId == user.GetUserId() || user.IsInRole("admin"))
                 {
                     lock (task)
                     {
@@ -177,12 +148,9 @@
 
                         tasks.Remove(task);
 
-                        using (var db = new LibiadaWebEntities())
-                        {
-                            CalculationTask databaseTask = db.CalculationTask.Find(id);
-                            db.CalculationTask.Remove(databaseTask);
-                            db.SaveChanges();
-                        }
+                        CalculationTask databaseTask = db.CalculationTask.Find(id);
+                        db.CalculationTask.Remove(databaseTask);
+                        db.SaveChanges();
 
                         signalrHub.Send(TaskEvent.DeleteTask, task.TaskData);
                     }
@@ -220,7 +188,8 @@
 
                 lock (task)
                 {
-                    if (!AccountHelper.IsAdmin() && task.TaskData.UserId != AccountHelper.GetUserId())
+                    IPrincipal user = httpContextAccessor.HttpContext.User;
+                    if (!user.IsInRole("admin") && task.TaskData.UserId != user.GetUserId())
                     {
                         throw new AccessViolationException("You do not have access to the current task");
                     }
@@ -253,10 +222,7 @@
                 throw new Exception("Task state is not 'complete'");
             }
 
-            using (var db = new LibiadaWebEntities())
-            {
-                return db.TaskResult.Single(tr => tr.TaskId == id && tr.Key == key).Value;
-            }
+            return db.TaskResult.Single(tr => tr.TaskId == id && tr.Key == key).Value;
         }
 
         /// <summary>
@@ -270,10 +236,10 @@
             lock (tasks)
             {
                 List<Task> result = tasks;
-
-                if (!AccountHelper.IsAdmin())
+                IPrincipal user = httpContextAccessor.HttpContext.User;
+                if (!user.IsInRole("admin"))
                 {
-                    var userId = AccountHelper.GetUserId();
+                    var userId = user.GetUserId();
                     result = result.Where(t => t.TaskData.UserId == userId).ToList();
                 }
 
@@ -301,17 +267,14 @@
         /// Removes not finished and not started tasks from database
         /// on task manager initialization.
         /// </summary>
-        private static void RemoveGarbageFromDb()
+        private void RemoveGarbageFromDb()
         {
-            using (var db = new LibiadaWebEntities())
-            {
-                var tasksToDelete = db.CalculationTask
-                    .Where(t => t.Status != TaskState.Completed && t.Status != TaskState.Error)
-                    .ToArray();
+            var tasksToDelete = db.CalculationTask
+                .Where(t => t.Status != TaskState.Completed && t.Status != TaskState.Error)
+                .ToArray();
 
-                db.CalculationTask.RemoveRange(tasksToDelete);
-                db.SaveChanges();
-            }
+            db.CalculationTask.RemoveRange(tasksToDelete);
+            db.SaveChanges();
         }
 
         /// <summary>
@@ -380,15 +343,13 @@
                 {
                     actionToCall = task.Action;
                     task.TaskData.Started = DateTime.Now;
-                    using (var db = new LibiadaWebEntities())
-                    {
-                        CalculationTask databaseTask = db.CalculationTask.Single(t => t.Id == task.TaskData.Id);
+                    CalculationTask databaseTask = db.CalculationTask.Single(t => t.Id == task.TaskData.Id);
 
-                        databaseTask.Started = DateTime.Now;
-                        databaseTask.Status = TaskState.InProgress;
-                        db.Entry(databaseTask).State = EntityState.Modified;
-                        db.SaveChanges();
-                    }
+                    databaseTask.Started = DateTime.Now;
+                    databaseTask.Status = TaskState.InProgress;
+                    db.Entry(databaseTask).State = EntityState.Modified;
+                    db.SaveChanges();
+
 
                     signalrHub.Send(TaskEvent.ChangeStatus, task.TaskData);
                 }
@@ -403,17 +364,14 @@
                     TaskResult[] results = result.Select(r => new TaskResult { Key = r.Key, Value = r.Value, TaskId = task.TaskData.Id }).ToArray();
 
                     task.TaskData.TaskState = TaskState.Completed;
-                    using (var db = new LibiadaWebEntities())
-                    {
-                        db.TaskResult.AddRange(results);
+                    db.TaskResult.AddRange(results);
 
-                        CalculationTask databaseTask = db.CalculationTask.Single(t => (t.Id == task.TaskData.Id));
-                        databaseTask.Completed = task.TaskData.Completed;
-                        databaseTask.Status = TaskState.Completed;
-                        db.Entry(databaseTask).State = EntityState.Modified;
+                    CalculationTask databaseTask = db.CalculationTask.Single(t => (t.Id == task.TaskData.Id));
+                    databaseTask.Completed = task.TaskData.Completed;
+                    databaseTask.Status = TaskState.Completed;
+                    db.Entry(databaseTask).State = EntityState.Modified;
 
-                        db.SaveChanges();
-                    }
+                    db.SaveChanges();
 
                     signalrHub.Send(TaskEvent.ChangeStatus, task.TaskData);
                 }
@@ -449,17 +407,14 @@
                         TaskId = taskData.Id
                     };
 
-                    using (var db = new LibiadaWebEntities())
-                    {
-                        db.TaskResult.Add(taskResult);
+                    db.TaskResult.Add(taskResult);
 
-                        CalculationTask databaseTask = db.CalculationTask.Single(t => (t.Id == taskData.Id));
-                        databaseTask.Completed = DateTime.Now;
-                        databaseTask.Status = TaskState.Error;
-                        db.Entry(databaseTask).State = EntityState.Modified;
+                    CalculationTask databaseTask = db.CalculationTask.Single(t => (t.Id == taskData.Id));
+                    databaseTask.Completed = DateTime.Now;
+                    databaseTask.Status = TaskState.Error;
+                    db.Entry(databaseTask).State = EntityState.Modified;
 
-                        db.SaveChanges();
-                    }
+                    db.SaveChanges();
 
                     signalrHub.Send(TaskEvent.ChangeStatus, taskData);
                 }

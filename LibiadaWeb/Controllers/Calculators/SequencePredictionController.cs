@@ -4,19 +4,22 @@
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Mvc;
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models.CalculatorsData;
-    using LibiadaWeb.Models.Repositories.Catalogs;
-    using LibiadaWeb.Models.Repositories.Sequences;
-    using LibiadaWeb.Tasks;
+    using Libiada.Database.Models.CalculatorsData;
+    using Libiada.Database.Models.Repositories.Catalogs;
+    using Libiada.Database.Models.Repositories.Sequences;
+    using Libiada.Database.Tasks;
 
     using Newtonsoft.Json;
+    using Microsoft.AspNetCore.Authorization;
+    using Libiada.Database;
+    using LibiadaWeb.Tasks;
 
     /// <summary>
     /// The sequence prediction controller.
@@ -24,11 +27,16 @@
     [Authorize(Roles = "Admin")]
     public class SequencePredictionController : AbstractResultController
     {
+        private readonly LibiadaDatabaseEntities db;
+        private readonly IViewDataHelper viewDataHelper;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SequencePredictionController"/> class.
         /// </summary>
-        public SequencePredictionController() : base(TaskType.SequencePrediction)
+        public SequencePredictionController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.SequencePrediction, taskManager)
         {
+            this.db = db;
+            this.viewDataHelper = viewDataHelper;
         }
 
         /// <summary>
@@ -39,13 +47,9 @@
         /// </returns>
         public ActionResult Index()
         {
-            using (var db = new LibiadaWebEntities())
-            {
-                var viewDataHelper = new ViewDataHelper(db);
-                var viewData = viewDataHelper.FillViewData(CharacteristicCategory.Full, 1, 1, "Predict");
-                ViewBag.data = JsonConvert.SerializeObject(viewData);
-                return View();
-            }
+            var viewData = viewDataHelper.FillViewData(CharacteristicCategory.Full, 1, 1, "Predict");
+            ViewBag.data = JsonConvert.SerializeObject(viewData);
+            return View();
         }
 
         /// <summary>
@@ -85,20 +89,17 @@
                 IFullCalculator calculator;
                 Link link;
 
-                using (var db = new LibiadaWebEntities())
-                {
-                    var commonSequenceRepository = new CommonSequenceRepository(db);
-                    matterName = Cache.GetInstance().Matters.Single(m => matterId == m.Id).Name;
-                    var sequenceId = db.CommonSequence.Single(c => matterId == c.MatterId && c.Notation == notation).Id;
-                    sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
+                var commonSequenceRepository = new CommonSequenceRepository(db);
+                matterName = Cache.GetInstance().Matters.Single(m => matterId == m.Id).Name;
+                var sequenceId = db.CommonSequence.Single(c => matterId == c.MatterId && c.Notation == notation).Id;
+                sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
 
-                    var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
-                    characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
+                var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
+                characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
 
-                    FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
-                    calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
-                    link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
-                }
+                FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
+                calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
+                link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
 
                 // characteristics = SequencesCharacteristicsCalculator.Calculate( new[] { sequenceId }, characteristicLinkId);
 

@@ -3,15 +3,17 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Mvc;
 
     using LibiadaCore.Core;
 
-    using LibiadaWeb.Tasks;
+    using Libiada.Database.Tasks;
 
     using Newtonsoft.Json;
 
     using SequenceGenerator;
+    using Microsoft.AspNetCore.Authorization;
+    using LibiadaWeb.Tasks;
 
     /// <summary>
     /// Calculates distribution of sequences by order.
@@ -22,7 +24,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SequencesOrderDistributionController"/> class.
         /// </summary>
-        public SequencesOrderDistributionController() : base(TaskType.SequencesOrderDistribution)
+        public SequencesOrderDistributionController(ITaskManager taskManager) : base(TaskType.SequencesOrderDistribution, taskManager)
         {
         }
 

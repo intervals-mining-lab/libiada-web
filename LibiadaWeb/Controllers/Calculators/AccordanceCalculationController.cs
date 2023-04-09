@@ -3,18 +3,20 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Mvc;
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.AccordanceCalculators;
     using LibiadaCore.Music;
-    using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models.Repositories.Catalogs;
-    using LibiadaWeb.Models.Repositories.Sequences;
-    using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
+    using Microsoft.AspNetCore.Authorization;
+    using Libiada.Database;
+    using Libiada.Database.Models.Repositories.Sequences;
+    using Libiada.Database.Models.Repositories.Catalogs;
+    using Libiada.Database.Tasks;
+    using LibiadaWeb.Tasks;
 
     /// <summary>
     /// The accordance calculation controller.
@@ -25,7 +27,9 @@
         /// <summary>
         /// The db.
         /// </summary>
-        private readonly LibiadaWebEntities db;
+        private readonly LibiadaDatabaseEntities db;
+
+        private readonly IViewDataHelper viewDataHelper;
 
         /// <summary>
         /// The common sequence repository.
@@ -40,9 +44,10 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AccordanceCalculationController"/> class.
         /// </summary>
-        public AccordanceCalculationController() : base(TaskType.AccordanceCalculation)
+        public AccordanceCalculationController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.AccordanceCalculation, taskManager)
         {
-            db = new LibiadaWebEntities();
+            this.db = db;
+            this.viewDataHelper = viewDataHelper;
             commonSequenceRepository = new CommonSequenceRepository(db);
             characteristicTypeLinkRepository = AccordanceCharacteristicRepository.Instance;
         }
@@ -55,7 +60,6 @@
         /// </returns>
         public ActionResult Index()
         {
-            var viewDataHelper = new ViewDataHelper(db);
             var viewData = viewDataHelper.FillViewData(CharacteristicCategory.Accordance, 2, 2, "Calculate");
             ViewBag.data = JsonConvert.SerializeObject(viewData);
             return View();

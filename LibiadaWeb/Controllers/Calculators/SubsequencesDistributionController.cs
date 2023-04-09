@@ -7,7 +7,7 @@
     using System.Linq;
     using System.Net;
     using System.Text;
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Mvc;
 
     using Newtonsoft.Json;
 
@@ -15,20 +15,21 @@
 
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models;
-    using LibiadaWeb.Models.Calculators;
-    using LibiadaWeb.Models.CalculatorsData;
-    using LibiadaWeb.Models.Repositories.Catalogs;
-    using LibiadaWeb.Models.Repositories.Sequences;
-    using LibiadaWeb.Tasks;
+    using Libiada.Database.Models;
+    using Libiada.Database.Models.Calculators;
+    using Libiada.Database.Models.CalculatorsData;
+    using Libiada.Database.Models.Repositories.Catalogs;
+    using Libiada.Database.Models.Repositories.Sequences;
+    using Libiada.Database.Tasks;
 
     using Bio.IO.FastA;
     using Bio;
 
-    using static LibiadaWeb.Models.Calculators.SubsequencesCharacteristicsCalculator;
+    using static Libiada.Database.Models.Calculators.SubsequencesCharacteristicsCalculator;
 
     using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
-    using Attribute = LibiadaWeb.Attribute;
+    using Attribute = Libiada.Database.Attribute;
+    using LibiadaWeb.Tasks;
 
 
     /// <summary>
@@ -37,11 +38,16 @@
     [Authorize]
     public class SubsequencesDistributionController : AbstractResultController
     {
+        private readonly LibiadaDatabaseEntities db;
+        private readonly IViewDataHelper viewDataHelper;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SubsequencesDistributionController"/> class.
         /// </summary>
-        public SubsequencesDistributionController() : base(TaskType.SubsequencesDistribution)
+        public SubsequencesDistributionController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.SubsequencesDistribution, taskManager)
         {
+            this.db = db;
+            this.viewDataHelper = viewDataHelper;
         }
 
         /// <summary>
@@ -52,12 +58,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            using (var db = new LibiadaWebEntities())
-            {
-                var viewDataHelper = new ViewDataHelper(db);
-                ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillSubsequencesViewData(1, int.MaxValue, "Calculate"));
-            }
-
+            ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillSubsequencesViewData(1, int.MaxValue, "Calculate"));
             return View();
         }
 
@@ -94,22 +95,20 @@
                     var attributeValuesCache = new AttributeValueCacheManager();
                     long[] sequenceIds;
 
-                    using (var db = new LibiadaWebEntities())
+                    DnaSequence[] parentSequences = db.DnaSequence.Include(s => s.Matter)
+                                            .Where(s => s.Notation == Notation.Nucleotides && matterIds.Contains(s.MatterId))
+                                            .OrderBy(s => s.MatterId)
+                                            .ToArray();
+
+                    for (int n = 0; n < parentSequences.Length; n++)
                     {
-                        DnaSequence[] parentSequences = db.DnaSequence.Include(s => s.Matter)
-                                                .Where(s => s.Notation == Notation.Nucleotides && matterIds.Contains(s.MatterId))
-                                                .OrderBy(s => s.MatterId)
-                                                .ToArray();
-
-                        for (int n = 0; n < parentSequences.Length; n++)
-                        {
-                            matterNames[n] = parentSequences[n].Matter.Name;
-                            remoteIds[n] = parentSequences[n].RemoteId;
-                        }
-
-                        var geneticSequenceRepository = new GeneticSequenceRepository(db);
-                        sequenceIds = geneticSequenceRepository.GetNucleotideSequenceIds(matterIds);
+                        matterNames[n] = parentSequences[n].Matter.Name;
+                        remoteIds[n] = parentSequences[n].RemoteId;
                     }
+
+                    var geneticSequenceRepository = new GeneticSequenceRepository(db);
+                    sequenceIds = geneticSequenceRepository.GetNucleotideSequenceIds(matterIds);
+
 
                     var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
                     string sequenceCharacteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId);
@@ -143,7 +142,7 @@
                     }
 
                     // sorting organisms by their characteristic
-                    Array.Sort(sequencesData, (x,y) => x.Characteristic.CompareTo(y.Characteristic));
+                    Array.Sort(sequencesData, (x, y) => x.Characteristic.CompareTo(y.Characteristic));
                     List<AttributeValue> allAttributeValues = attributeValuesCache.AllAttributeValues;
                     var result = new Dictionary<string, object>
                                  {
@@ -178,11 +177,9 @@
             {
                 ISequence[] bioSequences;
 
-                using (var db = new LibiadaWebEntities())
-                {
-                    var subsequenceExtractor = new SubsequenceExtractor(db);
-                    bioSequences = subsequenceExtractor.GetBioSequencesForFastaConverter(subsequencesIds);
-                }
+                var subsequenceExtractor = new SubsequenceExtractor(db);
+                bioSequences = subsequenceExtractor.GetBioSequencesForFastaConverter(subsequencesIds);
+
 
                 string fasta;
                 FastAFormatter formatter = new FastAFormatter();

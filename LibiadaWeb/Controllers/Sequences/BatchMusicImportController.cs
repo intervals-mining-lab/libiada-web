@@ -3,25 +3,30 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web;
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
 
-    using LibiadaWeb.Models.CalculatorsData;
-    using LibiadaWeb.Models.Repositories.Sequences;
-    using LibiadaWeb.Tasks;
+    using Libiada.Database.Models.CalculatorsData;
+    using Libiada.Database.Models.Repositories.Sequences;
+    using Libiada.Database.Tasks;
 
     using Newtonsoft.Json;
 
     using LibiadaCore.Extensions;
+    using LibiadaWeb.Helpers;
+    using LibiadaWeb.Tasks;
 
     [Authorize(Roles = "Admin")]
     public class BatchMusicImportController : AbstractResultController
     {
+        private readonly LibiadaDatabaseEntities db;
+
         /// <summary>
         /// The batch music import controller.
         /// </summary>
-        public BatchMusicImportController() : base(TaskType.BatchMusicImport)
+        public BatchMusicImportController(LibiadaDatabaseEntities db, ITaskManager taskManager) : base(TaskType.BatchMusicImport, taskManager)
         {
+            this.db = db;
         }
 
         // GET: BatchMusicImport
@@ -38,79 +43,77 @@
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(HttpPostedFileBase[] files)
+        public ActionResult Index(IFormFileCollection files)
         {
             return CreateTask(() =>
             {
                 var importResults = new List<MatterImportResult>();
 
-                using (var db = new LibiadaWebEntities())
+                Matter[] matters = Cache.GetInstance().Matters.Where(m => m.Nature == Nature.Music).ToArray();
+
+                for (int i = 0; i < files.Count; i++)
                 {
-                    Matter[] matters = Cache.GetInstance().Matters.Where(m => m.Nature == Nature.Music).ToArray();
+                    string sequenceName = files[i].FileName.Substring(0, files[i].FileName.LastIndexOf('.'));
 
-                    for (int i = 0; i < Request.Files.Count; i++)
+                    var importResult = new MatterImportResult()
                     {
-                        string sequenceName = Request.Files[i].FileName.Substring(0, Request.Files[i].FileName.LastIndexOf('.'));
+                        MatterName = sequenceName
+                    };
 
-                        var importResult = new MatterImportResult()
+                    try
+                    {
+                        var sequence = new CommonSequence();
+
+                        if (matters.Any(m => m.Name == sequenceName))
                         {
-                            MatterName = sequenceName
-                        };
-
-                        try
-                        {
-                            var sequence = new CommonSequence();
-
-                            if (matters.Any(m => m.Name == sequenceName))
-                            {
-                                var matter = matters.Single(m => m.Name == sequenceName);
-                                sequence.MatterId = matter.Id;
-                                importResult.MatterName = matter.Name;
-                                importResult.SequenceType = matter.SequenceType.GetDisplayValue();
-                                importResult.Group = matter.Group.GetDisplayValue();
-                                importResult.Result = "Successfully imported music for existing matter";
-                            }
-                            else
-                            {
-                                sequence.Matter = new Matter
-                                {
-                                    Name = sequenceName,
-                                    Group = Group.ClassicalMusic,
-                                    Nature = Nature.Music,
-                                    SequenceType = SequenceType.CompleteMusicalComposition
-                                };
-
-                                importResult.MatterName = sequence.Matter.Name;
-                                importResult.SequenceType = sequence.Matter.SequenceType.GetDisplayValue();
-                                importResult.Group = sequence.Matter.Group.GetDisplayValue();
-                                importResult.Result = "Successfully imported music and created matter";
-                            }
-
-                            var repository = new MusicSequenceRepository(db);
-
-                            repository.Create(sequence, Request.Files[i].InputStream);
-                            importResult.Status = "Success";
-                            importResults.Add(importResult);
+                            var matter = matters.Single(m => m.Name == sequenceName);
+                            sequence.MatterId = matter.Id;
+                            importResult.MatterName = matter.Name;
+                            importResult.SequenceType = matter.SequenceType.GetDisplayValue();
+                            importResult.Group = matter.Group.GetDisplayValue();
+                            importResult.Result = "Successfully imported music for existing matter";
                         }
-                        catch (Exception exception)
+                        else
                         {
-                            importResult.Result = $"Failed to import music: {exception.Message}";
-                            while (exception.InnerException != null)
+                            sequence.Matter = new Matter
                             {
-                                importResult.Result += $" {exception.InnerException.Message}";
+                                Name = sequenceName,
+                                Group = Group.ClassicalMusic,
+                                Nature = Nature.Music,
+                                SequenceType = SequenceType.CompleteMusicalComposition
+                            };
 
-                                exception = exception.InnerException;
-                            }
-
-                            importResult.Status = "Error";
-                            importResults.Add(importResult);
+                            importResult.MatterName = sequence.Matter.Name;
+                            importResult.SequenceType = sequence.Matter.SequenceType.GetDisplayValue();
+                            importResult.Group = sequence.Matter.Group.GetDisplayValue();
+                            importResult.Result = "Successfully imported music and created matter";
                         }
+
+                        var repository = new MusicSequenceRepository(db);
+
+                        repository.Create(sequence, FileHelper.GetFileStream(files[i]));
+                        importResult.Status = "Success";
+                        importResults.Add(importResult);
                     }
+                    catch (Exception exception)
+                    {
+                        importResult.Result = $"Failed to import music: {exception.Message}";
+                        while (exception.InnerException != null)
+                        {
+                            importResult.Result += $" {exception.InnerException.Message}";
 
-                    var result = new Dictionary<string, object> { { "result", importResults } };
+                            exception = exception.InnerException;
+                        }
 
-                    return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
+                        importResult.Status = "Error";
+                        importResults.Add(importResult);
+                    }
                 }
+
+                var result = new Dictionary<string, object> { { "result", importResults } };
+
+                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
+
             });
         }
     }

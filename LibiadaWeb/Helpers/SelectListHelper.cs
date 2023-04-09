@@ -1,5 +1,6 @@
 ﻿namespace LibiadaWeb.Helpers
 {
+    using Libiada.Database;
     using LibiadaWeb.Models.CalculatorsData;
 
     using System;
@@ -17,7 +18,7 @@
         /// <returns>
         /// The <see cref="IEnumerable{MattersTableRow}"/>.
         /// </returns>
-        public static IEnumerable<MattersTableRow> GetMatterSelectList(LibiadaWebEntities db)
+        public static IEnumerable<MattersTableRow> GetMatterSelectList(LibiadaDatabaseEntities db)
         {
             return GetMatterSelectList(m => true, m => false, db);
         }
@@ -37,7 +38,7 @@
         /// <returns>
         /// The <see cref="IEnumerable{MattersTableRow}"/>.
         /// </returns>
-        public static IEnumerable<MattersTableRow> GetMatterSelectList(Func<Matter, bool> filter, Func<Matter, bool> selectionFilter, LibiadaWebEntities db)
+        public static IEnumerable<MattersTableRow> GetMatterSelectList(Func<Matter, bool> filter, Func<Matter, bool> selectionFilter, LibiadaDatabaseEntities db)
         {
             return GetMatterSelectList(db.Matter.Where(filter), selectionFilter);
         }
@@ -69,7 +70,7 @@
         /// <returns>
         ///  The <see cref="T:IEnumerable{SelectListItemWithNature}"/>.
         /// </returns>
-        public static IEnumerable<SelectListItemWithNature> GetMultisequenceSelectList(LibiadaWebEntities db)
+        public static IEnumerable<SelectListItemWithNature> GetMultisequenceSelectList(LibiadaDatabaseEntities db)
         {
             return db.Multisequence.Select(ms => new SelectListItemWithNature
             {

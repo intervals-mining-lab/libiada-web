@@ -3,12 +3,20 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Web;
-    using System.Web.Mvc;
-    using System.Web.Mvc.Html;
+
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
     using Bio;
     using Bio.Extensions;
+
+    using Libiada.Database;
+    using Libiada.Database.Models.CalculatorsData;
+    using Libiada.Database.Models.Repositories.Catalogs;
+    using Libiada.Database.Tasks;
+    using Libiada.Database.Helpers;
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
@@ -16,12 +24,12 @@
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models.CalculatorsData;
-    using LibiadaWeb.Models.Repositories.Catalogs;
-    using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
+
     using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
+    using LibiadaWeb.Tasks;
+
 
     /// <summary>
     /// The custom sequence order transformation calculation controller.
@@ -29,11 +37,16 @@
     [Authorize(Roles = "Admin")]
     public class CustomSequenceOrderTransformationCalculationController : AbstractResultController
     {
+        private readonly LibiadaDatabaseEntities db;
+        private readonly IViewDataHelper viewDataHelper;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomSequenceOrderTransformationCalculationController"/> class.
         /// </summary>
-        public CustomSequenceOrderTransformationCalculationController() : base(TaskType.CustomSequenceOrderTransformationCalculation)
+        public CustomSequenceOrderTransformationCalculationController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.CustomSequenceOrderTransformationCalculation, taskManager)
         {
+            this.db = db;
+            this.viewDataHelper = viewDataHelper;
         }
 
         /// <summary>
@@ -44,17 +57,13 @@
         /// </returns>
         public ActionResult Index()
         {
-            using (var db = new LibiadaWebEntities())
-            {
-                var viewDataHelper = new ViewDataHelper(db);
-                var data = viewDataHelper.GetCharacteristicsData(CharacteristicCategory.Full);
+            var data = viewDataHelper.GetCharacteristicsData(CharacteristicCategory.Full);
 
-                var transformations = EnumHelper.GetSelectList(typeof(OrderTransformation));
-                data.Add("transformations", transformations);
+            var transformations = Extensions.EnumExtensions.GetSelectList<OrderTransformation>();
+            data.Add("transformations", transformations);
 
-                ViewBag.data = JsonConvert.SerializeObject(data);
-                return View();
-            }
+            ViewBag.data = JsonConvert.SerializeObject(data);
+            return View();
         }
 
         /// <summary>
@@ -89,12 +98,12 @@
             short[] characteristicLinkIds,
             string[] customSequences,
             bool localFile,
-            HttpPostedFileBase[] file)
+            IFormFileCollection file)
         {
             return CreateTask(() =>
             {
                 var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
-                int sequencesCount = localFile ? Request.Files.Count : customSequences.Length;
+                int sequencesCount = localFile ? file.Count : customSequences.Length;
                 var sequences = new string[sequencesCount];
                 var sequencesNames = new string[sequencesCount];
 
@@ -102,7 +111,7 @@
                 {
                     if (localFile)
                     {
-                        Stream sequenceStream = FileHelper.GetFileStream(file[i]);
+                        Stream sequenceStream = Helpers.FileHelper.GetFileStream(file[i]);
                         ISequence fastaSequence = NcbiHelper.GetFastaSequence(sequenceStream);
                         sequences[i] = fastaSequence.ConvertToString();
                         sequencesNames[i] = fastaSequence.ID;

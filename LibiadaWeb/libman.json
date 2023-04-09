@@ -4,52 +4,56 @@
   "libraries": [
     {
       "library": "angular.js@1.8.3",
-      "destination": "Libraries/angular.js/"
+      "destination": "wwwroot/lib/angular.js/"
     },
     {
       "library": "jquery@3.6.1",
-      "destination": "Libraries/jquery/"
+      "destination": "wwwroot/lib/jquery/"
     },
     {
       "library": "jquery-validate@1.19.5",
-      "destination": "Libraries/jquery-validate/"
+      "destination": "wwwroot/lib/jquery-validate/"
+    },
+    {
+      "library": "jquery-validation-unobtrusive@4.0.0",
+      "destination": "wwwroot/lib/jquery-alidation-unobtrusive/"
     },
     {
       "library": "AlertifyJS@1.13.1",
-      "destination": "Libraries/AlertifyJS/"
+      "destination": "wwwroot/lib/AlertifyJS/"
     },
     {
       "provider": "unpkg",
       "library": "midi.js@0.3.1",
-      "destination": "Libraries/midi.js/"
+      "destination": "wwwroot/lib/midi.js/"
     },
     {
       "library": "plotly.js@2.16.3",
-      "destination": "Libraries/plotly.js/"
+      "destination": "wwwroot/lib/plotly.js/"
     },
     {
       "library": "angular-smart-table@2.1.11",
-      "destination": "Libraries/angular-smart-table/"
+      "destination": "wwwroot/lib/angular-smart-table/"
     },
     {
       "library": "d3@7.6.1",
-      "destination": "Libraries/d3/"
+      "destination": "wwwroot/lib/d3/"
     },
     {
       "library": "signalr.js@2.4.3",
-      "destination": "Libraries/signalr.js/"
+      "destination": "wwwroot/lib/signalr.js/"
     },
     {
       "library": "twitter-bootstrap@5.2.3",
-      "destination": "Libraries/twitter-bootstrap/"
+      "destination": "wwwroot/lib/twitter-bootstrap/"
     },
     {
       "library": "bootstrap-icons@1.10.2",
-      "destination": "Libraries/bootstrap-icons/"
+      "destination": "wwwroot/lib/bootstrap-icons/"
     },
     {
       "library": "exceljs@4.3.0",
-      "destination": "Libraries/exceljs/"
+      "destination": "wwwroot/lib/exceljs/"
     }
   ]
 }

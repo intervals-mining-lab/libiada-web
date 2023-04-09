@@ -2,23 +2,27 @@
 {
     using Bio.Core.Extensions;
 
-    using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models.CalculatorsData;
-    using LibiadaWeb.Models.NcbiSequencesData;
-    using LibiadaWeb.Models.Repositories.Sequences;
-    using LibiadaWeb.Tasks;
+    using Libiada.Database.Helpers;
+    using Libiada.Database.Models.CalculatorsData;
+    using Libiada.Database.Models.NcbiSequencesData;
+    using Libiada.Database.Models.Repositories.Sequences;
+    using Libiada.Database.Tasks;
 
     using Newtonsoft.Json;
 
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Mvc;
+    using LibiadaWeb.Tasks;
 
     [Authorize(Roles = "Admin")]
     public class NcbiNuccoreSearchController : AbstractResultController
     {
-        public NcbiNuccoreSearchController() : base(TaskType.NcbiNuccoreSearch)
+        private readonly LibiadaDatabaseEntities db;
+
+        public NcbiNuccoreSearchController(LibiadaDatabaseEntities db, ITaskManager taskManager) : base(TaskType.NcbiNuccoreSearch, taskManager)
         {
+            this.db = db;
         }
 
         public ActionResult Index()
@@ -72,12 +76,9 @@
 
                 string[] existingAccessions;
 
-                using (var db = new LibiadaWebEntities())
-                {
-                    var dnaSequenceRepository = new GeneticSequenceRepository(db);
+                var dnaSequenceRepository = new GeneticSequenceRepository(db);
 
-                    (existingAccessions, _) = dnaSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
-                }
+                (existingAccessions, _) = dnaSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
 
                 searchResults = searchResults
                                     .Where(sr => !existingAccessions.Contains(sr.AccessionVersion.Split('.')[0]))

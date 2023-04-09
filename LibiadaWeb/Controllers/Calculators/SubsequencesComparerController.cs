@@ -5,27 +5,28 @@
     using System.Data.Entity;
     using System.Globalization;
     using System.Linq;
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Mvc;
 
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models.Calculators;
-    using LibiadaWeb.Models.CalculatorsData;
-    using LibiadaWeb.Models.Repositories.Catalogs;
-    using LibiadaWeb.Tasks;
-
-    using Models.Repositories.Sequences;
+    using Libiada.Database.Models.Calculators;
+    using Libiada.Database.Models.CalculatorsData;
+    using Libiada.Database.Models.Repositories.Catalogs;
+    using Libiada.Database.Tasks;
+    using Libiada.Database.Models.Repositories.Sequences;
 
     using Newtonsoft.Json;
 
-    using static LibiadaWeb.Models.Calculators.SubsequencesCharacteristicsCalculator;
+    using static Libiada.Database.Models.Calculators.SubsequencesCharacteristicsCalculator;
     using static LibiadaCore.Extensions.EnumExtensions;
     using LibiadaCore.TimeSeries.OneDimensional.DistanceCalculators;
     using LibiadaCore.TimeSeries.OneDimensional.Comparers;
     using LibiadaCore.TimeSeries.Aligners;
     using LibiadaCore.TimeSeries.Aggregators;
+    using Microsoft.AspNetCore.Authorization;
+    using LibiadaWeb.Tasks;
 
     /// <summary>
     /// The subsequences comparer controller.
@@ -33,11 +34,16 @@
     [Authorize]
     public class SubsequencesComparerController : AbstractResultController
     {
+        private readonly LibiadaDatabaseEntities db;
+        private readonly IViewDataHelper viewDataHelper;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SubsequencesComparerController"/> class.
         /// </summary>
-        public SubsequencesComparerController() : base(TaskType.SubsequencesComparer)
+        public SubsequencesComparerController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.SubsequencesComparer, taskManager)
         {
+            this.db = db;
+            this.viewDataHelper = viewDataHelper;
         }
 
         /// <summary>
@@ -48,12 +54,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            using (var db = new LibiadaWebEntities())
-            {
-                var viewDataHelper = new ViewDataHelper(db);
-                ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillSubsequencesViewData(2, int.MaxValue, "Compare"));
-            }
-
+            ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillSubsequencesViewData(2, int.MaxValue, "Compare"));
             return View();
         }
 
@@ -109,34 +110,32 @@
                 int mattersCount = matterIds.Length;
                 Dictionary<string, object> characteristicsTypesData;
 
-                using (var db = new LibiadaWebEntities())
+
+                // Sequences characteristic
+                var geneticSequenceRepository = new GeneticSequenceRepository(db);
+                long[] chains = geneticSequenceRepository.GetNucleotideSequenceIds(matterIds);
+
+                // Sequences characteristic
+                matterIds = OrderMatterIds(matterIds, characteristicLinkId, chains);
+
+                // Subsequences characteristics
+                var parentSequences = db.DnaSequence.Include(s => s.Matter)
+                                        .Where(s => s.Notation == Notation.Nucleotides && matterIds.Contains(s.MatterId))
+                                        .Select(s => new { s.Id, s.MatterId, MatterName = s.Matter.Name })
+                                        .ToDictionary(s => s.Id);
+
+                parentSequenceIds = parentSequences
+                                    .OrderBy(ps => Array.IndexOf(matterIds, ps.Value.MatterId))
+                                    .Select(ps => ps.Key)
+                                    .ToArray();
+
+                for (int n = 0; n < parentSequenceIds.Length; n++)
                 {
-                    // Sequences characteristic
-                    var geneticSequenceRepository = new GeneticSequenceRepository(db);
-                    long[] chains = geneticSequenceRepository.GetNucleotideSequenceIds(matterIds);
-
-                    // Sequences characteristic
-                    matterIds = OrderMatterIds(matterIds, characteristicLinkId, chains);
-
-                    // Subsequences characteristics
-                    var parentSequences = db.DnaSequence.Include(s => s.Matter)
-                                            .Where(s => s.Notation == Notation.Nucleotides && matterIds.Contains(s.MatterId))
-                                            .Select(s => new { s.Id, s.MatterId, MatterName = s.Matter.Name })
-                                            .ToDictionary(s => s.Id);
-
-                    parentSequenceIds = parentSequences
-                                        .OrderBy(ps => Array.IndexOf(matterIds, ps.Value.MatterId))
-                                        .Select(ps => ps.Key)
-                                        .ToArray();
-
-                    for (int n = 0; n < parentSequenceIds.Length; n++)
-                    {
-                        matterNames[n] = parentSequences[parentSequenceIds[n]].MatterName;
-                    }
-
-                    var viewDataHelper = new ViewDataHelper(db);
-                    characteristicsTypesData = viewDataHelper.GetCharacteristicsData(CharacteristicCategory.Full);
+                    matterNames[n] = parentSequences[parentSequenceIds[n]].MatterName;
                 }
+
+                characteristicsTypesData = viewDataHelper.GetCharacteristicsData(CharacteristicCategory.Full);
+
 
                 FullCharacteristicRepository fullCharacteristicRepository = FullCharacteristicRepository.Instance;
                 string sequenceCharacteristicName = fullCharacteristicRepository.GetCharacteristicName(characteristicLinkId);
@@ -199,7 +198,7 @@
                     { "similarities", similarities },
                     { "filteredSimilarities", filteredSimilarities },
                     { "features", features.ToDictionary(f => (byte)f, f => f.GetDisplayValue()) },
-                    { "attributes", ToArray<LibiadaWeb.Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
+                    { "attributes", ToArray<Libiada.Database.Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
                     { "maxPercentageDifference", maxPercentageDifference },
                     { "sequenceCharacteristicName", sequenceCharacteristicName },
                     { "nature", (byte)Nature.Genetic },
@@ -252,7 +251,7 @@
                 {
                     var subsequenceData = characteristics[similarPair.firstSequence.matterIndex][similarPair.firstSequence.subsequenceIndex];
                     firstLocalCharacteristics = localCharacteristicsCalculator.GetSubsequenceCharacteristic(subsequenceData.Id, subsequencesCharacteristicLinkId, 50, 1);
-                    cache.Add((similarPair.firstSequence.matterIndex, similarPair.firstSequence.subsequenceIndex),firstLocalCharacteristics);
+                    cache.Add((similarPair.firstSequence.matterIndex, similarPair.firstSequence.subsequenceIndex), firstLocalCharacteristics);
                     //TODO: get rid of hardcoded parameters
                 }
                 if (!cache.TryGetValue((similarPair.secondSequence.matterIndex, similarPair.secondSequence.subsequenceIndex), out double[] secondLocalCharacteristics))
@@ -557,7 +556,7 @@
                     similarityMatrix[i, j] = new List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>();
                 }
             }
-            
+
             foreach (((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference) in similarPairs)
             {
                 (int firstMatter, int firstSubsequence) = firstSequence;

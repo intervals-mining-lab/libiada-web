@@ -3,8 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web.Mvc;
-    using System.Web.Mvc.Html;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
@@ -13,13 +13,16 @@
     using LibiadaCore.Music;
 
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models.CalculatorsData;
-    using LibiadaWeb.Models.Repositories.Catalogs;
-    using LibiadaWeb.Models.Repositories.Sequences;
-    using LibiadaWeb.Tasks;
+    using Libiada.Database.Models.CalculatorsData;
+    using Libiada.Database.Models.Repositories.Catalogs;
+    using Libiada.Database.Models.Repositories.Sequences;
+    using Libiada.Database.Tasks;
 
     using Newtonsoft.Json;
     using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
+    using Microsoft.AspNetCore.Authorization;
+    using Libiada.Database;
+    using LibiadaWeb.Tasks;
 
     /// <summary>
     /// The order transformation calculation controller.
@@ -27,11 +30,16 @@
     [Authorize(Roles = "Admin")]
     public class OrderTransformationCalculationController : AbstractResultController
     {
+        private readonly LibiadaDatabaseEntities db;
+        private readonly IViewDataHelper viewDataHelper;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderTransformationCalculationController"/> class.
         /// </summary>
-        public OrderTransformationCalculationController() : base(TaskType.OrderTransformationCalculation)
+        public OrderTransformationCalculationController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.OrderTransformationCalculation, taskManager)
         {
+            this.db = db;
+            this.viewDataHelper = viewDataHelper;
         }
 
         /// <summary>
@@ -42,11 +50,9 @@
         /// </returns>
         public ActionResult Index()
         {
-            var db = new LibiadaWebEntities();
-            var viewDataHelper = new ViewDataHelper(db);
             Dictionary<string, object> data = viewDataHelper.FillViewData(CharacteristicCategory.Full, 1, int.MaxValue, "Calculate");
 
-            var transformations = EnumHelper.GetSelectList(typeof(OrderTransformation));
+            var transformations = Extensions.EnumExtensions.GetSelectList<OrderTransformation>();
             data.Add("transformations", transformations);
 
             ViewBag.data = JsonConvert.SerializeObject(data);
@@ -108,23 +114,20 @@
                 Dictionary<long, string> mattersNames = Cache.GetInstance().Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
                 Chain[][] sequences = new Chain[matterIds.Length][];
 
-                using (var db = new LibiadaWebEntities())
+                var commonSequenceRepository = new CommonSequenceRepository(db);
+                long[][] sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds,
+                                                                               notations,
+                                                                               languages,
+                                                                               translators,
+                                                                               pauseTreatments,
+                                                                               sequentialTransfers,
+                                                                               trajectories);
+                for (int i = 0; i < matterIds.Length; i++)
                 {
-                    var commonSequenceRepository = new CommonSequenceRepository(db);
-                    long[][] sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds, 
-                                                                                   notations, 
-                                                                                   languages, 
-                                                                                   translators, 
-                                                                                   pauseTreatments, 
-                                                                                   sequentialTransfers, 
-                                                                                   trajectories);
-                    for (int i = 0; i < matterIds.Length; i++)
+                    sequences[i] = new Chain[characteristicLinkIds.Length];
+                    for (int j = 0; j < characteristicLinkIds.Length; j++)
                     {
-                        sequences[i] = new Chain[characteristicLinkIds.Length];
-                        for (int j = 0; j < characteristicLinkIds.Length; j++)
-                        {
-                            sequences[i][j] = commonSequenceRepository.GetLibiadaChain(sequenceIds[i][j]);
-                        }
+                        sequences[i][j] = commonSequenceRepository.GetLibiadaChain(sequenceIds[i][j]);
                     }
                 }
 

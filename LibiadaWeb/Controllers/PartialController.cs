@@ -1,6 +1,6 @@
 ﻿namespace LibiadaWeb.Controllers
 {
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Mvc;
 
     /// <summary>
     /// Controller for partial views.

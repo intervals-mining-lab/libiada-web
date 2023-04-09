@@ -2,18 +2,18 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web.Mvc;
-    using System.Web.Mvc.Html;
+    using Microsoft.AspNetCore.Mvc;
 
     using LibiadaCore.DataTransformers;
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models.Repositories.Sequences;
-    using LibiadaWeb.Tasks;
+    using Libiada.Database.Models.Repositories.Sequences;
+    using Libiada.Database.Tasks;
 
     using Newtonsoft.Json;
     using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
+    using LibiadaWeb.Tasks;
 
     /// <summary>
     /// The order transformation controller.
@@ -24,7 +24,8 @@
         /// <summary>
         /// The db.
         /// </summary>
-        private readonly LibiadaWebEntities db;
+        private readonly LibiadaDatabaseEntities db;
+        private readonly IViewDataHelper viewDataHelper;
 
         /// <summary>
         /// The sequence repository.
@@ -34,9 +35,10 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderTransformerController"/> class.
         /// </summary>
-        public OrderTransformerController() : base(TaskType.OrderTransformer)
+        public OrderTransformerController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.OrderTransformer, taskManager)
         {
-            db = new LibiadaWebEntities();
+            this.db = db;
+            this.viewDataHelper = viewDataHelper;
             commonSequenceRepository = new CommonSequenceRepository(db);
         }
 
@@ -48,10 +50,9 @@
         /// </returns>
         public ActionResult Index()
         {
-            var viewDataHelper = new ViewDataHelper(db);
             var data = viewDataHelper.FillViewData(1, 1, "Transform");
 
-            var transformations = EnumHelper.GetSelectList(typeof(OrderTransformation));
+            var transformations = Extensions.EnumExtensions.GetSelectList<OrderTransformation>();
             data.Add("transformations", transformations);
 
             ViewBag.data = JsonConvert.SerializeObject(data);

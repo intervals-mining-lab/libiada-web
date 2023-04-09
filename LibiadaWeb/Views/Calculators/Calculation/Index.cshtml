@@ -4,7 +4,7 @@
     ViewBag.Title = "Characteristics calculation";
 }
 
-@Scripts.Render("~/bundles/Characteristics")
+<script src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
 
 @Html.Partial("_AngularControllerInitializer", "CalculationController")
 
@@ -34,7 +34,7 @@
                          pause-treatments="::pauseTreatments"
                          trajectories="::trajectories">
         </characteristics>
-        @if (AccountHelper.IsAdmin())
+        @if (User.IsInRole("admin"))
         {
             <div class="form-check" ng-if="nature==@((byte)Nature.Genetic)">
                 <input type="checkbox"

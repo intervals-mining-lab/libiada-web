@@ -3,18 +3,23 @@
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Linq;
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Mvc;
 
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.CalculatorsData;
-    using LibiadaWeb.Models.Repositories.Catalogs;
-    using LibiadaWeb.Tasks;
+    using Libiada.Database.Models.Repositories.Catalogs;
+    using Libiada.Database.Tasks;
 
     using Newtonsoft.Json;
 
-    using static Models.Calculators.SubsequencesCharacteristicsCalculator;
+    using static Libiada.Database.Models.Calculators.SubsequencesCharacteristicsCalculator;
+    using Microsoft.AspNetCore.Authorization;
+    using Libiada.Database;
+    using Libiada.Database.Models.CalculatorsData;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using LibiadaWeb.Tasks;
 
     /// <summary>
     /// The subsequences calculation controller.
@@ -22,11 +27,16 @@
     [Authorize(Roles = "Admin")]
     public class SubsequencesCalculationController : AbstractResultController
     {
+        private readonly LibiadaDatabaseEntities db;
+        private readonly IViewDataHelper viewDataHelper;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SubsequencesCalculationController"/> class.
         /// </summary>
-        public SubsequencesCalculationController() : base(TaskType.SubsequencesCalculation)
+        public SubsequencesCalculationController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.SubsequencesCalculation, taskManager)
         {
+            this.db = db;
+            this.viewDataHelper = viewDataHelper;
         }
 
         /// <summary>
@@ -37,12 +47,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            using (var db = new LibiadaWebEntities())
-            {
-                var viewDataHelper = new ViewDataHelper(db);
-                ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillSubsequencesViewData(1, int.MaxValue, "Calculate"));
-            }
-
+            ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillSubsequencesViewData(1, int.MaxValue, "Calculate"));
             return View();
         }
 
@@ -75,19 +80,16 @@
                 var subsequencesCharacteristicsNames = new string[characteristicLinkIds.Length];
                 var subsequencesCharacteristicsList = new SelectListItem[characteristicLinkIds.Length];
 
-                using (var db = new LibiadaWebEntities())
-                {
-                    var parentSequences = db.DnaSequence.Include(s => s.Matter)
-                                            .Where(s => s.Notation == Notation.Nucleotides && matterIds.Contains(s.MatterId))
-                                            .Select(s => new { s.Id, MatterName = s.Matter.Name, s.RemoteId })
-                                            .ToDictionary(s => s.Id);
-                    parentSequenceIds = parentSequences.Keys.ToArray();
+                var parentSequences = db.DnaSequence.Include(s => s.Matter)
+                                        .Where(s => s.Notation == Notation.Nucleotides && matterIds.Contains(s.MatterId))
+                                        .Select(s => new { s.Id, MatterName = s.Matter.Name, s.RemoteId })
+                                        .ToDictionary(s => s.Id);
+                parentSequenceIds = parentSequences.Keys.ToArray();
 
-                    for (int n = 0; n < parentSequenceIds.Length; n++)
-                    {
-                        matterNames[n] = parentSequences[parentSequenceIds[n]].MatterName;
-                        remoteIds[n] = parentSequences[parentSequenceIds[n]].RemoteId;
-                    }
+                for (int n = 0; n < parentSequenceIds.Length; n++)
+                {
+                    matterNames[n] = parentSequences[parentSequenceIds[n]].MatterName;
+                    remoteIds[n] = parentSequences[parentSequenceIds[n]].RemoteId;
                 }
 
                 FullCharacteristicRepository characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
@@ -125,7 +127,7 @@
                     { "subsequencesCharacteristicsNames", subsequencesCharacteristicsNames },
                     { "subsequencesCharacteristicsList", subsequencesCharacteristicsList }
                 };
-                
+
                 return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
             });
         }

@@ -5,17 +5,18 @@ namespace LibiadaWeb.Controllers.Sequences
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
-    using System.Web.Mvc;
-    using System.Web.Mvc.Html;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
 
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Tasks;
+    using Libiada.Database.Tasks;
 
     using Newtonsoft.Json;
 
     using Segmenter.Model.Criterion;
     using Segmenter.Model.Seekers;
     using Segmenter.Model.Threshold;
+    using LibiadaWeb.Tasks;
 
     /// <summary>
     /// The custom sequence segmentation controller.
@@ -26,7 +27,7 @@ namespace LibiadaWeb.Controllers.Sequences
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomSequenceSegmentationController"/> class.
         /// </summary>
-        public CustomSequenceSegmentationController() : base(TaskType.CustomSequenceSegmentation)
+        public CustomSequenceSegmentationController(ITaskManager taskManager) : base(TaskType.CustomSequenceSegmentation, taskManager)
         {
         }
 
@@ -38,13 +39,12 @@ namespace LibiadaWeb.Controllers.Sequences
         /// </returns>
         public ActionResult Index()
         {
-            var imageTransformers = EnumHelper.GetSelectList(typeof(ImageTransformer));
             ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object>
             {
-                { "thresholds", EnumHelper.GetSelectList(typeof(Threshold)) },
-                { "segmentationCriteria", EnumHelper.GetSelectList(typeof(SegmentationCriterion)) },
-                { "deviationCalculationMethods", EnumHelper.GetSelectList(typeof(DeviationCalculationMethod)) },
-                {"imageTransformers", imageTransformers }
+                { "thresholds", Extensions.EnumExtensions.GetSelectList<Threshold>() },
+                { "segmentationCriteria", Extensions.EnumExtensions.GetSelectList<SegmentationCriterion>() },
+                { "deviationCalculationMethods", Extensions.EnumExtensions.GetSelectList<DeviationCalculationMethod>() },
+                {"imageTransformers", Extensions.EnumExtensions.GetSelectList<ImageTransformer>() }
             });
             return View();
         }
@@ -63,11 +63,12 @@ namespace LibiadaWeb.Controllers.Sequences
             SegmentationCriterion segmentationCriterion,
             int wordLength,
             DeviationCalculationMethod deviationCalculationMethod,
-            int balance)
+            int balance,
+            IFormFileCollection files)
         {
             return CreateTask(() =>
             {
-                int sequencesCount = localFile ? Request.Files.Count : customSequences.Length;
+                int sequencesCount = localFile ? files.Count : customSequences.Length;
 
                 var sequencesNames = new string[sequencesCount];
                 var sequences = new string[sequencesCount];
@@ -77,13 +78,12 @@ namespace LibiadaWeb.Controllers.Sequences
                 {
                     if (localFile)
                     {
-                        sequencesNames[i] = Request.Files[i].FileName;
+                        sequencesNames[i] = files[i].FileName;
 
-                        Stream sequenceStream = FileHelper.GetFileStream(Request.Files[i]);
-                        using (var sr = new StreamReader(sequenceStream))
-                        {
-                            sequences[i] = sr.ReadToEnd();
-                        }
+                        using Stream sequenceStream = FileHelper.GetFileStream(files[i]);
+                        using var sr = new StreamReader(sequenceStream);
+                        sequences[i] = sr.ReadToEnd();
+
                     }
                     else
                     {

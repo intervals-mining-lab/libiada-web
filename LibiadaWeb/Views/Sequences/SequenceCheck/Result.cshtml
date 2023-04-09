@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "Sequence check result";
 }
-@Scripts.Render("~/bundles/loadingWindow")
+<script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
 @Html.Partial("_AngularControllerInitializer", "BatchSequenceImportResultController")
 
 <h2>@ViewBag.Title</h2>

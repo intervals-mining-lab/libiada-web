@@ -2,13 +2,13 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Mvc;
 
     using LibiadaCore.Core;
     using LibiadaCore.DataTransformers;
 
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models.Repositories.Sequences;
+    using Libiada.Database.Models.Repositories.Sequences;
 
     using Newtonsoft.Json;
 
@@ -21,7 +21,8 @@
         /// <summary>
         /// The db.
         /// </summary>
-        private readonly LibiadaWebEntities db;
+        private readonly LibiadaDatabaseEntities db;
+        private readonly IViewDataHelper viewDataHelper;
 
         /// <summary>
         /// The DNA sequence repository.
@@ -41,9 +42,10 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SequenceTransformerController"/> class.
         /// </summary>
-        public SequenceTransformerController()
+        public SequenceTransformerController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper)
         {
-            db = new LibiadaWebEntities();
+            this.db = db;
+            this.viewDataHelper = viewDataHelper;
             dnaSequenceRepository = new GeneticSequenceRepository(db);
             commonSequenceRepository = new CommonSequenceRepository(db);
             elementRepository = new ElementRepository(db);
@@ -59,7 +61,6 @@
         {
             var matterIds = db.DnaSequence.Where(d => d.Notation == Notation.Nucleotides).Select(d => d.MatterId).ToArray();
 
-            var viewDataHelper = new ViewDataHelper(db);
             var data = viewDataHelper.FillViewData(1, int.MaxValue, m => matterIds.Contains(m.Id), "Transform");
             data.Add("nature", (byte)Nature.Genetic);
             ViewBag.data = JsonConvert.SerializeObject(data);

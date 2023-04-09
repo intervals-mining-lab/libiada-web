@@ -3,19 +3,21 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Mvc;
 
     using Bio.Extensions;
 
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models.Repositories.Catalogs;
-    using LibiadaWeb.Tasks;
+    using Libiada.Database.Models.Repositories.Catalogs;
+    using Libiada.Database.Tasks;
 
     using Newtonsoft.Json;
 
-    using static Models.Calculators.SubsequencesCharacteristicsCalculator;
+    using static Libiada.Database.Models.Calculators.SubsequencesCharacteristicsCalculator;
+    using Libiada.Database;
+    using LibiadaWeb.Tasks;
 
     /// <summary>
     /// The alignment controller.
@@ -27,13 +29,17 @@
         /// The characteristic type repository.
         /// </summary>
         private readonly FullCharacteristicRepository characteristicTypeLinkRepository;
+        private readonly LibiadaDatabaseEntities db;
+        private readonly IViewDataHelper viewDataHelper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SequencesAlignmentController"/> class.
         /// </summary>
-        public SequencesAlignmentController() : base(TaskType.SequencesAlignment)
+        public SequencesAlignmentController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.SequencesAlignment, taskManager)
         {
             characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
+            this.db = db;
+            this.viewDataHelper = viewDataHelper;
         }
 
         /// <summary>
@@ -44,12 +50,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            using (var db = new LibiadaWebEntities())
-            {
-                var viewDataHelper = new ViewDataHelper(db);
-                ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillSubsequencesViewData(2, 2, "Align"));
-            }
-
+            ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillSubsequencesViewData(2, 2, "Align"));
             return View();
         }
 
@@ -106,16 +107,15 @@
                 string secondMatterName;
                 long firstParentId;
                 long secondParentId;
-                using (var db = new LibiadaWebEntities())
-                {
-                    long firstMatterId = matterIds[0];
-                    firstMatterName = Cache.GetInstance().Matters.Single(m => m.Id == firstMatterId).Name;
-                    firstParentId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
 
-                    long secondMatterId = matterIds[1];
-                    secondMatterName = Cache.GetInstance().Matters.Single(m => m.Id == secondMatterId).Name;
-                    secondParentId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
-                }
+                long firstMatterId = matterIds[0];
+                firstMatterName = Cache.GetInstance().Matters.Single(m => m.Id == firstMatterId).Name;
+                firstParentId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
+
+                long secondMatterId = matterIds[1];
+                secondMatterName = Cache.GetInstance().Matters.Single(m => m.Id == secondMatterId).Name;
+                secondParentId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
+
 
                 double[] firstSequenceCharacteristics = CalculateSubsequencesCharacteristics(firstParentId, characteristicLinkId, features);
                 double[] secondSequenceCharacteristics = CalculateSubsequencesCharacteristics(secondParentId, characteristicLinkId, features);

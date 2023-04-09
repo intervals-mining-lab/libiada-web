@@ -4,26 +4,34 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
-    using System.Web.Mvc;
-    using System.Web.Mvc.Html;
+    using Microsoft.AspNetCore.Mvc;
 
     using LibiadaCore.Music;
     using LibiadaWeb.Attributes;
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Models.CalculatorsData;
-    using LibiadaWeb.Models.Repositories.Catalogs;
+    using Libiada.Database.Models.Repositories.Catalogs;
 
     using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
+    using Libiada.Database;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using Libiada.Database.Attributes;
+    using System.Security.Principal;
 
     /// <summary>
-    /// Class filling data for ViewBag.
+    /// Class filling data for Views.
     /// </summary>
-    public class ViewDataHelper
+    public class ViewDataHelper : IViewDataHelper
     {
         /// <summary>
-        /// The db.
+        /// The database model.
         /// </summary>
-        private readonly LibiadaWebEntities db;
+        private readonly LibiadaDatabaseEntities db;
+
+        /// <summary>
+        /// The current user.
+        /// </summary>
+        private readonly IPrincipal user;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewDataHelper"/> class.
@@ -31,9 +39,10 @@
         /// <param name="db">
         /// The db.
         /// </param>
-        public ViewDataHelper(LibiadaWebEntities db)
+        public ViewDataHelper(LibiadaDatabaseEntities db, IPrincipal user)
         {
             this.db = db;
+            this.user = user;
         }
 
         /// <summary>
@@ -51,9 +60,9 @@
             IEnumerable<SequenceType> sequenceTypes = EnumExtensions.ToArray<SequenceType>();
             IEnumerable<Group> groups = EnumExtensions.ToArray<Group>();
 
-            if (AccountHelper.IsAdmin())
+            if (user.IsInRole("admin"))
             {
-                natures = EnumHelper.GetSelectList(typeof(Nature));
+                natures = Extensions.EnumExtensions.GetSelectList<Nature>();
                 notations = EnumExtensions.ToArray<Notation>();
             }
             else
@@ -74,8 +83,8 @@
                 { "sequenceTypes", sequenceTypes.ToSelectListWithNature() },
                 { "groups", groups.ToSelectListWithNature() },
                 { "multisequences", SelectListHelper.GetMultisequenceSelectList(db) },
-                { "languages", EnumHelper.GetSelectList(typeof(Language)) },
-                { "translators", EnumHelper.GetSelectList(typeof(Translator)) },
+                { "languages", Extensions.EnumExtensions.GetSelectList<Language>() },
+                { "translators", Extensions.EnumExtensions.GetSelectList<Translator>() },
                 { "trajectories", EnumExtensions.SelectAllWithAttribute<ImageOrderExtractor>(typeof(ImageOrderExtractorAttribute)).ToSelectList() }
             };
         }
@@ -140,9 +149,9 @@
             IEnumerable<SequenceType> sequenceTypes;
             IEnumerable<Group> groups;
 
-            if (AccountHelper.IsAdmin())
+            if (user.IsInRole("admin"))
             {
-                natures = EnumHelper.GetSelectList(typeof(Nature));
+                natures = Extensions.EnumExtensions.GetSelectList<Nature>();
                 notations = EnumExtensions.ToArray<Notation>();
                 sequenceTypes = EnumExtensions.ToArray<SequenceType>();
                 groups = EnumExtensions.ToArray<Group>();
@@ -158,9 +167,9 @@
             data.Add("submitName", submitName);
             data.Add("natures", natures);
             data.Add("notations", notations.ToSelectListWithNature());
-            data.Add("languages", EnumHelper.GetSelectList(typeof(Language)));
-            data.Add("translators", EnumHelper.GetSelectList(typeof(Translator)));
-            data.Add("pauseTreatments", EnumHelper.GetSelectList(typeof(PauseTreatment)));
+            data.Add("languages", Extensions.EnumExtensions.GetSelectList<Language>());
+            data.Add("translators", Extensions.EnumExtensions.GetSelectList<Translator>());
+            data.Add("pauseTreatments", Extensions.EnumExtensions.GetSelectList<PauseTreatment>());
             data.Add("trajectories", EnumExtensions.SelectAllWithAttribute<ImageOrderExtractor>(typeof(ImageOrderExtractorAttribute)).ToSelectList());
             data.Add("sequenceTypes", sequenceTypes.ToSelectListWithNature(true));
             data.Add("groups", groups.ToSelectListWithNature(true));
@@ -270,7 +279,7 @@
             switch (characteristicsCategory)
             {
                 case CharacteristicCategory.Full:
-                    characteristicTypes = FullCharacteristicRepository.Instance.GetCharacteristicTypes();
+                    characteristicTypes = Models.Repositories.Catalogs.FullCharacteristicRepository.Instance.GetCharacteristicTypes(user);
 
                     var fullCharacteristics = FullCharacteristicRepository.Instance.CharacteristicLinks;
                     foreach (var characteristic in fullCharacteristics)
@@ -283,7 +292,7 @@
 
                     break;
                 case CharacteristicCategory.Congeneric:
-                    characteristicTypes = CongenericCharacteristicRepository.Instance.GetCharacteristicTypes();
+                    characteristicTypes = Models.Repositories.Catalogs.CongenericCharacteristicRepository.Instance.GetCharacteristicTypes(user);
 
                     var congenericCharacteristics = CongenericCharacteristicRepository.Instance.CharacteristicLinks;
                     foreach (var characteristic in congenericCharacteristics)
@@ -296,7 +305,7 @@
 
                     break;
                 case CharacteristicCategory.Accordance:
-                    characteristicTypes = AccordanceCharacteristicRepository.Instance.GetCharacteristicTypes();
+                    characteristicTypes = Models.Repositories.Catalogs.AccordanceCharacteristicRepository.Instance.GetCharacteristicTypes(user);
 
                     var accordanceCharacteristics = AccordanceCharacteristicRepository.Instance.CharacteristicLinks;
                     foreach (var characteristic in accordanceCharacteristics)
@@ -306,7 +315,7 @@
 
                     break;
                 case CharacteristicCategory.Binary:
-                    characteristicTypes = BinaryCharacteristicRepository.Instance.GetCharacteristicTypes();
+                    characteristicTypes = Models.Repositories.Catalogs.BinaryCharacteristicRepository.Instance.GetCharacteristicTypes(user);
 
                     var binaryCharacteristics = BinaryCharacteristicRepository.Instance.CharacteristicLinks;
                     foreach (var characteristic in binaryCharacteristics)
@@ -347,9 +356,9 @@
             IEnumerable<SequenceType> sequenceTypes;
             IEnumerable<Group> groups;
 
-            if (AccountHelper.IsAdmin())
+            if (user.IsInRole("admin"))
             {
-                natures = EnumHelper.GetSelectList(typeof(Nature));
+                natures = Extensions.EnumExtensions.GetSelectList<Nature>();
                 sequenceTypes = EnumExtensions.ToArray<SequenceType>();
                 groups = EnumExtensions.ToArray<Group>();
             }

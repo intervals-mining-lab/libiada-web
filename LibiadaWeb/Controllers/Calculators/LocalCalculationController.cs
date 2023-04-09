@@ -3,8 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web.Mvc;
-    using System.Web.Mvc.Html;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc.Rendering;
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
@@ -16,15 +17,17 @@
     using LibiadaCore.TimeSeries.OneDimensional.DistanceCalculators;
 
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models.CalculatorsData;
-    using LibiadaWeb.Models.Repositories.Sequences;
-    using LibiadaWeb.Tasks;
+
+    using Libiada.Database;
+    using Libiada.Database.Models.Repositories.Sequences;
+    using Libiada.Database.Tasks;
+    using Libiada.Database.Models.Repositories.Catalogs;
+    using Libiada.Database.Models.CalculatorsData;
 
     using Math;
 
-    using Models.Repositories.Catalogs;
-
     using Newtonsoft.Json;
+    using LibiadaWeb.Tasks;
 
     /// <summary>
     /// The local calculation controller.
@@ -35,7 +38,8 @@
         /// <summary>
         /// The db.
         /// </summary>
-        private readonly LibiadaWebEntities db;
+        private readonly LibiadaDatabaseEntities db;
+        private readonly IViewDataHelper viewDataHelper;
 
         /// <summary>
         /// The sequence repository.
@@ -50,9 +54,10 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="LocalCalculationController"/> class.
         /// </summary>
-        public LocalCalculationController() : base(TaskType.LocalCalculation)
+        public LocalCalculationController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.LocalCalculation, taskManager)
         {
-            db = new LibiadaWebEntities();
+            this.db = db;
+            this.viewDataHelper = viewDataHelper;
             commonSequenceRepository = new CommonSequenceRepository(db);
             characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
         }
@@ -65,7 +70,6 @@
         /// </returns>
         public ActionResult Index()
         {
-            var viewDataHelper = new ViewDataHelper(db);
             var viewData = viewDataHelper.FillViewData(CharacteristicCategory.Full, 1, int.MaxValue, "Calculate");
             ViewBag.data = JsonConvert.SerializeObject(viewData);
             return View();
@@ -271,9 +275,9 @@
                     { "characteristicNames", characteristicNames },
                     { "matterIds", matterIds },
                     { "characteristicsList", characteristicsList },
-                    { "aligners", EnumHelper.GetSelectList(typeof(Aligner)) },
-                    { "distanceCalculators", EnumHelper.GetSelectList(typeof(DistanceCalculator)) },
-                    { "aggregators", EnumHelper.GetSelectList(typeof(Aggregator)) }
+                    { "aligners", Extensions.EnumExtensions.GetSelectList<Aligner>() },
+                    { "distanceCalculators", Extensions.EnumExtensions.GetSelectList<DistanceCalculator>() },
+                    { "aggregators", Extensions.EnumExtensions.GetSelectList<Aggregator>() }
                 };
 
                 return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };

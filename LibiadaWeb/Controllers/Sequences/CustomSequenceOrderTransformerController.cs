@@ -2,20 +2,21 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web;
-    using System.Web.Mvc;
-    using System.Web.Mvc.Html;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
     using Bio.Extensions;
 
     using LibiadaCore.Core;
     using LibiadaCore.DataTransformers;
     using LibiadaCore.Extensions;
 
-    using LibiadaWeb.Helpers;
-    using LibiadaWeb.Tasks;
+    using Libiada.Database.Helpers;
+    using Libiada.Database.Tasks;
 
     using Newtonsoft.Json;
     using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
+    using LibiadaWeb.Tasks;
+
 
     /// <summary>
     /// The custom sequence order transformer controller.
@@ -26,7 +27,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomSequenceOrderTransformerController"/> class.
         /// </summary>
-        public CustomSequenceOrderTransformerController() : base(TaskType.CustomSequenceOrderTransformer)
+        public CustomSequenceOrderTransformerController(ITaskManager taskManager) : base(TaskType.CustomSequenceOrderTransformer, taskManager)
         {
         }
 
@@ -38,8 +39,8 @@
         /// </returns>
         public ActionResult Index()
         {
-            var transformations = EnumHelper.GetSelectList(typeof(OrderTransformation));
-            var imageTransformers = EnumHelper.GetSelectList(typeof(ImageTransformer));
+            var transformations = Extensions.EnumExtensions.GetSelectList<OrderTransformation>();
+            var imageTransformers = Extensions.EnumExtensions.GetSelectList<ImageTransformer>();
             var data = new Dictionary<string, object>
             {
                 { "transformations", transformations },
@@ -77,11 +78,11 @@
             int iterationsCount,
             string[] customSequences,
             bool localFile,
-            HttpPostedFileBase[] file)
+            IFormFileCollection file)
         {
             return CreateTask(() =>
             {
-                int sequencesCount = localFile ? Request.Files.Count : customSequences.Length;
+                int sequencesCount = localFile ? file.Count : customSequences.Length;
                 var sourceSequences = new string[sequencesCount];
                 var sequences = new Chain[sequencesCount];
                 var names = new string[sequencesCount];
@@ -90,7 +91,7 @@
                 {
                     if (localFile)
                     {
-                        var sequenceStream = FileHelper.GetFileStream(file[i]);
+                        var sequenceStream = Helpers.FileHelper.GetFileStream(file[i]);
                         var fastaSequence = NcbiHelper.GetFastaSequence(sequenceStream);
                         sourceSequences[i] = fastaSequence.ConvertToString();
                         names[i] = fastaSequence.ID;

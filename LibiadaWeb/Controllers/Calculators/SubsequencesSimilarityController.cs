@@ -4,19 +4,20 @@
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Mvc;
 
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models;
-    using LibiadaWeb.Models.CalculatorsData;
-    using LibiadaWeb.Models.Repositories.Catalogs;
-    using LibiadaWeb.Tasks;
+    using Libiada.Database.Models;
+    using Libiada.Database.Models.CalculatorsData;
+    using Libiada.Database.Models.Repositories.Catalogs;
+    using Libiada.Database.Tasks;
 
     using Newtonsoft.Json;
 
-    using static LibiadaWeb.Models.Calculators.SubsequencesCharacteristicsCalculator;
+    using static Libiada.Database.Models.Calculators.SubsequencesCharacteristicsCalculator;
+    using LibiadaWeb.Tasks;
 
     /// <summary>
     /// The subsequences similarity controller.
@@ -27,7 +28,8 @@
         /// <summary>
         /// The db.
         /// </summary>
-        private readonly LibiadaWebEntities db;
+        private readonly LibiadaDatabaseEntities db;
+        private readonly IViewDataHelper viewDataHelper;
 
         /// <summary>
         /// The subsequence extractor.
@@ -47,9 +49,10 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SubsequencesSimilarityController"/> class.
         /// </summary>
-        public SubsequencesSimilarityController() : base(TaskType.SubsequencesSimilarity)
+        public SubsequencesSimilarityController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.SubsequencesSimilarity, taskManager)
         {
-            db = new LibiadaWebEntities();
+            this.db = db;
+            this.viewDataHelper = viewDataHelper;
             subsequenceExtractor = new SubsequenceExtractor(db);
             characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
             sequenceAttributeRepository = new SequenceAttributeRepository(db);
@@ -63,7 +66,6 @@
         /// </returns>
         public ActionResult Index()
         {
-            var viewDataHelper = new ViewDataHelper(db);
             ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillSubsequencesViewData(2, 2, "Compare"));
             return View();
         }

@@ -12,15 +12,22 @@
         ViewBag.Title = "Map of genes";
     }
     <title>@ViewBag.Title - FOA Research Lab</title>
-    @Styles.Render("~/Content/css")
-    <link rel="stylesheet" type="text/css" href="~/Libraries/bootstrap-icons/font/bootstrap-icons.css" />
-    @Styles.Render("~/Content/genesMap")
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/angularjs")
-    @* TODO: try to fix this after upgrading to .net core*@
-    <script src="~/Libraries/twitter-bootstrap/js/bootstrap.bundle.js"></script>
-    @Scripts.Render("~/bundles/d3js")
-    @Scripts.Render("~/bundles/plotlyjs")
+
+    <link rel="stylesheet" href="~/lib/twitter-bootstrap/css/bootstrap.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/ScrollUpDown.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/AlertifyJS/css/alertify.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/AlertifyJS/css/themes/bootstrap.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/GenesMap.css" asp-append-version="true" />
+    
+    <script src="~/lib/jquery/jquery.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/functions.js" asp-append-version="true"></script>
+    <script src="~/lib/angular.js/angular.js" asp-append-version="true"></script>
+    <script src="~/lib/angular-smart-table/smart-table.js" asp-append-version="true"></script>
+    <script src="~/lib/twitter-bootstrap/js/bootstrap.js" asp-append-version="true"></script>
+    <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
+    <script src="~/lib/plotly.js/plotly.js" asp-append-version="true"></script>
 
 </head>
 <body class="vh-100 m-0 p-0">
@@ -28,7 +35,7 @@
     {
         <div ng-app="libiada">
             @Html.Partial("_AngularControllerInitializer", "SubsequencesDistributionResultController")
-            @Scripts.Render("~/bundles/loadingWindow")
+            <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
             <div class="genes-map" ng-controller="SubsequencesDistributionResultCtrl">
                 <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
                 <div id="container" class="d-flex" ng-disabled="loading" ng-cloack>
@@ -355,7 +362,7 @@
     {
 
         <h1 class="text-danger">An error occurred while processing your request</h1>
-        if (AccountHelper.IsAdmin())
+        if (User.IsInRole("admin"))
         {
             <h3 class="text-danger mb-2">
                 Error message: @ViewBag.Error.Message

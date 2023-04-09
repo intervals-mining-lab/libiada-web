@@ -3,13 +3,14 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Mvc;
 
     using LibiadaCore.Exceptions;
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Attributes;
     using LibiadaWeb.Models.CalculatorsData;
+    using Libiada.Database.Attributes;
 
     /// <summary>
     /// The enum helper.
@@ -31,6 +32,55 @@
         public static Nature GetNature<T>(this T value) where T : struct, IComparable, IFormattable, IConvertible
         {
             return value.GetAttribute<T, NatureAttribute>().Value;
+        }
+
+        /// <summary>
+        /// Converts given enum into select list.
+        /// </summary>
+        /// <param name="useDisplayValueAsValue">
+        /// If true all values of select list are display values of enum values.
+        /// Otherwise uses byte enum value.
+        /// </param>
+        /// <typeparam name="T">
+        /// Enum type.
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="IEnumerable{SelectListItem}"/>.
+        /// </returns>
+        /// /// <remarks>
+        /// Works only with byte enums.
+        /// </remarks>
+        public static IEnumerable<SelectListItem> GetSelectList<T>(bool useDisplayValueAsValue = false)
+        where T : struct, IComparable, IFormattable, IConvertible
+        {
+            
+            return GetSelectList(Array.Empty<T>(), useDisplayValueAsValue);
+        }
+
+        /// <summary>
+        /// Converts given enum into select list.
+        /// </summary>
+        /// <param name="selectedValues">
+        /// List of enum values that sould be celected in SelectList.
+        /// </param>
+        /// <param name="useDisplayValueAsValue">
+        /// If true all values of select list are display values of enum values.
+        /// Otherwise uses byte enum value.
+        /// </param>
+        /// <typeparam name="T">
+        /// Enum type.
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="IEnumerable{SelectListItem}"/>.
+        /// </returns>
+        /// /// <remarks>
+        /// Works only with byte enums.
+        /// </remarks>
+        public static IEnumerable<SelectListItem> GetSelectList<T>(IEnumerable<T> selectedValues, bool useDisplayValueAsValue = false)
+        where T : struct, IComparable, IFormattable, IConvertible
+        {
+            T[] values = LibiadaCore.Extensions.EnumExtensions.ToArray<T>();
+            return values.ToSelectList(selectedValues, useDisplayValueAsValue);
         }
 
         /// <summary>

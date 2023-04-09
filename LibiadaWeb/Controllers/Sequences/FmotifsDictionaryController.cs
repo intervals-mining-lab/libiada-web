@@ -2,15 +2,19 @@
 {
     using System.Data.Entity;
     using System.Linq;
-    using System.Net;
     using System.Threading.Tasks;
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Mvc;
     using System.Collections.Generic;
 
-    using LibiadaWeb.Tasks;
-    using LibiadaWeb.Helpers;
-    using Newtonsoft.Json;
     using LibiadaCore.Core.SimpleTypes;
+
+    using Libiada.Database.Tasks;
+    using Libiada.Database.Helpers;
+
+    using Newtonsoft.Json;
+    using LibiadaWeb.Helpers;
+    using LibiadaWeb.Tasks;
+
 
     /// <summary>
     /// The Fmotifs dictionary controller.
@@ -21,7 +25,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="FmotifsDictionaryController"/> class.
         /// </summary>
-        public FmotifsDictionaryController() : base(TaskType.FmotifsDictionary)
+        public FmotifsDictionaryController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.FmotifsDictionary, db, viewDataHelper, taskManager)
         {
         }
 
@@ -33,11 +37,9 @@
         /// </returns>
         public async Task<ActionResult> Index()
         {
-            using (var db = new LibiadaWebEntities())
-            {
-                var musicSequence = db.MusicSequence.Where(m => m.Notation == Notation.FormalMotifs).Include(m => m.Matter);
-                return View(await musicSequence.ToListAsync());
-            }
+            var musicSequence = db.MusicSequence.Where(m => m.Notation == Notation.FormalMotifs).Include(m => m.Matter);
+            return View(await musicSequence.ToListAsync());
+
         }
 
         /// <summary>
@@ -53,66 +55,64 @@
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return BadRequest();
             }
 
-            using (var db = new LibiadaWebEntities())
+            MusicSequence musicSequence = db.MusicSequence.Include(m => m.Matter).Single(m => m.Id == id);
+            if (musicSequence == null)
             {
-                MusicSequence musicSequence = db.MusicSequence.Include(m => m.Matter).Single(m => m.Id == id);
-                if (musicSequence == null)
+                return NotFound();
+            }
+
+            var musicChainAlphabet = db.GetAlphabetElementIds(musicSequence.Id)
+                                                       .Select(el => db.Fmotif.Single(f => f.Id == el))
+                                                       .ToList();
+            var musicChainBuilding = db.GetSequenceBuilding(musicSequence.Id);
+            var sortedFmotifs = new Dictionary<Libiada.Database.Fmotif, int>();
+            for (int i = 0; i < musicChainAlphabet.Count; i++)
+            {
+                sortedFmotifs.Add(musicChainAlphabet[i], musicChainBuilding.Count(el => el == i + 1));
+            }
+
+            sortedFmotifs = sortedFmotifs.OrderByDescending(pair => pair.Value)
+                                         .ToDictionary(pair => pair.Key, pair => pair.Value);
+
+            var fmotifsChain = new List<Fmotif>();
+            foreach (var fmotif in sortedFmotifs.Keys)
+            {
+                var newFmotif = new Fmotif(fmotif.FmotifType, musicSequence.PauseTreatment, fmotif.Id);
+
+                var fmotifAlphabet = db.GetFmotifAlphabet(fmotif.Id);
+                var fmotifBuilding = db.GetFmotifBuilding(fmotif.Id);
+                foreach (var position in fmotifBuilding)
                 {
-                    return HttpNotFound();
-                }
-
-                var musicChainAlphabet = db.GetAlphabetElementIds(musicSequence.Id)
-                                                           .Select(el => db.Fmotif.Single(f => f.Id == el))
-                                                           .ToList();
-                var musicChainBuilding = db.GetSequenceBuilding(musicSequence.Id);
-                var sortedFmotifs = new Dictionary<LibiadaWeb.Fmotif, int>();
-                for (int i = 0; i < musicChainAlphabet.Count; i++)
-                {
-                    sortedFmotifs.Add(musicChainAlphabet[i], musicChainBuilding.Count(el => el == i + 1));
-                }
-
-                sortedFmotifs = sortedFmotifs.OrderByDescending(pair => pair.Value)
-                                             .ToDictionary(pair => pair.Key, pair => pair.Value);
-
-                var fmotifsChain = new List<Fmotif>();
-                foreach (var fmotif in sortedFmotifs.Keys)
-                {
-                    var newFmotif = new Fmotif(fmotif.FmotifType, musicSequence.PauseTreatment, fmotif.Id);
-
-                    var fmotifAlphabet = db.GetFmotifAlphabet(fmotif.Id);
-                    var fmotifBuilding = db.GetFmotifBuilding(fmotif.Id);
-                    foreach (var position in fmotifBuilding)
+                    var dbNoteId = fmotifAlphabet.ElementAt(position - 1);
+                    var dbNote = db.Note.Single(n => n.Id == dbNoteId);
+                    var newPitches = new List<Pitch>();
+                    foreach (var pitch in dbNote.Pitch)
                     {
-                        var dbNoteId = fmotifAlphabet.ElementAt(position - 1);
-                        var dbNote = db.Note.Single(n => n.Id == dbNoteId);
-                        var newPitches = new List<Pitch>();
-                        foreach (var pitch in dbNote.Pitch)
-                        {
-                            newPitches.Add(new Pitch(pitch.Midinumber));
-                        }
-
-                        var newNote = new ValueNote(newPitches,
-                                                    new Duration(dbNote.Numerator, dbNote.Denominator),
-                                                    dbNote.Triplet,
-                                                    dbNote.Tie);
-                        newNote.Id = dbNote.Id;
-                        newFmotif.NoteList.Add(newNote);
+                        newPitches.Add(new Pitch(pitch.Midinumber));
                     }
 
-                    fmotifsChain.Add(newFmotif);
+                    var newNote = new ValueNote(newPitches,
+                                                new Duration(dbNote.Numerator, dbNote.Denominator),
+                                                dbNote.Triplet,
+                                                dbNote.Tie);
+                    newNote.Id = dbNote.Id;
+                    newFmotif.NoteList.Add(newNote);
                 }
 
-                var result = new Dictionary<string, object> 
-                {
-                    { "fmotifs", fmotifsChain },
-                    { "sequentialTransfer", musicSequence.SequentialTransfer }
-                };
-                ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object> { { "data", result } });
-                return View(musicSequence);
+                fmotifsChain.Add(newFmotif);
             }
+
+            var result = new Dictionary<string, object>
+            {
+                { "fmotifs", fmotifsChain },
+                { "sequentialTransfer", musicSequence.SequentialTransfer }
+            };
+            ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object> { { "data", result } });
+            return View(musicSequence);
+
         }
     }
 

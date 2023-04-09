@@ -1,7 +1,7 @@
 ﻿namespace LibiadaWeb.Models
 {
     using System.Collections.Generic;
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Mvc;
 
     /// <summary>
     /// The select list item comparer.

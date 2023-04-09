@@ -3,30 +3,31 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Mvc;
 
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Tasks;
-    using LibiadaWeb.Models.Repositories.Sequences;
+    using Libiada.Database.Tasks;
+    using Libiada.Database.Models.Repositories.Sequences;
 
     using Newtonsoft.Json;
     
     using Segmenter.PoemsSegmenter;
-    
+    using LibiadaWeb.Tasks;
 
     public class PoemSegmentationController : AbstractResultController
     {
-        private readonly LibiadaWebEntities db;
+        private readonly LibiadaDatabaseEntities db;
+        private readonly IViewDataHelper viewDataHelper;
 
-        public PoemSegmentationController() : base(TaskType.PoemSegmentation)
+        public PoemSegmentationController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.PoemSegmentation, taskManager)
         {
-            db = new LibiadaWebEntities();
+            this.db = db;
+            this.viewDataHelper = viewDataHelper;
         }
 
         // GET: PoemSequenceSegmentation
         public ActionResult Index()
         {
-            var viewDataHelper = new ViewDataHelper(db);
             var data = viewDataHelper.FillViewData(1, 1, m => m.SequenceType == SequenceType.CompletePoem, "Segment");
             data.Add("nature", (byte)Nature.Literature);
             ViewBag.data = JsonConvert.SerializeObject(data);

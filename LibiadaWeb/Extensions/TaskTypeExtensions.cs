@@ -5,7 +5,7 @@
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Attributes;
-    using LibiadaWeb.Tasks;
+    using Libiada.Database.Tasks;
 
     public static class TaskTypeExtensions
     {

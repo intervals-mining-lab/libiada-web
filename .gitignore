@@ -55,6 +55,7 @@ _ReSharper*/
 [Pp]ackages
 packages/
 Libraries/
+*/wwwroot/lib/
 
 *.dgml
 *[Ss]tyle[Cc]op.[Cc]ache

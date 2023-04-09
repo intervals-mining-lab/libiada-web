@@ -3,19 +3,24 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Mvc;
     using LibiadaCore.Extensions;
     using LibiadaWeb.Extensions;
-    using LibiadaWeb.Models.CalculatorsData;
-    using LibiadaWeb.Models.Repositories.Sequences;
-    using LibiadaWeb.Tasks;
+    using LibiadaWeb.Helpers;
+    using Libiada.Database.Models.Repositories.Sequences;
+    using Libiada.Database.Tasks;
     using Newtonsoft.Json;
+    using Libiada.Database.Models.CalculatorsData;
+    using LibiadaWeb.Tasks;
 
     [Authorize(Roles = "Admin")]
     public class BatchPoemsImportController : AbstractResultController
     {
-        public BatchPoemsImportController() : base(TaskType.BatchPoemsImport)
+        private readonly LibiadaDatabaseEntities db;
+
+        public BatchPoemsImportController(LibiadaDatabaseEntities db, ITaskManager taskManager) : base(TaskType.BatchPoemsImport, taskManager)
         {
+            this.db = db;
         }
 
         public ActionResult Index()
@@ -30,84 +35,82 @@
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(Notation notation, bool dropPunctuation)
+        public ActionResult Index(Notation notation, bool dropPunctuation, IFormFileCollection files)
         {
             return CreateTask(() =>
             {
                 var importResults = new List<MatterImportResult>();
 
-                using (var db = new LibiadaWebEntities())
+                Matter[] matters = Cache.GetInstance().Matters.Where(m => m.Nature == Nature.Literature).ToArray();
+
+                for (int i = 0; i < files.Count; i++)
                 {
-                    Matter[] matters = Cache.GetInstance().Matters.Where(m => m.Nature == Nature.Literature).ToArray();
+                    string sequenceName = files[i].FileName.Substring(0, files[i].FileName.LastIndexOf('.'));
 
-                    for (int i = 0; i < Request.Files.Count; i++)
+                    var importResult = new MatterImportResult()
                     {
-                        string sequenceName = Request.Files[i].FileName.Substring(0, Request.Files[i].FileName.LastIndexOf('.'));
+                        MatterName = sequenceName
+                    };
 
-                        var importResult = new MatterImportResult()
+                    try
+                    {
+                        var sequence = new CommonSequence
                         {
-                            MatterName = sequenceName
+                            Notation = notation
                         };
 
-                        try
+
+                        if (matters.Any(m => m.Name == sequenceName))
                         {
-                            var sequence = new CommonSequence
+                            var matter = matters.Single(m => m.Name == sequenceName);
+                            sequence.MatterId = matter.Id;
+                            importResult.MatterName = matter.Name;
+                            importResult.SequenceType = matter.SequenceType.GetDisplayValue();
+                            importResult.Group = matter.Group.GetDisplayValue();
+                            importResult.Result = "Successfully imported poem for existing matter";
+                        }
+                        else
+                        {
+                            sequence.Matter = new Matter
                             {
-                                Notation = notation
+                                Name = sequenceName,
+                                Group = Group.ClassicalLiterature,
+                                Nature = Nature.Literature,
+                                SequenceType = SequenceType.CompleteText
                             };
 
-
-                            if (matters.Any(m => m.Name == sequenceName))
-                            {
-                                var matter = matters.Single(m => m.Name == sequenceName);
-                                sequence.MatterId = matter.Id;
-                                importResult.MatterName = matter.Name;
-                                importResult.SequenceType = matter.SequenceType.GetDisplayValue();
-                                importResult.Group = matter.Group.GetDisplayValue();
-                                importResult.Result = "Successfully imported poem for existing matter";
-                            }
-                            else
-                            {
-                                sequence.Matter = new Matter
-                                {
-                                    Name = sequenceName,
-                                    Group = Group.ClassicalLiterature,
-                                    Nature = Nature.Literature,
-                                    SequenceType = SequenceType.CompleteText
-                                };
-
-                                importResult.MatterName = sequence.Matter.Name;
-                                importResult.SequenceType = sequence.Matter.SequenceType.GetDisplayValue();
-                                importResult.Group = sequence.Matter.Group.GetDisplayValue();
-                                importResult.Result = "Successfully imported poem and created matter";
-                            }
-
-                            var repository = new LiteratureSequenceRepository(db);
-
-                            repository.Create(sequence, Request.Files[i].InputStream, Language.Russian, true, Translator.NoneOrManual, dropPunctuation);
-                            importResult.Status = "Success";
-                            
-                            importResults.Add(importResult);
+                            importResult.MatterName = sequence.Matter.Name;
+                            importResult.SequenceType = sequence.Matter.SequenceType.GetDisplayValue();
+                            importResult.Group = sequence.Matter.Group.GetDisplayValue();
+                            importResult.Result = "Successfully imported poem and created matter";
                         }
-                        catch (Exception exception)
-                        {
-                            importResult.Result = $"Failed to import poem: {exception.Message}";
-                            while (exception.InnerException != null)
-                            {
-                                importResult.Result += $" {exception.InnerException.Message}";
 
-                                exception = exception.InnerException;
-                            }
+                        var repository = new LiteratureSequenceRepository(db);
 
-                            importResult.Status = "Error";
-                            importResults.Add(importResult);
-                        }
+                        repository.Create(sequence, FileHelper.GetFileStream(files[i]), Language.Russian, true, Translator.NoneOrManual, dropPunctuation);
+                        importResult.Status = "Success";
+
+                        importResults.Add(importResult);
                     }
+                    catch (Exception exception)
+                    {
+                        importResult.Result = $"Failed to import poem: {exception.Message}";
+                        while (exception.InnerException != null)
+                        {
+                            importResult.Result += $" {exception.InnerException.Message}";
 
-                    var result = new Dictionary<string, object> { { "result", importResults } };
+                            exception = exception.InnerException;
+                        }
 
-                    return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
+                        importResult.Status = "Error";
+                        importResults.Add(importResult);
+                    }
                 }
+
+                var result = new Dictionary<string, object> { { "result", importResults } };
+
+                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
+
             });
         }
     }

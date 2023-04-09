@@ -2,8 +2,8 @@
     ViewBag.Title = "Subsequences characteristics distribution";
 }
 
-@Scripts.Render("~/bundles/Characteristic")
-@Scripts.Render("~/bundles/Characteristics")
+<script src="~/js/Angular/Components/characteristic.js" asp-append-version="true"></script>
+<script src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
 
 @Html.Partial("_AngularControllerInitializer", "SubsequencesDistributionController")
 

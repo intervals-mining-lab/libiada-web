@@ -1,6 +1,7 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
 
     /// <summary>
     /// The charts controller.

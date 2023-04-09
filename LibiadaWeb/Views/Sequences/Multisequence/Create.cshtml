@@ -19,7 +19,7 @@
     <h4>Multisequence parameters</h4>
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @if (AccountHelper.IsAdmin())
+    @if (User.IsInRole("admin"))
     {
         <div class="row mb-1">
             @Html.LabelFor(model => model.Nature, new { @class = "col-form-label col-md-2" })
@@ -65,5 +65,5 @@
 }
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+    <partial name="_ValidationScriptsPartial" />
 }

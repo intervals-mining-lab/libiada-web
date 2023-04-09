@@ -9,7 +9,7 @@
     <script src="~/Scripts/push-notification.js" async></script>
 }
 
-@Scripts.Render("~/bundles/loadingWindow")
+<script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
 
 @Html.Partial("_AngularControllerInitializer", "TaskManagerController")
 
@@ -34,7 +34,7 @@
         <thead>
             <tr>
                 <th scope="col">#</th>
-                @if (AccountHelper.IsAdmin())
+                @if (User.IsInRole("admin"))
                 {
                     <th scope="col">User</th>
                     columns = 10;
@@ -59,7 +59,7 @@
             </tr>
             <tr ng-repeat="task in tasks | orderBy:'Id':true" ng-cloak ng-class="getStatusClass(task.TaskState)">
                 <td ng-bind="$index + 1" />
-                @if (AccountHelper.IsAdmin())
+                @if (User.IsInRole("admin"))
                 {
                     <td aria-label="{{::task.UserName}}" title="{{::task.UserName}}" ng-bind="::task.UserId" />
                 }

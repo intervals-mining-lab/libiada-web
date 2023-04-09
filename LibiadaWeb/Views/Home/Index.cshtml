@@ -5,14 +5,14 @@
 
 <h1>Libiada - FOA Research Lab</h1>
 
-@if (Request.IsAuthenticated)
+@if (User.Identity.IsAuthenticated)
 {
     <div class="row mb-3">
         <div class="col-md-4">
             <h2>Data</h2>
-            @Html.ActionLink(AccountHelper.IsAdmin() ? "Matters" : "Sequences", "Index", "Matters")
+            @Html.ActionLink(User.IsInRole("admin") ? "Matters" : "Sequences", "Index", "Matters")
             <br />
-            @if (AccountHelper.IsAdmin())
+            @if (User.IsInRole("admin"))
             {
                 @Html.ActionLink("Multisequences", "Index", "Multisequence")
                 <br />
@@ -63,7 +63,7 @@
             <br />
             @Html.ActionLink("Matrix of similarity", "Index", "SubsequencesComparer")
             <br />
-            @if (AccountHelper.IsAdmin())
+            @if (User.IsInRole("admin"))
             {
                 @Html.ActionLink("Sliding window calculation (Functions of sequences)", "Index", "LocalCalculation")
                 <br />
@@ -94,7 +94,7 @@
             <h2>Tasks</h2>
             @Html.ActionLink("Task manager", "Index", "TaskManager")
             
-            @if (AccountHelper.IsAdmin())
+            @if (User.IsInRole("admin"))
             {
                 <h2>Research</h2>
                 @Html.ActionLink("Calculate order transformations convergence", "Index", "OrderTransformationConvergence")

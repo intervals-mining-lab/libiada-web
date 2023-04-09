@@ -2,9 +2,8 @@
 {
     using System.Data.Entity;
     using System.Linq;
-    using System.Net;
     using System.Threading.Tasks;
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Mvc;
 
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
@@ -22,7 +21,14 @@
         /// <summary>
         /// The database context.
         /// </summary>
-        private readonly LibiadaWebEntities db = new LibiadaWebEntities();
+        private readonly LibiadaDatabaseEntities db;
+        private readonly IViewDataHelper viewDataHelper;
+
+        public SequenceGroupsController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper)
+        {
+            this.db = db;
+            this.viewDataHelper = viewDataHelper;
+        }
 
         /// <summary>
         /// The index.
@@ -49,13 +55,13 @@
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return BadRequest();
             }
 
             SequenceGroup sequenceGroup = await db.SequenceGroup.FindAsync(id);
             if (sequenceGroup == null)
             {
-                return HttpNotFound();
+                return NotFound();
             }
 
             return View(sequenceGroup);
@@ -69,14 +75,10 @@
         /// </returns>
         public ActionResult Create()
         {
-            using (var db = new LibiadaWebEntities())
-            {
-                var viewDataHelper = new ViewDataHelper(db);
-                var viewData = viewDataHelper.GetMattersData(1, int.MaxValue);
-                viewData["sequenceGroupTypes"] = EnumExtensions.ToArray<SequenceGroupType>().ToSelectListWithNature();
-                ViewBag.data = JsonConvert.SerializeObject(viewData);
-                return View();
-            }
+            var viewData = viewDataHelper.GetMattersData(1, int.MaxValue);
+            viewData["sequenceGroupTypes"] = EnumExtensions.ToArray<SequenceGroupType>().ToSelectListWithNature();
+            ViewBag.data = JsonConvert.SerializeObject(viewData);
+            return View();
         }
 
         /// <summary>
@@ -93,12 +95,13 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Name,Nature,SequenceGroupType")] SequenceGroup sequenceGroup, long[] matterIds)
+        public async Task<ActionResult> Create(//[Bind(Include = "Id,Name,Nature,SequenceGroupType")] 
+        SequenceGroup sequenceGroup, long[] matterIds)
         {
             if (ModelState.IsValid)
             {
-                sequenceGroup.CreatorId = AccountHelper.GetUserId();
-                sequenceGroup.ModifierId = AccountHelper.GetUserId();
+                sequenceGroup.CreatorId = User.GetUserId();
+                sequenceGroup.ModifierId = User.GetUserId();
                 var matters = db.Matter.Where(m => matterIds.Contains(m.Id)).ToArray();
                 foreach (var matter in matters)
                 {
@@ -126,23 +129,19 @@
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return BadRequest();
             }
 
-            SequenceGroup sequenceGroup = await db.SequenceGroup.Include(m => m.Matters)
+            SequenceGroup? sequenceGroup = await db.SequenceGroup.Include(m => m.Matters)
                                                                 .SingleOrDefaultAsync(sg => sg.Id == id);
             if (sequenceGroup == null)
             {
-                return HttpNotFound();
+                return NotFound();
             }
 
-            using (var db = new LibiadaWebEntities())
-            {
-                var viewDataHelper = new ViewDataHelper(db);
-                var selectedMatterIds = sequenceGroup.Matters.Select(m => m.Id);
-                var viewData = viewDataHelper.FillViewData(1, int.MaxValue, m => true, m => selectedMatterIds.Contains(m.Id), "Save");
-                ViewBag.data = JsonConvert.SerializeObject(viewData);
-            }
+            var selectedMatterIds = sequenceGroup.Matters.Select(m => m.Id);
+            var viewData = viewDataHelper.FillViewData(1, int.MaxValue, m => true, m => selectedMatterIds.Contains(m.Id), "Save");
+            ViewBag.data = JsonConvert.SerializeObject(viewData);
 
             return View(sequenceGroup);
         }
@@ -161,7 +160,8 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Nature,SequenceGroupType")] SequenceGroup sequenceGroup, long[] matterIds)
+        public async Task<ActionResult> Edit(//[Bind(Include = "Id,Name,Nature,SequenceGroupType")] 
+            SequenceGroup sequenceGroup, long[] matterIds)
         {
             if (ModelState.IsValid)
             {
@@ -169,7 +169,7 @@
                 originalSequenceGroup.Name = sequenceGroup.Name;
                 originalSequenceGroup.Nature = sequenceGroup.Nature;
                 originalSequenceGroup.SequenceGroupType = sequenceGroup.SequenceGroupType;
-                originalSequenceGroup.ModifierId = AccountHelper.GetUserId();
+                originalSequenceGroup.ModifierId = User.GetUserId();
                 var matters = db.Matter.Where(m => matterIds.Contains(m.Id)).ToArray();
                 originalSequenceGroup.Matters.Clear();
                 foreach (var matter in matters)
@@ -198,13 +198,13 @@
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return BadRequest();
             }
 
             SequenceGroup sequenceGroup = await db.SequenceGroup.FindAsync(id);
             if (sequenceGroup == null)
             {
-                return HttpNotFound();
+                return NotFound();
             }
 
             return View(sequenceGroup);

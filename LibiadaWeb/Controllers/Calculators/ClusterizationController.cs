@@ -2,22 +2,25 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Mvc;
 
     using Clusterizator;
 
     using LibiadaCore.Music;
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models.Calculators;
-    using LibiadaWeb.Models.Repositories.Sequences;
-    using LibiadaWeb.Tasks;
-
-    using Models.Repositories.Catalogs;
+    using Libiada.Database.Tasks;
 
     using Newtonsoft.Json;
 
     using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
+    using Microsoft.AspNetCore.Authorization;
+    using Libiada.Database;
+    using Libiada.Database.Models.Repositories.Catalogs;
+    using Libiada.Database.Models.Repositories.Sequences;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using Libiada.Database.Models.Calculators;
+    using LibiadaWeb.Tasks;
 
     /// <summary>
     /// The clusterization controller.
@@ -28,7 +31,8 @@
         /// <summary>
         /// The db.
         /// </summary>
-        private readonly LibiadaWebEntities db;
+        private readonly LibiadaDatabaseEntities db;
+        private readonly IViewDataHelper viewDataHelper;
 
         /// <summary>
         /// The sequence repository.
@@ -43,9 +47,10 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ClusterizationController"/> class.
         /// </summary>
-        public ClusterizationController() : base(TaskType.Clusterization)
+        public ClusterizationController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.Clusterization, taskManager)
         {
-            db = new LibiadaWebEntities();
+            this.db = db;
+            this.viewDataHelper = viewDataHelper;
             commonSequenceRepository = new CommonSequenceRepository(db);
             characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
         }
@@ -58,7 +63,6 @@
         /// </returns>
         public ActionResult Index()
         {
-            var viewDataHelper = new ViewDataHelper(db);
             Dictionary<string, object> viewData = viewDataHelper.FillViewData(CharacteristicCategory.Full, 3, int.MaxValue, "Calculate");
             viewData.Add("ClusterizatorsTypes", EnumExtensions.ToArray<ClusterizationType>().ToSelectList());
             ViewBag.data = JsonConvert.SerializeObject(viewData);
@@ -147,18 +151,15 @@
                                                         .ToDictionary(m => m.Id, m => m.Name);
 
                 long[][] sequenceIds;
-                using (var db = new LibiadaWebEntities())
-                {
-                    var commonSequenceRepository = new CommonSequenceRepository(db);
-                    sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds,
-                                                                          notations,
-                                                                          languages,
-                                                                          translators,
-                                                                          pauseTreatments,
-                                                                          sequentialTransfers,
-                                                                          trajectories);
-                    mattersNames = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
-                }
+                var commonSequenceRepository = new CommonSequenceRepository(db);
+                sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds,
+                                                                      notations,
+                                                                      languages,
+                                                                      translators,
+                                                                      pauseTreatments,
+                                                                      sequentialTransfers,
+                                                                      trajectories);
+                mattersNames = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
 
                 double[][] characteristics;
 

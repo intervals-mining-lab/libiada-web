@@ -2,15 +2,19 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web.Mvc;
+    using System.Security.Principal;
+
+    using Libiada.Database;
+    using Libiada.Database.Models;
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.ArrangementManagers;
     using LibiadaCore.Core.Characteristics.Calculators.AccordanceCalculators;
     using LibiadaCore.Extensions;
 
-    using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.CalculatorsData;
+    
+    
 
     /// <summary>
     /// The accordance characteristic repository.
@@ -38,7 +42,7 @@
         /// <param name="db">
         /// The db.
         /// </param>
-        private AccordanceCharacteristicRepository(LibiadaWebEntities db)
+        private AccordanceCharacteristicRepository(LibiadaDatabaseEntities db)
         {
             characteristicsLinks = db.AccordanceCharacteristicLink.ToArray();
         }
@@ -56,7 +60,7 @@
                     {
                         if (instance == null)
                         {
-                            using (var db = new LibiadaWebEntities())
+                            using (var db = new LibiadaDatabaseEntities())
                             {
                                 instance = new AccordanceCharacteristicRepository(db);
                             }
@@ -68,76 +72,7 @@
             }
         }
 
-        /// <summary>
-        /// Gets the accordance characteristic links.
-        /// </summary>
-        public IEnumerable<AccordanceCharacteristicLink> CharacteristicLinks => characteristicsLinks.ToArray();
-
-        /// <summary>
-        /// The get link for accordance characteristic.
-        /// </summary>
-        /// <param name="characteristicLinkId">
-        /// The characteristic type link id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Link"/>.
-        /// </returns>
-        public Link GetLinkForCharacteristic(int characteristicLinkId)
-        {
-            return characteristicsLinks.Single(c => c.Id == characteristicLinkId).Link;
-        }
-
-        /// <summary>
-        /// The get accordance characteristic type.
-        /// </summary>
-        /// <param name="characteristicLinkId">
-        /// The characteristic type link id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="AccordanceCharacteristic"/>.
-        /// </returns>
-        public AccordanceCharacteristic GetCharacteristic(int characteristicLinkId)
-        {
-            return characteristicsLinks.Single(c => c.Id == characteristicLinkId).AccordanceCharacteristic;
-        }
-
-        /// <summary>
-        /// The get accordance characteristic name.
-        /// </summary>
-        /// <param name="characteristicLinkId">
-        /// The characteristic type link id.
-        /// </param>
-        /// <param name="notation">
-        /// The notation.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        public string GetCharacteristicName(int characteristicLinkId, Notation notation)
-        {
-            return string.Join("  ", GetCharacteristicName(characteristicLinkId), notation.GetDisplayValue());
-        }
-
-        /// <summary>
-        /// The get accordance characteristic name.
-        /// </summary>
-        /// <param name="characteristicLinkId">
-        /// The characteristic type link id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        public string GetCharacteristicName(int characteristicLinkId)
-        {
-            string characteristicTypeName = GetCharacteristic(characteristicLinkId).GetDisplayValue();
-
-            Link link = GetLinkForCharacteristic(characteristicLinkId);
-            string linkName = link == Link.NotApplied ? string.Empty : link.GetDisplayValue();
-
-            return string.Join("  ", characteristicTypeName, linkName);
-        }
-
-
+        
 
         /// <summary>
         /// The get accordance characteristic types.
@@ -145,12 +80,12 @@
         /// <returns>
         /// The <see cref="List{CharacteristicData}"/>.
         /// </returns>
-        public List<CharacteristicSelectListItem> GetCharacteristicTypes()
+        public List<CharacteristicSelectListItem> GetCharacteristicTypes(IPrincipal currentUser)
         {
             Link[] links;
             AccordanceCharacteristic[] characteristics;
             ArrangementType arrangementType = ArrangementType.Intervals;
-            if (AccountHelper.IsAdmin())
+            if (currentUser.IsInRole("admin"))
             {
                 links = EnumExtensions.ToArray<Link>();
                 characteristics = EnumExtensions.ToArray<AccordanceCharacteristic>();

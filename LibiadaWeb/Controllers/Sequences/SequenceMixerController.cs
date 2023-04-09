@@ -3,13 +3,13 @@
     using System;
     using System.ComponentModel;
     using System.Linq;
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Mvc;
 
     using LibiadaCore.Core;
     using LibiadaCore.Music;
 
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models.Repositories.Sequences;
+    using Libiada.Database.Models.Repositories.Sequences;
 
     using Newtonsoft.Json;
 
@@ -22,7 +22,7 @@
         /// <summary>
         /// The db.
         /// </summary>
-        private readonly LibiadaWebEntities db;
+        private readonly LibiadaDatabaseEntities db;
 
         /// <summary>
         /// The sequence repository.
@@ -58,19 +58,21 @@
         /// The random generator.
         /// </summary>
         private readonly Random randomGenerator = new Random();
+        private readonly IViewDataHelper viewDataHelper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SequenceMixerController"/> class.
         /// </summary>
-        public SequenceMixerController()
+        public SequenceMixerController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper)
         {
-            db = new LibiadaWebEntities();
+            this.db = db;
             sequenceRepository = new CommonSequenceRepository(db);
             dnaSequenceRepository = new GeneticSequenceRepository(db);
             musicSequenceRepository = new MusicSequenceRepository(db);
             literatureSequenceRepository = new LiteratureSequenceRepository(db);
             dataSequenceRepository = new DataSequenceRepository(db);
             elementRepository = new ElementRepository(db);
+            this.viewDataHelper = viewDataHelper;
         }
 
         /// <summary>
@@ -81,7 +83,6 @@
         /// </returns>
         public ActionResult Index()
         {
-            var viewDataHelper = new ViewDataHelper(db);
             ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillViewData(1, 1, "Mix"));
             return View();
         }

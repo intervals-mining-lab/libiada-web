@@ -1,9 +1,9 @@
 ﻿namespace LibiadaWeb.Controllers.Sequences
 {
-    using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models.NcbiSequencesData;
-    using LibiadaWeb.Models.Repositories.Sequences;
-    using LibiadaWeb.Tasks;
+    using Libiada.Database.Helpers;
+    using Libiada.Database.Models.NcbiSequencesData;
+    using Libiada.Database.Models.Repositories.Sequences;
+    using Libiada.Database.Tasks;
 
     using Newtonsoft.Json;
 
@@ -11,13 +11,17 @@
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Linq;
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Mvc;
     using LibiadaWeb.Models;
+    using LibiadaWeb.Tasks;
 
     public class GenBankAccessionVersionUpdateCheckerController : AbstractResultController
     {
-        public GenBankAccessionVersionUpdateCheckerController() : base(TaskType.GenBankAccessionVersionUpdateChecker)
+        private readonly LibiadaDatabaseEntities db;
+
+        public GenBankAccessionVersionUpdateCheckerController(LibiadaDatabaseEntities db, ITaskManager taskManager) : base(TaskType.GenBankAccessionVersionUpdateChecker, taskManager)
         {
+            this.db = db;
         }
 
         public ActionResult Index()
@@ -38,25 +42,24 @@
                 }
 
                 Dictionary<string, AccessionUpdateSearchResult> sequencesData;
-                using (var db = new LibiadaWebEntities())
-                {
-                    var dnaSequenceRepository = new GeneticSequenceRepository(db);
 
-                    var sequencesWithAccessions = db.DnaSequence
-                                                    .Include(ds => ds.Matter)
-                                                    .Where(ds => ds.Notation == Notation.Nucleotides && !string.IsNullOrEmpty(ds.RemoteId))
-                                                    .ToArray();
+                var dnaSequenceRepository = new GeneticSequenceRepository(db);
 
-                    sequencesData = sequencesWithAccessions
-                                            .ToDictionary(s => s.RemoteId.Split('.')[0], s => new AccessionUpdateSearchResult()
-                                            {
-                                                LocalAccession = s.RemoteId,
-                                                LocalVersion = Convert.ToByte(s.RemoteId.Split('?')[0].Split('.')[1]),
-                                                Name = s.Matter.Name.Split('|')[0].Trim(),
-                                                LocalUpdateDate = s.Matter.Modified.ToString(OutputFormats.DateFormat),
-                                                LocalUpdateDateTime = s.Matter.Modified
-                                            });
-                }
+                var sequencesWithAccessions = db.DnaSequence
+                                                .Include(ds => ds.Matter)
+                                                .Where(ds => ds.Notation == Notation.Nucleotides && !string.IsNullOrEmpty(ds.RemoteId))
+                                                .ToArray();
+
+                sequencesData = sequencesWithAccessions
+                                        .ToDictionary(s => s.RemoteId.Split('.')[0], s => new AccessionUpdateSearchResult()
+                                        {
+                                            LocalAccession = s.RemoteId,
+                                            LocalVersion = Convert.ToByte(s.RemoteId.Split('?')[0].Split('.')[1]),
+                                            Name = s.Matter.Name.Split('|')[0].Trim(),
+                                            LocalUpdateDate = s.Matter.Modified.ToString(OutputFormats.DateFormat),
+                                            LocalUpdateDateTime = s.Matter.Modified
+                                        });
+
 
                 List<NuccoreObject> searchResults = new List<NuccoreObject>();
 

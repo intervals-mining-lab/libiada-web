@@ -6,12 +6,12 @@
     using System.Linq;
     using System.Net;
     using System.Threading.Tasks;
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Mvc;
 
     using Bio.Extensions;
 
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models.Repositories.Sequences;
+    using Libiada.Database.Models.Repositories.Sequences;
 
     using Newtonsoft.Json;
 
@@ -21,17 +21,23 @@
     /// </summary>
     public class MultisequenceController : Controller
     {
+        private readonly LibiadaDatabaseEntities db;
+        private readonly IViewDataHelper viewDataHelper;
+
+        public MultisequenceController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper)
+        {
+            this.db = db;
+            this.viewDataHelper = viewDataHelper;
+        }
+
         /// <summary>
         /// Gets page with list of all multisequences.
         /// </summary>
         /// <returns></returns>
         public ActionResult Index()
         {
-            using (var db = new LibiadaWebEntities())
-            {
-                List<Multisequence> multisequences = db.Multisequence.Include(ms => ms.Matters).ToList();
-                return View(multisequences);
-            }
+            List<Multisequence> multisequences = db.Multisequence.Include(ms => ms.Matters).ToList();
+            return View(multisequences);
         }
 
         /// <summary>
@@ -42,12 +48,8 @@
         /// </returns>
         public ActionResult Create()
         {
-            using (var db = new LibiadaWebEntities())
-            {
-                var viewDataHelper = new ViewDataHelper(db);
-                var data = viewDataHelper.FillViewData(2, int.MaxValue, m => MultisequenceRepository.SequenceTypesFilter.Contains(m.SequenceType) && m.MultisequenceId == null, "Create");
-                ViewBag.data = JsonConvert.SerializeObject(data);
-            }
+            var data = viewDataHelper.FillViewData(2, int.MaxValue, m => MultisequenceRepository.SequenceTypesFilter.Contains(m.SequenceType) && m.MultisequenceId == null, "Create");
+            ViewBag.data = JsonConvert.SerializeObject(data);
 
             return View();
         }
@@ -60,32 +62,30 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Name,Nature")] Multisequence multisequence,
-                                                                   short[] multisequenceNumbers,
-                                                                   long[] matterIds)
+        public ActionResult Create(//[Bind(Include = "Name,Nature")] 
+            Multisequence multisequence,
+            short[] multisequenceNumbers,
+            long[] matterIds)
         {
             if (!ModelState.IsValid)
             {
                 throw new Exception("Model state is invalid");
             }
 
-            using (var db = new LibiadaWebEntities())
+            db.Multisequence.Add(multisequence);
+            db.SaveChanges();
+
+            var matters = db.Matter.Where(m => matterIds.Contains(m.Id))
+                                   .ToDictionary(m => m.Id, m => m);
+            for (int i = 0; i < matterIds.Length; i++)
             {
-                db.Multisequence.Add(multisequence);
-                db.SaveChanges();
-
-                var matters = db.Matter.Where(m => matterIds.Contains(m.Id))
-                                       .ToDictionary(m => m.Id, m => m);
-                for (int i = 0; i < matterIds.Length; i++)
-                {
-                    var matter = matters[matterIds[i]];
-                    matter.MultisequenceId = multisequence.Id;
-                    matter.MultisequenceNumber = multisequenceNumbers[i];
-                    db.Entry(matter).State = EntityState.Modified;
-                }
-
-                db.SaveChanges();
+                var matter = matters[matterIds[i]];
+                matter.MultisequenceId = multisequence.Id;
+                matter.MultisequenceNumber = multisequenceNumbers[i];
+                db.Entry(matter).State = EntityState.Modified;
             }
+
+            db.SaveChanges();
 
             return RedirectToAction("Index");
         }
@@ -103,20 +103,18 @@
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return BadRequest();
             }
 
-            using (var db = new LibiadaWebEntities())
+            Multisequence? multisequence = db.Multisequence.Include(m => m.Matters)
+                                                          .SingleOrDefault(m => m.Id == id);
+            if (multisequence == null)
             {
-                Multisequence multisequence = db.Multisequence.Include(m => m.Matters)
-                                                              .SingleOrDefault(m => m.Id == id);
-                if (multisequence == null)
-                {
-                    return HttpNotFound();
-                }
-
-                return View(multisequence);
+                return NotFound();
             }
+
+            return View(multisequence);
+
         }
 
 
@@ -124,82 +122,77 @@
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return BadRequest();
             }
 
-            using (var db = new LibiadaWebEntities())
+            Multisequence? multisequence = db.Multisequence.Include(m => m.Matters)
+                                                          .SingleOrDefault(m => m.Id == id);
+            if (multisequence == null)
             {
-                Multisequence multisequence = db.Multisequence.Include(m => m.Matters)
-                                                              .SingleOrDefault(m => m.Id == id);
-                if (multisequence == null)
-                {
-                    return HttpNotFound();
-                }
-
-                var viewDataHelper = new ViewDataHelper(db);
-                var selectedMatterIds = multisequence.Matters.Select(m => m.Id);
-                var data = viewDataHelper.FillViewData(2,
-                                                       int.MaxValue,
-                                                       m => (MultisequenceRepository.SequenceTypesFilter.Contains(m.SequenceType)
-                                                            && m.MultisequenceId == null)
-                                                            || selectedMatterIds.Contains(m.Id),
-                                                       m => selectedMatterIds.Contains(m.Id),
-                                                       "Save");
-                data.Add("multisequenceNumbers", multisequence.Matters.Select(m => new { m.Id, m.MultisequenceNumber }));
-                ViewBag.data = JsonConvert.SerializeObject(data);
-
-                return View(multisequence);
+                return NotFound();
             }
+
+            var selectedMatterIds = multisequence.Matters.Select(m => m.Id);
+            var data = viewDataHelper.FillViewData(2,
+                                                   int.MaxValue,
+                                                   m => (MultisequenceRepository.SequenceTypesFilter.Contains(m.SequenceType)
+                                                        && m.MultisequenceId == null)
+                                                        || selectedMatterIds.Contains(m.Id),
+                                                   m => selectedMatterIds.Contains(m.Id),
+                                                   "Save");
+            data.Add("multisequenceNumbers", multisequence.Matters.Select(m => new { m.Id, m.MultisequenceNumber }));
+            ViewBag.data = JsonConvert.SerializeObject(data);
+
+            return View(multisequence);
+
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Nature")] Multisequence multisequence,
-                                                                                short[] multisequenceNumbers,
-                                                                                long[] matterIds)
+        public async Task<ActionResult> Edit(//[Bind(Include = "Id,Name,Nature")]
+                                             Multisequence multisequence,
+                                             short[] multisequenceNumbers,
+                                             long[] matterIds)
         {
-            using (var db = new LibiadaWebEntities())
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+                db.Entry(multisequence).State = EntityState.Modified;
+
+                var mattersToRemove = db.Matter.Where(m => m.MultisequenceId == multisequence.Id && !matterIds.Contains(m.Id)).ToArray();
+                for (int i = 0; i < mattersToRemove.Length; i++)
                 {
-                    db.Entry(multisequence).State = EntityState.Modified;
-
-                    var mattersToRemove = db.Matter.Where(m => m.MultisequenceId == multisequence.Id && !matterIds.Contains(m.Id)).ToArray();
-                    for (int i = 0; i < mattersToRemove.Length; i++)
-                    {
-                        var matter = mattersToRemove[i];
-                        matter.MultisequenceId = null;
-                        matter.MultisequenceNumber = null;
-                        db.Entry(matter).State = EntityState.Modified;
-                    }
-
-                    var mattersToAddOrUpdate = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m);
-                    for (int i = 0; i < matterIds.Length; i++)
-                    {
-                        var matter = mattersToAddOrUpdate[matterIds[i]];
-                        matter.MultisequenceId = multisequence.Id;
-                        matter.MultisequenceNumber = multisequenceNumbers[i];
-                        db.Entry(matter).State = EntityState.Modified;
-                    }
-
-                    await db.SaveChangesAsync();
-                    return RedirectToAction("Index");
+                    var matter = mattersToRemove[i];
+                    matter.MultisequenceId = null;
+                    matter.MultisequenceNumber = null;
+                    db.Entry(matter).State = EntityState.Modified;
                 }
 
-                var viewDataHelper = new ViewDataHelper(db);
-                var sellectedMatterIds = multisequence.Matters.Select(m => m.Id);
-                var data = viewDataHelper.FillViewData(2,
-                                                       int.MaxValue,
-                                                       m => (MultisequenceRepository.SequenceTypesFilter.Contains(m.SequenceType)
-                                                            && m.MultisequenceId == null)
-                                                            || sellectedMatterIds.Contains(m.Id),
-                                                       m => sellectedMatterIds.Contains(m.Id),
-                                                       "Create");
+                var mattersToAddOrUpdate = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m);
+                for (int i = 0; i < matterIds.Length; i++)
+                {
+                    var matter = mattersToAddOrUpdate[matterIds[i]];
+                    matter.MultisequenceId = multisequence.Id;
+                    matter.MultisequenceNumber = multisequenceNumbers[i];
+                    db.Entry(matter).State = EntityState.Modified;
+                }
 
-                ViewBag.data = JsonConvert.SerializeObject(data);
-
-                return View(multisequence);
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
             }
+
+            var sellectedMatterIds = multisequence.Matters.Select(m => m.Id);
+            var data = viewDataHelper.FillViewData(2,
+                                                   int.MaxValue,
+                                                   m => (MultisequenceRepository.SequenceTypesFilter.Contains(m.SequenceType)
+                                                        && m.MultisequenceId == null)
+                                                        || sellectedMatterIds.Contains(m.Id),
+                                                   m => sellectedMatterIds.Contains(m.Id),
+                                                   "Create");
+
+            ViewBag.data = JsonConvert.SerializeObject(data);
+
+            return View(multisequence);
+
         }
 
         /// <summary>
@@ -215,19 +208,17 @@
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return BadRequest();
             }
 
-            using (var db = new LibiadaWebEntities())
+            Multisequence multisequence = await db.Multisequence.Include(m => m.Matters).SingleOrDefaultAsync(m => m.Id == id);
+            if (multisequence == null)
             {
-                Multisequence multisequence = await db.Multisequence.Include(m => m.Matters).SingleOrDefaultAsync(m => m.Id == id);
-                if (multisequence == null)
-                {
-                    return HttpNotFound();
-                }
-
-                return View(multisequence);
+                return NotFound();
             }
+
+            return View(multisequence);
+
         }
 
         /// <summary>
@@ -243,22 +234,19 @@
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(long id)
         {
-            using (var db = new LibiadaWebEntities())
+            Multisequence multisequence = await db.Multisequence.Include(m => m.Matters).SingleAsync(m => m.Id == id);
+            var matters = multisequence.Matters.ToArray();
+            foreach (var matter in matters)
             {
-                Multisequence multisequence = await db.Multisequence.Include(m => m.Matters).SingleAsync(m => m.Id == id);
-                var matters = multisequence.Matters.ToArray();
-                foreach (var matter in matters)
-                {
-                    matter.MultisequenceId = null;
-                    matter.MultisequenceNumber = null;
-                    db.Entry(matter).State = EntityState.Modified;
-                }
-
-                db.Multisequence.Remove(multisequence);
-                await db.SaveChangesAsync();
-                Cache.Clear();
-                return RedirectToAction("Index");
+                matter.MultisequenceId = null;
+                matter.MultisequenceNumber = null;
+                db.Entry(matter).State = EntityState.Modified;
             }
+
+            db.Multisequence.Remove(multisequence);
+            await db.SaveChangesAsync();
+            Cache.Clear();
+            return RedirectToAction("Index");
         }
 
         /// <summary>
@@ -323,15 +311,12 @@
         /// </returns>
         public string GroupMattersIntoMultisequences(long[] excludeMatterIds)
         {
-
-            using (var db = new LibiadaWebEntities())
-            {
-                Matter[] matters = db.Matter.Where(m => MultisequenceRepository.SequenceTypesFilter.Contains(m.SequenceType)).ToArray();
-                Dictionary<string, long[]> multisequences = SplitMattersIntoReferenceAnsNotReference(matters);
-                var result = multisequences.Select(m => new { name = m.Key, matterIds = m.Value }).ToArray();
-                var matterIds = result.SelectMany(r => r.matterIds);
-                var mattersDictionary = matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
-                var groupingResult = new Dictionary<string, object>
+            Matter[] matters = db.Matter.Where(m => MultisequenceRepository.SequenceTypesFilter.Contains(m.SequenceType)).ToArray();
+            Dictionary<string, long[]> multisequences = SplitMattersIntoReferenceAnsNotReference(matters);
+            var result = multisequences.Select(m => new { name = m.Key, matterIds = m.Value }).ToArray();
+            var matterIds = result.SelectMany(r => r.matterIds);
+            var mattersDictionary = matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
+            var groupingResult = new Dictionary<string, object>
                 {
                     {"result", result},
                     { "matters", mattersDictionary},
@@ -341,10 +326,9 @@
                                             .ToArray() }
                 };
 
-                var data = JsonConvert.SerializeObject(groupingResult);
+            var data = JsonConvert.SerializeObject(groupingResult);
 
-                return data;
-            }
+            return data;
         }
 
         /// <summary>
@@ -360,41 +344,38 @@
         [HttpPost]
         public ActionResult GroupMattersIntoMultisequences(Dictionary<string, long[]> multisequenceMatters)
         {
-            using (var db = new LibiadaWebEntities())
+            var multisequencesNames = multisequenceMatters.Keys.ToArray();
+            Multisequence[] multisequences = new Multisequence[multisequencesNames.Length];
+
+            for (int i = 0; i < multisequencesNames.Length; i++)
             {
-                var multisequencesNames = multisequenceMatters.Keys.ToArray();
-                Multisequence[] multisequences = new Multisequence[multisequencesNames.Length];
-
-                for (int i = 0; i < multisequencesNames.Length; i++)
+                multisequences[i] = new Multisequence
                 {
-                    multisequences[i] = new Multisequence
+                    Name = multisequencesNames[i],
+                    Nature = Nature.Genetic
+                };
+            }
+
+            db.Multisequence.AddRange(multisequences);
+            db.SaveChanges();
+
+            var matters = db.Matter.Where(mt => mt.Nature == Nature.Genetic).ToDictionary(m => m.Id, m => m);
+            foreach (Multisequence multisequence in multisequences)
+            {
+                try
+                {
+                    var matterIds = multisequenceMatters[multisequence.Name];
+                    foreach (var matterId in matterIds)
                     {
-                        Name = multisequencesNames[i],
-                        Nature = Nature.Genetic
-                    };
+                        db.Entry(matters[matterId]).State = EntityState.Modified;
+                        matters[matterId].MultisequenceId = multisequence.Id;
+                    }
+
+                    MultisequenceRepository.SetSequenceNumbers(matterIds.Select(m => matters[m]).ToArray());
+                    db.SaveChanges();
                 }
-
-                db.Multisequence.AddRange(multisequences);
-                db.SaveChanges();
-
-                var matters = db.Matter.Where(mt => mt.Nature == Nature.Genetic).ToDictionary(m => m.Id, m => m);
-                foreach (Multisequence multisequence in multisequences)
+                catch (Exception e)
                 {
-                    try
-                    {
-                        var matterIds = multisequenceMatters[multisequence.Name];
-                        foreach (var matterId in matterIds)
-                        {
-                            db.Entry(matters[matterId]).State = EntityState.Modified;
-                            matters[matterId].MultisequenceId = multisequence.Id;
-                        }
-
-                        MultisequenceRepository.SetSequenceNumbers(matterIds.Select(m => matters[m]).ToArray());
-                        db.SaveChanges();
-                    }
-                    catch (Exception e)
-                    {
-                    }
                 }
             }
 

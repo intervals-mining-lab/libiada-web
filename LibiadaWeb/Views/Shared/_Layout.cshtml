@@ -1,27 +1,20 @@
-﻿@using LibiadaWeb.Helpers
+﻿@using Libiada.Database.Helpers;
+@using LibiadaWeb.Helpers;
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - FOA Research Lab</title>
-
-    @Styles.Render("~/Content/css")
-    <link rel="stylesheet" type="text/css" href="~/Libraries/bootstrap-icons/font/bootstrap-icons.css" />
-    @Scripts.Render("~/bundles/jquery")
-    @* TODO: try to fix this after upgrading to .net core*@
-    <script src="~/Libraries/twitter-bootstrap/js/bootstrap.bundle.js"></script>
-    @Scripts.Render("~/bundles/alertify")
-    @Scripts.Render("~/bundles/angularjs")
-    @Scripts.Render("~/bundles/scrollJumper")
-    @RenderSection("scripts", required: false)
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - FOA Research Lab</title>
+    <link rel="stylesheet" href="~/lib/twitter-bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/LibiadaWeb.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <nav class="navbar fixed-top navbar-expand-sm navbar-dark bg-dark border-bottom box-shadow p-0">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                @Html.ActionLink("LibiadaWeb", "Index", "Home", null, new { @class = "navbar-brand" })
-                @*<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">AspNetCoreMVCProject</a>*@
+                <a class="navbar-brand" asp-controller="Home">LibiadaWeb</a>
                 <button class="navbar-toggler m-2"
                         type="button"
                         data-bs-toggle="collapse"
@@ -38,17 +31,10 @@
                             <a class="nav-link" href="http://foarLab.org/">Home</a>
                         </li>
                         <li class="nav-item">
-                            @Html.ActionLink("Task manager", "Index", "TaskManager", routeValues: null, htmlAttributes: new { @class = "nav-link" })
+                            <a class="nav-link" asp-controller="TaskManager">Task manager</a>
                         </li>
-                        @*<li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                            </li>*@
                     </ul>
-                    @Html.Partial("_LoginPartial")
-                    @*<partial name="_LoginPartial" />*@
+                    <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
@@ -56,35 +42,15 @@
     <div ng-app="libiada">
         <scroll-jumper></scroll-jumper>
         <div class="container pt-2 body-content">
-            @RenderBody()
-            @if (ViewBag.Error != null)
-            {
-                <h1 class="text-danger">An error occurred while processing your request</h1>
-                if (AccountHelper.IsAdmin())
-                {
-                    <h3 class="text-danger mb-2">
-                        Error message: @ViewBag.Error.Message
-                    </h3>
-                    <h5 class="mt-2 text-danger">Stack trace:</h5>
-                    <div class="p-2 mb-2 border border-danger border-2 rounded text-break">
-                        @ViewBag.Error.StackTrace
-                    </div>
-                }
-                else
-                {
-                    if (ViewBag.UserError != null)
-                    {
-                        <h3 class="text-danger p-2 mb-2">
-                            @ViewBag.UserError
-                        </h3>
-                    }
-                }
-            }
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
         </div>
     </div>
+
     <footer class="border-top footer text-muted">
         <div class="container">
-            @if (AccountHelper.IsAdmin())
+            @if (User.IsInRole("admin"))
             {
                 <h3 class='@(DbHelper.ConnectionSuccessful ? "text-success" : "text-danger")'>
                     Current database: @DbHelper.DbName
@@ -92,9 +58,15 @@
             }
             <p>All nucleotide sequences are downloaded from <a href="https://www.ncbi.nlm.nih.gov" target="_blank" rel="noopener">GenBank</a></p>
             <p>&copy; @DateTime.Now.Year - foarLab.org</p>
-            @*&copy; 2022 - AspNetCoreMVCProject - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>*@
         </div>
     </footer>
-    @RenderSection("endscripts", required: false)
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/AlertifyJS/alertify.min.js"></script>
+    <script src="~/js/Angular/functions.js"></script>
+    <script src="~/lib/angular.js/angular.min.js"></script>
+    <script src="~/lib/angular-smart-table/smart-table.min.js"></script>
+    <script src="~/js/Angular/Components/scrollJumper.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

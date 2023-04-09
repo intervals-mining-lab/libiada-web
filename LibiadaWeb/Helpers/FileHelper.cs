@@ -1,9 +1,8 @@
 ﻿namespace LibiadaWeb.Helpers
 {
+    using Microsoft.AspNetCore.Http;
     using System;
     using System.IO;
-    using System.Text;
-    using System.Web;
 
     /// <summary>
     /// The file helper.
@@ -22,31 +21,14 @@
         /// <exception cref="ArgumentNullException">
         /// Thrown if file is null or empty.
         /// </exception>
-        public static Stream GetFileStream(HttpPostedFileBase file)
+        public static Stream GetFileStream(IFormFile file)
         {
-            if (file == null || file.ContentLength == 0)
+            if (file == null || file.Length == 0)
             {
                 throw new ArgumentNullException(nameof(file), "File is null or empty.");
             }
 
-            return file.InputStream;
-        }
-
-        /// <summary>
-        /// The read sequence from stream.
-        /// </summary>
-        /// <param name="stream">
-        /// The stream.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        public static string ReadSequenceFromStream(Stream stream)
-        {
-            var input = new byte[stream.Length];
-            stream.Read(input, 0, (int)stream.Length);
-            stream.Dispose();
-            return Encoding.UTF8.GetString(input);
+            return  file.OpenReadStream();
         }
     }
 }

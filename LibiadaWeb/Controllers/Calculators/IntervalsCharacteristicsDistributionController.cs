@@ -3,21 +3,30 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web.Mvc;
-    using System.Web.Mvc.Html;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
 
     using LibiadaCore.Core;
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models.Calculators;
-    using LibiadaWeb.Models.CalculatorsData;
-    using LibiadaWeb.Models.Repositories.Catalogs;
-    using LibiadaWeb.Tasks;
+    using LibiadaWeb.Extensions;
+
+    using Libiada.Database.Models.CalculatorsData;
+    using Libiada.Database;
+    using Libiada.Database.Models.Calculators;
+    using Libiada.Database.Models.Repositories.Catalogs;
+    using Libiada.Database.Tasks;
 
     using Newtonsoft.Json;
 
     using SequenceGenerator;
+    using Microsoft.AspNetCore.Authorization;
+
+
+
+    using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
+    using LibiadaWeb.Tasks;
 
     /// <summary>
     /// Calculates accordance of orders by intervals distributions.
@@ -29,13 +38,17 @@
         /// The characteristic type link repository.
         /// </summary>
         private readonly FullCharacteristicRepository characteristicTypeLinkRepository;
+        private readonly LibiadaDatabaseEntities db;
+        private readonly IViewDataHelper viewDataHelper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IntervalsCharacteristicsDistributionController"/> class.
         /// </summary>
-        public IntervalsCharacteristicsDistributionController() : base(TaskType.IntervalsCharacteristicsDistribution)
+        public IntervalsCharacteristicsDistributionController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.IntervalsCharacteristicsDistribution, taskManager)
         {
             characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
+            this.db = db;
+            this.viewDataHelper = viewDataHelper;
         }
 
         /// <summary>
@@ -46,15 +59,11 @@
         /// </returns>
         public ActionResult Index()
         {
-            var imageTransformers = EnumHelper.GetSelectList(typeof(ImageTransformer));
+            var imageTransformers = Extensions.EnumExtensions.GetSelectList<ImageTransformer>();
 
-            using (var db = new LibiadaWebEntities())
-            {
-                var viewDataHelper = new ViewDataHelper(db);
-                Dictionary<string, object> viewData = viewDataHelper.GetCharacteristicsData(CharacteristicCategory.Full);
-                ViewBag.data = JsonConvert.SerializeObject(viewData);
-                return View();
-            }
+            Dictionary<string, object> viewData = viewDataHelper.GetCharacteristicsData(CharacteristicCategory.Full);
+            ViewBag.data = JsonConvert.SerializeObject(viewData);
+            return View();
         }
 
         /// <summary>
@@ -148,7 +157,7 @@
                 }
 
 
-                var list = EnumHelper.GetSelectList(typeof(Link));
+                var list = Extensions.EnumExtensions.GetSelectList<Link>().ToList();
                 list.RemoveAt(0);
                 var result = new Dictionary<string, object>
                 {

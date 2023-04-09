@@ -5,8 +5,8 @@
 
 <h2>@ViewBag.Title</h2>
 
-@Scripts.Render("~/bundles/CharacteristicsWithoutNotation")
-@Scripts.Render("~/bundles/CharacteristicNatureParams")
+<script src="~/js/Angular/Components/characteristicsWithoutNotation.js" asp-append-version="true"></script>
+<script src="~/js/Angular/Components/characteristicNatureParams.js" asp-append-version="true"></script>
 @Html.Partial("_AngularControllerInitializer", "CalculationController")
 
 @using (Html.BeginForm())
@@ -27,7 +27,7 @@
         <characteristics-without-notation characteristic-types="::characteristicTypes"
                                           characteristics-dictionary="::characteristicsDictionary">
         </characteristics-without-notation>
-        @if (AccountHelper.IsAdmin())
+        @if (User.IsInRole("admin"))
         {
             <div class="row mb-1">
                 <label class="col-form-label col-md-2" for="notation">Notation:</label>
@@ -41,7 +41,7 @@
             </div>
         }
         <input type="hidden" name="notation" ng-value="notation.Value" />
-        @if (AccountHelper.IsAdmin())
+        @if (User.IsInRole("admin"))
         {
             <characteristic-nature-params characteristic="characteristic"
                                           nature="nature"

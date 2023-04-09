@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "Ncbi GenBank search results";
 }
-@Scripts.Render("~/bundles/loadingWindow")
+<script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
 <h2>@ViewBag.Title</h2>
 
 @if (ViewBag.Error == null)

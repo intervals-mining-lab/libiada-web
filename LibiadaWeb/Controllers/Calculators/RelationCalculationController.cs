@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Mvc;
 
     using Helpers;
 
@@ -13,12 +13,16 @@
     using LibiadaCore.Extensions;
     using LibiadaCore.Music;
 
-    using LibiadaWeb.Models.Repositories.Sequences;
-    using LibiadaWeb.Tasks;
-
-    using Models.Repositories.Catalogs;
+    using Libiada.Database;
+    using Libiada.Database.Models.Repositories.Sequences;
+    using Libiada.Database.Tasks;
+    using Libiada.Database.Helpers;
+    using Libiada.Database.Models.Repositories.Catalogs;
 
     using Newtonsoft.Json;
+    using Microsoft.AspNetCore.Authorization;
+    using LibiadaWeb.Tasks;
+
 
     /// <summary>
     /// The relation calculation controller.
@@ -29,7 +33,7 @@
         /// <summary>
         /// The db.
         /// </summary>
-        private readonly LibiadaWebEntities db;
+        private readonly LibiadaDatabaseEntities db;
 
         /// <summary>
         /// The sequence repository.
@@ -40,15 +44,17 @@
         /// The characteristic type repository.
         /// </summary>
         private readonly BinaryCharacteristicRepository characteristicTypeLinkRepository;
+        private readonly IViewDataHelper viewDataHelper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RelationCalculationController"/> class.
         /// </summary>
-        public RelationCalculationController() : base(TaskType.RelationCalculation)
+        public RelationCalculationController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.RelationCalculation, taskManager)
         {
-            db = new LibiadaWebEntities();
+            this.db = db;
             commonSequenceRepository = new CommonSequenceRepository(db);
             characteristicTypeLinkRepository = BinaryCharacteristicRepository.Instance;
+            this.viewDataHelper = viewDataHelper;
         }
 
         /// <summary>
@@ -59,7 +65,6 @@
         /// </returns>
         public ActionResult Index()
         {
-            var viewDataHelper = new ViewDataHelper(db);
             ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillViewData(CharacteristicCategory.Binary, 1, 1, "Calculate"));
             return View();
         }

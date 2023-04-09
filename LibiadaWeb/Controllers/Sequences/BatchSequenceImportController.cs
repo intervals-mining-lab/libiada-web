@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Linq;
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Mvc;
 
     using Bio;
     using Bio.Extensions;
@@ -12,13 +12,15 @@
 
     using LibiadaCore.Extensions;
 
-    using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models;
-    using LibiadaWeb.Models.CalculatorsData;
-    using LibiadaWeb.Models.Repositories.Sequences;
-    using LibiadaWeb.Tasks;
+    using Libiada.Database.Models.CalculatorsData;
+    using Libiada.Database.Helpers;
+    using Libiada.Database.Models;
+    using Libiada.Database.Models.Repositories.Sequences;
+    using Libiada.Database.Tasks;
 
     using Newtonsoft.Json;
+    using LibiadaWeb.Tasks;
+
 
     /// <summary>
     /// The batch sequence import controller.
@@ -26,11 +28,14 @@
     [Authorize(Roles = "Admin")]
     public class BatchSequenceImportController : AbstractResultController
     {
+        private readonly LibiadaDatabaseEntities db;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="BatchSequenceImportController"/> class.
         /// </summary>
-        public BatchSequenceImportController() : base(TaskType.BatchSequenceImport)
+        public BatchSequenceImportController(LibiadaDatabaseEntities db, ITaskManager taskManager) : base(TaskType.BatchSequenceImport, taskManager)
         {
+            this.db = db;
         }
 
         /// <summary>
@@ -68,100 +73,94 @@
                 var importResults = new List<MatterImportResult>(accessions.Length);
                 string[] accessionsToImport;
 
-                using (var db = new LibiadaWebEntities())
-                {
-                    var dnaSequenceRepository = new GeneticSequenceRepository(db);
-                    string[] existingAccessions;
-                    (existingAccessions, accessionsToImport) = dnaSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
+                var dnaSequenceRepository = new GeneticSequenceRepository(db);
+                string[] existingAccessions;
+                (existingAccessions, accessionsToImport) = dnaSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
 
-                    importResults.AddRange(existingAccessions.ConvertAll(existingAccession => new MatterImportResult
-                    {
-                        MatterName = existingAccession,
-                        Result = "Sequence already exists",
-                        Status = "Exists"
-                    }));
-                }
+                importResults.AddRange(existingAccessions.ConvertAll(existingAccession => new MatterImportResult
+                {
+                    MatterName = existingAccession,
+                    Result = "Sequence already exists",
+                    Status = "Exists"
+                }));
+
+
                 importResults.AddRange(accessionsToImport.AsParallel().Select(accession =>
                 {
                     var importResult = new MatterImportResult() { MatterName = accession };
-                    using (var db = new LibiadaWebEntities())
+
+                    try
                     {
-                        try
+                        ISequence bioSequence = NcbiHelper.DownloadGenBankSequence(accession);
+                        GenBankMetadata metadata = NcbiHelper.GetMetadata(bioSequence);
+                        importResult.MatterName = metadata.Version.CompoundAccession;
+
+                        var matterRepository = new MatterRepository(db);
+                        var dnaSequenceRepository = new GeneticSequenceRepository(db);
+                        Matter matter = matterRepository.CreateMatterFromGenBankMetadata(metadata);
+
+                        importResult.SequenceType = matter.SequenceType.GetDisplayValue();
+                        importResult.Group = matter.Group.GetDisplayValue();
+                        importResult.MatterName = matter.Name;
+                        importResult.AllNames = $"Common name = {metadata.Source.CommonName}, "
+                                                  + $"Species = {metadata.Source.Organism.Species}, "
+                                                  + $"Definition = {metadata.Definition}, "
+                                                  + $"Saved matter name = {importResult.MatterName}";
+
+                        var sequence = new CommonSequence
                         {
-                            ISequence bioSequence = NcbiHelper.DownloadGenBankSequence(accession);
-                            GenBankMetadata metadata = NcbiHelper.GetMetadata(bioSequence);
-                            importResult.MatterName = metadata.Version.CompoundAccession;
+                            Matter = matter,
+                            Notation = Notation.Nucleotides,
+                            RemoteDb = RemoteDb.GenBank,
+                            RemoteId = metadata.Version.CompoundAccession
+                        };
 
-                            var matterRepository = new MatterRepository(db);
-                            var dnaSequenceRepository = new GeneticSequenceRepository(db);
-                            Matter matter = matterRepository.CreateMatterFromGenBankMetadata(metadata);
+                        bool partial = metadata.Definition.ToLower().Contains("partial");
+                        dnaSequenceRepository.Create(sequence, bioSequence, partial);
 
-                            importResult.SequenceType = matter.SequenceType.GetDisplayValue();
-                            importResult.Group = matter.Group.GetDisplayValue();
-                            importResult.MatterName = matter.Name;
-                            importResult.AllNames = $"Common name = {metadata.Source.CommonName}, "
-                                                      + $"Species = {metadata.Source.Organism.Species}, "
-                                                      + $"Definition = {metadata.Definition}, "
-                                                      + $"Saved matter name = {importResult.MatterName}";
-
-                            var sequence = new CommonSequence
-                            {
-                                Matter = matter,
-                                Notation = Notation.Nucleotides,
-                                RemoteDb = RemoteDb.GenBank,
-                                RemoteId = metadata.Version.CompoundAccession
-                            };
-
-                            bool partial = metadata.Definition.ToLower().Contains("partial");
-                            dnaSequenceRepository.Create(sequence, bioSequence, partial);
-
-                            (importResult.Result, importResult.Status) = importGenes ?
-                                                                 ImportFeatures(metadata, sequence) :
-                                                                 ("Successfully imported sequence", "Success");
-
-                            return importResult;
-                        }
-                        catch (Exception exception)
-                        {
-                            importResult.Status = "Error";
-                            importResult.Result = $"Error: {exception.Message}";
-                            while (exception.InnerException != null)
-                            {
-                                exception = exception.InnerException;
-                                importResult.Result += $" {exception.Message}";
-                            }
-
-                            foreach (var dbEntityEntry in db.ChangeTracker.Entries())
-                            {
-                                if (dbEntityEntry.Entity != null)
-                                {
-                                    dbEntityEntry.State = EntityState.Detached;
-                                }
-                            }
-                        }
+                        (importResult.Result, importResult.Status) = importGenes ?
+                                                             ImportFeatures(metadata, sequence) :
+                                                             ("Successfully imported sequence", "Success");
 
                         return importResult;
                     }
-
-                }
-                ));
-
-                string[] names = importResults.Select(r => r.MatterName).ToArray();
-                using (var db = new LibiadaWebEntities())
-                {
-                    // removing matters for which adding of sequence failed
-                    Matter[] orphanMatters = db.Matter
-                                               .Include(m => m.Sequence)
-                                               .Where(m => names.Contains(m.Name) && m.Sequence.Count == 0)
-                                               .ToArray();
-
-                    if (orphanMatters.Length > 0)
+                    catch (Exception exception)
                     {
-                        db.Matter.RemoveRange(orphanMatters);
-                        db.SaveChanges();
+                        importResult.Status = "Error";
+                        importResult.Result = $"Error: {exception.Message}";
+                        while (exception.InnerException != null)
+                        {
+                            exception = exception.InnerException;
+                            importResult.Result += $" {exception.Message}";
+                        }
+
+                        foreach (var dbEntityEntry in db.ChangeTracker.Entries())
+                        {
+                            if (dbEntityEntry.Entity != null)
+                            {
+                                dbEntityEntry.State = EntityState.Detached;
+                            }
+                        }
                     }
 
+                    return importResult;
+                }));
+
+                string[] names = importResults.Select(r => r.MatterName).ToArray();
+
+                // removing matters for which adding of sequence failed
+                Matter[] orphanMatters = db.Matter
+                                           .Include(m => m.Sequence)
+                                           .Where(m => names.Contains(m.Name) && m.Sequence.Count == 0)
+                                           .ToArray();
+
+                if (orphanMatters.Length > 0)
+                {
+                    db.Matter.RemoveRange(orphanMatters);
+                    db.SaveChanges();
                 }
+
+
                 var result = new Dictionary<string, object> { { "result", importResults } };
 
                 return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };

@@ -1,25 +1,19 @@
 ﻿namespace LibiadaWeb.Controllers.Sequences
 {
     using System.Collections.Generic;
-    using System.Web.Http;
-    using System.Web.Mvc;
-    using LibiadaWeb.Models.Repositories.Sequences;
+
+    using Microsoft.AspNetCore.Mvc;
+    using Libiada.Database.Models.Repositories.Sequences;
+    using Microsoft.AspNetCore.Mvc.Rendering;
 
     /// <summary>
     /// The sequence elements controller.
     /// </summary>
-    public class SequenceElementsController : ApiController
+    [Authorize]
+    [Route("api/[controller]")]
+    [ApiController]
+    public class SequenceElementsController : Controller
     {
-        /// <summary>
-        /// The db.
-        /// </summary>
-        private readonly LibiadaWebEntities db;
-
-        /// <summary>
-        /// The element repository.
-        /// </summary>
-        private readonly ElementRepository elementRepository;
-
         /// <summary>
         /// The sequence repository.
         /// </summary>
@@ -28,10 +22,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SequenceElementsController"/> class.
         /// </summary>
-        public SequenceElementsController()
+        public SequenceElementsController(LibiadaDatabaseEntities db)
         {
-            db = new LibiadaWebEntities();
-            elementRepository = new ElementRepository(db);
             sequenceRepository = new CommonSequenceRepository(db);
         }
 

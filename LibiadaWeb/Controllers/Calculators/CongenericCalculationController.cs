@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Mvc;
 
     using Helpers;
 
@@ -12,14 +12,17 @@
     using LibiadaCore.Extensions;
     using LibiadaCore.Music;
 
-    using LibiadaWeb.Models.Calculators;
-    using LibiadaWeb.Models.CalculatorsData;
-    using LibiadaWeb.Models.Repositories.Sequences;
-    using LibiadaWeb.Tasks;
-
-    using Models.Repositories.Catalogs;
+    using Libiada.Database.Tasks;
 
     using Newtonsoft.Json;
+    using Libiada.Database.Models.Repositories.Sequences;
+    using Microsoft.AspNetCore.Authorization;
+    using Libiada.Database;
+    using Libiada.Database.Models.Repositories.Catalogs;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using Libiada.Database.Models.Calculators;
+    using Libiada.Database.Models.CalculatorsData;
+    using LibiadaWeb.Tasks;
 
     /// <summary>
     /// The congeneric calculation controller.
@@ -30,7 +33,8 @@
         /// <summary>
         /// The db.
         /// </summary>
-        private readonly LibiadaWebEntities db;
+        private readonly LibiadaDatabaseEntities db;
+        private readonly IViewDataHelper viewDataHelper;
 
         /// <summary>
         /// The sequence repository.
@@ -45,9 +49,10 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CongenericCalculationController"/> class.
         /// </summary>
-        public CongenericCalculationController() : base(TaskType.CongenericCalculation)
+        public CongenericCalculationController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.CongenericCalculation, taskManager)
         {
-            db = new LibiadaWebEntities();
+            this.db = db;
+            this.viewDataHelper = viewDataHelper;
             commonSequenceRepository = new CommonSequenceRepository(db);
             characteristicTypeLinkRepository = CongenericCharacteristicRepository.Instance;
         }
@@ -60,7 +65,6 @@
         /// </returns>
         public ActionResult Index()
         {
-            var viewDataHelper = new ViewDataHelper(db);
             var viewData = viewDataHelper.FillViewData(CharacteristicCategory.Congeneric, 1, int.MaxValue, "Calculate");
             ViewBag.data = JsonConvert.SerializeObject(viewData);
             return View();
@@ -124,24 +128,22 @@
                 Dictionary<long, string> mattersNames;
                 long[][] sequenceIds;
 
-                using (var db = new LibiadaWebEntities())
+                mattersNames = Cache.GetInstance().Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
+
+                var commonSequenceRepository = new CommonSequenceRepository(db);
+                sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds, notations, languages, translators, pauseTreatments, sequentialTransfers, trajectories);
+
+                var congenericCharacteristicRepository = CongenericCharacteristicRepository.Instance;
+                for (int k = 0; k < characteristicLinkIds.Length; k++)
                 {
-                    mattersNames = Cache.GetInstance().Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
-
-                    var commonSequenceRepository = new CommonSequenceRepository(db);
-                    sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds, notations, languages, translators, pauseTreatments, sequentialTransfers, trajectories);
-
-                    var congenericCharacteristicRepository = CongenericCharacteristicRepository.Instance;
-                    for (int k = 0; k < characteristicLinkIds.Length; k++)
+                    characteristicNames[k] = congenericCharacteristicRepository.GetCharacteristicName(characteristicLinkIds[k], notations[k]);
+                    characteristicsList[k] = new SelectListItem
                     {
-                        characteristicNames[k] = congenericCharacteristicRepository.GetCharacteristicName(characteristicLinkIds[k], notations[k]);
-                        characteristicsList[k] = new SelectListItem
-                        {
-                            Value = k.ToString(),
-                            Text = characteristicNames[k],
-                            Selected = false
-                        };
-                    }
+                        Value = k.ToString(),
+                        Text = characteristicNames[k],
+                        Selected = false
+                    };
+
                 }
 
                 double[][][] characteristics = CongenericSequencesCharacteristicsCalculator.Calculate(sequenceIds, characteristicLinkIds);

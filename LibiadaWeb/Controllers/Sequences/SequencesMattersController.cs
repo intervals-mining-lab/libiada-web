@@ -6,32 +6,41 @@
     using System.Data.Entity;
     using System.IO;
     using System.Linq;
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Mvc;
 
     using Bio;
 
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Extensions;
-    using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models.Repositories.Sequences;
-    using LibiadaWeb.Tasks;
+    using Libiada.Database.Helpers;
+    using Libiada.Database.Models.Repositories.Sequences;
+    using Libiada.Database.Tasks;
 
     using Newtonsoft.Json;
+    using LibiadaWeb.Helpers;
+    using FileHelper = Helpers.FileHelper;
+    using System.IO.Pipes;
+    using LibiadaWeb.Tasks;
 
     /// <summary>
     /// The sequences matters controller.
     /// </summary>
     public abstract class SequencesMattersController : AbstractResultController
     {
+        protected readonly LibiadaDatabaseEntities db;
+        private readonly IViewDataHelper viewDataHelper;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SequencesMattersController"/> class.
         /// </summary>
         /// <param name="taskType">
         /// The task Type.
         /// </param>
-        protected SequencesMattersController(TaskType taskType) : base(taskType)
+        protected SequencesMattersController(TaskType taskType, LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(taskType, taskManager)
         {
+            this.db = db;
+            this.viewDataHelper = viewDataHelper;
         }
 
         /// <summary>
@@ -42,23 +51,21 @@
         /// </returns>
         public ActionResult Create()
         {
-            using (var db = new LibiadaWebEntities())
-            {
-                var viewDataHelper = new ViewDataHelper(db);
-                ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillMatterCreationViewData());
-            }
-
+            ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillMatterCreationViewData());
             return View();
         }
 
         /// <summary>
-        /// The create.
+        /// Sequence creation method.
         /// </summary>
         /// <param name="commonSequence">
         /// The sequence.
         /// </param>
         /// <param name="localFile">
         /// The local file.
+        /// </param>
+        /// <param name="file">
+        /// Sequence file as <see cref="IFormFile"/>.
         /// </param>
         /// <param name="language">
         /// The language id.
@@ -80,9 +87,10 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(
-            [Bind(Include = "Id,Notation,RemoteDb,RemoteId,Description,Matter,MatterId")] CommonSequence commonSequence,
+        public ActionResult Create(//[Bind(Include = "Id,Notation,RemoteDb,RemoteId,Description,Matter,MatterId")] 
+            CommonSequence commonSequence,
             bool localFile,
+            IFormFile? file,
             Language? language,
             bool? original,
             Translator? translator,
@@ -91,7 +99,6 @@
         {
             return CreateTask(() =>
             {
-                var db = new LibiadaWebEntities();
                 try
                 {
                     if (!ModelState.IsValid)
@@ -107,7 +114,7 @@
                     }
                     else
                     {
-                        sequenceStream = FileHelper.GetFileStream(Request.Files[0]);
+                        sequenceStream = LibiadaWeb.Helpers.FileHelper.GetFileStream(file!);
                     }
 
                     switch (nature)
@@ -131,15 +138,20 @@
                             break;
                         case Nature.Image:
                             var matterRepository = new MatterRepository(db);
-                            int fileSize = Request.Files[0].ContentLength;
-                            var file = new byte[fileSize];
-                            Request.Files[0].InputStream.Read(file, 0, fileSize);
+
+                            byte[] fileBytes;
+                            using (Stream fileStream = FileHelper.GetFileStream(file))
+                            {
+                                fileBytes = new byte[fileStream.Length];
+                                fileStream.Read(fileBytes, 0, (int)fileStream.Length);
+                            }
+
                             var matter = new Matter
                             {
                                 Nature = Nature.Image,
                                 SequenceType = commonSequence.Matter.SequenceType,
                                 Name = commonSequence.Matter.Name,
-                                Source = file,
+                                Source = fileBytes,
                                 Group = commonSequence.Matter.Group
                             };
                             matterRepository.SaveToDatabase(matter);
@@ -147,9 +159,9 @@
                         default:
                             throw new InvalidEnumArgumentException(nameof(nature), (int)nature, typeof(Nature));
                     }
-                    string multisequenceName = db.Multisequence.SingleOrDefault(ms => ms.Id == commonSequence.Matter.MultisequenceId).Name;
+                    string? multisequenceName = db.Multisequence.SingleOrDefault(ms => ms.Id == commonSequence.Matter.MultisequenceId)?.Name;
                     var result = new ImportResult(commonSequence, language, original, translator, partial, precision, multisequenceName);
-                    
+
                     return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
                 }
                 catch (Exception)
@@ -221,7 +233,7 @@
             /// <summary>
             /// The language.
             /// </summary>
-            public readonly string Language;
+            public readonly string? Language;
 
             /// <summary>
             /// The original.
@@ -231,7 +243,7 @@
             /// <summary>
             /// The translator.
             /// </summary>
-            public readonly string Translator;
+            public readonly string? Translator;
 
             /// <summary>
             /// The partial.
@@ -243,7 +255,7 @@
             /// </summary>
             public readonly double? Precision;
 
-            public readonly string MultisequenceName;
+            public readonly string? MultisequenceName;
 
             public readonly int? MultisequenceNumber;
 
@@ -282,7 +294,7 @@
                 Translator? translator,
                 bool? partial,
                 double? precision,
-                string multisequenceName)
+                string? multisequenceName)
             {
                 Matter matter = sequence.Matter;
 

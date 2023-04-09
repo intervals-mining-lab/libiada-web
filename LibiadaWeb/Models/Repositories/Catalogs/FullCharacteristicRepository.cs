@@ -2,14 +2,16 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web.Mvc;
+    using System.Security.Principal;
+
+    using Libiada.Database;
+    using Libiada.Database.Models;
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.ArrangementManagers;
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
     using LibiadaCore.Extensions;
 
-    using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.CalculatorsData;
 
     /// <summary>
@@ -38,7 +40,7 @@
         /// <param name="db">
         /// The db.
         /// </param>
-        private FullCharacteristicRepository(LibiadaWebEntities db)
+        private FullCharacteristicRepository(LibiadaDatabaseEntities db)
         {
             characteristicsLinks = db.FullCharacteristicLink.ToArray();
         }
@@ -56,7 +58,7 @@
                     {
                         if (instance == null)
                         {
-                            using (var db = new LibiadaWebEntities())
+                            using (var db = new LibiadaDatabaseEntities())
                             {
                                 instance = new FullCharacteristicRepository(db);
                             }
@@ -69,87 +71,18 @@
         }
 
         /// <summary>
-        /// Gets the characteristic type links.
-        /// </summary>
-        public IEnumerable<FullCharacteristicLink> CharacteristicLinks => characteristicsLinks.ToArray();
-
-        /// <summary>
-        /// The get libiada link.
-        /// </summary>
-        /// <param name="characteristicLinkId">
-        /// The characteristic type link id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Link"/>.
-        /// </returns>
-        public Link GetLinkForCharacteristic(int characteristicLinkId)
-        {
-            return characteristicsLinks.Single(c => c.Id == characteristicLinkId).Link;
-        }
-
-        /// <summary>
-        /// The get characteristic type.
-        /// </summary>
-        /// <param name="characteristicLinkId">
-        /// The characteristic type link id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="FullCharacteristic"/>.
-        /// </returns>
-        public FullCharacteristic GetCharacteristic(int characteristicLinkId)
-        {
-            return characteristicsLinks.Single(c => c.Id == characteristicLinkId).FullCharacteristic;
-        }
-
-        /// <summary>
-        /// The get characteristic name.
-        /// </summary>
-        /// <param name="characteristicLinkId">
-        /// The characteristic type and link id.
-        /// </param>
-        /// <param name="notation">
-        /// The notation id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        public string GetCharacteristicName(int characteristicLinkId, Notation notation)
-        {
-            return string.Join("  ", GetCharacteristicName(characteristicLinkId), notation.GetDisplayValue());
-        }
-
-        /// <summary>
-        /// The get characteristic name.
-        /// </summary>
-        /// <param name="characteristicLinkId">
-        /// The characteristic type and link id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        public string GetCharacteristicName(int characteristicLinkId)
-        {
-            string characteristicTypeName = GetCharacteristic(characteristicLinkId).GetDisplayValue();
-
-            Link link = GetLinkForCharacteristic(characteristicLinkId);
-            string linkName = link == Link.NotApplied ? string.Empty : link.GetDisplayValue();
-
-            return string.Join("  ", characteristicTypeName, linkName);
-        }
-
-        /// <summary>
         /// Gets characteristics types.
         /// </summary>
         /// <returns>
         /// The <see cref="List{CharacteristicData}"/>.
         /// </returns>
-        public List<CharacteristicSelectListItem> GetCharacteristicTypes()
+        public List<CharacteristicSelectListItem> GetCharacteristicTypes(IPrincipal currentUser)
         {
             Link[] links;
             FullCharacteristic[] characteristics;
             ArrangementType[] arrangementTypes;
 
-            if (AccountHelper.IsAdmin())
+            if (currentUser.IsInRole("admin"))
             {
                 links = EnumExtensions.ToArray<Link>();
                 characteristics = EnumExtensions.ToArray<FullCharacteristic>();

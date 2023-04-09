@@ -3,18 +3,17 @@
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Linq;
-    using System.Net;
     using System.Threading.Tasks;
-    using System.Web.Mvc;
-    using System.Web.Mvc.Html;
+    using Microsoft.AspNetCore.Mvc;
 
     using LibiadaWeb.Extensions;
-    using LibiadaWeb.Helpers;
-    using LibiadaWeb.Tasks;
+    using Libiada.Database.Tasks;
 
     using Newtonsoft.Json;
 
     using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
+    using LibiadaWeb.Helpers;
+    using LibiadaWeb.Tasks;
 
     /// <summary>
     /// The matters controller.
@@ -25,7 +24,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="MattersController"/> class.
         /// </summary>
-        public MattersController() : base(TaskType.Matters)
+        public MattersController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.Matters, db, viewDataHelper, taskManager)
         {
         }
 
@@ -37,17 +36,15 @@
         /// </returns>
         public async Task<ActionResult> Index()
         {
-            using (var db = new LibiadaWebEntities())
+            List<Matter> matter = await db.Matter.Include(m => m.Multisequence).ToListAsync();
+
+            if (!User.IsInRole("admin"))
             {
-                List<Matter> matter = await db.Matter.Include(m => m.Multisequence).ToListAsync();
-
-                if (!AccountHelper.IsAdmin())
-                {
-                    matter = matter.Where(m => m.Nature == Nature.Genetic).ToList();
-                }
-
-                return View(matter);
+                matter = matter.Where(m => m.Nature == Nature.Genetic).ToList();
             }
+
+            return View(matter);
+
         }
 
         /// <summary>
@@ -63,21 +60,19 @@
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return BadRequest();
             }
 
-            using (var db = new LibiadaWebEntities())
+            Matter matter = db.Matter.Include(m => m.Multisequence).SingleOrDefault(m => m.Id == id);
+            if (matter == null)
             {
-                Matter matter = db.Matter.Include(m => m.Multisequence).SingleOrDefault(m => m.Id == id);
-                if (matter == null)
-                {
-                    return HttpNotFound();
-                }
-
-                ViewBag.SequencesCount = db.CommonSequence.Count(c => c.MatterId == matter.Id);
-
-                return View(matter);
+                return NotFound();
             }
+
+            ViewBag.SequencesCount = db.CommonSequence.Count(c => c.MatterId == matter.Id);
+
+            return View(matter);
+
         }
 
         /// <summary>
@@ -93,19 +88,17 @@
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return BadRequest();
             }
 
-            using (var db = new LibiadaWebEntities())
+            Matter matter = db.Matter.Include(m => m.Multisequence).SingleOrDefault(m => m.Id == id);
+            if (matter == null)
             {
-                Matter matter = db.Matter.Include(m => m.Multisequence).SingleOrDefault(m => m.Id == id);
-                if (matter == null)
+                return NotFound();
+            }
+            var data = new Dictionary<string, object>
                 {
-                    return HttpNotFound();
-                }
-                var data = new Dictionary<string, object>
-                {
-                    { "natures", EnumHelper.GetSelectList(typeof(Nature), matter.Nature) },
+                    { "natures", LibiadaWeb.Extensions.EnumExtensions.GetSelectList(new[] { matter.Nature }) },
                     { "groups", EnumExtensions.ToArray<Group>().ToSelectListWithNature() },
                     { "sequenceTypes", EnumExtensions.ToArray<SequenceType>().ToSelectListWithNature() },
                     { "sequencesCount", db.CommonSequence.Count(c => c.MatterId == matter.Id) },
@@ -116,13 +109,13 @@
                     { "sequenceType", ((byte)matter.SequenceType).ToString() }
                 };
 
-                ViewBag.data = JsonConvert.SerializeObject(data, new JsonSerializerSettings()
-                {
-                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                });
+            ViewBag.data = JsonConvert.SerializeObject(data, new JsonSerializerSettings()
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
 
-                return View(matter);
-            }
+            return View(matter);
+
         }
 
         /// <summary>
@@ -137,21 +130,20 @@
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(
-            [Bind(Include = "Id,Name,Nature,Description,Group,SequenceType,MultisequenceId,MultisequenceNumber,CollectionCountry,CollectionDate")] Matter matter)
+        // [Bind(Include = "Id,Name,Nature,Description,Group,SequenceType,MultisequenceId,MultisequenceNumber,CollectionCountry,CollectionDate")] 
+        Matter matter)
         {
-            using (var db = new LibiadaWebEntities())
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
-                {
-                    db.Entry(matter).State = EntityState.Modified;
-                    await db.SaveChangesAsync();
-                    Cache.Clear();
-                    return RedirectToAction("Index");
-                }
+                db.Entry(matter).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+                Cache.Clear();
+                return RedirectToAction("Index");
+            }
 
-                var data = new Dictionary<string, object>
+            var data = new Dictionary<string, object>
                 {
-                    { "natures", EnumHelper.GetSelectList(typeof(Nature), matter.Nature) },
+                    { "natures", LibiadaWeb.Extensions.EnumExtensions.GetSelectList(new[] { matter.Nature }) },
                     { "groups", EnumExtensions.ToArray<Group>().ToSelectListWithNature() },
                     { "sequenceTypes", EnumExtensions.ToArray<SequenceType>().ToSelectListWithNature() },
                     { "sequencesCount", db.CommonSequence.Count(c => c.MatterId == matter.Id) },
@@ -162,9 +154,9 @@
                     { "sequenceType", ((byte)matter.SequenceType).ToString() }
                 };
 
-                ViewBag.data = JsonConvert.SerializeObject(data);
-                return View(matter);
-            }
+            ViewBag.data = JsonConvert.SerializeObject(data);
+            return View(matter);
+
         }
 
         /// <summary>
@@ -180,20 +172,18 @@
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return BadRequest();
             }
 
-            using (var db = new LibiadaWebEntities())
+            Matter matter = await db.Matter.FindAsync(id);
+            if (matter == null)
             {
-                Matter matter = await db.Matter.FindAsync(id);
-                if (matter == null)
-                {
-                    return HttpNotFound();
-                }
-
-                ViewBag.SequencesCount = db.CommonSequence.Count(c => c.MatterId == matter.Id);
-                return View(matter);
+                return NotFound();
             }
+
+            ViewBag.SequencesCount = db.CommonSequence.Count(c => c.MatterId == matter.Id);
+            return View(matter);
+
         }
 
         /// <summary>
@@ -209,14 +199,12 @@
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(long id)
         {
-            using (var db = new LibiadaWebEntities())
-            {
-                Matter matter = await db.Matter.FindAsync(id);
-                db.Matter.Remove(matter);
-                await db.SaveChangesAsync();
-                Cache.Clear();
-                return RedirectToAction("Index");
-            }
+            Matter matter = await db.Matter.FindAsync(id);
+            db.Matter.Remove(matter);
+            await db.SaveChangesAsync();
+            Cache.Clear();
+            return RedirectToAction("Index");
+
         }
     }
 }

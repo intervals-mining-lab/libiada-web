@@ -4,8 +4,8 @@
 
 <h2>@ViewBag.Title</h2>
 
-@Scripts.Render("~/bundles/orderTransformations")
-@Scripts.Render("~/bundles/Characteristics")
+<script src="~/js/Angular/Components/orderTransformations.js" asp-append-version="true"></script>
+<script src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
 @Html.Partial("_AngularControllerInitializer", "CustomCalculationController")
 
 @using (Html.BeginForm("Index", "CustomSequenceOrderTransformationCalculation", FormMethod.Post, new { enctype = "multipart/form-data" }))

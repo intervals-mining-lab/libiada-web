@@ -3,17 +3,18 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web.Mvc;
-    using System.Web.Mvc.Html;
+    using Microsoft.AspNetCore.Mvc;
 
     using LibiadaCore.Core;
     using LibiadaCore.Extensions;
 
-    using LibiadaWeb.Tasks;
+    using Libiada.Database.Tasks;
 
     using Newtonsoft.Json;
 
     using SequenceGenerator;
+    using Microsoft.AspNetCore.Authorization;
+    using LibiadaWeb.Tasks;
 
     /// <summary>
     /// Calculates accordance of orders to intervals distributions.
@@ -24,7 +25,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="OrdersIntervalsDistributionsAccordanceController"/> class.
         /// </summary>
-        public OrdersIntervalsDistributionsAccordanceController() : base(TaskType.OrdersIntervalsDistributionsAccordance)
+        public OrdersIntervalsDistributionsAccordanceController(ITaskManager taskManager) : base(TaskType.OrdersIntervalsDistributionsAccordance, taskManager)
         {
         }
 
@@ -112,7 +113,7 @@
                     distributionsAccordance.Add(link.GetDisplayValue(), accordance);
                 }
                 
-                var linksList = EnumHelper.GetSelectList(typeof(Link));
+                var linksList = Extensions.EnumExtensions.GetSelectList<Link>().ToList();
                 linksList.RemoveAt(0);
                 
                 var result = new Dictionary<string, object>
