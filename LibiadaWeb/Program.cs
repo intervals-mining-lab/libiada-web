@@ -19,7 +19,7 @@ builder.Services.AddDefaultIdentity<IdentityUser<int>>(options => options.SignIn
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddScoped<LibiadaDatabaseEntities>();
-builder.Services.AddSingleton<LibiadaDatabaseEntities>();
+builder.Services.AddSingleton<ILibiadaDatabaseEntitiesFactory, LibiadaDatabaseEntitiesFactory>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IPrincipal>(provider => provider.GetService<IHttpContextAccessor>().HttpContext.User);

@@ -16,7 +16,7 @@
     },
     {
       "library": "jquery-validation-unobtrusive@4.0.0",
-      "destination": "wwwroot/lib/jquery-alidation-unobtrusive/"
+      "destination": "wwwroot/lib/jquery-validation-unobtrusive/"
     },
     {
       "library": "AlertifyJS@1.13.1",

@@ -2,9 +2,6 @@
 {
     public class TaskManagerHubFactory : ITaskManagerHubFactory
     {
-        public TaskManagerHub Create(ITaskManager taskManager)
-        {
-            return new TaskManagerHub(taskManager);
-        }
+        public TaskManagerHub Create(ITaskManager taskManager) => new TaskManagerHub(taskManager);
     }
 }

@@ -37,10 +37,10 @@
         /// <summary>
         /// Prevents a default instance of the <see cref="TaskManager"/> class from being created.
         /// </summary>
-        public TaskManager(LibiadaDatabaseEntities db, ITaskManagerHubFactory factory, IHttpContextAccessor httpContextAccessor)
+        public TaskManager(ILibiadaDatabaseEntitiesFactory dbFactory, ITaskManagerHubFactory factory, IHttpContextAccessor httpContextAccessor)
         {
 
-            this.db = db;
+            this.db = dbFactory.Create();
             this.httpContextAccessor = httpContextAccessor;
             signalrHub = factory.Create(this);
             RemoveGarbageFromDb();
