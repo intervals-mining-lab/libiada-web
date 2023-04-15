@@ -6,6 +6,8 @@ namespace LibiadaWeb.Data
 {
     public class ApplicationDbContext : IdentityDbContext<IdentityUser<int>, IdentityRole<int>, int>
     {
+        public DbSet<AspNetPushNotificationSubscribers> AspNetPushNotificationSubscribers { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
