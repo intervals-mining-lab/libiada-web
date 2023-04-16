@@ -1,0 +1,61 @@
+﻿@using Libiada.Web.Helpers
+<div ng-repeat="characteristic in $ctrl.characteristics">
+    <div class="row mb-2">
+        <label class="col-form-label col-md-2" for="characterisitc">Characteristic:</label>
+        <div class="col-md-10">
+            <select class="form-select"
+                    title="Characteristic"
+                    ng-model="characteristic.characteristicType"
+                    ng-options="c.Text for c in $ctrl.characteristicTypes"
+                    ng-change="$ctrl.selectLink(characteristic)"
+                    id="characterisitc"></select>
+        </div>
+    </div>
+    <div class="row mb-2" ng-show="characteristic.characteristicType.Links.length > 1">
+        <label class="col-form-label col-md-2" for="link">Link:</label>
+        <div class="col-md-10">
+            <select class="form-select"
+                    title="Link"
+                    ng-model="characteristic.link"
+                    ng-options="l.Text for l in characteristic.characteristicType.Links"
+                    id="link"></select>
+        </div>
+    </div>
+    @if (User.IsInRole("admin"))
+    {
+        <div class="row mb-2" ng-show="characteristic.characteristicType.ArrangementTypes.length > 1">
+            <label class="col-form-label col-md-2" for="arrangementType">Arrangement type:</label>
+            <div class="col-md-10">
+                <select class="form-select"
+                        title="Arrangement type"
+                        ng-model="characteristic.arrangementType"
+                        ng-options="a.Text for a in characteristic.characteristicType.ArrangementTypes"
+                        id="arrangementType"></select>
+            </div>
+        </div>
+    }
+    <input type="hidden"
+           name="characteristicLinkIds"
+           ng-value="$ctrl.characteristicsDictionary['(' + characteristic.characteristicType.Value + ', ' + characteristic.link.Value + ', ' + characteristic.arrangementType.Value + ')']" />
+    <div class="row mb-2">
+        <div class="offset-md-2 col-md-10">
+            <button type="button"
+                    class="btn btn-danger"
+                    ng-click="$ctrl.deleteCharacteristic(characteristic)"
+                    ng-disabled="$ctrl.characteristics.length <= 1">
+                Delete characteristic
+            </button>
+        </div>
+    </div>
+</div>
+<div class="row mb-2">
+    <div class="offset-md-2 col-md-10">
+        <button type="button"
+                class="btn btn-success"
+                ng-init="$ctrl.addCharacteristic()"
+                ng-click="$ctrl.addCharacteristic()">
+            Add characteristic
+        </button>
+    </div>
+</div>
+<hr />

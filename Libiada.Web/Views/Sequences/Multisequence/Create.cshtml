@@ -1,0 +1,69 @@
+﻿@using Libiada.Web.Helpers
+@model Multisequence
+
+@{
+    ViewBag.Title = "Create multisequence";
+}
+
+@Html.Partial("_AngularControllerInitializer", "MultisequenceCreateController")
+
+<h2>@ViewBag.Title</h2>
+
+<div>@ViewBag.ErrorMessage</div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div ng-controller="MultisequenceCreateCtrl">
+    <h4>Multisequence parameters</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @if (User.IsInRole("admin"))
+    {
+        <div class="row mb-1">
+            @Html.LabelFor(model => model.Nature, new { @class = "col-form-label col-md-2" })
+            <div class="col-md-10">
+                <select class="form-select"
+                        ng-model="nature"
+                        ng-options="n.Value as n.Text for n in ::natures"
+                        ng-change="filterByNature()"
+                        ng-init="filterByNature()"></select>
+                <input type="hidden" name="Nature" ng-value="nature" />
+                @Html.ValidationMessageFor(model => model.Nature, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    }
+    else
+    {
+        <div ng-hide="true" ng-init="filterByNature()"></div>
+        <input type="hidden" name="Multisequence.Nature" ng-value="nature" />
+    }
+
+    <div class="row mb-1">
+        @Html.LabelFor(model => model.Name, new { @class = "col-form-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <matters-table matters="matters"
+                   nature="nature"
+                   groups="groups"
+                   sequence-types="sequenceTypes"
+                   maximum-selected-matters="::maximumSelectedMatters"
+                   selected-matters-count="selectedMattersCount"
+                   display-multisequence-number="::displayMultisequenceNumber">
+    </matters-table>
+    @Html.Partial("_MattersSubmit")
+    <div class="row mb-1">
+        <div class="col-md-2">
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    </div>
+</div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

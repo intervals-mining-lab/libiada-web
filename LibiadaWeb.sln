@@ -31,6 +31,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SequenceGenerator", "..\lib
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SequenceGenerator.Tests", "..\libiada-core\SequenceGenerator.Tests\SequenceGenerator.Tests.csproj", "{A60A8C4E-0911-4E57-9227-E63197BD59FF}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Libiada.Web", "Libiada.Web\Libiada.Web.csproj", "{57EAEA8A-3FB7-465C-8BF5-D0A73A6F6F8C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +95,10 @@ Global
 		{A60A8C4E-0911-4E57-9227-E63197BD59FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A60A8C4E-0911-4E57-9227-E63197BD59FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A60A8C4E-0911-4E57-9227-E63197BD59FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57EAEA8A-3FB7-465C-8BF5-D0A73A6F6F8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57EAEA8A-3FB7-465C-8BF5-D0A73A6F6F8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57EAEA8A-3FB7-465C-8BF5-D0A73A6F6F8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57EAEA8A-3FB7-465C-8BF5-D0A73A6F6F8C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
