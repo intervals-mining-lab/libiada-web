@@ -20,19 +20,10 @@
     public class CongenericCharacteristicRepository
     {
         /// <summary>
-        /// The sync root.
-        /// </summary>
-        private static readonly object SyncRoot = new object();
-
-        /// <summary>
-        /// The instance.
-        /// </summary>
-        private static volatile CongenericCharacteristicRepository instance;
-
-        /// <summary>
         /// The congeneric characteristic links.
         /// </summary>
         private readonly CongenericCharacteristicLink[] characteristicsLinks;
+        private readonly IPrincipal currentUser;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CongenericCharacteristicRepository"/> class.
@@ -40,34 +31,10 @@
         /// <param name="db">
         /// The db.
         /// </param>
-        private CongenericCharacteristicRepository(LibiadaDatabaseEntities db)
+        public CongenericCharacteristicRepository(LibiadaDatabaseEntities db, IPrincipal currentUser)
         {
             characteristicsLinks = db.CongenericCharacteristicLink.ToArray();
-        }
-
-        /// <summary>
-        /// Gets the instance.
-        /// </summary>
-        public static CongenericCharacteristicRepository Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    lock (SyncRoot)
-                    {
-                        if (instance == null)
-                        {
-                            using (var db = new LibiadaDatabaseEntities())
-                            {
-                                instance = new CongenericCharacteristicRepository(db);
-                            }
-                        }
-                    }
-                }
-
-                return instance;
-            }
+            this.currentUser = currentUser;
         }
 
         /// <summary>
@@ -76,7 +43,7 @@
         /// <returns>
         /// The <see cref="List{CharacteristicData}"/>.
         /// </returns>
-        public List<CharacteristicSelectListItem> GetCharacteristicTypes(IPrincipal currentUser)
+        public List<CharacteristicSelectListItem> GetCharacteristicTypes()
         {
             Link[] links;
             CongenericCharacteristic[] characteristics;

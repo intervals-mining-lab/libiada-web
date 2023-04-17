@@ -19,10 +19,15 @@
     public class NcbiNuccoreSearchController : AbstractResultController
     {
         private readonly LibiadaDatabaseEntities db;
+        private readonly Cache cache;
 
-        public NcbiNuccoreSearchController(LibiadaDatabaseEntities db, ITaskManager taskManager) : base(TaskType.NcbiNuccoreSearch, taskManager)
+        public NcbiNuccoreSearchController(LibiadaDatabaseEntities db,
+                                           ITaskManager taskManager,
+                                           Cache cache)
+            : base(TaskType.NcbiNuccoreSearch, taskManager)
         {
             this.db = db;
+            this.cache = cache;
         }
 
         public ActionResult Index()
@@ -76,7 +81,7 @@
 
                 string[] existingAccessions;
 
-                var dnaSequenceRepository = new GeneticSequenceRepository(db);
+                var dnaSequenceRepository = new GeneticSequenceRepository(db, cache);
 
                 (existingAccessions, _) = dnaSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
 

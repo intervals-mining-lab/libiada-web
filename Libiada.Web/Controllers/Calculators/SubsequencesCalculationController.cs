@@ -8,18 +8,18 @@
     using LibiadaCore.Extensions;
 
     using Libiada.Web.Helpers;
-    using Libiada.Web.Models.CalculatorsData;
     using Libiada.Database.Models.Repositories.Catalogs;
     using Libiada.Database.Tasks;
 
     using Newtonsoft.Json;
 
-    using static Libiada.Database.Models.Calculators.SubsequencesCharacteristicsCalculator;
     using Microsoft.AspNetCore.Authorization;
     using Libiada.Database;
     using Libiada.Database.Models.CalculatorsData;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Libiada.Web.Tasks;
+    using Libiada.Database.Models.Calculators;
+    using Libiada.Database.Models.Repositories.Sequences;
 
     /// <summary>
     /// The subsequences calculation controller.
@@ -29,14 +29,26 @@
     {
         private readonly LibiadaDatabaseEntities db;
         private readonly IViewDataHelper viewDataHelper;
+        private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
+        private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
+        private readonly ICommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubsequencesCalculationController"/> class.
         /// </summary>
-        public SubsequencesCalculationController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.SubsequencesCalculation, taskManager)
+        public SubsequencesCalculationController(LibiadaDatabaseEntities db,
+                                                 IViewDataHelper viewDataHelper,
+                                                 ITaskManager taskManager,
+                                                 IFullCharacteristicRepository characteristicTypeLinkRepository,
+                                                 ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator,
+                                                 ICommonSequenceRepository commonSequenceRepository)
+            : base(TaskType.SubsequencesCalculation, taskManager)
         {
             this.db = db;
             this.viewDataHelper = viewDataHelper;
+            this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
+            this.subsequencesCharacteristicsCalculator = subsequencesCharacteristicsCalculator;
+            this.commonSequenceRepository = commonSequenceRepository;
         }
 
         /// <summary>
@@ -92,7 +104,6 @@
                     remoteIds[n] = parentSequences[parentSequenceIds[n]].RemoteId;
                 }
 
-                FullCharacteristicRepository characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
                 for (int k = 0; k < characteristicLinkIds.Length; k++)
                 {
                     subsequencesCharacteristicsNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[k]);
@@ -105,11 +116,10 @@
                 }
 
                 // TODO: Maybe AttributesValueCache should be created in the Subsequences calculator
-                var attributeValuesCache = new AttributeValueCacheManager();
-
+                var attributeValuesCache = new AttributeValueCacheManager(db);
                 for (int i = 0; i < parentSequenceIds.Length; i++)
                 {
-                    var subsequencesData = CalculateSubsequencesCharacteristics(characteristicLinkIds, features, parentSequenceIds[i]);
+                    var subsequencesData = subsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(characteristicLinkIds, features, parentSequenceIds[i]);
 
                     attributeValuesCache.FillAttributeValues(subsequencesData);
 

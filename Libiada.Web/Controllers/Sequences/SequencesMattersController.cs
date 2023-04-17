@@ -20,7 +20,6 @@
     using Newtonsoft.Json;
     using Libiada.Web.Helpers;
     using FileHelper = Helpers.FileHelper;
-    using System.IO.Pipes;
     using Libiada.Web.Tasks;
 
     /// <summary>
@@ -30,6 +29,7 @@
     {
         protected readonly LibiadaDatabaseEntities db;
         private readonly IViewDataHelper viewDataHelper;
+        private readonly Cache cache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SequencesMattersController"/> class.
@@ -37,10 +37,16 @@
         /// <param name="taskType">
         /// The task Type.
         /// </param>
-        protected SequencesMattersController(TaskType taskType, LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(taskType, taskManager)
+        protected SequencesMattersController(TaskType taskType,
+                                             LibiadaDatabaseEntities db,
+                                             IViewDataHelper viewDataHelper,
+                                             ITaskManager taskManager,
+                                             Cache cache)
+            : base(taskType, taskManager)
         {
             this.db = db;
             this.viewDataHelper = viewDataHelper;
+            this.cache = cache;
         }
 
         /// <summary>
@@ -114,30 +120,30 @@
                     }
                     else
                     {
-                        sequenceStream = Libiada.Web.Helpers.FileHelper.GetFileStream(file!);
+                        sequenceStream = FileHelper.GetFileStream(file!);
                     }
 
                     switch (nature)
                     {
                         case Nature.Genetic:
                             ISequence bioSequence = NcbiHelper.GetFastaSequence(sequenceStream);
-                            var dnaSequenceRepository = new GeneticSequenceRepository(db);
+                            var dnaSequenceRepository = new GeneticSequenceRepository(db, cache);
                             dnaSequenceRepository.Create(commonSequence, bioSequence, partial ?? false);
                             break;
                         case Nature.Music:
-                            var musicSequenceRepository = new MusicSequenceRepository(db);
+                            var musicSequenceRepository = new MusicSequenceRepository(db, cache);
                             musicSequenceRepository.Create(commonSequence, sequenceStream);
                             break;
                         case Nature.Literature:
-                            var literatureSequenceRepository = new LiteratureSequenceRepository(db);
+                            var literatureSequenceRepository = new LiteratureSequenceRepository(db, cache);
                             literatureSequenceRepository.Create(commonSequence, sequenceStream, language ?? Language.Russian, original ?? true, translator ?? Translator.NoneOrManual);
                             break;
                         case Nature.MeasurementData:
-                            var dataSequenceRepository = new DataSequenceRepository(db);
+                            var dataSequenceRepository = new DataSequenceRepository(db, cache);
                             dataSequenceRepository.Create(commonSequence, sequenceStream, precision ?? 0);
                             break;
                         case Nature.Image:
-                            var matterRepository = new MatterRepository(db);
+                            var matterRepository = new MatterRepository(db, cache);
 
                             byte[] fileBytes;
                             using (Stream fileStream = FileHelper.GetFileStream(file))

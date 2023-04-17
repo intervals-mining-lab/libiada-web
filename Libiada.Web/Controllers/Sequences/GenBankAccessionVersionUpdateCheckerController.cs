@@ -13,16 +13,21 @@
     using System.Data.Entity;
     using System.Linq;
     using Microsoft.AspNetCore.Mvc;
-    
+
     using Libiada.Web.Tasks;
 
     public class GenBankAccessionVersionUpdateCheckerController : AbstractResultController
     {
         private readonly LibiadaDatabaseEntities db;
+        private readonly Cache cache;
 
-        public GenBankAccessionVersionUpdateCheckerController(LibiadaDatabaseEntities db, ITaskManager taskManager) : base(TaskType.GenBankAccessionVersionUpdateChecker, taskManager)
+        public GenBankAccessionVersionUpdateCheckerController(LibiadaDatabaseEntities db,
+                                                              ITaskManager taskManager,
+                                                              Cache cache)
+            : base(TaskType.GenBankAccessionVersionUpdateChecker, taskManager)
         {
             this.db = db;
+            this.cache = cache;
         }
 
         public ActionResult Index()
@@ -44,7 +49,7 @@
 
                 Dictionary<string, AccessionUpdateSearchResult> sequencesData;
 
-                var dnaSequenceRepository = new GeneticSequenceRepository(db);
+                var dnaSequenceRepository = new GeneticSequenceRepository(db, cache);
 
                 var sequencesWithAccessions = db.DnaSequence
                                                 .Include(ds => ds.Matter)

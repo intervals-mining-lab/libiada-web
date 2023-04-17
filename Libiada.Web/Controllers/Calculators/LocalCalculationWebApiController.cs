@@ -14,6 +14,8 @@
     using Newtonsoft.Json;
     using Libiada.Database.Models.CalculatorsData;
     using Libiada.Web.Tasks;
+    using Libiada.Database.Models.Repositories.Sequences;
+    using Libiada.Database.Models.Repositories.Catalogs;
 
     /// <summary>
     /// The local calculation web api controller.
@@ -23,10 +25,19 @@
     [ApiController]
     public class LocalCalculationWebApiController : Controller
     {
+        private readonly LibiadaDatabaseEntities db;
+        private readonly ICommonSequenceRepository commonSequenceRepository;
+        private readonly IFullCharacteristicRepository fullCharacteristicRepository;
         private readonly ITaskManager taskManager;
 
-        public LocalCalculationWebApiController(ITaskManager taskManager)
+        public LocalCalculationWebApiController(LibiadaDatabaseEntities db, 
+                                                ICommonSequenceRepository commonSequenceRepository,
+                                                IFullCharacteristicRepository fullCharacteristicRepository,
+                                                ITaskManager taskManager)
         {
+            this.db = db;
+            this.commonSequenceRepository = commonSequenceRepository;
+            this.fullCharacteristicRepository = fullCharacteristicRepository;
             this.taskManager = taskManager;
         }
 
@@ -54,7 +65,7 @@
             int windowSize,
             int step)
         {
-            var calculator = new LocalCharacteristicsCalculator();
+            var calculator = new LocalCharacteristicsCalculator(db, fullCharacteristicRepository, commonSequenceRepository);
             var characteristics = calculator.GetSubsequenceCharacteristic(subsequenceId, characteristicLinkId, windowSize, step);
 
             return JsonConvert.SerializeObject(characteristics);

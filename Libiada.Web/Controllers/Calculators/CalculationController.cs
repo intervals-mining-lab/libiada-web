@@ -27,14 +27,26 @@
     {
         private readonly LibiadaDatabaseEntities db;
         private readonly IViewDataHelper viewDataHelper;
+        private readonly Cache cache;
+        private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
+        private readonly ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CalculationController"/> class.
         /// </summary>
-        public CalculationController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.Calculation, taskManager)
+        public CalculationController(LibiadaDatabaseEntities db,
+                                     IViewDataHelper viewDataHelper,
+                                     ITaskManager taskManager,
+                                     Cache cache, 
+                                     IFullCharacteristicRepository characteristicTypeLinkRepository,
+                                     ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator)
+            : base(TaskType.Calculation, taskManager)
         {
             this.db = db;
             this.viewDataHelper = viewDataHelper;
+            this.cache = cache;
+            this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
+            this.sequencesCharacteristicsCalculator = sequencesCharacteristicsCalculator;
         }
 
         /// <summary>
@@ -45,10 +57,10 @@
         /// </returns>
         public ActionResult Index()
         {
-                var viewData = viewDataHelper.FillViewData(CharacteristicCategory.Full, 1, int.MaxValue, "Calculate");
-                ViewBag.data = JsonConvert.SerializeObject(viewData);
-                return View();
-            
+            var viewData = viewDataHelper.FillViewData(CharacteristicCategory.Full, 1, int.MaxValue, "Calculate");
+            ViewBag.data = JsonConvert.SerializeObject(viewData);
+            return View();
+
         }
 
         /// <summary>
@@ -110,24 +122,24 @@
                 Dictionary<long, string> mattersNames;
 
                 long[][] sequenceIds;
-                    var commonSequenceRepository = new CommonSequenceRepository(db);
-                    sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds, 
-                                                                          notations, 
-                                                                          languages, 
-                                                                          translators, 
-                                                                          pauseTreatments, 
-                                                                          sequentialTransfers, 
-                                                                          trajectories);
-                    mattersNames = Cache.GetInstance().Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
+                var commonSequenceRepository = new CommonSequenceRepository(db, cache);
+                sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds,
+                                                                      notations,
+                                                                      languages,
+                                                                      translators,
+                                                                      pauseTreatments,
+                                                                      sequentialTransfers,
+                                                                      trajectories);
+                mattersNames = cache.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
 
                 double[][] characteristics;
                 if (!rotate && !complementary)
                 {
-                    characteristics = SequencesCharacteristicsCalculator.Calculate(sequenceIds, characteristicLinkIds);
+                    characteristics = sequencesCharacteristicsCalculator.Calculate(sequenceIds, characteristicLinkIds);
                 }
                 else
                 {
-                    characteristics = SequencesCharacteristicsCalculator.Calculate(sequenceIds, characteristicLinkIds, rotate, complementary, rotationLength);
+                    characteristics = sequencesCharacteristicsCalculator.Calculate(sequenceIds, characteristicLinkIds, rotate, complementary, rotationLength);
                 }
 
                 var sequencesCharacteristics = new SequenceCharacteristics[matterIds.Length];
@@ -142,7 +154,6 @@
 
                 var characteristicNames = new string[characteristicLinkIds.Length];
                 var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
-                var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
                 for (int k = 0; k < characteristicLinkIds.Length; k++)
                 {
                     characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[k], notations[k]);

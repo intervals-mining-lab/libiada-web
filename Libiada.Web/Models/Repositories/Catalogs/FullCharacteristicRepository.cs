@@ -20,19 +20,10 @@
     public class FullCharacteristicRepository
     {
         /// <summary>
-        /// The sync root.
-        /// </summary>
-        private static readonly object SyncRoot = new object();
-
-        /// <summary>
-        /// The instance.
-        /// </summary>
-        private static volatile FullCharacteristicRepository instance;
-
-        /// <summary>
         /// The characteristic type links.
         /// </summary>
         private readonly FullCharacteristicLink[] characteristicsLinks;
+        private readonly IPrincipal currentUser;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FullCharacteristicRepository"/> class.
@@ -40,34 +31,10 @@
         /// <param name="db">
         /// The db.
         /// </param>
-        private FullCharacteristicRepository(LibiadaDatabaseEntities db)
+        public FullCharacteristicRepository(LibiadaDatabaseEntities db, IPrincipal currentUser)
         {
             characteristicsLinks = db.FullCharacteristicLink.ToArray();
-        }
-
-        /// <summary>
-        /// Gets the instance.
-        /// </summary>
-        public static FullCharacteristicRepository Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    lock (SyncRoot)
-                    {
-                        if (instance == null)
-                        {
-                            using (var db = new LibiadaDatabaseEntities())
-                            {
-                                instance = new FullCharacteristicRepository(db);
-                            }
-                        }
-                    }
-                }
-
-                return instance;
-            }
+            this.currentUser = currentUser;
         }
 
         /// <summary>
@@ -76,7 +43,7 @@
         /// <returns>
         /// The <see cref="List{CharacteristicData}"/>.
         /// </returns>
-        public List<CharacteristicSelectListItem> GetCharacteristicTypes(IPrincipal currentUser)
+        public List<CharacteristicSelectListItem> GetCharacteristicTypes()
         {
             Link[] links;
             FullCharacteristic[] characteristics;

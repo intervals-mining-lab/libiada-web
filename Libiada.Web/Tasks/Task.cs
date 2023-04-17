@@ -23,11 +23,6 @@
         public readonly TaskData TaskData;
 
         /// <summary>
-        /// The result.
-        /// </summary>
-        //public Dictionary<string, string> Result;
-
-        /// <summary>
         /// The cancellation token source to delete the task.
         /// </summary>
         public CancellationTokenSource CancellationTokenSource;
@@ -52,10 +47,10 @@
         /// <param name="taskType">
         /// The task Type.
         /// </param>
-        public Task(long id, Func<Dictionary<string, string>> action, int userId, TaskType taskType)
+        public Task(long id, Func<Dictionary<string, string>> action, AspNetUser creator, TaskType taskType)
         {
             Action = action;
-            TaskData = new TaskData(id, userId, taskType);
+            TaskData = new TaskData(id, creator, taskType);
         }
 
         /// <summary>

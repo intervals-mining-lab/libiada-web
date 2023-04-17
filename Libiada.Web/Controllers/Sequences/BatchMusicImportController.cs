@@ -20,13 +20,15 @@
     public class BatchMusicImportController : AbstractResultController
     {
         private readonly LibiadaDatabaseEntities db;
+        private readonly Cache cache;
 
         /// <summary>
         /// The batch music import controller.
         /// </summary>
-        public BatchMusicImportController(LibiadaDatabaseEntities db, ITaskManager taskManager) : base(TaskType.BatchMusicImport, taskManager)
+        public BatchMusicImportController(LibiadaDatabaseEntities db, ITaskManager taskManager, Cache cache) : base(TaskType.BatchMusicImport, taskManager)
         {
             this.db = db;
+            this.cache = cache;
         }
 
         // GET: BatchMusicImport
@@ -49,7 +51,7 @@
             {
                 var importResults = new List<MatterImportResult>();
 
-                Matter[] matters = Cache.GetInstance().Matters.Where(m => m.Nature == Nature.Music).ToArray();
+                Matter[] matters = cache.Matters.Where(m => m.Nature == Nature.Music).ToArray();
 
                 for (int i = 0; i < files.Count; i++)
                 {
@@ -89,7 +91,7 @@
                             importResult.Result = "Successfully imported music and created matter";
                         }
 
-                        var repository = new MusicSequenceRepository(db);
+                        var repository = new MusicSequenceRepository(db, cache);
 
                         repository.Create(sequence, FileHelper.GetFileStream(files[i]));
                         importResult.Status = "Success";

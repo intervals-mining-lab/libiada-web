@@ -32,7 +32,7 @@
         /// <summary>
         /// The sequence repository.
         /// </summary>
-        private readonly CommonSequenceRepository commonSequenceRepository;
+        private readonly ICommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
         /// The element repository.
@@ -42,12 +42,15 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SequenceTransformerController"/> class.
         /// </summary>
-        public SequenceTransformerController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper)
+        public SequenceTransformerController(LibiadaDatabaseEntities db, 
+                                             IViewDataHelper viewDataHelper,
+                                             ICommonSequenceRepository commonSequenceRepository, 
+                                             Cache cache)
         {
             this.db = db;
             this.viewDataHelper = viewDataHelper;
-            dnaSequenceRepository = new GeneticSequenceRepository(db);
-            commonSequenceRepository = new CommonSequenceRepository(db);
+            dnaSequenceRepository = new GeneticSequenceRepository(db, cache);
+            this.commonSequenceRepository = commonSequenceRepository;
             elementRepository = new ElementRepository(db);
         }
 

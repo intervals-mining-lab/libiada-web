@@ -37,22 +37,33 @@
         /// <summary>
         /// The sequence repository.
         /// </summary>
-        private readonly CommonSequenceRepository commonSequenceRepository;
+        private readonly ICommonSequenceRepository commonSequenceRepository;
+        private readonly Cache cache;
 
         /// <summary>
         /// The characteristic type repository.
         /// </summary>
-        private readonly FullCharacteristicRepository characteristicTypeLinkRepository;
+        private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
+        private readonly ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ClusterizationController"/> class.
         /// </summary>
-        public ClusterizationController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.Clusterization, taskManager)
+        public ClusterizationController(LibiadaDatabaseEntities db, 
+                                        IViewDataHelper viewDataHelper, 
+                                        ITaskManager taskManager, 
+                                        IFullCharacteristicRepository characteristicTypeLinkRepository,
+                                        ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator,
+                                        ICommonSequenceRepository commonSequenceRepository,
+                                        Cache cache) 
+            : base(TaskType.Clusterization, taskManager)
         {
             this.db = db;
             this.viewDataHelper = viewDataHelper;
-            commonSequenceRepository = new CommonSequenceRepository(db);
-            characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
+            this.commonSequenceRepository = commonSequenceRepository;
+            this.cache = cache;
+            this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
+            this.sequencesCharacteristicsCalculator = sequencesCharacteristicsCalculator;
         }
 
         /// <summary>
@@ -145,13 +156,11 @@
             return CreateTask(() =>
             {
                 Dictionary<long, string> mattersNames;
-                Dictionary<long, string> matters = Cache.GetInstance()
-                                                        .Matters
+                Dictionary<long, string> matters = cache.Matters
                                                         .Where(m => matterIds.Contains(m.Id))
                                                         .ToDictionary(m => m.Id, m => m.Name);
 
                 long[][] sequenceIds;
-                var commonSequenceRepository = new CommonSequenceRepository(db);
                 sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds,
                                                                       notations,
                                                                       languages,
@@ -163,7 +172,7 @@
 
                 double[][] characteristics;
 
-                characteristics = SequencesCharacteristicsCalculator.Calculate(sequenceIds, characteristicLinkIds);
+                characteristics = sequencesCharacteristicsCalculator.Calculate(sequenceIds, characteristicLinkIds);
 
                 var clusterizationParams = new Dictionary<string, double>
                 {
@@ -190,7 +199,6 @@
 
                 var characteristicNames = new string[characteristicLinkIds.Length];
                 var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
-                var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
                 for (int k = 0; k < characteristicLinkIds.Length; k++)
                 {
                     characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[k], notations[k]);

@@ -15,9 +15,10 @@
 
     using Newtonsoft.Json;
 
-    using static Libiada.Database.Models.Calculators.SubsequencesCharacteristicsCalculator;
+    using Libiada.Database.Models.Calculators;
     using Libiada.Database;
     using Libiada.Web.Tasks;
+    using Libiada.Database.Models.Repositories.Sequences;
 
     /// <summary>
     /// The alignment controller.
@@ -28,16 +29,29 @@
         /// <summary>
         /// The characteristic type repository.
         /// </summary>
-        private readonly FullCharacteristicRepository characteristicTypeLinkRepository;
+        private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
+        private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
+        private readonly ICommonSequenceRepository commonSequenceRepository;
+        private readonly Cache cache;
         private readonly LibiadaDatabaseEntities db;
         private readonly IViewDataHelper viewDataHelper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SequencesAlignmentController"/> class.
         /// </summary>
-        public SequencesAlignmentController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.SequencesAlignment, taskManager)
+        public SequencesAlignmentController(LibiadaDatabaseEntities db, 
+                                            IViewDataHelper viewDataHelper, 
+                                            ITaskManager taskManager,
+                                            IFullCharacteristicRepository characteristicTypeLinkRepository,
+                                            ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator,
+                                            ICommonSequenceRepository commonSequenceRepository,
+                                            Cache cache)
+            : base(TaskType.SequencesAlignment, taskManager)
         {
-            characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
+            this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
+            this.subsequencesCharacteristicsCalculator = subsequencesCharacteristicsCalculator;
+            this.commonSequenceRepository = commonSequenceRepository;
+            this.cache = cache;
             this.db = db;
             this.viewDataHelper = viewDataHelper;
         }
@@ -109,16 +123,15 @@
                 long secondParentId;
 
                 long firstMatterId = matterIds[0];
-                firstMatterName = Cache.GetInstance().Matters.Single(m => m.Id == firstMatterId).Name;
+                firstMatterName = cache.Matters.Single(m => m.Id == firstMatterId).Name;
                 firstParentId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
 
                 long secondMatterId = matterIds[1];
-                secondMatterName = Cache.GetInstance().Matters.Single(m => m.Id == secondMatterId).Name;
+                secondMatterName = cache.Matters.Single(m => m.Id == secondMatterId).Name;
                 secondParentId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
 
-
-                double[] firstSequenceCharacteristics = CalculateSubsequencesCharacteristics(firstParentId, characteristicLinkId, features);
-                double[] secondSequenceCharacteristics = CalculateSubsequencesCharacteristics(secondParentId, characteristicLinkId, features);
+                double[] firstSequenceCharacteristics = subsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(firstParentId, characteristicLinkId, features);
+                double[] secondSequenceCharacteristics = subsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(secondParentId, characteristicLinkId, features);
 
                 if (sort)
                 {

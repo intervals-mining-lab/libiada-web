@@ -23,11 +23,13 @@
     {
         private readonly LibiadaDatabaseEntities db;
         private readonly IViewDataHelper viewDataHelper;
+        private readonly Cache cache;
 
-        public MultisequenceController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper)
+        public MultisequenceController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, Cache cache)
         {
             this.db = db;
             this.viewDataHelper = viewDataHelper;
+            this.cache = cache;
         }
 
         /// <summary>
@@ -245,7 +247,7 @@
 
             db.Multisequence.Remove(multisequence);
             await db.SaveChangesAsync();
-            Cache.Clear();
+            cache.Clear();
             return RedirectToAction("Index");
         }
 

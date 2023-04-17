@@ -16,8 +16,9 @@
 
     using Newtonsoft.Json;
 
-    using static Libiada.Database.Models.Calculators.SubsequencesCharacteristicsCalculator;
     using Libiada.Web.Tasks;
+    using Libiada.Database.Models.Repositories.Sequences;
+    using Libiada.Database.Models.Calculators;
 
     /// <summary>
     /// The subsequences similarity controller.
@@ -44,17 +45,30 @@
         /// <summary>
         /// The characteristic type repository.
         /// </summary>
-        private readonly FullCharacteristicRepository characteristicTypeLinkRepository;
+        private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
+        private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
+        private readonly ICommonSequenceRepository commonSequenceRepository;
+        private readonly Cache cache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubsequencesSimilarityController"/> class.
         /// </summary>
-        public SubsequencesSimilarityController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.SubsequencesSimilarity, taskManager)
+        public SubsequencesSimilarityController(LibiadaDatabaseEntities db,
+                                                IViewDataHelper viewDataHelper,
+                                                ITaskManager taskManager,
+                                                IFullCharacteristicRepository characteristicTypeLinkRepository,
+                                                ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator,
+                                                ICommonSequenceRepository commonSequenceRepository,
+                                                Cache cache)
+            : base(TaskType.SubsequencesSimilarity, taskManager)
         {
             this.db = db;
             this.viewDataHelper = viewDataHelper;
-            subsequenceExtractor = new SubsequenceExtractor(db);
-            characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
+            subsequenceExtractor = new SubsequenceExtractor(db, commonSequenceRepository);
+            this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
+            this.subsequencesCharacteristicsCalculator = subsequencesCharacteristicsCalculator;
+            this.commonSequenceRepository = commonSequenceRepository;
+            this.cache = cache;
             sequenceAttributeRepository = new SequenceAttributeRepository(db);
         }
 
@@ -116,7 +130,7 @@
 
                 long firstMatterId = matterIds[0];
                 long firstParentSequenceId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
-                SubsequenceData[] firstSequenceSubsequences = CalculateSubsequencesCharacteristics(
+                SubsequenceData[] firstSequenceSubsequences = subsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
                                                                     new[] { characteristicLinkId },
                                                                     features,
                                                                     firstParentSequenceId);
@@ -132,7 +146,7 @@
 
                 long secondMatterId = matterIds[1];
                 long secondParentSequenceId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
-                SubsequenceData[] secondSequenceSubsequences = CalculateSubsequencesCharacteristics(
+                SubsequenceData[] secondSequenceSubsequences = subsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
                                                                     new[] { characteristicLinkId },
                                                                     features,
                                                                     secondParentSequenceId);
@@ -177,8 +191,8 @@
 
                 var result = new Dictionary<string, object>
                 {
-                    { "firstSequenceName", Cache.GetInstance().Matters.Single(m => m.Id == firstMatterId).Name },
-                    { "secondSequenceName", Cache.GetInstance().Matters.Single(m => m.Id == secondMatterId).Name },
+                    { "firstSequenceName", cache.Matters.Single(m => m.Id == firstMatterId).Name },
+                    { "secondSequenceName", cache.Matters.Single(m => m.Id == secondMatterId).Name },
                     { "characteristicName", characteristicName },
                     { "similarSubsequences", similarSubsequences },
                     { "similarity", similarity },

@@ -22,19 +22,10 @@
     public class AccordanceCharacteristicRepository
     {
         /// <summary>
-        /// The sync root.
-        /// </summary>
-        private static readonly object SyncRoot = new object();
-
-        /// <summary>
-        /// The instance.
-        /// </summary>
-        private static volatile AccordanceCharacteristicRepository instance;
-
-        /// <summary>
         /// The accordance characteristics links.
         /// </summary>
         private readonly AccordanceCharacteristicLink[] characteristicsLinks;
+        private readonly IPrincipal currentUser;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccordanceCharacteristicRepository"/> class.
@@ -42,36 +33,11 @@
         /// <param name="db">
         /// The db.
         /// </param>
-        private AccordanceCharacteristicRepository(LibiadaDatabaseEntities db)
+        public AccordanceCharacteristicRepository(LibiadaDatabaseEntities db, IPrincipal currentUser)
         {
             characteristicsLinks = db.AccordanceCharacteristicLink.ToArray();
+            this.currentUser = currentUser;
         }
-
-        /// <summary>
-        /// Gets the instance.
-        /// </summary>
-        public static AccordanceCharacteristicRepository Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    lock (SyncRoot)
-                    {
-                        if (instance == null)
-                        {
-                            using (var db = new LibiadaDatabaseEntities())
-                            {
-                                instance = new AccordanceCharacteristicRepository(db);
-                            }
-                        }
-                    }
-                }
-
-                return instance;
-            }
-        }
-
         
 
         /// <summary>
@@ -80,7 +46,7 @@
         /// <returns>
         /// The <see cref="List{CharacteristicData}"/>.
         /// </returns>
-        public List<CharacteristicSelectListItem> GetCharacteristicTypes(IPrincipal currentUser)
+        public List<CharacteristicSelectListItem> GetCharacteristicTypes()
         {
             Link[] links;
             AccordanceCharacteristic[] characteristics;

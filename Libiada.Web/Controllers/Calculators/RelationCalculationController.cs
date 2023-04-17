@@ -16,7 +16,7 @@
     using Libiada.Database;
     using Libiada.Database.Models.Repositories.Sequences;
     using Libiada.Database.Tasks;
-    using Libiada.Database.Helpers;
+    using Libiada.Database.Extensions;
     using Libiada.Database.Models.Repositories.Catalogs;
 
     using Newtonsoft.Json;
@@ -38,22 +38,30 @@
         /// <summary>
         /// The sequence repository.
         /// </summary>
-        private readonly CommonSequenceRepository commonSequenceRepository;
+        private readonly ICommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
         /// The characteristic type repository.
         /// </summary>
-        private readonly BinaryCharacteristicRepository characteristicTypeLinkRepository;
+        private readonly IBinaryCharacteristicRepository characteristicTypeLinkRepository;
+        private readonly Cache cache;
         private readonly IViewDataHelper viewDataHelper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RelationCalculationController"/> class.
         /// </summary>
-        public RelationCalculationController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.RelationCalculation, taskManager)
+        public RelationCalculationController(LibiadaDatabaseEntities db, 
+                                             IViewDataHelper viewDataHelper, 
+                                             ITaskManager taskManager, 
+                                             ICommonSequenceRepository commonSequenceRepository,
+                                             IBinaryCharacteristicRepository characteristicTypeLinkRepository,
+                                             Cache cache)
+            : base(TaskType.RelationCalculation, taskManager)
         {
             this.db = db;
-            commonSequenceRepository = new CommonSequenceRepository(db);
-            characteristicTypeLinkRepository = BinaryCharacteristicRepository.Instance;
+            this.commonSequenceRepository = commonSequenceRepository;
+            this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
+            this.cache = cache;
             this.viewDataHelper = viewDataHelper;
         }
 
@@ -130,7 +138,7 @@
             return CreateTask(() =>
             {
                 string characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
-                Matter matter = Cache.GetInstance().Matters.Single(m => m.Id == matterId);
+                Matter matter = cache.Matters.Single(m => m.Id == matterId);
                 long sequenceId = commonSequenceRepository.GetSequenceIds(new[] { matterId }, 
                                                                           notation, 
                                                                           language, 
@@ -166,16 +174,11 @@
                 if (filter)
                 {
                     var filteredResult = db.BinaryCharacteristicValue
-                                       .Where(b => b.SequenceId == sequenceId && b.CharacteristicLinkId == characteristicLinkId)
-                                       .OrderByDescending(b => b.Value)
-                                       .Take(filterSize)
-                                       .Select(rc => new
-                                       {
-                                           FirstElementId = rc.FirstElementId,
-                                           SecondElementId = rc.SecondElementId,
-                                           Value = rc.Value
-                                       })
-                                       .ToArray();
+                                           .Where(b => b.SequenceId == sequenceId && b.CharacteristicLinkId == characteristicLinkId)
+                                           .OrderByDescending(b => b.Value)
+                                           .Take(filterSize)
+                                           .Select(rc => new { rc.FirstElementId, rc.SecondElementId, rc.Value })
+                                           .ToArray();
 
                     var firstElements = new List<string>();
                     var secondElements = new List<string>();
@@ -198,15 +201,15 @@
                 else
                 {
                     var characteristics = db.BinaryCharacteristicValue
-                                        .Where(b => b.SequenceId == sequenceId && b.CharacteristicLinkId == characteristicLinkId)
-                                        .GroupBy(b => b.FirstElementId)
-                                        .ToDictionary(b => b.Key, b => b.ToDictionary(bb => bb.SecondElementId, bb => bb.Value));
+                                            .Where(b => b.SequenceId == sequenceId && b.CharacteristicLinkId == characteristicLinkId)
+                                            .GroupBy(b => b.FirstElementId)
+                                            .ToDictionary(b => b.Key, b => b.ToDictionary(bb => bb.SecondElementId, bb => bb.Value));
                     var elementsIds = db.GetAlphabetElementIds(sequenceId);
                     var elements = db.Element
-                        .Where(e => elementsIds.Contains(e.Id))
-                        .OrderBy(e => e.Id)
-                        .Select(e => new { Name = e.Name ?? e.Value, e.Id })
-                        .ToArray();
+                                     .Where(e => elementsIds.Contains(e.Id))
+                                     .OrderBy(e => e.Id)
+                                     .Select(e => new { Name = e.Name ?? e.Value, e.Id })
+                                     .ToArray();
                     
                     result.Add("characteristics", characteristics);
                     result.Add("elements", elements);

@@ -44,22 +44,30 @@
         /// <summary>
         /// The sequence repository.
         /// </summary>
-        private readonly CommonSequenceRepository commonSequenceRepository;
+        private readonly ICommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
         /// The characteristic type repository.
         /// </summary>
-        private readonly FullCharacteristicRepository characteristicTypeLinkRepository;
+        private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
+        private readonly Cache cache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LocalCalculationController"/> class.
         /// </summary>
-        public LocalCalculationController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.LocalCalculation, taskManager)
+        public LocalCalculationController(LibiadaDatabaseEntities db, 
+                                          IViewDataHelper viewDataHelper, 
+                                          ITaskManager taskManager,
+                                          ICommonSequenceRepository commonSequenceRepository,
+                                          IFullCharacteristicRepository characteristicTypeLinkRepository,
+                                          Cache cache)
+            : base(TaskType.LocalCalculation, taskManager)
         {
             this.db = db;
             this.viewDataHelper = viewDataHelper;
-            commonSequenceRepository = new CommonSequenceRepository(db);
-            characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
+            this.commonSequenceRepository = commonSequenceRepository;
+            this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
+            this.cache = cache;
         }
 
         /// <summary>
@@ -153,12 +161,12 @@
                 var calculators = new IFullCalculator[characteristicLinkIds.Length];
                 var links = new Link[characteristicLinkIds.Length];
                 Array.Sort(matterIds);
-                Dictionary<long, Matter> matters = Cache.GetInstance().Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id);
+                Dictionary<long, Matter> matters = cache.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id);
 
                 for (int k = 0; k < matterIds.Length; k++)
                 {
                     long matterId = matterIds[k];
-                    Nature nature = Cache.GetInstance().Matters.Single(m => m.Id == matterId).Nature;
+                    Nature nature = cache.Matters.Single(m => m.Id == matterId).Nature;
 
                     long sequenceId = commonSequenceRepository.GetSequenceIds(new[] { matterId },
                                                                            notation,

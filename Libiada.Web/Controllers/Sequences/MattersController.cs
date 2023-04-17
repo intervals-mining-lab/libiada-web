@@ -21,11 +21,18 @@
     [Authorize]
     public class MattersController : SequencesMattersController
     {
+        private readonly Cache cache;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MattersController"/> class.
         /// </summary>
-        public MattersController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.Matters, db, viewDataHelper, taskManager)
+        public MattersController(LibiadaDatabaseEntities db, 
+                                 IViewDataHelper viewDataHelper, 
+                                 ITaskManager taskManager,
+                                 Cache cache)
+            : base(TaskType.Matters, db, viewDataHelper, taskManager, cache)
         {
+            this.cache = cache;
         }
 
         /// <summary>
@@ -137,7 +144,7 @@
             {
                 db.Entry(matter).State = EntityState.Modified;
                 await db.SaveChangesAsync();
-                Cache.Clear();
+                cache.Clear();
                 return RedirectToAction("Index");
             }
 
@@ -202,9 +209,8 @@
             Matter matter = await db.Matter.FindAsync(id);
             db.Matter.Remove(matter);
             await db.SaveChangesAsync();
-            Cache.Clear();
+            cache.Clear();
             return RedirectToAction("Index");
-
         }
     }
 }

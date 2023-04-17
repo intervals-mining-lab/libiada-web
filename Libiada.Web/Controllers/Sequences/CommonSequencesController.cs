@@ -2,7 +2,6 @@
 {
     using System.Data.Entity;
     using System.Linq;
-    using System.Net;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
@@ -18,11 +17,18 @@
     [Authorize(Roles = "Admin")]
     public class CommonSequencesController : SequencesMattersController
     {
+        private readonly Cache cache;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CommonSequencesController"/> class.
         /// </summary>
-        public CommonSequencesController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.CommonSequences, db, viewDataHelper, taskManager)
+        public CommonSequencesController(LibiadaDatabaseEntities db, 
+                                         IViewDataHelper viewDataHelper, 
+                                         ITaskManager taskManager,
+                                         Cache cache)
+            : base(TaskType.CommonSequences, db, viewDataHelper, taskManager, cache)
         {
+            this.cache = cache;
         }
 
         /// <summary>
@@ -87,7 +93,7 @@
                 return NotFound();
             }
             var remoteDb = commonSequence.RemoteDb == null ? Array.Empty<RemoteDb>() : new[] { (RemoteDb)commonSequence.RemoteDb };
-            ViewBag.MatterId = new SelectList(Cache.GetInstance().Matters.ToArray(), "Id", "Name", commonSequence.MatterId);
+            ViewBag.MatterId = new SelectList(cache.Matters.ToArray(), "Id", "Name", commonSequence.MatterId);
             ViewBag.Notation = EnumExtensions.GetSelectList(new[] { commonSequence.Notation });
             ViewBag.RemoteDb = EnumExtensions.GetSelectList(remoteDb);
             return View(commonSequence);
@@ -116,7 +122,7 @@
 
             var remoteDb = commonSequence.RemoteDb == null ? Array.Empty<RemoteDb>() : new[] { (RemoteDb)commonSequence.RemoteDb };
 
-            ViewBag.MatterId = new SelectList(Cache.GetInstance().Matters.ToArray(), "Id", "Name", commonSequence.MatterId);
+            ViewBag.MatterId = new SelectList(cache.Matters.ToArray(), "Id", "Name", commonSequence.MatterId);
             ViewBag.Notation = EnumExtensions.GetSelectList(new[] { commonSequence.Notation });
             ViewBag.RemoteDb = EnumExtensions.GetSelectList(remoteDb);
             return View(commonSequence);

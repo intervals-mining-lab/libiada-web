@@ -26,14 +26,20 @@
     {
         private readonly LibiadaDatabaseEntities db;
         private readonly IViewDataHelper viewDataHelper;
+        private readonly Cache cache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GenesImportController"/> class.
         /// </summary>
-        public GenesImportController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.GenesImport, taskManager)
+        public GenesImportController(LibiadaDatabaseEntities db, 
+                                     IViewDataHelper viewDataHelper, 
+                                     ITaskManager taskManager, 
+                                     Cache cache)
+            : base(TaskType.GenesImport, taskManager)
         {
             this.db = db;
             this.viewDataHelper = viewDataHelper;
+            this.cache = cache;
         }
 
         /// <summary>
@@ -77,13 +83,12 @@
                 Dictionary<string, object> result;
 
                 DnaSequence parentSequence = db.DnaSequence.Single(d => d.MatterId == matterId);
-                using (var subsequenceImporter = new SubsequenceImporter(parentSequence))
-                {
-                    subsequenceImporter.CreateSubsequences();
-                }
+                var subsequenceImporter = new SubsequenceImporter(db, parentSequence);
+                subsequenceImporter.CreateSubsequences();
+
 
                 var features = EnumExtensions.ToArray<Feature>().ToDictionary(f => (byte)f, f => f.GetDisplayValue());
-                string matterName = Cache.GetInstance().Matters.Single(m => m.Id == matterId).Name;
+                string matterName = cache.Matters.Single(m => m.Id == matterId).Name;
                 SubsequenceData[] sequenceSubsequences = db.Subsequence
                     .Where(s => s.SequenceId == parentSequence.Id)
                     .Include(s => s.Position)

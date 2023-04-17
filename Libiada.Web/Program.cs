@@ -2,6 +2,11 @@ global using Libiada.Database;
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Mvc.Rendering;
 
+using Libiada.Database.Models.Calculators;
+using Libiada.Database.Models.Repositories.Catalogs;
+using Libiada.Database.Models.Repositories.Sequences;
+
+using Libiada.Web;
 using Libiada.Web.Data;
 using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
@@ -20,8 +25,20 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser<int>>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddScoped<LibiadaDatabaseEntities>();
+builder.Services.AddScoped<LibiadaDatabaseEntities>(l => new LibiadaDatabaseEntities(builder.Configuration.GetConnectionString("LibiadaDatabaseEntities")));
 builder.Services.AddSingleton<ILibiadaDatabaseEntitiesFactory, LibiadaDatabaseEntitiesFactory>();
+
+builder.Services.AddSingleton<Cache>();
+
+builder.Services.AddSingleton<IAccordanceCharacteristicRepository, AccordanceCharacteristicRepository>();
+builder.Services.AddSingleton<IBinaryCharacteristicRepository, BinaryCharacteristicRepository>();
+builder.Services.AddSingleton<ICongenericCharacteristicRepository, CongenericCharacteristicRepository>();
+builder.Services.AddSingleton<IFullCharacteristicRepository, FullCharacteristicRepository>();
+
+builder.Services.AddTransient<ICommonSequenceRepository, CommonSequenceRepository>();
+
+builder.Services.AddScoped<ISequencesCharacteristicsCalculator, SequencesCharacteristicsCalculator>();
+builder.Services.AddScoped<ISubsequencesCharacteristicsCalculator, SubsequencesCharacteristicsCalculator>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IPrincipal>(provider => provider.GetService<IHttpContextAccessor>().HttpContext.User);

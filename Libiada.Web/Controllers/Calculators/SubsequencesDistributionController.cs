@@ -15,6 +15,8 @@
 
     using Libiada.Web.Extensions;
     using Libiada.Web.Helpers;
+    using Libiada.Web.Tasks;
+
     using Libiada.Database.Models;
     using Libiada.Database.Models.Calculators;
     using Libiada.Database.Models.CalculatorsData;
@@ -25,13 +27,9 @@
     using Bio.IO.FastA;
     using Bio;
 
-    using static Libiada.Database.Models.Calculators.SubsequencesCharacteristicsCalculator;
-
     using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
-    using Attribute = Libiada.Database.Attribute;
-    using Libiada.Web.Tasks;
-
-
+    using Attribute = Database.Attribute;
+    
     /// <summary>
     /// The subsequences distribution controller.
     /// </summary>
@@ -40,14 +38,32 @@
     {
         private readonly LibiadaDatabaseEntities db;
         private readonly IViewDataHelper viewDataHelper;
+        private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
+        private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
+        private readonly ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator;
+        private readonly ICommonSequenceRepository commonSequenceRepository;
+        private readonly Cache cache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubsequencesDistributionController"/> class.
         /// </summary>
-        public SubsequencesDistributionController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.SubsequencesDistribution, taskManager)
+        public SubsequencesDistributionController(LibiadaDatabaseEntities db,
+                                                  IViewDataHelper viewDataHelper,
+                                                  ITaskManager taskManager,
+                                                  IFullCharacteristicRepository characteristicTypeLinkRepository,
+                                                  ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator,
+                                                  ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator,
+                                                  ICommonSequenceRepository commonSequenceRepository, 
+                                                  Cache cache)
+            : base(TaskType.SubsequencesDistribution, taskManager)
         {
             this.db = db;
             this.viewDataHelper = viewDataHelper;
+            this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
+            this.subsequencesCharacteristicsCalculator = subsequencesCharacteristicsCalculator;
+            this.sequencesCharacteristicsCalculator = sequencesCharacteristicsCalculator;
+            this.commonSequenceRepository = commonSequenceRepository;
+            this.cache = cache;
         }
 
         /// <summary>
@@ -85,78 +101,76 @@
         public ActionResult Index(long[] matterIds, short characteristicLinkId, short[] characteristicLinkIds, Feature[] features)
         {
             return CreateTask(() =>
+            {
+                Array.Sort(matterIds);
+
+                var matterNames = new string[matterIds.Length];
+                var remoteIds = new string[matterIds.Length];
+                var subsequencesCharacteristicsNames = new string[characteristicLinkIds.Length];
+                var subsequencesCharacteristicsList = new SelectListItem[characteristicLinkIds.Length];
+                var attributeValuesCache = new AttributeValueCacheManager(db);
+                long[] sequenceIds;
+
+                DnaSequence[] parentSequences = db.DnaSequence.Include(s => s.Matter)
+                                        .Where(s => s.Notation == Notation.Nucleotides && matterIds.Contains(s.MatterId))
+                                        .OrderBy(s => s.MatterId)
+                                        .ToArray();
+
+                for (int n = 0; n < parentSequences.Length; n++)
                 {
-                    Array.Sort(matterIds);
+                    matterNames[n] = parentSequences[n].Matter.Name;
+                    remoteIds[n] = parentSequences[n].RemoteId;
+                }
 
-                    var matterNames = new string[matterIds.Length];
-                    var remoteIds = new string[matterIds.Length];
-                    var subsequencesCharacteristicsNames = new string[characteristicLinkIds.Length];
-                    var subsequencesCharacteristicsList = new SelectListItem[characteristicLinkIds.Length];
-                    var attributeValuesCache = new AttributeValueCacheManager();
-                    long[] sequenceIds;
+                var geneticSequenceRepository = new GeneticSequenceRepository(db, cache);
+                sequenceIds = geneticSequenceRepository.GetNucleotideSequenceIds(matterIds);
 
-                    DnaSequence[] parentSequences = db.DnaSequence.Include(s => s.Matter)
-                                            .Where(s => s.Notation == Notation.Nucleotides && matterIds.Contains(s.MatterId))
-                                            .OrderBy(s => s.MatterId)
-                                            .ToArray();
+                string sequenceCharacteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId);
 
-                    for (int n = 0; n < parentSequences.Length; n++)
+                for (int k = 0; k < characteristicLinkIds.Length; k++)
+                {
+                    subsequencesCharacteristicsNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[k]);
+                    subsequencesCharacteristicsList[k] = new SelectListItem
                     {
-                        matterNames[n] = parentSequences[n].Matter.Name;
-                        remoteIds[n] = parentSequences[n].RemoteId;
-                    }
+                        Value = k.ToString(),
+                        Text = subsequencesCharacteristicsNames[k],
+                        Selected = false
+                    };
+                }
 
-                    var geneticSequenceRepository = new GeneticSequenceRepository(db);
-                    sequenceIds = geneticSequenceRepository.GetNucleotideSequenceIds(matterIds);
+                double[] characteristics = sequencesCharacteristicsCalculator.Calculate(sequenceIds, characteristicLinkId);
 
+                var sequencesData = new SequenceData[matterIds.Length];
+                for (int i = 0; i < matterIds.Length; i++)
+                {
+                   
+                    // all subsequence calculations
+                    SubsequenceData[] subsequencesData = subsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
+                        characteristicLinkIds,
+                        features,
+                        sequenceIds[i]);
 
-                    var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
-                    string sequenceCharacteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId);
+                    attributeValuesCache.FillAttributeValues(subsequencesData);
 
-                    for (int k = 0; k < characteristicLinkIds.Length; k++)
-                    {
-                        subsequencesCharacteristicsNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[k]);
-                        subsequencesCharacteristicsList[k] = new SelectListItem
-                        {
-                            Value = k.ToString(),
-                            Text = subsequencesCharacteristicsNames[k],
-                            Selected = false
-                        };
-                    }
+                    sequencesData[i] = new SequenceData(matterIds[i], matterNames[i], remoteIds[i], characteristics[i], subsequencesData);
+                }
 
-                    double[] characteristics = SequencesCharacteristicsCalculator.Calculate(sequenceIds, characteristicLinkId);
+                // sorting organisms by their characteristic
+                Array.Sort(sequencesData, (x, y) => x.Characteristic.CompareTo(y.Characteristic));
+                List<AttributeValue> allAttributeValues = attributeValuesCache.AllAttributeValues;
+                var result = new Dictionary<string, object>
+                                {
+                                    { "result", sequencesData },
+                                    { "subsequencesCharacteristicsNames", subsequencesCharacteristicsNames },
+                                    { "subsequencesCharacteristicsList", subsequencesCharacteristicsList },
+                                    { "sequenceCharacteristicName", sequenceCharacteristicName },
+                                    { "features", features.ToSelectList(features).ToDictionary(f => f.Value) },
+                                    { "attributes", EnumExtensions.ToArray<Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
+                                    { "attributeValues", allAttributeValues.Select(sa => new { attribute = sa.AttributeId, value = sa.Value }) }
+                                };
 
-                    var sequencesData = new SequenceData[matterIds.Length];
-
-                    for (int i = 0; i < matterIds.Length; i++)
-                    {
-                        // all subsequence calculations
-                        SubsequenceData[] subsequencesData = CalculateSubsequencesCharacteristics(
-                            characteristicLinkIds,
-                            features,
-                            sequenceIds[i]);
-
-                        attributeValuesCache.FillAttributeValues(subsequencesData);
-
-                        sequencesData[i] = new SequenceData(matterIds[i], matterNames[i], remoteIds[i], characteristics[i], subsequencesData);
-                    }
-
-                    // sorting organisms by their characteristic
-                    Array.Sort(sequencesData, (x, y) => x.Characteristic.CompareTo(y.Characteristic));
-                    List<AttributeValue> allAttributeValues = attributeValuesCache.AllAttributeValues;
-                    var result = new Dictionary<string, object>
-                                 {
-                                     { "result", sequencesData },
-                                     { "subsequencesCharacteristicsNames", subsequencesCharacteristicsNames },
-                                     { "subsequencesCharacteristicsList", subsequencesCharacteristicsList },
-                                     { "sequenceCharacteristicName", sequenceCharacteristicName },
-                                     { "features", features.ToSelectList(features).ToDictionary(f => f.Value) },
-                                     { "attributes", EnumExtensions.ToArray<Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
-                                     { "attributeValues", allAttributeValues.Select(sa => new { attribute = sa.AttributeId, value = sa.Value }) }
-                                 };
-
-                    return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
-                });
+                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
+            });
         }
 
 
@@ -177,7 +191,7 @@
             {
                 ISequence[] bioSequences;
 
-                var subsequenceExtractor = new SubsequenceExtractor(db);
+                var subsequenceExtractor = new SubsequenceExtractor(db, commonSequenceRepository);
                 bioSequences = subsequenceExtractor.GetBioSequencesForFastaConverter(subsequencesIds);
 
 

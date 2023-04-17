@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using Microsoft.AspNetCore.Mvc;
 
     using Libiada.Database.Tasks;
@@ -42,7 +41,7 @@
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        public ActionResult Result(int id)
+        public ActionResult Result(long id)
         {
             try
             {
@@ -51,13 +50,13 @@
                 if (taskStatus != TaskState.Completed && taskStatus != TaskState.Error)
                 {
                     throw new Exception($"Task with id = {id} is not complete, current status is {taskStatus}");
-                } else if(taskStatus == TaskState.Error)
+                }
+                else if (taskStatus == TaskState.Error)
                 {
                     ViewBag.Error = true;
-                    using(var db = new LibiadaDatabaseEntities())
-                    {
-                        ViewBag.Error = JsonConvert.DeserializeObject(db.TaskResult.Single(tr => tr.TaskId == id && tr.Key == "Error").Value);
-                    }
+
+                    ViewBag.Error = JsonConvert.DeserializeObject(taskManager.GetTaskData(id, "Error"));
+
                 }
             }
             catch (Exception e)

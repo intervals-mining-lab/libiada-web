@@ -4,10 +4,8 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
-    using Microsoft.AspNetCore.Mvc;
 
     using LibiadaCore.Music;
-    using Libiada.Web.Attributes;
     using Libiada.Web.Extensions;
     using Libiada.Web.Models.CalculatorsData;
     using Libiada.Database.Models.Repositories.Catalogs;
@@ -32,6 +30,10 @@
         /// The current user.
         /// </summary>
         private readonly IPrincipal user;
+        private readonly IFullCharacteristicRepository fullCharacteristicModelRepository;
+        private readonly ICongenericCharacteristicRepository congenericCharacteristicModelRepository;
+        private readonly IAccordanceCharacteristicRepository accordanceCharacteristicModelRepository;
+        private readonly IBinaryCharacteristicRepository binaryCharacteristicModelRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewDataHelper"/> class.
@@ -39,10 +41,19 @@
         /// <param name="db">
         /// The db.
         /// </param>
-        public ViewDataHelper(LibiadaDatabaseEntities db, IPrincipal user)
+        public ViewDataHelper(LibiadaDatabaseEntities db,
+                              IPrincipal user,
+                              IFullCharacteristicRepository fullCharacteristicRepository,
+                              ICongenericCharacteristicRepository congenericCharacteristicRepository,
+                              IAccordanceCharacteristicRepository accordanceCharacteristicRepository,
+                              IBinaryCharacteristicRepository binaryCharacteristicRepository)
         {
             this.db = db;
             this.user = user;
+            this.fullCharacteristicModelRepository = fullCharacteristicRepository;
+            this.congenericCharacteristicModelRepository = congenericCharacteristicRepository;
+            this.accordanceCharacteristicModelRepository = accordanceCharacteristicRepository;
+            this.binaryCharacteristicModelRepository = binaryCharacteristicRepository;
         }
 
         /// <summary>
@@ -279,9 +290,10 @@
             switch (characteristicsCategory)
             {
                 case CharacteristicCategory.Full:
-                    characteristicTypes = Models.Repositories.Catalogs.FullCharacteristicRepository.Instance.GetCharacteristicTypes(user);
+                    var fullCharacteristicRepository = new Models.Repositories.Catalogs.FullCharacteristicRepository(db, user);
+                    characteristicTypes = fullCharacteristicRepository.GetCharacteristicTypes();
 
-                    var fullCharacteristics = FullCharacteristicRepository.Instance.CharacteristicLinks;
+                    var fullCharacteristics = fullCharacteristicModelRepository.CharacteristicLinks;
                     foreach (var characteristic in fullCharacteristics)
                     {
                         characteristicsDictionary.Add(((short)characteristic.FullCharacteristic,
@@ -292,9 +304,10 @@
 
                     break;
                 case CharacteristicCategory.Congeneric:
-                    characteristicTypes = Models.Repositories.Catalogs.CongenericCharacteristicRepository.Instance.GetCharacteristicTypes(user);
+                    var congenericCharacteristicRepository = new Models.Repositories.Catalogs.CongenericCharacteristicRepository(db, user);
+                    characteristicTypes = congenericCharacteristicRepository.GetCharacteristicTypes();
 
-                    var congenericCharacteristics = CongenericCharacteristicRepository.Instance.CharacteristicLinks;
+                    var congenericCharacteristics = congenericCharacteristicModelRepository.CharacteristicLinks;
                     foreach (var characteristic in congenericCharacteristics)
                     {
                         characteristicsDictionary.Add(((short)characteristic.CongenericCharacteristic,
@@ -305,9 +318,10 @@
 
                     break;
                 case CharacteristicCategory.Accordance:
-                    characteristicTypes = Models.Repositories.Catalogs.AccordanceCharacteristicRepository.Instance.GetCharacteristicTypes(user);
+                    var accordanceCharacteristicRepository = new Models.Repositories.Catalogs.AccordanceCharacteristicRepository(db, user);
+                    characteristicTypes = accordanceCharacteristicRepository.GetCharacteristicTypes();
 
-                    var accordanceCharacteristics = AccordanceCharacteristicRepository.Instance.CharacteristicLinks;
+                    var accordanceCharacteristics = accordanceCharacteristicModelRepository.CharacteristicLinks;
                     foreach (var characteristic in accordanceCharacteristics)
                     {
                         characteristicsDictionary.Add(((short)characteristic.AccordanceCharacteristic, (short)characteristic.Link, 0), characteristic.Id);
@@ -315,9 +329,10 @@
 
                     break;
                 case CharacteristicCategory.Binary:
-                    characteristicTypes = Models.Repositories.Catalogs.BinaryCharacteristicRepository.Instance.GetCharacteristicTypes(user);
+                    var binaryCharacteristicRepository = new Models.Repositories.Catalogs.BinaryCharacteristicRepository(db, user);
+                    characteristicTypes = binaryCharacteristicRepository.GetCharacteristicTypes();
 
-                    var binaryCharacteristics = BinaryCharacteristicRepository.Instance.CharacteristicLinks;
+                    var binaryCharacteristics = binaryCharacteristicModelRepository.CharacteristicLinks;
                     foreach (var characteristic in binaryCharacteristics)
                     {
                         characteristicsDictionary.Add(((short)characteristic.BinaryCharacteristic, (short)characteristic.Link, 0), characteristic.Id);

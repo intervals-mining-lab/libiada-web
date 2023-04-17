@@ -35,11 +35,13 @@
         /// </summary>
         private readonly LibiadaDatabaseEntities db;
         private readonly IViewDataHelper viewDataHelper;
+        private readonly ICongenericCharacteristicRepository congenericCharacteristicRepository;
 
         /// <summary>
         /// The sequence repository.
         /// </summary>
-        private readonly CommonSequenceRepository commonSequenceRepository;
+        private readonly ICommonSequenceRepository commonSequenceRepository;
+        private readonly Cache cache;
 
         /// <summary>
         /// The characteristic type repository.
@@ -49,12 +51,19 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CongenericCalculationController"/> class.
         /// </summary>
-        public CongenericCalculationController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.CongenericCalculation, taskManager)
+        public CongenericCalculationController(LibiadaDatabaseEntities db, 
+                                               IViewDataHelper viewDataHelper, 
+                                               ITaskManager taskManager,
+                                               ICongenericCharacteristicRepository congenericCharacteristicRepository,
+                                               ICommonSequenceRepository commonSequenceRepository,
+                                               Cache cache) 
+            : base(TaskType.CongenericCalculation, taskManager)
         {
             this.db = db;
             this.viewDataHelper = viewDataHelper;
-            commonSequenceRepository = new CommonSequenceRepository(db);
-            characteristicTypeLinkRepository = CongenericCharacteristicRepository.Instance;
+            this.congenericCharacteristicRepository = congenericCharacteristicRepository;
+            this.commonSequenceRepository = commonSequenceRepository;
+            this.cache = cache;
         }
 
         /// <summary>
@@ -128,12 +137,10 @@
                 Dictionary<long, string> mattersNames;
                 long[][] sequenceIds;
 
-                mattersNames = Cache.GetInstance().Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
+                mattersNames = cache.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
 
-                var commonSequenceRepository = new CommonSequenceRepository(db);
                 sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds, notations, languages, translators, pauseTreatments, sequentialTransfers, trajectories);
 
-                var congenericCharacteristicRepository = CongenericCharacteristicRepository.Instance;
                 for (int k = 0; k < characteristicLinkIds.Length; k++)
                 {
                     characteristicNames[k] = congenericCharacteristicRepository.GetCharacteristicName(characteristicLinkIds[k], notations[k]);

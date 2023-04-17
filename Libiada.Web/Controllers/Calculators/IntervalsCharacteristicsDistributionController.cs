@@ -10,7 +10,6 @@
     using LibiadaCore.Extensions;
 
     using Libiada.Web.Helpers;
-    using Libiada.Web.Extensions;
 
     using Libiada.Database.Models.CalculatorsData;
     using Libiada.Database;
@@ -37,16 +36,20 @@
         /// <summary>
         /// The characteristic type link repository.
         /// </summary>
-        private readonly FullCharacteristicRepository characteristicTypeLinkRepository;
+        private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
         private readonly LibiadaDatabaseEntities db;
         private readonly IViewDataHelper viewDataHelper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IntervalsCharacteristicsDistributionController"/> class.
         /// </summary>
-        public IntervalsCharacteristicsDistributionController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.IntervalsCharacteristicsDistribution, taskManager)
+        public IntervalsCharacteristicsDistributionController(LibiadaDatabaseEntities db,
+                                                              IViewDataHelper viewDataHelper,
+                                                              ITaskManager taskManager,
+                                                              IFullCharacteristicRepository characteristicTypeLinkRepository)
+            : base(TaskType.IntervalsCharacteristicsDistribution, taskManager)
         {
-            characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
+            this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
             this.db = db;
             this.viewDataHelper = viewDataHelper;
         }
@@ -99,7 +102,7 @@
                         break;
                     default: throw new ArgumentException($"Invalid type of order generator param: {generateStrict}");
                 }
-                var calculator = new CustomSequencesCharacterisitcsCalculator(characteristicLinkIds);
+                var calculator = new CustomSequencesCharacterisitcsCalculator(characteristicTypeLinkRepository, characteristicLinkIds);
                 var characteristics = calculator.Calculate(orders.Select(order => new Chain(order))).ToList();
                 var sequencesCharacteristics = new List<SequenceCharacteristics>();
                 for (int i = 0; i < orders.Count; i++)

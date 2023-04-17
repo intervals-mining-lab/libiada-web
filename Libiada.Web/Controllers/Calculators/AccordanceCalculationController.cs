@@ -34,22 +34,30 @@
         /// <summary>
         /// The common sequence repository.
         /// </summary>
-        private readonly CommonSequenceRepository commonSequenceRepository;
+        private readonly ICommonSequenceRepository commonSequenceRepository;
+        private readonly Cache cache;
 
         /// <summary>
         /// The characteristic type link repository.
         /// </summary>
-        private readonly AccordanceCharacteristicRepository characteristicTypeLinkRepository;
+        private readonly IAccordanceCharacteristicRepository characteristicTypeLinkRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccordanceCalculationController"/> class.
         /// </summary>
-        public AccordanceCalculationController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.AccordanceCalculation, taskManager)
+        public AccordanceCalculationController(LibiadaDatabaseEntities db, 
+                                               IViewDataHelper viewDataHelper, 
+                                               ITaskManager taskManager,
+                                               IAccordanceCharacteristicRepository characteristicTypeLinkRepository,
+                                               ICommonSequenceRepository commonSequenceRepository,
+                                               Cache cache)
+            : base(TaskType.AccordanceCalculation, taskManager)
         {
             this.db = db;
             this.viewDataHelper = viewDataHelper;
-            commonSequenceRepository = new CommonSequenceRepository(db);
-            characteristicTypeLinkRepository = AccordanceCharacteristicRepository.Instance;
+            this.commonSequenceRepository = commonSequenceRepository;
+            this.cache = cache;
+            this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         }
 
         /// <summary>
@@ -129,7 +137,7 @@
                 var result = new Dictionary<string, object>
                                  {
                                      { "characteristics", characteristics },
-                                     { "matterNames", Cache.GetInstance().Matters.Where(m => matterIds.Contains(m.Id)).Select(m => m.Name).ToList() },
+                                     { "matterNames", cache.Matters.Where(m => matterIds.Contains(m.Id)).Select(m => m.Name).ToList() },
                                      { "characteristicName", characteristicName },
                                      { "calculationType", calculationType }
                                  };

@@ -7,7 +7,6 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
-    using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
     using Bio;
     using Bio.Extensions;
@@ -39,14 +38,20 @@
     {
         private readonly LibiadaDatabaseEntities db;
         private readonly IViewDataHelper viewDataHelper;
+        private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomSequenceOrderTransformationCalculationController"/> class.
         /// </summary>
-        public CustomSequenceOrderTransformationCalculationController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.CustomSequenceOrderTransformationCalculation, taskManager)
+        public CustomSequenceOrderTransformationCalculationController(LibiadaDatabaseEntities db, 
+                                                                      IViewDataHelper viewDataHelper, 
+                                                                      ITaskManager taskManager,
+                                                                      IFullCharacteristicRepository characteristicTypeLinkRepository)
+            : base(TaskType.CustomSequenceOrderTransformationCalculation, taskManager)
         {
             this.db = db;
             this.viewDataHelper = viewDataHelper;
+            this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         }
 
         /// <summary>
@@ -102,7 +107,6 @@
         {
             return CreateTask(() =>
             {
-                var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
                 int sequencesCount = localFile ? file.Count : customSequences.Length;
                 var sequences = new string[sequencesCount];
                 var sequencesNames = new string[sequencesCount];

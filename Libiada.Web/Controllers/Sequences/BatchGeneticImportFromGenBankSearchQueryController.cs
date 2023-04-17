@@ -25,10 +25,15 @@ namespace Libiada.Web.Controllers.Sequences
     public class BatchGeneticImportFromGenBankSearchQueryController : AbstractResultController
     {
         private readonly LibiadaDatabaseEntities db;
+        private readonly Cache cache;
 
-        public BatchGeneticImportFromGenBankSearchQueryController(LibiadaDatabaseEntities db, ITaskManager taskManager) : base(TaskType.BatchGeneticImportFromGenBankSearchQuery, taskManager)
+        public BatchGeneticImportFromGenBankSearchQueryController(LibiadaDatabaseEntities db,
+                                                                  ITaskManager taskManager,
+                                                                  Cache cache)
+            : base(TaskType.BatchGeneticImportFromGenBankSearchQuery, taskManager)
         {
             this.db = db;
+            this.cache = cache;
         }
         public ActionResult Index()
         {
@@ -69,8 +74,8 @@ namespace Libiada.Web.Controllers.Sequences
                 accessions = nuccoreObjects.Select(no => no.AccessionVersion.Split('.')[0]).Distinct().ToArray();
                 var importResults = new List<MatterImportResult>(accessions.Length);
 
-                var matterRepository = new MatterRepository(db);
-                var dnaSequenceRepository = new GeneticSequenceRepository(db);
+                var matterRepository = new MatterRepository(db, cache);
+                var dnaSequenceRepository = new GeneticSequenceRepository(db, cache);
 
                 var (existingAccessions, accessionsToImport) = dnaSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
 
@@ -178,14 +183,13 @@ namespace Libiada.Web.Controllers.Sequences
         {
             try
             {
-                using (var subsequenceImporter = new SubsequenceImporter(metadata.Features.All, sequence.Id))
-                {
-                    var (featuresCount, nonCodingCount) = subsequenceImporter.CreateSubsequences();
+                var subsequenceImporter = new SubsequenceImporter(db, metadata.Features.All, sequence.Id);
+                var (featuresCount, nonCodingCount) = subsequenceImporter.CreateSubsequences();
 
-                    string result = $"Successfully imported sequence, {featuresCount} features "
-                                  + $"and {nonCodingCount} non-coding subsequences";
-                    return (result, "Success");
-                }
+                string result = $"Successfully imported sequence, {featuresCount} features "
+                              + $"and {nonCodingCount} non-coding subsequences";
+                return (result, "Success");
+
             }
             catch (Exception exception)
             {

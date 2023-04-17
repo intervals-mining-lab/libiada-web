@@ -24,6 +24,8 @@
         /// </summary>
         private readonly LibiadaDatabaseEntities db;
 
+        private readonly MatterRepository matterRepository;
+
         /// <summary>
         /// The sequence repository.
         /// </summary>
@@ -59,20 +61,25 @@
         /// </summary>
         private readonly Random randomGenerator = new Random();
         private readonly IViewDataHelper viewDataHelper;
+        private readonly Cache cache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SequenceMixerController"/> class.
         /// </summary>
-        public SequenceMixerController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper)
+        public SequenceMixerController(LibiadaDatabaseEntities db, 
+                                       IViewDataHelper viewDataHelper,
+                                       Cache cache)
         {
             this.db = db;
-            sequenceRepository = new CommonSequenceRepository(db);
-            dnaSequenceRepository = new GeneticSequenceRepository(db);
-            musicSequenceRepository = new MusicSequenceRepository(db);
-            literatureSequenceRepository = new LiteratureSequenceRepository(db);
-            dataSequenceRepository = new DataSequenceRepository(db);
+            matterRepository = new MatterRepository(db, cache);
+            sequenceRepository = new CommonSequenceRepository(db, cache);
+            dnaSequenceRepository = new GeneticSequenceRepository(db, cache);
+            musicSequenceRepository = new MusicSequenceRepository(db, cache);
+            literatureSequenceRepository = new LiteratureSequenceRepository(db, cache);
+            dataSequenceRepository = new DataSequenceRepository(db, cache);            
             elementRepository = new ElementRepository(db);
             this.viewDataHelper = viewDataHelper;
+            this.cache = cache;
         }
 
         /// <summary>
@@ -127,7 +134,7 @@
                                   bool? sequentialTransfer,
                                   int scrambling)
         {
-            Matter matter = Cache.GetInstance().Matters.Single(m => m.Id == matterId);
+            Matter matter = cache.Matters.Single(m => m.Id == matterId);
             long sequenceId;
             switch (matter.Nature)
             {
@@ -165,7 +172,7 @@
                     Nature = matter.Nature,
                     Name = $"{matter.Name} {scrambling} mixes"
                 };
-            MatterRepository matterRepository = new MatterRepository(db);
+
             matterRepository.SaveToDatabase(resultMatter);
 
             var result = new CommonSequence

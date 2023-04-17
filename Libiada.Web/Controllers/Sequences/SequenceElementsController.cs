@@ -17,14 +17,14 @@
         /// <summary>
         /// The sequence repository.
         /// </summary>
-        private readonly CommonSequenceRepository sequenceRepository;
+        private readonly ICommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SequenceElementsController"/> class.
         /// </summary>
-        public SequenceElementsController(LibiadaDatabaseEntities db)
+        public SequenceElementsController(ICommonSequenceRepository commonSequenceRepository)
         {
-            sequenceRepository = new CommonSequenceRepository(db);
+            this.commonSequenceRepository = commonSequenceRepository;
         }
 
         /// <summary>
@@ -38,7 +38,7 @@
         /// </returns>
         public IEnumerable<SelectListItem> Get(int id)
         {
-            List<Element> sequenceElements = sequenceRepository.GetElements(id);
+            List<Element> sequenceElements = commonSequenceRepository.GetElements(id);
             return sequenceElements.ConvertAll(e => new SelectListItem
             {
                 Value = e.Id.ToString(),

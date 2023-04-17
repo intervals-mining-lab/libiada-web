@@ -19,7 +19,6 @@
 
     using Newtonsoft.Json;
 
-    using static Libiada.Database.Models.Calculators.SubsequencesCharacteristicsCalculator;
     using static LibiadaCore.Extensions.EnumExtensions;
     using LibiadaCore.TimeSeries.OneDimensional.DistanceCalculators;
     using LibiadaCore.TimeSeries.OneDimensional.Comparers;
@@ -36,14 +35,32 @@
     {
         private readonly LibiadaDatabaseEntities db;
         private readonly IViewDataHelper viewDataHelper;
+        private readonly IFullCharacteristicRepository fullCharacteristicRepository;
+        private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
+        private readonly ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator;
+        private readonly ICommonSequenceRepository commonSequenceRepository;
+        private readonly GeneticSequenceRepository geneticSequenceRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubsequencesComparerController"/> class.
         /// </summary>
-        public SubsequencesComparerController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.SubsequencesComparer, taskManager)
+        public SubsequencesComparerController(LibiadaDatabaseEntities db, 
+                                              IViewDataHelper viewDataHelper, 
+                                              ITaskManager taskManager,
+                                              IFullCharacteristicRepository fullCharacteristicRepository,
+                                              ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator,
+                                              ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator,
+                                              ICommonSequenceRepository commonSequenceRepository,
+                                              Cache cache)
+            : base(TaskType.SubsequencesComparer, taskManager)
         {
             this.db = db;
             this.viewDataHelper = viewDataHelper;
+            this.fullCharacteristicRepository = fullCharacteristicRepository;
+            this.subsequencesCharacteristicsCalculator = subsequencesCharacteristicsCalculator;
+            this.sequencesCharacteristicsCalculator = sequencesCharacteristicsCalculator;
+            this.commonSequenceRepository = commonSequenceRepository;
+            geneticSequenceRepository = new GeneticSequenceRepository(db, cache);
         }
 
         /// <summary>
@@ -101,7 +118,7 @@
             {
                 double percentageDifference = double.Parse(maxPercentageDifference, CultureInfo.InvariantCulture) / 100;
 
-                var attributeValuesCache = new AttributeValueCacheManager();
+                var attributeValuesCache = new AttributeValueCacheManager(db);
                 var characteristics = new SubsequenceData[matterIds.Length][];
 
                 long[] parentSequenceIds;
@@ -112,7 +129,6 @@
 
 
                 // Sequences characteristic
-                var geneticSequenceRepository = new GeneticSequenceRepository(db);
                 long[] chains = geneticSequenceRepository.GetNucleotideSequenceIds(matterIds);
 
                 // Sequences characteristic
@@ -136,8 +152,6 @@
 
                 characteristicsTypesData = viewDataHelper.GetCharacteristicsData(CharacteristicCategory.Full);
 
-
-                FullCharacteristicRepository fullCharacteristicRepository = FullCharacteristicRepository.Instance;
                 string sequenceCharacteristicName = fullCharacteristicRepository.GetCharacteristicName(characteristicLinkId);
                 string characteristicName = fullCharacteristicRepository.GetCharacteristicName(subsequencesCharacteristicLinkId);
 
@@ -146,7 +160,7 @@
                 // cycle through matters
                 for (int i = 0; i < mattersCount; i++)
                 {
-                    SubsequenceData[] subsequencesData = CalculateSubsequencesCharacteristics(
+                    SubsequenceData[] subsequencesData = subsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
                             new[] { subsequencesCharacteristicLinkId },
                             features,
                             parentSequenceIds[i],
@@ -229,7 +243,7 @@
                 short subsequencesCharacteristicLinkId
             )
         {
-            var localCharacteristicsCalculator = new LocalCharacteristicsCalculator();
+            var localCharacteristicsCalculator = new LocalCharacteristicsCalculator(db, fullCharacteristicRepository, commonSequenceRepository);
 
             var cache = new Dictionary<(int matterIndex, int subsequenceIndex), double[]>();
             var result = new List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)>();
@@ -290,7 +304,7 @@
         [NonAction]
         private long[] OrderMatterIds(long[] matterIds, short characteristicLinkId, long[] chains)
         {
-            double[] completeSequencesCharacteristics = SequencesCharacteristicsCalculator.Calculate(chains, characteristicLinkId);
+            double[] completeSequencesCharacteristics = sequencesCharacteristicsCalculator.Calculate(chains, characteristicLinkId);
 
             var matterCharacteristics = new (long matterId, double charcterisitcValue)[matterIds.Length];
 

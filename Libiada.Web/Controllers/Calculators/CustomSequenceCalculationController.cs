@@ -41,16 +41,20 @@
         /// <summary>
         /// The characteristic type link repository.
         /// </summary>
-        private readonly FullCharacteristicRepository characteristicTypeLinkRepository;
+        private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
         private readonly LibiadaDatabaseEntities db;
         private readonly IViewDataHelper viewDataHelper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomSequenceCalculationController"/> class.
         /// </summary>
-        public CustomSequenceCalculationController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.CustomSequenceCalculation, taskManager)
+        public CustomSequenceCalculationController(LibiadaDatabaseEntities db, 
+                                                   IViewDataHelper viewDataHelper, 
+                                                   ITaskManager taskManager,
+                                                   IFullCharacteristicRepository characteristicTypeLinkRepository) 
+            : base(TaskType.CustomSequenceCalculation, taskManager)
         {
-            characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
+            this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
             this.db = db;
             this.viewDataHelper = viewDataHelper;
         }
@@ -195,7 +199,7 @@
                         }
                     }
 
-                    var calculator = new CustomSequencesCharacterisitcsCalculator(characteristicLinkIds);
+                    var calculator = new CustomSequencesCharacterisitcsCalculator(characteristicTypeLinkRepository, characteristicLinkIds);
                     var characteristics = calculator.Calculate(sequences).ToList();
                     var sequencesCharacteristics = new List<SequenceCharacteristics>();
                     for (int i = 0; i < sequences.Length; i++)

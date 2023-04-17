@@ -20,19 +20,10 @@
     public class BinaryCharacteristicRepository
     {
         /// <summary>
-        /// The sync root.
-        /// </summary>
-        private static readonly object SyncRoot = new object();
-
-        /// <summary>
-        /// The instance.
-        /// </summary>
-        private static volatile BinaryCharacteristicRepository instance;
-
-        /// <summary>
         /// The binary characteristic links.
         /// </summary>
         private readonly BinaryCharacteristicLink[] characteristicsLinks;
+        private readonly IPrincipal currentUser;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BinaryCharacteristicRepository"/> class.
@@ -40,34 +31,10 @@
         /// <param name="db">
         /// The db.
         /// </param>
-        private BinaryCharacteristicRepository(LibiadaDatabaseEntities db)
+        public BinaryCharacteristicRepository(LibiadaDatabaseEntities db, IPrincipal currentUser)
         {
             characteristicsLinks = db.BinaryCharacteristicLink.ToArray();
-        }
-
-        /// <summary>
-        /// Gets the instance.
-        /// </summary>
-        public static BinaryCharacteristicRepository Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    lock (SyncRoot)
-                    {
-                        if (instance == null)
-                        {
-                            using (var db = new LibiadaDatabaseEntities())
-                            {
-                                instance = new BinaryCharacteristicRepository(db);
-                            }
-                        }
-                    }
-                }
-
-                return instance;
-            }
+            this.currentUser = currentUser;
         }
 
         /// <summary>
@@ -76,7 +43,7 @@
         /// <returns>
         /// The <see cref="List{CharacteristicData}"/>.
         /// </returns>
-        public List<CharacteristicSelectListItem> GetCharacteristicTypes(IPrincipal currentUser)
+        public List<CharacteristicSelectListItem> GetCharacteristicTypes()
         {
             Link[] links;
             BinaryCharacteristic[] characteristics;

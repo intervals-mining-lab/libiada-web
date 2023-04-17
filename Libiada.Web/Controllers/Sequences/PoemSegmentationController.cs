@@ -10,7 +10,7 @@
     using Libiada.Database.Models.Repositories.Sequences;
 
     using Newtonsoft.Json;
-    
+
     using Segmenter.PoemsSegmenter;
     using Libiada.Web.Tasks;
 
@@ -18,11 +18,17 @@
     {
         private readonly LibiadaDatabaseEntities db;
         private readonly IViewDataHelper viewDataHelper;
+        private readonly ICommonSequenceRepository commonSequenceRepository;
 
-        public PoemSegmentationController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.PoemSegmentation, taskManager)
+        public PoemSegmentationController(LibiadaDatabaseEntities db,
+                                          IViewDataHelper viewDataHelper,
+                                          ITaskManager taskManager,
+                                          ICommonSequenceRepository commonSequenceRepository)
+           : base(TaskType.PoemSegmentation, taskManager)
         {
             this.db = db;
             this.viewDataHelper = viewDataHelper;
+            this.commonSequenceRepository = commonSequenceRepository;
         }
 
         // GET: PoemSequenceSegmentation
@@ -44,8 +50,6 @@
         {
             return CreateTask(() =>
             {
-                var commonSequenceRepository = new CommonSequenceRepository(db);
-
                 var sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId && l.Notation == Notation.Consonance).Id;
                 var sequenceName = db.Matter.Single(l => l.Id == matterId).Name;
                 var chain = commonSequenceRepository.GetLibiadaBaseChain(sequenceId);

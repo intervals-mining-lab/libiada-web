@@ -69,12 +69,12 @@
         /// <param name="taskType">
         /// The task Type.
         /// </param>
-        public TaskData(long id, int userId, TaskType taskType)
+        public TaskData(long id, AspNetUser creator, TaskType taskType)
         {
             Id = id;
             TaskType = taskType;
-            UserId = userId;
-            UserName = AccountHelper.GetUserNameById(userId);
+            UserId = creator.Id;
+            UserName = creator.UserName;
             Created = DateTime.Now;
             TaskState = TaskState.InQueue;
         }
@@ -90,7 +90,7 @@
             Id = task.Id;
             TaskType = task.TaskType;
             UserId = task.UserId;
-            UserName = AccountHelper.GetUserNameById(task.UserId);
+            UserName = task.AspNetUser.UserName;
             Created = task.Created;
             Started = task.Started;
             Completed = task.Completed;

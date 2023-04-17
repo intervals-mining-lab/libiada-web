@@ -23,14 +23,20 @@
     {
         private readonly LibiadaDatabaseEntities db;
         private readonly IViewDataHelper viewDataHelper;
+        private readonly Cache cache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BatchGenesImportController"/> class.
         /// </summary>
-        public BatchGenesImportController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.BatchGenesImport, taskManager)
+        public BatchGenesImportController(LibiadaDatabaseEntities db, 
+                                          IViewDataHelper viewDataHelper, 
+                                          ITaskManager taskManager,
+                                          Cache cache)
+            : base(TaskType.BatchGenesImport, taskManager)
         {
             this.db = db;
             this.viewDataHelper = viewDataHelper;
+            this.cache = cache;
         }
 
         /// <summary>
@@ -74,11 +80,11 @@
                     string[] matterNames;
                     var importResults = new List<MatterImportResult>(matterIds.Length);
 
-                    matterNames = Cache.GetInstance().Matters
-                                                     .Where(m => matterIds.Contains(m.Id))
-                                                     .OrderBy(m => m.Id)
-                                                     .Select(m => m.Name)
-                                                     .ToArray();
+                    matterNames = cache.Matters
+                                       .Where(m => matterIds.Contains(m.Id))
+                                       .OrderBy(m => m.Id)
+                                       .Select(m => m.Name)
+                                       .ToArray();
                     var parentSequences = db.DnaSequence
                                             .Where(c => matterIds.Contains(c.MatterId))
                                             .OrderBy(c => c.MatterId)
@@ -94,13 +100,13 @@
                         try
                         {
                             DnaSequence parentSequence = parentSequences[i];
-                            using (var subsequenceImporter = new SubsequenceImporter(parentSequence))
-                            {
-                                subsequenceImporter.CreateSubsequences();
-                            }
+                            var subsequenceImporter = new SubsequenceImporter(db, parentSequence);
+
+                            subsequenceImporter.CreateSubsequences();
+
 
                             int featuresCount = db.Subsequence.Count(s => s.SequenceId == parentSequence.Id
-                                                                          && s.Feature != Feature.NonCodingSequence);
+                                                                         && s.Feature != Feature.NonCodingSequence);
                             int nonCodingCount = db.Subsequence.Count(s => s.SequenceId == parentSequence.Id
                                                                         && s.Feature == Feature.NonCodingSequence);
 

@@ -1,5 +1,7 @@
-﻿@using Libiada.Database.Helpers;
+﻿@using Libiada.Database.Extensions;
 @using Libiada.Web.Helpers;
+@inject LibiadaDatabaseEntities Db
+
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -53,8 +55,8 @@
         <div class="container">
             @if (User.IsInRole("admin"))
             {
-                <h3 class='@(DbHelper.ConnectionSuccessful ? "text-success" : "text-danger")'>
-                    Current database: @DbHelper.DbName
+                <h3 class='@(Db.IsConnectionSuccessful() ? "text-success" : "text-danger")'>
+                    Current database: @Db.TryGetDbName()
                 </h3>
             }
             <p>All nucleotide sequences are downloaded from <a href="https://www.ncbi.nlm.nih.gov" target="_blank" rel="noopener">GenBank</a></p>

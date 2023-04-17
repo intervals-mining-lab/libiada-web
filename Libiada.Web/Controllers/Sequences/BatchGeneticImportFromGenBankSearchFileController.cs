@@ -27,10 +27,15 @@
     public class BatchGeneticImportFromGenBankSearchFileController : AbstractResultController
     {
         private readonly LibiadaDatabaseEntities db;
+        private readonly Cache cache;
 
-        public BatchGeneticImportFromGenBankSearchFileController(LibiadaDatabaseEntities db, ITaskManager taskManager) : base(TaskType.BatchGeneticImportFromGenBankSearchFile, taskManager)
+        public BatchGeneticImportFromGenBankSearchFileController(LibiadaDatabaseEntities db,
+                                                                 ITaskManager taskManager,
+                                                                 Cache cache)
+            : base(TaskType.BatchGeneticImportFromGenBankSearchFile, taskManager)
         {
             this.db = db;
+            this.cache = cache;
         }
 
         public ActionResult Index()
@@ -70,8 +75,8 @@
                 accessions = accessions.Distinct().Select(a => a.Split('.')[0]).ToArray();
                 var importResults = new List<MatterImportResult>(accessions.Length);
 
-                var matterRepository = new MatterRepository(db);
-                var dnaSequenceRepository = new GeneticSequenceRepository(db);
+                var matterRepository = new MatterRepository(db, cache);
+                var dnaSequenceRepository = new GeneticSequenceRepository(db, cache);
 
                 var (existingAccessions, accessionsToImport) = dnaSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
 
@@ -179,15 +184,14 @@
         {
             try
             {
-                using (var subsequenceImporter = new SubsequenceImporter(metadata.Features.All, sequence.Id))
-                {
-                    var (featuresCount, nonCodingCount) = subsequenceImporter.CreateSubsequences();
+                var subsequenceImporter = new SubsequenceImporter(db, metadata.Features.All, sequence.Id);
+                var (featuresCount, nonCodingCount) = subsequenceImporter.CreateSubsequences();
 
-                    string result = $"Successfully imported sequence, {featuresCount} features "
-                                  + $"and {nonCodingCount} non-coding subsequences";
+                string result = $"Successfully imported sequence, {featuresCount} features "
+                              + $"and {nonCodingCount} non-coding subsequences";
 
-                    return (result, "Success");
-                }
+                return (result, "Success");
+
             }
             catch (Exception exception)
             {

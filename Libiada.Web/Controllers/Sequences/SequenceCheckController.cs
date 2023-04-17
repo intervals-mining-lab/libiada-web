@@ -24,13 +24,21 @@
     public class SequenceCheckController : AbstractResultController
     {
         private readonly LibiadaDatabaseEntities db;
+        private readonly ICommonSequenceRepository commonSequenceRepository;
+        private readonly Cache cache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SequenceCheckController"/> class.
         /// </summary>
-        public SequenceCheckController(LibiadaDatabaseEntities db, ITaskManager taskManager) : base(TaskType.SequenceCheck, taskManager)
+        public SequenceCheckController(LibiadaDatabaseEntities db, 
+                                       ITaskManager taskManager, 
+                                       ICommonSequenceRepository commonSequenceRepository, 
+                                       Cache cache) 
+            : base(TaskType.SequenceCheck, taskManager)
         {
             this.db = db;
+            this.commonSequenceRepository = commonSequenceRepository;
+            this.cache = cache;
         }
 
         /// <summary>
@@ -41,7 +49,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            ViewBag.matterId = new SelectList(Cache.GetInstance().Matters.Where(m => m.Nature == Nature.Genetic).ToArray(), "id", "name");
+            ViewBag.matterId = new SelectList(cache.Matters.Where(m => m.Nature == Nature.Genetic).ToArray(), "id", "name");
             return View();
         }
 
@@ -93,7 +101,6 @@
                 BaseChain dbChain;
 
                 long sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId).Id;
-                var commonSequenceRepository = new CommonSequenceRepository(db);
                 dbChain = commonSequenceRepository.GetLibiadaBaseChain(sequenceId);
 
 

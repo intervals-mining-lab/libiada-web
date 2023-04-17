@@ -32,14 +32,23 @@
     {
         private readonly LibiadaDatabaseEntities db;
         private readonly IViewDataHelper viewDataHelper;
+        private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
+        private readonly Cache cache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderTransformationCalculationController"/> class.
         /// </summary>
-        public OrderTransformationCalculationController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.OrderTransformationCalculation, taskManager)
+        public OrderTransformationCalculationController(LibiadaDatabaseEntities db, 
+                                                        IViewDataHelper viewDataHelper, 
+                                                        ITaskManager taskManager,
+                                                        IFullCharacteristicRepository characteristicTypeLinkRepository,
+                                                        Cache cache)
+            : base(TaskType.OrderTransformationCalculation, taskManager)
         {
             this.db = db;
             this.viewDataHelper = viewDataHelper;
+            this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
+            this.cache = cache;
         }
 
         /// <summary>
@@ -111,10 +120,10 @@
         {
             return CreateTask(() =>
             {
-                Dictionary<long, string> mattersNames = Cache.GetInstance().Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
+                Dictionary<long, string> mattersNames = cache.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
                 Chain[][] sequences = new Chain[matterIds.Length][];
 
-                var commonSequenceRepository = new CommonSequenceRepository(db);
+                var commonSequenceRepository = new CommonSequenceRepository(db, cache);
                 long[][] sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds,
                                                                                notations,
                                                                                languages,
@@ -131,7 +140,6 @@
                     }
                 }
 
-                var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
                 var sequencesCharacteristics = new SequenceCharacteristics[matterIds.Length];
                 Array.Sort(matterIds);
 

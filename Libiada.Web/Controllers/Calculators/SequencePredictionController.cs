@@ -29,14 +29,23 @@
     {
         private readonly LibiadaDatabaseEntities db;
         private readonly IViewDataHelper viewDataHelper;
+        private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
+        private readonly Cache cache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SequencePredictionController"/> class.
         /// </summary>
-        public SequencePredictionController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.SequencePrediction, taskManager)
+        public SequencePredictionController(LibiadaDatabaseEntities db, 
+                                            IViewDataHelper viewDataHelper, 
+                                            ITaskManager taskManager,
+                                            IFullCharacteristicRepository characteristicTypeLinkRepository,
+                                            Cache cache)
+            : base(TaskType.SequencePrediction, taskManager)
         {
             this.db = db;
             this.viewDataHelper = viewDataHelper;
+            this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
+            this.cache = cache;
         }
 
         /// <summary>
@@ -89,12 +98,11 @@
                 IFullCalculator calculator;
                 Link link;
 
-                var commonSequenceRepository = new CommonSequenceRepository(db);
-                matterName = Cache.GetInstance().Matters.Single(m => matterId == m.Id).Name;
+                var commonSequenceRepository = new CommonSequenceRepository(db, cache);
+                matterName = cache.Matters.Single(m => matterId == m.Id).Name;
                 var sequenceId = db.CommonSequence.Single(c => matterId == c.MatterId && c.Notation == notation).Id;
                 sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
 
-                var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
                 characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
 
                 FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);

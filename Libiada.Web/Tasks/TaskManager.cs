@@ -40,7 +40,7 @@
         public TaskManager(ILibiadaDatabaseEntitiesFactory dbFactory, ITaskManagerHubFactory factory, IHttpContextAccessor httpContextAccessor)
         {
 
-            this.db = dbFactory.Create();
+            db = dbFactory.Create();
             this.httpContextAccessor = httpContextAccessor;
             signalrHub = factory.Create(this);
             RemoveGarbageFromDb();
@@ -82,7 +82,7 @@
 
             lock (tasks)
             {
-                task = new Task(databaseTask.Id, action, databaseTask.UserId, taskType);
+                task = new Task(databaseTask.Id, action, databaseTask.AspNetUser, taskType);
                 lock (task)
                 {
                     tasks.Add(task);
@@ -317,7 +317,7 @@
                                         { "icon", "/Content/DNA.png" },
                                         { "tag", $"/{ task.TaskData.TaskType }/Result/{ task.TaskData.Id }" }
                                     };
-                                    PushNotificationHelper.Send(task.TaskData.UserId, data);
+                                    PushNotificationHelper.Send(db, task.TaskData.UserId, data);
                                 }
                             });
 

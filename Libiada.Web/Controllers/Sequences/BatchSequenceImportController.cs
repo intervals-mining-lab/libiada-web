@@ -29,13 +29,18 @@
     public class BatchSequenceImportController : AbstractResultController
     {
         private readonly LibiadaDatabaseEntities db;
+        private readonly Cache cache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BatchSequenceImportController"/> class.
         /// </summary>
-        public BatchSequenceImportController(LibiadaDatabaseEntities db, ITaskManager taskManager) : base(TaskType.BatchSequenceImport, taskManager)
+        public BatchSequenceImportController(LibiadaDatabaseEntities db,
+                                             ITaskManager taskManager,
+                                             Cache cache)
+            : base(TaskType.BatchSequenceImport, taskManager)
         {
             this.db = db;
+            this.cache = cache;
         }
 
         /// <summary>
@@ -73,7 +78,7 @@
                 var importResults = new List<MatterImportResult>(accessions.Length);
                 string[] accessionsToImport;
 
-                var dnaSequenceRepository = new GeneticSequenceRepository(db);
+                var dnaSequenceRepository = new GeneticSequenceRepository(db, cache);
                 string[] existingAccessions;
                 (existingAccessions, accessionsToImport) = dnaSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
 
@@ -95,8 +100,8 @@
                         GenBankMetadata metadata = NcbiHelper.GetMetadata(bioSequence);
                         importResult.MatterName = metadata.Version.CompoundAccession;
 
-                        var matterRepository = new MatterRepository(db);
-                        var dnaSequenceRepository = new GeneticSequenceRepository(db);
+                        var matterRepository = new MatterRepository(db, cache);
+                        var dnaSequenceRepository = new GeneticSequenceRepository(db, cache);
                         Matter matter = matterRepository.CreateMatterFromGenBankMetadata(metadata);
 
                         importResult.SequenceType = matter.SequenceType.GetDisplayValue();
@@ -185,14 +190,13 @@
         {
             try
             {
-                using (var subsequenceImporter = new SubsequenceImporter(metadata.Features.All, sequence.Id))
-                {
-                    var (featuresCount, nonCodingCount) = subsequenceImporter.CreateSubsequences();
+                var subsequenceImporter = new SubsequenceImporter(db, metadata.Features.All, sequence.Id);
+                var (featuresCount, nonCodingCount) = subsequenceImporter.CreateSubsequences();
 
-                    string result = $"Successfully imported sequence, {featuresCount} features "
-                                  + $"and {nonCodingCount} non-coding subsequences";
-                    return (result, "Success");
-                }
+                string result = $"Successfully imported sequence, {featuresCount} features "
+                              + $"and {nonCodingCount} non-coding subsequences";
+                return (result, "Success");
+
             }
             catch (Exception exception)
             {

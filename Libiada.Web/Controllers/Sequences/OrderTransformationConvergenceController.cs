@@ -30,16 +30,20 @@
         /// <summary>
         /// The sequence repository.
         /// </summary>
-        private readonly CommonSequenceRepository commonSequenceRepository;
+        private readonly ICommonSequenceRepository commonSequenceRepository;
         private readonly IViewDataHelper viewDataHelper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderTransformationConvergenceController"/> class.
         /// </summary>
-        public OrderTransformationConvergenceController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.OrderTransformationConvergence, taskManager)
+        public OrderTransformationConvergenceController(LibiadaDatabaseEntities db, 
+                                                        IViewDataHelper viewDataHelper, 
+                                                        ITaskManager taskManager,
+                                                        ICommonSequenceRepository commonSequenceRepository) 
+            : base(TaskType.OrderTransformationConvergence, taskManager)
         {
             this.db = db;
-            commonSequenceRepository = new CommonSequenceRepository(db);
+            this.commonSequenceRepository = commonSequenceRepository;
             this.viewDataHelper = viewDataHelper;
         }
 

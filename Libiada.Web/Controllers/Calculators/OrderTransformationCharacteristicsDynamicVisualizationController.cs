@@ -29,14 +29,23 @@
     {
         private readonly LibiadaDatabaseEntities db;
         private readonly IViewDataHelper viewDataHelper;
+        private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
+        private readonly Cache cache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderTransformationCharacteristicsDynamicVisualizationController"/> class.
         /// </summary>
-        public OrderTransformationCharacteristicsDynamicVisualizationController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.OrderTransformationCharacteristicsDynamicVisualization, taskManager)
+        public OrderTransformationCharacteristicsDynamicVisualizationController(LibiadaDatabaseEntities db,
+                                                                                IViewDataHelper viewDataHelper,
+                                                                                ITaskManager taskManager,
+                                                                                IFullCharacteristicRepository characteristicTypeLinkRepository,
+                                                                                Cache cache)
+            : base(TaskType.OrderTransformationCharacteristicsDynamicVisualization, taskManager)
         {
             this.db = db;
             this.viewDataHelper = viewDataHelper;
+            this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
+            this.cache = cache;
         }
 
         /// <summary>
@@ -108,11 +117,10 @@
         {
             return CreateTask(() =>
             {
-                var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
-                var commonSequenceRepository = new CommonSequenceRepository(db);
+                var commonSequenceRepository = new CommonSequenceRepository(db, cache);
                 var mattersCharacteristics = new object[matterIds.Length];
                 Array.Sort(matterIds);
-                Dictionary<long, Matter> matters = Cache.GetInstance().Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id);
+                Dictionary<long, Matter> matters = cache.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id);
 
                 for (int i = 0; i < matterIds.Length; i++)
                 {

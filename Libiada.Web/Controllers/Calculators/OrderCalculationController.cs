@@ -30,16 +30,20 @@
         /// <summary>
         /// The characteristic type link repository.
         /// </summary>
-        private readonly FullCharacteristicRepository characteristicTypeLinkRepository;
+        private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
         private readonly LibiadaDatabaseEntities db;
         private readonly IViewDataHelper viewDataHelper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderCalculationController"/> class.
         /// </summary>
-        public OrderCalculationController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.OrderCalculation, taskManager)
+        public OrderCalculationController(LibiadaDatabaseEntities db, 
+                                          IViewDataHelper viewDataHelper, 
+                                          ITaskManager taskManager,
+                                          IFullCharacteristicRepository characteristicTypeLinkRepository) 
+            : base(TaskType.OrderCalculation, taskManager)
         {
-            characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
+            this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
             this.db = db;
             this.viewDataHelper = viewDataHelper;
         }

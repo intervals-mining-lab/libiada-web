@@ -21,10 +21,13 @@
     public class BatchImagesImportController : AbstractResultController
     {
         private readonly LibiadaDatabaseEntities db;
+        private readonly Cache cache;
 
-        public BatchImagesImportController(LibiadaDatabaseEntities db, ITaskManager taskManager) : base(TaskType.BatchImagesImport, taskManager)
+        public BatchImagesImportController(LibiadaDatabaseEntities db, ITaskManager taskManager, Cache cache) 
+            : base(TaskType.BatchImagesImport, taskManager)
         {
             this.db = db;
+            this.cache = cache;
         }
 
         public ActionResult Index()
@@ -42,7 +45,7 @@
                 var importResults = new List<MatterImportResult>();
 
                 Matter[] matters = db.Matter.Where(m => m.Nature == Nature.Image).ToArray();
-                var matterRepository = new MatterRepository(db);
+                var matterRepository = new MatterRepository(db, cache);
 
                 for (int i = 0; i < files.Count; i++)
                 {

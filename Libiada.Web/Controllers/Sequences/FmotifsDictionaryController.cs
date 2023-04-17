@@ -9,7 +9,7 @@
     using LibiadaCore.Core.SimpleTypes;
 
     using Libiada.Database.Tasks;
-    using Libiada.Database.Helpers;
+    using Libiada.Database.Extensions;
 
     using Newtonsoft.Json;
     using Libiada.Web.Helpers;
@@ -25,7 +25,11 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="FmotifsDictionaryController"/> class.
         /// </summary>
-        public FmotifsDictionaryController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ITaskManager taskManager) : base(TaskType.FmotifsDictionary, db, viewDataHelper, taskManager)
+        public FmotifsDictionaryController(LibiadaDatabaseEntities db, 
+                                           IViewDataHelper viewDataHelper, 
+                                           ITaskManager taskManager, 
+                                           Cache cache) 
+            : base(TaskType.FmotifsDictionary, db, viewDataHelper, taskManager, cache)
         {
         }
 
