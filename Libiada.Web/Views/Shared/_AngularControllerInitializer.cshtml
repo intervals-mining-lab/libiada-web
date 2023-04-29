@@ -1,12 +1,12 @@
 ﻿@model string
 
-<script src="~/js/Angular/Controllers/midi.js/@Model" asp-append-version="true"></script>
+<script src="~/js/Angular/Controllers/@(Model).js" asp-append-version="true"></script>
 
 
 <script type="text/javascript">
     "use strict";
 
-     var controllerConstructor = @Model;
+     var controllerConstructor = @(Model + "Controller");
 
     @if(ViewBag.data != null)
     {

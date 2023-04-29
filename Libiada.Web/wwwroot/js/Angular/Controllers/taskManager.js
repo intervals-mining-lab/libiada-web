@@ -58,8 +58,6 @@
             } catch (e) { }
         };
 
-
-
         function getStatusClass(status) {
             return status === "InProgress" ? "table-info"
                  : status === "Completed" ? "table-success"

@@ -6,7 +6,7 @@
 
 @if (ViewBag.Error == null)
 {
-    @Html.Partial("_AngularControllerInitializer", "SubsequencesCalculationResultController")
+    @Html.Partial("_AngularControllerInitializer", "SubsequencesCalculationResult")
     <div ng-controller="SubsequencesCalculationResultCtrl">
         <h4>{{::firstSequenceName}} and {{::secondSequenceName}} using {{::characteristicName}}</h4>
         <h5>{{::similarity}} % of subsequences are similar:</h5>

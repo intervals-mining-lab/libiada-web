@@ -19,7 +19,7 @@
     }
 
     angular.module("libiada").component("orderTransformations", {
-        templateUrl: window.location.origin + "/Shared/_OrderTransformations",
+        templateUrl: window.location.origin + "/AngularTemplates/_OrderTransformations",
         controller: [OrderTransformationsController],
         bindings: {
             transformations: "<"

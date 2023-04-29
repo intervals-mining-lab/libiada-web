@@ -6,7 +6,7 @@
 
 @if (ViewBag.Error == null)
 {
-    @Html.Partial("_AngularControllerInitializer", "SubsequencesCalculationResultController")
+    @Html.Partial("_AngularControllerInitializer", "SubsequencesCalculationResult")
     <div ng-controller="SubsequencesCalculationResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <div class="form-check">

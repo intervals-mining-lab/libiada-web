@@ -176,7 +176,7 @@
     }
 
     angular.module("libiada").component("mattersTable", {
-        templateUrl: window.location.origin + "/Shared/_MattersTable",
+        templateUrl: window.location.origin + "/AngularTemplates/_MattersTable",
         controller: ["$scope", "filterFilter", MattersTableController],
         bindings: {
             matters: "<",

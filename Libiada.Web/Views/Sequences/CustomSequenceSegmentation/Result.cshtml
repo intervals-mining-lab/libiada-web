@@ -6,7 +6,7 @@
 <h2>@ViewBag.Title</h2>
 @if (ViewBag.Error == null)
 {
-    @Html.Partial("_AngularControllerInitializer", "SegmentationResultController")
+    @Html.Partial("_AngularControllerInitializer", "SegmentationResult")
 
     <div ng-controller="SegmentationResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>

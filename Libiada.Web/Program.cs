@@ -6,17 +6,18 @@ using Libiada.Database.Models.Calculators;
 using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Models.Repositories.Sequences;
 
-using Libiada.Web;
 using Libiada.Web.Data;
 using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
+using System.Data.Common;
 using System.Security.Principal;
 
 var builder = WebApplication.CreateBuilder(args);
-
+DbProviderFactories.RegisterFactory("Npgsql", NpgsqlFactory.Instance);
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));

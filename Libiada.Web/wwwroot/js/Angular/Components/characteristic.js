@@ -35,7 +35,7 @@
     }
 
     angular.module("libiada").component("characteristic", {
-        templateUrl: window.location.origin + "/Shared/_Characteristic",
+        templateUrl: window.location.origin + "/AngularTemplates/_Characteristic",
         controller: ["filterFilter", Characteristic],
         bindings: {
             characteristic: "=?",

@@ -4,7 +4,7 @@
 <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
 @if (ViewBag.Error == null)
 {
-    @Html.Partial("_AngularControllerInitializer", "BatchSequenceImportResultController")
+    @Html.Partial("_AngularControllerInitializer", "BatchSequenceImportResult")
 
     <div ng-controller="BatchSequenceImportResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>

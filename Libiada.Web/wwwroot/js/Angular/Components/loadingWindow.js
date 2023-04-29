@@ -21,7 +21,7 @@
     }
 
     angular.module("libiada").component("loadingWindow", {
-        templateUrl: window.location.origin + "/Shared/_LoadingWindow",
+        templateUrl: window.location.origin + "/AngularTemplates/_LoadingWindow",
         controller: [LoadingWindowController],
         bindings: {
             loading: "<",

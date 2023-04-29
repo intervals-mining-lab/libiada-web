@@ -6,7 +6,7 @@
 
 @if (ViewBag.Error == null)
 {
-    @Html.Partial("_AngularControllerInitializer", "SequencePredictionResultController")
+    @Html.Partial("_AngularControllerInitializer", "SequencePredictionResult")
 
     <div ng-controller="SequencePredictionResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>

@@ -6,7 +6,7 @@
 <h2>@ViewBag.Title</h2>
 @if (ViewBag.Error == null)
 {
-    @Html.Partial("_AngularControllerInitializer", "CalculationResultController")
+    @Html.Partial("_AngularControllerInitializer", "CalculationResult")
     <h3>@ViewBag.poemName</h3>
     <div ng-controller="CalculationResultCtrl">
         <table class="table table-bordered table-hover" ng-cloak>

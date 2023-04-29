@@ -6,7 +6,7 @@
     /// Controller for partial views.
     /// Needed for angular templates.
     /// </summary>
-    public class PartialController : Controller
+    public class AngularTemplatesController : Controller
     {
         /// <summary>
         /// The matters table partial view.
@@ -14,7 +14,7 @@
         /// <returns>
         /// The <see cref="PartialViewResult"/>.
         /// </returns>
-        public PartialViewResult _MattersTable() => PartialView();
+        public IActionResult _MattersTable() => PartialView();
 
         /// <summary>
         /// The scroll jumper partial view.
@@ -22,7 +22,7 @@
         /// <returns>
         /// The <see cref="PartialViewResult"/>.
         /// </returns>
-        public PartialViewResult _ScrollJumper() => PartialView();
+        public IActionResult _ScrollJumper() => PartialView();
 
         /// <summary>
         /// The loading Window partial view.
@@ -30,7 +30,7 @@
         /// <returns>
         /// The <see cref="PartialViewResult"/>.
         /// </returns>
-        public PartialViewResult _LoadingWindow() => PartialView();
+        public IActionResult _LoadingWindow() => PartialView();
 
         /// <summary>
         /// The Characteristic partial view.
@@ -38,7 +38,7 @@
         /// <returns>
         /// The <see cref="PartialViewResult"/>.
         /// </returns>
-        public PartialViewResult _Characteristic() => PartialView();
+        public IActionResult _Characteristic() => PartialView();
 
         /// <summary>
         /// Characteristics nature parameters partial view.
@@ -46,7 +46,7 @@
         /// <returns>
         /// The <see cref="PartialViewResult"/>.
         /// </returns>
-        public PartialViewResult _CharacteristicNatureParams() => PartialView();
+        public IActionResult _CharacteristicNatureParams() => PartialView();
 
         /// <summary>
         /// The Characteristics partial view.
@@ -54,7 +54,7 @@
         /// <returns>
         /// The <see cref="PartialViewResult"/>.
         /// </returns>
-        public PartialViewResult _Characteristics() => PartialView();
+        public IActionResult _Characteristics() => PartialView();
 
         /// <summary>
         /// The characteristics without notation.
@@ -62,7 +62,7 @@
         /// <returns>
         /// The <see cref="PartialViewResult"/>.
         /// </returns>
-        public PartialViewResult _CharacteristicsWithoutNotation() => PartialView();
+        public IActionResult _CharacteristicsWithoutNotation() => PartialView();
 
         /// <summary>
         /// The Order Transformations partial view.
@@ -70,6 +70,6 @@
         /// <returns>
         /// The <see cref="PartialViewResult"/>.
         /// </returns>
-        public PartialViewResult _OrderTransformations() => PartialView();
+        public IActionResult _OrderTransformations() => PartialView();
     }
 }

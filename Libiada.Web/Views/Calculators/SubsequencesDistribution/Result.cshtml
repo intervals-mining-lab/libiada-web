@@ -34,7 +34,7 @@
     @if (ViewBag.Error == null)
     {
         <div ng-app="libiada">
-            @Html.Partial("_AngularControllerInitializer", "SubsequencesDistributionResultController")
+            @Html.Partial("_AngularControllerInitializer", "SubsequencesDistributionResult")
             <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
             <div class="genes-map" ng-controller="SubsequencesDistributionResultCtrl">
                 <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>

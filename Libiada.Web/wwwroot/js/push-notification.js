@@ -121,7 +121,7 @@ const main = async () => {
     check();
 
     try {
-        const swRegistration = await navigator.serviceWorker.register("Scripts/sw-push-notification.js");
+        const swRegistration = await navigator.serviceWorker.register("js/sw-push-notification.js");
         await initPush();
     }
     catch (exception) {

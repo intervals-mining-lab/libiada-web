@@ -30,10 +30,10 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" href="http://foarLab.org/">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            @Html.ActionLink("Task manager", "Index", "TaskManager", routeValues: null, htmlAttributes: new { @class = "nav-link" })
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />
@@ -42,7 +42,7 @@
         </nav>
     </header>
     <div ng-app="libiada">
-        @*<scroll-jumper></scroll-jumper>*@
+        <scroll-jumper></scroll-jumper>
         @*<partial name="_ScrollJumper" />*@
         <div class="container pt-2 body-content">
             <main role="main" class="pb-3">
@@ -63,13 +63,14 @@
             <p>&copy; @DateTime.Now.Year - foarLab.org</p>
         </div>
     </footer>
+    
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/AlertifyJS/alertify.min.js"></script>
     <script src="~/js/Angular/functions.js"></script>
     <script src="~/lib/angular.js/angular.min.js"></script>
     <script src="~/lib/angular-smart-table/smart-table.min.js"></script>
-    @*<script src="~/js/Angular/Components/scrollJumper.js"></script>*@
+    <script src="~/js/Angular/Components/scrollJumper.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
