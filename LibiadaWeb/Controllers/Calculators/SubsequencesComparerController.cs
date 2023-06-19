@@ -51,7 +51,10 @@
             using (var db = new LibiadaWebEntities())
             {
                 var viewDataHelper = new ViewDataHelper(db);
-                ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillSubsequencesViewData(2, int.MaxValue, "Compare"));
+                var viewData = viewDataHelper.FillSubsequencesViewData(2, int.MaxValue, "Compare");
+                viewData.Add("percentageDifferenseNeeded", true);
+                ViewBag.data = JsonConvert.SerializeObject(viewData);
+                //ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillSubsequencesViewData(2, int.MaxValue, "Compare"));
             }
 
             return View();
@@ -90,15 +93,17 @@
         public ActionResult Index(
             long[] matterIds,
             short characteristicLinkId,
-            short subsequencesCharacteristicLinkId,
+            short[] characteristicLinkIds,
             Feature[] features,
-            string maxPercentageDifference,
+            string[] maxPercentageDifferences, // массив
             string[] filters,
-            bool filterMatrix)
+            bool filterMatrix
+        )
         {
             return CreateTask(() =>
             {
-                double percentageDifference = double.Parse(maxPercentageDifference, CultureInfo.InvariantCulture) / 100;
+                double[] percentageDifferences = maxPercentageDifferences.Select(item => double.Parse(item, CultureInfo.InvariantCulture) / 100).ToArray();
+                //double percentageDifference = double.Parse(maxPercentageDifference, CultureInfo.InvariantCulture) / 100; // цикл
 
                 var attributeValuesCache = new AttributeValueCacheManager();
                 var characteristics = new SubsequenceData[matterIds.Length][];
@@ -140,15 +145,15 @@
 
                 FullCharacteristicRepository fullCharacteristicRepository = FullCharacteristicRepository.Instance;
                 string sequenceCharacteristicName = fullCharacteristicRepository.GetCharacteristicName(characteristicLinkId);
-                string characteristicName = fullCharacteristicRepository.GetCharacteristicName(subsequencesCharacteristicLinkId);
+                string characteristicName = fullCharacteristicRepository.GetCharacteristicName(characteristicLinkIds[0]);
 
-                var characteristicValueSubsequences = new Dictionary<double, List<(int matterIndex, int subsequenceIndex)>>();
+                var characteristicValueSubsequences = new Dictionary<double, List<(int matterIndex, int subsequenceIndex, double[] additionalCharacteristics)>>();
 
                 // cycle through matters
                 for (int i = 0; i < mattersCount; i++)
                 {
                     SubsequenceData[] subsequencesData = CalculateSubsequencesCharacteristics(
-                            new[] { subsequencesCharacteristicLinkId },
+                            characteristicLinkIds,
                             features,
                             parentSequenceIds[i],
                             filters);
@@ -158,21 +163,25 @@
 
                     for (int j = 0; j < subsequencesData.Length; j++)
                     {
-                        double value = subsequencesData[j].CharacteristicsValues[0];
-                        if (characteristicValueSubsequences.TryGetValue(value, out List<(int matterIndex, int subsequenceIndex)> matterAndSubsequenceIdsList))
+                        double value = subsequencesData[j].CharacteristicsValues[0]; // Получаем значения характеристик?
+                        if (characteristicValueSubsequences.TryGetValue(value, out List<(int matterIndex, int subsequenceIndex, double[] additionalCharacteristics)> matterAndSubsequenceIdsList))
                         {
-                            matterAndSubsequenceIdsList.Add((i, j));
+                            matterAndSubsequenceIdsList.Add((i, j, subsequencesData[j].CharacteristicsValues.Skip(1).ToArray()));
                         }
                         else
                         {
-                            matterAndSubsequenceIdsList = new List<(int matterIndex, int subsequenceIndex)> { (matterIndex: i, subsequenceIndex: j) };
+                            matterAndSubsequenceIdsList = new List<(int matterIndex, int subsequenceIndex, double[] additionalCharacterisctics)> 
+                            { 
+                                (matterIndex: i, subsequenceIndex: j, additionalCharacterisctics: subsequencesData[j].CharacteristicsValues.Skip(1).ToArray()) 
+                            }; // добавить в кортеж все характеристики кроме 0
                             characteristicValueSubsequences.Add(value, matterAndSubsequenceIdsList);
                         }
                     }
                 }
 
+
                 List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> similarPairs =
-                    ExtractSimilarPairs(characteristicValueSubsequences, percentageDifference);
+                    ExtractSimilarPairs(characteristicValueSubsequences, percentageDifferences);
 
                 List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>[,] similarityMatrix =
                     FillSimilarityMatrix(mattersCount, similarPairs);
@@ -185,7 +194,7 @@
 
                 if (filterMatrix)
                 {
-                    filteredSimilarPairs = FilterSimilarityPairs(similarPairs, characteristics, subsequencesCharacteristicLinkId);
+                    filteredSimilarPairs = FilterSimilarityPairs(similarPairs, characteristics, characteristicLinkIds[0]);
                     filteredSimilarityMatrix = FillSimilarityMatrix(mattersCount, filteredSimilarPairs);
                     filteredSimilarities = Similarities(filteredSimilarityMatrix, characteristics, mattersCount);
                 }
@@ -200,7 +209,7 @@
                     { "filteredSimilarities", filteredSimilarities },
                     { "features", features.ToDictionary(f => (byte)f, f => f.GetDisplayValue()) },
                     { "attributes", ToArray<LibiadaWeb.Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
-                    { "maxPercentageDifference", maxPercentageDifference },
+                    { "maxPercentageDifferences", maxPercentageDifferences },
                     { "sequenceCharacteristicName", sequenceCharacteristicName },
                     { "nature", (byte)Nature.Genetic },
                     { "notations", ToArray<Notation>().Where(n => n.GetNature() == Nature.Genetic).ToSelectListWithNature() }
@@ -332,7 +341,7 @@
                     int firstEqualCount = similarityMatrix[i, j]
                                           .Select(s => s.firstSubsequenceIndex)
                                           .Distinct()
-                                           .Count();
+                                          .Count();
                     int firstAbsolutelyEqualCount = similarityMatrix[i, j]
                                                     .Where(s => s.difference == 0)
                                                     .Select(s => s.firstSubsequenceIndex)
@@ -419,13 +428,14 @@
         /// </returns>
         [NonAction]
         private List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> ExtractSimilarPairs(
-            Dictionary<double, List<(int matterId, int subsequenceIndex)>> characteristicValueSubsequences,
-            double percentageDifference)
+            Dictionary<double, List<(int matterId, int subsequenceIndex, double[] additionalCharacteristics /*все кроме 1*/)>> characteristicValueSubsequences,
+            double[] percentageDifferences)
         {
             var similarPairs = new List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)>(characteristicValueSubsequences.Count);
+            
             foreach (double key in characteristicValueSubsequences.Keys)
             {
-                similarPairs.AddRange(ExtractAllPossiblePairs(characteristicValueSubsequences[key]));
+                similarPairs.AddRange(ExtractAllPossiblePairs(characteristicValueSubsequences[key], percentageDifferences));
             }
 
             double[] orderedCharacteristicValue = characteristicValueSubsequences.Keys.OrderBy(v => v).ToArray();
@@ -433,11 +443,11 @@
             {
                 int j = i + 1;
                 double difference = CalculateAverageDifference(orderedCharacteristicValue[i], orderedCharacteristicValue[j]);
-                while (difference <= percentageDifference)
+                while (difference <= percentageDifferences[0]) // Не понял.
                 {
-                    List<(int matterIndex, int subsequenceIndex)> firstComponentIndex = characteristicValueSubsequences[orderedCharacteristicValue[i]];
-                    List<(int matterIndex, int subsequenceIndex)> secondComponentIndex = characteristicValueSubsequences[orderedCharacteristicValue[j]];
-                    similarPairs.AddRange(ExtractAllPossiblePairs(firstComponentIndex, secondComponentIndex, difference));
+                    List<(int matterIndex, int subsequenceIndex, double[] additionalCharacteristics)> firstComponentIndex = characteristicValueSubsequences[orderedCharacteristicValue[i]];
+                    List<(int matterIndex, int subsequenceIndex, double[] additionalCharacteristics)> secondComponentIndex = characteristicValueSubsequences[orderedCharacteristicValue[j]];
+                    similarPairs.AddRange(ExtractAllPossiblePairs(firstComponentIndex, secondComponentIndex, percentageDifferences, difference));
 
                     j++;
                     if (j == orderedCharacteristicValue.Length) break;
@@ -478,7 +488,7 @@
         /// </returns>
         [NonAction]
         private List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> ExtractAllPossiblePairs(
-            List<(int matterIndex, int subsequenceIndex)> list)
+            List<(int matterIndex, int subsequenceIndex, double[] additionalCharacteristics)> list, double[] differences) // добавить доп характеристики + массив dif
         {
             var result = new List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)>();
             if (list.Count < 2)
@@ -490,7 +500,21 @@
             {
                 for (int j = i + 1; j < list.Count; j++)
                 {
-                    result.Add((list[i], list[j], 0));
+                    var areSimilar = true;
+                    // Не понял
+                    for (int k = 0; k < differences.Length - 1; k++)
+                    {
+                        var difference = CalculateAverageDifference(list[i].additionalCharacteristics[k], list[j].additionalCharacteristics[k]);
+                        if (difference > differences[k + 1])
+                        {
+                            areSimilar = false;
+                            break;
+                        }
+                    }
+                    if (areSimilar)
+                    {
+                        result.Add(((list[i].matterIndex, list[i].subsequenceIndex), (list[j].matterIndex, list[j].subsequenceIndex), 0)); // добавить "если" разница не больше dif то добавляем, выкинуть нулевой элемент
+                    }
                 }
             }
 
@@ -515,17 +539,36 @@
         /// </returns>
         [NonAction]
         private List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> ExtractAllPossiblePairs(
-            List<(int matterIndex, int subsequenceIndex)> firstList,
-            List<(int matterIndex, int subsequenceIndex)> secondList,
-            double difference)
+            List<(int matterIndex, int subsequenceIndex, double[] additionalCharacteristics)> firstList,
+            List<(int matterIndex, int subsequenceIndex, double[] additionalCharacteristics)> secondList,
+            double[] differences,
+            double primaryDifference
+        ) // массив даблов
         {
             var result = new List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)>();
 
-            foreach ((int, int) firstElement in firstList)
+
+            foreach (var firstElement in firstList)
             {
-                foreach ((int, int) secondElement in secondList)
+                foreach (var secondElement in secondList)
                 {
-                    result.Add((firstElement, secondElement, difference));
+                    //result.Add((firstElement, secondElement, differences)); // аналогично
+
+                    var areSimilar = true;
+                    // Не понял
+                    for (int k = 0; k < differences.Length - 1; k++)
+                    {
+                        var difference = CalculateAverageDifference(firstElement.additionalCharacteristics[k], secondElement.additionalCharacteristics[k]);
+                        if (difference > differences[k + 1])
+                        {
+                            areSimilar = false;
+                            break;
+                        }
+                    }
+                    if (areSimilar)
+                    {
+                        result.Add(((firstElement.matterIndex, firstElement.subsequenceIndex), (secondElement.matterIndex, secondElement.subsequenceIndex), primaryDifference)); // добавить "если" разница не больше dif то добавляем, выкинуть нулевой элемент
+                    }
                 }
             }
 

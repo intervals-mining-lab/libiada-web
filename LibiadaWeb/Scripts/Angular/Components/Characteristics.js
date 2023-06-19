@@ -61,6 +61,7 @@
             pauseTreatments: "<",
             trajectories: "<",
             characteristicsDictionary: "<",
+            percentageDifferenseNeeded: "<",
             hideNotation: "@"
         }
     });
