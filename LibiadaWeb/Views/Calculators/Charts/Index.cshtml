@@ -10,6 +10,12 @@
     <textarea id="dataPasteBox" style="position:absolute; left:-1000px; top:-1000px;"></textarea>
     <div class="row mb-1">
         <table class="table table-bordered table-hover">
+            <thead ng-show="characteristicsList.length > 0">
+                <tr>
+                    <th ng-bind="sequencesName" />
+                    <th ng-repeat="characteristicName in characteristicsList" ng-bind="characteristicName.Text" />
+                </tr>
+            </thead>
             <tr ng-repeat="row in parsedData">
                 <td ng-repeat="col in row">{{col}}</td>
             </tr>
@@ -17,14 +23,14 @@
                 <td>Paste data from excel onto this page using Ctrl + V</td>
             </tr>
         </table>
-        <div ng-show="parsedData.length > 0">
+        <div ng-show="characteristicsList.length > 0">
             <div class="row mb-1 mt-2">
                 <label class="col-form-label col-md-2" for="firstCharacteristic">First characteristic:</label>
                 <div class="col-md-10">
                     <select class="form-select"
                             title="First characteristic"
                             ng-model="firstCharacteristic"
-                            ng-options="idx*1 as firstCharacteristic for (idx, firstCharacteristic) in parsedData[0]"
+                            ng-options="c.Text for c in characteristicsList"
                             id="firstCharacteristic"></select>
                 </div>
             </div>
@@ -34,7 +40,7 @@
                     <select class="form-select"
                             title="Second characteristic"
                             ng-model="secondCharacteristic"
-                            ng-options="idx*1 as secondCharacteristic for (idx, secondCharacteristic) in parsedData[0]"
+                            ng-options="c.Text for c in characteristicsList"
                             id="secondCharacteristic"></select>
                 </div>
             </div>

@@ -8,6 +8,15 @@
             try {
                 //Pasted data split into rows
                 let rows = text.split(/[\n\f\r]/);
+                // extracting first row that contains characteristics names
+                let characteristics = rows.shift().split("\t");
+                // extracting sequence name column
+                $scope.sequencesName = characteristics.shift();
+
+                $scope.characteristicsList = characteristics.map((c, i) => ({ Value: i+1, Text: c }));
+                $scope.firstCharacteristic = $scope.characteristicsList[0];
+                $scope.secondCharacteristic = $scope.characteristicsList.length > 1 ? $scope.characteristicsList[1] : $scope.characteristicsList[0];
+
                 rows.forEach(thisRow => {
                     let row = thisRow.trim();
                     if (row != "") {
@@ -65,8 +74,8 @@
 
         function fillLegend() {
             $scope.legend = [];
-            for (let k = 1; k < $scope.parsedData.length; k++) {
-                $scope.legend.push({ id: k - 1, name: $scope.parsedData[k][0], visible: true });
+            for (let k = 0; k < $scope.parsedData.length; k++) {
+                $scope.legend.push({ id: k, name: $scope.parsedData[k][0], visible: true });
             }
             $scope.legendHeight = $scope.legend.length * 20;
         }
@@ -76,13 +85,13 @@
 
             $scope.points = [];
 
-            for (let i = 1; i < $scope.parsedData.length; i++) {
+            for (let i = 0; i < $scope.parsedData.length; i++) {
                 let characteristic = $scope.parsedData[i];
                 $scope.points.push({
                     id: i,
                     name: characteristic[0],
-                    x: +characteristic[$scope.firstCharacteristic],
-                    y: +characteristic[$scope.secondCharacteristic]
+                    x: +characteristic[$scope.firstCharacteristic.Value],
+                    y: +characteristic[$scope.secondCharacteristic.Value]
                 });
             }
         }
@@ -95,8 +104,8 @@
 
 
             let pointsCharacteristics = [];
-            for (let i = 1; i < $scope.parsedData[0].length; i++) {
-                pointsCharacteristics.push($scope.parsedData[0][i] + ": " + $scope.parsedData[d.id][i]);
+            for (let i = 0; i < $scope.characteristicsList.length; i++) {
+                pointsCharacteristics.push($scope.characteristicsList[i].Text + ": " + $scope.parsedData[d.id][i+1]);
             }
 
             tooltipContent.push(pointsCharacteristics.join("<br/>"));
