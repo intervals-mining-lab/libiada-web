@@ -15,6 +15,26 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Segmenter", "..\libiada-cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SequenceGenerator", "..\libiada-core\SequenceGenerator\SequenceGenerator.csproj", "{41AB43B7-ACD6-47D5-BB3C-372CC7D59688}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Libiada.Database.Tests", "..\libiada-database\Libiada.Database.Tests\Libiada.Database.Tests.csproj", "{9342856E-BDEB-4F07-B18F-76507122AFFF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clusterizator.Tests", "..\libiada-core\Clusterizator.Tests\Clusterizator.Tests.csproj", "{8E2986A9-6D83-4C1F-AE84-D03496863E6D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibiadaCore.Tests", "..\libiada-core\LibiadaCore.Tests\LibiadaCore.Tests.csproj", "{CA7E5BAB-A689-45FB-9DA6-F7023866988A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarkovChains", "..\libiada-core\MarkovChains\MarkovChains.csproj", "{6ADFB9C2-4AFB-4D34-9DE2-D92FC98225E0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarkovChains.Tests", "..\libiada-core\MarkovChains.Tests\MarkovChains.Tests.csproj", "{714F8CA8-6EB5-4423-A73A-8B9A4CD44200}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhantomChains", "..\libiada-core\PhantomChains\PhantomChains.csproj", "{CD629F50-1CB7-410C-B77D-B76E2AB74B05}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhantomChains.Tests", "..\libiada-core\PhantomChains.Tests\PhantomChains.Tests.csproj", "{64B28094-CD18-48A2-BD3B-5CA41CBA058A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Segmenter.Tests", "..\libiada-core\Segmenter.Tests\Segmenter.Tests.csproj", "{E9A5358E-490D-49F6-ADA0-F2020BCE2B58}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SequenceGenerator.Tests", "..\libiada-core\SequenceGenerator.Tests\SequenceGenerator.Tests.csproj", "{6FD1420A-E4E9-4B23-A79E-ED59E111DE0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibiadaWeb.Tests", "LibiadaWeb.Tests\LibiadaWeb.Tests.csproj", "{EB0D176B-D8E7-4A34-BF0F-317112C5048F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +65,46 @@ Global
 		{41AB43B7-ACD6-47D5-BB3C-372CC7D59688}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41AB43B7-ACD6-47D5-BB3C-372CC7D59688}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41AB43B7-ACD6-47D5-BB3C-372CC7D59688}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9342856E-BDEB-4F07-B18F-76507122AFFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9342856E-BDEB-4F07-B18F-76507122AFFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9342856E-BDEB-4F07-B18F-76507122AFFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9342856E-BDEB-4F07-B18F-76507122AFFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E2986A9-6D83-4C1F-AE84-D03496863E6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E2986A9-6D83-4C1F-AE84-D03496863E6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E2986A9-6D83-4C1F-AE84-D03496863E6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E2986A9-6D83-4C1F-AE84-D03496863E6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA7E5BAB-A689-45FB-9DA6-F7023866988A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA7E5BAB-A689-45FB-9DA6-F7023866988A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA7E5BAB-A689-45FB-9DA6-F7023866988A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA7E5BAB-A689-45FB-9DA6-F7023866988A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6ADFB9C2-4AFB-4D34-9DE2-D92FC98225E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6ADFB9C2-4AFB-4D34-9DE2-D92FC98225E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6ADFB9C2-4AFB-4D34-9DE2-D92FC98225E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6ADFB9C2-4AFB-4D34-9DE2-D92FC98225E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{714F8CA8-6EB5-4423-A73A-8B9A4CD44200}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{714F8CA8-6EB5-4423-A73A-8B9A4CD44200}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{714F8CA8-6EB5-4423-A73A-8B9A4CD44200}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{714F8CA8-6EB5-4423-A73A-8B9A4CD44200}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD629F50-1CB7-410C-B77D-B76E2AB74B05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD629F50-1CB7-410C-B77D-B76E2AB74B05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD629F50-1CB7-410C-B77D-B76E2AB74B05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD629F50-1CB7-410C-B77D-B76E2AB74B05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64B28094-CD18-48A2-BD3B-5CA41CBA058A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64B28094-CD18-48A2-BD3B-5CA41CBA058A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64B28094-CD18-48A2-BD3B-5CA41CBA058A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64B28094-CD18-48A2-BD3B-5CA41CBA058A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9A5358E-490D-49F6-ADA0-F2020BCE2B58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9A5358E-490D-49F6-ADA0-F2020BCE2B58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9A5358E-490D-49F6-ADA0-F2020BCE2B58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9A5358E-490D-49F6-ADA0-F2020BCE2B58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FD1420A-E4E9-4B23-A79E-ED59E111DE0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FD1420A-E4E9-4B23-A79E-ED59E111DE0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FD1420A-E4E9-4B23-A79E-ED59E111DE0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FD1420A-E4E9-4B23-A79E-ED59E111DE0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB0D176B-D8E7-4A34-BF0F-317112C5048F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB0D176B-D8E7-4A34-BF0F-317112C5048F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB0D176B-D8E7-4A34-BF0F-317112C5048F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB0D176B-D8E7-4A34-BF0F-317112C5048F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

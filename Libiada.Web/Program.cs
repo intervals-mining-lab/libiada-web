@@ -11,6 +11,7 @@ using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
 
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using System.Data.Common;
@@ -47,6 +48,20 @@ builder.Services.AddTransient<IPrincipal>(provider => provider.GetService<IHttpC
 builder.Services.AddTransient<IViewDataHelper, ViewDataHelper>();
 builder.Services.AddSingleton<ITaskManagerHubFactory, TaskManagerHubFactory>();
 builder.Services.AddSingleton<ITaskManager, TaskManager>();
+
+builder.Services.Configure<RazorViewEngineOptions>(options =>
+{
+    // {0} - Action Name
+    // {1} - Controller Name
+    // {2} - Area Name
+    options.ViewLocationFormats.Add("/Views//{1}/{0}.cshtml");
+    options.ViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
+    options.ViewLocationFormats.Add("/Views/Sequences/{1}/{0}.cshtml");
+    options.ViewLocationFormats.Add("/Views/Calculators/{1}/{0}.cshtml");
+    // options.ViewLocationFormats.Add("/Views/AngularTemplates/{0}.cshtml");
+
+
+});
 
 builder.Services.AddControllersWithViews();
 
