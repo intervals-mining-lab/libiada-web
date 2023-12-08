@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Libiada.Web", "Libiada.Web\Libiada.Web.csproj", "{45D7D138-5640-47CD-BC92-3E15C2F719C8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Libiada.Database", "..\libiada-database\Libiada.Database\Libiada.Database.csproj", "{A14CA593-416D-4578-B79F-54BCDF5288F1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clusterizator", "..\libiada-core\Clusterizator\Clusterizator.csproj", "{FC07EAF3-248A-4E33-BC0B-62562608B971}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibiadaCore", "..\libiada-core\LibiadaCore\LibiadaCore.csproj", "{0487FD4A-C556-49C3-8863-DF5A96752D4F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Segmenter", "..\libiada-core\Segmenter\Segmenter.csproj", "{60871AFC-8039-4CCE-9DD5-DB51251BF6B1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SequenceGenerator", "..\libiada-core\SequenceGenerator\SequenceGenerator.csproj", "{41AB43B7-ACD6-47D5-BB3C-372CC7D59688}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{45D7D138-5640-47CD-BC92-3E15C2F719C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45D7D138-5640-47CD-BC92-3E15C2F719C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45D7D138-5640-47CD-BC92-3E15C2F719C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45D7D138-5640-47CD-BC92-3E15C2F719C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A14CA593-416D-4578-B79F-54BCDF5288F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A14CA593-416D-4578-B79F-54BCDF5288F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A14CA593-416D-4578-B79F-54BCDF5288F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A14CA593-416D-4578-B79F-54BCDF5288F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC07EAF3-248A-4E33-BC0B-62562608B971}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC07EAF3-248A-4E33-BC0B-62562608B971}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC07EAF3-248A-4E33-BC0B-62562608B971}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC07EAF3-248A-4E33-BC0B-62562608B971}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0487FD4A-C556-49C3-8863-DF5A96752D4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0487FD4A-C556-49C3-8863-DF5A96752D4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0487FD4A-C556-49C3-8863-DF5A96752D4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0487FD4A-C556-49C3-8863-DF5A96752D4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60871AFC-8039-4CCE-9DD5-DB51251BF6B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60871AFC-8039-4CCE-9DD5-DB51251BF6B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60871AFC-8039-4CCE-9DD5-DB51251BF6B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60871AFC-8039-4CCE-9DD5-DB51251BF6B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41AB43B7-ACD6-47D5-BB3C-372CC7D59688}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41AB43B7-ACD6-47D5-BB3C-372CC7D59688}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41AB43B7-ACD6-47D5-BB3C-372CC7D59688}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41AB43B7-ACD6-47D5-BB3C-372CC7D59688}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A930E3A3-36BE-4C8C-93A5-80E7C7638C87}
+	EndGlobalSection
+EndGlobal

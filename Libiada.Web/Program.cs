@@ -78,4 +78,6 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
+app.MapHub<TaskManagerHub>("/TaskManagerHub");
+
 app.Run();

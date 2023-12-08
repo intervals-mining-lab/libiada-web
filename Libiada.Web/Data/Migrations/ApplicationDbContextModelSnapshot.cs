@@ -49,7 +49,7 @@ namespace Libiada.Web.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetPushNotificationSubscribers");
+                    b.ToTable("AspNetPushNotificationSubscribers", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>

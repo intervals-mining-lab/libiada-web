@@ -7,13 +7,13 @@
 
 @section Scripts {
     <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
 
     @Html.Partial("_AngularControllerInitializer", "TaskManager")
     
     <script src="~/js/push-notification.js" async></script>
 }
 
-<script src="~/signalr/hubs"></script>
 <h2>@ViewBag.Title</h2>
 
 <div ng-controller="TaskManagerCtrl">

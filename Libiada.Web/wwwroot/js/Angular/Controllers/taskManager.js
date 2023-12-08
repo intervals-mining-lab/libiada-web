@@ -10,7 +10,7 @@
 
         function onHubStart() {
             $scope.$apply();
-            $scope.tasksHub.server.getAllTasks().done(tasksJson => {
+            $scope.tasksHub.invoke("getAllTasks").then(tasksJson => {
                 let tasks = JSON.parse(tasksJson);
                 for (let i = 0; i < tasks.length; i++) {
                     $scope.tasks.push(tasks[i]);
@@ -21,7 +21,7 @@
                 $scope.loading = false;
                 try {
                     $scope.$apply();
-                } catch (e) { }
+                } catch (e) { console.log(e); }
             });
         };
 
@@ -55,7 +55,7 @@
             }
             try {
                 $scope.$apply();
-            } catch (e) { }
+            } catch (e) { console.log(e); }
         };
 
         function getStatusClass(status) {
@@ -79,7 +79,7 @@
         function deleteAllTasks() {
             alertify.confirm('Confirm action', 'Are you sure you want to delete all tasks?',
                 () => {
-                    $scope.tasksHub.server.deleteAllTasks();
+                    $scope.tasksHub.invoke("deleteAllTasks");
                     alertify.success('All tasks have been deleted.');
                 }, () => { });
         }
@@ -87,7 +87,7 @@
         function deleteTasksWithStatus(taskState) {
             alertify.confirm('Confirm action', 'Are you sure you want to delete all tasks with "' + taskState + '" status?',
                 () => {
-                    $scope.tasksHub.server.deleteTasksWithState(taskState);
+                    $scope.tasksHub.invoke("deleteTasksWithState", taskState);
                     alertify.success('All tasks with "' + taskState + '" status have been deleted.');
                 }, () => { });
         }
@@ -95,7 +95,7 @@
         function deleteTask(id) {
             alertify.confirm('Confirm action', 'Are you sure you want to delete this task?',
                 () => {
-                    $scope.tasksHub.server.deleteTask(id);
+                    $scope.tasksHub.invoke("deleteTask", id);
                     alertify.success('The task has been deleted.');
                 }, () => { });
         }
@@ -119,11 +119,20 @@
         $scope.deleteTask = deleteTask;
         $scope.tryRedirectToResult = tryRedirectToResult;
 
-        $scope.tasksHub = $.connection.tasksManagerHub;
-        $scope.tasksHub.client.TaskEvent = taskEvent;
+        //$scope.tasksHub = $.connection.tasksManagerHub;
+        //$scope.tasksHub.client.TaskEvent = taskEvent;
 
-        $.connection.hub.stateChanged($scope.onStateChange);
-        $.connection.hub.start().done($scope.onHubStart);
+        //$.connection.hub.stateChanged($scope.onStateChange);
+        //$.connection.hub.start().done($scope.onHubStart);
+
+        //initializing signalr connection
+        $scope.tasksHub = new signalR.HubConnectionBuilder().withUrl("/TaskManagerHub").build();
+
+        $scope.tasksHub.on("taskEvent", $scope.taskEvent);
+
+        $scope.tasksHub.start().catch(function (err) {
+            return console.error(err.toString());
+        });
 
         let location = window.location.href.split("/");
         if (location[location.length - 1] != "TaskManager")

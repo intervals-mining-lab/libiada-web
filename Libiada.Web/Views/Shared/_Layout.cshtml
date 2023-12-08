@@ -16,7 +16,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-controller="Home">Libiada.Web</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Libiada.Web</a>
                 <button class="navbar-toggler m-2"
                         type="button"
                         data-bs-toggle="collapse"
@@ -30,10 +30,10 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link" href="http://foarLab.org/">Home</a>
+                            <a class="nav-link text-dark" href="http://foarLab.org/">Home</a>
                         </li>
                         <li class="nav-item">
-                            @Html.ActionLink("Task manager", "Index", "TaskManager", routeValues: null, htmlAttributes: new { @class = "nav-link" })
+                            <a class="nav-link text-dark" asp-area="" asp-controller="TaskManager" asp-action="Index">Task manager</a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />
@@ -70,7 +70,7 @@
     <script src="~/js/Angular/functions.js"></script>
     <script src="~/lib/angular.js/angular.min.js"></script>
     <script src="~/lib/angular-smart-table/smart-table.min.js"></script>
-    <script src="~/js/Angular/Components/scrollJumper.js"></script>
+    @*<script src="~/js/Angular/Components/scrollJumper.js"></script>*@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
