@@ -11,6 +11,15 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Libiada.Web.styles.css" asp-append-version="true" />
+    
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/AlertifyJS/alertify.min.js"></script>
+    <script src="~/js/Angular/functions.js"></script>
+    <script src="~/lib/angular.js/angular.js"></script>
+    <script src="~/lib/angular-smart-table/smart-table.min.js"></script>
+    @*<script src="~/js/Angular/Components/scrollJumper.js"></script>*@
+    @await RenderSectionAsync("Scripts", required: false)
 </head>
 <body>
     <header>
@@ -63,14 +72,5 @@
             <p>&copy; @DateTime.Now.Year - foarLab.org</p>
         </div>
     </footer>
-    
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/lib/AlertifyJS/alertify.min.js"></script>
-    <script src="~/js/Angular/functions.js"></script>
-    <script src="~/lib/angular.js/angular.min.js"></script>
-    <script src="~/lib/angular-smart-table/smart-table.min.js"></script>
-    @*<script src="~/js/Angular/Components/scrollJumper.js"></script>*@
-    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

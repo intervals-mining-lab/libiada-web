@@ -4,6 +4,7 @@
 }
 
 <script src="~/js/Angular/Components/characteristic.js" asp-append-version="true"></script>
+<script src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
 @Html.Partial("_AngularControllerInitializer", "SequencesAlignment")
 
 <h2>@ViewBag.Title</h2>
@@ -22,7 +23,7 @@
                        selected-matters-count="selectedMattersCount">
         </matters-table>
         @Html.Partial("_FeaturesSelect")
-        <hr/>
+        <hr />
         @Html.Partial("_Filters")
         <h4>Sort matrix by characterisitc:</h4>
         <characteristic characteristic-types="::characteristicTypes"
@@ -33,15 +34,16 @@
                         trajectories="::trajectories">
         </characteristic>
         <h4>Subsequences comparison characteristic:</h4>
-        <characteristic characteristic-types="::characteristicTypes"
-                        characteristics-dictionary="::characteristicsDictionary"
-                        nature="nature"
-                        notations="::notations"
-                        characteristic-name="subsequencesCharacteristicLinkId"
-                        pause-treatments="::pauseTreatments"
-                        trajectories="::trajectories"
-                        title="Subsequences characteristic">
-        </characteristic>
+        <characteristics characteristic-types="::characteristicTypes"
+                         characteristics-dictionary="::characteristicsDictionary"
+                         nature="nature"
+                         notations="::notations"
+                         languages="::languages"
+                         translators="::translators"
+                         pause-treatments="::pauseTreatments"
+                         trajectories="::trajectories"
+                         percentage-differense-needed="::percentageDifferenseNeeded">
+        </characteristics>
         <div class="row mb-1">
             <label class="col-form-label col-md-2" for="maxPercentageDifference">Maximum difference (%):</label>
             <div class="col-md-10">
