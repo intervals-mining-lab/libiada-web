@@ -33,7 +33,7 @@
         /// </param>
         public CongenericCharacteristicRepository(LibiadaDatabaseEntities db, IPrincipal currentUser)
         {
-            characteristicsLinks = db.CongenericCharacteristicLink.ToArray();
+            characteristicsLinks = db.CongenericCharacteristicLinks.ToArray();
             this.currentUser = currentUser;
         }
 

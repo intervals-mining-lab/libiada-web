@@ -62,7 +62,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            var matterIds = db.DnaSequence.Where(d => d.Notation == Notation.Nucleotides).Select(d => d.MatterId).ToArray();
+            var matterIds = db.DnaSequences.Where(d => d.Notation == Notation.Nucleotides).Select(d => d.MatterId).ToArray();
 
             var data = viewDataHelper.FillViewData(1, int.MaxValue, m => matterIds.Contains(m.Id), "Transform");
             data.Add("nature", (byte)Nature.Genetic);
@@ -90,7 +90,7 @@
 
             foreach (var matterId in matterIds)
             {
-                var sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == Notation.Nucleotides).Id;
+                var sequenceId = db.CommonSequences.Single(c => c.MatterId == matterId && c.Notation == Notation.Nucleotides).Id;
                 Chain sourceChain = commonSequenceRepository.GetLibiadaChain(sequenceId);
 
                 BaseChain transformedChain = transformType.Equals("toAmino")

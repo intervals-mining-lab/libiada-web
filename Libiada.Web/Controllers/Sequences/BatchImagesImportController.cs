@@ -44,7 +44,7 @@
             {
                 var importResults = new List<MatterImportResult>();
 
-                Matter[] matters = db.Matter.Where(m => m.Nature == Nature.Image).ToArray();
+                Matter[] matters = db.Matters.Where(m => m.Nature == Nature.Image).ToArray();
                 var matterRepository = new MatterRepository(db, cache);
 
                 for (int i = 0; i < files.Count; i++)

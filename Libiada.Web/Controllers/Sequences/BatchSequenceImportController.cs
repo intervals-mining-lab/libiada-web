@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.Entity;
+    using Microsoft.EntityFrameworkCore;
     using System.Linq;
     using Microsoft.AspNetCore.Mvc;
 
@@ -154,14 +154,14 @@
                 string[] names = importResults.Select(r => r.MatterName).ToArray();
 
                 // removing matters for which adding of sequence failed
-                Matter[] orphanMatters = db.Matter
+                Matter[] orphanMatters = db.Matters
                                            .Include(m => m.Sequence)
                                            .Where(m => names.Contains(m.Name) && m.Sequence.Count == 0)
                                            .ToArray();
 
                 if (orphanMatters.Length > 0)
                 {
-                    db.Matter.RemoveRange(orphanMatters);
+                    db.Matters.RemoveRange(orphanMatters);
                     db.SaveChanges();
                 }
 

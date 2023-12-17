@@ -1,7 +1,7 @@
 ﻿namespace Libiada.Web.Controllers.Sequences
 {
     using System.Collections.Generic;
-    using System.Data.Entity;
+    using Microsoft.EntityFrameworkCore;
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
@@ -43,7 +43,7 @@
         /// </returns>
         public async Task<ActionResult> Index()
         {
-            List<Matter> matter = await db.Matter.Include(m => m.Multisequence).ToListAsync();
+            List<Matter> matter = await db.Matters.Include(m => m.Multisequence).ToListAsync();
 
             if (!User.IsInRole("admin"))
             {
@@ -70,13 +70,13 @@
                 return BadRequest();
             }
 
-            Matter matter = db.Matter.Include(m => m.Multisequence).SingleOrDefault(m => m.Id == id);
+            Matter matter = db.Matters.Include(m => m.Multisequence).SingleOrDefault(m => m.Id == id);
             if (matter == null)
             {
                 return NotFound();
             }
 
-            ViewBag.SequencesCount = db.CommonSequence.Count(c => c.MatterId == matter.Id);
+            ViewBag.SequencesCount = db.CommonSequences.Count(c => c.MatterId == matter.Id);
 
             return View(matter);
 
@@ -98,7 +98,7 @@
                 return BadRequest();
             }
 
-            Matter matter = db.Matter.Include(m => m.Multisequence).SingleOrDefault(m => m.Id == id);
+            Matter matter = db.Matters.Include(m => m.Multisequence).SingleOrDefault(m => m.Id == id);
             if (matter == null)
             {
                 return NotFound();
@@ -108,9 +108,9 @@
                     { "natures", Libiada.Web.Extensions.EnumExtensions.GetSelectList(new[] { matter.Nature }) },
                     { "groups", EnumExtensions.ToArray<Group>().ToSelectListWithNature() },
                     { "sequenceTypes", EnumExtensions.ToArray<SequenceType>().ToSelectListWithNature() },
-                    { "sequencesCount", db.CommonSequence.Count(c => c.MatterId == matter.Id) },
+                    { "sequencesCount", db.CommonSequences.Count(c => c.MatterId == matter.Id) },
                     { "matter", matter },
-                    { "multisequences", db.Multisequence.ToList() },
+                    { "multisequences", db.Multisequences.ToList() },
                     { "nature", ((byte)matter.Nature).ToString() },
                     { "group", ((byte)matter.Group).ToString() },
                     { "sequenceType", ((byte)matter.SequenceType).ToString() }
@@ -153,9 +153,9 @@
                     { "natures", Libiada.Web.Extensions.EnumExtensions.GetSelectList(new[] { matter.Nature }) },
                     { "groups", EnumExtensions.ToArray<Group>().ToSelectListWithNature() },
                     { "sequenceTypes", EnumExtensions.ToArray<SequenceType>().ToSelectListWithNature() },
-                    { "sequencesCount", db.CommonSequence.Count(c => c.MatterId == matter.Id) },
+                    { "sequencesCount", db.CommonSequences.Count(c => c.MatterId == matter.Id) },
                     { "matter", matter },
-                    { "multisequences", db.Multisequence.ToList() },
+                    { "multisequences", db.Multisequences.ToList() },
                     { "nature", ((byte)matter.Nature).ToString() },
                     { "group", ((byte)matter.Group).ToString() },
                     { "sequenceType", ((byte)matter.SequenceType).ToString() }
@@ -182,13 +182,13 @@
                 return BadRequest();
             }
 
-            Matter matter = await db.Matter.FindAsync(id);
+            Matter matter = await db.Matters.FindAsync(id);
             if (matter == null)
             {
                 return NotFound();
             }
 
-            ViewBag.SequencesCount = db.CommonSequence.Count(c => c.MatterId == matter.Id);
+            ViewBag.SequencesCount = db.CommonSequences.Count(c => c.MatterId == matter.Id);
             return View(matter);
 
         }
@@ -206,8 +206,8 @@
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(long id)
         {
-            Matter matter = await db.Matter.FindAsync(id);
-            db.Matter.Remove(matter);
+            Matter matter = await db.Matters.FindAsync(id);
+            db.Matters.Remove(matter);
             await db.SaveChangesAsync();
             cache.Clear();
             return RedirectToAction("Index");

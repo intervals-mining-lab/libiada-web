@@ -1,6 +1,6 @@
 ﻿namespace Libiada.Web.Controllers.Sequences
 {
-    using System.Data.Entity;
+    using Microsoft.EntityFrameworkCore;
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
@@ -39,7 +39,7 @@
         /// </returns>
         public async Task<ActionResult> Index()
         {
-            var commonSequence = db.CommonSequence.Include(c => c.Matter);
+            var commonSequence = db.CommonSequences.Include(c => c.Matter);
             return View(await commonSequence.ToListAsync());
 
         }
@@ -60,7 +60,7 @@
                 return BadRequest();
             }
 
-            CommonSequence commonSequence = db.CommonSequence.Include(c => c.Matter).Single(c => c.Id == id);
+            CommonSequence commonSequence = db.CommonSequences.Include(c => c.Matter).Single(c => c.Id == id);
             if (commonSequence == null)
             {
                 return NotFound();
@@ -87,7 +87,7 @@
             }
 
 
-            CommonSequence commonSequence = await db.CommonSequence.FindAsync(id);
+            CommonSequence commonSequence = await db.CommonSequences.FindAsync(id);
             if (commonSequence == null)
             {
                 return NotFound();
@@ -144,7 +144,7 @@
                 return BadRequest();
             }
 
-            CommonSequence commonSequence = db.CommonSequence.Include(c => c.Matter).Single(c => c.Id == id);
+            CommonSequence commonSequence = db.CommonSequences.Include(c => c.Matter).Single(c => c.Id == id);
             if (commonSequence == null)
             {
                 return NotFound();
@@ -166,8 +166,8 @@
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(long id)
         {
-            CommonSequence commonSequence = await db.CommonSequence.FindAsync(id);
-            db.CommonSequence.Remove(commonSequence);
+            CommonSequence commonSequence = await db.CommonSequences.FindAsync(id);
+            db.CommonSequences.Remove(commonSequence);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }

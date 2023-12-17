@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.Entity;
+    using Microsoft.EntityFrameworkCore;
     using System.Globalization;
     using System.Linq;
     using Microsoft.AspNetCore.Mvc;
@@ -140,7 +140,7 @@
                 matterIds = OrderMatterIds(matterIds, characteristicLinkId, chains);
 
                 // Subsequences characteristics
-                var parentSequences = db.DnaSequence.Include(s => s.Matter)
+                var parentSequences = db.DnaSequences.Include(s => s.Matter)
                                         .Where(s => s.Notation == Notation.Nucleotides && matterIds.Contains(s.MatterId))
                                         .Select(s => new { s.Id, s.MatterId, MatterName = s.Matter.Name })
                                         .ToDictionary(s => s.Id);

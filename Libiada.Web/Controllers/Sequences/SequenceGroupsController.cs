@@ -1,6 +1,6 @@
 ﻿namespace Libiada.Web.Controllers.Sequences
 {
-    using System.Data.Entity;
+    using Microsoft.EntityFrameworkCore;
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
@@ -38,7 +38,7 @@
         /// </returns>
         public async Task<ActionResult> Index()
         {
-            var sequenceGroups = db.SequenceGroup.Include(s => s.Creator).Include(s => s.Modifier);
+            var sequenceGroups = db.SequenceGroups.Include(s => s.Creator).Include(s => s.Modifier);
             return View(await sequenceGroups.ToListAsync());
         }
 
@@ -58,7 +58,7 @@
                 return BadRequest();
             }
 
-            SequenceGroup sequenceGroup = await db.SequenceGroup.FindAsync(id);
+            SequenceGroup sequenceGroup = await db.SequenceGroups.FindAsync(id);
             if (sequenceGroup == null)
             {
                 return NotFound();
@@ -102,13 +102,13 @@
             {
                 sequenceGroup.CreatorId = User.GetUserId();
                 sequenceGroup.ModifierId = User.GetUserId();
-                var matters = db.Matter.Where(m => matterIds.Contains(m.Id)).ToArray();
+                var matters = db.Matters.Where(m => matterIds.Contains(m.Id)).ToArray();
                 foreach (var matter in matters)
                 {
                     sequenceGroup.Matters.Add(matter);
                 }
 
-                db.SequenceGroup.Add(sequenceGroup);
+                db.SequenceGroups.Add(sequenceGroup);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
@@ -132,7 +132,7 @@
                 return BadRequest();
             }
 
-            SequenceGroup? sequenceGroup = await db.SequenceGroup.Include(m => m.Matters)
+            SequenceGroup? sequenceGroup = await db.SequenceGroups.Include(m => m.Matters)
                                                                 .SingleOrDefaultAsync(sg => sg.Id == id);
             if (sequenceGroup == null)
             {
@@ -165,12 +165,12 @@
         {
             if (ModelState.IsValid)
             {
-                var originalSequenceGroup = db.SequenceGroup.Include(sg => sg.Matters).Single(sg => sg.Id == sequenceGroup.Id);
+                var originalSequenceGroup = db.SequenceGroups.Include(sg => sg.Matters).Single(sg => sg.Id == sequenceGroup.Id);
                 originalSequenceGroup.Name = sequenceGroup.Name;
                 originalSequenceGroup.Nature = sequenceGroup.Nature;
                 originalSequenceGroup.SequenceGroupType = sequenceGroup.SequenceGroupType;
                 originalSequenceGroup.ModifierId = User.GetUserId();
-                var matters = db.Matter.Where(m => matterIds.Contains(m.Id)).ToArray();
+                var matters = db.Matters.Where(m => matterIds.Contains(m.Id)).ToArray();
                 originalSequenceGroup.Matters.Clear();
                 foreach (var matter in matters)
                 {
@@ -201,7 +201,7 @@
                 return BadRequest();
             }
 
-            SequenceGroup sequenceGroup = await db.SequenceGroup.FindAsync(id);
+            SequenceGroup sequenceGroup = await db.SequenceGroups.FindAsync(id);
             if (sequenceGroup == null)
             {
                 return NotFound();
@@ -223,8 +223,8 @@
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            SequenceGroup sequenceGroup = await db.SequenceGroup.FindAsync(id);
-            db.SequenceGroup.Remove(sequenceGroup);
+            SequenceGroup sequenceGroup = await db.SequenceGroups.FindAsync(id);
+            db.SequenceGroups.Remove(sequenceGroup);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }

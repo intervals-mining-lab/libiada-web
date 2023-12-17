@@ -6,6 +6,7 @@
     using Libiada.Web.Helpers;
 
     using Libiada.Database.Tasks;
+    using Microsoft.AspNetCore.Identity;
 
     /// <summary>
     /// The task data.
@@ -69,7 +70,7 @@
         /// <param name="taskType">
         /// The task Type.
         /// </param>
-        public TaskData(long id, AspNetUser creator, TaskType taskType)
+        public TaskData(long id, IdentityUser<int> creator, TaskType taskType)
         {
             Id = id;
             TaskType = taskType;

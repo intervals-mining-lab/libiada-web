@@ -124,11 +124,11 @@
 
                 long firstMatterId = matterIds[0];
                 firstMatterName = cache.Matters.Single(m => m.Id == firstMatterId).Name;
-                firstParentId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
+                firstParentId = db.CommonSequences.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
 
                 long secondMatterId = matterIds[1];
                 secondMatterName = cache.Matters.Single(m => m.Id == secondMatterId).Name;
-                secondParentId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
+                secondParentId = db.CommonSequences.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
 
                 double[] firstSequenceCharacteristics = subsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(firstParentId, characteristicLinkId, features);
                 double[] secondSequenceCharacteristics = subsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(secondParentId, characteristicLinkId, features);

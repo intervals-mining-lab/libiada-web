@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.Entity;
+    using Microsoft.EntityFrameworkCore;
     using System.IO;
     using System.Linq;
     using System.Net;
@@ -111,7 +111,7 @@
                 var attributeValuesCache = new AttributeValueCacheManager(db);
                 long[] sequenceIds;
 
-                DnaSequence[] parentSequences = db.DnaSequence.Include(s => s.Matter)
+                DnaSequence[] parentSequences = db.DnaSequences.Include(s => s.Matter)
                                         .Where(s => s.Notation == Notation.Nucleotides && matterIds.Contains(s.MatterId))
                                         .OrderBy(s => s.MatterId)
                                         .ToArray();

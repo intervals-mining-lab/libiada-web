@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.Entity;
+    using Microsoft.EntityFrameworkCore;
     using System.Linq;
     using Microsoft.AspNetCore.Mvc;
 
@@ -47,9 +47,9 @@
         /// </returns>
         public ActionResult Index()
         {
-            var sequencesWithSubsequencesIds = db.Subsequence.Select(s => s.SequenceId).Distinct();
+            var sequencesWithSubsequencesIds = db.Subsequences.Select(s => s.SequenceId).Distinct();
 
-            var matterIds = db.DnaSequence.Include(c => c.Matter)
+            var matterIds = db.DnaSequences.Include(c => c.Matter)
                 .Where(c => !string.IsNullOrEmpty(c.RemoteId)
                          && !sequencesWithSubsequencesIds.Contains(c.Id)
                          && Aliases.SequenceTypesWithSubsequences.Contains(c.Matter.SequenceType))
@@ -85,7 +85,7 @@
                                        .OrderBy(m => m.Id)
                                        .Select(m => m.Name)
                                        .ToArray();
-                    var parentSequences = db.DnaSequence
+                    var parentSequences = db.DnaSequences
                                             .Where(c => matterIds.Contains(c.MatterId))
                                             .OrderBy(c => c.MatterId)
                                             .ToArray();
@@ -105,9 +105,9 @@
                             subsequenceImporter.CreateSubsequences();
 
 
-                            int featuresCount = db.Subsequence.Count(s => s.SequenceId == parentSequence.Id
+                            int featuresCount = db.Subsequences.Count(s => s.SequenceId == parentSequence.Id
                                                                          && s.Feature != Feature.NonCodingSequence);
-                            int nonCodingCount = db.Subsequence.Count(s => s.SequenceId == parentSequence.Id
+                            int nonCodingCount = db.Subsequences.Count(s => s.SequenceId == parentSequence.Id
                                                                         && s.Feature == Feature.NonCodingSequence);
 
                             importResult.Status = "Success";

@@ -10,7 +10,7 @@
 
     using System;
     using System.Collections.Generic;
-    using System.Data.Entity;
+    using Microsoft.EntityFrameworkCore;
     using System.Linq;
     using Microsoft.AspNetCore.Mvc;
 
@@ -51,7 +51,7 @@
 
                 var dnaSequenceRepository = new GeneticSequenceRepository(db, cache);
 
-                var sequencesWithAccessions = db.DnaSequence
+                var sequencesWithAccessions = db.DnaSequences
                                                 .Include(ds => ds.Matter)
                                                 .Where(ds => ds.Notation == Notation.Nucleotides && !string.IsNullOrEmpty(ds.RemoteId))
                                                 .ToArray();

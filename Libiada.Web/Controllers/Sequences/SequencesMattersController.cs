@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Data.Entity;
+    using Microsoft.EntityFrameworkCore;
     using System.IO;
     using System.Linq;
     using Microsoft.AspNetCore.Mvc;
@@ -165,7 +165,7 @@
                         default:
                             throw new InvalidEnumArgumentException(nameof(nature), (int)nature, typeof(Nature));
                     }
-                    string? multisequenceName = db.Multisequence.SingleOrDefault(ms => ms.Id == commonSequence.Matter.MultisequenceId)?.Name;
+                    string? multisequenceName = db.Multisequences.SingleOrDefault(ms => ms.Id == commonSequence.Matter.MultisequenceId)?.Name;
                     var result = new ImportResult(commonSequence, language, original, translator, partial, precision, multisequenceName);
 
                     return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
@@ -175,14 +175,14 @@
                     long matterId = commonSequence.MatterId;
                     if (matterId != 0)
                     {
-                        List<Matter> orphanMatter = db.Matter
+                        List<Matter> orphanMatter = db.Matters
                             .Include(m => m.Sequence)
                             .Where(m => m.Id == matterId && m.Sequence.Count == 0)
                             .ToList();
 
                         if (orphanMatter.Count > 0)
                         {
-                            db.Matter.Remove(orphanMatter[0]);
+                            db.Matters.Remove(orphanMatter[0]);
                             db.SaveChanges();
                         }
                     }
@@ -209,7 +209,7 @@
             /// <summary>
             /// The description.
             /// </summary>
-            public readonly string Description;
+            public readonly string? Description;
 
             /// <summary>
             /// The nature.
@@ -234,7 +234,7 @@
             /// <summary>
             /// The remote id.
             /// </summary>
-            public readonly string RemoteId;
+            public readonly string? RemoteId;
 
             /// <summary>
             /// The language.
@@ -265,9 +265,9 @@
 
             public readonly int? MultisequenceNumber;
 
-            public readonly string CollectionCountry;
+            public readonly string? CollectionCountry;
 
-            public readonly DateTimeOffset? CollectionDate;
+            public readonly DateOnly? CollectionDate;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="ImportResult"/> struct.

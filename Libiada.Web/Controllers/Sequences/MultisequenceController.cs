@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.Entity;
+    using Microsoft.EntityFrameworkCore;
     using System.Linq;
     using System.Net;
     using System.Threading.Tasks;
@@ -38,7 +38,7 @@
         /// <returns></returns>
         public ActionResult Index()
         {
-            List<Multisequence> multisequences = db.Multisequence.Include(ms => ms.Matters).ToList();
+            List<Multisequence> multisequences = db.Multisequences.Include(ms => ms.Matters).ToList();
             return View(multisequences);
         }
 
@@ -74,10 +74,10 @@
                 throw new Exception("Model state is invalid");
             }
 
-            db.Multisequence.Add(multisequence);
+            db.Multisequences.Add(multisequence);
             db.SaveChanges();
 
-            var matters = db.Matter.Where(m => matterIds.Contains(m.Id))
+            var matters = db.Matters.Where(m => matterIds.Contains(m.Id))
                                    .ToDictionary(m => m.Id, m => m);
             for (int i = 0; i < matterIds.Length; i++)
             {
@@ -108,7 +108,7 @@
                 return BadRequest();
             }
 
-            Multisequence? multisequence = db.Multisequence.Include(m => m.Matters)
+            Multisequence? multisequence = db.Multisequences.Include(m => m.Matters)
                                                           .SingleOrDefault(m => m.Id == id);
             if (multisequence == null)
             {
@@ -127,7 +127,7 @@
                 return BadRequest();
             }
 
-            Multisequence? multisequence = db.Multisequence.Include(m => m.Matters)
+            Multisequence? multisequence = db.Multisequences.Include(m => m.Matters)
                                                           .SingleOrDefault(m => m.Id == id);
             if (multisequence == null)
             {
@@ -160,7 +160,7 @@
             {
                 db.Entry(multisequence).State = EntityState.Modified;
 
-                var mattersToRemove = db.Matter.Where(m => m.MultisequenceId == multisequence.Id && !matterIds.Contains(m.Id)).ToArray();
+                var mattersToRemove = db.Matters.Where(m => m.MultisequenceId == multisequence.Id && !matterIds.Contains(m.Id)).ToArray();
                 for (int i = 0; i < mattersToRemove.Length; i++)
                 {
                     var matter = mattersToRemove[i];
@@ -169,7 +169,7 @@
                     db.Entry(matter).State = EntityState.Modified;
                 }
 
-                var mattersToAddOrUpdate = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m);
+                var mattersToAddOrUpdate = db.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m);
                 for (int i = 0; i < matterIds.Length; i++)
                 {
                     var matter = mattersToAddOrUpdate[matterIds[i]];
@@ -213,7 +213,7 @@
                 return BadRequest();
             }
 
-            Multisequence multisequence = await db.Multisequence.Include(m => m.Matters).SingleOrDefaultAsync(m => m.Id == id);
+            Multisequence multisequence = await db.Multisequences.Include(m => m.Matters).SingleOrDefaultAsync(m => m.Id == id);
             if (multisequence == null)
             {
                 return NotFound();
@@ -236,7 +236,7 @@
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(long id)
         {
-            Multisequence multisequence = await db.Multisequence.Include(m => m.Matters).SingleAsync(m => m.Id == id);
+            Multisequence multisequence = await db.Multisequences.Include(m => m.Matters).SingleAsync(m => m.Id == id);
             var matters = multisequence.Matters.ToArray();
             foreach (var matter in matters)
             {
@@ -245,7 +245,7 @@
                 db.Entry(matter).State = EntityState.Modified;
             }
 
-            db.Multisequence.Remove(multisequence);
+            db.Multisequences.Remove(multisequence);
             await db.SaveChangesAsync();
             cache.Clear();
             return RedirectToAction("Index");
@@ -313,7 +313,7 @@
         /// </returns>
         public string GroupMattersIntoMultisequences(long[] excludeMatterIds)
         {
-            Matter[] matters = db.Matter.Where(m => MultisequenceRepository.SequenceTypesFilter.Contains(m.SequenceType)).ToArray();
+            Matter[] matters = db.Matters.Where(m => MultisequenceRepository.SequenceTypesFilter.Contains(m.SequenceType)).ToArray();
             Dictionary<string, long[]> multisequences = SplitMattersIntoReferenceAnsNotReference(matters);
             var result = multisequences.Select(m => new { name = m.Key, matterIds = m.Value }).ToArray();
             var matterIds = result.SelectMany(r => r.matterIds);
@@ -322,7 +322,7 @@
                 {
                     {"result", result},
                     { "matters", mattersDictionary},
-                    { "ungroupedMatters", db.Matter
+                    { "ungroupedMatters", db.Matters
                                             .Where(m => m.Nature == Nature.Genetic && !matterIds.Contains(m.Id))
                                             .Select(m => new { m.Id, m.Name })
                                             .ToArray() }
@@ -358,10 +358,10 @@
                 };
             }
 
-            db.Multisequence.AddRange(multisequences);
+            db.Multisequences.AddRange(multisequences);
             db.SaveChanges();
 
-            var matters = db.Matter.Where(mt => mt.Nature == Nature.Genetic).ToDictionary(m => m.Id, m => m);
+            var matters = db.Matters.Where(mt => mt.Nature == Nature.Genetic).ToDictionary(m => m.Id, m => m);
             foreach (Multisequence multisequence in multisequences)
             {
                 try

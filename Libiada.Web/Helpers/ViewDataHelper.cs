@@ -249,8 +249,8 @@
         /// </returns>
         public Dictionary<string, object> FillSubsequencesViewData(int minSelectedMatters, int maxSelectedMatters, string submitName)
         {
-            var sequenceIds = db.Subsequence.Select(s => s.SequenceId).Distinct();
-            var matterIds = db.DnaSequence.Where(c => sequenceIds.Contains(c.Id)).Select(c => c.MatterId).ToList();
+            var sequenceIds = db.Subsequences.Select(s => s.SequenceId).Distinct();
+            var matterIds = db.DnaSequences.Where(c => sequenceIds.Contains(c.Id)).Select(c => c.MatterId).ToList();
 
             Dictionary<string, object> data = GetMattersData(minSelectedMatters, maxSelectedMatters, m => matterIds.Contains(m.Id));
 

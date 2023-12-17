@@ -100,7 +100,7 @@
                 string status;
                 BaseChain dbChain;
 
-                long sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId).Id;
+                long sequenceId = db.CommonSequences.Single(c => c.MatterId == matterId).Id;
                 dbChain = commonSequenceRepository.GetLibiadaBaseChain(sequenceId);
 
 

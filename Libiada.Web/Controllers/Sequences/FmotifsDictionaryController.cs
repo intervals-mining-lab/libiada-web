@@ -1,6 +1,6 @@
 ﻿namespace Libiada.Web.Controllers.Sequences
 {
-    using System.Data.Entity;
+    using Microsoft.EntityFrameworkCore;
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
@@ -41,7 +41,7 @@
         /// </returns>
         public async Task<ActionResult> Index()
         {
-            var musicSequence = db.MusicSequence.Where(m => m.Notation == Notation.FormalMotifs).Include(m => m.Matter);
+            var musicSequence = db.MusicSequences.Where(m => m.Notation == Notation.FormalMotifs).Include(m => m.Matter);
             return View(await musicSequence.ToListAsync());
 
         }
@@ -62,14 +62,14 @@
                 return BadRequest();
             }
 
-            MusicSequence musicSequence = db.MusicSequence.Include(m => m.Matter).Single(m => m.Id == id);
+            MusicSequence musicSequence = db.MusicSequences.Include(m => m.Matter).Single(m => m.Id == id);
             if (musicSequence == null)
             {
                 return NotFound();
             }
 
             var musicChainAlphabet = db.GetAlphabetElementIds(musicSequence.Id)
-                                                       .Select(el => db.Fmotif.Single(f => f.Id == el))
+                                                       .Select(el => db.Fmotifs.Single(f => f.Id == el))
                                                        .ToList();
             var musicChainBuilding = db.GetSequenceBuilding(musicSequence.Id);
             var sortedFmotifs = new Dictionary<Libiada.Database.Fmotif, int>();
@@ -86,14 +86,14 @@
             {
                 var newFmotif = new Fmotif(fmotif.FmotifType, musicSequence.PauseTreatment, fmotif.Id);
 
-                var fmotifAlphabet = db.GetFmotifAlphabet(fmotif.Id);
-                var fmotifBuilding = db.GetFmotifBuilding(fmotif.Id);
+                var fmotifAlphabet = fmotif.Alphabet;
+                var fmotifBuilding = fmotif.Building;
                 foreach (var position in fmotifBuilding)
                 {
-                    var dbNoteId = fmotifAlphabet.ElementAt(position - 1);
-                    var dbNote = db.Note.Single(n => n.Id == dbNoteId);
+                    var dbNoteId = fmotifAlphabet[position - 1];
+                    var dbNote = db.Notes.Single(n => n.Id == dbNoteId);
                     var newPitches = new List<Pitch>();
-                    foreach (var pitch in dbNote.Pitch)
+                    foreach (var pitch in dbNote.Pitches)
                     {
                         newPitches.Add(new Pitch(pitch.Midinumber));
                     }

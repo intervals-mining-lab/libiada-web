@@ -6,7 +6,6 @@ using Libiada.Database.Models.Calculators;
 using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Models.Repositories.Sequences;
 
-using Libiada.Web.Data;
 using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
 
@@ -20,14 +19,14 @@ using System.Security.Principal;
 var builder = WebApplication.CreateBuilder(args);
 DbProviderFactories.RegisterFactory("Npgsql", NpgsqlFactory.Instance);
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
+var connectionString = builder.Configuration.GetConnectionString("LibiadaDatabaseEntities") ?? throw new InvalidOperationException("Connection string 'LibiadaDatabaseEntities' not found.");
+builder.Services.AddDbContext<LibiadaDatabaseEntities>(options => options.UseNpgsql(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser<int>>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<LibiadaDatabaseEntities>();
 
-builder.Services.AddScoped<LibiadaDatabaseEntities>(l => new LibiadaDatabaseEntities(builder.Configuration.GetConnectionString("LibiadaDatabaseEntities")));
+builder.Services.AddScoped<LibiadaDatabaseEntities>(l => new LibiadaDatabaseEntities(new DbContextOptions<LibiadaDatabaseEntities>()));
 builder.Services.AddSingleton<ILibiadaDatabaseEntitiesFactory, LibiadaDatabaseEntitiesFactory>();
 
 builder.Services.AddSingleton<Cache>();

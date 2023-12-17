@@ -148,7 +148,7 @@
                                                                           trajectory).Single();
 
                 Chain currentChain = commonSequenceRepository.GetLibiadaChain(sequenceId);
-                var sequence = db.CommonSequence.Single(m => m.Id == sequenceId);
+                var sequence = db.CommonSequences.Single(m => m.Id == sequenceId);
 
                 var result = new Dictionary<string, object>
                 {
@@ -173,7 +173,7 @@
 
                 if (filter)
                 {
-                    var filteredResult = db.BinaryCharacteristicValue
+                    var filteredResult = db.BinaryCharacteristicValues
                                            .Where(b => b.SequenceId == sequenceId && b.CharacteristicLinkId == characteristicLinkId)
                                            .OrderByDescending(b => b.Value)
                                            .Take(filterSize)
@@ -185,11 +185,11 @@
                     for (int i = 0; i < filterSize; i++)
                     {
                         long firstElementId = filteredResult[i].FirstElementId;
-                        var firstElement = db.Element.Single(e => e.Id == firstElementId);
+                        var firstElement = db.Elements.Single(e => e.Id == firstElementId);
                         firstElements.Add(firstElement.Name ?? firstElement.Value);
 
                         long secondElementId = filteredResult[i].SecondElementId;
-                        var secondElement = db.Element.Single(e => e.Id == secondElementId);
+                        var secondElement = db.Elements.Single(e => e.Id == secondElementId);
                         secondElements.Add(secondElement.Name ?? secondElement.Value);
                     }
 
@@ -200,12 +200,12 @@
                 }
                 else
                 {
-                    var characteristics = db.BinaryCharacteristicValue
+                    var characteristics = db.BinaryCharacteristicValues
                                             .Where(b => b.SequenceId == sequenceId && b.CharacteristicLinkId == characteristicLinkId)
                                             .GroupBy(b => b.FirstElementId)
                                             .ToDictionary(b => b.Key, b => b.ToDictionary(bb => bb.SecondElementId, bb => bb.Value));
                     var elementsIds = db.GetAlphabetElementIds(sequenceId);
-                    var elements = db.Element
+                    var elements = db.Elements
                                      .Where(e => elementsIds.Contains(e.Id))
                                      .OrderBy(e => e.Id)
                                      .Select(e => new { Name = e.Name ?? e.Value, e.Id })
@@ -243,7 +243,7 @@
         private void CalculateAllCharacteristics(short characteristicLinkId, long sequenceId, Chain chain, IBinaryCalculator calculator, Link link)
         {
             var newCharacteristics = new List<BinaryCharacteristicValue>();
-            BinaryCharacteristicValue[] databaseCharacteristics = db.BinaryCharacteristicValue
+            BinaryCharacteristicValue[] databaseCharacteristics = db.BinaryCharacteristicValues
                 .Where(b => b.SequenceId == sequenceId && b.CharacteristicLinkId == characteristicLinkId)
                 .ToArray();
             int calculatedCount = databaseCharacteristics.Length;
@@ -268,7 +268,7 @@
                 }
             }
 
-            db.BinaryCharacteristicValue.AddRange(newCharacteristics);
+            db.BinaryCharacteristicValues.AddRange(newCharacteristics);
             db.SaveChanges();
         }
 
@@ -298,7 +298,7 @@
         {
             long[] sequenceElements = db.GetAlphabetElementIds(sequenceId);
             var newCharacteristics = new List<BinaryCharacteristicValue>();
-            BinaryCharacteristicValue[] databaseCharacteristics = db.BinaryCharacteristicValue
+            BinaryCharacteristicValue[] databaseCharacteristics = db.BinaryCharacteristicValues
                 .Where(b => b.SequenceId == sequenceId && b.CharacteristicLinkId == characteristicLinkId)
                 .ToArray();
 
@@ -335,7 +335,7 @@
                 }
             }
 
-            db.BinaryCharacteristicValue.AddRange(newCharacteristics);
+            db.BinaryCharacteristicValues.AddRange(newCharacteristics);
             db.SaveChanges();
         }
     }

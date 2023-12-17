@@ -88,7 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NUnit">
-      <Version>3.13.2</Version>
+      <Version>4.0.1</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup />

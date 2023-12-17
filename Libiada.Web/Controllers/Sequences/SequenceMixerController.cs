@@ -139,19 +139,19 @@
             switch (matter.Nature)
             {
                 case Nature.Literature:
-                    sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId
+                    sequenceId = db.LiteratureSequences.Single(l => l.MatterId == matterId
                                                                 && l.Notation == notation
                                                                 && l.Language == language
                                                                && l.Translator == translator).Id;
                     break;
                 case Nature.Music:
-                    sequenceId = db.MusicSequence.Single(m => m.MatterId == matterId
+                    sequenceId = db.MusicSequences.Single(m => m.MatterId == matterId
                                                            && m.Notation == notation
                                                            && m.PauseTreatment == pauseTreatment
                                                            && m.SequentialTransfer == sequentialTransfer).Id;
                     break;
                 default:
-                    sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
+                    sequenceId = db.CommonSequences.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
                     break;
             }
 
@@ -186,7 +186,7 @@
             switch (matter.Nature)
             {
                 case Nature.Genetic:
-                    DnaSequence dnaSequence = db.DnaSequence.Single(c => c.Id == sequenceId);
+                    DnaSequence dnaSequence = db.DnaSequences.Single(c => c.Id == sequenceId);
 
                     dnaSequenceRepository.Create(result, dnaSequence.Partial, alphabet, chain.Building);
                     break;
@@ -194,7 +194,7 @@
                     musicSequenceRepository.Create(result, alphabet, chain.Building);
                     break;
                 case Nature.Literature:
-                    LiteratureSequence sequence = db.LiteratureSequence.Single(c => c.Id == sequenceId);
+                    LiteratureSequence sequence = db.LiteratureSequences.Single(c => c.Id == sequenceId);
 
                     literatureSequenceRepository.Create(result, sequence.Original, sequence.Language, sequence.Translator, alphabet, chain.Building);
                     break;

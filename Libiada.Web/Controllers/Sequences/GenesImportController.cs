@@ -1,7 +1,7 @@
 ﻿namespace Libiada.Web.Controllers.Sequences
 {
     using System.Collections.Generic;
-    using System.Data.Entity;
+    using Microsoft.EntityFrameworkCore;
     using System.Linq;
     using Microsoft.AspNetCore.Mvc;
 
@@ -50,9 +50,9 @@
         /// </returns>
         public ActionResult Index()
         {
-            var genesSequenceIds = db.Subsequence.Select(s => s.SequenceId).Distinct();
+            var genesSequenceIds = db.Subsequences.Select(s => s.SequenceId).Distinct();
 
-            var matterIds = db.DnaSequence
+            var matterIds = db.DnaSequences
                               .Include(c => c.Matter)
                               .Where(c => !string.IsNullOrEmpty(c.RemoteId)
                                        && !genesSequenceIds.Contains(c.Id)
@@ -82,14 +82,14 @@
             {
                 Dictionary<string, object> result;
 
-                DnaSequence parentSequence = db.DnaSequence.Single(d => d.MatterId == matterId);
+                DnaSequence parentSequence = db.DnaSequences.Single(d => d.MatterId == matterId);
                 var subsequenceImporter = new SubsequenceImporter(db, parentSequence);
                 subsequenceImporter.CreateSubsequences();
 
 
                 var features = EnumExtensions.ToArray<Feature>().ToDictionary(f => (byte)f, f => f.GetDisplayValue());
                 string matterName = cache.Matters.Single(m => m.Id == matterId).Name;
-                SubsequenceData[] sequenceSubsequences = db.Subsequence
+                SubsequenceData[] sequenceSubsequences = db.Subsequences
                     .Where(s => s.SequenceId == parentSequence.Id)
                     .Include(s => s.Position)
                     .ToArray()

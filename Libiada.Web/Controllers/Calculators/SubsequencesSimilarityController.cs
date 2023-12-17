@@ -129,7 +129,7 @@
                 }
 
                 long firstMatterId = matterIds[0];
-                long firstParentSequenceId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
+                long firstParentSequenceId = db.CommonSequences.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
                 SubsequenceData[] firstSequenceSubsequences = subsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
                                                                     new[] { characteristicLinkId },
                                                                     features,
@@ -145,7 +145,7 @@
                 }
 
                 long secondMatterId = matterIds[1];
-                long secondParentSequenceId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
+                long secondParentSequenceId = db.CommonSequences.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
                 SubsequenceData[] secondSequenceSubsequences = subsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
                                                                     new[] { characteristicLinkId },
                                                                     features,

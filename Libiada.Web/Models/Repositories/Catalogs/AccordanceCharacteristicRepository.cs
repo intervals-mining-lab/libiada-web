@@ -35,7 +35,7 @@
         /// </param>
         public AccordanceCharacteristicRepository(LibiadaDatabaseEntities db, IPrincipal currentUser)
         {
-            characteristicsLinks = db.AccordanceCharacteristicLink.ToArray();
+            characteristicsLinks = db.AccordanceCharacteristicLinks.ToArray();
             this.currentUser = currentUser;
         }
         

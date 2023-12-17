@@ -168,7 +168,7 @@
                                                                       pauseTreatments,
                                                                       sequentialTransfers,
                                                                       trajectories);
-                mattersNames = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
+                mattersNames = db.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
 
                 double[][] characteristics;
 

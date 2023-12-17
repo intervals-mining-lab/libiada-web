@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.Entity;
+    using Microsoft.EntityFrameworkCore;
     using System.Linq;
     using System.Security.Principal;
     using System.Threading;
@@ -34,17 +34,14 @@
         /// </summary>
         private readonly TaskManagerHub signalrHub;
 
-        /// <summary>
-        /// Prevents a default instance of the <see cref="TaskManager"/> class from being created.
-        /// </summary>
         public TaskManager(ILibiadaDatabaseEntitiesFactory dbFactory, ITaskManagerHubFactory factory, IHttpContextAccessor httpContextAccessor)
         {
 
-            db = dbFactory.Create();
+            db = dbFactory.CreateDbContext();
             this.httpContextAccessor = httpContextAccessor;
             signalrHub = factory.Create(this);
             RemoveGarbageFromDb();
-            CalculationTask[] databaseTasks = db.CalculationTask.OrderBy(t => t.Created).ToArray();
+            CalculationTask[] databaseTasks = db.CalculationTasks.OrderBy(t => t.Created).ToArray();
             lock (tasks)
             {
                 foreach (CalculationTask task in databaseTasks)
@@ -77,7 +74,7 @@
                 TaskType = taskType
             };
 
-            db.CalculationTask.Add(databaseTask);
+            db.CalculationTasks.Add(databaseTask);
             db.SaveChanges();
 
             lock (tasks)
@@ -148,8 +145,8 @@
 
                         tasks.Remove(task);
 
-                        CalculationTask databaseTask = db.CalculationTask.Find(id);
-                        db.CalculationTask.Remove(databaseTask);
+                        CalculationTask databaseTask = db.CalculationTasks.Find(id);
+                        db.CalculationTasks.Remove(databaseTask);
                         db.SaveChanges();
 
                         signalrHub.Send(TaskEvent.DeleteTask, task.TaskData);
@@ -222,7 +219,7 @@
                 throw new Exception("Task state is not 'complete'");
             }
 
-            return db.TaskResult.Single(tr => tr.TaskId == id && tr.Key == key).Value;
+            return db.TaskResults.Single(tr => tr.TaskId == id && tr.Key == key).Value;
         }
 
         /// <summary>
@@ -269,11 +266,11 @@
         /// </summary>
         private void RemoveGarbageFromDb()
         {
-            var tasksToDelete = db.CalculationTask
+            var tasksToDelete = db.CalculationTasks
                 .Where(t => t.Status != TaskState.Completed && t.Status != TaskState.Error)
                 .ToArray();
 
-            db.CalculationTask.RemoveRange(tasksToDelete);
+            db.CalculationTasks.RemoveRange(tasksToDelete);
             db.SaveChanges();
         }
 
@@ -343,7 +340,7 @@
                 {
                     actionToCall = task.Action;
                     task.TaskData.Started = DateTime.Now;
-                    CalculationTask databaseTask = db.CalculationTask.Single(t => t.Id == task.TaskData.Id);
+                    CalculationTask databaseTask = db.CalculationTasks.Single(t => t.Id == task.TaskData.Id);
 
                     databaseTask.Started = DateTime.Now;
                     databaseTask.Status = TaskState.InProgress;
@@ -364,10 +361,10 @@
                     TaskResult[] results = result.Select(r => new TaskResult { Key = r.Key, Value = r.Value, TaskId = task.TaskData.Id }).ToArray();
 
                     task.TaskData.TaskState = TaskState.Completed;
-                    db.TaskResult.AddRange(results);
+                    db.TaskResults.AddRange(results);
 
-                    CalculationTask databaseTask = db.CalculationTask.Single(t => (t.Id == task.TaskData.Id));
-                    databaseTask.Completed = task.TaskData.Completed;
+                    CalculationTask databaseTask = db.CalculationTasks.Single(t => (t.Id == task.TaskData.Id));
+                    databaseTask.Completed = task.TaskData.Completed?.DateTime;
                     databaseTask.Status = TaskState.Completed;
                     db.Entry(databaseTask).State = EntityState.Modified;
 
@@ -407,9 +404,9 @@
                         TaskId = taskData.Id
                     };
 
-                    db.TaskResult.Add(taskResult);
+                    db.TaskResults.Add(taskResult);
 
-                    CalculationTask databaseTask = db.CalculationTask.Single(t => (t.Id == taskData.Id));
+                    CalculationTask databaseTask = db.CalculationTasks.Single(t => (t.Id == taskData.Id));
                     databaseTask.Completed = DateTime.Now;
                     databaseTask.Status = TaskState.Error;
                     db.Entry(databaseTask).State = EntityState.Modified;

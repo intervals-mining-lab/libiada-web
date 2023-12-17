@@ -88,7 +88,7 @@
             return CreateTask(() =>
             {
                 // TODO: add nature params
-                var sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId).Id;
+                var sequenceId = db.CommonSequences.Single(c => c.MatterId == matterId).Id;
                 var sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
                 for (int j = 0; j < iterationsCount; j++)
                 {

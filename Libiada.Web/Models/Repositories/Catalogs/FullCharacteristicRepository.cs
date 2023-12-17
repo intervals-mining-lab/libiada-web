@@ -33,7 +33,7 @@
         /// </param>
         public FullCharacteristicRepository(LibiadaDatabaseEntities db, IPrincipal currentUser)
         {
-            characteristicsLinks = db.FullCharacteristicLink.ToArray();
+            characteristicsLinks = db.FullCharacteristicLinks.ToArray();
             this.currentUser = currentUser;
         }
 

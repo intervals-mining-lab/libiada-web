@@ -50,8 +50,8 @@
         {
             return CreateTask(() =>
             {
-                var sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId && l.Notation == Notation.Consonance).Id;
-                var sequenceName = db.Matter.Single(l => l.Id == matterId).Name;
+                var sequenceId = db.LiteratureSequences.Single(l => l.MatterId == matterId && l.Notation == Notation.Consonance).Id;
+                var sequenceName = db.Matters.Single(l => l.Id == matterId).Name;
                 var chain = commonSequenceRepository.GetLibiadaBaseChain(sequenceId);
                 var thresholdString = startThreshold.Replace('.', ',');
                 var threshold = Convert.ToDouble(thresholdString);

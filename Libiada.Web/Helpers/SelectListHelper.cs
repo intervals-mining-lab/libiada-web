@@ -40,7 +40,7 @@
         /// </returns>
         public static IEnumerable<MattersTableRow> GetMatterSelectList(Func<Matter, bool> filter, Func<Matter, bool> selectionFilter, LibiadaDatabaseEntities db)
         {
-            return GetMatterSelectList(db.Matter.Where(filter), selectionFilter);
+            return GetMatterSelectList(db.Matters.Where(filter), selectionFilter);
         }
 
         /// <summary>
@@ -72,7 +72,7 @@
         /// </returns>
         public static IEnumerable<SelectListItemWithNature> GetMultisequenceSelectList(LibiadaDatabaseEntities db)
         {
-            return db.Multisequence.Select(ms => new SelectListItemWithNature
+            return db.Multisequences.Select(ms => new SelectListItemWithNature
             {
                 Value = ms.Id.ToString(), 
                 Text = ms.Name, 

@@ -100,7 +100,7 @@
 
                 var commonSequenceRepository = new CommonSequenceRepository(db, cache);
                 matterName = cache.Matters.Single(m => matterId == m.Id).Name;
-                var sequenceId = db.CommonSequence.Single(c => matterId == c.MatterId && c.Notation == notation).Id;
+                var sequenceId = db.CommonSequences.Single(c => matterId == c.MatterId && c.Notation == notation).Id;
                 sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
 
                 characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
