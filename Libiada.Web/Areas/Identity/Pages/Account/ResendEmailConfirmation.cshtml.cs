@@ -19,10 +19,10 @@ namespace Libiada.Web.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class ResendEmailConfirmationModel : PageModel
     {
-        private readonly UserManager<IdentityUser<int>> _userManager;
+        private readonly UserManager<AspNetUser> _userManager;
         private readonly IEmailSender _emailSender;
 
-        public ResendEmailConfirmationModel(UserManager<IdentityUser<int>> userManager, IEmailSender emailSender)
+        public ResendEmailConfirmationModel(UserManager<AspNetUser> userManager, IEmailSender emailSender)
         {
             _userManager = userManager;
             _emailSender = emailSender;

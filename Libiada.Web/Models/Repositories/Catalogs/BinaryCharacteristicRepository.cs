@@ -13,6 +13,9 @@
     using LibiadaCore.Extensions;
 
     using Libiada.Web.Models.CalculatorsData;
+    using Libiada.Web.Extensions;
+
+    using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
 
     /// <summary>
     /// The binary characteristic repository.
@@ -48,7 +51,7 @@
             Link[] links;
             BinaryCharacteristic[] characteristics;
             ArrangementType arrangementType = ArrangementType.Intervals;
-            if (currentUser.IsInRole("admin"))
+            if (currentUser.IsAdmin())
             {
                 links = EnumExtensions.ToArray<Link>();
                 characteristics = EnumExtensions.ToArray<BinaryCharacteristic>();

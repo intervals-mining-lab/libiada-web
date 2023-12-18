@@ -14,6 +14,7 @@
     using Newtonsoft.Json;
 
     using SystemTask = System.Threading.Tasks.Task;
+    using Libiada.Web.Extensions;
 
     /// <summary>
     /// SignalR messages hub class.
@@ -60,7 +61,7 @@
             }
 
             await Clients.Group("admins").TaskEvent(taskEvent, result);
-            if (!Context.User.IsInRole("admin"))
+            if (!Context.User.IsAdmin())
             {
                 await Clients.Group(task.UserId.ToString()).TaskEvent(taskEvent, result);
             }
@@ -75,7 +76,7 @@
         public string GetAllTasks()
         {
             int userId = Context.User.GetUserId();
-            bool isAdmin = Context.User.IsInRole("admin");
+            bool isAdmin = Context.User.IsAdmin();
 
             var tasks = taskManager.GetTasksData()
                 .Where(t => t.UserId == userId || isAdmin)
@@ -99,7 +100,7 @@
 
         public override async SystemTask OnConnectedAsync()
         {
-            if (Context.User.IsInRole("admin"))
+            if (Context.User.IsAdmin())
             {
                 await Groups.AddToGroupAsync(Context.ConnectionId, "admins");
             }
@@ -113,7 +114,7 @@
 
         public override async SystemTask OnDisconnectedAsync(Exception? ex)
         {
-            if (Context.User.IsInRole("admin"))
+            if (Context.User.IsAdmin())
             {
                 await Groups.RemoveFromGroupAsync(Context.ConnectionId, "admins");
             }

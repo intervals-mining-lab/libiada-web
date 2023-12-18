@@ -15,6 +15,7 @@
     using Newtonsoft.Json;
 
     using SystemTask = System.Threading.Tasks.Task;
+    using Libiada.Web.Extensions;
 
     /// <summary>
     /// The task manager.
@@ -41,7 +42,7 @@
             this.httpContextAccessor = httpContextAccessor;
             signalrHub = factory.Create(this);
             RemoveGarbageFromDb();
-            CalculationTask[] databaseTasks = db.CalculationTasks.OrderBy(t => t.Created).ToArray();
+            CalculationTask[] databaseTasks = db.CalculationTasks.OrderBy(t => t.Created).Include(t => t.AspNetUser).ToArray();
             lock (tasks)
             {
                 foreach (CalculationTask task in databaseTasks)
@@ -132,7 +133,7 @@
             {
                 IPrincipal user = httpContextAccessor.HttpContext.User;
                 Task task = tasks.Single(t => t.TaskData.Id == id);
-                if (task.TaskData.UserId == user.GetUserId() || user.IsInRole("admin"))
+                if (task.TaskData.UserId == user.GetUserId() || user.IsAdmin())
                 {
                     lock (task)
                     {
@@ -186,7 +187,7 @@
                 lock (task)
                 {
                     IPrincipal user = httpContextAccessor.HttpContext.User;
-                    if (!user.IsInRole("admin") && task.TaskData.UserId != user.GetUserId())
+                    if (!user.IsAdmin() && task.TaskData.UserId != user.GetUserId())
                     {
                         throw new AccessViolationException("You do not have access to the current task");
                     }
@@ -234,7 +235,7 @@
             {
                 List<Task> result = tasks;
                 IPrincipal user = httpContextAccessor.HttpContext.User;
-                if (!user.IsInRole("admin"))
+                if (!user.IsAdmin())
                 {
                     var userId = user.GetUserId();
                     result = result.Where(t => t.TaskData.UserId == userId).ToList();

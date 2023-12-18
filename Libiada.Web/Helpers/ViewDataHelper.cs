@@ -71,7 +71,7 @@
             IEnumerable<SequenceType> sequenceTypes = EnumExtensions.ToArray<SequenceType>();
             IEnumerable<Group> groups = EnumExtensions.ToArray<Group>();
 
-            if (user.IsInRole("admin"))
+            if (user.IsAdmin())
             {
                 natures = Extensions.EnumExtensions.GetSelectList<Nature>();
                 notations = EnumExtensions.ToArray<Notation>();
@@ -160,7 +160,7 @@
             IEnumerable<SequenceType> sequenceTypes;
             IEnumerable<Group> groups;
 
-            if (user.IsInRole("admin"))
+            if (user.IsAdmin())
             {
                 natures = Extensions.EnumExtensions.GetSelectList<Nature>();
                 notations = EnumExtensions.ToArray<Notation>();
@@ -371,7 +371,7 @@
             IEnumerable<SequenceType> sequenceTypes;
             IEnumerable<Group> groups;
 
-            if (user.IsInRole("admin"))
+            if (user.IsAdmin())
             {
                 natures = Extensions.EnumExtensions.GetSelectList<Nature>();
                 sequenceTypes = EnumExtensions.ToArray<SequenceType>();

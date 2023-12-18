@@ -1,4 +1,5 @@
-﻿@using Libiada.Web.Helpers
+﻿@using Libiada.Web.Extensions
+@using Libiada.Web.Helpers
 @{
     ViewBag.Title = "Sliding window calculation (Local characteristics)";
 }
@@ -27,7 +28,7 @@
         <characteristics-without-notation characteristic-types="::characteristicTypes"
                                           characteristics-dictionary="::characteristicsDictionary">
         </characteristics-without-notation>
-        @if (User.IsInRole("admin"))
+        @if (User.IsAdmin())
         {
             <div class="row mb-1">
                 <label class="col-form-label col-md-2" for="notation">Notation:</label>
@@ -41,7 +42,7 @@
             </div>
         }
         <input type="hidden" name="notation" ng-value="notation.Value" />
-        @if (User.IsInRole("admin"))
+        @if (User.IsAdmin())
         {
             <characteristic-nature-params characteristic="characteristic"
                                           nature="nature"

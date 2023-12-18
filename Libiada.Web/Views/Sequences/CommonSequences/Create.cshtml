@@ -1,4 +1,5 @@
-﻿@using Libiada.Web.Helpers
+﻿@using Libiada.Web.Extensions
+@using Libiada.Web.Helpers
 @model CommonSequence
 
 @{
@@ -19,7 +20,7 @@
         <h4>Sequence parameters</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @if (User.IsInRole("admin"))
+        @if (User.IsAdmin())
         {
             <div class="row mb-1">
                 @Html.LabelFor(model => model.Matter.Nature, new { @class = "col-form-label col-md-2" })

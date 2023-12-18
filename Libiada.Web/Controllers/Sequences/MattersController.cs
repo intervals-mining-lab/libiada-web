@@ -14,6 +14,7 @@
     using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
     using Libiada.Web.Helpers;
     using Libiada.Web.Tasks;
+    using Libiada.Database.Extensions;
 
     /// <summary>
     /// The matters controller.
@@ -45,7 +46,7 @@
         {
             List<Matter> matter = await db.Matters.Include(m => m.Multisequence).ToListAsync();
 
-            if (!User.IsInRole("admin"))
+            if (!User.IsAdmin())
             {
                 matter = matter.Where(m => m.Nature == Nature.Genetic).ToList();
             }

@@ -1,5 +1,7 @@
-﻿@using Libiada.Database.Extensions;
+﻿@using Libiada.Web.Extensions;
+@using Libiada.Database.Extensions;
 @using Libiada.Web.Helpers;
+@using Microsoft.AspNetCore.Identity
 @inject LibiadaDatabaseEntities Db
 
 ﻿<!DOCTYPE html>
@@ -62,7 +64,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            @if (User.IsInRole("admin"))
+            @if (User.IsAdmin())
             {
                 <h3 class='@(Db.IsConnectionSuccessful() ? "text-success" : "text-danger")'>
                     Current database: @Db.TryGetDbName()

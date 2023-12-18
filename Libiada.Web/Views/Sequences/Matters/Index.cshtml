@@ -1,4 +1,5 @@
-﻿@using LibiadaCore.Extensions
+﻿@using Libiada.Web.Extensions
+@using LibiadaCore.Extensions
 @using Libiada.Web.Helpers
 @model IEnumerable<Matter>
 
@@ -23,7 +24,7 @@
         <th>@Html.DisplayNameFor(model => model.MultisequenceNumber)</th>
         <th>@Html.DisplayNameFor(model => model.CollectionCountry)</th>
         <th>@Html.DisplayNameFor(model => model.CollectionDate)</th>
-        @if (User.IsInRole("admin"))
+        @if (User.IsAdmin())
         {
             <th />
         }
@@ -41,7 +42,7 @@
             <td>@Html.DisplayFor(modelItem => item.MultisequenceNumber)</td>
             <td>@Html.DisplayFor(modelItem => item.CollectionCountry)</td>
             <td>@Html.DisplayFor(modelItem => item.CollectionDate)</td>
-            @if (User.IsInRole("admin"))
+            @if (User.IsAdmin())
             {
                 <td>
                     @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |

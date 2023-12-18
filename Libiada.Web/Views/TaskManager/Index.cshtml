@@ -1,4 +1,5 @@
-﻿@using Libiada.Web.Helpers
+﻿@using Libiada.Web.Extensions
+@using Libiada.Web.Helpers
 
 @{
     ViewBag.Title = "Libiada task manager";
@@ -34,7 +35,7 @@
         <thead>
             <tr>
                 <th scope="col">#</th>
-                @if (User.IsInRole("admin"))
+                @if (User.IsAdmin())
                 {
                     <th scope="col">User</th>
                     columns = 10;
@@ -59,7 +60,7 @@
             </tr>
             <tr ng-repeat="task in tasks | orderBy:'Id':true" ng-cloak ng-class="getStatusClass(task.TaskState)">
                 <td ng-bind="$index + 1" />
-                @if (User.IsInRole("admin"))
+                @if (User.IsAdmin())
                 {
                     <td aria-label="{{::task.UserName}}" title="{{::task.UserName}}" ng-bind="::task.UserId" />
                 }

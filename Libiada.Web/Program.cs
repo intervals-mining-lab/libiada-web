@@ -23,10 +23,12 @@ var connectionString = builder.Configuration.GetConnectionString("LibiadaDatabas
 builder.Services.AddDbContext<LibiadaDatabaseEntities>(options => options.UseNpgsql(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser<int>>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<LibiadaDatabaseEntities>();
+builder.Services.AddDefaultIdentity<AspNetUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<AspNetRole>()
+                .AddEntityFrameworkStores<LibiadaDatabaseEntities>()
+                .AddDefaultTokenProviders();
 
-builder.Services.AddScoped<LibiadaDatabaseEntities>(l => new LibiadaDatabaseEntities(new DbContextOptions<LibiadaDatabaseEntities>()));
+builder.Services.AddScoped(l => new LibiadaDatabaseEntities(new DbContextOptions<LibiadaDatabaseEntities>()));
 builder.Services.AddSingleton<ILibiadaDatabaseEntitiesFactory, LibiadaDatabaseEntitiesFactory>();
 
 builder.Services.AddSingleton<Cache>();
@@ -53,7 +55,7 @@ builder.Services.Configure<RazorViewEngineOptions>(options =>
     // {0} - Action Name
     // {1} - Controller Name
     // {2} - Area Name
-    options.ViewLocationFormats.Add("/Views//{1}/{0}.cshtml");
+    options.ViewLocationFormats.Add("/Views/{1}/{0}.cshtml");
     options.ViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
     options.ViewLocationFormats.Add("/Views/Sequences/{1}/{0}.cshtml");
     options.ViewLocationFormats.Add("/Views/Calculators/{1}/{0}.cshtml");

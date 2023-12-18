@@ -17,13 +17,13 @@ namespace Libiada.Web.Areas.Identity.Pages.Account.Manage
 {
     public class EmailModel : PageModel
     {
-        private readonly UserManager<IdentityUser<int>> _userManager;
-        private readonly SignInManager<IdentityUser<int>> _signInManager;
+        private readonly UserManager<AspNetUser> _userManager;
+        private readonly SignInManager<AspNetUser> _signInManager;
         private readonly IEmailSender _emailSender;
 
         public EmailModel(
-            UserManager<IdentityUser<int>> userManager,
-            SignInManager<IdentityUser<int>> signInManager,
+            UserManager<AspNetUser> userManager,
+            SignInManager<AspNetUser> signInManager,
             IEmailSender emailSender)
         {
             _userManager = userManager;
@@ -73,7 +73,7 @@ namespace Libiada.Web.Areas.Identity.Pages.Account.Manage
             public string NewEmail { get; set; }
         }
 
-        private async Task LoadAsync(IdentityUser<int> user)
+        private async Task LoadAsync(AspNetUser user)
         {
             var email = await _userManager.GetEmailAsync(user);
             Email = email;

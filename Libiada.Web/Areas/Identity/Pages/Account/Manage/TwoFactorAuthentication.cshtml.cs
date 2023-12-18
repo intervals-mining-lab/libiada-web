@@ -13,12 +13,12 @@ namespace Libiada.Web.Areas.Identity.Pages.Account.Manage
 {
     public class TwoFactorAuthenticationModel : PageModel
     {
-        private readonly UserManager<IdentityUser<int>> _userManager;
-        private readonly SignInManager<IdentityUser<int>> _signInManager;
+        private readonly UserManager<AspNetUser> _userManager;
+        private readonly SignInManager<AspNetUser> _signInManager;
         private readonly ILogger<TwoFactorAuthenticationModel> _logger;
 
         public TwoFactorAuthenticationModel(
-            UserManager<IdentityUser<int>> userManager, SignInManager<IdentityUser<int>> signInManager, ILogger<TwoFactorAuthenticationModel> logger)
+            UserManager<AspNetUser> userManager, SignInManager<AspNetUser> signInManager, ILogger<TwoFactorAuthenticationModel> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;

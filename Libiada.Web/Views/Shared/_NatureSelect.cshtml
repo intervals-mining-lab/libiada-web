@@ -1,6 +1,7 @@
-﻿@using Libiada.Web.Helpers
+﻿@using Libiada.Web.Extensions
+@using Libiada.Web.Helpers
 
-@if (User.IsInRole("admin"))
+@if (User.IsAdmin())
 {
     <div class="row mb-2">
         <div class="col-md-10">

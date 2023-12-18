@@ -18,10 +18,10 @@ namespace Libiada.Web.Areas.Identity.Pages.Account
 {
     public class ForgotPasswordModel : PageModel
     {
-        private readonly UserManager<IdentityUser<int>> _userManager;
+        private readonly UserManager<AspNetUser> _userManager;
         private readonly IEmailSender _emailSender;
 
-        public ForgotPasswordModel(UserManager<IdentityUser<int>> userManager, IEmailSender emailSender)
+        public ForgotPasswordModel(UserManager<AspNetUser> userManager, IEmailSender emailSender)
         {
             _userManager = userManager;
             _emailSender = emailSender;

@@ -13,6 +13,9 @@
     using LibiadaCore.Extensions;
 
     using Libiada.Web.Models.CalculatorsData;
+    using Libiada.Web.Extensions;
+
+    using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
 
     /// <summary>
     /// The full characteristic repository.
@@ -49,7 +52,7 @@
             FullCharacteristic[] characteristics;
             ArrangementType[] arrangementTypes;
 
-            if (currentUser.IsInRole("admin"))
+            if (currentUser.IsAdmin())
             {
                 links = EnumExtensions.ToArray<Link>();
                 characteristics = EnumExtensions.ToArray<FullCharacteristic>();

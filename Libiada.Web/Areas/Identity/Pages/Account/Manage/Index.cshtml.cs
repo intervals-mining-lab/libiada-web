@@ -14,12 +14,12 @@ namespace Libiada.Web.Areas.Identity.Pages.Account.Manage
 {
     public class IndexModel : PageModel
     {
-        private readonly UserManager<IdentityUser<int>> _userManager;
-        private readonly SignInManager<IdentityUser<int>> _signInManager;
+        private readonly UserManager<AspNetUser> _userManager;
+        private readonly SignInManager<AspNetUser> _signInManager;
 
         public IndexModel(
-            UserManager<IdentityUser<int>> userManager,
-            SignInManager<IdentityUser<int>> signInManager)
+            UserManager<AspNetUser> userManager,
+            SignInManager<AspNetUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -60,7 +60,7 @@ namespace Libiada.Web.Areas.Identity.Pages.Account.Manage
             public string PhoneNumber { get; set; }
         }
 
-        private async Task LoadAsync(IdentityUser<int> user)
+        private async Task LoadAsync(AspNetUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);

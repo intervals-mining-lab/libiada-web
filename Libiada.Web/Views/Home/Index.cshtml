@@ -1,4 +1,5 @@
-﻿@using Libiada.Web.Helpers
+﻿@using Libiada.Web.Extensions
+@using Libiada.Web.Helpers
 @{
     ViewBag.Title = "Libiada";
 }
@@ -10,9 +11,9 @@
     <div class="row mb-3">
         <div class="col-md-4">
             <h2>Data</h2>
-            @Html.ActionLink(User.IsInRole("admin") ? "Matters" : "Sequences", "Index", "Matters")
+            @Html.ActionLink(User.IsAdmin() ? "Matters" : "Sequences", "Index", "Matters")
             <br />
-            @if (User.IsInRole("admin"))
+            @if (User.IsAdmin())
             {
                 @Html.ActionLink("Multisequences", "Index", "Multisequence")
                 <br />
@@ -63,7 +64,7 @@
             <br />
             @Html.ActionLink("Matrix of similarity", "Index", "SubsequencesComparer")
             <br />
-            @if (User.IsInRole("admin"))
+            @if (User.IsAdmin())
             {
                 @Html.ActionLink("Sliding window calculation (Functions of sequences)", "Index", "LocalCalculation")
                 <br />
@@ -93,8 +94,8 @@
         <div class="col-md-4">
             <h2>Tasks</h2>
             @Html.ActionLink("Task manager", "Index", "TaskManager")
-            
-            @if (User.IsInRole("admin"))
+
+            @if (User.IsAdmin())
             {
                 <h2>Research</h2>
                 @Html.ActionLink("Calculate order transformations convergence", "Index", "OrderTransformationConvergence")

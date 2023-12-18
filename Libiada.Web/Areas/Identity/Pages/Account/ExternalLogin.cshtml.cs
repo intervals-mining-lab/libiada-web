@@ -17,23 +17,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Libiada.Database;
 
 namespace Libiada.Web.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class ExternalLoginModel : PageModel
     {
-        private readonly SignInManager<IdentityUser<int>> _signInManager;
-        private readonly UserManager<IdentityUser<int>> _userManager;
-        private readonly IUserStore<IdentityUser<int>> _userStore;
-        private readonly IUserEmailStore<IdentityUser<int>> _emailStore;
+        private readonly SignInManager<AspNetUser> _signInManager;
+        private readonly UserManager<AspNetUser> _userManager;
+        private readonly IUserStore<AspNetUser> _userStore;
+        private readonly IUserEmailStore<AspNetUser> _emailStore;
         private readonly IEmailSender _emailSender;
         private readonly ILogger<ExternalLoginModel> _logger;
 
         public ExternalLoginModel(
-            SignInManager<IdentityUser<int>> signInManager,
-            UserManager<IdentityUser<int>> userManager,
-            IUserStore<IdentityUser<int>> userStore,
+            SignInManager<AspNetUser> signInManager,
+            UserManager<AspNetUser> userManager,
+            IUserStore<AspNetUser> userStore,
             ILogger<ExternalLoginModel> logger,
             IEmailSender emailSender)
         {
@@ -197,27 +198,27 @@ namespace Libiada.Web.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private IdentityUser<int> CreateUser()
+        private AspNetUser CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<IdentityUser<int>>();
+                return Activator.CreateInstance<AspNetUser>();
             }
             catch
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(IdentityUser<int>)}'. " +
-                    $"Ensure that '{nameof(IdentityUser<int>)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(AspNetUser)}'. " +
+                    $"Ensure that '{nameof(AspNetUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
                     $"override the external login page in /Areas/Identity/Pages/Account/ExternalLogin.cshtml");
             }
         }
 
-        private IUserEmailStore<IdentityUser<int>> GetEmailStore()
+        private IUserEmailStore<AspNetUser> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
-            return (IUserEmailStore<IdentityUser<int>>)_userStore;
+            return (IUserEmailStore<AspNetUser>)_userStore;
         }
     }
 }

@@ -16,9 +16,9 @@ namespace Libiada.Web.Areas.Identity.Pages.Account
 {
     public class ResetPasswordModel : PageModel
     {
-        private readonly UserManager<IdentityUser<int>> _userManager;
+        private readonly UserManager<AspNetUser> _userManager;
 
-        public ResetPasswordModel(UserManager<IdentityUser<int>> userManager)
+        public ResetPasswordModel(UserManager<AspNetUser> userManager)
         {
             _userManager = userManager;
         }

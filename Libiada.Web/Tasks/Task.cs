@@ -48,7 +48,7 @@
         /// <param name="taskType">
         /// The task Type.
         /// </param>
-        public Task(long id, Func<Dictionary<string, string>> action, IdentityUser<int> creator, TaskType taskType)
+        public Task(long id, Func<Dictionary<string, string>> action, AspNetUser creator, TaskType taskType)
         {
             Action = action;
             TaskData = new TaskData(id, creator, taskType);

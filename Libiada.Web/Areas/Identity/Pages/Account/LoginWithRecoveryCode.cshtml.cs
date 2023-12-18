@@ -14,13 +14,13 @@ namespace Libiada.Web.Areas.Identity.Pages.Account
 {
     public class LoginWithRecoveryCodeModel : PageModel
     {
-        private readonly SignInManager<IdentityUser<int>> _signInManager;
-        private readonly UserManager<IdentityUser<int>> _userManager;
+        private readonly SignInManager<AspNetUser> _signInManager;
+        private readonly UserManager<AspNetUser> _userManager;
         private readonly ILogger<LoginWithRecoveryCodeModel> _logger;
 
         public LoginWithRecoveryCodeModel(
-            SignInManager<IdentityUser<int>> signInManager,
-            UserManager<IdentityUser<int>> userManager,
+            SignInManager<AspNetUser> signInManager,
+            UserManager<AspNetUser> userManager,
             ILogger<LoginWithRecoveryCodeModel> logger)
         {
             _signInManager = signInManager;

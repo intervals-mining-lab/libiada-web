@@ -15,10 +15,10 @@ namespace Libiada.Web.Areas.Identity.Pages.Account
 {
     public class ConfirmEmailChangeModel : PageModel
     {
-        private readonly UserManager<IdentityUser<int>> _userManager;
-        private readonly SignInManager<IdentityUser<int>> _signInManager;
+        private readonly UserManager<AspNetUser> _userManager;
+        private readonly SignInManager<AspNetUser> _signInManager;
 
-        public ConfirmEmailChangeModel(UserManager<IdentityUser<int>> userManager, SignInManager<IdentityUser<int>> signInManager)
+        public ConfirmEmailChangeModel(UserManager<AspNetUser> userManager, SignInManager<AspNetUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;

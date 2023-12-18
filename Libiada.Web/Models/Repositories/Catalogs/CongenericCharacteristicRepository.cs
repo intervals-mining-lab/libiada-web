@@ -1,4 +1,6 @@
-﻿namespace Libiada.Web.Models.Repositories.Catalogs
+﻿using Libiada.Web.Extensions;
+
+namespace Libiada.Web.Models.Repositories.Catalogs
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -13,6 +15,9 @@
     using LibiadaCore.Extensions;
 
     using Libiada.Web.Models.CalculatorsData;
+    using Libiada.Database.Extensions;
+
+    using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
 
     /// <summary>
     /// The congeneric characteristic repository.
@@ -49,7 +54,7 @@
             CongenericCharacteristic[] characteristics;
             ArrangementType[] arrangementTypes;
 
-            if (currentUser.IsInRole("admin"))
+            if (currentUser.IsAdmin())
             {
                 links = EnumExtensions.ToArray<Link>();
                 characteristics = EnumExtensions.ToArray<CongenericCharacteristic>();
