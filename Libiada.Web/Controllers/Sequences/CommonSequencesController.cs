@@ -10,6 +10,7 @@
     using Libiada.Web.Extensions;
     using Libiada.Web.Helpers;
     using Libiada.Web.Tasks;
+    using Libiada.Database.Helpers;
 
     /// <summary>
     /// The common sequences controller.
@@ -25,8 +26,9 @@
         public CommonSequencesController(LibiadaDatabaseEntities db, 
                                          IViewDataHelper viewDataHelper, 
                                          ITaskManager taskManager,
+                                         INcbiHelper ncbiHelper,
                                          Cache cache)
-            : base(TaskType.CommonSequences, db, viewDataHelper, taskManager, cache)
+            : base(TaskType.CommonSequences, db, viewDataHelper, taskManager, ncbiHelper, cache)
         {
             this.cache = cache;
         }

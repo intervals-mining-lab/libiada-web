@@ -14,6 +14,7 @@
     using Newtonsoft.Json;
     using Libiada.Web.Helpers;
     using Libiada.Web.Tasks;
+    using Libiada.Database.Helpers;
 
 
     /// <summary>
@@ -27,9 +28,10 @@
         /// </summary>
         public FmotifsDictionaryController(LibiadaDatabaseEntities db, 
                                            IViewDataHelper viewDataHelper, 
-                                           ITaskManager taskManager, 
+                                           ITaskManager taskManager,
+                                           INcbiHelper ncbiHelper,
                                            Cache cache) 
-            : base(TaskType.FmotifsDictionary, db, viewDataHelper, taskManager, cache)
+            : base(TaskType.FmotifsDictionary, db, viewDataHelper, taskManager,ncbiHelper, cache)
         {
         }
 

@@ -15,6 +15,7 @@
     using Libiada.Web.Helpers;
     using Libiada.Web.Tasks;
     using Libiada.Database.Extensions;
+    using Libiada.Database.Helpers;
 
     /// <summary>
     /// The matters controller.
@@ -30,8 +31,9 @@
         public MattersController(LibiadaDatabaseEntities db, 
                                  IViewDataHelper viewDataHelper, 
                                  ITaskManager taskManager,
+                                 INcbiHelper ncbiHelper,
                                  Cache cache)
-            : base(TaskType.Matters, db, viewDataHelper, taskManager, cache)
+            : base(TaskType.Matters, db, viewDataHelper, taskManager, ncbiHelper, cache)
         {
             this.cache = cache;
         }

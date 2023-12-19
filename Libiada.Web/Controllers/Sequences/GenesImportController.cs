@@ -15,6 +15,7 @@
 
     using Newtonsoft.Json;
     using Libiada.Web.Tasks;
+    using Libiada.Database.Helpers;
 
 
 
@@ -26,6 +27,7 @@
     {
         private readonly LibiadaDatabaseEntities db;
         private readonly IViewDataHelper viewDataHelper;
+        private readonly INcbiHelper ncbiHelper;
         private readonly Cache cache;
 
         /// <summary>
@@ -33,12 +35,14 @@
         /// </summary>
         public GenesImportController(LibiadaDatabaseEntities db, 
                                      IViewDataHelper viewDataHelper, 
-                                     ITaskManager taskManager, 
+                                     ITaskManager taskManager,
+                                     INcbiHelper ncbiHelper,
                                      Cache cache)
             : base(TaskType.GenesImport, taskManager)
         {
             this.db = db;
             this.viewDataHelper = viewDataHelper;
+            this.ncbiHelper = ncbiHelper;
             this.cache = cache;
         }
 
@@ -83,7 +87,7 @@
                 Dictionary<string, object> result;
 
                 DnaSequence parentSequence = db.DnaSequences.Single(d => d.MatterId == matterId);
-                var subsequenceImporter = new SubsequenceImporter(db, parentSequence);
+                var subsequenceImporter = new SubsequenceImporter(db, parentSequence, ncbiHelper);
                 subsequenceImporter.CreateSubsequences();
 
 

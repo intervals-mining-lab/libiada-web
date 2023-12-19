@@ -25,14 +25,17 @@ namespace Libiada.Web.Controllers.Sequences
     public class BatchGeneticImportFromGenBankSearchQueryController : AbstractResultController
     {
         private readonly LibiadaDatabaseEntities db;
+        private readonly INcbiHelper ncbiHelper;
         private readonly Cache cache;
 
         public BatchGeneticImportFromGenBankSearchQueryController(LibiadaDatabaseEntities db,
                                                                   ITaskManager taskManager,
+                                                                  INcbiHelper ncbiHelper,
                                                                   Cache cache)
             : base(TaskType.BatchGeneticImportFromGenBankSearchQuery, taskManager)
         {
             this.db = db;
+            this.ncbiHelper = ncbiHelper;
             this.cache = cache;
         }
         public ActionResult Index()
@@ -70,7 +73,7 @@ namespace Libiada.Web.Controllers.Sequences
                         NcbiHelper.FormatNcbiSearchTerm(searchQuery, minLength: 1, maxLength: maxLength) :
                         NcbiHelper.FormatNcbiSearchTerm(searchQuery);
                 }
-                nuccoreObjects = NcbiHelper.ExecuteESummaryRequest(searchResults, importPartial);
+                nuccoreObjects = ncbiHelper.ExecuteESummaryRequest(searchResults, importPartial);
                 accessions = nuccoreObjects.Select(no => no.AccessionVersion.Split('.')[0]).Distinct().ToArray();
                 var importResults = new List<MatterImportResult>(accessions.Length);
 
@@ -92,7 +95,7 @@ namespace Libiada.Web.Controllers.Sequences
 
                     try
                     {
-                        ISequence bioSequence = NcbiHelper.DownloadGenBankSequence(accession);
+                        ISequence bioSequence = ncbiHelper.DownloadGenBankSequence(accession);
                         GenBankMetadata metadata = NcbiHelper.GetMetadata(bioSequence);
                         importResult.MatterName = metadata.Version.CompoundAccession;
 

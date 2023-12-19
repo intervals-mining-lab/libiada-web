@@ -29,6 +29,7 @@
     {
         protected readonly LibiadaDatabaseEntities db;
         private readonly IViewDataHelper viewDataHelper;
+        private readonly INcbiHelper ncbiHelper;
         private readonly Cache cache;
 
         /// <summary>
@@ -41,11 +42,13 @@
                                              LibiadaDatabaseEntities db,
                                              IViewDataHelper viewDataHelper,
                                              ITaskManager taskManager,
+                                             INcbiHelper ncbiHelper,
                                              Cache cache)
             : base(taskType, taskManager)
         {
             this.db = db;
             this.viewDataHelper = viewDataHelper;
+            this.ncbiHelper = ncbiHelper;
             this.cache = cache;
         }
 
@@ -116,7 +119,7 @@
                     Nature nature = commonSequence.Notation.GetNature();
                     if (nature == Nature.Genetic && !localFile)
                     {
-                        sequenceStream = NcbiHelper.GetFastaFileStream(commonSequence.RemoteId);
+                        sequenceStream = ncbiHelper.GetFastaFileStream(commonSequence.RemoteId);
                     }
                     else
                     {

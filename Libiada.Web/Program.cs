@@ -1,7 +1,7 @@
 global using Libiada.Database;
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Mvc.Rendering;
-
+using Libiada.Database.Helpers;
 using Libiada.Database.Models.Calculators;
 using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Models.Repositories.Sequences;
@@ -30,6 +30,8 @@ builder.Services.AddDefaultIdentity<AspNetUser>(options => options.SignIn.Requir
 
 builder.Services.AddScoped(l => new LibiadaDatabaseEntities(new DbContextOptions<LibiadaDatabaseEntities>()));
 builder.Services.AddSingleton<ILibiadaDatabaseEntitiesFactory, LibiadaDatabaseEntitiesFactory>();
+
+builder.Services.AddSingleton<INcbiHelper, NcbiHelper>();
 
 builder.Services.AddSingleton<Cache>();
 

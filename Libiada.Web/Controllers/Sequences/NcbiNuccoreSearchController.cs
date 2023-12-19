@@ -19,14 +19,17 @@
     public class NcbiNuccoreSearchController : AbstractResultController
     {
         private readonly LibiadaDatabaseEntities db;
+        private readonly INcbiHelper ncbiHelper;
         private readonly Cache cache;
 
         public NcbiNuccoreSearchController(LibiadaDatabaseEntities db,
                                            ITaskManager taskManager,
+                                           INcbiHelper ncbiHelper,
                                            Cache cache)
             : base(TaskType.NcbiNuccoreSearch, taskManager)
         {
             this.db = db;
+            this.ncbiHelper = ncbiHelper;
             this.cache = cache;
         }
 
@@ -61,14 +64,14 @@
                         NcbiHelper.FormatNcbiSearchTerm(searchQuery);
                 }
 
-                List<NuccoreObject> searchResults = NcbiHelper.ExecuteESummaryRequest(searchQuery, importPartial);
+                List<NuccoreObject> searchResults = ncbiHelper.ExecuteESummaryRequest(searchQuery, importPartial);
 
                 List<NuccoreObject> unfilteredSearchResults;
                 List<NuccoreObject> filteresOutSearchResults = searchResults;
                 string[] accessions;
                 if (!importPartial)
                 {
-                    unfilteredSearchResults = NcbiHelper.ExecuteESummaryRequest(searchQuery, true);
+                    unfilteredSearchResults = ncbiHelper.ExecuteESummaryRequest(searchQuery, true);
                     filteresOutSearchResults = unfilteredSearchResults.Except(searchResults).ToList();
                     accessions = unfilteredSearchResults.Select(no => no.AccessionVersion.Split('.')[0]).Distinct().ToArray();
                 }

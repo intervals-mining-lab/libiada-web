@@ -27,14 +27,17 @@
     public class BatchGeneticImportFromGenBankSearchFileController : AbstractResultController
     {
         private readonly LibiadaDatabaseEntities db;
+        private readonly INcbiHelper ncbiHelper;
         private readonly Cache cache;
 
         public BatchGeneticImportFromGenBankSearchFileController(LibiadaDatabaseEntities db,
                                                                  ITaskManager taskManager,
+                                                                 INcbiHelper ncbiHelper,
                                                                  Cache cache)
             : base(TaskType.BatchGeneticImportFromGenBankSearchFile, taskManager)
         {
             this.db = db;
+            this.ncbiHelper = ncbiHelper;
             this.cache = cache;
         }
 
@@ -93,7 +96,7 @@
 
                     try
                     {
-                        ISequence bioSequence = NcbiHelper.DownloadGenBankSequence(accession);
+                        ISequence bioSequence = ncbiHelper.DownloadGenBankSequence(accession);
                         GenBankMetadata metadata = NcbiHelper.GetMetadata(bioSequence);
                         importResult.MatterName = metadata.Version.CompoundAccession;
 

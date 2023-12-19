@@ -19,14 +19,17 @@
     public class GenBankAccessionVersionUpdateCheckerController : AbstractResultController
     {
         private readonly LibiadaDatabaseEntities db;
+        private readonly INcbiHelper ncbiHelper;
         private readonly Cache cache;
 
         public GenBankAccessionVersionUpdateCheckerController(LibiadaDatabaseEntities db,
                                                               ITaskManager taskManager,
+                                                              INcbiHelper ncbiHelper,
                                                               Cache cache)
             : base(TaskType.GenBankAccessionVersionUpdateChecker, taskManager)
         {
             this.db = db;
+            this.ncbiHelper = ncbiHelper;
             this.cache = cache;
         }
 
@@ -78,8 +81,8 @@
                     int actualChunkSize = Math.Min(maxChunkSize, accessions.Length - i);
                     var accessionsChunk = new string[actualChunkSize];
                     Array.Copy(accessions, i, accessionsChunk, 0, actualChunkSize);
-                    (string ncbiWebEnvironment, string queryKey) = NcbiHelper.ExecuteEPostRequest(string.Join(",", accessionsChunk));
-                    searchResults.AddRange(NcbiHelper.ExecuteESummaryRequest(ncbiWebEnvironment, queryKey, true));
+                    (string ncbiWebEnvironment, string queryKey) = ncbiHelper.ExecuteEPostRequest(string.Join(",", accessionsChunk));
+                    searchResults.AddRange(ncbiHelper.ExecuteESummaryRequest(ncbiWebEnvironment, queryKey, true));
                 }
 
                 for (int i = 0; i < searchResults.Count; i++)

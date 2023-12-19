@@ -14,6 +14,7 @@
     using Newtonsoft.Json;
     using Microsoft.AspNetCore.Authorization;
     using Libiada.Web.Tasks;
+    using Libiada.Database.Helpers;
 
     /// <summary>
     /// The batch genes import controller.
@@ -23,6 +24,7 @@
     {
         private readonly LibiadaDatabaseEntities db;
         private readonly IViewDataHelper viewDataHelper;
+        private readonly INcbiHelper ncbiHelper;
         private readonly Cache cache;
 
         /// <summary>
@@ -31,11 +33,13 @@
         public BatchGenesImportController(LibiadaDatabaseEntities db, 
                                           IViewDataHelper viewDataHelper, 
                                           ITaskManager taskManager,
+                                          INcbiHelper ncbiHelper,
                                           Cache cache)
             : base(TaskType.BatchGenesImport, taskManager)
         {
             this.db = db;
             this.viewDataHelper = viewDataHelper;
+            this.ncbiHelper = ncbiHelper;
             this.cache = cache;
         }
 
@@ -100,7 +104,7 @@
                         try
                         {
                             DnaSequence parentSequence = parentSequences[i];
-                            var subsequenceImporter = new SubsequenceImporter(db, parentSequence);
+                            var subsequenceImporter = new SubsequenceImporter(db, parentSequence, ncbiHelper);
 
                             subsequenceImporter.CreateSubsequences();
 
