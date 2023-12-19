@@ -122,7 +122,7 @@
 else
 {
 <div class="mb-3 fs-5">
-    @Html.ActionLink("log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" }) or
-    @Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" }) to use Libiada service.
+        <a asp-area="Identity" asp-page="/Account/Login">Log in</a> or
+        <a asp-area="Identity" asp-page="/Account/Register">Register</a> to use Libiada service.
 </div>
 }

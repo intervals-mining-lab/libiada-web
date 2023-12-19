@@ -1,6 +1,6 @@
-﻿namespace LibiadaWeb.Tests.Extensions
+﻿namespace Libiada.Web.Tests.Extensions
 {
-    using LibiadaWeb.Extensions;
+    using Libiada.Web.Extensions;
 
     using NUnit.Framework;
 
