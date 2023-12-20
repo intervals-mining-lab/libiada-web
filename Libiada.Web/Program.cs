@@ -28,7 +28,7 @@ builder.Services.AddDefaultIdentity<AspNetUser>(options => options.SignIn.Requir
                 .AddEntityFrameworkStores<LibiadaDatabaseEntities>()
                 .AddDefaultTokenProviders();
 
-builder.Services.AddScoped(l => new LibiadaDatabaseEntities(new DbContextOptions<LibiadaDatabaseEntities>()));
+builder.Services.AddScoped(l => new LibiadaDatabaseEntities(new DbContextOptions<LibiadaDatabaseEntities>(), builder.Configuration));
 builder.Services.AddSingleton<ILibiadaDatabaseEntitiesFactory, LibiadaDatabaseEntitiesFactory>();
 
 builder.Services.AddSingleton<INcbiHelper, NcbiHelper>();
