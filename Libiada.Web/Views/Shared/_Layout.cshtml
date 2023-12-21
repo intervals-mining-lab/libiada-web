@@ -3,8 +3,8 @@
 @using Libiada.Web.Helpers;
 @using Microsoft.AspNetCore.Identity
 @inject LibiadaDatabaseEntities Db
-
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -13,14 +13,18 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Libiada.Web.styles.css" asp-append-version="true" />
-    
+    <link rel="stylesheet" href="~/css/scrollUpDown.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/AlertifyJS/css/alertify.css" />
+    <link rel="stylesheet" href="~/lib/AlertifyJS/css/themes/bootstrap.css" />
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/AlertifyJS/alertify.min.js"></script>
-    <script src="~/js/Angular/functions.js"></script>
     <script src="~/lib/angular.js/angular.js"></script>
+    <script src="~/js/Angular/functions.js"></script>
+
     <script src="~/lib/angular-smart-table/smart-table.min.js"></script>
-    @*<script src="~/js/Angular/Components/scrollJumper.js"></script>*@
+    <script src="~/js/Angular/Components/scrollJumper.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </head>
 <body>
@@ -54,7 +58,6 @@
     </header>
     <div ng-app="libiada">
         <scroll-jumper></scroll-jumper>
-        @*<partial name="_ScrollJumper" />*@
         <div class="container pt-2 body-content">
             <main role="main" class="pb-3">
                 @RenderBody()
