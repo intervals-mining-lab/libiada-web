@@ -4,9 +4,11 @@
     ViewBag.Title = "Sequences group";
 }
 
-<h2>@ViewBag.Title</h2>
+<script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
 
 @Html.Partial("_AngularControllerInitializer", "SequenceGroups")
+
+<h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm())
 {
