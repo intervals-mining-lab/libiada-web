@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "Ncbi GenBank search results";
 }
-<script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+
 <h2>@ViewBag.Title</h2>
 
 @if (ViewBag.Error == null)
@@ -34,4 +34,8 @@
             </div>
         </div>
     </div>
+
+    @section Scripts {
+    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+    }
 }

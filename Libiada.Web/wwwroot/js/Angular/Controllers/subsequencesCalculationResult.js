@@ -471,7 +471,7 @@
 
         $http.get(`/api/TaskManagerWebApi/${$scope.taskId}`)
             .then(function (data) {
-                MapModelFromJson($scope, JSON.parse(data.data));
+                MapModelFromJson($scope, data.data);
 
                 $scope.legendHeight = $scope.sequencesData.length * 20;
                 $scope.height = 800 + $scope.legendHeight;

@@ -2,9 +2,6 @@
     ViewBag.Title = "Subsequences characteristics calculation";
 }
 
-<script src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
-<script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
-
 @Html.Partial("_AngularControllerInitializer", "SubsequencesCalculation")
 
 <h2>@ViewBag.Title</h2>
@@ -23,7 +20,7 @@
                        selected-matters-count="selectedMattersCount">
         </matters-table>
         @Html.Partial("_FeaturesSelect")
-        <hr/>
+        <hr />
         <characteristics characteristic-types="::characteristicTypes"
                          characteristics-dictionary="::characteristicsDictionary"
                          nature="nature"
@@ -36,4 +33,9 @@
         </characteristics>
         @Html.Partial("_MattersSubmit")
     </div>
+}
+
+@section Scripts {
+    <script src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
 }

@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "Accordance calculation";
 }
-<script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+
 <h2>@ViewBag.Title</h2>
 
 @if (ViewBag.Error == null)
@@ -39,14 +39,14 @@
                     <thead>
                         <tr>
                             <th>Element nam</th>
-                            <th ng-repeat="characteristic in ::characteristics[0]" 
+                            <th ng-repeat="characteristic in ::characteristics[0]"
                                 ng-bind="::secondAlphabet[$index]" />
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="characteristic in ::characteristics">
                             <td ng-bind="::firstAlphabet[$index]" />
-                            <td ng-repeat="characteristic in ::characteristics[$index]" 
+                            <td ng-repeat="characteristic in ::characteristics[$index]"
                                 ng-bind="::characteristics[$parent.$index][$index]" />
                         </tr>
                     </tbody>
@@ -54,8 +54,9 @@
             </div>
         </div>
     </div>
-}
 
-@section Scripts {
-    <script src="~lib/d3/d3.js" asp-append-version="true"></script>
+    @section Scripts {
+    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+    <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
+    }
 }

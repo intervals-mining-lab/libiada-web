@@ -15,7 +15,7 @@
     /// The task manager web api controller.
     /// </summary>
     [Authorize]
-    [Route("api/[controller]")]
+    [Route("api/TaskManagerWebApi")]
     [ApiController]
     public class TaskManagerWebApiController : Controller
     {
@@ -43,6 +43,7 @@
         /// <exception cref="Exception">
         /// Thrown if task is not complete.
         /// </exception>
+        [HttpGet("{id}")]
         public string GetTaskData(long id, string key = "data")
         {
             try

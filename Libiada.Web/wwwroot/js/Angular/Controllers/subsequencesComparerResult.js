@@ -393,7 +393,7 @@
         $scope.loading = true;
         $http.get(`/api/TaskManagerWebApi/${$scope.taskId}`)
             .then(data => {
-                MapModelFromJson($scope, JSON.parse(data.data));
+                MapModelFromJson($scope, data.data);
 
                 $scope.equalElements = new Array($scope.mattersNames.length);
 

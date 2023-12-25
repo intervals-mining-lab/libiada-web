@@ -2,9 +2,6 @@
     ViewBag.Title = "Similarity matrix";
 }
 
-<script src="~/js/Angular/Components/characteristic.js" asp-append-version="true"></script>
-<script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
-
 @if (ViewBag.Error == null)
 {
     <h2>@ViewBag.Title</h2>
@@ -170,6 +167,8 @@
     </div>
 
     @section Scripts {
-        <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
+    <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/characteristic.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
     }
 }

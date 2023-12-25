@@ -2,10 +2,6 @@
     ViewBag.Title = "Generate sequence rearrangements";
 }
 
-
-<script src="~/js/Angular/Components/characteristicNatureParams.js" asp-append-version="true"></script>
-<script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
-
 @Html.Partial("_AngularControllerInitializer", "BuildingsSimilarity")
 
 <h2>@ViewBag.Title</h2>
@@ -53,4 +49,9 @@
         <hr />
         @Html.Partial("_MattersSubmit")
     </div>
+}
+
+@section Scripts {
+    <script src="~/js/Angular/Components/characteristicNatureParams.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
 }

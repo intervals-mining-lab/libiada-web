@@ -4,8 +4,6 @@
 
 <h2>@ViewBag.Title</h2>
 
-<script src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
-
 @Html.Partial("_AngularControllerInitializer", "CustomCalculation")
 
 @using (Html.BeginForm("Index", "CustomSequenceCalculation", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -30,4 +28,8 @@
             </div>
         </div>
     </div>
+}
+
+@section Scripts {
+    <script src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
 }

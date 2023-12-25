@@ -5,9 +5,6 @@
     ViewBag.Title = "Characteristics calculation";
 }
 
-<script src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
-<script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
-
 @Html.Partial("_AngularControllerInitializer", "Calculation")
 
 <h2>@ViewBag.Title</h2>
@@ -50,11 +47,11 @@
                 </label>
             </div>
             <div class="form-check">
-                <input type="checkbox" 
-                       class="form-check-input" 
-                       name="rotate" 
-                       id="rotate" 
-                       value="true" 
+                <input type="checkbox"
+                       class="form-check-input"
+                       name="rotate"
+                       id="rotate"
+                       value="true"
                        ng-model="rotate" />
                 <label class="form-check-label" for="rotate">
                     Rotate sequences cyclically
@@ -73,4 +70,8 @@
         <input type="hidden" name="rotate" value="false" />
         @Html.Partial("_MattersSubmit")
     </div>
+}
+@section Scripts {
+    <script src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
 }

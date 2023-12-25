@@ -6,8 +6,6 @@
 
 <h2>@ViewBag.Title</h2>
 
-<script src="~/js/Angular/Components/characteristicsWithoutNotation.js" asp-append-version="true"></script>
-<script src="~/js/Angular/Components/characteristicNatureParams.js" asp-append-version="true"></script>
 @Html.Partial("_AngularControllerInitializer", "Calculation")
 
 @using (Html.BeginForm())
@@ -99,4 +97,9 @@
         <hr />
         @Html.Partial("_MattersSubmit")
     </div>
+}
+
+@section Scripts {
+    <script src="~/js/Angular/Components/characteristicsWithoutNotation.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/characteristicNatureParams.js" asp-append-version="true"></script>
 }

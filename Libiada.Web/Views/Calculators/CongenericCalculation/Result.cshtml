@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "Congeneric sequences characteristics";
 }
-<script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+
 <h2>@ViewBag.Title</h2>
 
 @if (ViewBag.Error == null)
@@ -88,8 +88,9 @@
         </div>
         <input type="button" class="btn btn-secondary mb-2" ng-click="draw()" value="Draw" />
     </div>
-}
 
-@section Scripts {
+    @section Scripts {
     <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+    }
 }

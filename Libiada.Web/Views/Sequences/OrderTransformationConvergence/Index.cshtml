@@ -2,8 +2,6 @@
     ViewBag.Title = "Order transformation convergence";
 }
 
-<script src="~/js/Angular/Components/orderTransformations.js" asp-append-version="true"></script>
-<script src="~/js/Angular/Components/characteristicNatureParams.js" asp-append-version="true"></script>
 @Html.Partial("_AngularControllerInitializer", "OrderTransformer")
 
 <h2>@ViewBag.Title</h2>
@@ -33,4 +31,9 @@
         </order-transformations>
         @Html.Partial("_MattersSubmit")
     </div>
+}
+
+@section Scripts {
+    <script src="~/js/Angular/Components/orderTransformations.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/characteristicNatureParams.js" asp-append-version="true"></script>
 }

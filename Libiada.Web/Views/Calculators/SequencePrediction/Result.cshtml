@@ -23,7 +23,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="characteristic in ::result" 
+                    <tr ng-repeat="characteristic in ::result"
                         ng-class="characteristic.Fragment == characteristic.Predicted ? 'success' : 'danger'">
                         <td ng-bind="::characteristic.ActualCharacteristic" />
                         <td ng-bind="::characteristic.TheoreticalCharacteristic" />
@@ -34,8 +34,8 @@
             </table>
         </div>
     </div>
-}
 
-@section Scripts {
+    @section Scripts {
     <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
+    }
 }

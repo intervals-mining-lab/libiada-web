@@ -2,10 +2,6 @@
     ViewBag.Title = "Transformation of order of sequences";
 }
 
-<script src="~/js/Angular/Components/orderTransformations.js" asp-append-version="true"></script>
-<script src="~/js/Angular/Components/characteristicNatureParams.js" asp-append-version="true"></script>
-<script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
-
 @Html.Partial("_AngularControllerInitializer", "OrderTransformer")
 
 <h2>@ViewBag.Title</h2>
@@ -35,4 +31,10 @@
     </order-transformations>
     @Html.Partial("_MattersSubmit")
 </div>
+}
+
+@section Scripts {
+    <script src="~/js/Angular/Components/orderTransformations.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/characteristicNatureParams.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
 }

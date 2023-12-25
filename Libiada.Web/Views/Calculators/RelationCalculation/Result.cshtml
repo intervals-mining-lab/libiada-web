@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "Relation characteristic calculation results";
 }
-<script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+
 <h2>@ViewBag.Title</h2>
 
 @if (ViewBag.Error == null)
@@ -17,14 +17,14 @@
                 <thead>
                     <tr>
                         <th>First element\Second element</th>
-                        <th ng-repeat="element in ::elements" 
+                        <th ng-repeat="element in ::elements"
                             ng-bind="::element.Name" />
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="element in ::elements">
                         <td ng-bind="::element.Name" />
-                        <td ng-repeat="element in ::elements" 
+                        <td ng-repeat="element in ::elements"
                             ng-bind="::characteristics[elements[$parent.$index].Id][elements[$index].Id]" />
                     </tr>
                 </tbody>
@@ -49,8 +49,9 @@
             </table>
         </div>
     </div>
-}
 
-@section Scripts {
+    @section Scripts {
     <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+    }
 }

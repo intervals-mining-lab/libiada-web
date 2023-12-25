@@ -4,8 +4,6 @@
 
 <h2>@ViewBag.Title</h2>
 
-<script src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
-
 @Html.Partial("_AngularControllerInitializer", "OrderCalculation")
 
 @using (Html.BeginForm())
@@ -57,4 +55,8 @@
         </characteristics>
         @Html.Partial("_MattersSubmit")
     </div>
+}
+
+@section Scripts {
+    <script src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
 }

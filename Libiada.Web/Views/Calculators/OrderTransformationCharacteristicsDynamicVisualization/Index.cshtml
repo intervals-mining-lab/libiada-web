@@ -2,9 +2,6 @@
     ViewBag.Title = "Transformation of order of sequences";
 }
 
-<script src="~/js/Angular/Components/orderTransformations.js" asp-append-version="true"></script>
-<script src="~/js/Angular/Components/characteristic.js" asp-append-version="true"></script>
-
 @Html.Partial("_AngularControllerInitializer", "OrderTransformer")
 
 <h2>@ViewBag.Title</h2>
@@ -36,4 +33,9 @@
         </characteristic>
         @Html.Partial("_MattersSubmit")
     </div>
+}
+
+@section Scripts {
+    <script src="~/js/Angular/Components/orderTransformations.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/characteristic.js" asp-append-version="true"></script>
 }

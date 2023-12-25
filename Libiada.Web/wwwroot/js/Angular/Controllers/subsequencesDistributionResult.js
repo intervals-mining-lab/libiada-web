@@ -40,7 +40,7 @@
 
             $http.get(`/api/TaskManagerWebApi/${$scope.taskId}`)
                 .then((data) => {
-                    MapModelFromJson($scope, JSON.parse(data.data));
+                    MapModelFromJson($scope, data.data);
                     $scope.plot = document.getElementById("chart");
                     $scope.subsequenceCharacteristic = $scope.subsequencesCharacteristicsList[0];
 

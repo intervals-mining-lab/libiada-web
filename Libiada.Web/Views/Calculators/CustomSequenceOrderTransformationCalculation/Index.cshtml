@@ -4,8 +4,6 @@
 
 <h2>@ViewBag.Title</h2>
 
-<script src="~/js/Angular/Components/orderTransformations.js" asp-append-version="true"></script>
-<script src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
 @Html.Partial("_AngularControllerInitializer", "CustomCalculation")
 
 @using (Html.BeginForm("Index", "CustomSequenceOrderTransformationCalculation", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -35,4 +33,9 @@
             </div>
         </div>
     </div>
+}
+
+@section Scripts {
+    <script src="~/js/Angular/Components/orderTransformations.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
 }

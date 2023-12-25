@@ -2,7 +2,6 @@
     ViewBag.Title = "Sequence prediction";
 }
 
-<script src="~/js/Angular/Components/characteristic.js" asp-append-version="true"></script>
 @Html.Partial("_AngularControllerInitializer", "Calculation")
 
 <h2>@ViewBag.Title</h2>
@@ -21,7 +20,7 @@
                        maximum-selected-matters="::maximumSelectedMatters"
                        selected-matters-count="selectedMattersCount">
         </matters-table>
-        <hr/>
+        <hr />
         <characteristic characteristic-types="::characteristicTypes"
                         characteristics-dictionary="::characteristicsDictionary"
                         nature="nature"
@@ -40,7 +39,7 @@
         <div class="row mb-1">
             <label class="col-form-label col-md-2" for="initialLength">Initial sequence length:</label>
             <div class="col-md-10">
-                    <input class="form-control" name="initialLength" type="number" value="1000" min="1" id="initialLength" />
+                <input class="form-control" name="initialLength" type="number" value="1000" min="1" id="initialLength" />
             </div>
         </div>
         <div class="row mb-1">
@@ -52,4 +51,8 @@
         <hr />
         @Html.Partial("_MattersSubmit")
     </div>
+}
+
+@section Scripts {
+    <script src="~/js/Angular/Components/characteristic.js" asp-append-version="true"></script>
 }

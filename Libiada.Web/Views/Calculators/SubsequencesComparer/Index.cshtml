@@ -4,8 +4,6 @@
     ViewBag.Title = "Subsequences comparer";
 }
 
-<script src="~/js/Angular/Components/characteristic.js" asp-append-version="true"></script>
-<script src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
 @Html.Partial("_AngularControllerInitializer", "SequencesAlignment")
 
 <h2>@ViewBag.Title</h2>
@@ -69,4 +67,9 @@
         <input type="hidden" name="filterMatrix" value="false" />
         @Html.Partial("_MattersSubmit")
     </div>
+}
+
+@section Scripts {
+    <script src="~/js/Angular/Components/characteristic.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
 }

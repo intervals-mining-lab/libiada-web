@@ -2,8 +2,6 @@
     ViewBag.Title = "Genes import";
 }
 
-<script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
-
 @Html.Partial("_AngularControllerInitializer", "GenesImport")
 
 <h2>@ViewBag.Title</h2>
@@ -22,4 +20,8 @@
         </matters-table>
         @Html.Partial("_MattersSubmit")
     </div>
+}
+
+@section Scripts {
+    <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
 }

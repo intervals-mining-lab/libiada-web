@@ -119,18 +119,13 @@
         $scope.deleteTask = deleteTask;
         $scope.tryRedirectToResult = tryRedirectToResult;
 
-        //$scope.tasksHub = $.connection.tasksManagerHub;
-        //$scope.tasksHub.client.TaskEvent = taskEvent;
-
-        //$.connection.hub.stateChanged($scope.onStateChange);
-        //$.connection.hub.start().done($scope.onHubStart);
 
         //initializing signalr connection
         $scope.tasksHub = new signalR.HubConnectionBuilder().withUrl("/TaskManagerHub").build();
 
         $scope.tasksHub.on("taskEvent", $scope.taskEvent);
 
-        $scope.tasksHub.start().catch(function (err) {
+        $scope.tasksHub.start().then($scope.onHubStart).catch(function (err) {
             return console.error(err.toString());
         });
 

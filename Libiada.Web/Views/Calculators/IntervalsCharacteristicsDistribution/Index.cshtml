@@ -4,8 +4,6 @@
 
 <h2>@ViewBag.Title</h2>
 
-<script src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
-
 @Html.Partial("_AngularControllerInitializer", "IntervalsCharacteristicsDistribution")
 
 @using (Html.BeginForm())
@@ -59,3 +57,6 @@
     </div>
 }
 
+@section Scripts {
+    <script src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
+}

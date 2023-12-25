@@ -4,8 +4,6 @@
     ViewBag.Title = "Sequences group";
 }
 
-<script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
-
 @Html.Partial("_AngularControllerInitializer", "SequenceGroups")
 
 <h2>@ViewBag.Title</h2>
@@ -59,4 +57,5 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
 }

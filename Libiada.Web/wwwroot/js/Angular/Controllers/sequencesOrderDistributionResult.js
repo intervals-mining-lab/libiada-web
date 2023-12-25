@@ -265,7 +265,7 @@
 
         $http.get(`/api/TaskManagerWebApi/${$scope.taskId}`)
             .then(function (data) {
-                MapModelFromJson($scope, JSON.parse(data.data));
+                MapModelFromJson($scope, data.data);
                 $scope.loading = false;
             }, function () {
                 alert("Failed loading sequences order distribution data");

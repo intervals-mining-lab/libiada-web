@@ -13,7 +13,7 @@
 
         $http.get(`/api/TaskManagerWebApi/${$scope.taskId}`)
             .then(function (data) {
-                MapModelFromJson($scope, JSON.parse(data.data));
+                MapModelFromJson($scope, data.data);
 
                 //$scope.firstCharacteristic = $scope.characteristicsList[0];
                 //$scope.secondCharacteristic = $scope.characteristicsList.length > 1 ? $scope.characteristicsList[1] : $scope.characteristicsList[0];

@@ -2,7 +2,6 @@
     ViewBag.Title = "Transformation of order of sequences";
 }
 
-<script src="~/js/Angular/Components/orderTransformations.js" asp-append-version="true"></script>
 @Html.Partial("_AngularControllerInitializer", "CustomCalculation")
 
 <h2>@ViewBag.Title</h2>
@@ -21,4 +20,8 @@
             </div>
         </div>
     </div>
+}
+
+@section Scripts {
+    <script src="~/js/Angular/Components/orderTransformations.js" asp-append-version="true"></script>
 }

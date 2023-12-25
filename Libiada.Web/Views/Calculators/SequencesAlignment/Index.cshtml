@@ -2,9 +2,6 @@
     ViewBag.Title = "Sequences alignment";
 }
 
-<script src="~/js/Angular/Components/characteristic.js" asp-append-version="true"></script>
-<script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
-
 @Html.Partial("_AngularControllerInitializer", "SequencesAlignment")
 
 <h2>@ViewBag.Title</h2>
@@ -12,79 +9,84 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-<div ng-controller="SequencesAlignmentCtrl">
-    <h4>Sequences and parameters</h4>
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <matters-table matters="matters"
-                   nature="nature"
-                   groups="groups"
-                   sequence-types="sequenceTypes"
-                   maximum-selected-matters="::maximumSelectedMatters"
-                   selected-matters-count="selectedMattersCount">
-    </matters-table>
-    @Html.Partial("_FeaturesSelect")
-    <hr />
-    <characteristic characteristic-types="::characteristicTypes"
-                    characteristics-dictionary="::characteristicsDictionary"
-                    nature="nature"
-                    notations="::notations"
-                    languages="::languages"
-                    translators="::translators"
-                    pause-treatments="::pauseTreatments"
-                    trajectories="::trajectories">
-    </characteristic>
-    <fieldset>
-        <legend>Alignment validation type:</legend>
+    <div ng-controller="SequencesAlignmentCtrl">
+        <h4>Sequences and parameters</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <matters-table matters="matters"
+                       nature="nature"
+                       groups="groups"
+                       sequence-types="sequenceTypes"
+                       maximum-selected-matters="::maximumSelectedMatters"
+                       selected-matters-count="selectedMattersCount">
+        </matters-table>
+        @Html.Partial("_FeaturesSelect")
+        <hr />
+        <characteristic characteristic-types="::characteristicTypes"
+                        characteristics-dictionary="::characteristicsDictionary"
+                        nature="nature"
+                        notations="::notations"
+                        languages="::languages"
+                        translators="::translators"
+                        pause-treatments="::pauseTreatments"
+                        trajectories="::trajectories">
+        </characteristic>
+        <fieldset>
+            <legend>Alignment validation type:</legend>
+            <div class="form-check">
+                <input type="radio" class="form-check-input" name="validationType" id="validationTypeSimilarity" value="Similarity" checked />
+                <label class="form-check-label" for="validationTypeSimilarity">
+                    Similarity
+                </label>
+            </div>
+            <div class="form-check">
+                <input type="radio" class="form-check-input" name="validationType" id="validationTypeDifference" value="Difference" />
+                <label class="form-check-label" for="validationTypeDifference">
+                    Difference
+                </label>
+            </div>
+            <div class="form-check">
+                <input type="radio" class="form-check-input" name="validationType" id="validationTypeNormalizedDifference" value="NormalizedDifference" />
+                <label class="form-check-label" for="validationTypeNormalizedDifference">
+                    Normalized difference
+                </label>
+            </div>
+            <div class="form-check">
+                <input type="radio" class="form-check-input" name="validationType" id="validationTypeEquality" value="Equality" />
+                <label class="form-check-label" for="validationTypeEquality">
+                    Equality of elements
+                </label>
+            </div>
+        </fieldset>
+        <hr />
         <div class="form-check">
-            <input type="radio" class="form-check-input" name="validationType" id="validationTypeSimilarity" value="Similarity" checked />
-            <label class="form-check-label" for="validationTypeSimilarity">
-                Similarity
+            <input type="checkbox"
+                   class="form-check-input"
+                   name="cyclicShift"
+                   id="cyclicShift"
+                   value="true" />
+            <input type="hidden" name="cyclicShift" value="false" />
+            <label class="form-check-label" for="cyclicShift">
+                Cyclic shift
             </label>
         </div>
         <div class="form-check">
-            <input type="radio" class="form-check-input" name="validationType" id="validationTypeDifference" value="Difference" />
-            <label class="form-check-label" for="validationTypeDifference">
-                Difference
+            <input type="checkbox"
+                   class="form-check-input"
+                   name="sort"
+                   id="sort"
+                   value="true" />
+            <input type="hidden" name="sort" value="false" />
+            <label class="form-check-label" for="sort">
+                Sort into rank distribution
             </label>
         </div>
-        <div class="form-check">
-            <input type="radio" class="form-check-input" name="validationType" id="validationTypeNormalizedDifference" value="NormalizedDifference" />
-            <label class="form-check-label" for="validationTypeNormalizedDifference">
-                Normalized difference
-            </label>
-        </div>
-        <div class="form-check">
-            <input type="radio" class="form-check-input" name="validationType" id="validationTypeEquality" value="Equality" />
-            <label class="form-check-label" for="validationTypeEquality">
-                Equality of elements
-            </label>
-        </div>
-    </fieldset>
-    <hr />
-    <div class="form-check">
-        <input type="checkbox"
-               class="form-check-input"
-               name="cyclicShift"
-               id="cyclicShift"
-               value="true" />
-        <input type="hidden" name="cyclicShift" value="false" />
-        <label class="form-check-label" for="cyclicShift">
-            Cyclic shift
-        </label>
+        <hr />
+        @Html.Partial("_MattersSubmit")
     </div>
-    <div class="form-check">
-        <input type="checkbox"
-               class="form-check-input"
-               name="sort"
-               id="sort"
-               value="true" />
-        <input type="hidden" name="sort" value="false" />
-        <label class="form-check-label" for="sort">
-            Sort into rank distribution
-        </label>
-    </div>
-    <hr />
-    @Html.Partial("_MattersSubmit")
-</div>
+}
+
+@section Scripts {
+    <script src="~/js/Angular/Components/characteristic.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
 }

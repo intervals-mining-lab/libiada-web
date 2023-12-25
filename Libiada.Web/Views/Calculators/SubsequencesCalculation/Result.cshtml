@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "Subsequences characteristics";
 }
-<script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+
 <h2>@ViewBag.Title</h2>
 
 @if (ViewBag.Error == null)
@@ -81,7 +81,9 @@
                 </table>
             </div>*@
     </div>
+
     @section Scripts {
-        <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
+    <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
     }
 }

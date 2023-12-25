@@ -1,8 +1,6 @@
 ﻿@{
     ViewBag.Title = "Characteristics";
 }
-<script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
-<script src="~/lib/exceljs/exceljs.min.js" asp-append-version="true"></script>
 
 <h2>@ViewBag.Title</h2>
 
@@ -52,9 +50,9 @@
                 </li>
             </ul>
             <div class="tab-content">
-                <div id="charts-tab-pane" 
-                     class="tab-pane fade show active" 
-                     role="tabpanel" 
+                <div id="charts-tab-pane"
+                     class="tab-pane fade show active"
+                     role="tabpanel"
                      aria-labelledby="charts-tab"
                      tabindex="0">
                     <div class="row mb-1 mt-2">
@@ -107,10 +105,10 @@
                     <div id="chart" class="font-monospace">
                     </div>
                 </div>
-                <div id="export-tab-pane" 
-                     class="tab-pane fade" 
-                     role="tabpanel" 
-                     aria-labelledby="export-tab" 
+                <div id="export-tab-pane"
+                     class="tab-pane fade"
+                     role="tabpanel"
+                     aria-labelledby="export-tab"
                      tabindex="0">
                     <div class="row my-2">
                         <label class="col-form-label col-md-2" for="searchQuery">Excel file name:</label>
@@ -133,10 +131,10 @@
                         </div>
                     </div>
                 </div>
-                <div id="data-table-tab-pane" 
-                     class="tab-pane fade" 
-                     role="tabpanel" 
-                     aria-labelledby="data-table-tab" 
+                <div id="data-table-tab-pane"
+                     class="tab-pane fade"
+                     role="tabpanel"
+                     aria-labelledby="data-table-tab"
                      tabindex="0">
                     <table id="characteristicsTable" st-table="characteristics" class="table table-bordered table-hover table-sm mt-2" ng-cloak>
                         <thead>
@@ -153,8 +151,10 @@
             </div>
         </div>
     </div>
-}
 
-@section Scripts {
-    <script src="~lib/d3/d3.js" asp-append-version="true"></script>
+    @section Scripts {
+    <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+    <script src="~/lib/exceljs/exceljs.min.js" asp-append-version="true"></script>
+    }
 }

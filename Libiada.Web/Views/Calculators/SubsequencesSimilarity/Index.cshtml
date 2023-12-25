@@ -2,7 +2,6 @@
     ViewBag.Title = "Subsequences similarity";
 }
 
-<script src="~/js/Angular/Components/characteristic.js" asp-append-version="true"></script>
 @Html.Partial("_AngularControllerInitializer", "SequencesAlignment")
 
 <h2>@ViewBag.Title</h2>
@@ -54,4 +53,8 @@
         </div>
         @Html.Partial("_MattersSubmit")
     </div>
+}
+
+@section Scripts {
+    <script src="~/js/Angular/Components/characteristic.js" asp-append-version="true"></script>
 }

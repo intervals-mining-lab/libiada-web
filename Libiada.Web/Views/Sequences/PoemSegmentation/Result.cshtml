@@ -1,7 +1,6 @@
 ﻿@{
     ViewBag.Title = "Segmentation results";
 }
-<script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
 
 <h2>@ViewBag.Title</h2>
 @if (ViewBag.Error == null)
@@ -33,4 +32,8 @@
             {{poemChain}}
         </p>
     </div>
+
+    @section Scripts {
+    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+    }
 }
