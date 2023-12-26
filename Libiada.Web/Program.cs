@@ -19,8 +19,7 @@ using System.Security.Principal;
 var builder = WebApplication.CreateBuilder(args);
 DbProviderFactories.RegisterFactory("Npgsql", NpgsqlFactory.Instance);
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("LibiadaDatabaseEntities") ?? throw new InvalidOperationException("Connection string 'LibiadaDatabaseEntities' not found.");
-builder.Services.AddDbContext<LibiadaDatabaseEntities>(options => options.UseNpgsql(connectionString));
+builder.Services.AddDbContext<LibiadaDatabaseEntities>(options => options.UseNpgsql());
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<AspNetUser>(options => options.SignIn.RequireConfirmedAccount = true)
