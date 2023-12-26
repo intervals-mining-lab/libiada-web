@@ -111,7 +111,7 @@
                     aggregator: $scope.aggregator.Value
                 }
             }).then(function (result) {
-                const response = JSON.parse(result.data)
+                const response = result.data;
                 $scope.comparisonMatrix = response.result;
                 $scope.usedAligner = $scope.aligners[response.aligner - 1].Text;
                 $scope.usedDistanceCalculator = $scope.distanceCalculators[response.distanceCalculator - 1].Text;
@@ -321,7 +321,7 @@
         let location = window.location.href.split("/");
         $scope.taskId = location[location.length - 1];
 
-        $http.get(`/api/TaskManagerWebApi/${$scope.taskId}`)
+        $http.get(`/api/TaskManagerWebApi/GetTaskData/${$scope.taskId}`)
             .then(function (data) {
                 MapModelFromJson($scope, data.data);
 

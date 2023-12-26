@@ -21,9 +21,9 @@
     /// The local calculation web api controller.
     /// </summary>
     [Authorize]
-    [Route("api/[controller]")]
     [ApiController]
-    public class LocalCalculationWebApiController : Controller
+    [Route("api/[controller]/[action]")]
+    public class LocalCalculationWebApiController : ControllerBase
     {
         private readonly LibiadaDatabaseEntities db;
         private readonly ICommonSequenceRepository commonSequenceRepository;
@@ -59,6 +59,7 @@
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
+        [HttpGet]
         public string GetSubsequenceCharacteristic(
             long subsequenceId,
             short characteristicLinkId,

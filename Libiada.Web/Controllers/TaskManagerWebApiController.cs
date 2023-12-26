@@ -15,9 +15,9 @@
     /// The task manager web api controller.
     /// </summary>
     [Authorize]
-    [Route("api/TaskManagerWebApi")]
     [ApiController]
-    public class TaskManagerWebApiController : Controller
+    [Route("api/[controller]/[action]")]
+    public class TaskManagerWebApiController : ControllerBase
     {
         private readonly LibiadaDatabaseEntities db;
         private readonly ITaskManager taskManager;
@@ -43,25 +43,26 @@
         /// <exception cref="Exception">
         /// Thrown if task is not complete.
         /// </exception>
-        [HttpGet("{id}")]
-        public string GetTaskData(long id, string key = "data")
-        {
-            try
-            {
-                return taskManager.GetTaskData(id, key);
-            }
-            catch (Exception ex)
-            {
-                string message = ex.Message;
-                while (ex.InnerException != null)
-                {
-                    ex = ex.InnerException;
-                    message += $"{Environment.NewLine} {ex.Message}";
-                }
+        [HttpGet("{id:long}")]
+        public string GetTaskData(long id) => GetTaskData(id, "data");
 
-                return JsonConvert.SerializeObject(new { Status = "Error", Message = message });
-            }
-        }
+        /// <summary>
+        /// Gets the task data by task id and key.
+        /// </summary>
+        /// <param name="id">
+        /// The task id in database.
+        /// </param>
+        /// <param name="key">
+        /// Name of the parameter in task results.
+        /// </param>
+        /// <returns>
+        /// The json as <see cref="string"/>.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Thrown if task is not complete.
+        /// </exception>
+        [HttpGet]
+        public string GetTaskDataByKey(long id, string key = "data") => GetTaskData(id, key);
 
         /// <summary>
         /// Get subsequences comparer data element.
@@ -81,6 +82,7 @@
         /// <exception cref="Exception">
         /// Thrown if task is not complete or doesn't have additional data.
         /// </exception>
+        [HttpGet]
         public string GetSubsequencesComparerDataElement(int taskId, int firstIndex, int secondIndex, bool filtered)
         {
             try
@@ -144,12 +146,47 @@
             db.SaveChanges();
         }
 
+        [HttpGet]
         public string GetApplicationServerKey()
         {
             try
             {
                 var response = new { applicationServerKey = ConfigurationManager.AppSettings["PublicVapidKey"] };
                 return JsonConvert.SerializeObject(response);
+            }
+            catch (Exception ex)
+            {
+                string message = ex.Message;
+                while (ex.InnerException != null)
+                {
+                    ex = ex.InnerException;
+                    message += $"{Environment.NewLine} {ex.Message}";
+                }
+
+                return JsonConvert.SerializeObject(new { Status = "Error", Message = message });
+            }
+        }
+
+        /// <summary>
+        /// Gets the task data by task id and key.
+        /// </summary>
+        /// <param name="id">
+        /// The task id in database.
+        /// </param>
+        /// <param name="key">
+        /// Name of the parameter in task results.
+        /// </param>
+        /// <returns>
+        /// The json as <see cref="string"/>.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Thrown if task is not complete.
+        /// </exception>
+        private string GetTaskData(long id, string key)
+        {
+            try
+            {
+                return taskManager.GetTaskData(id, key);
             }
             catch (Exception ex)
             {

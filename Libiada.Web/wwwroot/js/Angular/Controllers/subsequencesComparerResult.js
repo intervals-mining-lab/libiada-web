@@ -102,24 +102,21 @@
                         filtered: $scope.flags.displayFiltered
                     }
                 })
-                    .then(response => JSON.parse(response.data))
-                    .then(equalElements => $scope.equalElements[firstIndex][secondIndex] = equalElements)
-                    .then(_ => $http.get("/api/TaskManagerWebApi/GetTaskData", {
+                    .then(response => $scope.equalElements[firstIndex][secondIndex] = response.data)
+                    .then(_ => $http.get("/api/TaskManagerWebApi/GetTaskDataByKey", {
                         params: {
                             id: $scope.taskId,
                             key: "characteristics"
                         }
                     }))
-                    .then(response => JSON.parse(response.data))
-                    .then(characteristics => $scope.characteristics = characteristics)
-                    .then(_ => $http.get("/api/TaskManagerWebApi/GetTaskData", {
+                    .then(response => $scope.characteristics = response.data)
+                    .then(_ => $http.get("/api/TaskManagerWebApi/GetTaskDataByKey", {
                         params: {
                             id: $scope.taskId,
                             key: "attributeValues"
                         }
                     }))
-                    .then(response => JSON.parse(response.data))
-                    .then(attributeValues => $scope.attributeValues = attributeValues)
+                    .then(response => $scope.attributeValues = response.data)
                     .then(() => {
                         $scope.applyFilters($scope.equalElements[firstIndex][secondIndex]);
                         $scope.equalElementsToShow = $scope.equalElements[firstIndex][secondIndex];
@@ -159,7 +156,7 @@
                     step: $scope.slidingWindowParams.step
                 }
             }).then(firstCharacteristics => {
-                $scope.firstSubsequenceLocalCharacteristics = JSON.parse(firstCharacteristics.data);
+                $scope.firstSubsequenceLocalCharacteristics = firstCharacteristics.data;
 
                 $http.get("/api/LocalCalculationWebApi/GetSubsequenceCharacteristic", {
                     params: {
@@ -169,7 +166,7 @@
                         step: $scope.slidingWindowParams.step
                     }
                 }).then(secondCharacteristics => {
-                    $scope.secondSubsequenceLocalCharacteristics = JSON.parse(secondCharacteristics.data);
+                    $scope.secondSubsequenceLocalCharacteristics = secondCharacteristics.data;
                     $scope.drawLocalCharacteristics(firstSubsequenceId, secondSubsequenceId, index);
 
                     $scope.loading = false;
@@ -391,7 +388,7 @@
         let location = window.location.href.split("/");
         $scope.taskId = location[location.length - 1];
         $scope.loading = true;
-        $http.get(`/api/TaskManagerWebApi/${$scope.taskId}`)
+        $http.get(`/api/TaskManagerWebApi/GetTaskData/${$scope.taskId}`)
             .then(data => {
                 MapModelFromJson($scope, data.data);
 
