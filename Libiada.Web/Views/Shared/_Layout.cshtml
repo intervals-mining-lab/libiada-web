@@ -10,7 +10,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewBag.Title - FOA Research Lab</title>
+    
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Libiada.Web.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/scrollUpDown.css" asp-append-version="true" />
@@ -58,7 +60,7 @@
     <div ng-app="libiada">
         <scroll-jumper></scroll-jumper>
         <div class="container pt-2 body-content">
-            <main role="main" @* class="pb-3" *@>
+            <main role="main" @* class="pb-3" *@ >
                 @RenderBody()
             </main>
         </div>

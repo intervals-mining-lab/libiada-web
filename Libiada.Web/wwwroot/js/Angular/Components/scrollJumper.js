@@ -14,24 +14,24 @@
 
         ctrl.scrollDown = () => {
             if (ctrl.scrolledDown) {
-                $('html, body').animate({ scrollTop: ctrl.savedPosition }, 800);
+                $('html, body').animate({ scrollTop: ctrl.savedPosition }, 400);
                 ctrl.scrolledDown = false;
                 ctrl.scrolledUp = false;
             } else {
                 ctrl.savedPosition = window.pageYOffset || document.documentElement.scrollTop;
-                $('html, body').animate({ scrollTop: $('body').height() }, 800);
+                $('html, body').animate({ scrollTop: $('body').height() }, 400);
                 ctrl.scrolledDown = true;
             }
         };
 
         ctrl.scrollUp = () => {
             if (ctrl.scrolledUp) {
-                $('html, body').animate({ scrollTop: ctrl.savedPosition }, 800);
+                $('html, body').animate({ scrollTop: ctrl.savedPosition }, 400);
                 ctrl.scrolledDown = false;
                 ctrl.scrolledUp = false;
             } else {
                 ctrl.savedPosition = window.pageYOffset || document.documentElement.scrollTop;
-                $('html, body').animate({ scrollTop: '0px' }, 800);
+                $('html, body').animate({ scrollTop: '0px' }, 400);
                 ctrl.scrolledUp = true;
             }
         };
