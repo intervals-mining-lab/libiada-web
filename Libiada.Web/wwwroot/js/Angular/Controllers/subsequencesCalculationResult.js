@@ -334,7 +334,7 @@
 
             // add the tooltip area to the webpage
             let tooltip = d3.select("#chart").append("div")
-                .attr("class", "chart-tooltip position-absolute text-bg-light font-monospace small lh-sm p-1 rounded")
+                .attr("class", "chart-tooltip position-absolute bg-light font-monospace small lh-sm p-1 rounded")
                 .style("opacity", 0);
 
             // preventing tooltip hiding if dot clicked
