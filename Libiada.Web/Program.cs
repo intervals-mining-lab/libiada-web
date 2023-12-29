@@ -17,6 +17,24 @@ using System.Data.Common;
 using System.Security.Principal;
 
 var builder = WebApplication.CreateBuilder(args);
+//builder.Configuration.AddEnvironmentVariables(prefix: "Libiada_");
+builder.WebHost.UseKestrel(options =>
+    {
+        options.Limits.MaxRequestBodySize = null;
+        options.Limits.MaxRequestBufferSize = null;
+        options.Limits.MaxRequestLineSize = 0x1000000;
+        //options.Limits.MaxRequestHeadersTotalSize = 0x1000000;
+        options.Limits.MaxResponseBufferSize = null;
+        //options.Limits.Http2.MaxStreamsPerConnection = 1000; // 100 by default
+        options.Limits.Http2.MaxFrameSize = 16777215; // 2^14 by default
+        options.Limits.Http2.InitialConnectionWindowSize = 0x79000000; // 0x100000 by default
+        options.Limits.Http2.InitialStreamWindowSize = 0x79000000; // 0xBB800 by default
+    });
+
+builder.Services.AddResponseCompression(options =>
+    {
+        options.EnableForHttps = true;
+    });
 DbProviderFactories.RegisterFactory("Npgsql", NpgsqlFactory.Instance);
 // Add services to the container.
 builder.Services.AddDbContext<LibiadaDatabaseEntities>(options => options.UseNpgsql());
@@ -61,8 +79,6 @@ builder.Services.Configure<RazorViewEngineOptions>(options =>
     options.ViewLocationFormats.Add("/Views/Sequences/{1}/{0}.cshtml");
     options.ViewLocationFormats.Add("/Views/Calculators/{1}/{0}.cshtml");
     options.ViewLocationFormats.Add("/Views/AngularTemplates/{0}.cshtml");
-
-
 });
 
 builder.Services.AddControllersWithViews();
@@ -85,6 +101,7 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseResponseCompression();
 
 app.UseRouting();
 
