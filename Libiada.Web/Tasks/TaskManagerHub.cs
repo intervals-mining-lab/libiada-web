@@ -60,10 +60,10 @@
                 };
             }
 
-            await Clients.Group("admins").TaskEvent(taskEvent, result);
+            await Clients.Group("admins").TaskEvent(taskEvent.ToString(), result);
             if (!Context.User.IsAdmin())
             {
-                await Clients.Group(task.UserId.ToString()).TaskEvent(taskEvent, result);
+                await Clients.Group(task.UserId.ToString()).TaskEvent(taskEvent.ToString(), result);
             }
         }
 
@@ -135,11 +135,12 @@
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        public void DeleteTask(int id)
+        public async SystemTask DeleteTask(int id)
         {
             try
             {
-                taskManager.DeleteTask(id);
+                var taskData = taskManager.DeleteTask(id);
+                await Send(TaskEvent.DeleteTask, taskData);
             }
             catch (Exception e)
             {
@@ -156,11 +157,12 @@
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        public void DeleteTasksWithState(TaskState taskState)
+        public async SystemTask DeleteTasksWithState(TaskState taskState)
         {
             try
             {
-                taskManager.DeleteTasksWithState(taskState);
+                var tasksData = taskManager.DeleteTasksWithState(taskState);
+                await SystemTask.WhenAll(tasksData.Select(td => Send(TaskEvent.DeleteTask, td)));
             }
             catch (Exception e)
             {
@@ -174,11 +176,12 @@
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        public void DeleteAllTasks()
+        public async SystemTask DeleteAllTasks()
         {
             try
             {
-                taskManager.DeleteAllTasks();
+                var tasksData = taskManager.DeleteAllTasks();
+                await SystemTask.WhenAll(tasksData.Select(td => Send(TaskEvent.DeleteTask, td)));
             }
             catch (Exception e)
             {

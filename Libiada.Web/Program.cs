@@ -66,7 +66,6 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IPrincipal>(provider => provider.GetService<IHttpContextAccessor>().HttpContext.User);
 
 builder.Services.AddTransient<IViewDataHelper, ViewDataHelper>();
-builder.Services.AddSingleton<ITaskManagerHubFactory, TaskManagerHubFactory>();
 builder.Services.AddSingleton<ITaskManager, TaskManager>();
 
 builder.Services.Configure<RazorViewEngineOptions>(options =>
@@ -83,7 +82,7 @@ builder.Services.Configure<RazorViewEngineOptions>(options =>
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddSignalR();
+builder.Services.AddSignalR().AddJsonProtocol(options => { options.PayloadSerializerOptions.PropertyNamingPolicy = null; });
 
 var app = builder.Build();
 

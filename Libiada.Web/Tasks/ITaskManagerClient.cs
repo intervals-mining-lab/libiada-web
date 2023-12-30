@@ -2,6 +2,6 @@
 {
     public interface ITaskManagerClient
     {
-        System.Threading.Tasks.Task TaskEvent(TaskEvent @event, object data);
+        System.Threading.Tasks.Task TaskEvent(string @event, object data);
     }
 }

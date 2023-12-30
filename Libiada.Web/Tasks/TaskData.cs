@@ -2,11 +2,7 @@
 {
     using System;
 
-
-    using Libiada.Web.Helpers;
-
     using Libiada.Database.Tasks;
-    using Microsoft.AspNetCore.Identity;
 
     /// <summary>
     /// The task data.
@@ -76,7 +72,7 @@
             TaskType = taskType;
             UserId = creator.Id;
             UserName = creator.UserName;
-            Created = DateTime.Now;
+            Created = DateTimeOffset.UtcNow;
             TaskState = TaskState.InQueue;
         }
 

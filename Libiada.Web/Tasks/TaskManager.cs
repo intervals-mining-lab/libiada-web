@@ -16,6 +16,9 @@
 
     using SystemTask = System.Threading.Tasks.Task;
     using Libiada.Web.Extensions;
+    using Microsoft.AspNetCore.SignalR;
+    using Libiada.Database.Models;
+    using System.Runtime.CompilerServices;
 
     /// <summary>
     /// The task manager.
@@ -33,14 +36,14 @@
         /// <summary>
         /// The signalr hub.
         /// </summary>
-        private readonly TaskManagerHub signalrHub;
+        private readonly IHubContext<TaskManagerHub> signalrHubContext;
 
-        public TaskManager(ILibiadaDatabaseEntitiesFactory dbFactory, ITaskManagerHubFactory factory, IHttpContextAccessor httpContextAccessor)
+        public TaskManager(ILibiadaDatabaseEntitiesFactory dbFactory, IHubContext<TaskManagerHub> signalrHubContext, IHttpContextAccessor httpContextAccessor)
         {
 
             db = dbFactory.CreateDbContext();
             this.httpContextAccessor = httpContextAccessor;
-            signalrHub = factory.Create(this);
+            this.signalrHubContext = signalrHubContext;
             RemoveGarbageFromDb();
             CalculationTask[] databaseTasks = db.CalculationTasks.OrderBy(t => t.Created).Include(t => t.AspNetUser).ToArray();
             lock (tasks)
@@ -68,7 +71,7 @@
             IPrincipal user = httpContextAccessor.HttpContext.User;
             databaseTask = new CalculationTask
             {
-                Created = DateTime.Now,
+                Created = DateTimeOffset.UtcNow,
                 Description = taskType.GetDisplayValue(),
                 Status = TaskState.InQueue,
                 UserId = user.GetUserId(),
@@ -77,32 +80,35 @@
 
             db.CalculationTasks.Add(databaseTask);
             db.SaveChanges();
-
+            TaskAwaiter taskAwaiter;
             lock (tasks)
             {
                 task = new Task(databaseTask.Id, action, databaseTask.AspNetUser, taskType);
                 lock (task)
                 {
                     tasks.Add(task);
-                    signalrHub.Send(TaskEvent.AddTask, task.TaskData);
+                    taskAwaiter = SendTaskEventToClients(TaskEvent.AddTask, task.TaskData).GetAwaiter();
                 }
             }
-
+            
             ManageTasks();
+            taskAwaiter.OnCompleted(() => { });
             return task.TaskData.Id;
         }
 
         /// <summary>
         /// Deletes all visible to user tasks.
         /// </summary>
-        public void DeleteAllTasks()
+        public IEnumerable<TaskData> DeleteAllTasks()
         {
             List<Task> tasksToDelete = GetUserTasks();
-
+            var result = new List<TaskData>(tasksToDelete.Count);
             for (int i = tasksToDelete.Count - 1; i >= 0; i--)
             {
-                DeleteTask(tasksToDelete[i].TaskData.Id);
+                result.Add(DeleteTask(tasksToDelete[i].TaskData.Id));
             }
+
+            return result;
         }
 
         /// <summary>
@@ -111,14 +117,16 @@
         /// <param name="taskState">
         /// The task state.
         /// </param>
-        public void DeleteTasksWithState(TaskState taskState)
+        public IEnumerable<TaskData> DeleteTasksWithState(TaskState taskState)
         {
             List<Task> tasksToDelete = GetUserTasksWithState(taskState);
-
+            var result = new List<TaskData>(tasksToDelete.Count);
             for (int i = tasksToDelete.Count - 1; i >= 0; i--)
             {
-                DeleteTask(tasksToDelete[i].TaskData.Id);
+                result.Add(DeleteTask(tasksToDelete[i].TaskData.Id));
             }
+
+            return result;
         }
 
         /// <summary>
@@ -127,7 +135,7 @@
         /// <param name="id">
         /// The task id.
         /// </param>
-        public void DeleteTask(long id)
+        public TaskData DeleteTask(long id)
         {
             lock (tasks)
             {
@@ -149,10 +157,11 @@
                         CalculationTask databaseTask = db.CalculationTasks.Find(id);
                         db.CalculationTasks.Remove(databaseTask);
                         db.SaveChanges();
-
-                        signalrHub.Send(TaskEvent.DeleteTask, task.TaskData);
+                        return task.TaskData;
                     }
                 }
+
+                return null;
             }
         }
 
@@ -336,28 +345,29 @@
         {
             try
             {
+                TaskAwaiter taskAwaiter;
                 Func<Dictionary<string, string>> actionToCall;
                 lock (task)
                 {
                     actionToCall = task.Action;
-                    task.TaskData.Started = DateTime.Now;
+                    task.TaskData.Started = DateTimeOffset.UtcNow;
                     CalculationTask databaseTask = db.CalculationTasks.Single(t => t.Id == task.TaskData.Id);
 
-                    databaseTask.Started = DateTime.Now;
+                    databaseTask.Started = DateTimeOffset.UtcNow;
                     databaseTask.Status = TaskState.InProgress;
                     db.Entry(databaseTask).State = EntityState.Modified;
                     db.SaveChanges();
 
-
-                    signalrHub.Send(TaskEvent.ChangeStatus, task.TaskData);
+                    taskAwaiter = SendTaskEventToClients(TaskEvent.ChangeStatus, task.TaskData).GetAwaiter();
                 }
 
+                taskAwaiter.OnCompleted(() => { });
                 // executing action
                 Dictionary<string, string> result = actionToCall();
 
                 lock (task)
                 {
-                    task.TaskData.Completed = DateTime.Now;
+                    task.TaskData.Completed = DateTimeOffset.UtcNow;
                     task.TaskData.ExecutionTime = task.TaskData.Completed - task.TaskData.Started;
                     TaskResult[] results = result.Select(r => new TaskResult { Key = r.Key, Value = r.Value, TaskId = task.TaskData.Id }).ToArray();
 
@@ -365,14 +375,15 @@
                     db.TaskResults.AddRange(results);
 
                     CalculationTask databaseTask = db.CalculationTasks.Single(t => (t.Id == task.TaskData.Id));
-                    databaseTask.Completed = task.TaskData.Completed?.DateTime;
+                    databaseTask.Completed = task.TaskData.Completed;
                     databaseTask.Status = TaskState.Completed;
                     db.Entry(databaseTask).State = EntityState.Modified;
 
                     db.SaveChanges();
-
-                    signalrHub.Send(TaskEvent.ChangeStatus, task.TaskData);
+                    taskAwaiter = SendTaskEventToClients(TaskEvent.ChangeStatus, task.TaskData).GetAwaiter();
                 }
+
+                taskAwaiter.OnCompleted(() => { });
             }
             catch (ThreadAbortException)
             {
@@ -388,11 +399,11 @@
                     e = e.InnerException;
                     errorMessage += $"{Environment.NewLine} {e.Message}";
                 }
-
+                TaskAwaiter taskAwaiter;
                 lock (task)
                 {
                     var taskData = task.TaskData;
-                    taskData.Completed = DateTime.Now;
+                    taskData.Completed = DateTimeOffset.UtcNow;
                     taskData.ExecutionTime = taskData.Completed - taskData.Started;
                     taskData.TaskState = TaskState.Error;
 
@@ -408,14 +419,53 @@
                     db.TaskResults.Add(taskResult);
 
                     CalculationTask databaseTask = db.CalculationTasks.Single(t => (t.Id == taskData.Id));
-                    databaseTask.Completed = DateTime.Now;
+                    databaseTask.Completed = DateTimeOffset.UtcNow;
                     databaseTask.Status = TaskState.Error;
                     db.Entry(databaseTask).State = EntityState.Modified;
 
                     db.SaveChanges();
-
-                    signalrHub.Send(TaskEvent.ChangeStatus, taskData);
+                    taskAwaiter = SendTaskEventToClients(TaskEvent.ChangeStatus, taskData).GetAwaiter();
                 }
+
+                taskAwaiter.OnCompleted(() => { });
+            }
+        }
+
+        /// <summary>
+        /// Send web socket message to target clients.
+        /// </summary>
+        /// <param name="taskEvent">
+        /// Task event.
+        /// </param>
+        /// <param name="task">
+        /// Task itself.
+        /// </param>
+        public async SystemTask SendTaskEventToClients(TaskEvent taskEvent, TaskData task)
+        {
+            object result;
+
+            lock (task)
+            {
+                result = new
+                {
+                    task.Id,
+                    TaskType = task.TaskType.GetName(),
+                    DisplayName = task.TaskType.GetDisplayValue(),
+                    Created = task.Created.ToString(OutputFormats.DateTimeFormat),
+                    Started = task.Started?.ToString(OutputFormats.DateTimeFormat),
+                    Completed = task.Completed?.ToString(OutputFormats.DateTimeFormat),
+                    ExecutionTime = task.ExecutionTime?.ToString(OutputFormats.TimeFormat),
+                    TaskState = task.TaskState.ToString(),
+                    TaskStateName = task.TaskState.GetDisplayValue(),
+                    task.UserId,
+                    task.UserName
+                };
+            }
+
+            await signalrHubContext.Clients.Group("admins").SendAsync("TaskEvent", taskEvent.ToString(), result);
+            if (!db.Users.Include(u => u.Roles).Single(u => u.Id == task.UserId).Roles.Any(r => r.Name == "Admin"))
+            {
+                await signalrHubContext.Clients.Group(task.UserId.ToString()).SendAsync("TaskEvent", taskEvent.ToString(), result);
             }
         }
     }

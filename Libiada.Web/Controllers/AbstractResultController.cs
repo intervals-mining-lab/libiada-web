@@ -83,7 +83,7 @@
         protected ActionResult CreateTask(Func<Dictionary<string, string>> action)
         {
             long taskId = taskManager.CreateTask(action, taskType);
-            return RedirectToAction(taskId.ToString(), "TaskManager");
+            return RedirectToAction("Index", "TaskManager", new { id = taskId });
         }
     }
 }
