@@ -35,7 +35,9 @@ builder.Services.AddResponseCompression(options =>
     {
         options.EnableForHttps = true;
     });
+
 DbProviderFactories.RegisterFactory("Npgsql", NpgsqlFactory.Instance);
+
 // Add services to the container.
 builder.Services.AddDbContext<LibiadaDatabaseEntities>(options => options.UseNpgsql());
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -45,7 +47,7 @@ builder.Services.AddDefaultIdentity<AspNetUser>(options => options.SignIn.Requir
                 .AddEntityFrameworkStores<LibiadaDatabaseEntities>()
                 .AddDefaultTokenProviders();
 
-builder.Services.AddScoped(l => new LibiadaDatabaseEntities(new DbContextOptions<LibiadaDatabaseEntities>(), builder.Configuration));
+//builder.Services.AddScoped(l => new LibiadaDatabaseEntities(new DbContextOptions<LibiadaDatabaseEntities>(), builder.Configuration));
 builder.Services.AddSingleton<ILibiadaDatabaseEntitiesFactory, LibiadaDatabaseEntitiesFactory>();
 
 builder.Services.AddSingleton<INcbiHelper, NcbiHelper>();

@@ -22,6 +22,7 @@
         /// The db.
         /// </summary>
         private readonly LibiadaDatabaseEntities db;
+        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
         private readonly IViewDataHelper viewDataHelper;
 
         /// <summary>
@@ -42,16 +43,17 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SequenceTransformerController"/> class.
         /// </summary>
-        public SequenceTransformerController(LibiadaDatabaseEntities db, 
+        public SequenceTransformerController(ILibiadaDatabaseEntitiesFactory dbFactory, 
                                              IViewDataHelper viewDataHelper,
                                              ICommonSequenceRepository commonSequenceRepository, 
                                              Cache cache)
         {
-            this.db = db;
+            this.dbFactory = dbFactory;
+            this.db = dbFactory.CreateDbContext();
             this.viewDataHelper = viewDataHelper;
-            dnaSequenceRepository = new GeneticSequenceRepository(db, cache);
+            dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
             this.commonSequenceRepository = commonSequenceRepository;
-            elementRepository = new ElementRepository(db);
+            elementRepository = new ElementRepository(dbFactory.CreateDbContext());
         }
 
         /// <summary>

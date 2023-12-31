@@ -62,6 +62,29 @@
         <div class="container pt-2 body-content">
             <main role="main" @* class="pb-3" *@ >
                 @RenderBody()
+                @if (ViewBag.Error != null)
+                {
+                    <h1 class="text-danger">An error occurred while processing your request</h1>
+                    if (User.IsAdmin())
+                    {
+                        <h3 class="text-danger mb-2">
+                            Error message: @ViewBag.Error.Message
+                        </h3>
+                        <h5 class="mt-2 text-danger">Stack trace:</h5>
+                        <div class="p-2 mb-2 border border-danger border-2 rounded text-break">
+                            @ViewBag.Error.StackTrace
+                        </div>
+                    }
+                    else
+                    {
+                        if (ViewBag.UserError != null)
+                        {
+                            <h3 class="text-danger p-2 mb-2">
+                                @ViewBag.UserError
+                            </h3>
+                        }
+                    }
+                }
             </main>
         </div>
     </div>

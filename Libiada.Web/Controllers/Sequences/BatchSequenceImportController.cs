@@ -28,20 +28,20 @@
     [Authorize(Roles = "Admin")]
     public class BatchSequenceImportController : AbstractResultController
     {
-        private readonly LibiadaDatabaseEntities db;
+        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
         private readonly INcbiHelper ncbiHelper;
         private readonly Cache cache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BatchSequenceImportController"/> class.
         /// </summary>
-        public BatchSequenceImportController(LibiadaDatabaseEntities db,
+        public BatchSequenceImportController(ILibiadaDatabaseEntitiesFactory dbFactory,
                                              ITaskManager taskManager,
                                              INcbiHelper ncbiHelper,
                                              Cache cache)
             : base(TaskType.BatchSequenceImport, taskManager)
         {
-            this.db = db;
+            this.dbFactory = dbFactory;
             this.ncbiHelper = ncbiHelper;
             this.cache = cache;
         }
@@ -81,7 +81,7 @@
                 var importResults = new List<MatterImportResult>(accessions.Length);
                 string[] accessionsToImport;
 
-                var dnaSequenceRepository = new GeneticSequenceRepository(db, cache);
+                var dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
                 string[] existingAccessions;
                 (existingAccessions, accessionsToImport) = dnaSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
 
@@ -92,7 +92,7 @@
                     Status = "Exists"
                 }));
 
-
+                var db = dbFactory.CreateDbContext();
                 importResults.AddRange(accessionsToImport.AsParallel().Select(accession =>
                 {
                     var importResult = new MatterImportResult() { MatterName = accession };
@@ -104,7 +104,7 @@
                         importResult.MatterName = metadata.Version.CompoundAccession;
 
                         var matterRepository = new MatterRepository(db, cache);
-                        var dnaSequenceRepository = new GeneticSequenceRepository(db, cache);
+                        var dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
                         Matter matter = matterRepository.CreateMatterFromGenBankMetadata(metadata);
 
                         importResult.SequenceType = matter.SequenceType.GetDisplayValue();
@@ -193,7 +193,7 @@
         {
             try
             {
-                var subsequenceImporter = new SubsequenceImporter(db, metadata.Features.All, sequence.Id);
+                var subsequenceImporter = new SubsequenceImporter(dbFactory.CreateDbContext(), metadata.Features.All, sequence.Id);
                 var (featuresCount, nonCodingCount) = subsequenceImporter.CreateSubsequences();
 
                 string result = $"Successfully imported sequence, {featuresCount} features "

@@ -18,17 +18,17 @@
 
     public class GenBankAccessionVersionUpdateCheckerController : AbstractResultController
     {
-        private readonly LibiadaDatabaseEntities db;
+        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
         private readonly INcbiHelper ncbiHelper;
         private readonly Cache cache;
 
-        public GenBankAccessionVersionUpdateCheckerController(LibiadaDatabaseEntities db,
+        public GenBankAccessionVersionUpdateCheckerController(ILibiadaDatabaseEntitiesFactory dbFactory,
                                                               ITaskManager taskManager,
                                                               INcbiHelper ncbiHelper,
                                                               Cache cache)
             : base(TaskType.GenBankAccessionVersionUpdateChecker, taskManager)
         {
-            this.db = db;
+            this.dbFactory = dbFactory;
             this.ncbiHelper = ncbiHelper;
             this.cache = cache;
         }
@@ -52,9 +52,9 @@
 
                 Dictionary<string, AccessionUpdateSearchResult> sequencesData;
 
-                var dnaSequenceRepository = new GeneticSequenceRepository(db, cache);
+                var dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
 
-                var sequencesWithAccessions = db.DnaSequences
+                var sequencesWithAccessions = dbFactory.CreateDbContext().DnaSequences
                                                 .Include(ds => ds.Matter)
                                                 .Where(ds => ds.Notation == Notation.Nucleotides && !string.IsNullOrEmpty(ds.RemoteId))
                                                 .ToArray();

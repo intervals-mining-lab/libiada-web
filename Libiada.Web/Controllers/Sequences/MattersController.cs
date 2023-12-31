@@ -16,6 +16,7 @@
     using Libiada.Web.Tasks;
     using Libiada.Database.Extensions;
     using Libiada.Database.Helpers;
+    using Bio.Algorithms.Assembly.Graph;
 
     /// <summary>
     /// The matters controller.
@@ -28,12 +29,12 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="MattersController"/> class.
         /// </summary>
-        public MattersController(LibiadaDatabaseEntities db, 
+        public MattersController(ILibiadaDatabaseEntitiesFactory dbFactory, 
                                  IViewDataHelper viewDataHelper, 
                                  ITaskManager taskManager,
                                  INcbiHelper ncbiHelper,
                                  Cache cache)
-            : base(TaskType.Matters, db, viewDataHelper, taskManager, ncbiHelper, cache)
+            : base(TaskType.Matters, dbFactory, viewDataHelper, taskManager, ncbiHelper, cache)
         {
             this.cache = cache;
         }
@@ -46,7 +47,7 @@
         /// </returns>
         public async Task<ActionResult> Index()
         {
-            List<Matter> matter = await db.Matters.Include(m => m.Multisequence).ToListAsync();
+            List<Matter> matter = await dbFactory.CreateDbContext().Matters.Include(m => m.Multisequence).ToListAsync();
 
             if (!User.IsAdmin())
             {
@@ -72,7 +73,7 @@
             {
                 return BadRequest();
             }
-
+            var db = dbFactory.CreateDbContext();
             Matter matter = db.Matters.Include(m => m.Multisequence).SingleOrDefault(m => m.Id == id);
             if (matter == null)
             {
@@ -100,7 +101,7 @@
             {
                 return BadRequest();
             }
-
+            var db = dbFactory.CreateDbContext();
             Matter matter = db.Matters.Include(m => m.Multisequence).SingleOrDefault(m => m.Id == id);
             if (matter == null)
             {
@@ -143,6 +144,7 @@
         // [Bind(Include = "Id,Name,Nature,Description,Group,SequenceType,MultisequenceId,MultisequenceNumber,CollectionCountry,CollectionDate")] 
         Matter matter)
         {
+            var db = dbFactory.CreateDbContext();
             if (ModelState.IsValid)
             {
                 db.Entry(matter).State = EntityState.Modified;
@@ -184,7 +186,7 @@
             {
                 return BadRequest();
             }
-
+            var db = dbFactory.CreateDbContext();
             Matter matter = await db.Matters.FindAsync(id);
             if (matter == null)
             {
@@ -209,6 +211,7 @@
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(long id)
         {
+            var db = dbFactory.CreateDbContext();
             Matter matter = await db.Matters.FindAsync(id);
             db.Matters.Remove(matter);
             await db.SaveChangesAsync();

@@ -36,7 +36,7 @@
     [Authorize]
     public class SubsequencesDistributionController : AbstractResultController
     {
-        private readonly LibiadaDatabaseEntities db;
+        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
         private readonly IViewDataHelper viewDataHelper;
         private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
         private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
@@ -47,7 +47,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SubsequencesDistributionController"/> class.
         /// </summary>
-        public SubsequencesDistributionController(LibiadaDatabaseEntities db,
+        public SubsequencesDistributionController(ILibiadaDatabaseEntitiesFactory dbFactory,
                                                   IViewDataHelper viewDataHelper,
                                                   ITaskManager taskManager,
                                                   IFullCharacteristicRepository characteristicTypeLinkRepository,
@@ -57,7 +57,7 @@
                                                   Cache cache)
             : base(TaskType.SubsequencesDistribution, taskManager)
         {
-            this.db = db;
+            this.dbFactory = dbFactory;
             this.viewDataHelper = viewDataHelper;
             this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
             this.subsequencesCharacteristicsCalculator = subsequencesCharacteristicsCalculator;
@@ -103,7 +103,7 @@
             return CreateTask(() =>
             {
                 Array.Sort(matterIds);
-
+                var db = dbFactory.CreateDbContext();
                 var matterNames = new string[matterIds.Length];
                 var remoteIds = new string[matterIds.Length];
                 var subsequencesCharacteristicsNames = new string[characteristicLinkIds.Length];
@@ -122,7 +122,7 @@
                     remoteIds[n] = parentSequences[n].RemoteId;
                 }
 
-                var geneticSequenceRepository = new GeneticSequenceRepository(db, cache);
+                var geneticSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
                 sequenceIds = geneticSequenceRepository.GetNucleotideSequenceIds(matterIds);
 
                 string sequenceCharacteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId);
@@ -191,7 +191,7 @@
             {
                 ISequence[] bioSequences;
 
-                var subsequenceExtractor = new SubsequenceExtractor(db, commonSequenceRepository);
+                var subsequenceExtractor = new SubsequenceExtractor(dbFactory.CreateDbContext(), commonSequenceRepository);
                 bioSequences = subsequenceExtractor.GetBioSequencesForFastaConverter(subsequencesIds);
 
 

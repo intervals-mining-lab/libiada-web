@@ -30,7 +30,7 @@
     [Authorize(Roles = "Admin")]
     public class OrderTransformationCalculationController : AbstractResultController
     {
-        private readonly LibiadaDatabaseEntities db;
+        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
         private readonly IViewDataHelper viewDataHelper;
         private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
         private readonly Cache cache;
@@ -38,14 +38,14 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderTransformationCalculationController"/> class.
         /// </summary>
-        public OrderTransformationCalculationController(LibiadaDatabaseEntities db, 
+        public OrderTransformationCalculationController(ILibiadaDatabaseEntitiesFactory dbFactory, 
                                                         IViewDataHelper viewDataHelper, 
                                                         ITaskManager taskManager,
                                                         IFullCharacteristicRepository characteristicTypeLinkRepository,
                                                         Cache cache)
             : base(TaskType.OrderTransformationCalculation, taskManager)
         {
-            this.db = db;
+            this.dbFactory = dbFactory;
             this.viewDataHelper = viewDataHelper;
             this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
             this.cache = cache;
@@ -112,18 +112,18 @@
             int iterationsCount,
             short[] characteristicLinkIds,
             Notation[] notations,
-            Language?[] languages,
-            Translator?[] translators,
-            PauseTreatment?[] pauseTreatments,
-            bool?[] sequentialTransfers,
-            ImageOrderExtractor?[] trajectories)
+            Language[] languages,
+            Translator[] translators,
+            PauseTreatment[] pauseTreatments,
+            bool[] sequentialTransfers,
+            ImageOrderExtractor[] trajectories)
         {
             return CreateTask(() =>
             {
                 Dictionary<long, string> mattersNames = cache.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
                 Chain[][] sequences = new Chain[matterIds.Length][];
 
-                var commonSequenceRepository = new CommonSequenceRepository(db, cache);
+                var commonSequenceRepository = new CommonSequenceRepository(dbFactory, cache);
                 long[][] sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds,
                                                                                notations,
                                                                                languages,

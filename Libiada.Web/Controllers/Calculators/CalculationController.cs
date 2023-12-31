@@ -25,28 +25,31 @@
     [Authorize]
     public class CalculationController : AbstractResultController
     {
-        private readonly LibiadaDatabaseEntities db;
+        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
         private readonly IViewDataHelper viewDataHelper;
         private readonly Cache cache;
         private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
         private readonly ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator;
+        private readonly ICommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CalculationController"/> class.
         /// </summary>
-        public CalculationController(LibiadaDatabaseEntities db,
+        public CalculationController(ILibiadaDatabaseEntitiesFactory dbFactory,
                                      IViewDataHelper viewDataHelper,
                                      ITaskManager taskManager,
                                      Cache cache, 
                                      IFullCharacteristicRepository characteristicTypeLinkRepository,
-                                     ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator)
+                                     ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator,
+                                     ICommonSequenceRepository commonSequenceRepository)
             : base(TaskType.Calculation, taskManager)
         {
-            this.db = db;
+            this.dbFactory = dbFactory;
             this.viewDataHelper = viewDataHelper;
             this.cache = cache;
             this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
             this.sequencesCharacteristicsCalculator = sequencesCharacteristicsCalculator;
+            this.commonSequenceRepository = commonSequenceRepository;
         }
 
         /// <summary>
@@ -108,11 +111,11 @@
             long[] matterIds,
             short[] characteristicLinkIds,
             Notation[] notations,
-            Language?[] languages,
-            Translator?[] translators,
-            PauseTreatment?[] pauseTreatments,
-            bool?[] sequentialTransfers,
-            ImageOrderExtractor?[] trajectories,
+            Language[] languages,
+            Translator[] translators,
+            PauseTreatment[] pauseTreatments,
+            bool[] sequentialTransfers,
+            ImageOrderExtractor[] trajectories,
             bool rotate,
             bool complementary,
             uint? rotationLength)
@@ -122,7 +125,6 @@
                 Dictionary<long, string> mattersNames;
 
                 long[][] sequenceIds;
-                var commonSequenceRepository = new CommonSequenceRepository(db, cache);
                 sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds,
                                                                       notations,
                                                                       languages,

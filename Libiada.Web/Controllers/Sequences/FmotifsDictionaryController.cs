@@ -26,12 +26,12 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="FmotifsDictionaryController"/> class.
         /// </summary>
-        public FmotifsDictionaryController(LibiadaDatabaseEntities db, 
+        public FmotifsDictionaryController(ILibiadaDatabaseEntitiesFactory dbFactory, 
                                            IViewDataHelper viewDataHelper, 
                                            ITaskManager taskManager,
                                            INcbiHelper ncbiHelper,
                                            Cache cache) 
-            : base(TaskType.FmotifsDictionary, db, viewDataHelper, taskManager,ncbiHelper, cache)
+            : base(TaskType.FmotifsDictionary, dbFactory, viewDataHelper, taskManager,ncbiHelper, cache)
         {
         }
 
@@ -43,7 +43,7 @@
         /// </returns>
         public async Task<ActionResult> Index()
         {
-            var musicSequence = db.MusicSequences.Where(m => m.Notation == Notation.FormalMotifs).Include(m => m.Matter);
+            var musicSequence = dbFactory.CreateDbContext().MusicSequences.Where(m => m.Notation == Notation.FormalMotifs).Include(m => m.Matter);
             return View(await musicSequence.ToListAsync());
 
         }
@@ -63,7 +63,7 @@
             {
                 return BadRequest();
             }
-
+            var db = dbFactory.CreateDbContext();
             MusicSequence musicSequence = db.MusicSequences.Include(m => m.Matter).Single(m => m.Id == id);
             if (musicSequence == null)
             {

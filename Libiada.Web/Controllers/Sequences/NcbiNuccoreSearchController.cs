@@ -18,17 +18,17 @@
     [Authorize(Roles = "Admin")]
     public class NcbiNuccoreSearchController : AbstractResultController
     {
-        private readonly LibiadaDatabaseEntities db;
+        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
         private readonly INcbiHelper ncbiHelper;
         private readonly Cache cache;
 
-        public NcbiNuccoreSearchController(LibiadaDatabaseEntities db,
+        public NcbiNuccoreSearchController(ILibiadaDatabaseEntitiesFactory dbFactory,
                                            ITaskManager taskManager,
                                            INcbiHelper ncbiHelper,
                                            Cache cache)
             : base(TaskType.NcbiNuccoreSearch, taskManager)
         {
-            this.db = db;
+            this.dbFactory = dbFactory;
             this.ncbiHelper = ncbiHelper;
             this.cache = cache;
         }
@@ -84,7 +84,7 @@
 
                 string[] existingAccessions;
 
-                var dnaSequenceRepository = new GeneticSequenceRepository(db, cache);
+                var dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
 
                 (existingAccessions, _) = dnaSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
 

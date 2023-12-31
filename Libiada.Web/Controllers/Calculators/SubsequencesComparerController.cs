@@ -33,7 +33,7 @@
     [Authorize]
     public class SubsequencesComparerController : AbstractResultController
     {
-        private readonly LibiadaDatabaseEntities db;
+        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
         private readonly IViewDataHelper viewDataHelper;
         private readonly IFullCharacteristicRepository fullCharacteristicRepository;
         private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
@@ -44,7 +44,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SubsequencesComparerController"/> class.
         /// </summary>
-        public SubsequencesComparerController(LibiadaDatabaseEntities db, 
+        public SubsequencesComparerController(ILibiadaDatabaseEntitiesFactory dbFactory, 
                                               IViewDataHelper viewDataHelper, 
                                               ITaskManager taskManager,
                                               IFullCharacteristicRepository fullCharacteristicRepository,
@@ -54,13 +54,13 @@
                                               Cache cache)
             : base(TaskType.SubsequencesComparer, taskManager)
         {
-            this.db = db;
+            this.dbFactory = dbFactory;
             this.viewDataHelper = viewDataHelper;
             this.fullCharacteristicRepository = fullCharacteristicRepository;
             this.subsequencesCharacteristicsCalculator = subsequencesCharacteristicsCalculator;
             this.sequencesCharacteristicsCalculator = sequencesCharacteristicsCalculator;
             this.commonSequenceRepository = commonSequenceRepository;
-            geneticSequenceRepository = new GeneticSequenceRepository(db, cache);
+            geneticSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
         }
 
         /// <summary>
@@ -122,7 +122,7 @@
             {
                 double[] percentageDifferences = maxPercentageDifferences.Select(item => double.Parse(item, CultureInfo.InvariantCulture) / 100).ToArray();
                 //double percentageDifference = double.Parse(maxPercentageDifference, CultureInfo.InvariantCulture) / 100; // цикл
-
+                var db = dbFactory.CreateDbContext();
                 var attributeValuesCache = new AttributeValueCacheManager(db);
                 var characteristics = new SubsequenceData[matterIds.Length][];
 
@@ -252,7 +252,7 @@
                 short subsequencesCharacteristicLinkId
             )
         {
-            var localCharacteristicsCalculator = new LocalCharacteristicsCalculator(db, fullCharacteristicRepository, commonSequenceRepository);
+            var localCharacteristicsCalculator = new LocalCharacteristicsCalculator(dbFactory.CreateDbContext(), fullCharacteristicRepository, commonSequenceRepository);
 
             var cache = new Dictionary<(int matterIndex, int subsequenceIndex), double[]>();
             var result = new List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)>();

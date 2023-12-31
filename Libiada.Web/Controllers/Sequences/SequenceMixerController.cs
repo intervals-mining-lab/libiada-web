@@ -22,7 +22,7 @@
         /// <summary>
         /// The db.
         /// </summary>
-        private readonly LibiadaDatabaseEntities db;
+        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
 
         private readonly MatterRepository matterRepository;
 
@@ -66,18 +66,18 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SequenceMixerController"/> class.
         /// </summary>
-        public SequenceMixerController(LibiadaDatabaseEntities db, 
+        public SequenceMixerController(ILibiadaDatabaseEntitiesFactory dbFactory, 
                                        IViewDataHelper viewDataHelper,
                                        Cache cache)
         {
-            this.db = db;
-            matterRepository = new MatterRepository(db, cache);
-            sequenceRepository = new CommonSequenceRepository(db, cache);
-            dnaSequenceRepository = new GeneticSequenceRepository(db, cache);
-            musicSequenceRepository = new MusicSequenceRepository(db, cache);
-            literatureSequenceRepository = new LiteratureSequenceRepository(db, cache);
-            dataSequenceRepository = new DataSequenceRepository(db, cache);            
-            elementRepository = new ElementRepository(db);
+            this.dbFactory = dbFactory;
+            matterRepository = new MatterRepository(dbFactory.CreateDbContext(), cache);
+            sequenceRepository = new CommonSequenceRepository(dbFactory, cache);
+            dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
+            musicSequenceRepository = new MusicSequenceRepository(dbFactory, cache);
+            literatureSequenceRepository = new LiteratureSequenceRepository(dbFactory, cache);
+            dataSequenceRepository = new DataSequenceRepository(dbFactory, cache);            
+            elementRepository = new ElementRepository(dbFactory.CreateDbContext());
             this.viewDataHelper = viewDataHelper;
             this.cache = cache;
         }
@@ -134,6 +134,8 @@
                                   bool? sequentialTransfer,
                                   int scrambling)
         {
+
+            var db = dbFactory.CreateDbContext();
             Matter matter = cache.Matters.Single(m => m.Id == matterId);
             long sequenceId;
             switch (matter.Nature)

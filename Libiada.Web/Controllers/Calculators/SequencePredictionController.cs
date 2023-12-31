@@ -27,7 +27,7 @@
     [Authorize(Roles = "Admin")]
     public class SequencePredictionController : AbstractResultController
     {
-        private readonly LibiadaDatabaseEntities db;
+        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
         private readonly IViewDataHelper viewDataHelper;
         private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
         private readonly Cache cache;
@@ -35,14 +35,14 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SequencePredictionController"/> class.
         /// </summary>
-        public SequencePredictionController(LibiadaDatabaseEntities db, 
+        public SequencePredictionController(ILibiadaDatabaseEntitiesFactory dbFactory, 
                                             IViewDataHelper viewDataHelper, 
                                             ITaskManager taskManager,
                                             IFullCharacteristicRepository characteristicTypeLinkRepository,
                                             Cache cache)
             : base(TaskType.SequencePrediction, taskManager)
         {
-            this.db = db;
+            this.dbFactory = dbFactory;
             this.viewDataHelper = viewDataHelper;
             this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
             this.cache = cache;
@@ -98,9 +98,9 @@
                 IFullCalculator calculator;
                 Link link;
 
-                var commonSequenceRepository = new CommonSequenceRepository(db, cache);
+                var commonSequenceRepository = new CommonSequenceRepository(dbFactory, cache);
                 matterName = cache.Matters.Single(m => matterId == m.Id).Name;
-                var sequenceId = db.CommonSequences.Single(c => matterId == c.MatterId && c.Notation == notation).Id;
+                var sequenceId = dbFactory.CreateDbContext().CommonSequences.Single(c => matterId == c.MatterId && c.Notation == notation).Id;
                 sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
 
                 characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);

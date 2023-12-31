@@ -24,17 +24,17 @@ namespace Libiada.Web.Controllers.Sequences
     [Authorize(Roles = "Admin")]
     public class BatchGeneticImportFromGenBankSearchQueryController : AbstractResultController
     {
-        private readonly LibiadaDatabaseEntities db;
+        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
         private readonly INcbiHelper ncbiHelper;
         private readonly Cache cache;
 
-        public BatchGeneticImportFromGenBankSearchQueryController(LibiadaDatabaseEntities db,
+        public BatchGeneticImportFromGenBankSearchQueryController(ILibiadaDatabaseEntitiesFactory dbFactory,
                                                                   ITaskManager taskManager,
                                                                   INcbiHelper ncbiHelper,
                                                                   Cache cache)
             : base(TaskType.BatchGeneticImportFromGenBankSearchQuery, taskManager)
         {
-            this.db = db;
+            this.dbFactory = dbFactory;
             this.ncbiHelper = ncbiHelper;
             this.cache = cache;
         }
@@ -76,9 +76,9 @@ namespace Libiada.Web.Controllers.Sequences
                 nuccoreObjects = ncbiHelper.ExecuteESummaryRequest(searchResults, importPartial);
                 accessions = nuccoreObjects.Select(no => no.AccessionVersion.Split('.')[0]).Distinct().ToArray();
                 var importResults = new List<MatterImportResult>(accessions.Length);
-
+                var db = dbFactory.CreateDbContext();
                 var matterRepository = new MatterRepository(db, cache);
-                var dnaSequenceRepository = new GeneticSequenceRepository(db, cache);
+                var dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
 
                 var (existingAccessions, accessionsToImport) = dnaSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
 
@@ -186,7 +186,7 @@ namespace Libiada.Web.Controllers.Sequences
         {
             try
             {
-                var subsequenceImporter = new SubsequenceImporter(db, metadata.Features.All, sequence.Id);
+                var subsequenceImporter = new SubsequenceImporter(dbFactory.CreateDbContext(), metadata.Features.All, sequence.Id);
                 var (featuresCount, nonCodingCount) = subsequenceImporter.CreateSubsequences();
 
                 string result = $"Successfully imported sequence, {featuresCount} features "

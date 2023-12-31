@@ -27,7 +27,7 @@
     /// </summary>
     public abstract class SequencesMattersController : AbstractResultController
     {
-        protected readonly LibiadaDatabaseEntities db;
+        protected readonly ILibiadaDatabaseEntitiesFactory dbFactory;
         private readonly IViewDataHelper viewDataHelper;
         private readonly INcbiHelper ncbiHelper;
         private readonly Cache cache;
@@ -39,14 +39,14 @@
         /// The task Type.
         /// </param>
         protected SequencesMattersController(TaskType taskType,
-                                             LibiadaDatabaseEntities db,
+                                             ILibiadaDatabaseEntitiesFactory dbFactory,
                                              IViewDataHelper viewDataHelper,
                                              ITaskManager taskManager,
                                              INcbiHelper ncbiHelper,
                                              Cache cache)
             : base(taskType, taskManager)
         {
-            this.db = db;
+            this.dbFactory = dbFactory;
             this.viewDataHelper = viewDataHelper;
             this.ncbiHelper = ncbiHelper;
             this.cache = cache;
@@ -126,23 +126,25 @@
                         sequenceStream = FileHelper.GetFileStream(file!);
                     }
 
+                    var db = dbFactory.CreateDbContext();
+
                     switch (nature)
                     {
                         case Nature.Genetic:
                             ISequence bioSequence = NcbiHelper.GetFastaSequence(sequenceStream);
-                            var dnaSequenceRepository = new GeneticSequenceRepository(db, cache);
+                            var dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
                             dnaSequenceRepository.Create(commonSequence, bioSequence, partial ?? false);
                             break;
                         case Nature.Music:
-                            var musicSequenceRepository = new MusicSequenceRepository(db, cache);
+                            var musicSequenceRepository = new MusicSequenceRepository(dbFactory, cache);
                             musicSequenceRepository.Create(commonSequence, sequenceStream);
                             break;
                         case Nature.Literature:
-                            var literatureSequenceRepository = new LiteratureSequenceRepository(db, cache);
+                            var literatureSequenceRepository = new LiteratureSequenceRepository(dbFactory, cache);
                             literatureSequenceRepository.Create(commonSequence, sequenceStream, language ?? Language.Russian, original ?? true, translator ?? Translator.NoneOrManual);
                             break;
                         case Nature.MeasurementData:
-                            var dataSequenceRepository = new DataSequenceRepository(db, cache);
+                            var dataSequenceRepository = new DataSequenceRepository(dbFactory, cache);
                             dataSequenceRepository.Create(commonSequence, sequenceStream, precision ?? 0);
                             break;
                         case Nature.Image:
@@ -175,6 +177,7 @@
                 }
                 catch (Exception)
                 {
+                    var db = dbFactory.CreateDbContext();
                     long matterId = commonSequence.MatterId;
                     if (matterId != 0)
                     {

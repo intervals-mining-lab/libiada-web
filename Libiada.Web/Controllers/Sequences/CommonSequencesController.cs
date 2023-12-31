@@ -23,12 +23,12 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CommonSequencesController"/> class.
         /// </summary>
-        public CommonSequencesController(LibiadaDatabaseEntities db, 
+        public CommonSequencesController(ILibiadaDatabaseEntitiesFactory dbFactory, 
                                          IViewDataHelper viewDataHelper, 
                                          ITaskManager taskManager,
                                          INcbiHelper ncbiHelper,
                                          Cache cache)
-            : base(TaskType.CommonSequences, db, viewDataHelper, taskManager, ncbiHelper, cache)
+            : base(TaskType.CommonSequences, dbFactory, viewDataHelper, taskManager, ncbiHelper, cache)
         {
             this.cache = cache;
         }
@@ -41,7 +41,7 @@
         /// </returns>
         public async Task<ActionResult> Index()
         {
-            var commonSequence = db.CommonSequences.Include(c => c.Matter);
+            var commonSequence = dbFactory.CreateDbContext().CommonSequences.Include(c => c.Matter);
             return View(await commonSequence.ToListAsync());
 
         }
@@ -62,7 +62,7 @@
                 return BadRequest();
             }
 
-            CommonSequence commonSequence = db.CommonSequences.Include(c => c.Matter).Single(c => c.Id == id);
+            CommonSequence commonSequence = dbFactory.CreateDbContext().CommonSequences.Include(c => c.Matter).Single(c => c.Id == id);
             if (commonSequence == null)
             {
                 return NotFound();
@@ -89,7 +89,7 @@
             }
 
 
-            CommonSequence commonSequence = await db.CommonSequences.FindAsync(id);
+            CommonSequence commonSequence = await dbFactory.CreateDbContext().CommonSequences.FindAsync(id);
             if (commonSequence == null)
             {
                 return NotFound();
@@ -117,6 +117,7 @@
         {
             if (ModelState.IsValid)
             {
+                var db = dbFactory.CreateDbContext();
                 db.Entry(commonSequence).State = EntityState.Modified;
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -146,7 +147,7 @@
                 return BadRequest();
             }
 
-            CommonSequence commonSequence = db.CommonSequences.Include(c => c.Matter).Single(c => c.Id == id);
+            CommonSequence commonSequence = dbFactory.CreateDbContext().CommonSequences.Include(c => c.Matter).Single(c => c.Id == id);
             if (commonSequence == null)
             {
                 return NotFound();
@@ -168,6 +169,7 @@
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(long id)
         {
+            var db = dbFactory.CreateDbContext();
             CommonSequence commonSequence = await db.CommonSequences.FindAsync(id);
             db.CommonSequences.Remove(commonSequence);
             await db.SaveChangesAsync();

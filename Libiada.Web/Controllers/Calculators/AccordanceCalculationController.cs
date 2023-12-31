@@ -25,9 +25,9 @@
     public class AccordanceCalculationController : AbstractResultController
     {
         /// <summary>
-        /// The db.
+        /// The database context factory.
         /// </summary>
-        private readonly LibiadaDatabaseEntities db;
+        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
 
         private readonly IViewDataHelper viewDataHelper;
 
@@ -45,7 +45,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AccordanceCalculationController"/> class.
         /// </summary>
-        public AccordanceCalculationController(LibiadaDatabaseEntities db, 
+        public AccordanceCalculationController(ILibiadaDatabaseEntitiesFactory dbFactory, 
                                                IViewDataHelper viewDataHelper, 
                                                ITaskManager taskManager,
                                                IAccordanceCharacteristicRepository characteristicTypeLinkRepository,
@@ -53,7 +53,7 @@
                                                Cache cache)
             : base(TaskType.AccordanceCalculation, taskManager)
         {
-            this.db = db;
+            this.dbFactory = dbFactory;
             this.viewDataHelper = viewDataHelper;
             this.commonSequenceRepository = commonSequenceRepository;
             this.cache = cache;

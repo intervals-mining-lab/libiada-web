@@ -16,12 +16,13 @@
     [Authorize(Roles = "Admin")]
     public class BatchPoemsImportController : AbstractResultController
     {
-        private readonly LibiadaDatabaseEntities db;
+        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
         private readonly Cache cache;
 
-        public BatchPoemsImportController(LibiadaDatabaseEntities db, ITaskManager taskManager, Cache cache) : base(TaskType.BatchPoemsImport, taskManager)
+        public BatchPoemsImportController(ILibiadaDatabaseEntitiesFactory dbFactory, ITaskManager taskManager, Cache cache) 
+            : base(TaskType.BatchPoemsImport, taskManager)
         {
-            this.db = db;
+            this.dbFactory = dbFactory;
             this.cache = cache;
         }
 
@@ -87,7 +88,7 @@
                             importResult.Result = "Successfully imported poem and created matter";
                         }
 
-                        var repository = new LiteratureSequenceRepository(db, cache);
+                        var repository = new LiteratureSequenceRepository(dbFactory, cache);
 
                         repository.Create(sequence, FileHelper.GetFileStream(files[i]), Language.Russian, true, Translator.NoneOrManual, dropPunctuation);
                         importResult.Status = "Success";

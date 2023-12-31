@@ -26,17 +26,17 @@
     [Authorize(Roles = "Admin")]
     public class BatchGeneticImportFromGenBankSearchFileController : AbstractResultController
     {
-        private readonly LibiadaDatabaseEntities db;
+        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
         private readonly INcbiHelper ncbiHelper;
         private readonly Cache cache;
 
-        public BatchGeneticImportFromGenBankSearchFileController(LibiadaDatabaseEntities db,
+        public BatchGeneticImportFromGenBankSearchFileController(ILibiadaDatabaseEntitiesFactory dbFactory,
                                                                  ITaskManager taskManager,
                                                                  INcbiHelper ncbiHelper,
                                                                  Cache cache)
             : base(TaskType.BatchGeneticImportFromGenBankSearchFile, taskManager)
         {
-            this.db = db;
+            this.dbFactory = dbFactory;
             this.ncbiHelper = ncbiHelper;
             this.cache = cache;
         }
@@ -78,8 +78,8 @@
                 accessions = accessions.Distinct().Select(a => a.Split('.')[0]).ToArray();
                 var importResults = new List<MatterImportResult>(accessions.Length);
 
-                var matterRepository = new MatterRepository(db, cache);
-                var dnaSequenceRepository = new GeneticSequenceRepository(db, cache);
+                var matterRepository = new MatterRepository(dbFactory.CreateDbContext(), cache);
+                var dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
 
                 var (existingAccessions, accessionsToImport) = dnaSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
 
@@ -89,7 +89,7 @@
                     Result = "Sequence already exists",
                     Status = "Exists"
                 }));
-
+                var db = dbFactory.CreateDbContext();
                 foreach (string accession in accessionsToImport)
                 {
                     var importResult = new MatterImportResult() { MatterName = accession };
@@ -151,6 +151,7 @@
                 string[] names = importResults.Select(r => r.MatterName).ToArray();
 
                 // removing matters for which adding of sequence failed
+                
                 Matter[] orphanMatters = db.Matters
                                            .Include(m => m.Sequence)
                                            .Where(m => names.Contains(m.Name) && m.Sequence.Count == 0)
@@ -187,7 +188,7 @@
         {
             try
             {
-                var subsequenceImporter = new SubsequenceImporter(db, metadata.Features.All, sequence.Id);
+                var subsequenceImporter = new SubsequenceImporter(dbFactory.CreateDbContext(), metadata.Features.All, sequence.Id);
                 var (featuresCount, nonCodingCount) = subsequenceImporter.CreateSubsequences();
 
                 string result = $"Successfully imported sequence, {featuresCount} features "
