@@ -25,17 +25,17 @@
     [Route("api/[controller]/[action]")]
     public class LocalCalculationWebApiController : ControllerBase
     {
-        private readonly LibiadaDatabaseEntities db;
+        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
         private readonly ICommonSequenceRepository commonSequenceRepository;
         private readonly IFullCharacteristicRepository fullCharacteristicRepository;
         private readonly ITaskManager taskManager;
 
-        public LocalCalculationWebApiController(LibiadaDatabaseEntities db, 
+        public LocalCalculationWebApiController(ILibiadaDatabaseEntitiesFactory dbFactory, 
                                                 ICommonSequenceRepository commonSequenceRepository,
                                                 IFullCharacteristicRepository fullCharacteristicRepository,
                                                 ITaskManager taskManager)
         {
-            this.db = db;
+            this.dbFactory = dbFactory;
             this.commonSequenceRepository = commonSequenceRepository;
             this.fullCharacteristicRepository = fullCharacteristicRepository;
             this.taskManager = taskManager;
@@ -66,6 +66,7 @@
             int windowSize,
             int step)
         {
+            using var db = dbFactory.CreateDbContext();
             var calculator = new LocalCharacteristicsCalculator(db, fullCharacteristicRepository, commonSequenceRepository);
             var characteristics = calculator.GetSubsequenceCharacteristic(subsequenceId, characteristicLinkId, windowSize, step);
 

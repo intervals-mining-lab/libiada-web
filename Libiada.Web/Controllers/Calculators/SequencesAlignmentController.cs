@@ -33,13 +33,13 @@
         private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
         private readonly ICommonSequenceRepository commonSequenceRepository;
         private readonly Cache cache;
-        private readonly LibiadaDatabaseEntities db;
+        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
         private readonly IViewDataHelper viewDataHelper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SequencesAlignmentController"/> class.
         /// </summary>
-        public SequencesAlignmentController(LibiadaDatabaseEntities db, 
+        public SequencesAlignmentController(ILibiadaDatabaseEntitiesFactory dbFactory, 
                                             IViewDataHelper viewDataHelper, 
                                             ITaskManager taskManager,
                                             IFullCharacteristicRepository characteristicTypeLinkRepository,
@@ -52,7 +52,7 @@
             this.subsequencesCharacteristicsCalculator = subsequencesCharacteristicsCalculator;
             this.commonSequenceRepository = commonSequenceRepository;
             this.cache = cache;
-            this.db = db;
+            this.dbFactory = dbFactory;
             this.viewDataHelper = viewDataHelper;
         }
 
@@ -121,6 +121,8 @@
                 string secondMatterName;
                 long firstParentId;
                 long secondParentId;
+
+                using var db = dbFactory.CreateDbContext();
 
                 long firstMatterId = matterIds[0];
                 firstMatterName = cache.Matters.Single(m => m.Id == firstMatterId).Name;

@@ -42,20 +42,17 @@
         /// The characteristic type link repository.
         /// </summary>
         private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
-        private readonly LibiadaDatabaseEntities db;
         private readonly IViewDataHelper viewDataHelper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomSequenceCalculationController"/> class.
         /// </summary>
-        public CustomSequenceCalculationController(LibiadaDatabaseEntities db, 
-                                                   IViewDataHelper viewDataHelper, 
+        public CustomSequenceCalculationController(IViewDataHelper viewDataHelper, 
                                                    ITaskManager taskManager,
                                                    IFullCharacteristicRepository characteristicTypeLinkRepository) 
             : base(TaskType.CustomSequenceCalculation, taskManager)
         {
             this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
-            this.db = db;
             this.viewDataHelper = viewDataHelper;
         }
 

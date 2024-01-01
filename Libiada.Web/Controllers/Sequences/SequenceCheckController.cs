@@ -23,20 +23,20 @@
     [Authorize(Roles = "Admin")]
     public class SequenceCheckController : AbstractResultController
     {
-        private readonly LibiadaDatabaseEntities db;
+        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
         private readonly ICommonSequenceRepository commonSequenceRepository;
         private readonly Cache cache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SequenceCheckController"/> class.
         /// </summary>
-        public SequenceCheckController(LibiadaDatabaseEntities db, 
+        public SequenceCheckController(ILibiadaDatabaseEntitiesFactory dbFactory, 
                                        ITaskManager taskManager, 
                                        ICommonSequenceRepository commonSequenceRepository, 
                                        Cache cache) 
             : base(TaskType.SequenceCheck, taskManager)
         {
-            this.db = db;
+            this.dbFactory = dbFactory;
             this.commonSequenceRepository = commonSequenceRepository;
             this.cache = cache;
         }
@@ -99,7 +99,7 @@
                 string message;
                 string status;
                 BaseChain dbChain;
-
+                using var db = dbFactory.CreateDbContext();
                 long sequenceId = db.CommonSequences.Single(c => c.MatterId == matterId).Id;
                 dbChain = commonSequenceRepository.GetLibiadaBaseChain(sequenceId);
 

@@ -25,7 +25,7 @@
         /// <summary>
         /// The db.
         /// </summary>
-        private readonly LibiadaDatabaseEntities db;
+        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
 
         /// <summary>
         /// The sequence repository.
@@ -36,13 +36,13 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderTransformationConvergenceController"/> class.
         /// </summary>
-        public OrderTransformationConvergenceController(LibiadaDatabaseEntities db, 
+        public OrderTransformationConvergenceController(ILibiadaDatabaseEntitiesFactory dbFactory, 
                                                         IViewDataHelper viewDataHelper, 
                                                         ITaskManager taskManager,
                                                         ICommonSequenceRepository commonSequenceRepository) 
             : base(TaskType.OrderTransformationConvergence, taskManager)
         {
-            this.db = db;
+            this.dbFactory = dbFactory;
             this.commonSequenceRepository = commonSequenceRepository;
             this.viewDataHelper = viewDataHelper;
         }
@@ -89,6 +89,7 @@
             return CreateTask(() =>
             {
                 // TODO: add nature params
+                using var db = dbFactory.CreateDbContext();
                 var sequenceId = db.CommonSequences.Single(c => c.MatterId == matterId).Id;
                 var sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
                 int loopIteration = -1;

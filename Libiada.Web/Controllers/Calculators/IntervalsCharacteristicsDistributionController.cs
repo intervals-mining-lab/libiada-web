@@ -37,20 +37,17 @@
         /// The characteristic type link repository.
         /// </summary>
         private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
-        private readonly LibiadaDatabaseEntities db;
         private readonly IViewDataHelper viewDataHelper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IntervalsCharacteristicsDistributionController"/> class.
         /// </summary>
-        public IntervalsCharacteristicsDistributionController(LibiadaDatabaseEntities db,
-                                                              IViewDataHelper viewDataHelper,
+        public IntervalsCharacteristicsDistributionController(IViewDataHelper viewDataHelper,
                                                               ITaskManager taskManager,
                                                               IFullCharacteristicRepository characteristicTypeLinkRepository)
             : base(TaskType.IntervalsCharacteristicsDistribution, taskManager)
         {
             this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
-            this.db = db;
             this.viewDataHelper = viewDataHelper;
         }
 

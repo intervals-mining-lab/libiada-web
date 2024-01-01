@@ -20,13 +20,13 @@
     [Authorize(Roles = "Admin")]
     public class BatchImagesImportController : AbstractResultController
     {
-        private readonly LibiadaDatabaseEntities db;
+        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
         private readonly Cache cache;
 
-        public BatchImagesImportController(LibiadaDatabaseEntities db, ITaskManager taskManager, Cache cache) 
+        public BatchImagesImportController(ILibiadaDatabaseEntitiesFactory dbFactory, ITaskManager taskManager, Cache cache) 
             : base(TaskType.BatchImagesImport, taskManager)
         {
-            this.db = db;
+            this.dbFactory = dbFactory;
             this.cache = cache;
         }
 
@@ -42,6 +42,7 @@
         {
             return CreateTask(() =>
             {
+                using var db = dbFactory.CreateDbContext();
                 var importResults = new List<MatterImportResult>();
 
                 Matter[] matters = db.Matters.Where(m => m.Nature == Nature.Image).ToArray();

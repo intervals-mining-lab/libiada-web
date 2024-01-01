@@ -35,10 +35,6 @@
     [Authorize(Roles = "Admin")]
     public class LocalCalculationController : AbstractResultController
     {
-        /// <summary>
-        /// The db.
-        /// </summary>
-        private readonly LibiadaDatabaseEntities db;
         private readonly IViewDataHelper viewDataHelper;
 
         /// <summary>
@@ -55,15 +51,13 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="LocalCalculationController"/> class.
         /// </summary>
-        public LocalCalculationController(LibiadaDatabaseEntities db, 
-                                          IViewDataHelper viewDataHelper, 
+        public LocalCalculationController(IViewDataHelper viewDataHelper, 
                                           ITaskManager taskManager,
                                           ICommonSequenceRepository commonSequenceRepository,
                                           IFullCharacteristicRepository characteristicTypeLinkRepository,
                                           Cache cache)
             : base(TaskType.LocalCalculation, taskManager)
         {
-            this.db = db;
             this.viewDataHelper = viewDataHelper;
             this.commonSequenceRepository = commonSequenceRepository;
             this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;

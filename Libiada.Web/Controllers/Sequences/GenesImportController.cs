@@ -25,7 +25,7 @@
     [Authorize(Roles = "Admin")]
     public class GenesImportController : AbstractResultController
     {
-        private readonly LibiadaDatabaseEntities db;
+        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
         private readonly IViewDataHelper viewDataHelper;
         private readonly INcbiHelper ncbiHelper;
         private readonly Cache cache;
@@ -33,14 +33,14 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="GenesImportController"/> class.
         /// </summary>
-        public GenesImportController(LibiadaDatabaseEntities db, 
+        public GenesImportController(ILibiadaDatabaseEntitiesFactory dbFactory, 
                                      IViewDataHelper viewDataHelper, 
                                      ITaskManager taskManager,
                                      INcbiHelper ncbiHelper,
                                      Cache cache)
             : base(TaskType.GenesImport, taskManager)
         {
-            this.db = db;
+            this.dbFactory = dbFactory;
             this.viewDataHelper = viewDataHelper;
             this.ncbiHelper = ncbiHelper;
             this.cache = cache;
@@ -54,6 +54,7 @@
         /// </returns>
         public ActionResult Index()
         {
+            using var db = dbFactory.CreateDbContext();
             var genesSequenceIds = db.Subsequences.Select(s => s.SequenceId).Distinct();
 
             var matterIds = db.DnaSequences
@@ -85,7 +86,7 @@
             return CreateTask(() =>
             {
                 Dictionary<string, object> result;
-
+                using var db = dbFactory.CreateDbContext();
                 DnaSequence parentSequence = db.DnaSequences.Single(d => d.MatterId == matterId);
                 var subsequenceImporter = new SubsequenceImporter(db, parentSequence, ncbiHelper);
                 subsequenceImporter.CreateSubsequences();

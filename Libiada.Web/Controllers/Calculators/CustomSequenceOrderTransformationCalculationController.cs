@@ -36,20 +36,17 @@
     [Authorize(Roles = "Admin")]
     public class CustomSequenceOrderTransformationCalculationController : AbstractResultController
     {
-        private readonly LibiadaDatabaseEntities db;
         private readonly IViewDataHelper viewDataHelper;
         private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomSequenceOrderTransformationCalculationController"/> class.
         /// </summary>
-        public CustomSequenceOrderTransformationCalculationController(LibiadaDatabaseEntities db, 
-                                                                      IViewDataHelper viewDataHelper, 
+        public CustomSequenceOrderTransformationCalculationController(IViewDataHelper viewDataHelper, 
                                                                       ITaskManager taskManager,
                                                                       IFullCharacteristicRepository characteristicTypeLinkRepository)
             : base(TaskType.CustomSequenceOrderTransformationCalculation, taskManager)
         {
-            this.db = db;
             this.viewDataHelper = viewDataHelper;
             this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         }

@@ -88,8 +88,8 @@
                 return BadRequest();
             }
 
-
-            CommonSequence commonSequence = await dbFactory.CreateDbContext().CommonSequences.FindAsync(id);
+            using var db = dbFactory.CreateDbContext();
+            CommonSequence? commonSequence = await db.CommonSequences.FindAsync(id);
             if (commonSequence == null)
             {
                 return NotFound();

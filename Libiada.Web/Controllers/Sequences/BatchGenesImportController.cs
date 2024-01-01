@@ -22,7 +22,7 @@
     [Authorize(Roles = "Admin")]
     public class BatchGenesImportController : AbstractResultController
     {
-        private readonly LibiadaDatabaseEntities db;
+        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
         private readonly IViewDataHelper viewDataHelper;
         private readonly INcbiHelper ncbiHelper;
         private readonly Cache cache;
@@ -30,14 +30,14 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="BatchGenesImportController"/> class.
         /// </summary>
-        public BatchGenesImportController(LibiadaDatabaseEntities db, 
+        public BatchGenesImportController(ILibiadaDatabaseEntitiesFactory dbFactory, 
                                           IViewDataHelper viewDataHelper, 
                                           ITaskManager taskManager,
                                           INcbiHelper ncbiHelper,
                                           Cache cache)
             : base(TaskType.BatchGenesImport, taskManager)
         {
-            this.db = db;
+            this.dbFactory = dbFactory;
             this.viewDataHelper = viewDataHelper;
             this.ncbiHelper = ncbiHelper;
             this.cache = cache;
@@ -51,6 +51,7 @@
         /// </returns>
         public ActionResult Index()
         {
+            using var db = dbFactory.CreateDbContext();
             var sequencesWithSubsequencesIds = db.Subsequences.Select(s => s.SequenceId).Distinct();
 
             var matterIds = db.DnaSequences.Include(c => c.Matter)
@@ -81,6 +82,7 @@
         {
             return CreateTask(() =>
                 {
+                    using var db = dbFactory.CreateDbContext();
                     string[] matterNames;
                     var importResults = new List<MatterImportResult>(matterIds.Length);
 

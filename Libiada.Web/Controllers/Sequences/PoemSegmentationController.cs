@@ -16,17 +16,17 @@
 
     public class PoemSegmentationController : AbstractResultController
     {
-        private readonly LibiadaDatabaseEntities db;
+        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
         private readonly IViewDataHelper viewDataHelper;
         private readonly ICommonSequenceRepository commonSequenceRepository;
 
-        public PoemSegmentationController(LibiadaDatabaseEntities db,
+        public PoemSegmentationController(ILibiadaDatabaseEntitiesFactory dbFactory,
                                           IViewDataHelper viewDataHelper,
                                           ITaskManager taskManager,
                                           ICommonSequenceRepository commonSequenceRepository)
            : base(TaskType.PoemSegmentation, taskManager)
         {
-            this.db = db;
+            this.dbFactory = dbFactory;
             this.viewDataHelper = viewDataHelper;
             this.commonSequenceRepository = commonSequenceRepository;
         }
@@ -50,6 +50,7 @@
         {
             return CreateTask(() =>
             {
+                using var db = dbFactory.CreateDbContext();
                 var sequenceId = db.LiteratureSequences.Single(l => l.MatterId == matterId && l.Notation == Notation.Consonance).Id;
                 var sequenceName = db.Matters.Single(l => l.Id == matterId).Name;
                 var chain = commonSequenceRepository.GetLibiadaBaseChain(sequenceId);

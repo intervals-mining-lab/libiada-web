@@ -33,7 +33,7 @@
         /// <summary>
         /// The db.
         /// </summary>
-        private readonly LibiadaDatabaseEntities db;
+        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
         private readonly IViewDataHelper viewDataHelper;
         private readonly ICongenericCharacteristicRepository congenericCharacteristicRepository;
 
@@ -51,7 +51,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CongenericCalculationController"/> class.
         /// </summary>
-        public CongenericCalculationController(LibiadaDatabaseEntities db, 
+        public CongenericCalculationController(ILibiadaDatabaseEntitiesFactory dbFactory, 
                                                IViewDataHelper viewDataHelper, 
                                                ITaskManager taskManager,
                                                ICongenericCharacteristicRepository congenericCharacteristicRepository,
@@ -59,7 +59,7 @@
                                                Cache cache) 
             : base(TaskType.CongenericCalculation, taskManager)
         {
-            this.db = db;
+            this.dbFactory = dbFactory;
             this.viewDataHelper = viewDataHelper;
             this.congenericCharacteristicRepository = congenericCharacteristicRepository;
             this.commonSequenceRepository = commonSequenceRepository;
@@ -196,6 +196,7 @@
                 //    theoreticalRanks.Add(new List<List<double>>());
 
                 //    // cycle through characteristics and notations; second level of characteristics array
+                //    using var db = dbFactory.CreateDbContext();
                 //    for (int i = 0; i < characteristicLinkIds.Length; i++)
                 //    {
                 //        Notation notation = notations[i];

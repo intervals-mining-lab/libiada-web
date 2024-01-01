@@ -31,7 +31,7 @@
         /// <summary>
         /// The db.
         /// </summary>
-        private readonly LibiadaDatabaseEntities db;
+        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
         private readonly IViewDataHelper viewDataHelper;
 
         /// <summary>
@@ -49,7 +49,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ClusterizationController"/> class.
         /// </summary>
-        public ClusterizationController(LibiadaDatabaseEntities db, 
+        public ClusterizationController(ILibiadaDatabaseEntitiesFactory dbFactory, 
                                         IViewDataHelper viewDataHelper, 
                                         ITaskManager taskManager, 
                                         IFullCharacteristicRepository characteristicTypeLinkRepository,
@@ -58,7 +58,7 @@
                                         Cache cache) 
             : base(TaskType.Clusterization, taskManager)
         {
-            this.db = db;
+            this.dbFactory = dbFactory;
             this.viewDataHelper = viewDataHelper;
             this.commonSequenceRepository = commonSequenceRepository;
             this.cache = cache;
@@ -168,6 +168,8 @@
                                                                       pauseTreatments,
                                                                       sequentialTransfers,
                                                                       trajectories);
+
+                using var db = dbFactory.CreateDbContext();
                 mattersNames = db.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
 
                 double[][] characteristics;

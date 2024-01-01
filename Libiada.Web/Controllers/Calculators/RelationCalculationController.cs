@@ -33,7 +33,9 @@
         /// <summary>
         /// The db.
         /// </summary>
-        private readonly LibiadaDatabaseEntities db;
+        private readonly LibiadaDatabaseEntities db; 
+
+        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
 
         /// <summary>
         /// The sequence repository.
@@ -50,7 +52,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="RelationCalculationController"/> class.
         /// </summary>
-        public RelationCalculationController(LibiadaDatabaseEntities db, 
+        public RelationCalculationController(ILibiadaDatabaseEntitiesFactory dbFactory, 
                                              IViewDataHelper viewDataHelper, 
                                              ITaskManager taskManager, 
                                              ICommonSequenceRepository commonSequenceRepository,
@@ -58,7 +60,8 @@
                                              Cache cache)
             : base(TaskType.RelationCalculation, taskManager)
         {
-            this.db = db;
+            this.dbFactory = dbFactory;
+            this.db = dbFactory.CreateDbContext();
             this.commonSequenceRepository = commonSequenceRepository;
             this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
             this.cache = cache;

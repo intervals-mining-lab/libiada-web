@@ -30,6 +30,7 @@
         /// The db.
         /// </summary>
         private readonly LibiadaDatabaseEntities db;
+        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
         private readonly IViewDataHelper viewDataHelper;
 
         /// <summary>
@@ -53,7 +54,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SubsequencesSimilarityController"/> class.
         /// </summary>
-        public SubsequencesSimilarityController(LibiadaDatabaseEntities db,
+        public SubsequencesSimilarityController(ILibiadaDatabaseEntitiesFactory dbFactory,
                                                 IViewDataHelper viewDataHelper,
                                                 ITaskManager taskManager,
                                                 IFullCharacteristicRepository characteristicTypeLinkRepository,
@@ -62,7 +63,8 @@
                                                 Cache cache)
             : base(TaskType.SubsequencesSimilarity, taskManager)
         {
-            this.db = db;
+            this.dbFactory = dbFactory;
+            this.db = dbFactory.CreateDbContext();
             this.viewDataHelper = viewDataHelper;
             subsequenceExtractor = new SubsequenceExtractor(db, commonSequenceRepository);
             this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;

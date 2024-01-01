@@ -28,7 +28,7 @@
     [Authorize(Roles = "Admin")]
     public class SubsequencesCalculationController : AbstractResultController
     {
-        private readonly LibiadaDatabaseEntities db;
+        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
         private readonly IViewDataHelper viewDataHelper;
         private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
         private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
@@ -37,7 +37,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SubsequencesCalculationController"/> class.
         /// </summary>
-        public SubsequencesCalculationController(LibiadaDatabaseEntities db,
+        public SubsequencesCalculationController(ILibiadaDatabaseEntitiesFactory dbFactory,
                                                  IViewDataHelper viewDataHelper,
                                                  ITaskManager taskManager,
                                                  IFullCharacteristicRepository characteristicTypeLinkRepository,
@@ -45,7 +45,7 @@
                                                  ICommonSequenceRepository commonSequenceRepository)
             : base(TaskType.SubsequencesCalculation, taskManager)
         {
-            this.db = db;
+            this.dbFactory = dbFactory;
             this.viewDataHelper = viewDataHelper;
             this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
             this.subsequencesCharacteristicsCalculator = subsequencesCharacteristicsCalculator;
@@ -86,7 +86,7 @@
             return CreateTask(() =>
             {
                 var sequencesData = new SequenceData[matterIds.Length];
-
+                using var db = dbFactory.CreateDbContext();
                 long[] parentSequenceIds;
                 var matterNames = new string[matterIds.Length];
                 var remoteIds = new string[matterIds.Length];
