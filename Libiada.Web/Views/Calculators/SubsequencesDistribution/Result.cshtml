@@ -16,22 +16,20 @@
 
     <title>@ViewBag.Title - FOA Research Lab</title>
 
-    <link rel="stylesheet" href="~/lib/twitter-bootstrap/css/bootstrap.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/twitter-bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/ScrollUpDown.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/lib/AlertifyJS/css/alertify.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/lib/AlertifyJS/css/themes/bootstrap.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/AlertifyJS/css/alertify.css" />
+    <link rel="stylesheet" href="~/lib/AlertifyJS/css/themes/bootstrap.css" />
     <link rel="stylesheet" href="~/css/GenesMap.css" asp-append-version="true" />
     
-    <script src="~/lib/jquery/jquery.js" asp-append-version="true"></script>
-    <script src="~/js/Angular/functions.js" asp-append-version="true"></script>
-    <script src="~/lib/angular.js/angular.js" asp-append-version="true"></script>
-    <script src="~/lib/angular-smart-table/smart-table.js" asp-append-version="true"></script>
-    <script src="~/lib/twitter-bootstrap/js/bootstrap.js" asp-append-version="true"></script>
-    <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
-    <script src="~/lib/plotly.js/plotly.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/angular.js/angular.js"></script>
+    <script src="~/js/Angular/functions.js"></script>
+    <script src="~/lib/angular-smart-table/smart-table.js"></script>
+    <script src="~/lib/d3/d3.js"></script>
+    <script src="~/lib/plotly.js/plotly.js"></script>
 
 </head>
 <body class="vh-100 m-0 p-0">
@@ -39,7 +37,7 @@
     {
         <div ng-app="libiada">
             @Html.Partial("_AngularControllerInitializer", "SubsequencesDistributionResult")
-            <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+            <script src="~/js/Angular/Components/loadingWindow.js"></script>
             <div class="genes-map" ng-controller="SubsequencesDistributionResultCtrl">
                 <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
                 <div id="container" class="d-flex" ng-disabled="loading" ng-cloack>

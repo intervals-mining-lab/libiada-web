@@ -85,19 +85,17 @@
                 @Html.ActionLink("Order transformation (high order) characteristics calculation", "Index", "OrderTransformationCalculation")
                 <br />
                 @Html.ActionLink("Custom sequences order transformation (high order) characteristics calculation", "Index", "CustomSequenceOrderTransformationCalculation")
-                <br />
-                @Html.ActionLink("Data visualization", "Index", "Charts")
-
-
             }
         </div>
         <div class="col-md-4">
             <h2>Tasks</h2>
             @Html.ActionLink("Task manager", "Index", "TaskManager")
 
+            <h2>FOA Research</h2>
+            @Html.ActionLink("Data visualization", "Index", "Charts")
+            <br />
             @if (User.IsAdmin())
             {
-                <h2>Research</h2>
                 @Html.ActionLink("Calculate order transformations convergence", "Index", "OrderTransformationConvergence")
                 <br />
                 @Html.ActionLink("Calculate distribution of sequences by order", "Index", "SequencesOrderDistribution")

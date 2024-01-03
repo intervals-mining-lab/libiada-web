@@ -74,7 +74,6 @@
                 var viewData = viewDataHelper.FillSubsequencesViewData(2, int.MaxValue, "Compare");
                 viewData.Add("percentageDifferenseNeeded", true);
                 ViewBag.data = JsonConvert.SerializeObject(viewData);
-                //ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillSubsequencesViewData(2, int.MaxValue, "Compare"));
             return View();
         }
 
@@ -113,7 +112,7 @@
             short characteristicLinkId,
             short[] characteristicLinkIds,
             Feature[] features,
-            string[] maxPercentageDifferences, // массив
+            string[] maxPercentageDifferences,
             string[] filters,
             bool filterMatrix
         )
@@ -121,7 +120,6 @@
             return CreateTask(() =>
             {
                 double[] percentageDifferences = maxPercentageDifferences.Select(item => double.Parse(item, CultureInfo.InvariantCulture) / 100).ToArray();
-                //double percentageDifference = double.Parse(maxPercentageDifference, CultureInfo.InvariantCulture) / 100; // цикл
                 var db = dbFactory.CreateDbContext();
                 var attributeValuesCache = new AttributeValueCacheManager(db);
                 var characteristics = new SubsequenceData[matterIds.Length][];
@@ -556,7 +554,7 @@
             List<(int matterIndex, int subsequenceIndex, double[] additionalCharacteristics)> secondList,
             double[] differences,
             double primaryDifference
-        ) // массив даблов
+        )
         {
             var result = new List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)>();
 

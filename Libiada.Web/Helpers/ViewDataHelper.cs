@@ -25,6 +25,7 @@
         /// The database model.
         /// </summary>
         private readonly LibiadaDatabaseEntities db;
+        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
 
         /// <summary>
         /// The current user.
@@ -41,14 +42,15 @@
         /// <param name="db">
         /// The db.
         /// </param>
-        public ViewDataHelper(LibiadaDatabaseEntities db,
+        public ViewDataHelper(ILibiadaDatabaseEntitiesFactory dbFactory,
                               IPrincipal user,
                               IFullCharacteristicRepository fullCharacteristicRepository,
                               ICongenericCharacteristicRepository congenericCharacteristicRepository,
                               IAccordanceCharacteristicRepository accordanceCharacteristicRepository,
                               IBinaryCharacteristicRepository binaryCharacteristicRepository)
         {
-            this.db = db;
+            this.dbFactory = dbFactory;
+            this.db = dbFactory.CreateDbContext();
             this.user = user;
             this.fullCharacteristicModelRepository = fullCharacteristicRepository;
             this.congenericCharacteristicModelRepository = congenericCharacteristicRepository;
