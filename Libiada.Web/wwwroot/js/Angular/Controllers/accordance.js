@@ -7,5 +7,5 @@
         $scope.nature = $scope.natures[0].Value;
     }
 
-	angular.module("libiada").controller("AccordanceCtrl", ["$scope", "filterFilter", accordance]);
+    angular.module("libiada").controller("AccordanceCtrl", ["$scope", "filterFilter", accordance]);
 }

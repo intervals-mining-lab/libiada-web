@@ -22,6 +22,7 @@
     using Newtonsoft.Json;
     using Microsoft.AspNetCore.Authorization;
     using Libiada.Web.Tasks;
+    using Microsoft.EntityFrameworkCore;
 
 
     /// <summary>
@@ -151,7 +152,7 @@
                                                                           trajectory).Single();
 
                 Chain currentChain = commonSequenceRepository.GetLibiadaChain(sequenceId);
-                var sequence = db.CommonSequences.Single(m => m.Id == sequenceId);
+                var sequence = db.CommonSequences.Include(cs => cs.Matter).Single(m => m.Id == sequenceId);
 
                 var result = new Dictionary<string, object>
                 {
