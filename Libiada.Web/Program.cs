@@ -17,7 +17,8 @@ using System.Data.Common;
 using System.Security.Principal;
 
 var builder = WebApplication.CreateBuilder(args);
-//builder.Configuration.AddEnvironmentVariables(prefix: "Libiada_");
+builder.Configuration.AddEnvironmentVariables(prefix: "Libiada_");
+
 builder.WebHost.UseKestrel(options =>
     {
         options.Limits.MaxRequestBodySize = null;
@@ -47,7 +48,6 @@ builder.Services.AddDefaultIdentity<AspNetUser>(options => options.SignIn.Requir
                 .AddEntityFrameworkStores<LibiadaDatabaseEntities>()
                 .AddDefaultTokenProviders();
 
-//builder.Services.AddScoped(l => new LibiadaDatabaseEntities(new DbContextOptions<LibiadaDatabaseEntities>(), builder.Configuration));
 builder.Services.AddSingleton<ILibiadaDatabaseEntitiesFactory, LibiadaDatabaseEntitiesFactory>();
 
 builder.Services.AddSingleton<INcbiHelper, NcbiHelper>();
