@@ -27,7 +27,8 @@
     </div>
     <div class="row mb-4">
         <div class="col-md-10">
-            <button id="push-notification-button" class="btn btn-sm btn-outline-secondary hidden" onclick="unsubscribeDevice()">Disable push notifications</button>
+            <button id="push-subscribe-button" type="button" class="btn btn-sm btn-outline-secondary" onclick="subscribeDevice()">Enable push notifications for completed tasks</button>
+            <button id="push-unsubscribe-button" type="button" class="btn btn-sm btn-outline-secondary invisible" onclick="unsubscribeDevice()">Disable push notifications</button>
         </div>
     </div>
     <h3>Tasks list</h3>

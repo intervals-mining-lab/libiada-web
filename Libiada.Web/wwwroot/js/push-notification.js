@@ -3,7 +3,8 @@ const WEB_API_URL = "api/TaskManagerWebApi/";
 const SUBSCRIBE_URL = `${WEB_API_URL}Subscribe`;
 const UNSUBSCRIBE_URL = `${WEB_API_URL}Unsubscribe`;
 const APPLICATION_SERVER_KEY_URL = `${WEB_API_URL}GetApplicationServerKey`;
-const PUSH_BUTTON = $("#push-notification-button");
+const PUSH_UNSUBSCRIBE_BUTTON = $("#push-unsubscribe-button");
+const PUSH_SUBSCRIBE_BUTTON = $("#push-subscribe-button");
 
 const urlB64ToUint8Array = base64String => {
     const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
@@ -54,6 +55,9 @@ const subscribeDevice = async () => {
             })
         });
         hasSubscription = true;
+        PUSH_SUBSCRIBE_BUTTON.removeClass('invisible');
+        PUSH_SUBSCRIBE_BUTTON.addClass('invisible');
+        alertify.success("You have been subscribed to push notifications");
         return response;
     }
     catch {
@@ -77,7 +81,8 @@ const unsubscribeDevice = async () => {
             });
             const result = await subscription.unsubscribe();
             hasSubscription = false;
-            PUSH_BUTTON.addClass('hidden');
+            PUSH_UNSUBSCRIBE_BUTTON.addClass('invisible');
+            PUSH_SUBSCRIBE_BUTTON.removeClass('invisible');
             return response;
         }
         catch {
@@ -93,18 +98,8 @@ const initPush = async () => {
     hasSubscription = !(subscription === null);
     
     if (hasSubscription) {
-        PUSH_BUTTON.removeClass('hidden');
-    }
-    else {
-        window.setTimeout(
-            () => alertify.confirm("Push notification subscription", "Would you like to get push notifications about completed tasks?",
-                () => {
-                    subscribeDevice();
-                    hasSubscription = true;
-                    pushButton.removeClass('hidden');
-                    alertify.success("You have been subscribed to push notifications");
-                }, () => { }),
-            5000);
+        PUSH_UNSUBSCRIBE_BUTTON.removeClass('invisible');
+        PUSH_SUBSCRIBE_BUTTON.addClass('invisible');
     }
 }
 
@@ -121,7 +116,7 @@ const main = async () => {
     check();
 
     try {
-        const swRegistration = await navigator.serviceWorker.register("js/sw-push-notification.js");
+        const swRegistration = await navigator.serviceWorker.register("js/sw-push-notification.js"); 
         await initPush();
     }
     catch (exception) {
