@@ -17,7 +17,11 @@ using System.Data.Common;
 using System.Security.Principal;
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Configuration.AddEnvironmentVariables(prefix: "Libiada_");
+string environment = builder.Configuration["ASPNETCORE_ENVIRONMENT"] ?? "Production";
+string connectionString = builder.Configuration.GetConnectionString($"LibiadaDatabaseEntities_{environment}") ?? throw new InvalidOperationException($"Connection string 'LibiadaDatabaseEntities_{environment}' not found.");
+builder.Configuration["ConnectionStrings:LibiadaDatabaseEntities"] = connectionString;
 
 builder.WebHost.UseKestrel(options =>
     {
