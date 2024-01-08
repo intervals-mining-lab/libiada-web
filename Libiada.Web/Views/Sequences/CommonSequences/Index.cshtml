@@ -1,4 +1,5 @@
-﻿@model IEnumerable<CommonSequence>
+﻿@using static Libiada.Web.Controllers.Sequences.CommonSequencesController
+@model IEnumerable<CommonSequence>
 
 @{
     ViewBag.Title = "Sequences list";
@@ -21,10 +22,10 @@
         <th />
     </tr>
 
-    @foreach (var item in Model)
+    @foreach (SequenceViewModel item in ViewBag.Sequences)
     {
         <tr>
-            <td>@Html.DisplayFor(modelItem => item.Matter.Name)</td>
+            <td>@Html.DisplayFor(modelItem => item.MatterName)</td>
             <td>@Html.DisplayFor(modelItem => item.Notation)</td>
             <td>@Html.DisplayFor(modelItem => item.Created)</td>
             <td>@Html.DisplayFor(modelItem => item.Modified)</td>

@@ -7,10 +7,10 @@
     using Microsoft.AspNetCore.Mvc.Rendering;
 
     using Libiada.Database.Tasks;
-    using Libiada.Web.Extensions;
     using Libiada.Web.Helpers;
     using Libiada.Web.Tasks;
     using Libiada.Database.Helpers;
+    using LibiadaCore.Extensions;
 
     /// <summary>
     /// The common sequences controller.
@@ -23,8 +23,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CommonSequencesController"/> class.
         /// </summary>
-        public CommonSequencesController(ILibiadaDatabaseEntitiesFactory dbFactory, 
-                                         IViewDataHelper viewDataHelper, 
+        public CommonSequencesController(ILibiadaDatabaseEntitiesFactory dbFactory,
+                                         IViewDataHelper viewDataHelper,
                                          ITaskManager taskManager,
                                          INcbiHelper ncbiHelper,
                                          Cache cache)
@@ -41,8 +41,23 @@
         /// </returns>
         public async Task<ActionResult> Index()
         {
-            var commonSequence = dbFactory.CreateDbContext().CommonSequences.Include(c => c.Matter);
-            return View(await commonSequence.ToListAsync());
+            using var db = dbFactory.CreateDbContext();
+            var commonSequence = db.CommonSequences.Include(c => c.Matter).Select(cs => new SequenceViewModel()
+            {
+                Id = cs.Id,
+                Created = cs.Created.ToString(),
+                Description = cs.Description ?? "",
+                MatterName = cs.Matter.Name,
+                Modified = cs.Modified.ToString(),
+                Notation = cs.Notation.GetDisplayValue(),
+                RemoteDb = cs.RemoteDb.ToString() ?? "",
+                RemoteId = cs.RemoteId ?? ""
+
+            });
+
+            ViewBag.Sequences = await commonSequence.ToListAsync();
+
+            return View();
 
         }
 
@@ -96,8 +111,8 @@
             }
             var remoteDb = commonSequence.RemoteDb == null ? Array.Empty<RemoteDb>() : new[] { (RemoteDb)commonSequence.RemoteDb };
             ViewBag.MatterId = new SelectList(cache.Matters.ToArray(), "Id", "Name", commonSequence.MatterId);
-            ViewBag.Notation = EnumExtensions.GetSelectList(new[] { commonSequence.Notation });
-            ViewBag.RemoteDb = EnumExtensions.GetSelectList(remoteDb);
+            ViewBag.Notation = Extensions.EnumExtensions.GetSelectList(new[] { commonSequence.Notation });
+            ViewBag.RemoteDb = Extensions.EnumExtensions.GetSelectList(remoteDb);
             return View(commonSequence);
         }
 
@@ -126,8 +141,8 @@
             var remoteDb = commonSequence.RemoteDb == null ? Array.Empty<RemoteDb>() : new[] { (RemoteDb)commonSequence.RemoteDb };
 
             ViewBag.MatterId = new SelectList(cache.Matters.ToArray(), "Id", "Name", commonSequence.MatterId);
-            ViewBag.Notation = EnumExtensions.GetSelectList(new[] { commonSequence.Notation });
-            ViewBag.RemoteDb = EnumExtensions.GetSelectList(remoteDb);
+            ViewBag.Notation = Extensions.EnumExtensions.GetSelectList(new[] { commonSequence.Notation });
+            ViewBag.RemoteDb = Extensions.EnumExtensions.GetSelectList(remoteDb);
             return View(commonSequence);
         }
 
@@ -174,6 +189,18 @@
             db.CommonSequences.Remove(commonSequence);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
+        }
+
+        internal readonly struct SequenceViewModel()
+        {
+            public readonly long Id { get; init; }
+            public readonly string MatterName { get; init; }
+            public readonly string Notation { get; init; }
+            public readonly string RemoteDb { get; init; }
+            public readonly string RemoteId { get; init; }
+            public readonly string Description { get; init; }
+            public readonly string Created { get; init; }
+            public readonly string Modified { get; init; }
         }
     }
 }

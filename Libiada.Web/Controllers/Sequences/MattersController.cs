@@ -14,9 +14,7 @@
     using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
     using Libiada.Web.Helpers;
     using Libiada.Web.Tasks;
-    using Libiada.Database.Extensions;
     using Libiada.Database.Helpers;
-    using Bio.Algorithms.Assembly.Graph;
 
     /// <summary>
     /// The matters controller.
@@ -73,8 +71,8 @@
             {
                 return BadRequest();
             }
-            var db = dbFactory.CreateDbContext();
-            Matter matter = db.Matters.Include(m => m.Multisequence).SingleOrDefault(m => m.Id == id);
+            using var db = dbFactory.CreateDbContext();
+            Matter? matter = db.Matters.Include(m => m.Multisequence).SingleOrDefault(m => m.Id == id);
             if (matter == null)
             {
                 return NotFound();
@@ -102,14 +100,14 @@
                 return BadRequest();
             }
             var db = dbFactory.CreateDbContext();
-            Matter matter = db.Matters.Include(m => m.Multisequence).SingleOrDefault(m => m.Id == id);
+            Matter? matter = db.Matters.Include(m => m.Multisequence).SingleOrDefault(m => m.Id == id);
             if (matter == null)
             {
                 return NotFound();
             }
             var data = new Dictionary<string, object>
                 {
-                    { "natures", Libiada.Web.Extensions.EnumExtensions.GetSelectList(new[] { matter.Nature }) },
+                    { "natures", Extensions.EnumExtensions.GetSelectList(new[] { matter.Nature }) },
                     { "groups", EnumExtensions.ToArray<Group>().ToSelectListWithNature() },
                     { "sequenceTypes", EnumExtensions.ToArray<SequenceType>().ToSelectListWithNature() },
                     { "sequencesCount", db.CommonSequences.Count(c => c.MatterId == matter.Id) },
@@ -144,7 +142,7 @@
         // [Bind(Include = "Id,Name,Nature,Description,Group,SequenceType,MultisequenceId,MultisequenceNumber,CollectionCountry,CollectionDate")] 
         Matter matter)
         {
-            var db = dbFactory.CreateDbContext();
+            using var db = dbFactory.CreateDbContext();
             if (ModelState.IsValid)
             {
                 db.Entry(matter).State = EntityState.Modified;
@@ -155,7 +153,7 @@
 
             var data = new Dictionary<string, object>
                 {
-                    { "natures", Libiada.Web.Extensions.EnumExtensions.GetSelectList(new[] { matter.Nature }) },
+                    { "natures", Extensions.EnumExtensions.GetSelectList(new[] { matter.Nature }) },
                     { "groups", EnumExtensions.ToArray<Group>().ToSelectListWithNature() },
                     { "sequenceTypes", EnumExtensions.ToArray<SequenceType>().ToSelectListWithNature() },
                     { "sequencesCount", db.CommonSequences.Count(c => c.MatterId == matter.Id) },
@@ -186,8 +184,8 @@
             {
                 return BadRequest();
             }
-            var db = dbFactory.CreateDbContext();
-            Matter matter = await db.Matters.FindAsync(id);
+            using var db = dbFactory.CreateDbContext();
+            Matter? matter = await db.Matters.FindAsync(id);
             if (matter == null)
             {
                 return NotFound();
