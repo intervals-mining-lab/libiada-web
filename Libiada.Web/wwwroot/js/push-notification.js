@@ -33,7 +33,7 @@ const arrayBufferToBase64 = (buffer) => {
 const subscribeDevice = async () => {
     const swRegistration = await navigator.serviceWorker.ready;
     const responseKey = await fetch(APPLICATION_SERVER_KEY_URL);
-    const body = JSON.parse(await responseKey.json());
+    const body = await responseKey.json();
     const applicationServerKey = body.applicationServerKey;
     
     let options = {
@@ -55,7 +55,7 @@ const subscribeDevice = async () => {
             })
         });
         hasSubscription = true;
-        PUSH_SUBSCRIBE_BUTTON.removeClass('invisible');
+        PUSH_UNSUBSCRIBE_BUTTON.removeClass('invisible');
         PUSH_SUBSCRIBE_BUTTON.addClass('invisible');
         alertify.success("You have been subscribed to push notifications");
         return response;
@@ -100,6 +100,9 @@ const initPush = async () => {
     if (hasSubscription) {
         PUSH_UNSUBSCRIBE_BUTTON.removeClass('invisible');
         PUSH_SUBSCRIBE_BUTTON.addClass('invisible');
+    } else{
+        PUSH_UNSUBSCRIBE_BUTTON.addClass('invisible');
+        PUSH_SUBSCRIBE_BUTTON.removeClass('invisible');
     }
 }
 
@@ -116,7 +119,7 @@ const main = async () => {
     check();
 
     try {
-        const swRegistration = await navigator.serviceWorker.register("js/sw-push-notification.js"); 
+        const swRegistration = await navigator.serviceWorker.register("sw-push-notification.js"); 
         await initPush();
     }
     catch (exception) {

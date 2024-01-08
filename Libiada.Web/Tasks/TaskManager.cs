@@ -37,13 +37,15 @@
         /// The signalr hub.
         /// </summary>
         private readonly IHubContext<TaskManagerHub> signalrHubContext;
+        private readonly IPushNotificationHelper pushNotificationHelper;
 
-        public TaskManager(ILibiadaDatabaseEntitiesFactory dbFactory, IHubContext<TaskManagerHub> signalrHubContext, IHttpContextAccessor httpContextAccessor)
+        public TaskManager(ILibiadaDatabaseEntitiesFactory dbFactory, IHubContext<TaskManagerHub> signalrHubContext, IPushNotificationHelper pushNotificationHelper, IHttpContextAccessor httpContextAccessor)
         {
 
             db = dbFactory.CreateDbContext();
             this.httpContextAccessor = httpContextAccessor;
             this.signalrHubContext = signalrHubContext;
+            this.pushNotificationHelper = pushNotificationHelper;
             RemoveGarbageFromDb();
             CalculationTask[] databaseTasks = db.CalculationTasks.OrderBy(t => t.Created).Include(t => t.AspNetUser).ToArray();
             lock (tasks)
@@ -324,7 +326,7 @@
                                         { "icon", "/Content/DNA.png" },
                                         { "tag", $"/{ task.TaskData.TaskType }/Result/{ task.TaskData.Id }" }
                                     };
-                                    PushNotificationHelper.Send(db, task.TaskData.UserId, data);
+                                    pushNotificationHelper.Send(task.TaskData.UserId, data);
                                 }
                             });
 

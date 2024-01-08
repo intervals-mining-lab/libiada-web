@@ -1,18 +1,26 @@
 ﻿namespace Libiada.Web.Helpers
 {
     using Newtonsoft.Json;
-
-    using System.Configuration;
     using System.Diagnostics;
 
     using WebPush;
 
-    public static class PushNotificationHelper
+    public class PushNotificationHelper : IPushNotificationHelper
     {
         /// <summary>
         /// The subject.
         /// </summary>
-        const string subject = @"http://foarlab.org/";
+        const string subject = @"https://foarlab.org/";
+        private readonly LibiadaDatabaseEntities db;
+        private readonly string privateKey;
+        private readonly string publicKey;
+
+        public PushNotificationHelper(ILibiadaDatabaseEntitiesFactory dbFactory, IConfiguration configuration)
+        {
+            this.db = dbFactory.CreateDbContext();
+            publicKey = configuration["PublicVapidKey"] ?? throw new Exception($"PublicVapidKey is not found in confiuguration.");
+            privateKey = configuration["PrivateVapidKey"] ?? throw new Exception($"PrivateVapidKey is not found in confiuguration.");
+        }
 
         /// <summary>
         /// Send push notification to subscribers.
@@ -23,7 +31,7 @@
         /// <param name="data">
         /// Data dictionary containing push notification elements.
         /// </param>
-        public static void Send(LibiadaDatabaseEntities db, int userId, Dictionary<string, string> data)
+        public void Send(int userId, Dictionary<string, string> data)
         {
             var subscribers = db.AspNetPushNotificationSubscribers.Where(s => s.UserId == userId);
 
@@ -37,20 +45,20 @@
                     var payload = JsonConvert.SerializeObject(data);
 
                     var subscription = new PushSubscription(endpoint, p256dh, auth);
-                    var options = new Dictionary<string, object>();
-                    options["TTL"] = 3600;
+                    var options = new Dictionary<string, object>()
+                    {
+                        {"TTL", 3600 },
+                        {"vapidDetails", new VapidDetails(subject, publicKey, privateKey) }
+                    };
 
-                    var publicKey = ConfigurationManager.AppSettings["PublicVapidKey"];
-                    var privateKey = ConfigurationManager.AppSettings["PrivateVapidKey"];
-                    options["vapidDetails"] = new VapidDetails(subject, publicKey, privateKey);
-                    var webPushClient = new WebPushClient();
                     try
                     {
+                        using var webPushClient = new WebPushClient();
                         webPushClient.SendNotification(subscription, payload, options);
                     }
                     catch (WebPushException exception)
                     {
-                        Debug.WriteLine("Http STATUS code: {0}", exception.StatusCode);
+                        Debug.WriteLine($"Failed to send push notification. Http STATUS code: {exception.StatusCode}. {exception.Message}");
                     }
                 }
             }

@@ -20,7 +20,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables(prefix: "Libiada_");
 string environment = builder.Configuration["ASPNETCORE_ENVIRONMENT"] ?? "Production";
-string connectionString = builder.Configuration.GetConnectionString($"LibiadaDatabaseEntities_{environment}") ?? throw new InvalidOperationException($"Connection string 'LibiadaDatabaseEntities_{environment}' not found.");
+string connectionString = builder.Configuration.GetConnectionString($"LibiadaDatabaseEntities_{environment}") ?? throw new Exception($"Connection string 'LibiadaDatabaseEntities_{environment}' is not found.");
 builder.Configuration["ConnectionStrings:LibiadaDatabaseEntities"] = connectionString;
 
 builder.WebHost.UseKestrel(options =>
@@ -72,6 +72,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IPrincipal>(provider => provider.GetService<IHttpContextAccessor>().HttpContext.User);
 
 builder.Services.AddTransient<IViewDataHelper, ViewDataHelper>();
+builder.Services.AddSingleton<IPushNotificationHelper, PushNotificationHelper>();
 builder.Services.AddSingleton<ITaskManager, TaskManager>();
 
 builder.Services.Configure<RazorViewEngineOptions>(options =>

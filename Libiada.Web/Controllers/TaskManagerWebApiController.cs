@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Configuration;
     using System.Linq;
 
     using Libiada.Web.Helpers;
@@ -20,11 +19,13 @@
     public class TaskManagerWebApiController : ControllerBase
     {
         private readonly LibiadaDatabaseEntities db;
+        private readonly IConfiguration configuration;
         private readonly ITaskManager taskManager;
 
-        public TaskManagerWebApiController(LibiadaDatabaseEntities db, ITaskManager taskManager)
+        public TaskManagerWebApiController(LibiadaDatabaseEntities db, IConfiguration configuration, ITaskManager taskManager)
         {
             this.db = db;
+            this.configuration = configuration;
             this.taskManager = taskManager;
         }
 
@@ -140,8 +141,7 @@
         {
             string endpoint = subscriberData.Endpoint;
             int userId = User.GetUserId();
-            AspNetPushNotificationSubscriber subscriber = db.AspNetPushNotificationSubscribers.Single(s => s.Endpoint == endpoint
-                                                                                                        && s.UserId == userId);
+            AspNetPushNotificationSubscriber subscriber = db.AspNetPushNotificationSubscribers.Single(s => s.Endpoint == endpoint && s.UserId == userId);
             db.AspNetPushNotificationSubscribers.Remove(subscriber);
             db.SaveChanges();
         }
@@ -151,7 +151,7 @@
         {
             try
             {
-                var response = new { applicationServerKey = ConfigurationManager.AppSettings["PublicVapidKey"] };
+                var response = new { applicationServerKey = configuration["PublicVapidKey"] ?? throw new Exception($"PublicVapidKey is not found in confiuguration.") };
                 return JsonConvert.SerializeObject(response);
             }
             catch (Exception ex)
