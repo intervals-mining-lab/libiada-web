@@ -4,8 +4,6 @@
     function fmotifsDictionary($scope) {
         MapModelFromJson($scope, data);
 
-        console.log($scope);
-
         // initializes MIDI player
         $scope.onload = function () {
             MIDI.loadPlugin({

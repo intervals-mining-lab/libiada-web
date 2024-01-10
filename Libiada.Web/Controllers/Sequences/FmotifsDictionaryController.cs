@@ -93,7 +93,7 @@
                 foreach (var position in fmotifBuilding)
                 {
                     var dbNoteId = fmotifAlphabet[position - 1];
-                    var dbNote = db.Notes.Single(n => n.Id == dbNoteId);
+                    var dbNote = db.Notes.Include(n => n.Pitches).Single(n => n.Id == dbNoteId);
                     var newPitches = new List<Pitch>();
                     foreach (var pitch in dbNote.Pitches)
                     {
