@@ -7,11 +7,11 @@
             $scope.legend = [];
             if ($scope.clustersCount) {
                 for (let j = 0; j < $scope.clustersCount; j++) {
-                    $scope.legend.push({ id: j, name: j + 1, visible: true });
+                    $scope.legend.push({ id: j + 1, name: j + 1, visible: true });
                 }
             } else {
                 for (let k = 0; k < $scope.characteristics.length; k++) {
-                    $scope.legend.push({ id: k, name: $scope.characteristics[k].MatterName, visible: true });
+                    $scope.legend.push({ id: k + 1, name: $scope.characteristics[k].MatterName, visible: true });
                 }
             }
         }
@@ -25,7 +25,7 @@
             for (let i = 0; i < $scope.characteristics.length; i++) {
                 let characteristic = $scope.characteristics[i];
                 $scope.points.push({
-                    id: i,
+                    id: i + 1,
                     name: characteristic.MatterName,
                     x: characteristic.Characteristics[first],
                     y: characteristic.Characteristics[second],
@@ -210,8 +210,8 @@
                 .attr("cx", $scope.xMap)
                 .attr("cy", $scope.yMap)
                 .style("fill-opacity", 0.6)
-                .style("fill", d => color(d.id))
-                .style("stroke", d => color(d.id))
+                .style("fill", d => color($scope.clustersCount ? d.cluster : d.id))
+                .style("stroke", d => color($scope.clustersCount ? d.cluster : d.id))
                 .on("click", (event, d) => $scope.showTooltip(event, d, tooltip, svg));
 
             if ($scope.legendSettings.show) {
@@ -250,7 +250,7 @@
                     .attr("y", 9)
                     .attr("dy", ".35em")
                     .attr("transform", "translate(0, -" + $scope.legendHeight + ")")
-                    .text(d => ($scope.clustersCount ? "Cluster " : "") + d.name)
+                    .text(d => $scope.clustersCount ? `Cluster ${d.name}` :  d.name)
                     .style("font-size", "9pt");
             }
         }
