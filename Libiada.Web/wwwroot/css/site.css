@@ -9,6 +9,12 @@ body {
     margin-bottom: var(--footer-height);
 }
 
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select {
+    max-width: 280px;
+}
+
 table {
     font-family: monospace;
     /*    font-size: 16px;
