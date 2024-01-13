@@ -123,8 +123,8 @@ const main = async () => {
         await initPush();
     }
     catch (exception) {
-        console.log("Service Worker Error");
-        console.log(exception);
+        console.error("Service Worker Error");
+        console.error(exception.toString());
     }
 };
 main();

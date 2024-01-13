@@ -15,6 +15,10 @@ select {
     max-width: 280px;
 }
 
+.body-content {
+    margin-left: 0px;
+}
+
 table {
     font-family: monospace;
     /*    font-size: 16px;
