@@ -11,7 +11,6 @@
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.SignalR;
-    using Newtonsoft.Json;
 
     using SystemTask = System.Threading.Tasks.Task;
     using Libiada.Web.Extensions;
@@ -73,7 +72,7 @@
         /// <returns>
         /// The JSON of all tasks as <see cref="string"/>.
         /// </returns>
-        public string GetAllTasks()
+        public object[] GetAllTasks()
         {
             int userId = Context.User.GetUserId();
             bool isAdmin = Context.User.IsAdmin();
@@ -95,7 +94,7 @@
                     task.UserName
                 });
 
-            return JsonConvert.SerializeObject(tasks.ToArray());
+            return tasks.ToArray();
         }
 
         public override async SystemTask OnConnectedAsync()

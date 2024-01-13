@@ -85,7 +85,7 @@
             TaskAwaiter taskAwaiter;
             lock (tasks)
             {
-                task = new Task(databaseTask.Id, action, databaseTask.AspNetUser, taskType);
+                task = new Task(databaseTask.Id, action, new AspNetUser { Id = user.GetUserId(), UserName = user.Identity?.Name }, taskType);
                 lock (task)
                 {
                     tasks.Add(task);

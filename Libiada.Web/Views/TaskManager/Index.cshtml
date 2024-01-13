@@ -75,7 +75,7 @@
                 </td>
                 <td>
                     <a ng-if="task.TaskState == 'Completed' || task.TaskState == 'Error'"
-                       ng-href="{{::window.location.origin + '/' + task.TaskType + '/Result/' + task.Id}}"
+                       ng-href="{{::task.resultLink}}"
                        target="_blank"
                        rel="noopener">
                         View result
@@ -83,24 +83,24 @@
                 </td>
                 <td>
                     <input type="hidden" name="id" ng-value="::task.Id" />
-                    <button class="btn btn-secondary" ng-click="deleteTask(task.Id)">Delete task</button>
+                    <button class="btn btn-secondary" ng-disabled="task.Deleting" ng-click="deleteTask(task.Id)">Delete task</button>
                 </td>
             </tr>
         </tbody>
     </table>
 
     <div class="row mb-3">
-        <div class="col-3" ng-hide="tasks.length == 0">
-            <button class="btn btn-danger" ng-cloak ng-click="deleteAllTasks()">Delete all tasks</button>
+        <div class="col-3" ng-hide="tasks.length < 2">
+            <button class="btn btn-danger" onclick="this.disabled=true" ng-cloak ng-click="deleteAllTasks()">Delete all tasks</button>
         </div>
         <div class="col-3" ng-hide="getTaskCountWithStatus('InProgress') == 0">
-            <button class="btn btn-danger" ng-cloak ng-click="deleteTasksWithStatus('InProgress')">Delete running tasks</button>
+            <button class="btn btn-danger" onclick="this.disabled=true" ng-cloak ng-click="deleteTasksWithStatus('InProgress')">Delete running tasks</button>
         </div>
         <div class="col-3" ng-hide="getTaskCountWithStatus('Error') == 0">
-            <button class="btn btn-danger" ng-cloak ng-click="deleteTasksWithStatus('Error')">Delete failed tasks</button>
+            <button class="btn btn-danger" onclick="this.disabled=true" ng-cloak ng-click="deleteTasksWithStatus('Error')">Delete failed tasks</button>
         </div>
         <div class="col-3" ng-hide="getTaskCountWithStatus('InQueue') == 0">
-            <button class="btn btn-danger" ng-cloak ng-click="deleteTasksWithStatus('InQueue')">Delete tasks in queue</button>
+            <button class="btn btn-danger" onclick="this.disabled=true" ng-cloak ng-click="deleteTasksWithStatus('InQueue')">Delete tasks in queue</button>
         </div>
     </div>
 </div>
