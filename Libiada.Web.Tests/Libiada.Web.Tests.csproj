@@ -21,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\libiada-core\LibiadaCore\LibiadaCore.csproj" />
     <ProjectReference Include="..\Libiada.Web\Libiada.Web.csproj" />
   </ItemGroup>
 

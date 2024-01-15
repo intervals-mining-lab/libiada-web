@@ -29,10 +29,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\libiada-core\Clusterizator\Clusterizator.csproj" />
-    <ProjectReference Include="..\..\libiada-core\LibiadaCore\LibiadaCore.csproj" />
-    <ProjectReference Include="..\..\libiada-core\Segmenter\Segmenter.csproj" />
-    <ProjectReference Include="..\..\libiada-core\SequenceGenerator\SequenceGenerator.csproj" />
+    <ProjectReference Include="..\..\libiada-core\Libiada.Clusterizator\Libiada.Clusterizator.csproj" />
+    <ProjectReference Include="..\..\libiada-core\Libiada.Core\Libiada.Core.csproj" />
+    <ProjectReference Include="..\..\libiada-core\Libiada.Segmenter\Libiada.Segmenter.csproj" />
+    <ProjectReference Include="..\..\libiada-core\Libiada.SequenceGenerator\Libiada.SequenceGenerator.csproj" />
     <ProjectReference Include="..\..\libiada-database\Libiada.Database\Libiada.Database.csproj" />
   </ItemGroup>
 
