@@ -1,123 +1,122 @@
-﻿namespace Libiada.Web.Controllers.Sequences
+﻿namespace Libiada.Web.Controllers.Sequences;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+using Libiada.Database.Models.CalculatorsData;
+using Libiada.Database.Models.Repositories.Sequences;
+using Libiada.Database.Tasks;
+
+using Newtonsoft.Json;
+
+using Libiada.Core.Extensions;
+using Libiada.Web.Helpers;
+using Libiada.Web.Tasks;
+
+[Authorize(Roles = "Admin")]
+public class BatchMusicImportController : AbstractResultController
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
+    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly Cache cache;
 
-    using Libiada.Database.Models.CalculatorsData;
-    using Libiada.Database.Models.Repositories.Sequences;
-    using Libiada.Database.Tasks;
-
-    using Newtonsoft.Json;
-
-    using LibiadaCore.Extensions;
-    using Libiada.Web.Helpers;
-    using Libiada.Web.Tasks;
-
-    [Authorize(Roles = "Admin")]
-    public class BatchMusicImportController : AbstractResultController
+    /// <summary>
+    /// The batch music import controller.
+    /// </summary>
+    public BatchMusicImportController(ILibiadaDatabaseEntitiesFactory dbFactory, ITaskManager taskManager, Cache cache) 
+        : base(TaskType.BatchMusicImport, taskManager)
     {
-        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
-        private readonly Cache cache;
+        this.dbFactory = dbFactory;
+        this.cache = cache;
+    }
 
-        /// <summary>
-        /// The batch music import controller.
-        /// </summary>
-        public BatchMusicImportController(ILibiadaDatabaseEntitiesFactory dbFactory, ITaskManager taskManager, Cache cache) 
-            : base(TaskType.BatchMusicImport, taskManager)
-        {
-            this.dbFactory = dbFactory;
-            this.cache = cache;
-        }
+    // GET: BatchMusicImport
+    public ActionResult Index()
+    {
+        return View();
+    }
 
-        // GET: BatchMusicImport
-        public ActionResult Index()
+    /// <summary>
+    /// Imports sequences from uploaded MusicXML files.
+    /// </summary>
+    /// <param name="files">
+    /// Uploaded MusicXML files.</param>
+    /// <returns></returns>
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public ActionResult Index(IFormFileCollection files)
+    {
+        return CreateTask(() =>
         {
-            return View();
-        }
+            var importResults = new List<MatterImportResult>();
 
-        /// <summary>
-        /// Imports sequences from uploaded MusicXML files.
-        /// </summary>
-        /// <param name="files">
-        /// Uploaded MusicXML files.</param>
-        /// <returns></returns>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Index(IFormFileCollection files)
-        {
-            return CreateTask(() =>
+            Matter[] matters = cache.Matters.Where(m => m.Nature == Nature.Music).ToArray();
+
+            for (int i = 0; i < files.Count; i++)
             {
-                var importResults = new List<MatterImportResult>();
+                string sequenceName = files[i].FileName.Substring(0, files[i].FileName.LastIndexOf('.'));
 
-                Matter[] matters = cache.Matters.Where(m => m.Nature == Nature.Music).ToArray();
-
-                for (int i = 0; i < files.Count; i++)
+                var importResult = new MatterImportResult()
                 {
-                    string sequenceName = files[i].FileName.Substring(0, files[i].FileName.LastIndexOf('.'));
+                    MatterName = sequenceName
+                };
 
-                    var importResult = new MatterImportResult()
+                try
+                {
+                    var sequence = new CommonSequence();
+
+                    if (matters.Any(m => m.Name == sequenceName))
                     {
-                        MatterName = sequenceName
-                    };
-
-                    try
-                    {
-                        var sequence = new CommonSequence();
-
-                        if (matters.Any(m => m.Name == sequenceName))
-                        {
-                            var matter = matters.Single(m => m.Name == sequenceName);
-                            sequence.MatterId = matter.Id;
-                            importResult.MatterName = matter.Name;
-                            importResult.SequenceType = matter.SequenceType.GetDisplayValue();
-                            importResult.Group = matter.Group.GetDisplayValue();
-                            importResult.Result = "Successfully imported music for existing matter";
-                        }
-                        else
-                        {
-                            sequence.Matter = new Matter
-                            {
-                                Name = sequenceName,
-                                Group = Group.ClassicalMusic,
-                                Nature = Nature.Music,
-                                SequenceType = SequenceType.CompleteMusicalComposition
-                            };
-
-                            importResult.MatterName = sequence.Matter.Name;
-                            importResult.SequenceType = sequence.Matter.SequenceType.GetDisplayValue();
-                            importResult.Group = sequence.Matter.Group.GetDisplayValue();
-                            importResult.Result = "Successfully imported music and created matter";
-                        }
-
-                        var repository = new MusicSequenceRepository(dbFactory, cache);
-
-                        repository.Create(sequence, FileHelper.GetFileStream(files[i]));
-                        importResult.Status = "Success";
-                        importResults.Add(importResult);
+                        var matter = matters.Single(m => m.Name == sequenceName);
+                        sequence.MatterId = matter.Id;
+                        importResult.MatterName = matter.Name;
+                        importResult.SequenceType = matter.SequenceType.GetDisplayValue();
+                        importResult.Group = matter.Group.GetDisplayValue();
+                        importResult.Result = "Successfully imported music for existing matter";
                     }
-                    catch (Exception exception)
+                    else
                     {
-                        importResult.Result = $"Failed to import music: {exception.Message}";
-                        while (exception.InnerException != null)
+                        sequence.Matter = new Matter
                         {
-                            importResult.Result += $" {exception.InnerException.Message}";
+                            Name = sequenceName,
+                            Group = Group.ClassicalMusic,
+                            Nature = Nature.Music,
+                            SequenceType = SequenceType.CompleteMusicalComposition
+                        };
 
-                            exception = exception.InnerException;
-                        }
-
-                        importResult.Status = "Error";
-                        importResults.Add(importResult);
+                        importResult.MatterName = sequence.Matter.Name;
+                        importResult.SequenceType = sequence.Matter.SequenceType.GetDisplayValue();
+                        importResult.Group = sequence.Matter.Group.GetDisplayValue();
+                        importResult.Result = "Successfully imported music and created matter";
                     }
+
+                    var repository = new MusicSequenceRepository(dbFactory, cache);
+
+                    repository.Create(sequence, FileHelper.GetFileStream(files[i]));
+                    importResult.Status = "Success";
+                    importResults.Add(importResult);
                 }
+                catch (Exception exception)
+                {
+                    importResult.Result = $"Failed to import music: {exception.Message}";
+                    while (exception.InnerException != null)
+                    {
+                        importResult.Result += $" {exception.InnerException.Message}";
 
-                var result = new Dictionary<string, object> { { "result", importResults } };
+                        exception = exception.InnerException;
+                    }
 
-                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
+                    importResult.Status = "Error";
+                    importResults.Add(importResult);
+                }
+            }
 
-            });
-        }
+            var result = new Dictionary<string, object> { { "result", importResults } };
+
+            return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
+
+        });
     }
 }

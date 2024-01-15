@@ -1,227 +1,226 @@
-﻿namespace Libiada.Web.Controllers.Calculators
+﻿namespace Libiada.Web.Controllers.Calculators;
+
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+
+using Clusterizator;
+
+using Libiada.Core.Music;
+using Libiada.Web.Extensions;
+using Libiada.Web.Helpers;
+using Libiada.Database.Tasks;
+
+using Newtonsoft.Json;
+
+using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
+using Microsoft.AspNetCore.Authorization;
+using Libiada.Database;
+using Libiada.Database.Models.Repositories.Catalogs;
+using Libiada.Database.Models.Repositories.Sequences;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Libiada.Database.Models.Calculators;
+using Libiada.Web.Tasks;
+
+/// <summary>
+/// The clusterization controller.
+/// </summary>
+[Authorize(Roles = "Admin")]
+public class ClusterizationController : AbstractResultController
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using Microsoft.AspNetCore.Mvc;
-
-    using Clusterizator;
-
-    using LibiadaCore.Music;
-    using Libiada.Web.Extensions;
-    using Libiada.Web.Helpers;
-    using Libiada.Database.Tasks;
-
-    using Newtonsoft.Json;
-
-    using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
-    using Microsoft.AspNetCore.Authorization;
-    using Libiada.Database;
-    using Libiada.Database.Models.Repositories.Catalogs;
-    using Libiada.Database.Models.Repositories.Sequences;
-    using Microsoft.AspNetCore.Mvc.Rendering;
-    using Libiada.Database.Models.Calculators;
-    using Libiada.Web.Tasks;
+    /// <summary>
+    /// The db.
+    /// </summary>
+    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IViewDataHelper viewDataHelper;
 
     /// <summary>
-    /// The clusterization controller.
+    /// The sequence repository.
     /// </summary>
-    [Authorize(Roles = "Admin")]
-    public class ClusterizationController : AbstractResultController
+    private readonly ICommonSequenceRepository commonSequenceRepository;
+    private readonly Cache cache;
+
+    /// <summary>
+    /// The characteristic type repository.
+    /// </summary>
+    private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
+    private readonly ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ClusterizationController"/> class.
+    /// </summary>
+    public ClusterizationController(ILibiadaDatabaseEntitiesFactory dbFactory, 
+                                    IViewDataHelper viewDataHelper, 
+                                    ITaskManager taskManager, 
+                                    IFullCharacteristicRepository characteristicTypeLinkRepository,
+                                    ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator,
+                                    ICommonSequenceRepository commonSequenceRepository,
+                                    Cache cache) 
+        : base(TaskType.Clusterization, taskManager)
     {
-        /// <summary>
-        /// The db.
-        /// </summary>
-        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
-        private readonly IViewDataHelper viewDataHelper;
+        this.dbFactory = dbFactory;
+        this.viewDataHelper = viewDataHelper;
+        this.commonSequenceRepository = commonSequenceRepository;
+        this.cache = cache;
+        this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
+        this.sequencesCharacteristicsCalculator = sequencesCharacteristicsCalculator;
+    }
 
-        /// <summary>
-        /// The sequence repository.
-        /// </summary>
-        private readonly ICommonSequenceRepository commonSequenceRepository;
-        private readonly Cache cache;
+    /// <summary>
+    /// The index.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="ActionResult"/>.
+    /// </returns>
+    public ActionResult Index()
+    {
+        Dictionary<string, object> viewData = viewDataHelper.FillViewData(CharacteristicCategory.Full, 3, int.MaxValue, "Calculate");
+        viewData.Add("ClusterizatorsTypes", EnumExtensions.ToArray<ClusterizationType>().ToSelectList());
+        ViewBag.data = JsonConvert.SerializeObject(viewData);
+        return View();
+    }
 
-        /// <summary>
-        /// The characteristic type repository.
-        /// </summary>
-        private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
-        private readonly ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ClusterizationController"/> class.
-        /// </summary>
-        public ClusterizationController(ILibiadaDatabaseEntitiesFactory dbFactory, 
-                                        IViewDataHelper viewDataHelper, 
-                                        ITaskManager taskManager, 
-                                        IFullCharacteristicRepository characteristicTypeLinkRepository,
-                                        ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator,
-                                        ICommonSequenceRepository commonSequenceRepository,
-                                        Cache cache) 
-            : base(TaskType.Clusterization, taskManager)
+    /// <summary>
+    /// The index.
+    /// </summary>
+    /// <param name="matterIds">
+    /// The matter ids.
+    /// </param>
+    /// <param name="characteristicLinkIds">
+    /// The characteristic type and link ids.
+    /// </param>
+    /// <param name="notations">
+    /// The notation ids.
+    /// </param>
+    /// <param name="languages">
+    /// The language ids.
+    /// </param>
+    /// <param name="translators">
+    /// The translators ids.
+    /// </param>
+    /// <param name="pauseTreatments">
+    /// Pause treatment parameters of music sequences.
+    /// </param>
+    /// <param name="sequentialTransfers">
+    /// Sequential transfer flag used in music sequences.
+    /// </param>
+    /// <param name="trajectories">
+    /// Reading trajectories for images.
+    /// </param>
+    /// <param name="clustersCount">
+    /// The clusters count.
+    /// Minimum clusters count for methods
+    /// that use range of clusters.
+    /// </param>
+    /// <param name="clusterizationType">
+    /// Clusterization method.
+    /// </param>
+    /// <param name="equipotencyWeight">
+    /// The power weight.
+    /// </param>
+    /// <param name="normalizedDistanceWeight">
+    /// The normalized distance weight.
+    /// </param>
+    /// <param name="distanceWeight">
+    /// The distance weight.
+    /// </param>
+    /// <param name="bandwidth">
+    /// The bandwidth.
+    /// </param>
+    /// <param name="maximumClusters">
+    /// The maximum clusters count
+    /// for methods that use range of possible custers.
+    /// </param>
+    /// <returns>
+    /// The <see cref="ActionResult"/>.
+    /// </returns>
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public ActionResult Index(
+        long[] matterIds,
+        short[] characteristicLinkIds,
+        Notation[] notations,
+        Language[] languages,
+        Translator[] translators,
+        PauseTreatment[] pauseTreatments,
+        bool[] sequentialTransfers,
+        ImageOrderExtractor[] trajectories,
+        int clustersCount,
+        ClusterizationType clusterizationType,
+        double equipotencyWeight = 1,
+        double normalizedDistanceWeight = 1,
+        double distanceWeight = 1,
+        double bandwidth = 0,
+        int maximumClusters = 2)
+    {
+        return CreateTask(() =>
         {
-            this.dbFactory = dbFactory;
-            this.viewDataHelper = viewDataHelper;
-            this.commonSequenceRepository = commonSequenceRepository;
-            this.cache = cache;
-            this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
-            this.sequencesCharacteristicsCalculator = sequencesCharacteristicsCalculator;
-        }
+            Dictionary<long, string> mattersNames;
+            Dictionary<long, string> matters = cache.Matters
+                                                    .Where(m => matterIds.Contains(m.Id))
+                                                    .ToDictionary(m => m.Id, m => m.Name);
 
-        /// <summary>
-        /// The index.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
-        public ActionResult Index()
-        {
-            Dictionary<string, object> viewData = viewDataHelper.FillViewData(CharacteristicCategory.Full, 3, int.MaxValue, "Calculate");
-            viewData.Add("ClusterizatorsTypes", EnumExtensions.ToArray<ClusterizationType>().ToSelectList());
-            ViewBag.data = JsonConvert.SerializeObject(viewData);
-            return View();
-        }
+            long[][] sequenceIds;
+            sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds,
+                                                                  notations,
+                                                                  languages,
+                                                                  translators,
+                                                                  pauseTreatments,
+                                                                  sequentialTransfers,
+                                                                  trajectories);
 
-        /// <summary>
-        /// The index.
-        /// </summary>
-        /// <param name="matterIds">
-        /// The matter ids.
-        /// </param>
-        /// <param name="characteristicLinkIds">
-        /// The characteristic type and link ids.
-        /// </param>
-        /// <param name="notations">
-        /// The notation ids.
-        /// </param>
-        /// <param name="languages">
-        /// The language ids.
-        /// </param>
-        /// <param name="translators">
-        /// The translators ids.
-        /// </param>
-        /// <param name="pauseTreatments">
-        /// Pause treatment parameters of music sequences.
-        /// </param>
-        /// <param name="sequentialTransfers">
-        /// Sequential transfer flag used in music sequences.
-        /// </param>
-        /// <param name="trajectories">
-        /// Reading trajectories for images.
-        /// </param>
-        /// <param name="clustersCount">
-        /// The clusters count.
-        /// Minimum clusters count for methods
-        /// that use range of clusters.
-        /// </param>
-        /// <param name="clusterizationType">
-        /// Clusterization method.
-        /// </param>
-        /// <param name="equipotencyWeight">
-        /// The power weight.
-        /// </param>
-        /// <param name="normalizedDistanceWeight">
-        /// The normalized distance weight.
-        /// </param>
-        /// <param name="distanceWeight">
-        /// The distance weight.
-        /// </param>
-        /// <param name="bandwidth">
-        /// The bandwidth.
-        /// </param>
-        /// <param name="maximumClusters">
-        /// The maximum clusters count
-        /// for methods that use range of possible custers.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Index(
-            long[] matterIds,
-            short[] characteristicLinkIds,
-            Notation[] notations,
-            Language[] languages,
-            Translator[] translators,
-            PauseTreatment[] pauseTreatments,
-            bool[] sequentialTransfers,
-            ImageOrderExtractor[] trajectories,
-            int clustersCount,
-            ClusterizationType clusterizationType,
-            double equipotencyWeight = 1,
-            double normalizedDistanceWeight = 1,
-            double distanceWeight = 1,
-            double bandwidth = 0,
-            int maximumClusters = 2)
-        {
-            return CreateTask(() =>
+            using var db = dbFactory.CreateDbContext();
+            mattersNames = db.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
+
+            double[][] characteristics;
+
+            characteristics = sequencesCharacteristicsCalculator.Calculate(sequenceIds, characteristicLinkIds);
+
+            var clusterizationParams = new Dictionary<string, double>
             {
-                Dictionary<long, string> mattersNames;
-                Dictionary<long, string> matters = cache.Matters
-                                                        .Where(m => matterIds.Contains(m.Id))
-                                                        .ToDictionary(m => m.Id, m => m.Name);
+                { "clustersCount", clustersCount },
+                { "equipotencyWeight", equipotencyWeight },
+                { "normalizedDistanceWeight", normalizedDistanceWeight },
+                { "distanceWeight", distanceWeight },
+                { "bandwidth", bandwidth },
+                { "maximumClusters", maximumClusters }
+            };
 
-                long[][] sequenceIds;
-                sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds,
-                                                                      notations,
-                                                                      languages,
-                                                                      translators,
-                                                                      pauseTreatments,
-                                                                      sequentialTransfers,
-                                                                      trajectories);
-
-                using var db = dbFactory.CreateDbContext();
-                mattersNames = db.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
-
-                double[][] characteristics;
-
-                characteristics = sequencesCharacteristicsCalculator.Calculate(sequenceIds, characteristicLinkIds);
-
-                var clusterizationParams = new Dictionary<string, double>
+            IClusterizator clusterizator = ClusterizatorsFactory.CreateClusterizator(clusterizationType, clusterizationParams);
+            int[] clusterizationResult = clusterizator.Cluster(clustersCount, characteristics);
+            var mattersCharacteristics = new object[matterIds.Length];
+            for (int i = 0; i < clusterizationResult.Length; i++)
+            {
+                mattersCharacteristics[i] = new
                 {
-                    { "clustersCount", clustersCount },
-                    { "equipotencyWeight", equipotencyWeight },
-                    { "normalizedDistanceWeight", normalizedDistanceWeight },
-                    { "distanceWeight", distanceWeight },
-                    { "bandwidth", bandwidth },
-                    { "maximumClusters", maximumClusters }
+                    MatterName = mattersNames[matterIds[i]],
+                    cluster = clusterizationResult[i] + 1,
+                    Characteristics = characteristics[i]
                 };
+            }
 
-                IClusterizator clusterizator = ClusterizatorsFactory.CreateClusterizator(clusterizationType, clusterizationParams);
-                int[] clusterizationResult = clusterizator.Cluster(clustersCount, characteristics);
-                var mattersCharacteristics = new object[matterIds.Length];
-                for (int i = 0; i < clusterizationResult.Length; i++)
+            var characteristicNames = new string[characteristicLinkIds.Length];
+            var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
+            for (int k = 0; k < characteristicLinkIds.Length; k++)
+            {
+                characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[k], notations[k]);
+                characteristicsList[k] = new SelectListItem
                 {
-                    mattersCharacteristics[i] = new
-                    {
-                        MatterName = mattersNames[matterIds[i]],
-                        cluster = clusterizationResult[i] + 1,
-                        Characteristics = characteristics[i]
-                    };
-                }
-
-                var characteristicNames = new string[characteristicLinkIds.Length];
-                var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
-                for (int k = 0; k < characteristicLinkIds.Length; k++)
-                {
-                    characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[k], notations[k]);
-                    characteristicsList[k] = new SelectListItem
-                    {
-                        Value = k.ToString(),
-                        Text = characteristicNames[k],
-                        Selected = false
-                    };
-                }
-
-                var result = new Dictionary<string, object>
-                {
-                    { "characteristicNames", characteristicNames },
-                    { "characteristics", mattersCharacteristics },
-                    { "characteristicsList", characteristicsList },
-                    { "clustersCount", clusterizationResult.Distinct().Count() }
+                    Value = k.ToString(),
+                    Text = characteristicNames[k],
+                    Selected = false
                 };
+            }
 
-                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
-            });
-        }
+            var result = new Dictionary<string, object>
+            {
+                { "characteristicNames", characteristicNames },
+                { "characteristics", mattersCharacteristics },
+                { "characteristicsList", characteristicsList },
+                { "clustersCount", clusterizationResult.Distinct().Count() }
+            };
+
+            return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
+        });
     }
 }

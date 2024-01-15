@@ -1,135 +1,134 @@
-﻿namespace Libiada.Web.Controllers.Sequences
+﻿namespace Libiada.Web.Controllers.Sequences;
+
+using Bio.Core.Extensions;
+
+using Libiada.Database.Helpers;
+using Libiada.Database.Models.CalculatorsData;
+using Libiada.Database.Models.NcbiSequencesData;
+using Libiada.Database.Models.Repositories.Sequences;
+using Libiada.Database.Tasks;
+
+using Newtonsoft.Json;
+
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using Libiada.Web.Tasks;
+
+[Authorize(Roles = "Admin")]
+public class NcbiNuccoreSearchController : AbstractResultController
 {
-    using Bio.Core.Extensions;
+    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly INcbiHelper ncbiHelper;
+    private readonly Cache cache;
 
-    using Libiada.Database.Helpers;
-    using Libiada.Database.Models.CalculatorsData;
-    using Libiada.Database.Models.NcbiSequencesData;
-    using Libiada.Database.Models.Repositories.Sequences;
-    using Libiada.Database.Tasks;
-
-    using Newtonsoft.Json;
-
-    using System.Collections.Generic;
-    using System.Linq;
-    using Microsoft.AspNetCore.Mvc;
-    using Libiada.Web.Tasks;
-
-    [Authorize(Roles = "Admin")]
-    public class NcbiNuccoreSearchController : AbstractResultController
+    public NcbiNuccoreSearchController(ILibiadaDatabaseEntitiesFactory dbFactory,
+                                       ITaskManager taskManager,
+                                       INcbiHelper ncbiHelper,
+                                       Cache cache)
+        : base(TaskType.NcbiNuccoreSearch, taskManager)
     {
-        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
-        private readonly INcbiHelper ncbiHelper;
-        private readonly Cache cache;
+        this.dbFactory = dbFactory;
+        this.ncbiHelper = ncbiHelper;
+        this.cache = cache;
+    }
 
-        public NcbiNuccoreSearchController(ILibiadaDatabaseEntitiesFactory dbFactory,
-                                           ITaskManager taskManager,
-                                           INcbiHelper ncbiHelper,
-                                           Cache cache)
-            : base(TaskType.NcbiNuccoreSearch, taskManager)
-        {
-            this.dbFactory = dbFactory;
-            this.ncbiHelper = ncbiHelper;
-            this.cache = cache;
-        }
+    public ActionResult Index()
+    {
+        ViewBag.data = JsonConvert.SerializeObject(string.Empty);
+        return View();
+    }
 
-        public ActionResult Index()
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public ActionResult Index(
+        string searchQuery,
+        bool importPartial,
+        bool filterMinLength,
+        int minLength,
+        bool filterMaxLength,
+        int maxLength)
+    {
+        return CreateTask(() =>
         {
-            ViewBag.data = JsonConvert.SerializeObject(string.Empty);
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Index(
-            string searchQuery,
-            bool importPartial,
-            bool filterMinLength,
-            int minLength,
-            bool filterMaxLength,
-            int maxLength)
-        {
-            return CreateTask(() =>
+            if (filterMinLength)
             {
-                if (filterMinLength)
+                searchQuery = filterMaxLength ?
+                    NcbiHelper.FormatNcbiSearchTerm(searchQuery, minLength, maxLength: maxLength) :
+                    NcbiHelper.FormatNcbiSearchTerm(searchQuery, minLength);
+            }
+            else
+            {
+                searchQuery = filterMaxLength ?
+                    NcbiHelper.FormatNcbiSearchTerm(searchQuery, maxLength: maxLength) :
+                    NcbiHelper.FormatNcbiSearchTerm(searchQuery);
+            }
+
+            List<NuccoreObject> searchResults = ncbiHelper.ExecuteESummaryRequest(searchQuery, importPartial);
+
+            List<NuccoreObject> unfilteredSearchResults;
+            List<NuccoreObject> filteresOutSearchResults = searchResults;
+            string[] accessions;
+            if (!importPartial)
+            {
+                unfilteredSearchResults = ncbiHelper.ExecuteESummaryRequest(searchQuery, true);
+                filteresOutSearchResults = unfilteredSearchResults.Except(searchResults).ToList();
+                accessions = unfilteredSearchResults.Select(no => no.AccessionVersion.Split('.')[0]).Distinct().ToArray();
+            }
+            else
+            {
+                accessions = searchResults.Select(no => no.AccessionVersion.Split('.')[0]).Distinct().ToArray();
+            }
+
+            var results = new List<MatterImportResult>(accessions.Length);
+
+            string[] existingAccessions;
+
+            var dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
+
+            (existingAccessions, _) = dnaSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
+
+            searchResults = searchResults
+                                .Where(sr => !existingAccessions.Contains(sr.AccessionVersion.Split('.')[0]))
+                                .ToList();
+            foreach (var searchResult in searchResults)
+            {
+                results.Add(new MatterImportResult()
                 {
-                    searchQuery = filterMaxLength ?
-                        NcbiHelper.FormatNcbiSearchTerm(searchQuery, minLength, maxLength: maxLength) :
-                        NcbiHelper.FormatNcbiSearchTerm(searchQuery, minLength);
-                }
-                else
-                {
-                    searchQuery = filterMaxLength ?
-                        NcbiHelper.FormatNcbiSearchTerm(searchQuery, maxLength: maxLength) :
-                        NcbiHelper.FormatNcbiSearchTerm(searchQuery);
-                }
+                    MatterName = $"{searchResult.Title} | {searchResult.AccessionVersion}",
+                    Result = "Found new sequence",
+                    Status = "Success"
+                });
+            }
 
-                List<NuccoreObject> searchResults = ncbiHelper.ExecuteESummaryRequest(searchQuery, importPartial);
+            results.AddRange(existingAccessions.ConvertAll(existingAccession => new MatterImportResult
+            {
+                MatterName = existingAccession,
+                Result = "Sequence already exists",
+                Status = "Exists"
+            }));
 
-                List<NuccoreObject> unfilteredSearchResults;
-                List<NuccoreObject> filteresOutSearchResults = searchResults;
-                string[] accessions;
-                if (!importPartial)
-                {
-                    unfilteredSearchResults = ncbiHelper.ExecuteESummaryRequest(searchQuery, true);
-                    filteresOutSearchResults = unfilteredSearchResults.Except(searchResults).ToList();
-                    accessions = unfilteredSearchResults.Select(no => no.AccessionVersion.Split('.')[0]).Distinct().ToArray();
-                }
-                else
-                {
-                    accessions = searchResults.Select(no => no.AccessionVersion.Split('.')[0]).Distinct().ToArray();
-                }
-
-                var results = new List<MatterImportResult>(accessions.Length);
-
-                string[] existingAccessions;
-
-                var dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
-
-                (existingAccessions, _) = dnaSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
-
-                searchResults = searchResults
-                                    .Where(sr => !existingAccessions.Contains(sr.AccessionVersion.Split('.')[0]))
-                                    .ToList();
-                foreach (var searchResult in searchResults)
+            if (!importPartial)
+            {
+                filteresOutSearchResults = filteresOutSearchResults
+                                        .Where(sr => !existingAccessions.Contains(sr.AccessionVersion.Split('.')[0]))
+                                        .ToList();
+                foreach (var filteresOutSearchResult in filteresOutSearchResults)
                 {
                     results.Add(new MatterImportResult()
                     {
-                        MatterName = $"{searchResult.Title} | {searchResult.AccessionVersion}",
-                        Result = "Found new sequence",
-                        Status = "Success"
+                        MatterName = $"{filteresOutSearchResult.Title} | {filteresOutSearchResult.AccessionVersion}",
+                        Result = "Filtered out",
+                        Status = "Error"
                     });
                 }
+            }
 
-                results.AddRange(existingAccessions.ConvertAll(existingAccession => new MatterImportResult
-                {
-                    MatterName = existingAccession,
-                    Result = "Sequence already exists",
-                    Status = "Exists"
-                }));
+            accessions = searchResults.Select(sr => sr.AccessionVersion).ToArray();
 
-                if (!importPartial)
-                {
-                    filteresOutSearchResults = filteresOutSearchResults
-                                            .Where(sr => !existingAccessions.Contains(sr.AccessionVersion.Split('.')[0]))
-                                            .ToList();
-                    foreach (var filteresOutSearchResult in filteresOutSearchResults)
-                    {
-                        results.Add(new MatterImportResult()
-                        {
-                            MatterName = $"{filteresOutSearchResult.Title} | {filteresOutSearchResult.AccessionVersion}",
-                            Result = "Filtered out",
-                            Status = "Error"
-                        });
-                    }
-                }
+            var result = new Dictionary<string, object> { { "result", results }, { "accessions", accessions } };
 
-                accessions = searchResults.Select(sr => sr.AccessionVersion).ToArray();
-
-                var result = new Dictionary<string, object> { { "result", results }, { "accessions", accessions } };
-
-                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
-            });
-        }
+            return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
+        });
     }
 }

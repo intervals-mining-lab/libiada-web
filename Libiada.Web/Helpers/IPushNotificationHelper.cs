@@ -1,8 +1,6 @@
-﻿
-namespace Libiada.Web.Helpers
+﻿namespace Libiada.Web.Helpers;
+
+public interface IPushNotificationHelper
 {
-    public interface IPushNotificationHelper
-    {
-        void Send(int userId, Dictionary<string, string> data);
-    }
+    void Send(int userId, Dictionary<string, string> data);
 }

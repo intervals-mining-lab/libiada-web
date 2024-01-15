@@ -1,26 +1,25 @@
-﻿namespace Libiada.Web.Models
+﻿namespace Libiada.Web.Models;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
+using System.Reflection;
+
+public class SerializationFilter : DefaultContractResolver
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Newtonsoft.Json.Serialization;
-    using Newtonsoft.Json;
-    using System.Reflection;
+    private IEnumerable<string> ignoredProperties;
 
-    public class SerializationFilter : DefaultContractResolver
+    public SerializationFilter(IEnumerable<string> propNamesToIgnore)
     {
-        private IEnumerable<string> ignoredProperties;
+        ignoredProperties = propNamesToIgnore;
+    }
 
-        public SerializationFilter(IEnumerable<string> propNamesToIgnore)
-        {
-            ignoredProperties = propNamesToIgnore;
-        }
-
-        protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
-        {
-            JsonProperty property = base.CreateProperty(member, memberSerialization);
-            property.ShouldSerialize = (x) => { return !ignoredProperties.Contains(property.PropertyName); };
-            return property;
-        }
+    protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
+    {
+        JsonProperty property = base.CreateProperty(member, memberSerialization);
+        property.ShouldSerialize = (x) => { return !ignoredProperties.Contains(property.PropertyName); };
+        return property;
     }
 }

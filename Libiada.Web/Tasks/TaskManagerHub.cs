@@ -1,191 +1,190 @@
-﻿namespace Libiada.Web.Tasks
+﻿namespace Libiada.Web.Tasks;
+
+using System;
+using System.Linq;
+using Libiada.Database.Tasks;
+using Libiada.Database.Models;
+
+using Libiada.Core.Extensions;
+
+using Libiada.Web.Helpers;
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
+
+using SystemTask = System.Threading.Tasks.Task;
+using Libiada.Web.Extensions;
+
+/// <summary>
+/// SignalR messages hub class.
+/// </summary>
+[Authorize]
+public class TaskManagerHub : Hub<ITaskManagerClient>
 {
-    using System;
-    using System.Linq;
-    using Libiada.Database.Tasks;
-    using Libiada.Database.Models;
+    private readonly ITaskManager taskManager;
 
-    using LibiadaCore.Extensions;
-
-    using Libiada.Web.Helpers;
-
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.SignalR;
-
-    using SystemTask = System.Threading.Tasks.Task;
-    using Libiada.Web.Extensions;
+    public TaskManagerHub(ITaskManager taskManager)
+    {
+        this.taskManager = taskManager;
+    }
 
     /// <summary>
-    /// SignalR messages hub class.
+    /// Send web socket message to target clients.
     /// </summary>
-    [Authorize]
-    public class TaskManagerHub : Hub<ITaskManagerClient>
+    /// <param name="taskEvent">
+    /// Task event.
+    /// </param>
+    /// <param name="task">
+    /// Task itself.
+    /// </param>
+    public async SystemTask Send(TaskEvent taskEvent, TaskData task)
     {
-        private readonly ITaskManager taskManager;
+        object result;
 
-        public TaskManagerHub(ITaskManager taskManager)
+        lock (task)
         {
-            this.taskManager = taskManager;
+            result = new
+            {
+                task.Id,
+                TaskType = task.TaskType.GetName(),
+                DisplayName = task.TaskType.GetDisplayValue(),
+                Created = task.Created.ToString(OutputFormats.DateTimeFormat),
+                Started = task.Started?.ToString(OutputFormats.DateTimeFormat),
+                Completed = task.Completed?.ToString(OutputFormats.DateTimeFormat),
+                ExecutionTime = task.ExecutionTime?.ToString(OutputFormats.TimeFormat),
+                TaskState = task.TaskState.ToString(),
+                TaskStateName = task.TaskState.GetDisplayValue(),
+                task.UserId,
+                task.UserName
+            };
         }
 
-        /// <summary>
-        /// Send web socket message to target clients.
-        /// </summary>
-        /// <param name="taskEvent">
-        /// Task event.
-        /// </param>
-        /// <param name="task">
-        /// Task itself.
-        /// </param>
-        public async SystemTask Send(TaskEvent taskEvent, TaskData task)
+        await Clients.Group("admins").TaskEvent(taskEvent.ToString(), result);
+        if (!Context.User.IsAdmin())
         {
-            object result;
+            await Clients.Group(task.UserId.ToString()).TaskEvent(taskEvent.ToString(), result);
+        }
+    }
 
-            lock (task)
-            {
-                result = new
-                {
-                    task.Id,
-                    TaskType = task.TaskType.GetName(),
-                    DisplayName = task.TaskType.GetDisplayValue(),
-                    Created = task.Created.ToString(OutputFormats.DateTimeFormat),
-                    Started = task.Started?.ToString(OutputFormats.DateTimeFormat),
-                    Completed = task.Completed?.ToString(OutputFormats.DateTimeFormat),
-                    ExecutionTime = task.ExecutionTime?.ToString(OutputFormats.TimeFormat),
-                    TaskState = task.TaskState.ToString(),
-                    TaskStateName = task.TaskState.GetDisplayValue(),
-                    task.UserId,
-                    task.UserName
-                };
-            }
+    /// <summary>
+    /// Called by clients on connect.
+    /// </summary>
+    /// <returns>
+    /// The JSON of all tasks as <see cref="string"/>.
+    /// </returns>
+    public object[] GetAllTasks()
+    {
+        int userId = Context.User.GetUserId();
+        bool isAdmin = Context.User.IsAdmin();
 
-            await Clients.Group("admins").TaskEvent(taskEvent.ToString(), result);
-            if (!Context.User.IsAdmin())
+        var tasks = taskManager.GetTasksData()
+            .Where(t => t.UserId == userId || isAdmin)
+            .Select(task => new
             {
-                await Clients.Group(task.UserId.ToString()).TaskEvent(taskEvent.ToString(), result);
-            }
+                task.Id,
+                TaskType = task.TaskType.GetName(),
+                DisplayName = task.TaskType.GetDisplayValue(),
+                Created = task.Created.ToString(OutputFormats.DateTimeFormat),
+                Started = task.Started?.ToString(OutputFormats.DateTimeFormat),
+                Completed = task.Completed?.ToString(OutputFormats.DateTimeFormat),
+                ExecutionTime = task.ExecutionTime?.ToString(OutputFormats.TimeFormat),
+                TaskState = task.TaskState.ToString(),
+                TaskStateName = task.TaskState.GetDisplayValue(),
+                task.UserId,
+                task.UserName
+            });
+
+        return tasks.ToArray();
+    }
+
+    public override async SystemTask OnConnectedAsync()
+    {
+        if (Context.User.IsAdmin())
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, "admins");
+        }
+        else
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, Context.User.GetUserId().ToString());
         }
 
-        /// <summary>
-        /// Called by clients on connect.
-        /// </summary>
-        /// <returns>
-        /// The JSON of all tasks as <see cref="string"/>.
-        /// </returns>
-        public object[] GetAllTasks()
+        await base.OnConnectedAsync();
+    }
+
+    public override async SystemTask OnDisconnectedAsync(Exception? ex)
+    {
+        if (Context.User.IsAdmin())
         {
-            int userId = Context.User.GetUserId();
-            bool isAdmin = Context.User.IsAdmin();
-
-            var tasks = taskManager.GetTasksData()
-                .Where(t => t.UserId == userId || isAdmin)
-                .Select(task => new
-                {
-                    task.Id,
-                    TaskType = task.TaskType.GetName(),
-                    DisplayName = task.TaskType.GetDisplayValue(),
-                    Created = task.Created.ToString(OutputFormats.DateTimeFormat),
-                    Started = task.Started?.ToString(OutputFormats.DateTimeFormat),
-                    Completed = task.Completed?.ToString(OutputFormats.DateTimeFormat),
-                    ExecutionTime = task.ExecutionTime?.ToString(OutputFormats.TimeFormat),
-                    TaskState = task.TaskState.ToString(),
-                    TaskStateName = task.TaskState.GetDisplayValue(),
-                    task.UserId,
-                    task.UserName
-                });
-
-            return tasks.ToArray();
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, "admins");
+        }
+        else
+        {
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, Context.User.GetUserId().ToString());
         }
 
-        public override async SystemTask OnConnectedAsync()
-        {
-            if (Context.User.IsAdmin())
-            {
-                await Groups.AddToGroupAsync(Context.ConnectionId, "admins");
-            }
-            else
-            {
-                await Groups.AddToGroupAsync(Context.ConnectionId, Context.User.GetUserId().ToString());
-            }
+        await base.OnDisconnectedAsync(ex);
+    }
 
-            await base.OnConnectedAsync();
+    /// <summary>
+    /// Delete task by id.
+    /// </summary>
+    /// <param name="id">
+    /// The id.
+    /// </param>
+    /// <returns>
+    /// The <see cref="ActionResult"/>.
+    /// </returns>
+    public async SystemTask DeleteTask(int id)
+    {
+        try
+        {
+            var taskData = taskManager.DeleteTask(id);
+            await Send(TaskEvent.DeleteTask, taskData);
         }
-
-        public override async SystemTask OnDisconnectedAsync(Exception? ex)
+        catch (Exception e)
         {
-            if (Context.User.IsAdmin())
-            {
-                await Groups.RemoveFromGroupAsync(Context.ConnectionId, "admins");
-            }
-            else
-            {
-                await Groups.RemoveFromGroupAsync(Context.ConnectionId, Context.User.GetUserId().ToString());
-            }
-
-            await base.OnDisconnectedAsync(ex);
+            throw new Exception($"Unable to delete task with id = {id}", e);
         }
+    }
 
-        /// <summary>
-        /// Delete task by id.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
-        public async SystemTask DeleteTask(int id)
+    /// <summary>
+    /// Delete tasks with the specified state.
+    /// </summary>
+    /// <param name="taskState">
+    /// The id.
+    /// </param>
+    /// <returns>
+    /// The <see cref="ActionResult"/>.
+    /// </returns>
+    public async SystemTask DeleteTasksWithState(TaskState taskState)
+    {
+        try
         {
-            try
-            {
-                var taskData = taskManager.DeleteTask(id);
-                await Send(TaskEvent.DeleteTask, taskData);
-            }
-            catch (Exception e)
-            {
-                throw new Exception($"Unable to delete task with id = {id}", e);
-            }
+            var tasksData = taskManager.DeleteTasksWithState(taskState);
+            await SystemTask.WhenAll(tasksData.Select(td => Send(TaskEvent.DeleteTask, td)));
         }
-
-        /// <summary>
-        /// Delete tasks with the specified state.
-        /// </summary>
-        /// <param name="taskState">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
-        public async SystemTask DeleteTasksWithState(TaskState taskState)
+        catch (Exception e)
         {
-            try
-            {
-                var tasksData = taskManager.DeleteTasksWithState(taskState);
-                await SystemTask.WhenAll(tasksData.Select(td => Send(TaskEvent.DeleteTask, td)));
-            }
-            catch (Exception e)
-            {
-                throw new Exception($"Unable to delete tasks with state '{taskState}'", e);
-            }
+            throw new Exception($"Unable to delete tasks with state '{taskState}'", e);
         }
+    }
 
-        /// <summary>
-        /// Delete all tasks.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
-        public async SystemTask DeleteAllTasks()
+    /// <summary>
+    /// Delete all tasks.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="ActionResult"/>.
+    /// </returns>
+    public async SystemTask DeleteAllTasks()
+    {
+        try
         {
-            try
-            {
-                var tasksData = taskManager.DeleteAllTasks();
-                await SystemTask.WhenAll(tasksData.Select(td => Send(TaskEvent.DeleteTask, td)));
-            }
-            catch (Exception e)
-            {
-                throw new Exception($"Unable to delete all tasks", e);
-            }
+            var tasksData = taskManager.DeleteAllTasks();
+            await SystemTask.WhenAll(tasksData.Select(td => Send(TaskEvent.DeleteTask, td)));
+        }
+        catch (Exception e)
+        {
+            throw new Exception($"Unable to delete all tasks", e);
         }
     }
 }

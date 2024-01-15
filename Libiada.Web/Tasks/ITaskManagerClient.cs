@@ -1,7 +1,6 @@
-﻿namespace Libiada.Web.Tasks
+﻿namespace Libiada.Web.Tasks;
+
+public interface ITaskManagerClient
 {
-    public interface ITaskManagerClient
-    {
-        System.Threading.Tasks.Task TaskEvent(string @event, object data);
-    }
+    System.Threading.Tasks.Task TaskEvent(string @event, object data);
 }

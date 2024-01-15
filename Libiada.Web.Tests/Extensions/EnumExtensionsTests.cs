@@ -1,34 +1,33 @@
-﻿namespace Libiada.Web.Tests.Extensions
+﻿namespace Libiada.Web.Tests.Extensions;
+
+using Libiada.Web.Extensions;
+
+using NUnit.Framework;
+
+/// <summary>
+/// Tests for enum extensions.
+/// </summary>
+[TestFixture(TestOf = typeof(EnumExtensions))]
+public class EnumExtensionsTests
 {
-    using Libiada.Web.Extensions;
-
-    using NUnit.Framework;
-
     /// <summary>
-    /// Tests for enum extensions.
+    /// The test enum.
     /// </summary>
-    [TestFixture(TestOf = typeof(EnumExtensions))]
-    public class EnumExtensionsTests
+    private enum TestEnum : byte
     {
         /// <summary>
-        /// The test enum.
+        /// The first.
         /// </summary>
-        private enum TestEnum : byte
-        {
-            /// <summary>
-            /// The first.
-            /// </summary>
-            First = 1,
+        First = 1,
 
-            /// <summary>
-            /// The second.
-            /// </summary>
-            Second = 2,
+        /// <summary>
+        /// The second.
+        /// </summary>
+        Second = 2,
 
-            /// <summary>
-            /// The third.
-            /// </summary>
-            Third = 3
-        }
+        /// <summary>
+        /// The third.
+        /// </summary>
+        Third = 3
     }
 }

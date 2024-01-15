@@ -1,220 +1,219 @@
-﻿namespace Libiada.Web.Controllers.Sequences
+﻿namespace Libiada.Web.Controllers.Sequences;
+
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+
+using Libiada.Web.Extensions;
+using Libiada.Database.Tasks;
+
+using Newtonsoft.Json;
+
+using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
+using Libiada.Web.Helpers;
+using Libiada.Web.Tasks;
+using Libiada.Database.Helpers;
+
+/// <summary>
+/// The matters controller.
+/// </summary>
+[Authorize]
+public class MattersController : SequencesMattersController
 {
-    using System.Collections.Generic;
-    using Microsoft.EntityFrameworkCore;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Mvc;
-
-    using Libiada.Web.Extensions;
-    using Libiada.Database.Tasks;
-
-    using Newtonsoft.Json;
-
-    using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
-    using Libiada.Web.Helpers;
-    using Libiada.Web.Tasks;
-    using Libiada.Database.Helpers;
+    private readonly Cache cache;
 
     /// <summary>
-    /// The matters controller.
+    /// Initializes a new instance of the <see cref="MattersController"/> class.
     /// </summary>
-    [Authorize]
-    public class MattersController : SequencesMattersController
+    public MattersController(ILibiadaDatabaseEntitiesFactory dbFactory, 
+                             IViewDataHelper viewDataHelper, 
+                             ITaskManager taskManager,
+                             INcbiHelper ncbiHelper,
+                             Cache cache)
+        : base(TaskType.Matters, dbFactory, viewDataHelper, taskManager, ncbiHelper, cache)
     {
-        private readonly Cache cache;
+        this.cache = cache;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MattersController"/> class.
-        /// </summary>
-        public MattersController(ILibiadaDatabaseEntitiesFactory dbFactory, 
-                                 IViewDataHelper viewDataHelper, 
-                                 ITaskManager taskManager,
-                                 INcbiHelper ncbiHelper,
-                                 Cache cache)
-            : base(TaskType.Matters, dbFactory, viewDataHelper, taskManager, ncbiHelper, cache)
+    /// <summary>
+    /// The index.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="System.Threading.Tasks.Task"/>.
+    /// </returns>
+    public async Task<ActionResult> Index()
+    {
+        List<Matter> matter = await dbFactory.CreateDbContext().Matters.Include(m => m.Multisequence).ToListAsync();
+
+        if (!User.IsAdmin())
         {
-            this.cache = cache;
+            matter = matter.Where(m => m.Nature == Nature.Genetic).ToList();
         }
 
-        /// <summary>
-        /// The index.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="System.Threading.Tasks.Task"/>.
-        /// </returns>
-        public async Task<ActionResult> Index()
+        return View(matter);
+
+    }
+
+    /// <summary>
+    /// The details.
+    /// </summary>
+    /// <param name="id">
+    /// The id.
+    /// </param>
+    /// <returns>
+    /// The <see cref="System.Threading.Tasks.Task"/>.
+    /// </returns>
+    public ActionResult Details(long? id)
+    {
+        if (id == null)
         {
-            List<Matter> matter = await dbFactory.CreateDbContext().Matters.Include(m => m.Multisequence).ToListAsync();
-
-            if (!User.IsAdmin())
-            {
-                matter = matter.Where(m => m.Nature == Nature.Genetic).ToList();
-            }
-
-            return View(matter);
-
+            return BadRequest();
+        }
+        using var db = dbFactory.CreateDbContext();
+        Matter? matter = db.Matters.Include(m => m.Multisequence).SingleOrDefault(m => m.Id == id);
+        if (matter == null)
+        {
+            return NotFound();
         }
 
-        /// <summary>
-        /// The details.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="System.Threading.Tasks.Task"/>.
-        /// </returns>
-        public ActionResult Details(long? id)
+        ViewBag.SequencesCount = db.CommonSequences.Count(c => c.MatterId == matter.Id);
+
+        return View(matter);
+
+    }
+
+    /// <summary>
+    /// The edit.
+    /// </summary>
+    /// <param name="id">
+    /// The id.
+    /// </param>
+    /// <returns>
+    /// The <see cref="System.Threading.Tasks.Task"/>.
+    /// </returns>
+    public ActionResult Edit(long? id)
+    {
+        if (id == null)
         {
-            if (id == null)
-            {
-                return BadRequest();
-            }
-            using var db = dbFactory.CreateDbContext();
-            Matter? matter = db.Matters.Include(m => m.Multisequence).SingleOrDefault(m => m.Id == id);
-            if (matter == null)
-            {
-                return NotFound();
-            }
-
-            ViewBag.SequencesCount = db.CommonSequences.Count(c => c.MatterId == matter.Id);
-
-            return View(matter);
-
+            return BadRequest();
         }
-
-        /// <summary>
-        /// The edit.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="System.Threading.Tasks.Task"/>.
-        /// </returns>
-        public ActionResult Edit(long? id)
+        var db = dbFactory.CreateDbContext();
+        Matter? matter = db.Matters.Include(m => m.Multisequence).SingleOrDefault(m => m.Id == id);
+        if (matter == null)
         {
-            if (id == null)
-            {
-                return BadRequest();
-            }
-            var db = dbFactory.CreateDbContext();
-            Matter? matter = db.Matters.Include(m => m.Multisequence).SingleOrDefault(m => m.Id == id);
-            if (matter == null)
-            {
-                return NotFound();
-            }
-            var data = new Dictionary<string, object>
-                {
-                    { "natures", Extensions.EnumExtensions.GetSelectList(new[] { matter.Nature }) },
-                    { "groups", EnumExtensions.ToArray<Group>().ToSelectListWithNature() },
-                    { "sequenceTypes", EnumExtensions.ToArray<SequenceType>().ToSelectListWithNature() },
-                    { "sequencesCount", db.CommonSequences.Count(c => c.MatterId == matter.Id) },
-                    { "matter", matter },
-                    { "multisequences", db.Multisequences.ToList() },
-                    { "nature", ((byte)matter.Nature).ToString() },
-                    { "group", ((byte)matter.Group).ToString() },
-                    { "sequenceType", ((byte)matter.SequenceType).ToString() }
-                };
-
-            ViewBag.data = JsonConvert.SerializeObject(data, new JsonSerializerSettings()
-            {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            });
-
-            return View(matter);
-
+            return NotFound();
         }
-
-        /// <summary>
-        /// The edit.
-        /// </summary>
-        /// <param name="matter">
-        /// The matter.
-        /// </param>
-        /// <returns>
-        /// The <see cref="System.Threading.Tasks.Task"/>.
-        /// </returns>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(
-        // [Bind(Include = "Id,Name,Nature,Description,Group,SequenceType,MultisequenceId,MultisequenceNumber,CollectionCountry,CollectionDate")] 
-        Matter matter)
-        {
-            using var db = dbFactory.CreateDbContext();
-            if (ModelState.IsValid)
+        var data = new Dictionary<string, object>
             {
-                db.Entry(matter).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                cache.Clear();
-                return RedirectToAction("Index");
-            }
+                { "natures", Extensions.EnumExtensions.GetSelectList(new[] { matter.Nature }) },
+                { "groups", EnumExtensions.ToArray<Group>().ToSelectListWithNature() },
+                { "sequenceTypes", EnumExtensions.ToArray<SequenceType>().ToSelectListWithNature() },
+                { "sequencesCount", db.CommonSequences.Count(c => c.MatterId == matter.Id) },
+                { "matter", matter },
+                { "multisequences", db.Multisequences.ToList() },
+                { "nature", ((byte)matter.Nature).ToString() },
+                { "group", ((byte)matter.Group).ToString() },
+                { "sequenceType", ((byte)matter.SequenceType).ToString() }
+            };
 
-            var data = new Dictionary<string, object>
-                {
-                    { "natures", Extensions.EnumExtensions.GetSelectList(new[] { matter.Nature }) },
-                    { "groups", EnumExtensions.ToArray<Group>().ToSelectListWithNature() },
-                    { "sequenceTypes", EnumExtensions.ToArray<SequenceType>().ToSelectListWithNature() },
-                    { "sequencesCount", db.CommonSequences.Count(c => c.MatterId == matter.Id) },
-                    { "matter", matter },
-                    { "multisequences", db.Multisequences.ToList() },
-                    { "nature", ((byte)matter.Nature).ToString() },
-                    { "group", ((byte)matter.Group).ToString() },
-                    { "sequenceType", ((byte)matter.SequenceType).ToString() }
-                };
-
-            ViewBag.data = JsonConvert.SerializeObject(data);
-            return View(matter);
-
-        }
-
-        /// <summary>
-        /// The delete.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="System.Threading.Tasks.Task"/>.
-        /// </returns>
-        public async Task<ActionResult> Delete(long? id)
+        ViewBag.data = JsonConvert.SerializeObject(data, new JsonSerializerSettings()
         {
-            if (id == null)
-            {
-                return BadRequest();
-            }
-            using var db = dbFactory.CreateDbContext();
-            Matter? matter = await db.Matters.FindAsync(id);
-            if (matter == null)
-            {
-                return NotFound();
-            }
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        });
 
-            ViewBag.SequencesCount = db.CommonSequences.Count(c => c.MatterId == matter.Id);
-            return View(matter);
+        return View(matter);
 
-        }
+    }
 
-        /// <summary>
-        /// The delete confirmed.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="System.Threading.Tasks.Task"/>.
-        /// </returns>
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(long id)
+    /// <summary>
+    /// The edit.
+    /// </summary>
+    /// <param name="matter">
+    /// The matter.
+    /// </param>
+    /// <returns>
+    /// The <see cref="System.Threading.Tasks.Task"/>.
+    /// </returns>
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<ActionResult> Edit(
+    // [Bind(Include = "Id,Name,Nature,Description,Group,SequenceType,MultisequenceId,MultisequenceNumber,CollectionCountry,CollectionDate")] 
+    Matter matter)
+    {
+        using var db = dbFactory.CreateDbContext();
+        if (ModelState.IsValid)
         {
-            var db = dbFactory.CreateDbContext();
-            Matter matter = await db.Matters.FindAsync(id);
-            db.Matters.Remove(matter);
+            db.Entry(matter).State = EntityState.Modified;
             await db.SaveChangesAsync();
             cache.Clear();
             return RedirectToAction("Index");
         }
+
+        var data = new Dictionary<string, object>
+            {
+                { "natures", Extensions.EnumExtensions.GetSelectList(new[] { matter.Nature }) },
+                { "groups", EnumExtensions.ToArray<Group>().ToSelectListWithNature() },
+                { "sequenceTypes", EnumExtensions.ToArray<SequenceType>().ToSelectListWithNature() },
+                { "sequencesCount", db.CommonSequences.Count(c => c.MatterId == matter.Id) },
+                { "matter", matter },
+                { "multisequences", db.Multisequences.ToList() },
+                { "nature", ((byte)matter.Nature).ToString() },
+                { "group", ((byte)matter.Group).ToString() },
+                { "sequenceType", ((byte)matter.SequenceType).ToString() }
+            };
+
+        ViewBag.data = JsonConvert.SerializeObject(data);
+        return View(matter);
+
+    }
+
+    /// <summary>
+    /// The delete.
+    /// </summary>
+    /// <param name="id">
+    /// The id.
+    /// </param>
+    /// <returns>
+    /// The <see cref="System.Threading.Tasks.Task"/>.
+    /// </returns>
+    public async Task<ActionResult> Delete(long? id)
+    {
+        if (id == null)
+        {
+            return BadRequest();
+        }
+        using var db = dbFactory.CreateDbContext();
+        Matter? matter = await db.Matters.FindAsync(id);
+        if (matter == null)
+        {
+            return NotFound();
+        }
+
+        ViewBag.SequencesCount = db.CommonSequences.Count(c => c.MatterId == matter.Id);
+        return View(matter);
+
+    }
+
+    /// <summary>
+    /// The delete confirmed.
+    /// </summary>
+    /// <param name="id">
+    /// The id.
+    /// </param>
+    /// <returns>
+    /// The <see cref="System.Threading.Tasks.Task"/>.
+    /// </returns>
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<ActionResult> DeleteConfirmed(long id)
+    {
+        var db = dbFactory.CreateDbContext();
+        Matter matter = await db.Matters.FindAsync(id);
+        db.Matters.Remove(matter);
+        await db.SaveChangesAsync();
+        cache.Clear();
+        return RedirectToAction("Index");
     }
 }

@@ -1,28 +1,27 @@
-﻿namespace Libiada.Web.Controllers
-{
-    using Microsoft.AspNetCore.Mvc;
+﻿namespace Libiada.Web.Controllers;
 
+using Microsoft.AspNetCore.Mvc;
+
+/// <summary>
+/// The calculation controller.
+/// </summary>
+[Authorize]
+public class TaskManagerController : Controller
+{
     /// <summary>
-    /// The calculation controller.
+    /// The index.
     /// </summary>
-    [Authorize]
-    public class TaskManagerController : Controller
+    /// <returns>
+    /// The <see cref="ActionResult"/>.
+    /// </returns>
+    public ActionResult Index(int? id)
     {
-        /// <summary>
-        /// The index.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
-        public ActionResult Index(int? id)
+        if (TempData["ErrorMessage"] != null)
         {
-            if (TempData["ErrorMessage"] != null)
-            {
-                ViewBag.Error = true;
-                ViewBag.ErrorMessage = ViewBag.UserError = TempData["ErrorMessage"];
-            }
-            
-            return View();
+            ViewBag.Error = true;
+            ViewBag.ErrorMessage = ViewBag.UserError = TempData["ErrorMessage"];
         }
+        
+        return View();
     }
 }

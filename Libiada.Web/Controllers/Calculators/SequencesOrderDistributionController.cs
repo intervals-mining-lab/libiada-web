@@ -1,114 +1,113 @@
-﻿namespace Libiada.Web.Controllers.Calculators
+﻿namespace Libiada.Web.Controllers.Calculators;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+
+using Libiada.Core.Core;
+
+using Libiada.Database.Tasks;
+
+using Newtonsoft.Json;
+
+using SequenceGenerator;
+using Microsoft.AspNetCore.Authorization;
+using Libiada.Web.Tasks;
+
+/// <summary>
+/// Calculates distribution of sequences by order.
+/// </summary>
+[Authorize(Roles = "Admin")]
+public class SequencesOrderDistributionController : AbstractResultController
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Microsoft.AspNetCore.Mvc;
-
-    using LibiadaCore.Core;
-
-    using Libiada.Database.Tasks;
-
-    using Newtonsoft.Json;
-
-    using SequenceGenerator;
-    using Microsoft.AspNetCore.Authorization;
-    using Libiada.Web.Tasks;
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SequencesOrderDistributionController"/> class.
+    /// </summary>
+    public SequencesOrderDistributionController(ITaskManager taskManager) : base(TaskType.SequencesOrderDistribution, taskManager)
+    {
+    }
 
     /// <summary>
-    /// Calculates distribution of sequences by order.
+    /// The index.
     /// </summary>
-    [Authorize(Roles = "Admin")]
-    public class SequencesOrderDistributionController : AbstractResultController
+    /// <returns>
+    /// The <see cref="ActionResult"/>.
+    /// </returns>
+    public ActionResult Index()
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SequencesOrderDistributionController"/> class.
-        /// </summary>
-        public SequencesOrderDistributionController(ITaskManager taskManager) : base(TaskType.SequencesOrderDistribution, taskManager)
-        {
-        }
+        ViewBag.data = "{}";
+        return View();
+    }
 
-        /// <summary>
-        /// The index.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
-        public ActionResult Index()
+    /// <summary>
+    /// The index.
+    /// </summary>
+    /// <param name="length">
+    /// The length.
+    /// </param>
+    /// <param name="alphabetCardinality">
+    /// The alphabet cardinality.
+    /// </param>
+    /// <param name="typeGenerate">
+    /// Sequence generation type.
+    /// </param>
+    /// <returns>
+    /// The <see cref="ActionResult"/>.
+    /// </returns>
+    [HttpPost]
+    public ActionResult Index(int length, int alphabetCardinality, int typeGenerate)
+    {
+        return CreateTask(() =>
         {
-            ViewBag.data = "{}";
-            return View();
-        }
-
-        /// <summary>
-        /// The index.
-        /// </summary>
-        /// <param name="length">
-        /// The length.
-        /// </param>
-        /// <param name="alphabetCardinality">
-        /// The alphabet cardinality.
-        /// </param>
-        /// <param name="typeGenerate">
-        /// Sequence generation type.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
-        [HttpPost]
-        public ActionResult Index(int length, int alphabetCardinality, int typeGenerate)
-        {
-            return CreateTask(() =>
+            ISequenceGenerator sequenceGenerator;
+            var orderGenerator = new OrderGenerator();
+            List<int[]> orders;
+            // TODO: add enum
+            switch (typeGenerate)
             {
-                ISequenceGenerator sequenceGenerator;
-                var orderGenerator = new OrderGenerator();
-                List<int[]> orders;
-                // TODO: add enum
-                switch (typeGenerate)
-                {
-                    case 0:
-                        sequenceGenerator = new StrictSequenceGenerator();
-                        orders = orderGenerator.StrictGenerateOrders(length, alphabetCardinality);
-                        break;
-                    case 1:
-                        sequenceGenerator = new SequenceGenerator();
-                        orders = orderGenerator.GenerateOrders(length, alphabetCardinality);
-                        break;
-                    case 2:
-                        sequenceGenerator = new NonRedundantStrictSequenceGenerator();
-                        orders = orderGenerator.StrictGenerateOrders(length, alphabetCardinality);
-                        break;
-                    case 3:
-                        sequenceGenerator = new NonRedundantSequenceGenerator();
-                        orders = orderGenerator.GenerateOrders(length, alphabetCardinality);
-                        break;
-                    default: throw new ArgumentException("Invalid type of generate");
-                }
-                var sequences = sequenceGenerator.GenerateSequences(length, alphabetCardinality);
-                var SequecesOrdersDistribution = new Dictionary<int[], List<BaseChain>>(new OrderEqualityComparer());
-                foreach (int[] order in orders)
-                {
-                    SequecesOrdersDistribution.Add(order, new List<BaseChain>());
-                }
+                case 0:
+                    sequenceGenerator = new StrictSequenceGenerator();
+                    orders = orderGenerator.StrictGenerateOrders(length, alphabetCardinality);
+                    break;
+                case 1:
+                    sequenceGenerator = new SequenceGenerator();
+                    orders = orderGenerator.GenerateOrders(length, alphabetCardinality);
+                    break;
+                case 2:
+                    sequenceGenerator = new NonRedundantStrictSequenceGenerator();
+                    orders = orderGenerator.StrictGenerateOrders(length, alphabetCardinality);
+                    break;
+                case 3:
+                    sequenceGenerator = new NonRedundantSequenceGenerator();
+                    orders = orderGenerator.GenerateOrders(length, alphabetCardinality);
+                    break;
+                default: throw new ArgumentException("Invalid type of generate");
+            }
+            var sequences = sequenceGenerator.GenerateSequences(length, alphabetCardinality);
+            var SequecesOrdersDistribution = new Dictionary<int[], List<BaseChain>>(new OrderEqualityComparer());
+            foreach (int[] order in orders)
+            {
+                SequecesOrdersDistribution.Add(order, new List<BaseChain>());
+            }
 
-                foreach (BaseChain sequence in sequences)
-                {
-                    SequecesOrdersDistribution[sequence.Building].Add(sequence);
+            foreach (BaseChain sequence in sequences)
+            {
+                SequecesOrdersDistribution[sequence.Building].Add(sequence);
+            }
+
+            var result = new Dictionary<string, object>
+            {
+                { 
+                    "result", SequecesOrdersDistribution.Select(r => new
+                    {
+                        order = r.Key,
+                        sequences = r.Value.Select(s => s.ToString(",")).ToArray()
+                    }) 
                 }
+            };
 
-                var result = new Dictionary<string, object>
-                {
-                    { 
-                        "result", SequecesOrdersDistribution.Select(r => new
-                        {
-                            order = r.Key,
-                            sequences = r.Value.Select(s => s.ToString(",")).ToArray()
-                        }) 
-                    }
-                };
-
-                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
-            });
-        }
+            return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
+        });
     }
 }

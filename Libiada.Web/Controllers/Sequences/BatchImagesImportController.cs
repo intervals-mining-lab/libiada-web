@@ -1,116 +1,115 @@
-﻿namespace Libiada.Web.Controllers.Sequences
+﻿namespace Libiada.Web.Controllers.Sequences;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+
+using Libiada.Database.Models.CalculatorsData;
+using Libiada.Database.Models.Repositories.Sequences;
+using Libiada.Database.Tasks;
+
+using Newtonsoft.Json;
+
+using System.IO;
+using Microsoft.AspNetCore.Authorization;
+using Libiada.Core.Extensions;
+using Libiada.Web.Helpers;
+using Libiada.Web.Tasks;
+
+[Authorize(Roles = "Admin")]
+public class BatchImagesImportController : AbstractResultController
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Microsoft.AspNetCore.Mvc;
+    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly Cache cache;
 
-    using Libiada.Database.Models.CalculatorsData;
-    using Libiada.Database.Models.Repositories.Sequences;
-    using Libiada.Database.Tasks;
-
-    using Newtonsoft.Json;
-
-    using System.IO;
-    using Microsoft.AspNetCore.Authorization;
-    using LibiadaCore.Extensions;
-    using Libiada.Web.Helpers;
-    using Libiada.Web.Tasks;
-
-    [Authorize(Roles = "Admin")]
-    public class BatchImagesImportController : AbstractResultController
+    public BatchImagesImportController(ILibiadaDatabaseEntitiesFactory dbFactory, ITaskManager taskManager, Cache cache) 
+        : base(TaskType.BatchImagesImport, taskManager)
     {
-        private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
-        private readonly Cache cache;
+        this.dbFactory = dbFactory;
+        this.cache = cache;
+    }
 
-        public BatchImagesImportController(ILibiadaDatabaseEntitiesFactory dbFactory, ITaskManager taskManager, Cache cache) 
-            : base(TaskType.BatchImagesImport, taskManager)
-        {
-            this.dbFactory = dbFactory;
-            this.cache = cache;
-        }
+    public ActionResult Index()
+    {
+        ViewBag.data = JsonConvert.SerializeObject("");
+        return View();
+    }
 
-        public ActionResult Index()
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public ActionResult Index(IFormFileCollection files)
+    {
+        return CreateTask(() =>
         {
-            ViewBag.data = JsonConvert.SerializeObject("");
-            return View();
-        }
+            using var db = dbFactory.CreateDbContext();
+            var importResults = new List<MatterImportResult>();
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Index(IFormFileCollection files)
-        {
-            return CreateTask(() =>
+            Matter[] matters = db.Matters.Where(m => m.Nature == Nature.Image).ToArray();
+            var matterRepository = new MatterRepository(db, cache);
+
+            for (int i = 0; i < files.Count; i++)
             {
-                using var db = dbFactory.CreateDbContext();
-                var importResults = new List<MatterImportResult>();
+                var file = files[i];
+                string sequenceName = file.FileName.Substring(0, file.FileName.LastIndexOf('.'));
 
-                Matter[] matters = db.Matters.Where(m => m.Nature == Nature.Image).ToArray();
-                var matterRepository = new MatterRepository(db, cache);
-
-                for (int i = 0; i < files.Count; i++)
+                var importResult = new MatterImportResult()
                 {
-                    var file = files[i];
-                    string sequenceName = file.FileName.Substring(0, file.FileName.LastIndexOf('.'));
+                    MatterName = sequenceName
+                };
 
-                    var importResult = new MatterImportResult()
+                try
+                {
+                    if (file == null)
                     {
-                        MatterName = sequenceName
+                        throw new FileNotFoundException($"No image file is provided. Iteration: {i}");
+                    }
+
+                    if (matters.Any(m => m.Name == sequenceName))
+                    {
+                        importResult.Result = "Image already exists";
+                        continue;
+                    }
+
+                    using Stream sequenceStream = FileHelper.GetFileStream(files[i]);
+                    var fileBytes = new byte[sequenceStream.Length];
+                    sequenceStream.Read(fileBytes, 0, (int)sequenceStream.Length);
+
+                    var matter = new Matter
+                    {
+                        Name = sequenceName,
+                        Group = Group.Picture,
+                        Nature = Nature.Image,
+                        Source = fileBytes,
+                        SequenceType = SequenceType.CompleteImage
                     };
 
-                    try
-                    {
-                        if (file == null)
-                        {
-                            throw new FileNotFoundException($"No image file is provided. Iteration: {i}");
-                        }
-
-                        if (matters.Any(m => m.Name == sequenceName))
-                        {
-                            importResult.Result = "Image already exists";
-                            continue;
-                        }
-
-                        using Stream sequenceStream = FileHelper.GetFileStream(files[i]);
-                        var fileBytes = new byte[sequenceStream.Length];
-                        sequenceStream.Read(fileBytes, 0, (int)sequenceStream.Length);
-
-                        var matter = new Matter
-                        {
-                            Name = sequenceName,
-                            Group = Group.Picture,
-                            Nature = Nature.Image,
-                            Source = fileBytes,
-                            SequenceType = SequenceType.CompleteImage
-                        };
-
-                        matterRepository.SaveToDatabase(matter);
-                        importResult.Result = "Successfully imported image and created matter";
-                        importResult.Status = "Success";
-                        importResult.SequenceType = matter.SequenceType.GetDisplayValue();
-                        importResult.Group = matter.Group.GetDisplayValue();
-                        importResults.Add(importResult);
-                    }
-                    catch (Exception exception)
-                    {
-                        importResult.Result = $"Failed to import image: {exception.Message}";
-                        while (exception.InnerException != null)
-                        {
-                            importResult.Result += $" {exception.InnerException.Message}";
-
-                            exception = exception.InnerException;
-                        }
-
-                        importResult.Status = "Error";
-                        importResults.Add(importResult);
-                    }
+                    matterRepository.SaveToDatabase(matter);
+                    importResult.Result = "Successfully imported image and created matter";
+                    importResult.Status = "Success";
+                    importResult.SequenceType = matter.SequenceType.GetDisplayValue();
+                    importResult.Group = matter.Group.GetDisplayValue();
+                    importResults.Add(importResult);
                 }
+                catch (Exception exception)
+                {
+                    importResult.Result = $"Failed to import image: {exception.Message}";
+                    while (exception.InnerException != null)
+                    {
+                        importResult.Result += $" {exception.InnerException.Message}";
 
-                var result = new Dictionary<string, object> { { "result", importResults } };
+                        exception = exception.InnerException;
+                    }
 
-                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
+                    importResult.Status = "Error";
+                    importResults.Add(importResult);
+                }
+            }
 
-            });
-        }
+            var result = new Dictionary<string, object> { { "result", importResults } };
+
+            return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
+
+        });
     }
 }

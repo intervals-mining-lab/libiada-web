@@ -1,206 +1,205 @@
-﻿namespace Libiada.Web.Controllers.Sequences
-{
-    using Microsoft.EntityFrameworkCore;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.Rendering;
+﻿namespace Libiada.Web.Controllers.Sequences;
 
-    using Libiada.Database.Tasks;
-    using Libiada.Web.Helpers;
-    using Libiada.Web.Tasks;
-    using Libiada.Database.Helpers;
-    using LibiadaCore.Extensions;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
+using Libiada.Database.Tasks;
+using Libiada.Web.Helpers;
+using Libiada.Web.Tasks;
+using Libiada.Database.Helpers;
+using Libiada.Core.Extensions;
+
+/// <summary>
+/// The common sequences controller.
+/// </summary>
+[Authorize(Roles = "Admin")]
+public class CommonSequencesController : SequencesMattersController
+{
+    private readonly Cache cache;
 
     /// <summary>
-    /// The common sequences controller.
+    /// Initializes a new instance of the <see cref="CommonSequencesController"/> class.
     /// </summary>
-    [Authorize(Roles = "Admin")]
-    public class CommonSequencesController : SequencesMattersController
+    public CommonSequencesController(ILibiadaDatabaseEntitiesFactory dbFactory,
+                                     IViewDataHelper viewDataHelper,
+                                     ITaskManager taskManager,
+                                     INcbiHelper ncbiHelper,
+                                     Cache cache)
+        : base(TaskType.CommonSequences, dbFactory, viewDataHelper, taskManager, ncbiHelper, cache)
     {
-        private readonly Cache cache;
+        this.cache = cache;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CommonSequencesController"/> class.
-        /// </summary>
-        public CommonSequencesController(ILibiadaDatabaseEntitiesFactory dbFactory,
-                                         IViewDataHelper viewDataHelper,
-                                         ITaskManager taskManager,
-                                         INcbiHelper ncbiHelper,
-                                         Cache cache)
-            : base(TaskType.CommonSequences, dbFactory, viewDataHelper, taskManager, ncbiHelper, cache)
+    /// <summary>
+    /// The index.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="System.Threading.Tasks.Task"/>.
+    /// </returns>
+    public async Task<ActionResult> Index()
+    {
+        using var db = dbFactory.CreateDbContext();
+        var commonSequence = db.CommonSequences.Include(c => c.Matter).Select(cs => new SequenceViewModel()
         {
-            this.cache = cache;
+            Id = cs.Id,
+            Created = cs.Created.ToString(),
+            Description = cs.Description ?? "",
+            MatterName = cs.Matter.Name,
+            Modified = cs.Modified.ToString(),
+            Notation = cs.Notation.GetDisplayValue(),
+            RemoteDb = cs.RemoteDb.ToString() ?? "",
+            RemoteId = cs.RemoteId ?? ""
+
+        });
+
+        ViewBag.Sequences = await commonSequence.ToListAsync();
+
+        return View();
+
+    }
+
+    /// <summary>
+    /// The details.
+    /// </summary>
+    /// <param name="id">
+    /// The id.
+    /// </param>
+    /// <returns>
+    /// The <see cref="System.Threading.Tasks.Task"/>.
+    /// </returns>
+    public async Task<ActionResult> Details(long? id)
+    {
+        if (id == null)
+        {
+            return BadRequest();
         }
 
-        /// <summary>
-        /// The index.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="System.Threading.Tasks.Task"/>.
-        /// </returns>
-        public async Task<ActionResult> Index()
+        CommonSequence commonSequence = dbFactory.CreateDbContext().CommonSequences.Include(c => c.Matter).Single(c => c.Id == id);
+        if (commonSequence == null)
         {
-            using var db = dbFactory.CreateDbContext();
-            var commonSequence = db.CommonSequences.Include(c => c.Matter).Select(cs => new SequenceViewModel()
-            {
-                Id = cs.Id,
-                Created = cs.Created.ToString(),
-                Description = cs.Description ?? "",
-                MatterName = cs.Matter.Name,
-                Modified = cs.Modified.ToString(),
-                Notation = cs.Notation.GetDisplayValue(),
-                RemoteDb = cs.RemoteDb.ToString() ?? "",
-                RemoteId = cs.RemoteId ?? ""
-
-            });
-
-            ViewBag.Sequences = await commonSequence.ToListAsync();
-
-            return View();
-
+            return NotFound();
         }
 
-        /// <summary>
-        /// The details.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="System.Threading.Tasks.Task"/>.
-        /// </returns>
-        public async Task<ActionResult> Details(long? id)
+        return View(commonSequence);
+
+    }
+
+    /// <summary>
+    /// The edit.
+    /// </summary>
+    /// <param name="id">
+    /// The id.
+    /// </param>
+    /// <returns>
+    /// The <see cref="System.Threading.Tasks.Task"/>.
+    /// </returns>
+    public async Task<ActionResult> Edit(long? id)
+    {
+        if (id == null)
         {
-            if (id == null)
-            {
-                return BadRequest();
-            }
-
-            CommonSequence commonSequence = dbFactory.CreateDbContext().CommonSequences.Include(c => c.Matter).Single(c => c.Id == id);
-            if (commonSequence == null)
-            {
-                return NotFound();
-            }
-
-            return View(commonSequence);
-
+            return BadRequest();
         }
 
-        /// <summary>
-        /// The edit.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="System.Threading.Tasks.Task"/>.
-        /// </returns>
-        public async Task<ActionResult> Edit(long? id)
+        using var db = dbFactory.CreateDbContext();
+        CommonSequence? commonSequence = await db.CommonSequences.FindAsync(id);
+        if (commonSequence == null)
         {
-            if (id == null)
-            {
-                return BadRequest();
-            }
-
-            using var db = dbFactory.CreateDbContext();
-            CommonSequence? commonSequence = await db.CommonSequences.FindAsync(id);
-            if (commonSequence == null)
-            {
-                return NotFound();
-            }
-            var remoteDb = commonSequence.RemoteDb == null ? Array.Empty<RemoteDb>() : new[] { (RemoteDb)commonSequence.RemoteDb };
-            ViewBag.MatterId = new SelectList(cache.Matters.ToArray(), "Id", "Name", commonSequence.MatterId);
-            ViewBag.Notation = Extensions.EnumExtensions.GetSelectList(new[] { commonSequence.Notation });
-            ViewBag.RemoteDb = Extensions.EnumExtensions.GetSelectList(remoteDb);
-            return View(commonSequence);
+            return NotFound();
         }
+        var remoteDb = commonSequence.RemoteDb == null ? Array.Empty<RemoteDb>() : new[] { (RemoteDb)commonSequence.RemoteDb };
+        ViewBag.MatterId = new SelectList(cache.Matters.ToArray(), "Id", "Name", commonSequence.MatterId);
+        ViewBag.Notation = Extensions.EnumExtensions.GetSelectList(new[] { commonSequence.Notation });
+        ViewBag.RemoteDb = Extensions.EnumExtensions.GetSelectList(remoteDb);
+        return View(commonSequence);
+    }
 
-        /// <summary>
-        /// The edit.
-        /// </summary>
-        /// <param name="commonSequence">
-        /// The common sequence.
-        /// </param>
-        /// <returns>
-        /// The <see cref="System.Threading.Tasks.Task"/>.
-        /// </returns>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(//[Bind(Include = "Id,Notation,MatterId,RemoteDb,RemoteId,Description")] 
-        CommonSequence commonSequence)
-        {
-            if (ModelState.IsValid)
-            {
-                var db = dbFactory.CreateDbContext();
-                db.Entry(commonSequence).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
-
-            var remoteDb = commonSequence.RemoteDb == null ? Array.Empty<RemoteDb>() : new[] { (RemoteDb)commonSequence.RemoteDb };
-
-            ViewBag.MatterId = new SelectList(cache.Matters.ToArray(), "Id", "Name", commonSequence.MatterId);
-            ViewBag.Notation = Extensions.EnumExtensions.GetSelectList(new[] { commonSequence.Notation });
-            ViewBag.RemoteDb = Extensions.EnumExtensions.GetSelectList(remoteDb);
-            return View(commonSequence);
-        }
-
-        /// <summary>
-        /// The delete.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="System.Threading.Tasks.Task"/>.
-        /// </returns>
-        public async Task<ActionResult> Delete(long? id)
-        {
-            if (id == null)
-            {
-                return BadRequest();
-            }
-
-            CommonSequence commonSequence = dbFactory.CreateDbContext().CommonSequences.Include(c => c.Matter).Single(c => c.Id == id);
-            if (commonSequence == null)
-            {
-                return NotFound();
-            }
-
-            return View(commonSequence);
-        }
-
-        /// <summary>
-        /// The delete confirmed.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="System.Threading.Tasks.Task"/>.
-        /// </returns>
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(long id)
+    /// <summary>
+    /// The edit.
+    /// </summary>
+    /// <param name="commonSequence">
+    /// The common sequence.
+    /// </param>
+    /// <returns>
+    /// The <see cref="System.Threading.Tasks.Task"/>.
+    /// </returns>
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<ActionResult> Edit(//[Bind(Include = "Id,Notation,MatterId,RemoteDb,RemoteId,Description")] 
+    CommonSequence commonSequence)
+    {
+        if (ModelState.IsValid)
         {
             var db = dbFactory.CreateDbContext();
-            CommonSequence commonSequence = await db.CommonSequences.FindAsync(id);
-            db.CommonSequences.Remove(commonSequence);
+            db.Entry(commonSequence).State = EntityState.Modified;
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        internal readonly struct SequenceViewModel()
+        var remoteDb = commonSequence.RemoteDb == null ? Array.Empty<RemoteDb>() : new[] { (RemoteDb)commonSequence.RemoteDb };
+
+        ViewBag.MatterId = new SelectList(cache.Matters.ToArray(), "Id", "Name", commonSequence.MatterId);
+        ViewBag.Notation = Extensions.EnumExtensions.GetSelectList(new[] { commonSequence.Notation });
+        ViewBag.RemoteDb = Extensions.EnumExtensions.GetSelectList(remoteDb);
+        return View(commonSequence);
+    }
+
+    /// <summary>
+    /// The delete.
+    /// </summary>
+    /// <param name="id">
+    /// The id.
+    /// </param>
+    /// <returns>
+    /// The <see cref="System.Threading.Tasks.Task"/>.
+    /// </returns>
+    public async Task<ActionResult> Delete(long? id)
+    {
+        if (id == null)
         {
-            public readonly long Id { get; init; }
-            public readonly string MatterName { get; init; }
-            public readonly string Notation { get; init; }
-            public readonly string RemoteDb { get; init; }
-            public readonly string RemoteId { get; init; }
-            public readonly string Description { get; init; }
-            public readonly string Created { get; init; }
-            public readonly string Modified { get; init; }
+            return BadRequest();
         }
+
+        CommonSequence commonSequence = dbFactory.CreateDbContext().CommonSequences.Include(c => c.Matter).Single(c => c.Id == id);
+        if (commonSequence == null)
+        {
+            return NotFound();
+        }
+
+        return View(commonSequence);
+    }
+
+    /// <summary>
+    /// The delete confirmed.
+    /// </summary>
+    /// <param name="id">
+    /// The id.
+    /// </param>
+    /// <returns>
+    /// The <see cref="System.Threading.Tasks.Task"/>.
+    /// </returns>
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<ActionResult> DeleteConfirmed(long id)
+    {
+        var db = dbFactory.CreateDbContext();
+        CommonSequence commonSequence = await db.CommonSequences.FindAsync(id);
+        db.CommonSequences.Remove(commonSequence);
+        await db.SaveChangesAsync();
+        return RedirectToAction("Index");
+    }
+
+    internal readonly struct SequenceViewModel()
+    {
+        public readonly long Id { get; init; }
+        public readonly string MatterName { get; init; }
+        public readonly string Notation { get; init; }
+        public readonly string RemoteDb { get; init; }
+        public readonly string RemoteId { get; init; }
+        public readonly string Description { get; init; }
+        public readonly string Created { get; init; }
+        public readonly string Modified { get; init; }
     }
 }
