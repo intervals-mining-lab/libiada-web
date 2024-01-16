@@ -1,6 +1,9 @@
-global using Libiada.Database;
-global using Microsoft.AspNetCore.Authorization;
-global using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Razor;
+
+using System.Data.Common;
+using System.Security.Principal;
+
 using Libiada.Database.Helpers;
 using Libiada.Database.Models.Calculators;
 using Libiada.Database.Models.Repositories.Catalogs;
@@ -9,12 +12,7 @@ using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
 
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Razor;
-using Microsoft.EntityFrameworkCore;
 using Npgsql;
-using System.Data.Common;
-using System.Security.Principal;
 
 var builder = WebApplication.CreateBuilder(args);
 

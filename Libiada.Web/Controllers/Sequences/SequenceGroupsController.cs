@@ -1,10 +1,5 @@
 ﻿namespace Libiada.Web.Controllers.Sequences;
 
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-
 using Libiada.Web.Extensions;
 using Libiada.Web.Helpers;
 

@@ -1,22 +1,17 @@
 ﻿namespace Libiada.Web.Controllers.Calculators;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-
 using Libiada.Core.Core;
 using Libiada.Core.Core.Characteristics.Calculators.AccordanceCalculators;
 using Libiada.Core.Music;
-using Libiada.Web.Helpers;
 
-using Newtonsoft.Json;
-using Microsoft.AspNetCore.Authorization;
-using Libiada.Database;
 using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Tasks;
+
 using Libiada.Web.Tasks;
+using Libiada.Web.Helpers;
+
+using Newtonsoft.Json;
 
 /// <summary>
 /// The accordance calculation controller.

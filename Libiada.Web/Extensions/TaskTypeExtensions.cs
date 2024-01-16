@@ -1,10 +1,9 @@
 ﻿namespace Libiada.Web.Extensions;
 
-using System;
-
 using Libiada.Core.Extensions;
 
 using Libiada.Web.Attributes;
+
 using Libiada.Database.Tasks;
 
 public static class TaskTypeExtensions

@@ -1,16 +1,14 @@
 ﻿namespace Libiada.Web.Models;
 
-using System.Collections.Generic;
-using System.Linq;
-
-using SequenceGenerator;
+using Libiada.SequenceGenerator;
 
 using Libiada.Core.Core;
 using Libiada.Core.DataTransformers;
 using Libiada.Core.Extensions;
 
-using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
 using Libiada.Database.Models.CalculatorsData;
+
+using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
 
 public class OrderTransformer
 {

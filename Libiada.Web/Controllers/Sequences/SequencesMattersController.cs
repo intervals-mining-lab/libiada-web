@@ -1,26 +1,23 @@
 ﻿namespace Libiada.Web.Controllers.Sequences;
 
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using Microsoft.EntityFrameworkCore;
-using System.IO;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
 
 using Bio;
 
 using Libiada.Core.Extensions;
 
-using Libiada.Web.Extensions;
 using Libiada.Database.Helpers;
 using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
 
 using Newtonsoft.Json;
+
 using Libiada.Web.Helpers;
-using FileHelper = Helpers.FileHelper;
+using Libiada.Web.Extensions;
+
 using Libiada.Web.Tasks;
+
+using FileHelper = Helpers.FileHelper;
 
 /// <summary>
 /// The sequences matters controller.

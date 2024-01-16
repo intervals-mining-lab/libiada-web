@@ -1,21 +1,15 @@
 ﻿namespace Libiada.Web.Controllers.Sequences;
 
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-
 using Libiada.Core.Core.SimpleTypes;
 
 using Libiada.Database.Tasks;
+using Libiada.Database.Helpers;
 using Libiada.Database.Extensions;
 
 using Newtonsoft.Json;
+
 using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
-using Libiada.Database.Helpers;
-
 
 /// <summary>
 /// The Fmotifs dictionary controller.

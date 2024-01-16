@@ -1,12 +1,5 @@
 ﻿namespace Libiada.Web.Controllers.Calculators;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Rendering;
-
 using Libiada.Core.Core;
 using Libiada.Core.Core.Characteristics.Calculators.FullCalculators;
 using Libiada.Core.Extensions;
@@ -16,18 +9,16 @@ using Libiada.Core.TimeSeries.Aggregators;
 using Libiada.Core.TimeSeries.Aligners;
 using Libiada.Core.TimeSeries.OneDimensional.DistanceCalculators;
 
-using Libiada.Web.Helpers;
-
-using Libiada.Database;
 using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
 using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Models.CalculatorsData;
 
-using Math;
-
 using Newtonsoft.Json;
+
+using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
+using Libiada.Web.Math;
 
 /// <summary>
 /// The local calculation controller.

@@ -1,9 +1,6 @@
 ﻿namespace Libiada.Web.Tasks;
 
 using Libiada.Database.Tasks;
-using System;
-using System.Collections.Generic;
-using System.Threading;
 
 using SystemTask = System.Threading.Tasks.Task;
 

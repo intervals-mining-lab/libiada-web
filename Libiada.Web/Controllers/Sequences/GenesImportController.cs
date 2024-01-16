@@ -1,23 +1,16 @@
 ﻿namespace Libiada.Web.Controllers.Sequences;
 
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-
 using Libiada.Core.Extensions;
 
 using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Models;
 using Libiada.Database.Tasks;
-
-using Libiada.Web.Helpers;
-
-using Newtonsoft.Json;
-using Libiada.Web.Tasks;
 using Libiada.Database.Helpers;
 
+using Libiada.Web.Helpers;
+using Libiada.Web.Tasks;
 
+using Newtonsoft.Json;
 
 /// <summary>
 /// The genes import controller.

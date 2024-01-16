@@ -1,13 +1,6 @@
 ﻿namespace Libiada.Web.Controllers.Calculators;
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Authorization;
 
 using Bio;
 using Bio.Extensions;
@@ -16,20 +9,18 @@ using Libiada.Core.Core;
 using Libiada.Core.Core.SimpleTypes;
 using Libiada.Core.Images;
 
-using Libiada.Web.Helpers;
 using Libiada.Database.Models.Calculators;
 using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Tasks;
+using Libiada.Database.Helpers;
+using Libiada.Database.Models.CalculatorsData;
 
 using Newtonsoft.Json;
 
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
-
-using Libiada.Database;
-using Libiada.Database.Helpers;
-using Libiada.Database.Models.CalculatorsData;
+using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
 
 /// <summary>
@@ -247,7 +238,7 @@ public class CustomSequenceCalculationController : AbstractResultController
     [NonAction]
     private short[] CutAmplitude(short[] shortArray, double percent)
     {
-        short max = shortArray.Max(e => (short)Math.Max(e, -e));
+        short max = shortArray.Max(e => (short)System.Math.Max(e, -e));
         double threshold = max * percent / 100;
         return shortArray.Select(e => (e > threshold) || (e < -threshold) ? e : (short)0).ToArray();
     }
@@ -270,7 +261,7 @@ public class CustomSequenceCalculationController : AbstractResultController
             short difference = short.MaxValue;
             for (int j = 0; j < alphabet.Length; j++)
             {
-                short currentDifference = (short)Math.Abs(alphabet[j] - shortArray[i]);
+                short currentDifference = (short)System.Math.Abs(alphabet[j] - shortArray[i]);
                 if (difference > currentDifference)
                 {
                     closest = alphabet[j];

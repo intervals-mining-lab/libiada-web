@@ -1,31 +1,21 @@
 ﻿namespace Libiada.Web.Controllers.Calculators;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-
 using Libiada.Core.Core;
 using Libiada.Core.Extensions;
 
 using Libiada.Web.Helpers;
+using Libiada.Web.Tasks;
 
 using Libiada.Database.Models.CalculatorsData;
-using Libiada.Database;
 using Libiada.Database.Models.Calculators;
 using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Tasks;
 
 using Newtonsoft.Json;
 
-using SequenceGenerator;
-using Microsoft.AspNetCore.Authorization;
-
-
+using Libiada.SequenceGenerator;
 
 using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
-using Libiada.Web.Tasks;
 
 /// <summary>
 /// Calculates accordance of orders by intervals distributions.

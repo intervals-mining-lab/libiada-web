@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewBag.Title - FOA Research Lab</title>
     
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/twitter-bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Libiada.Web.styles.css" asp-append-version="true" />
@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="~/lib/AlertifyJS/css/themes/bootstrap.css" />
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/AlertifyJS/alertify.min.js"></script>
     <script src="~/lib/angular.js/angular.js"></script>
     <script src="~/js/Angular/functions.js"></script>
@@ -46,7 +46,7 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link" href="http://foarLab.org/">Home</a>
+                            <a class="nav-link" href="https://foarLab.org/">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="TaskManager" asp-action="Index">Task manager</a>
@@ -59,7 +59,7 @@
     </header>
     <div ng-app="libiada">
         <scroll-jumper></scroll-jumper>
-        <div class="container pt-2 body-content">
+        <div class="container-fluid pt-2 pe-4 body-content">
             <main role="main" @* class="pb-3" *@ >
                 @RenderBody()
                 @if (ViewBag.Error != null)

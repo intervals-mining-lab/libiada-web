@@ -1,20 +1,15 @@
 ﻿namespace Libiada.Web.Controllers.Sequences;
 
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-
 using Libiada.Web.Extensions;
+using Libiada.Web.Helpers;
+using Libiada.Web.Tasks;
+
 using Libiada.Database.Tasks;
+using Libiada.Database.Helpers;
 
 using Newtonsoft.Json;
 
 using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
-using Libiada.Web.Helpers;
-using Libiada.Web.Tasks;
-using Libiada.Database.Helpers;
 
 /// <summary>
 /// The matters controller.

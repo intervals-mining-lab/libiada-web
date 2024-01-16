@@ -1,13 +1,9 @@
 ﻿namespace Libiada.Web.Controllers.Calculators;
 
-using System.Collections.Generic;
-using System.IO;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-
 using Libiada.Database.Tasks;
 
 using Newtonsoft.Json;
+
 using Libiada.Web.Tasks;
 
 /// <summary>

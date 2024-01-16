@@ -1,29 +1,20 @@
 ﻿namespace Libiada.Web.Controllers.Calculators;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-
-using Helpers;
-
 using Libiada.Core.Core;
 using Libiada.Core.Core.Characteristics.Calculators.BinaryCalculators;
 using Libiada.Core.Core.Characteristics.Calculators.CongenericCalculators;
 using Libiada.Core.Extensions;
 using Libiada.Core.Music;
 
-using Libiada.Database;
 using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
 using Libiada.Database.Extensions;
 using Libiada.Database.Models.Repositories.Catalogs;
 
 using Newtonsoft.Json;
-using Microsoft.AspNetCore.Authorization;
-using Libiada.Web.Tasks;
-using Microsoft.EntityFrameworkCore;
 
+using Libiada.Web.Tasks;
+using Libiada.Web.Helpers;
 
 /// <summary>
 /// The relation calculation controller.

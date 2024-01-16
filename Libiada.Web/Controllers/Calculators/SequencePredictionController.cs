@@ -1,24 +1,19 @@
 ﻿namespace Libiada.Web.Controllers.Calculators;
 
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
 
 using Libiada.Core.Core;
 using Libiada.Core.Core.Characteristics.Calculators.FullCalculators;
 using Libiada.Core.Extensions;
 
-using Libiada.Web.Helpers;
 using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
 
 using Newtonsoft.Json;
-using Microsoft.AspNetCore.Authorization;
-using Libiada.Database;
+
+using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
 
 /// <summary>
@@ -197,7 +192,7 @@ public class SequencePredictionController : AbstractResultController
     [NonAction]
     private Chain Copy(Chain source, Chain destanation)
     {
-        int commonLenth = Math.Min(source.Length, destanation.Length);
+        int commonLenth = System.Math.Min(source.Length, destanation.Length);
         for (int i = 0; i < commonLenth; i++)
         {
             destanation.Set(source.Get(i), i);
@@ -237,7 +232,7 @@ public class SequencePredictionController : AbstractResultController
             {
                 currentPredicion.Set(element, wordPositionStart);
                 double currentAvgRemoteness = averageRemotenessCalc.Calculate(currentPredicion, Link.Start);
-                double delta = Math.Abs(currentAvgRemoteness - averageRemoteness);
+                double delta = System.Math.Abs(currentAvgRemoteness - averageRemoteness);
 
                 if (delta < accuracy)
                 {

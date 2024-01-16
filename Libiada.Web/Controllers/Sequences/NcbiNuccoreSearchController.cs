@@ -8,12 +8,9 @@ using Libiada.Database.Models.NcbiSequencesData;
 using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
 
-using Newtonsoft.Json;
-
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
 using Libiada.Web.Tasks;
+
+using Newtonsoft.Json;
 
 [Authorize(Roles = "Admin")]
 public class NcbiNuccoreSearchController : AbstractResultController

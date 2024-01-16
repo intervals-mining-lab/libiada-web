@@ -1,11 +1,6 @@
 ﻿namespace Libiada.Web.Helpers;
 
-using Libiada.Database;
 using Libiada.Web.Models.CalculatorsData;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 public static class SelectListHelper
 {

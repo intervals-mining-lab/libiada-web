@@ -1,26 +1,17 @@
 ﻿namespace Libiada.Web.Controllers.Calculators;
 
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-
 using Libiada.Core.Extensions;
 
-using Libiada.Web.Helpers;
+using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Models.Repositories.Catalogs;
+using Libiada.Database.Models.Calculators;
+using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
 
 using Newtonsoft.Json;
 
-using Microsoft.AspNetCore.Authorization;
-using Libiada.Database;
-using Libiada.Database.Models.CalculatorsData;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
-using Libiada.Database.Models.Calculators;
-using Libiada.Database.Models.Repositories.Sequences;
-
 
 /// <summary>
 /// The subsequences calculation controller.
@@ -133,7 +124,7 @@ public class SubsequencesCalculationController : AbstractResultController
             {
                 { "sequencesData", sequencesData },
                 { "features", features.ToDictionary(f => (byte)f, f => f.GetDisplayValue()) },
-                { "attributes", EnumExtensions.ToArray<Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
+                { "attributes", EnumExtensions.ToArray<AnnotationAttribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
                 { "attributeValues", allAttributeValues.Select(sa => new { attribute = sa.AttributeId, value = sa.Value }) },
                 { "subsequencesCharacteristicsNames", subsequencesCharacteristicsNames },
                 { "subsequencesCharacteristicsList", subsequencesCharacteristicsList }

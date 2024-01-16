@@ -1,14 +1,12 @@
 ﻿namespace Libiada.Web.Controllers.Sequences;
 
-using System;
 using System.ComponentModel;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
 
 using Libiada.Core.Core;
 using Libiada.Core.Music;
 
 using Libiada.Web.Helpers;
+
 using Libiada.Database.Models.Repositories.Sequences;
 
 using Newtonsoft.Json;

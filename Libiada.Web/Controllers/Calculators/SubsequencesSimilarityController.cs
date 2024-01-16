@@ -1,24 +1,21 @@
 ﻿namespace Libiada.Web.Controllers.Calculators;
 
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
 
 using Libiada.Core.Extensions;
 
-using Libiada.Web.Helpers;
 using Libiada.Database.Models;
 using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Models.Repositories.Catalogs;
+
+using Libiada.Database.Models.Repositories.Sequences;
+using Libiada.Database.Models.Calculators;
 using Libiada.Database.Tasks;
 
 using Newtonsoft.Json;
 
 using Libiada.Web.Tasks;
-using Libiada.Database.Models.Repositories.Sequences;
-using Libiada.Database.Models.Calculators;
+using Libiada.Web.Helpers;
 
 /// <summary>
 /// The subsequences similarity controller.
@@ -170,7 +167,7 @@ public class SubsequencesSimilarityController : AbstractResultController
             {
                 for (int j = 0; j < secondSequenceCharacteristics.Count; j++)
                 {
-                    if (Math.Abs(firstSequenceCharacteristics[i] - secondSequenceCharacteristics[j]) <= difference)
+                    if (System.Math.Abs(firstSequenceCharacteristics[i] - secondSequenceCharacteristics[j]) <= difference)
                     {
                         similarSubsequences.Add((i, j));
 

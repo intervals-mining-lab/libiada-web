@@ -4,8 +4,6 @@ using Libiada.Web.Controllers.Calculators;
 
 using Newtonsoft.Json;
 
-using NUnit.Framework;
-
 [TestFixture]
 public class SubsequencesDistributionControllerTests
 {

@@ -1,26 +1,21 @@
 ﻿namespace Libiada.Web.Controllers.Calculators;
 
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-
-using Clusterizator;
+using Libiada.Clusterizator;
 
 using Libiada.Core.Music;
+
 using Libiada.Web.Extensions;
 using Libiada.Web.Helpers;
+using Libiada.Web.Tasks;
+
 using Libiada.Database.Tasks;
+using Libiada.Database.Models.Repositories.Catalogs;
+using Libiada.Database.Models.Repositories.Sequences;
+using Libiada.Database.Models.Calculators;
 
 using Newtonsoft.Json;
 
 using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
-using Microsoft.AspNetCore.Authorization;
-using Libiada.Database;
-using Libiada.Database.Models.Repositories.Catalogs;
-using Libiada.Database.Models.Repositories.Sequences;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Libiada.Database.Models.Calculators;
-using Libiada.Web.Tasks;
 
 /// <summary>
 /// The clusterization controller.

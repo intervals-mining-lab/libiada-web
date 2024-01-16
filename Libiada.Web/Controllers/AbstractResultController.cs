@@ -1,12 +1,9 @@
 ﻿namespace Libiada.Web.Controllers;
 
-using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-
 using Libiada.Database.Tasks;
 
 using Newtonsoft.Json;
+
 using Libiada.Web.Tasks;
 
 /// <summary>

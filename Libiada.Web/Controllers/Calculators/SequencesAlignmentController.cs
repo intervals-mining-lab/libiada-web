@@ -1,24 +1,18 @@
 ﻿namespace Libiada.Web.Controllers.Calculators;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-
 using Bio.Extensions;
 
 using Libiada.Core.Extensions;
 
-using Libiada.Web.Helpers;
+using Libiada.Database.Models.Calculators;
 using Libiada.Database.Models.Repositories.Catalogs;
+using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
 
 using Newtonsoft.Json;
 
-using Libiada.Database.Models.Calculators;
-using Libiada.Database;
 using Libiada.Web.Tasks;
-using Libiada.Database.Models.Repositories.Sequences;
+using Libiada.Web.Helpers;
 
 /// <summary>
 /// The alignment controller.
@@ -204,13 +198,13 @@ public class SequencesAlignmentController : AbstractResultController
         switch (validationType)
         {
             case "Similarity":
-                return (first, second) => Math.Abs(Math.Min(first, second));
+                return (first, second) => System.Math.Abs(System.Math.Min(first, second));
             case "Difference":
-                return (first, second) => -Math.Abs(first - second);
+                return (first, second) => -System.Math.Abs(first - second);
             case "NormalizedDifference":
-                return (first, second) => -Math.Abs((first - second) / (first + second));
+                return (first, second) => -System.Math.Abs((first - second) / (first + second));
             case "Equality":
-                return (first, second) => Math.Abs(first - second) < (Math.Abs(first + second) / 20) ? 1 : 0;
+                return (first, second) => System.Math.Abs(first - second) < (System.Math.Abs(first + second) / 20) ? 1 : 0;
             default:
                 throw new ArgumentException("unknown validation type", nameof(validationType));
         }

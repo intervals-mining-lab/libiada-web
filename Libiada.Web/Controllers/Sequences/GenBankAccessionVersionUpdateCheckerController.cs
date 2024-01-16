@@ -8,12 +8,6 @@ using Libiada.Database.Models;
 
 using Newtonsoft.Json;
 
-using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-
 using Libiada.Web.Tasks;
 
 public class GenBankAccessionVersionUpdateCheckerController : AbstractResultController
@@ -78,7 +72,7 @@ public class GenBankAccessionVersionUpdateCheckerController : AbstractResultCont
 
             for (int i = 0; i < accessions.Length; i += maxChunkSize)
             {
-                int actualChunkSize = Math.Min(maxChunkSize, accessions.Length - i);
+                int actualChunkSize = System.Math.Min(maxChunkSize, accessions.Length - i);
                 var accessionsChunk = new string[actualChunkSize];
                 Array.Copy(accessions, i, accessionsChunk, 0, actualChunkSize);
                 (string ncbiWebEnvironment, string queryKey) = ncbiHelper.ExecuteEPostRequest(string.Join(",", accessionsChunk));

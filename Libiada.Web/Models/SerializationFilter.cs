@@ -1,10 +1,8 @@
 ﻿namespace Libiada.Web.Models;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
+
 using System.Reflection;
 
 public class SerializationFilter : DefaultContractResolver

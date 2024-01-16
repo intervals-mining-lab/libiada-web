@@ -1,10 +1,6 @@
 ﻿namespace Libiada.Web.Controllers.Sequences;
 
-using System.Collections.Generic;
-
-using Microsoft.AspNetCore.Mvc;
 using Libiada.Database.Models.Repositories.Sequences;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 /// <summary>
 /// The sequence elements controller.

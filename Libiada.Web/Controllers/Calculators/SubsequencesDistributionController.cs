@@ -1,13 +1,7 @@
 ﻿namespace Libiada.Web.Controllers.Calculators;
 
-using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
-using Microsoft.AspNetCore.Mvc;
 
 using Newtonsoft.Json;
 
@@ -28,7 +22,6 @@ using Bio.IO.FastA;
 using Bio;
 
 using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
-using Attribute = Database.Attribute;
 
 /// <summary>
 /// The subsequences distribution controller.
@@ -165,7 +158,7 @@ public class SubsequencesDistributionController : AbstractResultController
                                 { "subsequencesCharacteristicsList", subsequencesCharacteristicsList },
                                 { "sequenceCharacteristicName", sequenceCharacteristicName },
                                 { "features", features.ToSelectList(features).ToDictionary(f => f.Value) },
-                                { "attributes", EnumExtensions.ToArray<Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
+                                { "attributes", EnumExtensions.ToArray<AnnotationAttribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
                                 { "attributeValues", allAttributeValues.Select(sa => new { attribute = sa.AttributeId, value = sa.Value }) }
                             };
 

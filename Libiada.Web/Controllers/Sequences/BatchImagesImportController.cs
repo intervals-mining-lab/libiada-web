@@ -1,19 +1,13 @@
 ﻿namespace Libiada.Web.Controllers.Sequences;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-
 using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
 
 using Newtonsoft.Json;
 
-using System.IO;
-using Microsoft.AspNetCore.Authorization;
 using Libiada.Core.Extensions;
+
 using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
 

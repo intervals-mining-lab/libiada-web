@@ -1,8 +1,5 @@
 ﻿namespace Libiada.Web.Models.CalculatorsData;
 
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-
 /// <summary>
 /// The characteristic types data.
 /// </summary>

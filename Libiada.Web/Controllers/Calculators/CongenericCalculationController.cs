@@ -1,27 +1,19 @@
 ﻿namespace Libiada.Web.Controllers.Calculators;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-
-using Helpers;
-
 using Libiada.Core.Core;
 using Libiada.Core.Core.Characteristics.Calculators.CongenericCalculators;
 using Libiada.Core.Extensions;
 using Libiada.Core.Music;
 
-using Libiada.Database.Tasks;
-
 using Newtonsoft.Json;
+
+using Libiada.Database.Tasks;
 using Libiada.Database.Models.Repositories.Sequences;
-using Microsoft.AspNetCore.Authorization;
-using Libiada.Database;
 using Libiada.Database.Models.Repositories.Catalogs;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Libiada.Database.Models.Calculators;
 using Libiada.Database.Models.CalculatorsData;
+
+using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
 
 /// <summary>

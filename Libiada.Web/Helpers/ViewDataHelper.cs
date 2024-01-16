@@ -1,20 +1,17 @@
 ﻿namespace Libiada.Web.Helpers;
 
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
+using System.Security.Principal;
 
 using Libiada.Core.Music;
+
 using Libiada.Web.Extensions;
 using Libiada.Web.Models.CalculatorsData;
+
 using Libiada.Database.Models.Repositories.Catalogs;
+using Libiada.Database.Attributes;
 
 using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
-using Libiada.Database;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Libiada.Database.Attributes;
-using System.Security.Principal;
 
 /// <summary>
 /// Class filling data for Views.

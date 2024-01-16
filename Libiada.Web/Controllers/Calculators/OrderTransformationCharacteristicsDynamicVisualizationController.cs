@@ -1,24 +1,19 @@
 ﻿namespace Libiada.Web.Controllers.Calculators;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-
 using Libiada.Core.Core;
 using Libiada.Core.Core.Characteristics.Calculators.FullCalculators;
 using Libiada.Core.DataTransformers;
 using Libiada.Core.Extensions;
 using Libiada.Core.Music;
 
-using Libiada.Web.Helpers;
 using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
 
 using Newtonsoft.Json;
-using Microsoft.AspNetCore.Authorization;
+
 using Libiada.Web.Tasks;
+using Libiada.Web.Helpers;
 
 /// <summary>
 /// The order transformation calculation controller.

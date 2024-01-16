@@ -1,8 +1,5 @@
 ﻿namespace Libiada.Web.Math;
 
-using System;
-using System.Linq;
-
 /// <summary>
 /// The auto correlation.
 /// </summary>
@@ -99,7 +96,7 @@ public static class AutoCorrelation
         // Get average
         double avg = GetAverage(data);
 
-        double sum = data.Sum(t => Math.Pow(t - avg, 2));
+        double sum = data.Sum(t => System.Math.Pow(t - avg, 2));
 
         return sum / len;
     }
@@ -115,7 +112,7 @@ public static class AutoCorrelation
     /// </returns>
     public static double GetStdev(double[] data)
     {
-        return Math.Sqrt(GetVariance(data));
+        return System.Math.Sqrt(GetVariance(data));
     }
 
     /// <summary>

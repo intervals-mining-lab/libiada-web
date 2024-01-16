@@ -1,9 +1,5 @@
 ﻿namespace Libiada.Web.Controllers.Sequences;
 
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Bio.Extensions;
 
 using Libiada.Core.Core;
@@ -13,10 +9,11 @@ using Libiada.Core.Extensions;
 using Libiada.Database.Helpers;
 using Libiada.Database.Tasks;
 
-using Newtonsoft.Json;
-using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
 using Libiada.Web.Tasks;
 
+using Newtonsoft.Json;
+
+using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
 
 /// <summary>
 /// The custom sequence order transformer controller.

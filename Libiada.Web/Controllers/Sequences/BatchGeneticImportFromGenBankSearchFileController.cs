@@ -1,18 +1,11 @@
 ﻿namespace Libiada.Web.Controllers.Sequences;
 
-using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-
 using Bio;
 using Bio.Core.Extensions;
 using Bio.IO.GenBank;
 
 using Libiada.Core.Extensions;
 
-using Libiada.Database;
 using Libiada.Database.Helpers;
 using Libiada.Database.Models;
 using Libiada.Database.Models.CalculatorsData;
@@ -20,7 +13,7 @@ using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
 
 using Newtonsoft.Json;
-using Microsoft.AspNetCore.Authorization;
+
 using Libiada.Web.Tasks;
 
 [Authorize(Roles = "Admin")]

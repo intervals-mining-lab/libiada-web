@@ -1,17 +1,8 @@
 ﻿namespace Libiada.Web.Controllers.Calculators;
 
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-
 using Bio;
 using Bio.Extensions;
 
-using Libiada.Database;
 using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Tasks;
@@ -23,11 +14,12 @@ using Libiada.Core.DataTransformers;
 using Libiada.Core.Extensions;
 
 using Libiada.Web.Helpers;
+using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
 
 using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
-using Libiada.Web.Tasks;
+
 
 
 /// <summary>

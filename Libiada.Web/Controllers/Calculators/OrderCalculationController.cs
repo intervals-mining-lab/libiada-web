@@ -1,25 +1,18 @@
 ﻿namespace Libiada.Web.Controllers.Calculators;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-
 using Libiada.Core.Core;
 using Libiada.Core.Core.Characteristics.Calculators.FullCalculators;
 
 using Libiada.Database.Tasks;
-using Libiada.Web.Helpers;
 using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Models.Repositories.Catalogs;
 
 using Newtonsoft.Json;
 
-using SequenceGenerator;
-using Microsoft.AspNetCore.Authorization;
-using Libiada.Database;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Libiada.SequenceGenerator;
+
 using Libiada.Web.Tasks;
+using Libiada.Web.Helpers;
 
 /// <summary>
 /// Calculates distribution of sequences by order.

@@ -4,9 +4,6 @@ using Bio;
 using Bio.Core.Extensions;
 using Bio.IO.GenBank;
 
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
-
 using Newtonsoft.Json;
 
 using Libiada.Core.Extensions;

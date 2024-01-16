@@ -1,9 +1,5 @@
 ﻿namespace Libiada.Web.Helpers;
 
-using Microsoft.AspNetCore.Http;
-using System;
-using System.IO;
-
 /// <summary>
 /// The file helper.
 /// </summary>

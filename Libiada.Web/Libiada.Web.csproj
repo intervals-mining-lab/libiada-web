@@ -36,4 +36,12 @@
     <ProjectReference Include="..\..\libiada-database\Libiada.Database\Libiada.Database.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Using Include="Libiada.Database" />
+    <Using Include="Microsoft.AspNetCore.Authorization" />
+    <Using Include="Microsoft.AspNetCore.Mvc" />
+    <Using Include="Microsoft.AspNetCore.Mvc.Rendering" />
+    <Using Include="Microsoft.EntityFrameworkCore" />
+  </ItemGroup>
+
 </Project>

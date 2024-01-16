@@ -1,19 +1,17 @@
 ﻿namespace Libiada.Web.Controllers.Sequences;
 
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-
 using Libiada.Core.DataTransformers;
 using Libiada.Core.Extensions;
 
-using Libiada.Web.Helpers;
 using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
 
 using Newtonsoft.Json;
-using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
+
 using Libiada.Web.Tasks;
+using Libiada.Web.Helpers;
+
+using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
 
 /// <summary>
 /// The order transformation controller.

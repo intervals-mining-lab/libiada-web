@@ -1,7 +1,5 @@
 ﻿namespace Libiada.Web.Models.CalculatorsData;
 
-using Microsoft.AspNetCore.Mvc;
-
 /// <summary>
 /// The arrangement type select list item.
 /// </summary>

@@ -1,10 +1,7 @@
 ﻿namespace Libiada.Web.Models.Repositories.Catalogs;
 
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Principal;
 
-using Libiada.Database;
 using Libiada.Database.Models;
 
 using Libiada.Core.Core;
@@ -14,6 +11,7 @@ using Libiada.Core.Extensions;
 
 using Libiada.Web.Models.CalculatorsData;
 using Libiada.Web.Extensions;
+
 using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
 
 

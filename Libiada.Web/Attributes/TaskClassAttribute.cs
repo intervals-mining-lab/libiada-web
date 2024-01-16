@@ -1,7 +1,5 @@
 ﻿namespace Libiada.Web.Attributes;
 
-using System;
-
 using Libiada.Web.Controllers;
 
 /// <summary>

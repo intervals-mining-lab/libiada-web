@@ -1,7 +1,5 @@
 ﻿namespace Libiada.Web.Controllers;
 
-using Microsoft.AspNetCore.Mvc;
-
 /// <summary>
 /// Controller for partial views.
 /// Needed for angular templates.

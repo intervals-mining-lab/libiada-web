@@ -1,17 +1,13 @@
 ﻿namespace Libiada.Web.Controllers.Sequences;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-
-using Libiada.Web.Helpers;
 using Libiada.Database.Tasks;
 using Libiada.Database.Models.Repositories.Sequences;
 
 using Newtonsoft.Json;
 
 using Segmenter.PoemsSegmenter;
+
+using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
 
 public class PoemSegmentationController : AbstractResultController

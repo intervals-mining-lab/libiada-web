@@ -1,19 +1,17 @@
 ﻿namespace Libiada.Web.Tasks;
 
-using System;
-using System.Linq;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
+
 using Libiada.Database.Tasks;
 using Libiada.Database.Models;
 
 using Libiada.Core.Extensions;
 
 using Libiada.Web.Helpers;
-
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.SignalR;
+using Libiada.Web.Extensions;
 
 using SystemTask = System.Threading.Tasks.Task;
-using Libiada.Web.Extensions;
 
 /// <summary>
 /// SignalR messages hub class.

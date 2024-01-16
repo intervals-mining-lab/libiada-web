@@ -1,15 +1,10 @@
 ﻿namespace Libiada.Web.Extensions;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-
 using Libiada.Core.Exceptions;
 using Libiada.Core.Extensions;
 
-using Libiada.Web.Attributes;
 using Libiada.Web.Models.CalculatorsData;
+
 using Libiada.Database.Attributes;
 
 /// <summary>

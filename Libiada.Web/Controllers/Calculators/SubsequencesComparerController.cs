@@ -1,16 +1,7 @@
 ﻿namespace Libiada.Web.Controllers.Calculators;
 
-using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 using System.Globalization;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
 
-using Libiada.Core.Extensions;
-
-using Libiada.Web.Extensions;
-using Libiada.Web.Helpers;
 using Libiada.Database.Models.Calculators;
 using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Models.Repositories.Catalogs;
@@ -19,13 +10,17 @@ using Libiada.Database.Models.Repositories.Sequences;
 
 using Newtonsoft.Json;
 
-using static Libiada.Core.Extensions.EnumExtensions;
+using Libiada.Core.Extensions;
 using Libiada.Core.TimeSeries.OneDimensional.DistanceCalculators;
 using Libiada.Core.TimeSeries.OneDimensional.Comparers;
 using Libiada.Core.TimeSeries.Aligners;
 using Libiada.Core.TimeSeries.Aggregators;
-using Microsoft.AspNetCore.Authorization;
+
 using Libiada.Web.Tasks;
+using Libiada.Web.Extensions;
+using Libiada.Web.Helpers;
+
+using static Libiada.Core.Extensions.EnumExtensions;
 
 /// <summary>
 /// The subsequences comparer controller.
@@ -219,7 +214,7 @@ public class SubsequencesComparerController : AbstractResultController
                 { "similarities", similarities },
                 { "filteredSimilarities", filteredSimilarities },
                 { "features", features.ToDictionary(f => (byte)f, f => f.GetDisplayValue()) },
-                { "attributes", ToArray<Libiada.Database.Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
+                { "attributes", ToArray<Libiada.Database.AnnotationAttribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
                 { "maxPercentageDifferences", maxPercentageDifferences },
                 { "sequenceCharacteristicName", sequenceCharacteristicName },
                 { "nature", (byte)Nature.Genetic },
@@ -379,7 +374,7 @@ public class SubsequencesComparerController : AbstractResultController
                                              .Distinct()
                                              .Count();
 
-                double equalSequencesCount = Math.Min(firstEqualCount, secondEqualCount) * 2d;
+                double equalSequencesCount = System.Math.Min(firstEqualCount, secondEqualCount) * 2d;
                 double formula1 = equalSequencesCount / (characteristics[i].Length + characteristics[j].Length);
 
                 double formula2 = 0;
@@ -399,7 +394,7 @@ public class SubsequencesComparerController : AbstractResultController
                                                  .Distinct()
                                                  .Sum(s => characteristics[j][s].CharacteristicsValues[0]);
 
-                double similarSequencesCharacteristicSum = Math.Min(firstCharacteristicSum, secondCharacteristicSum) * 2d;
+                double similarSequencesCharacteristicSum = System.Math.Min(firstCharacteristicSum, secondCharacteristicSum) * 2d;
 
                 double fistSequenceCharacteristicSum = characteristics[i].Sum(c => c.CharacteristicsValues[0]);
                 double secondSequenceCharacteristicSum = characteristics[j].Sum(c => c.CharacteristicsValues[0]);
@@ -409,9 +404,9 @@ public class SubsequencesComparerController : AbstractResultController
                 const int digits = 5;
                 similarities[i, j] = new
                 {
-                    formula1 = Math.Round(formula1, digits),
-                    formula2 = Math.Round(formula2, digits),
-                    formula3 = Math.Round(formula3, digits),
+                    formula1 = System.Math.Round(formula1, digits),
+                    formula2 = System.Math.Round(formula2, digits),
+                    formula3 = System.Math.Round(formula3, digits),
                     firstAbsolutelyEqualElementsCount = firstAbsolutelyEqualCount,
                     firstNearlyEqualElementsCount = firstNearlyEqualCount,
                     firstNotEqualElementsCount = characteristics[i].Length - firstEqualCount,
@@ -484,7 +479,7 @@ public class SubsequencesComparerController : AbstractResultController
     [NonAction]
     private double CalculateAverageDifference(double first, double second)
     {
-        return Math.Abs((first - second) / ((first + second) / 2));
+        return System.Math.Abs((first - second) / ((first + second) / 2));
     }
 
     /// <summary>

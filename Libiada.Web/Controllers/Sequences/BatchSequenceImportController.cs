@@ -1,11 +1,5 @@
 ﻿namespace Libiada.Web.Controllers.Sequences;
 
-using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-
 using Bio;
 using Bio.Extensions;
 using Bio.IO.GenBank;
@@ -19,6 +13,7 @@ using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
 
 using Newtonsoft.Json;
+
 using Libiada.Web.Tasks;
 
 

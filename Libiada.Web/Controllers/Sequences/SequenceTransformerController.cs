@@ -1,13 +1,10 @@
 ﻿namespace Libiada.Web.Controllers.Sequences;
 
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-
 using Libiada.Core.Core;
 using Libiada.Core.DataTransformers;
 
 using Libiada.Web.Helpers;
+
 using Libiada.Database.Models.Repositories.Sequences;
 
 using Newtonsoft.Json;

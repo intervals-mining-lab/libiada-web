@@ -1,7 +1,5 @@
 ﻿namespace Libiada.Web.Controllers;
 
-using Microsoft.AspNetCore.Mvc;
-
 /// <summary>
 /// The calculation controller.
 /// </summary>
