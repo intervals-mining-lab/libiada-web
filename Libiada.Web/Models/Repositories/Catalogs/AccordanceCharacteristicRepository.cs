@@ -2,8 +2,6 @@
 
 using System.Security.Principal;
 
-using Libiada.Database.Models;
-
 using Libiada.Core.Core;
 using Libiada.Core.Core.ArrangementManagers;
 using Libiada.Core.Core.Characteristics.Calculators.AccordanceCalculators;

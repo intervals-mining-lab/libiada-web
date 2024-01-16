@@ -1,7 +1,8 @@
-﻿@using Libiada.Web.Extensions;
-@using Libiada.Database.Extensions;
-@using Libiada.Web.Helpers;
+﻿@using Libiada.Web.Extensions
+@using Libiada.Database.Extensions
+@using Libiada.Web.Helpers
 @using Microsoft.AspNetCore.Identity
+
 @inject LibiadaDatabaseEntities Db
 ﻿
 <!DOCTYPE html>
@@ -59,7 +60,7 @@
     </header>
     <div ng-app="libiada">
         <scroll-jumper></scroll-jumper>
-        <div class="container-fluid pt-2 pe-4 body-content">
+        <div class="container-fluid pt-2 pe-4 ms-0 body-content">
             <main role="main" @* class="pb-3" *@ >
                 @RenderBody()
                 @if (ViewBag.Error != null)

@@ -15,14 +15,10 @@ select {
     max-width: 280px;
 }
 
-.body-content {
-    margin-left: 0px;
-}
-
 table {
     font-family: monospace;
-    /*    font-size: 16px;
-    font-style: normal;
+    font-size: 16px;
+    /*font-style: normal;
     font-variant: normal;
     font-weight: 400;
     line-height: 30px;*/

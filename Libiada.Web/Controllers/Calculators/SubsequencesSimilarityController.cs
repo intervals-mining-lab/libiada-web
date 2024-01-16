@@ -4,7 +4,6 @@ using System.Globalization;
 
 using Libiada.Core.Extensions;
 
-using Libiada.Database.Models;
 using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Models.Repositories.Catalogs;
 

@@ -4,7 +4,6 @@ using Libiada.Database.Helpers;
 using Libiada.Database.Models.NcbiSequencesData;
 using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
-using Libiada.Database.Models;
 
 using Newtonsoft.Json;
 

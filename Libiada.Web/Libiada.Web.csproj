@@ -37,7 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Using Include="Libiada.Database" />
+    <Using Include="Libiada.Database.Models" />
     <Using Include="Microsoft.AspNetCore.Authorization" />
     <Using Include="Microsoft.AspNetCore.Mvc" />
     <Using Include="Microsoft.AspNetCore.Mvc.Rendering" />

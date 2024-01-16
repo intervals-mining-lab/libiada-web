@@ -6,7 +6,6 @@ using System.Security.Principal;
 using System.Runtime.CompilerServices;
 
 using Libiada.Database.Tasks;
-using Libiada.Database.Models;
 
 using Libiada.Core.Extensions;
 

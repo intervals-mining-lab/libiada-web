@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
 using Libiada.Database.Tasks;
-using Libiada.Database.Models;
 
 using Libiada.Core.Extensions;
 

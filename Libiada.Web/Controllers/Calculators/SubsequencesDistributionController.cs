@@ -11,7 +11,6 @@ using Libiada.Web.Extensions;
 using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
 
-using Libiada.Database.Models;
 using Libiada.Database.Models.Calculators;
 using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Models.Repositories.Catalogs;

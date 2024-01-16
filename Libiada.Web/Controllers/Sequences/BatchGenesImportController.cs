@@ -1,7 +1,6 @@
 ﻿namespace Libiada.Web.Controllers.Sequences;
 
 using Libiada.Database.Helpers;
-using Libiada.Database.Models;
 using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Tasks;
 

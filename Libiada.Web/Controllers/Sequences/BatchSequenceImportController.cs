@@ -8,7 +8,6 @@ using Libiada.Core.Extensions;
 
 using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Helpers;
-using Libiada.Database.Models;
 using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
 

@@ -214,7 +214,7 @@ public class SubsequencesComparerController : AbstractResultController
                 { "similarities", similarities },
                 { "filteredSimilarities", filteredSimilarities },
                 { "features", features.ToDictionary(f => (byte)f, f => f.GetDisplayValue()) },
-                { "attributes", ToArray<Libiada.Database.AnnotationAttribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
+                { "attributes", ToArray<AnnotationAttribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
                 { "maxPercentageDifferences", maxPercentageDifferences },
                 { "sequenceCharacteristicName", sequenceCharacteristicName },
                 { "nature", (byte)Nature.Genetic },

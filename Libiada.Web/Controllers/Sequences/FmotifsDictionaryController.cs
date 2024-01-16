@@ -68,7 +68,7 @@ public class FmotifsDictionaryController : SequencesMattersController
                                                    .Select(el => db.Fmotifs.Single(f => f.Id == el))
                                                    .ToList();
         var musicChainBuilding = db.GetSequenceBuilding(musicSequence.Id);
-        var sortedFmotifs = new Dictionary<Libiada.Database.Fmotif, int>();
+        var sortedFmotifs = new Dictionary<Database.Models.Fmotif, int>();
         for (int i = 0; i < musicChainAlphabet.Count; i++)
         {
             sortedFmotifs.Add(musicChainAlphabet[i], musicChainBuilding.Count(el => el == i + 1));

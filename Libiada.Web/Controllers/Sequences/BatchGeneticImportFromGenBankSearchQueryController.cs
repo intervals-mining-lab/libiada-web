@@ -9,7 +9,6 @@ using Newtonsoft.Json;
 using Libiada.Core.Extensions;
 
 using Libiada.Database.Helpers;
-using Libiada.Database.Models;
 using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Models.NcbiSequencesData;
 using Libiada.Database.Models.Repositories.Sequences;

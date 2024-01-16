@@ -3,7 +3,6 @@
 using Libiada.Core.Extensions;
 
 using Libiada.Database.Models.CalculatorsData;
-using Libiada.Database.Models;
 using Libiada.Database.Tasks;
 using Libiada.Database.Helpers;
 
