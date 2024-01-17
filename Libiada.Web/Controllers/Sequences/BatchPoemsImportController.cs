@@ -37,8 +37,10 @@ public class BatchPoemsImportController : AbstractResultController
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Index(Notation notation, bool dropPunctuation, IFormFileCollection files)
+    public ActionResult Index(Notation notation, bool dropPunctuation, List<IFormFile> files)
     {
+        var fileStreams = files.Select(Helpers.FileHelper.GetFileStream).ToList();
+
         return CreateTask(() =>
         {
             var importResults = new List<MatterImportResult>();
@@ -89,7 +91,7 @@ public class BatchPoemsImportController : AbstractResultController
 
                     var repository = new LiteratureSequenceRepository(dbFactory, cache);
 
-                    repository.Create(sequence, FileHelper.GetFileStream(files[i]), Language.Russian, true, Translator.NoneOrManual, dropPunctuation);
+                    repository.Create(sequence, fileStreams[i], Language.Russian, true, Translator.NoneOrManual, dropPunctuation);
                     importResult.Status = "Success";
 
                     importResults.Add(importResult);

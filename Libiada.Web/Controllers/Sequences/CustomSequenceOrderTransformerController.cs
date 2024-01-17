@@ -75,11 +75,13 @@ public class CustomSequenceOrderTransformerController : AbstractResultController
         int iterationsCount,
         string[] customSequences,
         bool localFile,
-        IFormFileCollection file)
+        List<IFormFile> files)
     {
+        var fileStreams = files.Select(Helpers.FileHelper.GetFileStream).ToList();
+
         return CreateTask(() =>
         {
-            int sequencesCount = localFile ? file.Count : customSequences.Length;
+            int sequencesCount = localFile ? files.Count : customSequences.Length;
             var sourceSequences = new string[sequencesCount];
             var sequences = new Chain[sequencesCount];
             var names = new string[sequencesCount];
@@ -88,8 +90,8 @@ public class CustomSequenceOrderTransformerController : AbstractResultController
             {
                 if (localFile)
                 {
-                    var sequenceStream = Helpers.FileHelper.GetFileStream(file[i]);
-                    var fastaSequence = NcbiHelper.GetFastaSequence(sequenceStream);
+                    // TODO: implement different natures
+                    var fastaSequence = NcbiHelper.GetFastaSequence(fileStreams[i]);
                     sourceSequences[i] = fastaSequence.ConvertToString();
                     names[i] = fastaSequence.ID;
                 }

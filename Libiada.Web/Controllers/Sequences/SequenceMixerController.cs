@@ -175,31 +175,33 @@ public class SequenceMixerController : Controller
 
         matterRepository.SaveToDatabase(resultMatter);
 
-        var result = new CommonSequence
-            {
-                Notation = notation,
-                MatterId = resultMatter.Id
-            };
+        List<long> alphabet = elementRepository.ToDbElements(chain.Alphabet, notation, false);
 
-        long[] alphabet = elementRepository.ToDbElements(chain.Alphabet, notation, false);
+        var result = new CommonSequence
+        {
+            Notation = notation,
+            MatterId = resultMatter.Id,
+            Alphabet = alphabet,
+            Order = chain.Order.ToList()
+        };
 
         switch (matter.Nature)
         {
             case Nature.Genetic:
                 DnaSequence dnaSequence = db.DnaSequences.Single(c => c.Id == sequenceId);
 
-                dnaSequenceRepository.Create(result, dnaSequence.Partial, alphabet, chain.Order);
+                dnaSequenceRepository.Create(result, dnaSequence.Partial);
                 break;
             case Nature.Music:
-                musicSequenceRepository.Create(result, alphabet, chain.Order);
+                musicSequenceRepository.Create(result);
                 break;
             case Nature.Literature:
                 LiteratureSequence sequence = db.LiteratureSequences.Single(c => c.Id == sequenceId);
 
-                literatureSequenceRepository.Create(result, sequence.Original, sequence.Language, sequence.Translator, alphabet, chain.Order);
+                literatureSequenceRepository.Create(result, sequence.Original, sequence.Language, sequence.Translator);
                 break;
             case Nature.MeasurementData:
-                dataSequenceRepository.Create(result, alphabet, chain.Order);
+                dataSequenceRepository.Create(result);
                 break;
             default:
                 throw new InvalidEnumArgumentException(nameof(matter.Nature), (int)matter.Nature, typeof(Nature));

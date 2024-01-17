@@ -32,8 +32,9 @@ public class BatchImagesImportController : AbstractResultController
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Index(IFormFileCollection files)
+    public ActionResult Index(List<IFormFile> files)
     {
+        var fileStreams = files.Select(Helpers.FileHelper.GetFileStream).ToList();
         return CreateTask(() =>
         {
             using var db = dbFactory.CreateDbContext();
@@ -65,7 +66,7 @@ public class BatchImagesImportController : AbstractResultController
                         continue;
                     }
 
-                    using Stream sequenceStream = FileHelper.GetFileStream(files[i]);
+                    using Stream sequenceStream = fileStreams[i];
                     var fileBytes = new byte[sequenceStream.Length];
                     sequenceStream.Read(fileBytes, 0, (int)sequenceStream.Length);
 

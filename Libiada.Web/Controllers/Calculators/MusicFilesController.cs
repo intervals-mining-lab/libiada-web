@@ -41,17 +41,18 @@ public class MusicFilesController : AbstractResultController
     /// </returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Index(IFormFileCollection file)
+    public ActionResult Index(List<IFormFile> files)
     {
+        var fileStreams = files.Select(Helpers.FileHelper.GetFileStream).ToList();
         return CreateTask(() =>
         {
-            var names = new string[file.Count];
-            var data = new object[file.Count];
+            var names = new string[files.Count];
+            var data = new object[files.Count];
 
-            for (int i = 0; i < file.Count; i++)
+            for (int i = 0; i < files.Count; i++)
             {
-                names[i] = file[i].FileName;
-                using var reader = new BinaryReader(Helpers.FileHelper.GetFileStream(file[i]));
+                names[i] = files[i].FileName;
+                using var reader = new BinaryReader(fileStreams[i]);
 
                 int chunkID = reader.ReadInt32();
                 int fileSize = reader.ReadInt32();
@@ -75,7 +76,7 @@ public class MusicFilesController : AbstractResultController
                 int dataID = reader.ReadInt32();
                 int dataSize = reader.ReadInt32();
 
-                data[i] = new { name = file[i].FileName, sampleRate, channels, audioFormat = fmtCode, sampleSize = fmtBlockAlign };
+                data[i] = new { name = files[i].FileName, sampleRate, channels, audioFormat = fmtCode, sampleSize = fmtBlockAlign };
 
             }
 

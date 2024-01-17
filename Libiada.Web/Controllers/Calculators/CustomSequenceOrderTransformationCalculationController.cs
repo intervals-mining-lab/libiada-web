@@ -92,11 +92,13 @@ public class CustomSequenceOrderTransformationCalculationController : AbstractRe
         short[] characteristicLinkIds,
         string[] customSequences,
         bool localFile,
-        IFormFileCollection file)
+        List<IFormFile> files)
     {
+        var fileStreams = files.Select(Helpers.FileHelper.GetFileStream).ToList();
+
         return CreateTask(() =>
         {
-            int sequencesCount = localFile ? file.Count : customSequences.Length;
+            int sequencesCount = localFile ? files.Count : customSequences.Length;
             var sequences = new string[sequencesCount];
             var sequencesNames = new string[sequencesCount];
 
@@ -104,8 +106,7 @@ public class CustomSequenceOrderTransformationCalculationController : AbstractRe
             {
                 if (localFile)
                 {
-                    Stream sequenceStream = Helpers.FileHelper.GetFileStream(file[i]);
-                    ISequence fastaSequence = NcbiHelper.GetFastaSequence(sequenceStream);
+                    ISequence fastaSequence = NcbiHelper.GetFastaSequence(fileStreams[i]);
                     sequences[i] = fastaSequence.ConvertToString();
                     sequencesNames[i] = fastaSequence.ID;
                 }

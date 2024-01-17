@@ -60,8 +60,10 @@ public class CustomSequenceSegmentationController : AbstractResultController
         int wordLength,
         DeviationCalculationMethod deviationCalculationMethod,
         int balance,
-        IFormFileCollection files)
+        List<IFormFile> files)
     {
+        var fileStreams = files.Select(Helpers.FileHelper.GetFileStream).ToList();
+
         return CreateTask(() =>
         {
             int sequencesCount = localFile ? files.Count : customSequences.Length;
@@ -76,7 +78,7 @@ public class CustomSequenceSegmentationController : AbstractResultController
                 {
                     sequencesNames[i] = files[i].FileName;
 
-                    using Stream sequenceStream = FileHelper.GetFileStream(files[i]);
+                    using Stream sequenceStream = fileStreams[i];
                     using var sr = new StreamReader(sequenceStream);
                     sequences[i] = sr.ReadToEnd();
 

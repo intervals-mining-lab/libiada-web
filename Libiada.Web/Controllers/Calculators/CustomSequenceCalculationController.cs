@@ -96,8 +96,10 @@ public class CustomSequenceCalculationController : AbstractResultController
                               bool? toLower,
                               bool? removePunctuation,
                               char? delimiter,
-                              IFormFileCollection files)
+                              List<IFormFile> files)
     {
+        var fileStreams = files.Select(Helpers.FileHelper.GetFileStream).ToList();
+
         return CreateTask(() =>
             {
                 int sequencesCount = localFile ? files.Count : customSequences.Length;
@@ -107,7 +109,6 @@ public class CustomSequenceCalculationController : AbstractResultController
                 {
                     for (int i = 0; i < sequencesCount; i++)
                     {
-                        using Stream sequenceStream = Helpers.FileHelper.GetFileStream(files[i]);
                         sequencesNames[i] = files[i].FileName;
 
                         switch (fileType)
@@ -115,7 +116,7 @@ public class CustomSequenceCalculationController : AbstractResultController
                             case "literature":
                                 throw new NotImplementedException();
                             case "text":
-                                using (var sr = new StreamReader(sequenceStream))
+                                using (var sr = new StreamReader(fileStreams[i]))
                                 {
                                     string stringTextSequence = sr.ReadToEnd();
                                     if ((bool)toLower) stringTextSequence = stringTextSequence.ToLower();
@@ -124,7 +125,7 @@ public class CustomSequenceCalculationController : AbstractResultController
                                 }
                                 break;
                             case "image":
-                                var image = Image.Load<Rgba32>(sequenceStream);
+                                var image = Image.Load<Rgba32>(fileStreams[i]);
                                 var sequence = ImageProcessor.ProcessImage(image, new IImageTransformer[0], new IMatrixTransformer[0], new LineOrderExtractor());
                                 var alphabet = new Alphabet { NullValue.Instance() };
                                 var incompleteAlphabet = sequence.Alphabet;
@@ -136,7 +137,7 @@ public class CustomSequenceCalculationController : AbstractResultController
                                 sequences[i] = new Chain(sequence.Order, alphabet);
                                 break;
                             case "genetic":
-                                ISequence fastaSequence = NcbiHelper.GetFastaSequence(sequenceStream);
+                                ISequence fastaSequence = NcbiHelper.GetFastaSequence(fileStreams[i]);
                                 var stringSequence = fastaSequence.ConvertToString();
                                 sequences[i] = new Chain(stringSequence);
                                 sequencesNames[i] = fastaSequence.ID;

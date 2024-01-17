@@ -48,11 +48,12 @@ public class BatchGeneticImportFromGenBankSearchFileController : AbstractResultC
         int minLength,
         bool filterMaxLength,
         int maxLength,
-        IFormFileCollection files)
+        List<IFormFile> files)
     {
+        var fileStreams = files.Select(Helpers.FileHelper.GetFileStream).ToList();
         return CreateTask(() =>
         {
-            using var genBankSearchResultsStream = Helpers.FileHelper.GetFileStream(files[0]);
+            using var genBankSearchResultsStream = fileStreams[0];
             string searchResults = FileHelper.ReadSequenceFromStream(genBankSearchResultsStream);
             string[] accessions;
             if (filterMinLength)

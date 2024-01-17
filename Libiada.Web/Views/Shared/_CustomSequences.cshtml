@@ -48,9 +48,9 @@
 </div>
 <div class="row mb-2" ng-show="localFile">
     <div class="col-md-12">
-        <label class="form-label" for="file">Sequence file(s):</label>
-        <input type="file" name="file" id="file" multiple />
-        @Html.ValidationMessage("file", "", new { @class = "text-danger" })
+        <label class="form-label" for="files">Sequence file(s):</label>
+        <input type="file" name="files" id="files" multiple />
+        @Html.ValidationMessage("files", "", new { @class = "text-danger" })
     </div>
 </div>
 <div ng-hide="localFile">

@@ -24,6 +24,11 @@ public static class FileHelper
             throw new ArgumentNullException(nameof(file), "File is null or empty.");
         }
 
-        return  file.OpenReadStream();
+        var stream = new MemoryStream();
+
+        file.CopyTo(stream);
+        stream.Position = 0;
+
+        return stream;
     }
 }

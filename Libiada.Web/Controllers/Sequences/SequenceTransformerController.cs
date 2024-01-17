@@ -85,6 +85,7 @@ public class SequenceTransformerController : Controller
     [ValidateAntiForgeryToken]
     public ActionResult Index(IEnumerable<long> matterIds, string transformType)
     {
+        // TODO: make transformType into enum
         Notation notation = transformType.Equals("toAmino") ? Notation.AminoAcids : Notation.Triplets;
 
         foreach (var matterId in matterIds)
@@ -96,14 +97,17 @@ public class SequenceTransformerController : Controller
                                              ? DnaTransformer.EncodeAmino(sourceChain)
                                              : DnaTransformer.EncodeTriplets(sourceChain);
 
-            var result = new DnaSequence
-                {
-                    MatterId = matterId,
-                    Notation = notation
-                };
+            List<long> alphabet = elementRepository.ToDbElements(transformedChain.Alphabet, notation, false);
 
-            long[] alphabet = elementRepository.ToDbElements(transformedChain.Alphabet, notation, false);
-            dnaSequenceRepository.Insert(result, alphabet, transformedChain.Order);
+            var result = new CommonSequence
+            {
+                MatterId = matterId,
+                Notation = notation,
+                Alphabet = alphabet,
+                Order = transformedChain.Order.ToList()
+            };
+
+            dnaSequenceRepository.Create(result, false);
         }
 
         return RedirectToAction("Index", "CommonSequences");

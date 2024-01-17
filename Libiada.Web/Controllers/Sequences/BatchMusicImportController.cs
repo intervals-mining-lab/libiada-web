@@ -41,8 +41,11 @@ public class BatchMusicImportController : AbstractResultController
     /// <returns></returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Index(IFormFileCollection files)
+    public ActionResult Index(List<IFormFile> files)
     {
+        // TODO: use temp files instead of this
+        var fileStreams = files.Select(Helpers.FileHelper.GetFileStream).ToList();
+
         return CreateTask(() =>
         {
             var importResults = new List<MatterImportResult>();
@@ -88,8 +91,7 @@ public class BatchMusicImportController : AbstractResultController
                     }
 
                     var repository = new MusicSequenceRepository(dbFactory, cache);
-
-                    repository.Create(sequence, FileHelper.GetFileStream(files[i]));
+                    repository.Create(sequence, fileStreams[i]);
                     importResult.Status = "Success";
                     importResults.Add(importResult);
                 }
