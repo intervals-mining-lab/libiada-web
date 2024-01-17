@@ -188,18 +188,18 @@ public class SequenceMixerController : Controller
             case Nature.Genetic:
                 DnaSequence dnaSequence = db.DnaSequences.Single(c => c.Id == sequenceId);
 
-                dnaSequenceRepository.Create(result, dnaSequence.Partial, alphabet, chain.Building);
+                dnaSequenceRepository.Create(result, dnaSequence.Partial, alphabet, chain.Order);
                 break;
             case Nature.Music:
-                musicSequenceRepository.Create(result, alphabet, chain.Building);
+                musicSequenceRepository.Create(result, alphabet, chain.Order);
                 break;
             case Nature.Literature:
                 LiteratureSequence sequence = db.LiteratureSequences.Single(c => c.Id == sequenceId);
 
-                literatureSequenceRepository.Create(result, sequence.Original, sequence.Language, sequence.Translator, alphabet, chain.Building);
+                literatureSequenceRepository.Create(result, sequence.Original, sequence.Language, sequence.Translator, alphabet, chain.Order);
                 break;
             case Nature.MeasurementData:
-                dataSequenceRepository.Create(result, alphabet, chain.Building);
+                dataSequenceRepository.Create(result, alphabet, chain.Order);
                 break;
             default:
                 throw new InvalidEnumArgumentException(nameof(matter.Nature), (int)matter.Nature, typeof(Nature));

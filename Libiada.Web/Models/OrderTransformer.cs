@@ -44,7 +44,7 @@ public class OrderTransformer
 
         for (int i = 0; i < Orders.Count; i++)
         {
-            if (Orders[i].SequenceEqual(chain.Building))
+            if (Orders[i].SequenceEqual(chain.Order))
             {
                 transformationResult.OrderId = i;
                 transformationResult.Transformation = transformationType.GetDisplayValue();

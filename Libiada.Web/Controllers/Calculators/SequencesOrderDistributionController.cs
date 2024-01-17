@@ -88,7 +88,7 @@ public class SequencesOrderDistributionController : AbstractResultController
 
             foreach (BaseChain sequence in sequences)
             {
-                SequecesOrdersDistribution[sequence.Building].Add(sequence);
+                SequecesOrdersDistribution[sequence.Order].Add(sequence);
             }
 
             var result = new Dictionary<string, object>

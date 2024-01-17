@@ -2,14 +2,14 @@
     ViewBag.Title = "Generate sequence rearrangements";
 }
 
-@Html.Partial("_AngularControllerInitializer", "BuildingsSimilarity")
+@Html.Partial("_AngularControllerInitializer", "OrdersSimilarity")
 
 <h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    <div ng-controller="BuildingsSimilarityCtrl">
+    <div ng-controller="OrdersSimilarityCtrl">
         <h4>Sequences and parameters</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })

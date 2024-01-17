@@ -103,7 +103,7 @@ public class SequenceTransformerController : Controller
                 };
 
             long[] alphabet = elementRepository.ToDbElements(transformedChain.Alphabet, notation, false);
-            dnaSequenceRepository.Insert(result, alphabet, transformedChain.Building);
+            dnaSequenceRepository.Insert(result, alphabet, transformedChain.Order);
         }
 
         return RedirectToAction("Index", "CommonSequences");

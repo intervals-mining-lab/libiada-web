@@ -131,14 +131,14 @@ public class SequenceCheckController : AbstractResultController
                     return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(new { message, status }) } };
                 }
 
-                int[] libiadaBuilding = chain.Building;
-                int[] dataBaseBuilding = dbChain.Building;
+                int[] libiadaOrder = chain.Order;
+                int[] databaseOrder = dbChain.Order;
 
                 for (int j = 0; j < chain.Length; j++)
                 {
-                    if (libiadaBuilding[j] != dataBaseBuilding[j])
+                    if (libiadaOrder[j] != databaseOrder[j])
                     {
-                        message = $"{j} sequences elements are not equal. In db {dataBaseBuilding[j]}. In file {libiadaBuilding[j]}";
+                        message = $"{j} sequences elements are not equal. In db {databaseOrder[j]}. In file {libiadaOrder[j]}";
                         return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(new { message, status }) } };
                     }
                 }

@@ -1,7 +1,7 @@
-﻿function BuildingsSimilarityController(data) {
+﻿function OrdersSimilarityController(data) {
     "use strict";
 
-    function buildingsSimilarity($scope, filterFilter) {
+    function ordersSimilarity($scope, filterFilter) {
         MapModelFromJson($scope, data);
 
         function filterByNature() {
@@ -13,5 +13,5 @@
         $scope.nature = $scope.natures[0].Value;
     }
 
-    angular.module("libiada").controller("BuildingsSimilarityCtrl", ["$scope", "filterFilter", buildingsSimilarity]);
+    angular.module("libiada").controller("OrdersSimilarityCtrl", ["$scope", "filterFilter", ordersSimilarity]);
 }

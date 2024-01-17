@@ -133,7 +133,7 @@ public class CustomSequenceCalculationController : AbstractResultController
                                     alphabet.Add(incompleteAlphabet[j]);
                                 }
 
-                                sequences[i] = new Chain(sequence.Building, alphabet);
+                                sequences[i] = new Chain(sequence.Order, alphabet);
                                 break;
                             case "genetic":
                                 ISequence fastaSequence = NcbiHelper.GetFastaSequence(sequenceStream);

@@ -89,7 +89,7 @@ public class OrderTransformationConvergenceController : AbstractResultController
             var sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
             int loopIteration = -1;
             int lastIteration = -1;
-            var transformationsResult = new List<int[]>(iterationsCount + 1) { sequence.Building };
+            var transformationsResult = new List<int[]>(iterationsCount + 1) { sequence.Order };
 
             for (int j = 0; j < iterationsCount; j++)
             {
@@ -99,13 +99,13 @@ public class OrderTransformationConvergenceController : AbstractResultController
                     sequence = transformationsSequence[i] == OrderTransformation.Dissimilar ? DissimilarChainFactory.Create(sequence)
                                                          : HighOrderFactory.Create(sequence, transformationsSequence[i].GetLink());
 
-                    if (transformationsResult.Any(tr => tr.SequenceEqual(sequence.Building)))
+                    if (transformationsResult.Any(tr => tr.SequenceEqual(sequence.Order)))
                     {
-                        loopIteration = transformationsResult.FindIndex(tr => tr.SequenceEqual(sequence.Building)) + 1;
+                        loopIteration = transformationsResult.FindIndex(tr => tr.SequenceEqual(sequence.Order)) + 1;
                         lastIteration = j + 1;
                         goto exitLoops;
                     }
-                    transformationsResult.Add(sequence.Building);
+                    transformationsResult.Add(sequence.Order);
                 }
             }
 

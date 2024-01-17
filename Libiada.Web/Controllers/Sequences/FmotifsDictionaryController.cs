@@ -67,11 +67,11 @@ public class FmotifsDictionaryController : SequencesMattersController
         var musicChainAlphabet = db.GetAlphabetElementIds(musicSequence.Id)
                                                    .Select(el => db.Fmotifs.Single(f => f.Id == el))
                                                    .ToList();
-        var musicChainBuilding = db.GetSequenceBuilding(musicSequence.Id);
+        var musicChainOrder = db.GetSequenceOrder(musicSequence.Id);
         var sortedFmotifs = new Dictionary<Database.Models.Fmotif, int>();
         for (int i = 0; i < musicChainAlphabet.Count; i++)
         {
-            sortedFmotifs.Add(musicChainAlphabet[i], musicChainBuilding.Count(el => el == i + 1));
+            sortedFmotifs.Add(musicChainAlphabet[i], musicChainOrder.Count(el => el == i + 1));
         }
 
         sortedFmotifs = sortedFmotifs.OrderByDescending(pair => pair.Value)
@@ -83,8 +83,8 @@ public class FmotifsDictionaryController : SequencesMattersController
             var newFmotif = new Fmotif(fmotif.FmotifType, musicSequence.PauseTreatment, fmotif.Id);
 
             var fmotifAlphabet = fmotif.Alphabet;
-            var fmotifBuilding = fmotif.Building;
-            foreach (var position in fmotifBuilding)
+            var fmotifOrder = fmotif.Order;
+            foreach (var position in fmotifOrder)
             {
                 var dbNoteId = fmotifAlphabet[position - 1];
                 var dbNote = db.Notes.Include(n => n.Pitches).Single(n => n.Id == dbNoteId);
