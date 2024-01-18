@@ -4,7 +4,6 @@ using Libiada.Core.Core.SimpleTypes;
 
 using Libiada.Database.Tasks;
 using Libiada.Database.Helpers;
-using Libiada.Database.Extensions;
 
 using Newtonsoft.Json;
 
@@ -57,25 +56,22 @@ public class FmotifsDictionaryController : SequencesMattersController
         {
             return BadRequest();
         }
+
         var db = dbFactory.CreateDbContext();
-        MusicSequence musicSequence = db.MusicSequences.Include(m => m.Matter).Single(m => m.Id == id);
+        MusicSequence musicSequence = await db.MusicSequences.Include(m => m.Matter).SingleAsync(m => m.Id == id);
         if (musicSequence == null)
         {
             return NotFound();
         }
 
-        var musicChainAlphabet = db.GetAlphabetElementIds(musicSequence.Id)
-                                                   .Select(el => db.Fmotifs.Single(f => f.Id == el))
-                                                   .ToList();
-        var musicChainOrder = db.GetSequenceOrder(musicSequence.Id);
+        var musicChainAlphabet = musicSequence.Alphabet.Select(el => db.Fmotifs.Single(f => f.Id == el)).ToList();
         var sortedFmotifs = new Dictionary<Database.Models.Fmotif, int>();
         for (int i = 0; i < musicChainAlphabet.Count; i++)
         {
-            sortedFmotifs.Add(musicChainAlphabet[i], musicChainOrder.Count(el => el == i + 1));
+            sortedFmotifs.Add(musicChainAlphabet[i], musicSequence.Order.Count(el => el == i + 1));
         }
 
-        sortedFmotifs = sortedFmotifs.OrderByDescending(pair => pair.Value)
-                                     .ToDictionary(pair => pair.Key, pair => pair.Value);
+        sortedFmotifs = sortedFmotifs.OrderByDescending(pair => pair.Value).ToDictionary(pair => pair.Key, pair => pair.Value);
 
         var fmotifsChain = new List<Fmotif>();
         foreach (var fmotif in sortedFmotifs.Keys)
@@ -87,7 +83,7 @@ public class FmotifsDictionaryController : SequencesMattersController
             foreach (var position in fmotifOrder)
             {
                 var dbNoteId = fmotifAlphabet[position - 1];
-                var dbNote = db.Notes.Include(n => n.Pitches).Single(n => n.Id == dbNoteId);
+                var dbNote = await db.Notes.Include(n => n.Pitches).SingleAsync(n => n.Id == dbNoteId);
                 var newPitches = new List<Pitch>();
                 foreach (var pitch in dbNote.Pitches)
                 {
@@ -112,6 +108,5 @@ public class FmotifsDictionaryController : SequencesMattersController
         };
         ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object> { { "data", result } });
         return View(musicSequence);
-
     }
 }

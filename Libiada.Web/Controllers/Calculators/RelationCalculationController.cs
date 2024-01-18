@@ -199,7 +199,7 @@ public class RelationCalculationController : AbstractResultController
                                         .Where(b => b.SequenceId == sequenceId && b.CharacteristicLinkId == characteristicLinkId)
                                         .GroupBy(b => b.FirstElementId)
                                         .ToDictionary(b => b.Key, b => b.ToDictionary(bb => bb.SecondElementId, bb => bb.Value));
-                var elementsIds = db.GetAlphabetElementIds(sequenceId);
+                var elementsIds = db.CommonSequences.Single(cs => cs.Id == sequenceId).Alphabet;
                 var elements = db.Elements
                                  .Where(e => elementsIds.Contains(e.Id))
                                  .OrderBy(e => e.Id)
@@ -246,7 +246,7 @@ public class RelationCalculationController : AbstractResultController
 
         if (calculatedCount < alphabetCardinality * alphabetCardinality)
         {
-            long[] sequenceElements = db.GetAlphabetElementIds(sequenceId);
+            List<long> sequenceElements = db.CommonSequences.Single(cs => cs.Id == sequenceId).Alphabet;
             for (int i = 0; i < alphabetCardinality; i++)
             {
                 for (int j = 0; j < alphabetCardinality; j++)
@@ -291,7 +291,7 @@ public class RelationCalculationController : AbstractResultController
     [NonAction]
     private void CalculateFrequencyCharacteristics(short characteristicLinkId, int frequencyCount, Chain chain, long sequenceId, IBinaryCalculator calculator, Link link)
     {
-        long[] sequenceElements = db.GetAlphabetElementIds(sequenceId);
+        List<long> sequenceElements = db.CommonSequences.Single(cs => cs.Id == sequenceId).Alphabet;
         var newCharacteristics = new List<BinaryCharacteristicValue>();
         BinaryCharacteristicValue[] databaseCharacteristics = db.BinaryCharacteristicValues
             .Where(b => b.SequenceId == sequenceId && b.CharacteristicLinkId == characteristicLinkId)
