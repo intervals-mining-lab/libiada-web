@@ -10,7 +10,7 @@
             ctrl.savedPosition = 0;
         };
 
-        ctrl.isScrollable = () => document.body.clientHeight - document.documentElement.clientHeight > 0;
+        ctrl.isScrollable = () => window.innerHeight < $('html').height();
 
         ctrl.scrollDown = () => {
             if (ctrl.scrolledDown) {
@@ -18,7 +18,7 @@
                 ctrl.scrolledDown = false;
                 ctrl.scrolledUp = false;
             } else {
-                ctrl.savedPosition = window.pageYOffset || document.documentElement.scrollTop;
+                ctrl.savedPosition = window.scrollY || document.documentElement.scrollTop;
                 $('html, body').animate({ scrollTop: $('body').height() }, 400);
                 ctrl.scrolledDown = true;
             }
@@ -30,7 +30,7 @@
                 ctrl.scrolledDown = false;
                 ctrl.scrolledUp = false;
             } else {
-                ctrl.savedPosition = window.pageYOffset || document.documentElement.scrollTop;
+                ctrl.savedPosition = window.scrollY || document.documentElement.scrollTop;
                 $('html, body').animate({ scrollTop: '0px' }, 400);
                 ctrl.scrolledUp = true;
             }
