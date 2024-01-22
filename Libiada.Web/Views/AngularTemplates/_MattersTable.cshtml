@@ -7,7 +7,7 @@
            id="showRefSeqOnly"
            checked
            ng-model="$ctrl.showRefSeqOnly"
-           ng-change="$ctrl.toogleMattersVisibility()" />
+           ng-change="$ctrl.toogleMattersVisibility(false)" />
     <label class="form-check-label" for="showRefSeqOnly">
         Show only reference sequences
     </label>
@@ -22,18 +22,25 @@
         <tr>
             <th ng-if="::$ctrl.displayMultisequenceNumber"></th>
             <th>
-                <input type="text"
-                       class="form-control"
-                       placeholder="Start typing name to see results"
-                       ng-model="$ctrl.searchMatterText"
-                       ng-init="$ctrl.searchMatterText=''"
-                       ng-change="$ctrl.toogleMattersVisibility()" />
+                <div class="row">
+                    <div class="col">
+                        <input type="text"
+                               class="form-control"
+                               placeholder="Start typing name to see results"
+                               ng-model="$ctrl.searchMatterText"
+                               ng-init="$ctrl.searchMatterText=''"
+                               ng-change="$ctrl.toogleMattersVisibility(false)" />
+                    </div>
+                    <div class="col" ng-show="!$ctrl.searchMatterText && $ctrl.group && $ctrl.sequenceType">
+                        or <input type="button" class="btn btn-outline-secondary" ng-click="$ctrl.toogleMattersVisibility(false, true)" value="show all" />
+                    </div>
+                </div>
             </th>
             <th>
                 <select class="form-select"
                         ng-model="$ctrl.group"
                         ng-options="g.Value as g.Text for g in $ctrl.groups | filter:{ Nature: $ctrl.nature }"
-                        ng-change="$ctrl.toogleMattersVisibility()">
+                        ng-change="$ctrl.toogleMattersVisibility(false)">
                     <option value="">-- All groups --</option>
                 </select>
             </th>
@@ -41,7 +48,7 @@
                 <select class="form-select"
                         ng-model="$ctrl.sequenceType"
                         ng-options="s.Value as s.Text for s in $ctrl.sequenceTypes | filter:{ Nature: $ctrl.nature }"
-                        ng-change="$ctrl.toogleMattersVisibility()">
+                        ng-change="$ctrl.toogleMattersVisibility(false)">
                     <option value="">-- All sequence types --</option>
                 </select>
             </th>

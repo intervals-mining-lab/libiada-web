@@ -74,13 +74,13 @@
             }
         }
 
-        ctrl.toogleMattersVisibility = isNewNature => {
+        ctrl.toogleMattersVisibility = (isNewNature, ignoreSearch) => {
             if (isNewNature) {
                 ctrl.matters.forEach(m => m.Selected = false);
             }
 
             const oldVisibleMatters = ctrl.getVisibleMatters();
-            ctrl.matters.forEach(m => ctrl.setMatterVisibility(m));
+            ctrl.matters.forEach(m => ignoreSearch ? ctrl.setMatterVisibilityWithoutSearch(m) : ctrl.setMatterVisibility(m));
             const visibleMatters = ctrl.getVisibleMatters();
 
             const mattersToHide = oldVisibleMatters.filter(m => !visibleMatters.includes(m));
@@ -116,9 +116,18 @@
             ));
         };
 
+        ctrl.setMatterVisibilityWithoutSearch = matter => {
+            matter.Visible = matter.Selected ||
+                (matter.Nature == ctrl.nature
+                && matter.Group.includes(ctrl.group || "")
+                && matter.SequenceType.includes(ctrl.sequenceType || "")
+                && (ctrl.nature != ctrl.geneticNature || !ctrl.showRefSeqOnly || ctrl.isRefSeq(matter)));
+        };
+
         ctrl.setMatterVisibility = matter => {
             ctrl.searchMatterText = ctrl.searchMatterText || "";
-            matter.Visible = matter.Selected || (ctrl.searchMatterText.length >= 4
+            matter.Visible = matter.Selected ||
+                (ctrl.searchMatterText.length >= 4
                 && matter.Nature == ctrl.nature
                 && matter.Group.includes(ctrl.group || "")
                 && matter.SequenceType.includes(ctrl.sequenceType || "")
