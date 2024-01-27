@@ -40,10 +40,10 @@
             let tooltipContent = [];
             tooltipContent.push("Name: " + d.name);
 
-
+            let pointData = $scope.characteristics[d.id - 1].Characteristics;
             let pointsCharacteristics = [];
-            for (let i = 0; i < $scope.characteristics[d.id].Characteristics.length; i++) {
-                pointsCharacteristics.push($scope.characteristicsList[i].Text + ": " + $scope.characteristics[d.id].Characteristics[i]);
+            for (let i = 0; i < pointData.length; i++) {
+                pointsCharacteristics.push($scope.characteristicsList[i].Text + ": " + pointData[i]);
             }
 
             tooltipContent.push(pointsCharacteristics.join("<br/>"));
