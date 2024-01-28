@@ -250,9 +250,27 @@
                     .attr("y", 9)
                     .attr("dy", ".35em")
                     .attr("transform", "translate(0, -" + $scope.legendHeight + ")")
-                    .text(d => $scope.clustersCount ? `Cluster ${d.name}` :  d.name)
+                    .text(d => $scope.clustersCount ? `Cluster ${d.name}` : d.name)
                     .style("font-size", "9pt");
             }
+
+            $scope.chartDisplayed = true;
+        }
+
+        function legendSetVisibilityForAll(visibility) {
+            let legend = d3.selectAll(".legend");
+
+            legend.each(l => l.visible = visibility);
+            
+            legend.selectAll("rect")
+                .style("fill-opacity", () => visibility ? 1 : 0);
+
+            legend.selectAll("text")
+                .style("opacity", () => visibility ? 1 : 0.5);
+
+            d3.select(".chart-svg")
+                .selectAll(".dot")
+                .attr("visibility", () => visibility ? "visible" : "hidden");
         }
 
         async function exportToExcel() {
@@ -318,6 +336,7 @@
         $scope.fillLegend = fillLegend;
         $scope.yValue = yValue;
         $scope.xValue = xValue;
+        $scope.legendSetVisibilityForAll = legendSetVisibilityForAll;
         $scope.exportToExcel = exportToExcel;
         $scope.renderResultsTable = renderResultsTable;
 
@@ -326,6 +345,7 @@
         $scope.selectedDotRadius = $scope.dotRadius * 2;
         $scope.legendSettings = { show: true };
         $scope.characteristicsTableRendering = { rendered: false };
+        $scope.chartDisplayed = false;
 
         $scope.loadingScreenHeader = "Loading data";
 

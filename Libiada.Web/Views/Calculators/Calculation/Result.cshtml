@@ -102,6 +102,16 @@
                             <input type="button" class="btn btn-secondary" ng-click="draw()" value="Draw" />
                         </div>
                     </div>
+                    <div class="row" id="chart-visibility-buttons" ng-show="chartDisplayed">
+                        <div class="col-md-4 mt-2 btn-group" role="group" aria-label="Legend control buttons">
+                            <button type="button" class="btn btn-outline-secondary btn-sm" ng-click="legendSetVisibilityForAll(true)">
+                                Show all
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" ng-click="legendSetVisibilityForAll(false)">
+                                Hide all
+                            </button>
+                        </div>
+                    </div>
                     <div id="chart" class="font-monospace">
                     </div>
                 </div>
