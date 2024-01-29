@@ -6,9 +6,9 @@
 
 @if (ViewBag.Error == null)
 {
-    @Html.Partial("_AngularControllerInitializer", "CalculationResult")
+    @Html.Partial("_AngularControllerInitializer", "ClusterizationResult")
 
-    <div ng-controller="CalculationResultCtrl">
+    <div ng-controller="ClusterizationResultCtrl">
         <table st-table="characteristics" class="table table-bordered table-hover table-sm" ng-cloak>
             <thead>
                 <tr>
@@ -68,6 +68,16 @@
             </label>
         </div>
         <input type="button" class="btn btn-secondary mb-2" ng-click="draw()" value="Draw" />
+        <div class="row" id="chart-visibility-buttons" ng-show="chartDisplayed">
+            <div class="col-md-4 mt-2 btn-group" role="group" aria-label="Legend control buttons">
+                <button type="button" class="btn btn-outline-secondary btn-sm" ng-click="legendSetVisibilityForAll(true)">
+                    Show all
+                </button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" ng-click="legendSetVisibilityForAll(false)">
+                    Hide all
+                </button>
+            </div>
+        </div>
         <div id="chart" class="font-monospace">
         </div>
     </div>
