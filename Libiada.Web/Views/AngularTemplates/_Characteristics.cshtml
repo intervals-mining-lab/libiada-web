@@ -3,7 +3,7 @@
 
 <div ng-repeat="characteristic in $ctrl.characteristics">
     <div class="row mb-1">
-        <label class="col-form-label col-md-2" for="characteristic">Characteristic:</label>
+        <label class="col-form-label col-md-2" for="characteristic{{$index}}">Characteristic:</label>
         <div class="col-md-10">
             <select class="form-select"
                     title="Characteristic"

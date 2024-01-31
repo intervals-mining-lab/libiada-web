@@ -55,24 +55,36 @@
                      role="tabpanel"
                      aria-labelledby="charts-tab"
                      tabindex="0">
-                    <div class="row mb-1 mt-2">
-                        <label class="col-form-label col-md-2" for="firstCharacteristic">First characteristic:</label>
-                        <div class="col-md-10">
-                            <select class="form-select"
-                                    title="First characteristic"
-                                    ng-model="firstCharacteristic"
-                                    ng-options="c.Text for c in ::characteristicsList"
-                                    id="firstCharacteristic"></select>
+                    <div ng-repeat="characteristic in chartCharacteristics">
+                        <div class="row mb-1 mt-2">
+                            <label class="col-form-label col-md-2" for="characteristic{{$index}}">Characteristic:</label>
+                            <div class="col-md-10">
+                                <select class="form-select"
+                                        title="Characteristic"
+                                        ng-model="characteristic.value"
+                                        ng-options="c.Text for c in ::characteristicsList"
+                                        id="characteristic{{$index}}"></select>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="offset-md-2 col-md-10">
+                                <button type="button"
+                                        class="btn btn-danger"
+                                        ng-click="deleteCharacteristic(characteristic)"
+                                        ng-disabled="chartCharacteristics.length <= 1">
+                                    Delete characteristic
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <div class="row mb-1">
-                        <label class="col-form-label col-md-2" for="secondCharacteristic">Second characteristic:</label>
-                        <div class="col-md-10">
-                            <select class="form-select"
-                                    title="Second characteristic"
-                                    ng-model="secondCharacteristic"
-                                    ng-options="c.Text for c in ::characteristicsList"
-                                    id="secondCharacteristic"></select>
+                    <div class="row mb-4">
+                        <div class="offset-md-2 col-md-10">
+                            <button type="button"
+                                    class="btn btn-success"
+                                    ng-click="addCharacteristic()"
+                                    ng-disabled="chartCharacteristics.length == characteristicsList.length">
+                                Add characteristic
+                            </button>
                         </div>
                     </div>
                     <div class="row mb-1">
@@ -163,7 +175,8 @@
     </div>
 
     @section Scripts {
-    <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
+    <script src="~/lib/d3/d3.min.js" asp-append-version="true"></script>
+    <script src="~/lib/plotly.js/plotly.min.js" asp-append-version="true"></script>
     <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
     <script src="~/lib/exceljs/exceljs.min.js" asp-append-version="true"></script>
     }
