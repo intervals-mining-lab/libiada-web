@@ -26,10 +26,11 @@
     <script src="~/lib/angular.js/angular.js"></script>
     <script src="~/js/Angular/functions.js"></script>
     <script src="~/lib/angular-smart-table/smart-table.min.js"></script>
+    <script src="~/js/Angular/libiadaModuleInitializer.js"></script>
     <script src="~/js/Angular/Components/scrollJumper.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </head>
-<body>
+<body class="header-footer-margin mt-3">
     <header>
         <nav class="navbar fixed-top navbar-expand-sm navbar-dark bg-dark border-bottom box-shadow p-0 navbar-toggleable-sm">
             <div class="container-fluid">
@@ -60,8 +61,8 @@
     </header>
     <div ng-app="libiada">
         <scroll-jumper></scroll-jumper>
-        <div class="container-fluid pt-2 pe-4 ms-0 body-content">
-            <main role="main" @* class="pb-3" *@ >
+        <div class="container-fluid pe-4 ms-0 body-content">
+            <main role="main">
                 @RenderBody()
                 @if (ViewBag.Error != null)
                 {
@@ -89,7 +90,6 @@
             </main>
         </div>
     </div>
-
     <footer class="border-top footer text-muted">
         <div class="container">
             @if (User.IsAdmin())

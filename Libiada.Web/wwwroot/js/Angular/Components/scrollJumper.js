@@ -37,7 +37,7 @@
         };
     }
 
-    angular.module("libiada", []).component("scrollJumper", {
+    angular.module("libiada").component("scrollJumper", {
         templateUrl: window.location.origin + "/AngularTemplates/_ScrollJumper",
         controller: [ScrollJumperController]
     });

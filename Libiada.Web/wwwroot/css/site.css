@@ -1,11 +1,10 @@
 :root {
     --navbar-height: 50px;
     --sidebar-width: 30px;
-    --footer-height: 80px;
+    --footer-height: 90px;
 }
 
-body {
-    padding-top: var(--navbar-height);
+.header-footer-margin {
     margin-bottom: var(--footer-height);
 }
 
