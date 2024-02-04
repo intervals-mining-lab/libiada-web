@@ -1,17 +1,12 @@
-﻿@using Libiada.Web.Extensions
-@using Libiada.Database.Extensions
-@using Libiada.Web.Helpers
-@using Microsoft.AspNetCore.Identity
+﻿@inject LibiadaDatabaseEntities Db
 
-@inject LibiadaDatabaseEntities Db
-﻿
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewBag.Title - FOA Research Lab</title>
-    
+
     <link rel="stylesheet" href="~/lib/twitter-bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -30,7 +25,7 @@
     <script src="~/js/Angular/Components/scrollJumper.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </head>
-<body class="header-footer-margin mt-3">
+<body class="header-footer-margin">
     <header>
         <nav class="navbar fixed-top navbar-expand-sm navbar-dark bg-dark border-bottom box-shadow p-0 navbar-toggleable-sm">
             <div class="container-fluid">

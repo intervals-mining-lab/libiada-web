@@ -1,8 +1,5 @@
 ﻿@{
     Layout = "_EmptyLayout";
-}
-
-@{
     ViewBag.Title = "Libiada - Integral characterisitics calculation result";
 }
 
@@ -10,8 +7,6 @@
 
 @if (ViewBag.Error == null)
 {
-    @Html.Partial("_AngularControllerInitializer", "CalculationResult")
-
     <div ng-controller="CalculationResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <div ng-disabled="loading">
@@ -183,5 +178,6 @@
     <script src="~/lib/plotly.js/plotly.min.js" asp-append-version="true"></script>
     <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
     <script src="~/lib/exceljs/exceljs.min.js" asp-append-version="true"></script>
+    @Html.Partial("_AngularControllerInitializer", "CalculationResult")
     }
 }

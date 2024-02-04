@@ -5,6 +5,7 @@
 }
 
 .header-footer-margin {
+    padding-top: var(--navbar-height);
     margin-bottom: var(--footer-height);
 }
 

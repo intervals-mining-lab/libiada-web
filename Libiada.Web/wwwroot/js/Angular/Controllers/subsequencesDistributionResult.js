@@ -569,5 +569,5 @@
         $scope.onInit();
     }
 
-    angular.module("libiada", []).controller("SubsequencesDistributionResultCtrl", ["$scope", "$http", subsequencesDistributionResult]);
+    angular.module("libiada").controller("SubsequencesDistributionResultCtrl", ["$scope", "$http", subsequencesDistributionResult]);
 }

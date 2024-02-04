@@ -1,11 +1,4 @@
-﻿@using Libiada.Web.Extensions
-@using Libiada.Database.Extensions
-@using Libiada.Web.Helpers
-@using Microsoft.AspNetCore.Identity
-
-@inject LibiadaDatabaseEntities Db
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -17,6 +10,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/AlertifyJS/css/alertify.css" />
     <link rel="stylesheet" href="~/lib/AlertifyJS/css/themes/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/GenesMap.css" asp-append-version="true" />
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -27,34 +21,32 @@
     <script src="~/js/Angular/libiadaModuleInitializer.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </head>
-<body>
-    <div class="container-fluid pe-4 ms-0" ng-app="libiada">
-        <main role="main">
-            @RenderBody()
-            @if (ViewBag.Error != null)
+<body class="vh-100 m-0 p-0">
+    <div ng-app="libiada">
+        @RenderBody()
+        @if (ViewBag.Error != null)
+        {
+            <h1 class="text-danger">An error occurred while processing your request</h1>
+            if (User.IsAdmin())
             {
-                <h1 class="text-danger">An error occurred while processing your request</h1>
-                if (User.IsAdmin())
+                <h3 class="text-danger mb-2">
+                    Error message: @ViewBag.Error.Message
+                </h3>
+                <h5 class="mt-2 text-danger">Stack trace:</h5>
+                <div class="p-2 mb-2 border border-danger border-2 rounded text-break">
+                    @ViewBag.Error.StackTrace
+                </div>
+            }
+            else
+            {
+                if (ViewBag.UserError != null)
                 {
-                    <h3 class="text-danger mb-2">
-                        Error message: @ViewBag.Error.Message
+                    <h3 class="text-danger p-2 mb-2">
+                        @ViewBag.UserError
                     </h3>
-                    <h5 class="mt-2 text-danger">Stack trace:</h5>
-                    <div class="p-2 mb-2 border border-danger border-2 rounded text-break">
-                        @ViewBag.Error.StackTrace
-                    </div>
-                }
-                else
-                {
-                    if (ViewBag.UserError != null)
-                    {
-                        <h3 class="text-danger p-2 mb-2">
-                            @ViewBag.UserError
-                        </h3>
-                    }
                 }
             }
-        </main>
+        }
     </div>
 </body>
 </html>
