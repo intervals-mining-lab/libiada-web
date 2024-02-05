@@ -6,12 +6,21 @@
         function fillLegend() {
             $scope.legend = [];
             if ($scope.clustersCount) {
+                $scope.colorScale = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.clustersCount]);
                 for (let j = 0; j < $scope.clustersCount; j++) {
                     $scope.legend.push({ id: j + 1, name: j + 1, visible: true });
+
+                    // hack for the legend's dot color
+                    document.styleSheets[0].insertRule(".legend" + (j + 1) + ":after { background:" + $scope.colorScale(j) + "}");
+
                 }
             } else {
+                $scope.colorScale = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.characteristics.length]);
                 for (let k = 0; k < $scope.characteristics.length; k++) {
                     $scope.legend.push({ id: k + 1, name: $scope.characteristics[k].MatterName, visible: true });
+
+                    // hack for the legend's dot color
+                    document.styleSheets[0].insertRule(".legend" + (k + 1) + ":after { background:" + $scope.colorScale(k) + "}");
                 }
             }
         }
@@ -106,11 +115,11 @@
 
         function drawBarPlot() {
             let characteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
-            let colorScale = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.legend.length]);
+            
             let data = [{
                 x: $scope.points.map(p => p.name),
                 y: $scope.points.map(p => p.characteristics[characteristicIndex]),
-                marker: { color: $scope.points.map(p => colorScale(p.id)) },
+                marker: { color: $scope.points.map(p => $scope.colorScale(p.id)) },
                 type: 'bar'
             }];
 
@@ -145,7 +154,7 @@
 
             let firstCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
             let secondCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1].value);
-            let colorScale = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.legend.length]);
+            
             let data = [{
                 hoverinfo: 'text+x+y',
                 type: 'scattergl',
@@ -153,7 +162,7 @@
                 y: $scope.points.map(p => p.characteristics[secondCharacteristicIndex]),
                 text: $scope.points.map(p => p.name),
                 mode: "markers",
-                marker: { opacity: 0.8, color: $scope.points.map(p => colorScale(p.id) ) },
+                marker: { opacity: 0.8, color: $scope.points.map(p => $scope.colorScale(p.id) ) },
                 name: $scope.points.map(p => p.name)
             }];
 
@@ -168,7 +177,7 @@
         }
 
         function draw3dScatterPlot() {
-            let colorScale = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.legend.length]);
+            
             let firstCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
             let secondCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1].value);
             let thirdCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[2].value);
@@ -179,7 +188,7 @@
                 text: $scope.points.map(p => p.name),
                 mode: "markers",
                 marker: {
-                    opacity: 0.8, color: $scope.points.map(p => colorScale(p.id))
+                    opacity: 0.8, color: $scope.points.map(p => $scope.colorScale(p.id))
                     //                    line: {
                     //    color: 'rgba(217, 217, 217, 0.14)',
                     //    width: 0.5
@@ -427,6 +436,27 @@
                 .attr("visibility", () => visibility ? "visible" : "hidden");
         }
 
+        function dragbarMouseDown() {
+            let chart = document.getElementById('chart');
+            let right = document.getElementById('sidebar');
+            let bar = document.getElementById('dragbar');
+
+            const drag = (e) => {
+                document.selection ? document.selection.empty() : window.getSelection().removeAllRanges();
+                let chart_width = chart.style.width = (e.pageX - bar.offsetWidth / 2) + 'px';
+
+                Plotly.relayout('chart', { autosize: true });
+            };
+
+            bar.addEventListener('mousedown', () => {
+                document.addEventListener('mousemove', drag);
+            });
+
+            bar.addEventListener('mouseup', () => {
+                document.removeEventListener('mousemove', drag);
+            });
+        }
+
         async function exportToExcel() {
 
             const workbook = new ExcelJS.Workbook();
@@ -495,6 +525,7 @@
         $scope.yValue = yValue;
         $scope.xValue = xValue;
         $scope.legendSetVisibilityForAll = legendSetVisibilityForAll;
+        $scope.dragbarMouseDown = dragbarMouseDown;
         $scope.exportToExcel = exportToExcel;
         $scope.renderResultsTable = renderResultsTable;
 
@@ -512,6 +543,9 @@
         let location = window.location.href.split("/");
         $scope.taskId = location[location.length - 1];
 
+        // initialyzing tooltips for tabs
+        $('[data-bs-toggle="tooltip"]').tooltip();
+
         $scope.loading = true;
 
         $http.get(`/api/TaskManagerWebApi/GetTaskData/${$scope.taskId}`)
@@ -521,9 +555,7 @@
                 $scope.fillLegend();
 
                 $scope.chartCharacteristics = [{ id: $scope.chartsCharacterisrticsCount++, value: $scope.characteristicsList[0] }];
-
-                $scope.legendHeight = $scope.legend.length * 20;
-
+                
                 $scope.loading = false;
             }, function () {
                 alert("Failed loading characteristic data");

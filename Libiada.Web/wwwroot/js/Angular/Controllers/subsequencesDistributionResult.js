@@ -476,7 +476,6 @@
             bar.addEventListener('mouseup', () => {
                 document.removeEventListener('mousemove', drag);
             });
-
         }
 
         // opens alignment of given subsequences with clustal on new tab
