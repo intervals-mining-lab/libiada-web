@@ -105,30 +105,31 @@
             }
         }
 
-        function xValue(d) {
-            return d.x;
-        }
-
-        function yValue(d) {
-            return d.y;
-        }
-
         function drawBarPlot() {
             let characteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
-            
-            let data = [{
-                x: $scope.points.map(p => p.name),
-                y: $scope.points.map(p => p.characteristics[characteristicIndex]),
-                marker: { color: $scope.points.map(p => $scope.colorScale(p.id)) },
-                type: 'bar'
-            }];
 
-            Plotly.newPlot('chart', data);
+            let layout = {
+                showlegend: false,
+                xaxis: { categoryorder: 'total ascending' },
+                yaxis: {
+                    range: [Math.min(...$scope.points.map(p => p.characteristics[characteristicIndex])),
+                            Math.max(...$scope.points.map(p => p.characteristics[characteristicIndex]))]
+                }
+            };
+
+            let data = $scope.points.map(p => ({
+                x:  [p.name],
+                y:  [p.characteristics[characteristicIndex]],
+                marker: { color: $scope.colorScale(p.id) },
+                type: 'bar'
+            }));
+
+            Plotly.newPlot($scope.chartElementId, data, layout, { responsive: true });
         }
 
         function drawScatterPlot() {
             $scope.layout = {
-                //showlegend: false,
+                showlegend: false,
                 hovermode: "closest",
                 xaxis: {
                     //type: $scope.plotTypeX ? 'log' : '',
@@ -155,18 +156,18 @@
             let firstCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
             let secondCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1].value);
             
-            let data = [{
+            let data = $scope.points.map(p => ({
                 hoverinfo: 'text+x+y',
                 type: 'scattergl',
-                x: $scope.points.map(p => p.characteristics[firstCharacteristicIndex]),
-                y: $scope.points.map(p => p.characteristics[secondCharacteristicIndex]),
-                text: $scope.points.map(p => p.name),
+                x: [p.characteristics[firstCharacteristicIndex]],
+                y: [p.characteristics[secondCharacteristicIndex]],
+                text: p.name,
                 mode: "markers",
-                marker: { opacity: 0.8, color: $scope.points.map(p => $scope.colorScale(p.id) ) },
-                name: $scope.points.map(p => p.name)
-            }];
+                marker: { opacity: 0.8, color: $scope.colorScale(p.id) },
+                name:  p.name
+            }));
 
-            Plotly.newPlot("chart", data, $scope.layout, { responsive: true });
+            Plotly.newPlot($scope.chartElementId, data, $scope.layout, { responsive: true });
 
             //$scope.plot.on("plotly_click", data => {
             //    $scope.selectedPointIndex = data.points[0].pointNumber;
@@ -181,22 +182,21 @@
             let firstCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
             let secondCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1].value);
             let thirdCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[2].value);
-            let data = [{
-                x: $scope.points.map(p => p.characteristics[firstCharacteristicIndex]),
-                y: $scope.points.map(p => p.characteristics[secondCharacteristicIndex]),
-                z: $scope.points.map(p => p.characteristics[thirdCharacteristicIndex]),
-                text: $scope.points.map(p => p.name),
+            let data = $scope.points.map(p => ({
+                x: [p.characteristics[firstCharacteristicIndex]],
+                y: [p.characteristics[secondCharacteristicIndex]],
+                z: [p.characteristics[thirdCharacteristicIndex]],
+                text: p.name,
                 mode: "markers",
                 marker: {
-                    opacity: 0.8, color: $scope.points.map(p => $scope.colorScale(p.id))
+                    opacity: 0.8, color: $scope.colorScale(p.id)
                     //                    line: {
-                    //    color: 'rgba(217, 217, 217, 0.14)',
                     //    width: 0.5
                     //},
                 },
-                name: $scope.points.map(p => p.name),
+                name: p.name,
                 type: 'scatter3d'
-            }];
+            }));
             //var layout = {
             //    margin: {
             //        l: 0,
@@ -205,7 +205,7 @@
             //        t: 0
             //    }
             //};
-            Plotly.newPlot('chart', data);
+            Plotly.newPlot($scope.chartElementId, data, { showlegend: false }, { responsive: true });
         }
 
         function drawParallelCoordinatesPlot() {
@@ -214,10 +214,10 @@
             let data = [{
                 type: 'parcoords',
                 //pad: [80, 80, 80, 80],
-                //line: {
-                //    color: unpack(rows, 'species_id'),
-                //    colorscale: [[0, 'red'], [0.5, 'green'], [1, 'blue']]
-                //},
+                line: {
+                    color: $scope.points.map(p => p.id),
+                    colorscale: 'Turbo'
+                },
 
                 dimensions: $scope.chartCharacteristics.map(c => ({
                     label: c.value.Text,
@@ -227,27 +227,15 @@
                 //    range: [2, 4.5],
                 //    label: 'sepal_width',
                 //    values: unpack(rows, 'sepal_width')
-                //}, {
-                //    constraintrange: [5, 6],
-                //    range: [4, 8],
-                //    label: 'sepal_length',
-                //    values: unpack(rows, 'sepal_length')
-                //}, {
-                //    label: 'petal_width',
-                //    range: [0, 2.5],
-                //    values: unpack(rows, 'petal_width')
-                //}, {
-                //    label: 'petal_length',
-                //    range: [1, 7],
-                //    values: unpack(rows, 'petal_length')
                 //}]
             }];
 
             let layout = {
-                width: $scope.width
+                width: $scope.width,
+                showlegend: false
             };
 
-            Plotly.newPlot('chart', data, layout);
+            Plotly.newPlot($scope.chartElementId, data, layout, { responsive: true });
         }
 
         function draw() {
@@ -266,156 +254,6 @@
                 default:
                     $scope.drawParallelCoordinatesPlot();
             }
-
-
-
-            //// removing previous chart and tooltip if any
-            //d3.select(".chart-tooltip").remove();
-            //d3.select(".chart-svg").remove();
-
-            //let actualLegendHeight = $scope.legendSettings.show ? $scope.legendHeight : 0;
-
-            //// chart size and margin settings
-            //let margin = { top: 30 + actualLegendHeight, right: 30, bottom: 35, left: 50 };
-            //let width = $scope.width - margin.left - margin.right;
-            //let height = $scope.height + actualLegendHeight - margin.top - margin.bottom;
-
-            //// setup x
-            //// calculating margins for dots
-            //let xMin = d3.min($scope.points, $scope.xValue);
-            //let xMax = d3.max($scope.points, $scope.xValue);
-            //let xMargin = (xMax - xMin) * 0.05;
-
-            //let xScale = d3.scaleLinear()
-            //    .domain([xMin - xMargin, xMax + xMargin])
-            //    .range([0, width]);
-            //let xAxis = d3.axisBottom(xScale)
-            //    .tickSizeInner(-height)
-            //    .tickSizeOuter(0)
-            //    .tickPadding(10);
-
-            //$scope.xMap = d => xScale($scope.xValue(d));
-
-            //// setup y
-            //// calculating margins for dots
-            //let yMax = d3.max($scope.points, $scope.yValue);
-            //let yMin = d3.min($scope.points, $scope.yValue);
-            //let yMargin = (yMax - yMin) * 0.05;
-
-            //let yScale = d3.scaleLinear()
-            //    .domain([yMin - yMargin, yMax + yMargin])
-            //    .range([height, 0]);
-            //let yAxis = d3.axisLeft(yScale)
-            //    .tickSizeInner(-width)
-            //    .tickSizeOuter(0)
-            //    .tickPadding(10);
-
-            //$scope.yMap = function (d) { return yScale($scope.yValue(d)); };
-
-            //// setup fill color
-            //let color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.legend.length]);
-
-            //// add the graph canvas to the body of the webpage
-            //let svg = d3.select("#chart").append("svg")
-            //    .attr("width", $scope.width)
-            //    .attr("height", $scope.height + actualLegendHeight)
-            //    .attr("class", "chart-svg")
-            //    .append("g")
-            //    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-            //// add the tooltip area to the webpage
-            //let tooltip = d3.select("#chart").append("div")
-            //    .attr("class", "chart-tooltip position-absolute bg-light font-monospace small lh-sm p-1 rounded")
-            //    .style("opacity", 0);
-
-            //// preventing tooltip hiding if dot clicked
-            //tooltip.on("click", function () { tooltip.hideTooltip = false; });
-
-            //// hiding tooltip
-            //d3.select("#chart").on("click", function () { $scope.clearTooltip(tooltip); });
-
-            //// x-axis
-            //svg.append("g")
-            //    .attr("class", "x axis")
-            //    .attr("transform", "translate(0," + height + ")")
-            //    .call(xAxis);
-
-            //svg.append("text")
-            //    .attr("class", "label")
-            //    .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top - actualLegendHeight) + ")")
-            //    .style("text-anchor", "middle")
-            //    .text($scope.firstCharacteristic.Text)
-            //    .style("font-size", "12pt");
-
-            //// y-axis
-            //svg.append("g")
-            //    .attr("class", "y axis")
-            //    .call(yAxis);
-
-            //svg.append("text")
-            //    .attr("class", "label")
-            //    .attr("transform", "rotate(-90)")
-            //    .attr("y", 0 - margin.left)
-            //    .attr("x", 0 - (height / 2))
-            //    .attr("dy", ".71em")
-            //    .style("text-anchor", "middle")
-            //    .text($scope.secondCharacteristic.Text)
-            //    .style("font-size", "12pt");
-
-            //// draw dots
-            //svg.selectAll(".dot")
-            //    .data($scope.points)
-            //    .enter()
-            //    .append("ellipse")
-            //    .attr("class", "dot")
-            //    .attr("rx", $scope.dotRadius)
-            //    .attr("ry", $scope.dotRadius)
-            //    .attr("cx", $scope.xMap)
-            //    .attr("cy", $scope.yMap)
-            //    .style("fill-opacity", 0.6)
-            //    .style("fill", d => color($scope.clustersCount ? d.cluster : d.id))
-            //    .style("stroke", d => color($scope.clustersCount ? d.cluster : d.id))
-            //    .on("click", (event, d) => $scope.showTooltip(event, d, tooltip, svg));
-
-            //if ($scope.legendSettings.show) {
-            //    // draw legend
-            //    let legend = svg.selectAll(".legend")
-            //        .data($scope.legend)
-            //        .enter()
-            //        .append("g")
-            //        .attr("class", "legend")
-            //        .attr("transform", (_d, i) => "translate(0," + i * 20 + ")")
-            //        .on("click", (event, d) => {
-            //            d.visible = !d.visible;
-            //            let legendEntry = d3.select(event.currentTarget);
-            //            legendEntry.select("text")
-            //                .style("opacity", () => d.visible ? 1 : 0.5);
-            //            legendEntry.select("rect")
-            //                .style("fill-opacity", () => d.visible ? 1 : 0);
-
-            //            svg.selectAll(".dot")
-            //                .filter(dot => dot.cluster === d.name)
-            //                .attr("visibility", () => d.visible ? "visible" : "hidden");
-            //        });
-
-            //    // draw legend colored rectangles
-            //    legend.append("rect")
-            //        .attr("width", 15)
-            //        .attr("height", 15)
-            //        .style("fill", d => color(d.id))
-            //        .style("stroke", d => color(d.id))
-            //        .style("stroke-width", 4)
-            //        .attr("transform", "translate(0, -" + $scope.legendHeight + ")");
-
-            //    // draw legend text
-            //    legend.append("text")
-            //        .attr("x", 24)
-            //        .attr("y", 9)
-            //        .attr("dy", ".35em")
-            //        .attr("transform", "translate(0, -" + $scope.legendHeight + ")")
-            //        .text(d => $scope.clustersCount ? `Cluster ${d.name}` : d.name)
-            //        .style("font-size", "9pt");
-            //}
 
             $scope.chartDisplayed = true;
         }
@@ -522,8 +360,6 @@
         $scope.showTooltip = showTooltip;
         $scope.clearTooltip = clearTooltip;
         $scope.fillLegend = fillLegend;
-        $scope.yValue = yValue;
-        $scope.xValue = xValue;
         $scope.legendSetVisibilityForAll = legendSetVisibilityForAll;
         $scope.dragbarMouseDown = dragbarMouseDown;
         $scope.exportToExcel = exportToExcel;
@@ -533,6 +369,7 @@
         $scope.height = 800;
         $scope.dotRadius = 4;
         $scope.selectedDotRadius = $scope.dotRadius * 2;
+        $scope.chartElementId = "chart";
         $scope.legendSettings = { show: true };
         $scope.characteristicsTableRendering = { rendered: false };
         $scope.chartDisplayed = false;
