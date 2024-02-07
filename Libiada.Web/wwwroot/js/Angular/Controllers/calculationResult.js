@@ -130,11 +130,13 @@
             };
 
             $scope.chartData = $scope.points.map(p => ({
+                hoverinfo: 'text+x+y',
                 x: [p.name],
                 y: [p.characteristics[characteristicIndex]],
                 marker: { color: $scope.colorScale(p.id) },
                 type: 'bar',
                 customdata: { id: p.id },
+                name: p.name,
                 visible: $scope.legend.find(l => l.id == p.id).visible ? "true" : "legendonly" 
             }));
         }
@@ -203,6 +205,7 @@
             let secondCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1].value);
             let thirdCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[2].value);
             $scope.chartData = $scope.points.map(p => ({
+                hoverinfo: 'text+x+y+z',
                 x: [p.characteristics[firstCharacteristicIndex]],
                 y: [p.characteristics[secondCharacteristicIndex]],
                 z: [p.characteristics[thirdCharacteristicIndex]],
