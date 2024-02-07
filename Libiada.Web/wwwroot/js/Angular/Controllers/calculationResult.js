@@ -251,7 +251,13 @@
             }];
 
             $scope.layout = {
-                width: $scope.width,
+                margin: {
+                    l: 50,
+                    r: 50,
+                    b: 20,
+                    t: 70
+                },
+               // width: $scope.width,
                 showlegend: false
             };
         }
@@ -278,7 +284,7 @@
         }
 
         function legendClick(legendItem) {
-            if ($scope.chartData) {
+            if ($scope.chartData && $scope.chartData[0].customdata) {
                 let index;
                 let update = { visible: legendItem.visible ? "legendonly" : true  };
                 for (let i = 0; i < $scope.chartData.length; i++) {
@@ -294,19 +300,11 @@
         }
 
         function legendSetVisibilityForAll(visibility) {
-            let legend = d3.selectAll(".legend");
-
-            legend.each(l => l.visible = visibility);
-
-            legend.selectAll("rect")
-                .style("fill-opacity", () => visibility ? 1 : 0);
-
-            legend.selectAll("text")
-                .style("opacity", () => visibility ? 1 : 0.5);
-
-            d3.select(".chart-svg")
-                .selectAll(".dot")
-                .attr("visibility", () => visibility ? "visible" : "hidden");
+            if ($scope.chartData && $scope.chartData[0].customdata) {
+                let update = { visible: visibility ? true : "legendonly" };
+                $scope.legend.forEach(l => l.visible = visibility);
+                Plotly.restyle($scope.chartElementId, update);
+            }
         }
 
         function dragbarMouseDown() {
@@ -401,8 +399,6 @@
         $scope.exportToExcel = exportToExcel;
         $scope.renderResultsTable = renderResultsTable;
 
-        $scope.width = 800;
-        $scope.height = 800;
         $scope.dotRadius = 4;
         $scope.selectedDotRadius = $scope.dotRadius * 2;
         $scope.chartElementId = "chart";
