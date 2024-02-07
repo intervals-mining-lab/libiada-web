@@ -59,25 +59,25 @@
                         <div id="sidebar">
                             <ul id='nav' class="nav nav-tabs d-flex pt-1" role="tablist">
                                 <li class="nav-item" role="presentation" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Legend">
-                                    <button class="nav-link active p-1"
+                                    <button class="nav-link p-1"
                                             id="legend-tab" data-bs-toggle="tab"
                                             data-bs-target="#legend-tab-pane"
                                             type="button"
                                             role="tab"
                                             aria-controls="legend-tab-pane"
-                                            aria-selected="true">
+                                            aria-selected="false">
                                         <i class="bi-list-ul fs-3" aria-label="Legend" role="img"></i>
                                     </button>
                                 </li>
                                 <li class="nav-item" role="presentation" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Display settings">
-                                    <button class="nav-link p-1"
+                                    <button class="nav-link active p-1"
                                             id="characteristic-tab"
                                             data-bs-toggle="tab"
                                             data-bs-target="#characteristic-tab-pane"
                                             type="button"
                                             role="tab"
                                             aria-controls="characteristic-tab-pane"
-                                            aria-selected="false">
+                                            aria-selected="true">
                                         <i class="bi-display fs-3" aria-label="Display settings" role="img"></i>
                                     </button>
                                 </li>
@@ -95,7 +95,7 @@
                                 </li>
                             </ul>
                             <div class="tab-content px-2 pt-2">
-                                <div id="legend-tab-pane" class="tab-pane fade show active" role="tabpanel" aria-labelledby="legend-tab" tabindex="0">
+                                <div id="legend-tab-pane" class="tab-pane fade" role="tabpanel" aria-labelledby="legend-tab" tabindex="0">
                                     <div class="row">
                                         <div class="col-md-12 mb-2 btn-group" role="group" aria-label="Legend control buttons">
                                             <button type="button" class="btn btn-outline-secondary btn-sm" ng-click="legendSetVisibilityForAll(true)">
@@ -126,7 +126,7 @@
                                     </div>
                                     <!-- end .roundedOne -->
                                 </div>
-                                <div id="characteristic-tab-pane" class="tab-pane fade" role="tabpanel" aria-labelledby="characteristic-tab" tabindex="0">
+                                <div id="characteristic-tab-pane" class="tab-pane fade show active" role="tabpanel" aria-labelledby="characteristic-tab" tabindex="0">
                                     <div ng-repeat="characteristic in chartCharacteristics">
                                         <div class="row mb-1 mt-2">
                                             <div class="col-md-12">

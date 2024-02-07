@@ -105,30 +105,49 @@
             }
         }
 
-        function drawBarPlot() {
+        function fillBarPlotData() {
             let characteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
-
-            let layout = {
+            let min = Math.min(...$scope.points.map(p => p.characteristics[characteristicIndex]));
+            let max = Math.max(...$scope.points.map(p => p.characteristics[characteristicIndex]));
+            let range = Math.abs(max - min);
+            let maxNameLength = Math.max(...$scope.points.map(p => p.name.length));
+            min -= Math.abs(range * 0.05);
+            max += Math.abs(range * 0.05);
+            $scope.layout = {
+                margin: {
+                    l: 50,
+                    r: 20,
+                    t: 10,
+                    b: Math.min(150, maxNameLength * 10)
+                    
+                },
                 showlegend: false,
                 xaxis: { categoryorder: 'total ascending' },
                 yaxis: {
-                    range: [Math.min(...$scope.points.map(p => p.characteristics[characteristicIndex])),
-                            Math.max(...$scope.points.map(p => p.characteristics[characteristicIndex]))]
-                }
+                    range: [min,max]
+                },
+
             };
 
-            let data = $scope.points.map(p => ({
-                x:  [p.name],
-                y:  [p.characteristics[characteristicIndex]],
+            $scope.chartData = $scope.points.map(p => ({
+                x: [p.name],
+                y: [p.characteristics[characteristicIndex]],
                 marker: { color: $scope.colorScale(p.id) },
-                type: 'bar'
+                type: 'bar',
+                customdata: { id: p.id },
+                visible: $scope.legend.find(l => l.id == p.id).visible ? "true" : "legendonly" 
             }));
-
-            Plotly.newPlot($scope.chartElementId, data, layout, { responsive: true });
         }
 
-        function drawScatterPlot() {
+        function fillScatterPlotData() {
             $scope.layout = {
+                margin: {
+                    l: 50,
+                    r: 20,
+                    t: 30,
+                    b: 20
+
+                },
                 showlegend: false,
                 hovermode: "closest",
                 xaxis: {
@@ -155,8 +174,8 @@
 
             let firstCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
             let secondCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1].value);
-            
-            let data = $scope.points.map(p => ({
+
+            $scope.chartData = $scope.points.map(p => ({
                 hoverinfo: 'text+x+y',
                 type: 'scattergl',
                 x: [p.characteristics[firstCharacteristicIndex]],
@@ -164,10 +183,11 @@
                 text: p.name,
                 mode: "markers",
                 marker: { opacity: 0.8, color: $scope.colorScale(p.id) },
-                name:  p.name
+                name: p.name,
+                customdata: { id: p.id },
+                visible: $scope.legend.find(l => l.id == p.id).visible
             }));
 
-            Plotly.newPlot($scope.chartElementId, data, $scope.layout, { responsive: true });
 
             //$scope.plot.on("plotly_click", data => {
             //    $scope.selectedPointIndex = data.points[0].pointNumber;
@@ -177,12 +197,12 @@
             //});
         }
 
-        function draw3dScatterPlot() {
-            
+        function fill3dScatterPlotData() {
+
             let firstCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
             let secondCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1].value);
             let thirdCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[2].value);
-            let data = $scope.points.map(p => ({
+            $scope.chartData = $scope.points.map(p => ({
                 x: [p.characteristics[firstCharacteristicIndex]],
                 y: [p.characteristics[secondCharacteristicIndex]],
                 z: [p.characteristics[thirdCharacteristicIndex]],
@@ -195,23 +215,23 @@
                     //},
                 },
                 name: p.name,
-                type: 'scatter3d'
+                type: 'scatter3d',
+                customdata: { id: p.id },
+                visible: $scope.legend.find(l => l.id == p.id).visible
             }));
-            //var layout = {
-            //    margin: {
-            //        l: 0,
-            //        r: 0,
-            //        b: 0,
-            //        t: 0
-            //    }
-            //};
-            Plotly.newPlot($scope.chartElementId, data, { showlegend: false }, { responsive: true });
+            $scope.layout = {
+                margin: {
+                    l: 0,
+                    r: 0,
+                    b: 0,
+                    t: 0
+                },
+                showlegend: false
+            };
         }
 
-        function drawParallelCoordinatesPlot() {
-
-
-            let data = [{
+        function fillParallelCoordinatesPlotData() {
+            $scope.chartData = [{
                 type: 'parcoords',
                 //pad: [80, 80, 80, 80],
                 line: {
@@ -221,7 +241,7 @@
 
                 dimensions: $scope.chartCharacteristics.map(c => ({
                     label: c.value.Text,
-                    values: $scope.points.map(p => p.characteristics[$scope.characteristicsList.indexOf(c.value)] )
+                    values: $scope.points.map(p => p.characteristics[$scope.characteristicsList.indexOf(c.value)])
                 }))
                 //    [{
                 //    range: [2, 4.5],
@@ -230,12 +250,10 @@
                 //}]
             }];
 
-            let layout = {
+            $scope.layout = {
                 width: $scope.width,
                 showlegend: false
             };
-
-            Plotly.newPlot($scope.chartElementId, data, layout, { responsive: true });
         }
 
         function draw() {
@@ -243,19 +261,36 @@
 
             switch ($scope.chartCharacteristics.length) {
                 case 1:
-                    $scope.drawBarPlot();
+                    $scope.fillBarPlotData();
                     break;
                 case 2:
-                    $scope.drawScatterPlot();
+                    $scope.fillScatterPlotData();
                     break;
                 case 3:
-                    $scope.draw3dScatterPlot();
+                    $scope.fill3dScatterPlotData();
                     break;
                 default:
-                    $scope.drawParallelCoordinatesPlot();
+                    $scope.fillParallelCoordinatesPlotData();
             }
 
+            Plotly.newPlot($scope.chartElementId, $scope.chartData, $scope.layout, { responsive: true });
             $scope.chartDisplayed = true;
+        }
+
+        function legendClick(legendItem) {
+            if ($scope.chartData) {
+                let index;
+                let update = { visible: legendItem.visible ? "legendonly" : true  };
+                for (let i = 0; i < $scope.chartData.length; i++) {
+                    if ($scope.chartData[i].customdata.id == legendItem.id) {
+                        index = i;
+                        break;
+                    }
+                }
+
+                Plotly.restyle($scope.chartElementId, update, index);
+            }
+            
         }
 
         function legendSetVisibilityForAll(visibility) {
@@ -275,15 +310,15 @@
         }
 
         function dragbarMouseDown() {
-            let chart = document.getElementById('chart');
+            let chart = document.getElementById($scope.chartElementId);
             let right = document.getElementById('sidebar');
             let bar = document.getElementById('dragbar');
 
             const drag = (e) => {
                 document.selection ? document.selection.empty() : window.getSelection().removeAllRanges();
-                let chart_width = chart.style.width = (e.pageX - bar.offsetWidth / 2) + 'px';
+                chart.style.width = (e.pageX - bar.offsetWidth / 2) + 'px';
 
-                Plotly.relayout('chart', { autosize: true });
+                Plotly.relayout($scope.chartElementId, { autosize: true });
             };
 
             bar.addEventListener('mousedown', () => {
@@ -349,17 +384,18 @@
                 $scope.characteristicsTableRendering.rendered = true;
             }
         }
-        
-        $scope.drawBarPlot = drawBarPlot;
-        $scope.drawScatterPlot = drawScatterPlot;
-        $scope.draw3dScatterPlot = draw3dScatterPlot;
-        $scope.drawParallelCoordinatesPlot = drawParallelCoordinatesPlot;
+
+        $scope.fillBarPlotData = fillBarPlotData;
+        $scope.fillScatterPlotData = fillScatterPlotData;
+        $scope.fill3dScatterPlotData = fill3dScatterPlotData;
+        $scope.fillParallelCoordinatesPlotData = fillParallelCoordinatesPlotData;
         $scope.draw = draw;
         $scope.fillPoints = fillPoints;
         $scope.fillPointTooltip = fillPointTooltip;
         $scope.showTooltip = showTooltip;
         $scope.clearTooltip = clearTooltip;
         $scope.fillLegend = fillLegend;
+        $scope.legendClick = legendClick;
         $scope.legendSetVisibilityForAll = legendSetVisibilityForAll;
         $scope.dragbarMouseDown = dragbarMouseDown;
         $scope.exportToExcel = exportToExcel;
@@ -392,7 +428,7 @@
                 $scope.fillLegend();
 
                 $scope.chartCharacteristics = [{ id: $scope.chartsCharacterisrticsCount++, value: $scope.characteristicsList[0] }];
-                
+
                 $scope.loading = false;
             }, function () {
                 alert("Failed loading characteristic data");
