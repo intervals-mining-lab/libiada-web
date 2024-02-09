@@ -122,14 +122,14 @@
                     r: 20,
                     t: 10,
                     b: Math.min(150, maxNameLength * 10)
-                    
+
                 },
                 showlegend: false,
                 xaxis: { categoryorder: 'total ascending' },
                 yaxis: {
                     range: [min, max],
                     title: {
-                        text: $scope.characteristicNames[characteristicIndex], 
+                        text: $scope.characteristicNames[characteristicIndex],
                     }
                 }
             };
@@ -142,7 +142,7 @@
                 type: 'bar',
                 customdata: { id: p.id },
                 name: p.name,
-                visible: $scope.legend.find(l => l.id == p.id).visible ? "true" : "legendonly" 
+                visible: $scope.legend.find(l => l.id == p.id).visible ? "true" : "legendonly"
             }));
         }
 
@@ -156,14 +156,13 @@
                     r: 20,
                     t: 30,
                     b: 40
-
                 },
                 showlegend: false,
                 hovermode: "closest",
                 xaxis: {
                     //type: $scope.plotTypeX ? 'log' : '',
                     title: {
-                        text: $scope.characteristicNames[firstCharacteristicIndex]                       
+                        text: $scope.characteristicNames[firstCharacteristicIndex]
                     }
                 },
                 yaxis: {
@@ -173,7 +172,7 @@
                     }
                 }
             };
-           
+
             $scope.chartData = $scope.points.map(p => ({
                 hoverinfo: 'text+x+y',
                 type: 'scattergl',
@@ -259,6 +258,8 @@
         }
 
         function fillParallelCoordinatesPlotData() {
+            let characteristicsIndices = $scope.chartCharacteristics.map(c => $scope.characteristicsList.indexOf(c.value));
+
             $scope.chartData = [{
                 type: 'parcoords',
                 //pad: [80, 80, 80, 80],
@@ -267,15 +268,10 @@
                     colorscale: 'Turbo'
                 },
 
-                dimensions: $scope.chartCharacteristics.map(c => ({
-                    label: c.value.Text,
-                    values: $scope.points.map(p => p.characteristics[$scope.characteristicsList.indexOf(c.value)])
+                dimensions: characteristicsIndices.map(ci => ({
+                    label: $scope.characteristicNames[ci],
+                    values: $scope.points.map(p => p.characteristics[ci])
                 }))
-                //    [{
-                //    range: [2, 4.5],
-                //    label: 'sepal_width',
-                //    values: unpack(rows, 'sepal_width')
-                //}]
             }];
 
             $scope.layout = {
@@ -313,7 +309,7 @@
         function legendClick(legendItem) {
             if ($scope.chartData && $scope.chartData[0].customdata) {
                 let index;
-                let update = { visible: legendItem.visible ? "legendonly" : true  };
+                let update = { visible: legendItem.visible ? "legendonly" : true };
                 for (let i = 0; i < $scope.chartData.length; i++) {
                     if ($scope.chartData[i].customdata.id == legendItem.id) {
                         index = i;
@@ -323,7 +319,7 @@
 
                 Plotly.restyle($scope.chartElementId, update, index);
             }
-            
+
         }
 
         function legendSetVisibilityForAll(visibility) {
