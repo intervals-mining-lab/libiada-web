@@ -25,7 +25,10 @@
             }
         }
 
-        $scope.addCharacteristic = () => $scope.chartCharacteristics.push({ id: $scope.chartsCharacterisrticsCount++, value: $scope.characteristicsList[0] });
+        $scope.addCharacteristic = () => $scope.chartCharacteristics.push({
+            id: $scope.chartsCharacterisrticsCount++,
+            value: $scope.characteristicsList.find(cl => $scope.chartCharacteristics.every(cc => cc.value != cl))
+        });
 
         $scope.deleteCharacteristic = characteristic => $scope.chartCharacteristics.splice($scope.chartCharacteristics.indexOf(characteristic), 1);
 
