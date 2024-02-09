@@ -111,8 +111,11 @@
             let max = Math.max(...$scope.points.map(p => p.characteristics[characteristicIndex]));
             let range = Math.abs(max - min);
             let maxNameLength = Math.max(...$scope.points.map(p => p.name.length));
+
+            // adding margins
             min -= Math.abs(range * 0.05);
             max += Math.abs(range * 0.05);
+
             $scope.layout = {
                 margin: {
                     l: 50,
@@ -124,9 +127,11 @@
                 showlegend: false,
                 xaxis: { categoryorder: 'total ascending' },
                 yaxis: {
-                    range: [min,max]
-                },
-
+                    range: [min, max],
+                    title: {
+                        text: $scope.characteristicNames[characteristicIndex], 
+                    }
+                }
             };
 
             $scope.chartData = $scope.points.map(p => ({
@@ -142,12 +147,15 @@
         }
 
         function fillScatterPlotData() {
+            let firstCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
+            let secondCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1].value);
+
             $scope.layout = {
                 margin: {
                     l: 50,
                     r: 20,
                     t: 30,
-                    b: 20
+                    b: 40
 
                 },
                 showlegend: false,
@@ -155,28 +163,17 @@
                 xaxis: {
                     //type: $scope.plotTypeX ? 'log' : '',
                     title: {
-                        text: $scope.chartCharacteristics[0].value,
-                        font: {
-                            family: 'Courier New, monospace',
-                            size: 12
-                        }
+                        text: $scope.characteristicNames[firstCharacteristicIndex]                       
                     }
                 },
                 yaxis: {
                     //type: $scope.plotTypeY ? 'log' : '',
                     title: {
-                        text: $scope.chartCharacteristics[1].value,
-                        font: {
-                            family: 'Courier New, monospace',
-                            size: 12
-                        }
+                        text: $scope.characteristicNames[secondCharacteristicIndex]
                     }
                 }
             };
-
-            let firstCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
-            let secondCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1].value);
-
+           
             $scope.chartData = $scope.points.map(p => ({
                 hoverinfo: 'text+x+y',
                 type: 'scattergl',
@@ -204,6 +201,7 @@
             let firstCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
             let secondCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1].value);
             let thirdCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[2].value);
+
             $scope.chartData = $scope.points.map(p => ({
                 hoverinfo: 'text+x+y+z',
                 x: [p.characteristics[firstCharacteristicIndex]],
@@ -213,15 +211,13 @@
                 mode: "markers",
                 marker: {
                     opacity: 0.8, color: $scope.colorScale(p.id)
-                    //                    line: {
-                    //    width: 0.5
-                    //},
                 },
                 name: p.name,
                 type: 'scatter3d',
                 customdata: { id: p.id },
                 visible: $scope.legend.find(l => l.id == p.id).visible
             }));
+
             $scope.layout = {
                 margin: {
                     l: 0,
@@ -229,7 +225,36 @@
                     b: 0,
                     t: 0
                 },
-                showlegend: false
+                showlegend: false,
+                scene: {
+                    xaxis: {
+                        //type: $scope.plotTypeX ? 'log' : '',
+                        title: {
+                            text: $scope.characteristicNames[firstCharacteristicIndex],
+                            font: {
+                                size: 10
+                            }
+                        },
+                    },
+                    yaxis: {
+                        //type: $scope.plotTypeY ? 'log' : '',
+                        title: {
+                            text: $scope.characteristicNames[secondCharacteristicIndex],
+                            font: {
+                                size: 10
+                            }
+                        }
+                    },
+                    zaxis: {
+                        //type: $scope.plotTypeY ? 'log' : '',
+                        title: {
+                            text: $scope.characteristicNames[thirdCharacteristicIndex],
+                            font: {
+                                size: 10
+                            }
+                        }
+                    }
+                }
             };
         }
 
@@ -260,7 +285,6 @@
                     b: 20,
                     t: 70
                 },
-               // width: $scope.width,
                 showlegend: false
             };
         }
