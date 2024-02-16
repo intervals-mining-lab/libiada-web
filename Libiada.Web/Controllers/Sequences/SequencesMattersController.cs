@@ -123,7 +123,7 @@ public abstract class SequencesMattersController : AbstractResultController
                     sequenceStream = FileHelper.GetFileStream(file!);
                 }
 
-                var db = dbFactory.CreateDbContext();
+                using var db = dbFactory.CreateDbContext();
 
                 switch (nature)
                 {
@@ -174,7 +174,7 @@ public abstract class SequencesMattersController : AbstractResultController
             }
             catch (Exception)
             {
-                var db = dbFactory.CreateDbContext();
+                using var db = dbFactory.CreateDbContext();
                 long matterId = commonSequence.MatterId;
                 if (matterId != 0)
                 {

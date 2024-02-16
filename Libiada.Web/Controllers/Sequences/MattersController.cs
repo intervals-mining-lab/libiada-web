@@ -40,7 +40,8 @@ public class MattersController : SequencesMattersController
     /// </returns>
     public async Task<ActionResult> Index()
     {
-        List<Matter> matter = await dbFactory.CreateDbContext().Matters.Include(m => m.Multisequence).ToListAsync();
+        using var db = dbFactory.CreateDbContext();
+        List<Matter> matter = await db.Matters.Include(m => m.Multisequence).ToListAsync();
 
         if (!User.IsAdmin())
         {
@@ -94,7 +95,7 @@ public class MattersController : SequencesMattersController
         {
             return BadRequest();
         }
-        var db = dbFactory.CreateDbContext();
+        using var db = dbFactory.CreateDbContext();
         Matter? matter = db.Matters.Include(m => m.Multisequence).SingleOrDefault(m => m.Id == id);
         if (matter == null)
         {
@@ -204,7 +205,7 @@ public class MattersController : SequencesMattersController
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> DeleteConfirmed(long id)
     {
-        var db = dbFactory.CreateDbContext();
+        using var db = dbFactory.CreateDbContext();
         Matter matter = await db.Matters.FindAsync(id);
         db.Matters.Remove(matter);
         await db.SaveChangesAsync();

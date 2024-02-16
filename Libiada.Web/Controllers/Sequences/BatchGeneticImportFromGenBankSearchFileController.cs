@@ -70,8 +70,8 @@ public class BatchGeneticImportFromGenBankSearchFileController : AbstractResultC
             }
             accessions = accessions.Distinct().Select(a => a.Split('.')[0]).ToArray();
             var importResults = new List<MatterImportResult>(accessions.Length);
-
-            var matterRepository = new MatterRepository(dbFactory.CreateDbContext(), cache);
+            using var db = dbFactory.CreateDbContext();
+            var matterRepository = new MatterRepository(db, cache);
             var dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
 
             var (existingAccessions, accessionsToImport) = dnaSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
@@ -82,7 +82,7 @@ public class BatchGeneticImportFromGenBankSearchFileController : AbstractResultC
                 Result = "Sequence already exists",
                 Status = "Exists"
             }));
-            var db = dbFactory.CreateDbContext();
+            
             foreach (string accession in accessionsToImport)
             {
                 var importResult = new MatterImportResult() { MatterName = accession };
@@ -181,7 +181,8 @@ public class BatchGeneticImportFromGenBankSearchFileController : AbstractResultC
     {
         try
         {
-            var subsequenceImporter = new SubsequenceImporter(dbFactory.CreateDbContext(), metadata.Features.All, sequence.Id);
+            using var db = dbFactory.CreateDbContext();
+            var subsequenceImporter = new SubsequenceImporter(db, metadata.Features.All, sequence.Id);
             var (featuresCount, nonCodingCount) = subsequenceImporter.CreateSubsequences();
 
             string result = $"Successfully imported sequence, {featuresCount} features "

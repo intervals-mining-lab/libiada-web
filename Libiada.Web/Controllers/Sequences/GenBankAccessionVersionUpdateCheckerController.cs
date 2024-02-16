@@ -46,8 +46,8 @@ public class GenBankAccessionVersionUpdateCheckerController : AbstractResultCont
             Dictionary<string, AccessionUpdateSearchResult> sequencesData;
 
             var dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
-
-            var sequencesWithAccessions = dbFactory.CreateDbContext().DnaSequences
+            using var db = dbFactory.CreateDbContext();
+            var sequencesWithAccessions = db.DnaSequences
                                             .Include(ds => ds.Matter)
                                             .Where(ds => ds.Notation == Notation.Nucleotides && !string.IsNullOrEmpty(ds.RemoteId))
                                             .ToArray();

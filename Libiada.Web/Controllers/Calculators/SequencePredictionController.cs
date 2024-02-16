@@ -95,7 +95,8 @@ public class SequencePredictionController : AbstractResultController
 
             var commonSequenceRepository = new CommonSequenceRepository(dbFactory, cache);
             matterName = cache.Matters.Single(m => matterId == m.Id).Name;
-            var sequenceId = dbFactory.CreateDbContext().CommonSequences.Single(c => matterId == c.MatterId && c.Notation == notation).Id;
+            using var db = dbFactory.CreateDbContext();
+            var sequenceId = db.CommonSequences.Single(c => matterId == c.MatterId && c.Notation == notation).Id;
             sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
 
             characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);

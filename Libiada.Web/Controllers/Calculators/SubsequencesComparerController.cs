@@ -115,7 +115,7 @@ public class SubsequencesComparerController : AbstractResultController
         return CreateTask(() =>
         {
             double[] percentageDifferences = maxPercentageDifferences.Select(item => double.Parse(item, CultureInfo.InvariantCulture) / 100).ToArray();
-            var db = dbFactory.CreateDbContext();
+            using var db = dbFactory.CreateDbContext();
             var attributeValuesCache = new AttributeValueCacheManager(db);
             var characteristics = new SubsequenceData[matterIds.Length][];
 
@@ -245,7 +245,8 @@ public class SubsequencesComparerController : AbstractResultController
             short subsequencesCharacteristicLinkId
         )
     {
-        var localCharacteristicsCalculator = new LocalCharacteristicsCalculator(dbFactory.CreateDbContext(), fullCharacteristicRepository, commonSequenceRepository);
+        using var db = dbFactory.CreateDbContext();
+        var localCharacteristicsCalculator = new LocalCharacteristicsCalculator(db, fullCharacteristicRepository, commonSequenceRepository);
 
         var cache = new Dictionary<(int matterIndex, int subsequenceIndex), double[]>();
         var result = new List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)>();

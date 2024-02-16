@@ -8,7 +8,6 @@ using Libiada.Core.Music;
 
 using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
-using Libiada.Database.Extensions;
 using Libiada.Database.Models.Repositories.Catalogs;
 
 using Newtonsoft.Json;

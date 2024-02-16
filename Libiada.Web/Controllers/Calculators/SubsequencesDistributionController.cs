@@ -95,7 +95,7 @@ public class SubsequencesDistributionController : AbstractResultController
         return CreateTask(() =>
         {
             Array.Sort(matterIds);
-            var db = dbFactory.CreateDbContext();
+            using var db = dbFactory.CreateDbContext();
             var matterNames = new string[matterIds.Length];
             var remoteIds = new string[matterIds.Length];
             var subsequencesCharacteristicsNames = new string[characteristicLinkIds.Length];
@@ -182,8 +182,8 @@ public class SubsequencesDistributionController : AbstractResultController
         try
         {
             ISequence[] bioSequences;
-
-            var subsequenceExtractor = new SubsequenceExtractor(dbFactory.CreateDbContext(), commonSequenceRepository);
+            using var db = dbFactory.CreateDbContext();
+            var subsequenceExtractor = new SubsequenceExtractor(db, commonSequenceRepository);
             bioSequences = subsequenceExtractor.GetBioSequencesForFastaConverter(subsequencesIds);
 
 

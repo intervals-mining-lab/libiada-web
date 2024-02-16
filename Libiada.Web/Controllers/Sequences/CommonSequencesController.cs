@@ -72,8 +72,8 @@ public class CommonSequencesController : SequencesMattersController
         {
             return BadRequest();
         }
-
-        CommonSequence commonSequence = dbFactory.CreateDbContext().CommonSequences.Include(c => c.Matter).Single(c => c.Id == id);
+        using var db = dbFactory.CreateDbContext();
+        CommonSequence commonSequence = db.CommonSequences.Include(c => c.Matter).Single(c => c.Id == id);
         if (commonSequence == null)
         {
             return NotFound();
@@ -128,7 +128,7 @@ public class CommonSequencesController : SequencesMattersController
     {
         if (ModelState.IsValid)
         {
-            var db = dbFactory.CreateDbContext();
+            using var db = dbFactory.CreateDbContext();
             db.Entry(commonSequence).State = EntityState.Modified;
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
@@ -157,8 +157,8 @@ public class CommonSequencesController : SequencesMattersController
         {
             return BadRequest();
         }
-
-        CommonSequence commonSequence = dbFactory.CreateDbContext().CommonSequences.Include(c => c.Matter).Single(c => c.Id == id);
+        using var db = dbFactory.CreateDbContext();
+        CommonSequence commonSequence = db.CommonSequences.Include(c => c.Matter).Single(c => c.Id == id);
         if (commonSequence == null)
         {
             return NotFound();
@@ -180,7 +180,7 @@ public class CommonSequencesController : SequencesMattersController
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> DeleteConfirmed(long id)
     {
-        var db = dbFactory.CreateDbContext();
+        using var db = dbFactory.CreateDbContext();
         CommonSequence commonSequence = await db.CommonSequences.FindAsync(id);
         db.CommonSequences.Remove(commonSequence);
         await db.SaveChangesAsync();

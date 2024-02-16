@@ -187,7 +187,8 @@ public class BatchSequenceImportController : AbstractResultController
     {
         try
         {
-            var subsequenceImporter = new SubsequenceImporter(dbFactory.CreateDbContext(), metadata.Features.All, sequence.Id);
+            using var db = dbFactory.CreateDbContext();
+            var subsequenceImporter = new SubsequenceImporter(db, metadata.Features.All, sequence.Id);
             var (featuresCount, nonCodingCount) = subsequenceImporter.CreateSubsequences();
 
             string result = $"Successfully imported sequence, {featuresCount} features "

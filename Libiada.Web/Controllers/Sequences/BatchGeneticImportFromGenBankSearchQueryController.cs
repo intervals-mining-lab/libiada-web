@@ -71,7 +71,7 @@ public class BatchGeneticImportFromGenBankSearchQueryController : AbstractResult
             nuccoreObjects = ncbiHelper.ExecuteESummaryRequest(searchResults, importPartial);
             accessions = nuccoreObjects.Select(no => no.AccessionVersion.Split('.')[0]).Distinct().ToArray();
             var importResults = new List<MatterImportResult>(accessions.Length);
-            var db = dbFactory.CreateDbContext();
+            using var db = dbFactory.CreateDbContext();
             var matterRepository = new MatterRepository(db, cache);
             var dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
 
@@ -181,7 +181,8 @@ public class BatchGeneticImportFromGenBankSearchQueryController : AbstractResult
     {
         try
         {
-            var subsequenceImporter = new SubsequenceImporter(dbFactory.CreateDbContext(), metadata.Features.All, sequence.Id);
+            using var db = dbFactory.CreateDbContext();
+            var subsequenceImporter = new SubsequenceImporter(db, metadata.Features.All, sequence.Id);
             var (featuresCount, nonCodingCount) = subsequenceImporter.CreateSubsequences();
 
             string result = $"Successfully imported sequence, {featuresCount} features "

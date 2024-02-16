@@ -36,7 +36,8 @@ public class FmotifsDictionaryController : SequencesMattersController
     /// </returns>
     public async Task<ActionResult> Index()
     {
-        var musicSequence = dbFactory.CreateDbContext().MusicSequences.Where(m => m.Notation == Notation.FormalMotifs).Include(m => m.Matter);
+        using var db = dbFactory.CreateDbContext();
+        var musicSequence = db.MusicSequences.Where(m => m.Notation == Notation.FormalMotifs).Include(m => m.Matter);
         return View(await musicSequence.ToListAsync());
 
     }
@@ -57,7 +58,7 @@ public class FmotifsDictionaryController : SequencesMattersController
             return BadRequest();
         }
 
-        var db = dbFactory.CreateDbContext();
+        using var db = dbFactory.CreateDbContext();
         MusicSequence musicSequence = await db.MusicSequences.Include(m => m.Matter).SingleAsync(m => m.Id == id);
         if (musicSequence == null)
         {

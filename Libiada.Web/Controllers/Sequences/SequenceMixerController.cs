@@ -133,7 +133,7 @@ public class SequenceMixerController : Controller
                               int scrambling)
     {
 
-        var db = dbFactory.CreateDbContext();
+        using var db = dbFactory.CreateDbContext();
         Matter matter = cache.Matters.Single(m => m.Id == matterId);
         long sequenceId;
         switch (matter.Nature)

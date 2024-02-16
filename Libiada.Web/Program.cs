@@ -51,27 +51,28 @@ builder.Services.AddDefaultIdentity<AspNetUser>(options => options.SignIn.Requir
                 .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<ILibiadaDatabaseEntitiesFactory, LibiadaDatabaseEntitiesFactory>();
+builder.Services.AddSingleton<Cache>();
+
+builder.Services.AddSingleton<IPushNotificationHelper, PushNotificationHelper>();
+builder.Services.AddSingleton<ITaskManager, TaskManager>();
 
 builder.Services.AddSingleton<INcbiHelper, NcbiHelper>();
-
-builder.Services.AddSingleton<Cache>();
 
 builder.Services.AddSingleton<IAccordanceCharacteristicRepository, AccordanceCharacteristicRepository>();
 builder.Services.AddSingleton<IBinaryCharacteristicRepository, BinaryCharacteristicRepository>();
 builder.Services.AddSingleton<ICongenericCharacteristicRepository, CongenericCharacteristicRepository>();
 builder.Services.AddSingleton<IFullCharacteristicRepository, FullCharacteristicRepository>();
 
-builder.Services.AddTransient<ICommonSequenceRepository, CommonSequenceRepository>();
-
 builder.Services.AddScoped<ISequencesCharacteristicsCalculator, SequencesCharacteristicsCalculator>();
+builder.Services.AddScoped<ICongenericSequencesCharacteristicsCalculator, CongenericSequencesCharacteristicsCalculator>();
 builder.Services.AddScoped<ISubsequencesCharacteristicsCalculator, SubsequencesCharacteristicsCalculator>();
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddTransient<IPrincipal>(provider => provider.GetService<IHttpContextAccessor>().HttpContext.User);
+builder.Services.AddTransient<IPrincipal>(provider => provider.GetService<IHttpContextAccessor>()?.HttpContext?.User);
 
 builder.Services.AddTransient<IViewDataHelper, ViewDataHelper>();
-builder.Services.AddSingleton<IPushNotificationHelper, PushNotificationHelper>();
-builder.Services.AddSingleton<ITaskManager, TaskManager>();
+
+builder.Services.AddTransient<ICommonSequenceRepository, CommonSequenceRepository>();
 
 builder.Services.Configure<RazorViewEngineOptions>(options =>
 {
