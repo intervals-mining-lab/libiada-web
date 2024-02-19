@@ -290,8 +290,8 @@
         // constructs string representing tooltip text (inner html)
         function fillPointTooltip(point, matterName, similarity) {
             let color = similarity === $scope.pointsSimilarity.same ? "default"
-                : similarity === $scope.pointsSimilarity.similar ? "success"
-                    : similarity === $scope.pointsSimilarity.different ? "danger" : "danger";
+                      : similarity === $scope.pointsSimilarity.similar ? "success"
+                      : similarity === $scope.pointsSimilarity.different ? "danger" : "danger";
 
             let tooltipElement = {
                 id: point.id,

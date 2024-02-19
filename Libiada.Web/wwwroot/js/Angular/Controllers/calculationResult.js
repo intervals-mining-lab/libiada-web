@@ -65,48 +65,36 @@
         }
 
         // shows tooltip for dot or group of dots
-        function showTooltip(event, d, tooltip, svg) {
-            $scope.clearTooltip(tooltip);
+        function showTooltip(selectedPoint) {
+            $("button[data-bs-target='#tooltip-tab-pane']").tab("show");
 
-            tooltip.style("opacity", 0.9);
-
-            let tooltipHtml = [];
-
-            tooltip.selectedDots = svg.selectAll(".dot")
-                .filter((dot) => {
-                    if (dot.x === d.x && dot.y === d.y) {
-                        tooltipHtml.push($scope.fillPointTooltip(dot));
-                        return true;
-                    } else {
-                        return false;
-                    }
-                })
-                .attr("rx", $scope.selectedDotRadius)
-                .attr("ry", $scope.selectedDotRadius);
-
-            tooltip.html(tooltipHtml.join("</br></br>"));
-
-            tooltip.style("left", (event.pageX + 10) + "px")
-                .style("top", (event.pageY - 8) + "px");
-
-            tooltip.hideTooltip = false;
-        }
-
-        // clears tooltip and unselects dots
-        function clearTooltip(tooltip) {
-            if (tooltip) {
-                if (tooltip.hideTooltip) {
-                    tooltip.html("").style("opacity", 0);
-
-                    if (tooltip.selectedDots) {
-                        tooltip.selectedDots.attr("rx", $scope.dotRadius)
-                            .attr("ry", $scope.dotRadius);
-                    }
-                }
-
-                tooltip.hideTooltip = true;
+            $scope.tooltipVisible = true;
+            $scope.tooltip = {
+                id: selectedPoint.id,
+                name: selectedPoint.name,
+                characteristics: selectedPoint.characteristics
+            };
+            let update = {};
+            switch ($scope.chartCharacteristics.length) {
+                case 1:
+                    break;
+                case 2:
+                    update = {
+                        "marker.symbol": $scope.points.map(point => point === selectedPoint ? "diamond-wide" : "circle-open"),
+                        "marker.size": $scope.points.map(point => point === selectedPoint ? 15 : 6)
+                    };
+                    break;
+                case 3:
+                    break;
+                default:
             }
+            
+
+            Plotly.restyle($scope.chartElement, update);
+
+            $scope.$apply();
         }
+
 
         function fillBarPlotData() {
             let characteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
@@ -188,14 +176,6 @@
                 customdata: { id: p.id },
                 visible: $scope.legend.find(l => l.id == p.id).visible
             }));
-
-
-            //$scope.plot.on("plotly_click", data => {
-            //    $scope.selectedPointIndex = data.points[0].pointNumber;
-            //    $scope.selectedMatterIndex = data.points[0].curveNumber;
-            //    let selectedPoint = $scope.points[data.points[0].curveNumber][data.points[0].pointNumber];
-            //    //$scope.showTooltip(selectedPoint);
-            //});
         }
 
         function fill3dScatterPlotData() {
@@ -305,7 +285,15 @@
                     $scope.fillParallelCoordinatesPlotData();
             }
 
-            Plotly.newPlot($scope.chartElementId, $scope.chartData, $scope.layout, { responsive: true });
+            Plotly.newPlot($scope.chartElement, $scope.chartData, $scope.layout, { responsive: true });
+
+            $scope.chartElement.on("plotly_click", data => {
+                $scope.selectedPointIndex = data.points[0].pointNumber;
+                $scope.selectedMatterIndex = data.points[0].curveNumber;
+                let selectedPoint = $scope.points[data.points[0].curveNumber];
+                $scope.showTooltip(selectedPoint);
+            });
+
             $scope.chartDisplayed = true;
         }
 
@@ -320,7 +308,7 @@
                     }
                 }
 
-                Plotly.restyle($scope.chartElementId, update, index);
+                Plotly.restyle($scope.chartElement, update, index);
             }
 
         }
@@ -329,20 +317,19 @@
             if ($scope.chartData && $scope.chartData[0].customdata) {
                 let update = { visible: visibility ? true : "legendonly" };
                 $scope.legend.forEach(l => l.visible = visibility);
-                Plotly.restyle($scope.chartElementId, update);
+                Plotly.restyle($scope.chartElement, update);
             }
         }
 
         function dragbarMouseDown() {
-            let chart = document.getElementById($scope.chartElementId);
             let right = document.getElementById('sidebar');
             let bar = document.getElementById('dragbar');
 
             const drag = (e) => {
                 document.selection ? document.selection.empty() : window.getSelection().removeAllRanges();
-                chart.style.width = (e.pageX - bar.offsetWidth / 2) + 'px';
+                $scope.chartElement.style.width = (e.pageX - bar.offsetWidth / 2) + 'px';
 
-                Plotly.relayout($scope.chartElementId, { autosize: true });
+                Plotly.relayout($scope.chartElement, { autosize: true });
             };
 
             bar.addEventListener('mousedown', () => {
@@ -417,7 +404,6 @@
         $scope.fillPoints = fillPoints;
         $scope.fillPointTooltip = fillPointTooltip;
         $scope.showTooltip = showTooltip;
-        $scope.clearTooltip = clearTooltip;
         $scope.fillLegend = fillLegend;
         $scope.legendClick = legendClick;
         $scope.legendSetVisibilityForAll = legendSetVisibilityForAll;
@@ -427,7 +413,7 @@
 
         $scope.dotRadius = 4;
         $scope.selectedDotRadius = $scope.dotRadius * 2;
-        $scope.chartElementId = "chart";
+        $scope.chartElement = document.getElementById("chart");;
         $scope.legendSettings = { show: true };
         $scope.characteristicsTableRendering = { rendered: false };
         $scope.chartDisplayed = false;
