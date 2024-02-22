@@ -5,29 +5,30 @@
     min-height: 300px;
 }
 
-#sidebar {
-    flex: 1;
-    width: 30vw;
-    min-width: 225px;
-}
-
-#nav {
-    justify-content: space-around;
-}
-
-.tab-content {
-    overflow-y: auto;
-    height: calc(100vh - 60px);
-}
-
 #dragbar {
     width: 3px;
     cursor: col-resize;
     margin-left: 1px;
 }
 
-.genes-map .row {
-    margin: 0 !important;
+#sidebar {
+    flex: 1;
+    width: 30vw;
+    min-width: 225px;
+}
+
+.tab-content-full-height {
+    overflow-y: auto;
+    height: calc(100vh - 56px);
+}
+
+.subtab-content-full-height {
+    overflow-y: auto;
+    height: calc(100vh - 112px);
+}
+
+.no-margin .row {
+    margin: 0;
 }
 
 .check-color {
