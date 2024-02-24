@@ -152,7 +152,7 @@ public class TaskManager : ITaskManager
 
                     tasks.Remove(task);
 
-                    CalculationTask databaseTask = db.CalculationTasks.Find(id);
+                    CalculationTask? databaseTask = db.CalculationTasks.Find(id);
                     db.CalculationTasks.Remove(databaseTask);
                     db.SaveChanges();
                     return task.TaskData;
@@ -390,7 +390,7 @@ public class TaskManager : ITaskManager
         catch (Exception e)
         {
             string errorMessage = e.Message;
-            string stackTrace = e.StackTrace;
+            string stackTrace = e.StackTrace ?? string.Empty;
 
             while (e.InnerException != null)
             {

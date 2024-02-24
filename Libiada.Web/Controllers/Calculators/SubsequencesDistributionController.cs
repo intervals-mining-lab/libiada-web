@@ -97,7 +97,7 @@ public class SubsequencesDistributionController : AbstractResultController
             Array.Sort(matterIds);
             using var db = dbFactory.CreateDbContext();
             var matterNames = new string[matterIds.Length];
-            var remoteIds = new string[matterIds.Length];
+            var remoteIds = new string?[matterIds.Length];
             var subsequencesCharacteristicsNames = new string[characteristicLinkIds.Length];
             var subsequencesCharacteristicsList = new SelectListItem[characteristicLinkIds.Length];
             var attributeValuesCache = new AttributeValueCacheManager(db);
