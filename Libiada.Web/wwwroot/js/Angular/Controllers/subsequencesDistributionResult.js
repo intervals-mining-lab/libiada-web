@@ -530,7 +530,7 @@
 
             // color are shifted for odd and even indexes
             let colorCode = index / (2 * lastIndex);
-            if (index % 2 != 0) {
+            if (index % 2 !== 0) {
                 colorCode = colorCode + 0.5;
             }
 

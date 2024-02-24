@@ -165,7 +165,7 @@
                 matter.Selected = false;
                 ctrl.selectedMattersCount--;
             } else {
-                if (ctrl.maximumSelectedMatters == 1) {
+                if (ctrl.maximumSelectedMatters === 1) {
                     ctrl.matters.forEach(m => m.Selected = false);
                     matter.Selected = true;
                     ctrl.selectedMattersCount = 1;

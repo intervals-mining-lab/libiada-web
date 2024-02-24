@@ -27,7 +27,7 @@
 
         $scope.addCharacteristic = () => $scope.chartCharacteristics.push({
             id: $scope.chartsCharacterisrticsCount++,
-            value: $scope.characteristicsList.find(cl => $scope.chartCharacteristics.every(cc => cc.value != cl))
+            value: $scope.characteristicsList.find(cl => $scope.chartCharacteristics.every(cc => cc.value !== cl))
         });
 
         $scope.deleteCharacteristic = characteristic => $scope.chartCharacteristics.splice($scope.chartCharacteristics.indexOf(characteristic), 1);
@@ -133,7 +133,7 @@
                 type: 'bar',
                 customdata: { id: p.id },
                 name: p.name,
-                visible: $scope.legend.find(l => l.id == p.id).visible ? "true" : "legendonly"
+                visible: $scope.legend.find(l => l.id === p.id).visible ? "true" : "legendonly"
             }));
         }
 
@@ -174,7 +174,7 @@
                 marker: { opacity: 0.8, color: $scope.colorScale(p.id) },
                 name: p.name,
                 customdata: { id: p.id },
-                visible: $scope.legend.find(l => l.id == p.id).visible
+                visible: $scope.legend.find(l => l.id === p.id).visible
             }));
         }
 
@@ -197,7 +197,7 @@
                 name: p.name,
                 type: 'scatter3d',
                 customdata: { id: p.id },
-                visible: $scope.legend.find(l => l.id == p.id).visible
+                visible: $scope.legend.find(l => l.id === p.id).visible
             }));
 
             $scope.layout = {
@@ -302,7 +302,7 @@
                 let index;
                 let update = { visible: legendItem.visible ? "legendonly" : true };
                 for (let i = 0; i < $scope.chartData.length; i++) {
-                    if ($scope.chartData[i].customdata.id == legendItem.id) {
+                    if ($scope.chartData[i].customdata.id === legendItem.id) {
                         index = i;
                         break;
                     }

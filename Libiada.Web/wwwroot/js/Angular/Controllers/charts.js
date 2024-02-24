@@ -19,7 +19,7 @@
 
                 rows.forEach(thisRow => {
                     let row = thisRow.trim();
-                    if (row != "") {
+                    if (row) {
                         let cols = row.split("\t").map(c => c.replace(",", "."));
                         result.push(cols);
                     }
@@ -35,10 +35,10 @@
 
         function textChanged() {
             let text = $("#dataPasteBox").val();
-            if (text != "") {
+            if (text) {
                 $scope.rawData = text;
                 let asArray = $scope.parseTabularData(text);
-                if (asArray != null) {
+                if (asArray) {
                     $scope.parsedData = asArray;
                     $scope.$apply();
                 }
@@ -46,7 +46,7 @@
         }
 
         function handleKeyDown(e, args) {
-            if (!$scope.inFocus && e.which == $scope.keyCodes.V && (e.ctrlKey || e.metaKey)) { // CTRL + V
+            if (!$scope.inFocus && e.which === $scope.keyCodes.V && (e.ctrlKey || e.metaKey)) { // CTRL + V
                 //reset value of our box
                 $("#dataPasteBox").val("");
                 //set it in focus so that pasted text goes inside the box

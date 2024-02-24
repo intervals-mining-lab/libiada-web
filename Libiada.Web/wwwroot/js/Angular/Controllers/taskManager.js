@@ -103,7 +103,7 @@
 
         function tryRedirectToResult(task) {
             if ($scope.autoRedirect &&
-                (task.Id == $scope.RedirectTaskId) &&
+                (task.Id === $scope.RedirectTaskId) &&
                 (task.TaskState === "Completed" || task.TaskState === "Error")) {
                 document.location.href = `${window.location.origin}/${task.TaskType}/Result/${task.Id}`;
             }
@@ -133,7 +133,7 @@
 
         let location = window.location.href.split("/");
         if (location[location.length - 1] !== "TaskManager")
-            $scope.RedirectTaskId = location[location.length - 1];
+            $scope.RedirectTaskId = +location[location.length - 1];
         else $scope.RedirectTaskId = null;
         $scope.loadingScreenHeader = "Loading tasks";
         $scope.loading = true;
