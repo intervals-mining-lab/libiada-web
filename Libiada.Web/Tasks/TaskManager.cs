@@ -27,7 +27,7 @@ public class TaskManager : ITaskManager
     /// <summary>
     /// Gets the tasks.
     /// </summary>
-    private readonly List<Task> tasks = new List<Task>();
+    private readonly List<Task> tasks = [];
 
     /// <summary>
     /// The signalr hub.

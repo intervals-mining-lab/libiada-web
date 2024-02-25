@@ -17,7 +17,7 @@ public class SelectListItemComparer : IEqualityComparer<SelectListItem>
     /// <returns>
     /// Comparing result <see cref="bool"/>.
     /// </returns>
-    public bool Equals(SelectListItem x, SelectListItem y)
+    public bool Equals(SelectListItem? x, SelectListItem? y)
     {
         return (x == y) || (!(x == null || y == null) && (x.Text == y.Text && x.Value == y.Value));
     }
