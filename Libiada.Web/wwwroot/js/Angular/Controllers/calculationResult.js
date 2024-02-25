@@ -80,7 +80,7 @@
                     break;
                 case 2:
                     update = {
-                        "marker.symbol": $scope.points.map(point => point === selectedPoint ? "diamond-wide" : "circle-open"),
+                        "marker.symbol": $scope.points.map(point => point === selectedPoint ? "diamond-wide" : "circle"),
                         "marker.size": $scope.points.map(point => point === selectedPoint ? 15 : 6)
                     };
                     break;
