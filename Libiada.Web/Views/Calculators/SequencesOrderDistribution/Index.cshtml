@@ -4,7 +4,9 @@
 
 <h2>@ViewBag.Title</h2>
 
-@Html.Partial("_AngularControllerInitializer", "SequencesOrderDistribution")
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "SequencesOrderDistribution");
+}
 
 @using (Html.BeginForm())
 {
@@ -54,6 +56,8 @@
         </div>
     </fieldset>
     <hr />
-    @Html.Partial("_MattersSubmit")
+        @{
+            await Html.RenderPartialAsync("_MattersSubmit");
+}
 </div>
 }

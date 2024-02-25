@@ -2,7 +2,9 @@
     ViewBag.Title = "Batch genes import";
 }
 
-@Html.Partial("_AngularControllerInitializer", "GenesImport")
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "GenesImport");
+}
 
 <h2>@ViewBag.Title</h2>
 
@@ -18,7 +20,9 @@
                        maximum-selected-matters="::maximumSelectedMatters"
                        selected-matters-count="selectedMattersCount">
         </matters-table>
-        @Html.Partial("_MattersSubmit")
+        @{
+            await Html.RenderPartialAsync("_MattersSubmit");
+}
     </div>
 }
 

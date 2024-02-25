@@ -6,7 +6,7 @@
 
 @if (ViewBag.Error == null)
 {
-    @Html.Partial("_AngularControllerInitializer", "BatchSequenceImportResult")
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchSequenceImportResult");
 
     <div ng-controller="BatchSequenceImportResultCtrl">
         <table class="table table-bordered table-hover">
@@ -27,7 +27,7 @@
         </table>
     </div>
 
-    @section Scripts{
+    @section Scripts {
     <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
     }
 }

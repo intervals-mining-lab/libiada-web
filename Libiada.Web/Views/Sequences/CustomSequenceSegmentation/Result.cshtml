@@ -5,23 +5,23 @@
 <h2>@ViewBag.Title</h2>
 @if (ViewBag.Error == null)
 {
-    @Html.Partial("_AngularControllerInitializer", "SegmentationResult")
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "SegmentationResult");
 
     <div ng-controller="SegmentationResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <div ng-disabled="loading">
             <table class="table table-bordered table-hover table-sm" ng-cloak>
                 <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Sequence</th>
-                </tr>
+                    <tr>
+                        <th>Name</th>
+                        <th>Sequence</th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="sequence in sequences">
-                    <td ng-bind="sequence.name"/>
-                    <td ng-bind="sequence.value"/>
-                </tr>
+                    <tr ng-repeat="sequence in sequences">
+                        <td ng-bind="sequence.name" />
+                        <td ng-bind="sequence.value" />
+                    </tr>
                 </tbody>
             </table>
         </div>

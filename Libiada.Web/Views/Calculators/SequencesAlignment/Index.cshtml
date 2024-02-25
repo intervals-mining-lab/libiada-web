@@ -2,7 +2,9 @@
     ViewBag.Title = "Sequences alignment";
 }
 
-@Html.Partial("_AngularControllerInitializer", "SequencesAlignment")
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "SequencesAlignment");
+}
 
 <h2>@ViewBag.Title</h2>
 
@@ -20,7 +22,9 @@
                        maximum-selected-matters="::maximumSelectedMatters"
                        selected-matters-count="selectedMattersCount">
         </matters-table>
-        @Html.Partial("_FeaturesSelect")
+        @{
+            await Html.RenderPartialAsync("_FeaturesSelect");
+}
         <hr />
         <characteristic characteristic-types="::characteristicTypes"
                         characteristics-dictionary="::characteristicsDictionary"
@@ -82,7 +86,9 @@
             </label>
         </div>
         <hr />
-        @Html.Partial("_MattersSubmit")
+        @{
+        await Html.RenderPartialAsync("_MattersSubmit");
+}
     </div>
 }
 

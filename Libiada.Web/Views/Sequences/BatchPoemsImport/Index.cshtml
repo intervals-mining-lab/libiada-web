@@ -2,7 +2,9 @@
     ViewBag.Title = "Batch poems import";
 }
 
-@Html.Partial("_AngularControllerInitializer", "BatchPoemsImport")
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchPoemsImport");
+}
 
 <h2>@ViewBag.Title</h2>
 

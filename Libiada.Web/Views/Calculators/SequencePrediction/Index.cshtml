@@ -2,7 +2,9 @@
     ViewBag.Title = "Sequence prediction";
 }
 
-@Html.Partial("_AngularControllerInitializer", "Calculation")
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "Calculation");
+}
 
 <h2>@ViewBag.Title</h2>
 
@@ -12,7 +14,9 @@
     <div ng-controller="CalculationCtrl">
         <h4>Sequences and parameters</h4>
         <hr />
-        @Html.Partial("_NatureSelect")
+        @{
+            await Html.RenderPartialAsync("_NatureSelect");
+}
         <matters-table matters="matters"
                        nature="nature"
                        groups="groups"
@@ -49,7 +53,9 @@
             </div>
         </div>
         <hr />
-        @Html.Partial("_MattersSubmit")
+        @{
+        await Html.RenderPartialAsync("_MattersSubmit");
+}
     </div>
 }
 

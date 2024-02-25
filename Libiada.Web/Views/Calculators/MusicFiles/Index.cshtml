@@ -4,7 +4,9 @@
 
 <h2>@ViewBag.Title</h2>
 
-@Html.Partial("_AngularControllerInitializer", "CustomCalculation")
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "CustomCalculation");
+}
 
 @using (Html.BeginForm("Index", "MusicFiles", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {

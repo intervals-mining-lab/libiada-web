@@ -6,7 +6,7 @@
 
 @if (ViewBag.Error == null)
 {
-    @Html.Partial("_AngularControllerInitializer", "ClusterizationResult")
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "ClusterizationResult");
 
     <div ng-controller="ClusterizationResultCtrl">
         <h4 class="mb-2" ng-bind="::matterNames[0]"></h4>

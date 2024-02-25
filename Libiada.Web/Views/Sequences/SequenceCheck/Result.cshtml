@@ -2,7 +2,9 @@
     ViewBag.Title = "Sequence check result";
 }
 
-@Html.Partial("_AngularControllerInitializer", "BatchSequenceImportResult")
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchSequenceImportResult");
+}
 
 <h2>@ViewBag.Title</h2>
 

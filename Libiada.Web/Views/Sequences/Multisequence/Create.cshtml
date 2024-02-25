@@ -6,7 +6,9 @@
     ViewBag.Title = "Create multisequence";
 }
 
-@Html.Partial("_AngularControllerInitializer", "MultisequenceCreate")
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "MultisequenceCreate");
+}
 
 <h2>@ViewBag.Title</h2>
 
@@ -56,7 +58,9 @@
                    selected-matters-count="selectedMattersCount"
                    display-multisequence-number="::displayMultisequenceNumber">
     </matters-table>
-    @Html.Partial("_MattersSubmit")
+        @{
+            await Html.RenderPartialAsync("_MattersSubmit");
+}
     <div class="row mb-1">
         <div class="col-md-2">
             @Html.ActionLink("Back to List", "Index")

@@ -4,9 +4,8 @@
 
 @{
     ViewBag.Title = "Create sequence";
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "MatterSequenceCreate");
 }
-
-@Html.Partial("_AngularControllerInitializer", "MatterSequenceCreate")
 
 <h2>@ViewBag.Title</h2>
 
@@ -65,7 +64,9 @@
                 @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
             </div>
         </div>
-        @Html.Partial("_LocalFile")
+        @{
+            await Html.RenderPartialAsync("_LocalFile");
+        }
         <div ng-show="nature == @((byte)Nature.Genetic)">
             <div class="row mb-1">
                 @Html.LabelFor(model => model.RemoteDb, new { @class = "col-form-label col-md-2" })

@@ -4,7 +4,9 @@
     ViewBag.Title = "Sequences group";
 }
 
-@Html.Partial("_AngularControllerInitializer", "SequenceGroups")
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "SequenceGroups");
+}
 
 <h2>@ViewBag.Title</h2>
 
@@ -23,7 +25,9 @@
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
         </div>
-        @Html.Partial("_NatureSelect")
+        @{
+            await Html.RenderPartialAsync("_NatureSelect");
+}
         <div class="row mb-1">
             <div class="col-md-10">
                 <label class="form-label" for="sequenceGroupType">Sequence group type</label>

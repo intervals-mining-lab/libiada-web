@@ -2,7 +2,9 @@
     ViewBag.Title = "Congeneric sequences characteristics calculation";
 }
 
-@Html.Partial("_AngularControllerInitializer", "Calculation")
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "Calculation");
+}
 
 <h2>@ViewBag.Title</h2>
 
@@ -11,7 +13,9 @@
     @Html.AntiForgeryToken()
     <div ng-controller="CalculationCtrl">
         @(Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" }))
-        @Html.Partial("_NatureSelect")
+        @{
+            await Html.RenderPartialAsync("_NatureSelect");
+}
         <matters-table matters="matters"
                        nature="nature"
                        groups="groups"
@@ -42,7 +46,9 @@
                 Calculate theoretical rank distribution
             </label>
         </div>
-        @Html.Partial("_MattersSubmit")
+        @{
+        await Html.RenderPartialAsync("_MattersSubmit");
+}
     </div>
 }
 

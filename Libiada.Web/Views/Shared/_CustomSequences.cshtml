@@ -110,5 +110,7 @@
     </div>
     <hr />
 </div>
-@Html.Partial("_ImageTransformers")
+@{
+    await Html.RenderPartialAsync("_ImageTransformers");
+}
 <hr />

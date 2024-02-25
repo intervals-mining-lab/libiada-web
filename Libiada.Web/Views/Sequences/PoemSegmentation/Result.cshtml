@@ -5,7 +5,8 @@
 <h2>@ViewBag.Title</h2>
 @if (ViewBag.Error == null)
 {
-    @Html.Partial("_AngularControllerInitializer", "ClusterizationResult")
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "ClusterizationResult");
+
     <h3>@ViewBag.poemName</h3>
     <div ng-controller="ClusterizationResultCtrl">
         <table class="table table-bordered table-hover" ng-cloak>

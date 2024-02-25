@@ -4,7 +4,9 @@
     ViewBag.Title = "Subsequences comparer";
 }
 
-@Html.Partial("_AngularControllerInitializer", "SequencesAlignment")
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "SequencesAlignment");
+}
 
 <h2>@ViewBag.Title</h2>
 
@@ -21,9 +23,13 @@
                        maximum-selected-matters="::maximumSelectedMatters"
                        selected-matters-count="selectedMattersCount">
         </matters-table>
-        @Html.Partial("_FeaturesSelect")
+        @{
+            await Html.RenderPartialAsync("_FeaturesSelect");
+}
         <hr />
-        @Html.Partial("_Filters")
+        @{
+        await Html.RenderPartialAsync("_Filters");
+}
         <h4>Sort matrix by characterisitc:</h4>
         <characteristic characteristic-types="::characteristicTypes"
                         characteristics-dictionary="::characteristicsDictionary"
@@ -65,7 +71,9 @@
             </div>
         }
         <input type="hidden" name="filterMatrix" value="false" />
-        @Html.Partial("_MattersSubmit")
+        @{
+            await Html.RenderPartialAsync("_MattersSubmit");
+}
     </div>
 }
 

@@ -5,7 +5,7 @@
 <h2>@ViewBag.Title</h2>
 @if (ViewBag.Error == null)
 {
-    @Html.Partial("_AngularControllerInitializer", "OrderTransformationResult")
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "OrderTransformationResult");
 
     <div ng-controller="OrderTransformationResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>

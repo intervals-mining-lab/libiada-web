@@ -4,7 +4,9 @@
 
 <h2>@ViewBag.Title</h2>
 
-@Html.Partial("_AngularControllerInitializer", "OrderTransformationVisualization")
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "OrderTransformationVisualization");
+}
 
 @using (Html.BeginForm())
 {
@@ -20,6 +22,8 @@
                 @Html.ValidationMessage("length", "", new { @class = "text-danger" })
             </div>
         </div>
-        @Html.Partial("_MattersSubmit")
+        @{
+            await Html.RenderPartialAsync("_MattersSubmit");
+}
     </div>
 }

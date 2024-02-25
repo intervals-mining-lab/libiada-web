@@ -4,7 +4,9 @@
 
 <h2>@ViewBag.Title</h2>
 
-@Html.Partial("_AngularControllerInitializer", "OrderCalculation")
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "OrderCalculation");
+}
 
 @using (Html.BeginForm())
 {
@@ -53,7 +55,9 @@
                          trajectories="::trajectories"
                          hide-notation="true">
         </characteristics>
-        @Html.Partial("_MattersSubmit")
+        @{
+            await Html.RenderPartialAsync("_MattersSubmit");
+}
     </div>
 }
 

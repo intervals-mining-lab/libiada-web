@@ -2,7 +2,9 @@
     ViewBag.Title = "Transformation of genetic sequences";
 }
 
-@Html.Partial("_AngularControllerInitializer", "SubsequencesCalculation")
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "SubsequencesCalculation");
+}
 
 <h2>@ViewBag.Title</h2>
 
@@ -36,7 +38,9 @@
             </div>
         </fieldset>
         <hr />
-        @Html.Partial("_MattersSubmit")
+        @{
+            await Html.RenderPartialAsync("_MattersSubmit");
+}
     </div>
 }
 @section Scripts {

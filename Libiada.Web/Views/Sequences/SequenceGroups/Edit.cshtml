@@ -6,7 +6,9 @@
 
 <h2>@ViewBag.Title</h2>
 
-@Html.Partial("_AngularControllerInitializer", "SequenceGroups")
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "SequenceGroups");
+}
 
 @using (Html.BeginForm())
 {
@@ -27,7 +29,9 @@
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
         </div>
-        @Html.Partial("_NatureSelect")
+        @{
+            await Html.RenderPartialAsync("_NatureSelect");
+}
         <div class="row mb-1">
             <div class="col-md-10">
                 <label class="form-label" for="sequenceGroupType">Sequence group type</label>
@@ -47,7 +51,9 @@
                        maximum-selected-matters="::maximumSelectedMatters"
                        selected-matters-count="selectedMattersCount">
         </matters-table>
-        @Html.Partial("_MattersSubmit")
+        @{
+            await Html.RenderPartialAsync("_MattersSubmit");
+}
         <div class="row mb-2">
             <div class="col-md-2">
                 @Html.ActionLink("Back to List", "Index")

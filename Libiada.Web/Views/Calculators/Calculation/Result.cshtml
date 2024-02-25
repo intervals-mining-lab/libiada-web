@@ -247,6 +247,8 @@
     <script src="~/lib/plotly.js/plotly.min.js" asp-append-version="true"></script>
     <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
     <script src="~/lib/exceljs/exceljs.min.js" asp-append-version="true"></script>
-    @Html.Partial("_AngularControllerInitializer", "CalculationResult")
+    @{
+            await Html.RenderPartialAsync("_AngularControllerInitializer", "CalculationResult");
+}
     }
 }

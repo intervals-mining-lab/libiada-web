@@ -2,7 +2,9 @@
     ViewBag.Title = "Segmentation of poem sequences";
 }
 
-@Html.Partial("_AngularControllerInitializer", "Calculation")
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "Calculation");
+}
 
 <h2>@ViewBag.Title</h2>
 
@@ -59,7 +61,9 @@
                        ng-init="balance=0.5" />
             </div>
         </div>
-        @Html.Partial("_MattersSubmit")
+        @{
+            await Html.RenderPartialAsync("_MattersSubmit");
+}
     </div>
 }
 

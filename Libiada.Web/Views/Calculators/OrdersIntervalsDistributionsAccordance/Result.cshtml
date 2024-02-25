@@ -6,7 +6,7 @@
 
 @if (ViewBag.Error == null)
 {
-    @Html.Partial("_AngularControllerInitializer", "OrdersIntervalsDistributionsAccordanceResult")
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "OrdersIntervalsDistributionsAccordanceResult");
 
     <div ng-controller="OrdersIntervalsDistributionsAccordanceResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>

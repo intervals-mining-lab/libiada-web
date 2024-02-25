@@ -6,7 +6,7 @@
 
 @if (ViewBag.Error == null)
 {
-    @Html.Partial("_AngularControllerInitializer", "SubsequencesCalculationResult")
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "SubsequencesCalculationResult");
     <div ng-controller="SubsequencesCalculationResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <div class="form-check">
@@ -56,7 +56,7 @@
         <div id="chart" class="font-monospace mb-2">
         </div>
 
-        @*  @Html.Partial("_Filters")
+        @*  @{await Html.RenderPartialAsync("_Filters");}
             <div ng-repeat="sequenceData in sequencesData">
                 <h3 ng-bind="sequenceData.MatterName"></h3>
                 <table class="table table-bordered table-striped">

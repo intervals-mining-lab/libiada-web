@@ -6,7 +6,7 @@
 
 @if (ViewBag.Error == null)
 {
-    @Html.Partial("_AngularControllerInitializer", "ClusterizationResult")
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "ClusterizationResult");
 
     <div ng-controller="ClusterizationResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>

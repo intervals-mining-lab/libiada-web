@@ -6,7 +6,8 @@
 
 @if (ViewBag.Error == null)
 {
-    @Html.Partial("_AngularControllerInitializer", "ClusterizationResult")
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "ClusterizationResult");
+
     <div ng-controller="ClusterizationResultCtrl">
         <h4>Alignment type: {{::validationType}} using {{characteristicName}}</h4>
         <h4>Optimal shift: {{::optimalRotation}}</h4>

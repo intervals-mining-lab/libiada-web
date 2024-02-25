@@ -5,7 +5,9 @@
     ViewBag.Title = "Characteristics calculation";
 }
 
-@Html.Partial("_AngularControllerInitializer", "Calculation")
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "Calculation");
+}
 
 <h2>@ViewBag.Title</h2>
 
@@ -16,7 +18,9 @@
         <h4>Sequences and parameters</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.Partial("_NatureSelect")
+        @{
+            await Html.RenderPartialAsync("_NatureSelect");
+        }
         <matters-table matters="matters"
                        nature="nature"
                        groups="groups"
@@ -68,7 +72,9 @@
         }
         <input type="hidden" name="complementary" value="false" />
         <input type="hidden" name="rotate" value="false" />
-        @Html.Partial("_MattersSubmit")
+        @{
+            await Html.RenderPartialAsync("_MattersSubmit");
+}
     </div>
 }
 @section Scripts {

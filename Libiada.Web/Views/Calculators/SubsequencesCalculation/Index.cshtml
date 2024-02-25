@@ -2,7 +2,9 @@
     ViewBag.Title = "Subsequences characteristics calculation";
 }
 
-@Html.Partial("_AngularControllerInitializer", "SubsequencesCalculation")
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "SubsequencesCalculation");
+}
 
 <h2>@ViewBag.Title</h2>
 
@@ -19,7 +21,9 @@
                        maximum-selected-matters="::maximumSelectedMatters"
                        selected-matters-count="selectedMattersCount">
         </matters-table>
-        @Html.Partial("_FeaturesSelect")
+        @{
+            await Html.RenderPartialAsync("_FeaturesSelect");
+}
         <hr />
         <characteristics characteristic-types="::characteristicTypes"
                          characteristics-dictionary="::characteristicsDictionary"
@@ -31,7 +35,9 @@
                          trajectories="::trajectories"
                          hide-notation="true">
         </characteristics>
-        @Html.Partial("_MattersSubmit")
+        @{
+        await Html.RenderPartialAsync("_MattersSubmit");
+}
     </div>
 }
 

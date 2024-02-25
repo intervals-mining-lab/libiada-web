@@ -8,7 +8,7 @@
 {
     using (Html.BeginForm())
     {
-        @Html.Partial("_AngularControllerInitializer", "MultisequenceGrouping")
+        await Html.RenderPartialAsync("_AngularControllerInitializer", "MultisequenceGrouping");
 
         <div ng-controller="MultisequenceGroupingCtrl">
             <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
@@ -68,8 +68,8 @@
                             <td>
                                 @* TODO: add autocomplete *@
                                 <select class="form-select"
-                                        name="{{'matter' + matter.Id}}" 
-                                        ng-model="multisequence" 
+                                        name="{{'matter' + matter.Id}}"
+                                        ng-model="multisequence"
                                         ng-options="multisequence.name for multisequence in result"></select>
                                 <button type="button" class="btn btn-secondary btn-sm" ng-click="bindMatter(multisequence, $index)">Distribute</button>
                             </td>

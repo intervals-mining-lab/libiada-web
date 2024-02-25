@@ -6,7 +6,9 @@
     ViewBag.Title = "Edit";
 }
 
-@Html.Partial("_AngularControllerInitializer", "MatterEdit")
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "MatterEdit");
+}
 
 <h2>@ViewBag.Title</h2>
 

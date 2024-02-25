@@ -6,7 +6,7 @@
 
 @if (ViewBag.Error == null)
 {
-    @Html.Partial("_AngularControllerInitializer", "OrderTransformationCharacteristicsDynamicVisualizationResult")
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "OrderTransformationCharacteristicsDynamicVisualizationResult");
 
     <div ng-controller="OrderTransformationCharacteristicsDynamicVisualizationResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>

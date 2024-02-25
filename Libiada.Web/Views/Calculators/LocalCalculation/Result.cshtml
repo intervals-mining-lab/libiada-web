@@ -6,7 +6,7 @@
 
 @if (ViewBag.Error == null)
 {
-    @Html.Partial("_AngularControllerInitializer", "LocalCalculationResult")
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "LocalCalculationResult");
 
     <div ng-controller="LocalCalculationResultCtrl">
         <div ng-disabled="loading">
@@ -129,6 +129,6 @@
     </div>
 
     @section Scripts {
-        <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
+    <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
     }
 }
