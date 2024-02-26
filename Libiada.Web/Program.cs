@@ -16,6 +16,7 @@ using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//  reading connection sting from environment variables
 builder.Configuration.AddEnvironmentVariables(prefix: "Libiada_");
 string environment = builder.Configuration["ASPNETCORE_ENVIRONMENT"] ?? "Production";
 string connectionString = builder.Configuration.GetConnectionString($"LibiadaDatabaseEntities_{environment}") ?? throw new Exception($"Connection string 'LibiadaDatabaseEntities_{environment}' is not found.");
@@ -42,7 +43,7 @@ builder.Services.AddResponseCompression(options =>
 DbProviderFactories.RegisterFactory("Npgsql", NpgsqlFactory.Instance);
 
 // Add services to the container.
-builder.Services.AddDbContext<LibiadaDatabaseEntities>(options => options.UseNpgsql());
+builder.Services.AddDbContext<LibiadaDatabaseEntities>(options => options.UseNpgsql(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<AspNetUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -50,7 +51,8 @@ builder.Services.AddDefaultIdentity<AspNetUser>(options => options.SignIn.Requir
                 .AddEntityFrameworkStores<LibiadaDatabaseEntities>()
                 .AddDefaultTokenProviders();
 
-builder.Services.AddSingleton<ILibiadaDatabaseEntitiesFactory, LibiadaDatabaseEntitiesFactory>();
+var options = new DbContextOptionsBuilder<LibiadaDatabaseEntities>().UseNpgsql(connectionString).Options;
+builder.Services.AddSingleton<ILibiadaDatabaseEntitiesFactory>(new LibiadaDatabaseEntitiesFactory(options));
 builder.Services.AddSingleton<Cache>();
 
 builder.Services.AddSingleton<IPushNotificationHelper, PushNotificationHelper>();

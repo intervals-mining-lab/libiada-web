@@ -86,9 +86,10 @@ public class BatchSequenceImportController : AbstractResultController
                 Status = "Exists"
             }));
 
-            var db = dbFactory.CreateDbContext();
+            
             importResults.AddRange(accessionsToImport.AsParallel().Select(accession =>
             {
+                using var db = dbFactory.CreateDbContext();
                 var importResult = new MatterImportResult() { MatterName = accession };
 
                 try
@@ -97,6 +98,7 @@ public class BatchSequenceImportController : AbstractResultController
                     GenBankMetadata metadata = NcbiHelper.GetMetadata(bioSequence);
                     importResult.MatterName = metadata.Version.CompoundAccession;
 
+                    // TODO: refactor this to use DI (and probably factories) 
                     var matterRepository = new MatterRepository(db, cache);
                     var dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
                     Matter matter = matterRepository.CreateMatterFromGenBankMetadata(metadata);
@@ -149,8 +151,9 @@ public class BatchSequenceImportController : AbstractResultController
             }));
 
             string[] names = importResults.Select(r => r.MatterName).ToArray();
-
+            
             // removing matters for which adding of sequence failed
+            using var db = dbFactory.CreateDbContext();
             Matter[] orphanMatters = db.Matters
                                        .Include(m => m.Sequence)
                                        .Where(m => names.Contains(m.Name) && m.Sequence.Count == 0)

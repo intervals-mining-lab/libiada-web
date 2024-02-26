@@ -21,13 +21,13 @@ using SystemTask = System.Threading.Tasks.Task;
 /// </summary>
 public class TaskManager : ITaskManager
 {
-    private readonly LibiadaDatabaseEntities db;
     private readonly IHttpContextAccessor httpContextAccessor;
 
     /// <summary>
     /// Gets the tasks.
     /// </summary>
     private readonly List<Task> tasks = [];
+    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
 
     /// <summary>
     /// The signalr hub.
@@ -37,12 +37,12 @@ public class TaskManager : ITaskManager
 
     public TaskManager(ILibiadaDatabaseEntitiesFactory dbFactory, IHubContext<TaskManagerHub> signalrHubContext, IPushNotificationHelper pushNotificationHelper, IHttpContextAccessor httpContextAccessor)
     {
-
-        db = dbFactory.CreateDbContext();
         this.httpContextAccessor = httpContextAccessor;
+        this.dbFactory = dbFactory;
         this.signalrHubContext = signalrHubContext;
         this.pushNotificationHelper = pushNotificationHelper;
         RemoveGarbageFromDb();
+        using var db = dbFactory.CreateDbContext();
         CalculationTask[] databaseTasks = db.CalculationTasks.OrderBy(t => t.Created).Include(t => t.AspNetUser).ToArray();
         lock (tasks)
         {
@@ -76,6 +76,7 @@ public class TaskManager : ITaskManager
             TaskType = taskType
         };
 
+        using var db = dbFactory.CreateDbContext();
         db.CalculationTasks.Add(databaseTask);
         db.SaveChanges();
         TaskAwaiter taskAwaiter;
@@ -151,7 +152,7 @@ public class TaskManager : ITaskManager
                     }
 
                     tasks.Remove(task);
-
+                    using var db = dbFactory.CreateDbContext();
                     CalculationTask? databaseTask = db.CalculationTasks.Find(id);
                     db.CalculationTasks.Remove(databaseTask);
                     db.SaveChanges();
@@ -226,7 +227,7 @@ public class TaskManager : ITaskManager
         {
             throw new Exception("Task state is not 'complete'");
         }
-
+        using var db = dbFactory.CreateDbContext();
         return db.TaskResults.Single(tr => tr.TaskId == id && tr.Key == key).Value;
     }
 
@@ -274,6 +275,7 @@ public class TaskManager : ITaskManager
     /// </summary>
     private void RemoveGarbageFromDb()
     {
+        using var db = dbFactory.CreateDbContext();
         var tasksToDelete = db.CalculationTasks
             .Where(t => t.Status != TaskState.Completed && t.Status != TaskState.Error)
             .ToArray();
@@ -349,10 +351,12 @@ public class TaskManager : ITaskManager
             {
                 actionToCall = task.Action;
                 task.TaskData.Started = DateTimeOffset.UtcNow;
+                using var db = dbFactory.CreateDbContext();
                 CalculationTask databaseTask = db.CalculationTasks.Single(t => t.Id == task.TaskData.Id);
 
                 databaseTask.Started = DateTimeOffset.UtcNow;
                 databaseTask.Status = TaskState.InProgress;
+
                 db.Entry(databaseTask).State = EntityState.Modified;
                 db.SaveChanges();
 
@@ -370,6 +374,8 @@ public class TaskManager : ITaskManager
                 TaskResult[] results = result.Select(r => new TaskResult { Key = r.Key, Value = r.Value, TaskId = task.TaskData.Id }).ToArray();
 
                 task.TaskData.TaskState = TaskState.Completed;
+
+                using var db = dbFactory.CreateDbContext();
                 db.TaskResults.AddRange(results);
 
                 CalculationTask databaseTask = db.CalculationTasks.Single(t => (t.Id == task.TaskData.Id));
@@ -413,7 +419,7 @@ public class TaskManager : ITaskManager
                     Value = JsonConvert.SerializeObject(error),
                     TaskId = taskData.Id
                 };
-
+                using var db = dbFactory.CreateDbContext();
                 db.TaskResults.Add(taskResult);
 
                 CalculationTask databaseTask = db.CalculationTasks.Single(t => (t.Id == taskData.Id));
@@ -461,6 +467,7 @@ public class TaskManager : ITaskManager
         }
 
         await signalrHubContext.Clients.Group("admins").SendAsync("TaskEvent", taskEvent.ToString(), result);
+        using var db = dbFactory.CreateDbContext();
         if (!db.Users.Include(u => u.Roles).Single(u => u.Id == task.UserId).Roles.Any(r => r.Name == "Admin"))
         {
             await signalrHubContext.Clients.Group(task.UserId.ToString()).SendAsync("TaskEvent", taskEvent.ToString(), result);
