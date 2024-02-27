@@ -21,14 +21,14 @@ using Libiada.Web.Tasks;
 [Authorize(Roles = "Admin")]
 public class SequenceCheckController : AbstractResultController
 {
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly ICommonSequenceRepository commonSequenceRepository;
     private readonly Cache cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SequenceCheckController"/> class.
     /// </summary>
-    public SequenceCheckController(ILibiadaDatabaseEntitiesFactory dbFactory, 
+    public SequenceCheckController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
                                    ITaskManager taskManager, 
                                    ICommonSequenceRepository commonSequenceRepository, 
                                    Cache cache) 

@@ -22,14 +22,14 @@ using Libiada.Web.Tasks;
 [Authorize(Roles = "Admin")]
 public class BatchSequenceImportController : AbstractResultController
 {
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly INcbiHelper ncbiHelper;
     private readonly Cache cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BatchSequenceImportController"/> class.
     /// </summary>
-    public BatchSequenceImportController(ILibiadaDatabaseEntitiesFactory dbFactory,
+    public BatchSequenceImportController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                          ITaskManager taskManager,
                                          INcbiHelper ncbiHelper,
                                          Cache cache)

@@ -22,7 +22,7 @@ public class ViewDataHelper : IViewDataHelper
     /// The database model.
     /// </summary>
     private readonly LibiadaDatabaseEntities db;
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
 
     /// <summary>
     /// The current user.
@@ -39,7 +39,7 @@ public class ViewDataHelper : IViewDataHelper
     /// <param name="db">
     /// The db.
     /// </param>
-    public ViewDataHelper(ILibiadaDatabaseEntitiesFactory dbFactory,
+    public ViewDataHelper(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                           IPrincipal user,
                           IFullCharacteristicRepository fullCharacteristicRepository,
                           ICongenericCharacteristicRepository congenericCharacteristicRepository,

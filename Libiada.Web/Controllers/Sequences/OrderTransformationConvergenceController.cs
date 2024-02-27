@@ -20,7 +20,7 @@ public class OrderTransformationConvergenceController : AbstractResultController
     /// <summary>
     /// The db.
     /// </summary>
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
 
     /// <summary>
     /// The sequence repository.
@@ -31,7 +31,7 @@ public class OrderTransformationConvergenceController : AbstractResultController
     /// <summary>
     /// Initializes a new instance of the <see cref="OrderTransformationConvergenceController"/> class.
     /// </summary>
-    public OrderTransformationConvergenceController(ILibiadaDatabaseEntitiesFactory dbFactory, 
+    public OrderTransformationConvergenceController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
                                                     IViewDataHelper viewDataHelper, 
                                                     ITaskManager taskManager,
                                                     ICommonSequenceRepository commonSequenceRepository) 

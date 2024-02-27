@@ -19,7 +19,7 @@ public class SequenceTransformerController : Controller
     /// The db.
     /// </summary>
     private readonly LibiadaDatabaseEntities db;
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
 
     /// <summary>
@@ -40,7 +40,7 @@ public class SequenceTransformerController : Controller
     /// <summary>
     /// Initializes a new instance of the <see cref="SequenceTransformerController"/> class.
     /// </summary>
-    public SequenceTransformerController(ILibiadaDatabaseEntitiesFactory dbFactory, 
+    public SequenceTransformerController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
                                          IViewDataHelper viewDataHelper,
                                          ICommonSequenceRepository commonSequenceRepository, 
                                          Cache cache)

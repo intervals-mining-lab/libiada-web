@@ -22,7 +22,7 @@ public class MattersController : SequencesMattersController
     /// <summary>
     /// Initializes a new instance of the <see cref="MattersController"/> class.
     /// </summary>
-    public MattersController(ILibiadaDatabaseEntitiesFactory dbFactory, 
+    public MattersController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
                              IViewDataHelper viewDataHelper, 
                              ITaskManager taskManager,
                              INcbiHelper ncbiHelper,

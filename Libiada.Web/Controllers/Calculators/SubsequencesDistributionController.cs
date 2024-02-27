@@ -28,7 +28,7 @@ using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
 [Authorize]
 public class SubsequencesDistributionController : AbstractResultController
 {
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
     private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
@@ -39,7 +39,7 @@ public class SubsequencesDistributionController : AbstractResultController
     /// <summary>
     /// Initializes a new instance of the <see cref="SubsequencesDistributionController"/> class.
     /// </summary>
-    public SubsequencesDistributionController(ILibiadaDatabaseEntitiesFactory dbFactory,
+    public SubsequencesDistributionController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                               IViewDataHelper viewDataHelper,
                                               ITaskManager taskManager,
                                               IFullCharacteristicRepository characteristicTypeLinkRepository,

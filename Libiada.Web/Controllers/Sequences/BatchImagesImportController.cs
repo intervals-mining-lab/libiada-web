@@ -8,16 +8,17 @@ using Newtonsoft.Json;
 
 using Libiada.Core.Extensions;
 
-using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
+
+using Microsoft.EntityFrameworkCore;
 
 [Authorize(Roles = "Admin")]
 public class BatchImagesImportController : AbstractResultController
 {
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly Cache cache;
 
-    public BatchImagesImportController(ILibiadaDatabaseEntitiesFactory dbFactory, ITaskManager taskManager, Cache cache) 
+    public BatchImagesImportController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, ITaskManager taskManager, Cache cache) 
         : base(TaskType.BatchImagesImport, taskManager)
     {
         this.dbFactory = dbFactory;

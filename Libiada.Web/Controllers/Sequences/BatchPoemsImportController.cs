@@ -3,7 +3,6 @@
 using Libiada.Core.Extensions;
 
 using Libiada.Web.Extensions;
-using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
 
 using Libiada.Database.Models.Repositories.Sequences;
@@ -12,13 +11,15 @@ using Libiada.Database.Tasks;
 
 using Newtonsoft.Json;
 
+using Microsoft.EntityFrameworkCore;
+
 [Authorize(Roles = "Admin")]
 public class BatchPoemsImportController : AbstractResultController
 {
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly Cache cache;
 
-    public BatchPoemsImportController(ILibiadaDatabaseEntitiesFactory dbFactory, ITaskManager taskManager, Cache cache) 
+    public BatchPoemsImportController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, ITaskManager taskManager, Cache cache) 
         : base(TaskType.BatchPoemsImport, taskManager)
     {
         this.dbFactory = dbFactory;

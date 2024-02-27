@@ -27,13 +27,13 @@ public class SequencesAlignmentController : AbstractResultController
     private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
     private readonly ICommonSequenceRepository commonSequenceRepository;
     private readonly Cache cache;
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SequencesAlignmentController"/> class.
     /// </summary>
-    public SequencesAlignmentController(ILibiadaDatabaseEntitiesFactory dbFactory, 
+    public SequencesAlignmentController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
                                         IViewDataHelper viewDataHelper, 
                                         ITaskManager taskManager,
                                         IFullCharacteristicRepository characteristicTypeLinkRepository,

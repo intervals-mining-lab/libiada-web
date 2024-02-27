@@ -20,7 +20,7 @@ using Libiada.Database.Tasks;
 [Authorize]
 public class CalculationController : AbstractResultController
 {
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
     private readonly Cache cache;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
@@ -30,7 +30,7 @@ public class CalculationController : AbstractResultController
     /// <summary>
     /// Initializes a new instance of the <see cref="CalculationController"/> class.
     /// </summary>
-    public CalculationController(ILibiadaDatabaseEntitiesFactory dbFactory,
+    public CalculationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                  IViewDataHelper viewDataHelper,
                                  ITaskManager taskManager,
                                  Cache cache, 

@@ -28,7 +28,7 @@ using static Libiada.Core.Extensions.EnumExtensions;
 [Authorize]
 public class SubsequencesComparerController : AbstractResultController
 {
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
     private readonly IFullCharacteristicRepository fullCharacteristicRepository;
     private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
@@ -39,7 +39,7 @@ public class SubsequencesComparerController : AbstractResultController
     /// <summary>
     /// Initializes a new instance of the <see cref="SubsequencesComparerController"/> class.
     /// </summary>
-    public SubsequencesComparerController(ILibiadaDatabaseEntitiesFactory dbFactory, 
+    public SubsequencesComparerController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
                                           IViewDataHelper viewDataHelper, 
                                           ITaskManager taskManager,
                                           IFullCharacteristicRepository fullCharacteristicRepository,

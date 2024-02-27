@@ -17,7 +17,7 @@ using Newtonsoft.Json;
 [Authorize(Roles = "Admin")]
 public class GenesImportController : AbstractResultController
 {
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
     private readonly INcbiHelper ncbiHelper;
     private readonly Cache cache;
@@ -25,7 +25,7 @@ public class GenesImportController : AbstractResultController
     /// <summary>
     /// Initializes a new instance of the <see cref="GenesImportController"/> class.
     /// </summary>
-    public GenesImportController(ILibiadaDatabaseEntitiesFactory dbFactory, 
+    public GenesImportController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
                                  IViewDataHelper viewDataHelper, 
                                  ITaskManager taskManager,
                                  INcbiHelper ncbiHelper,

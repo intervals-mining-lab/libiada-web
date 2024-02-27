@@ -12,11 +12,11 @@ using Libiada.Web.Tasks;
 
 public class PoemSegmentationController : AbstractResultController
 {
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
     private readonly ICommonSequenceRepository commonSequenceRepository;
 
-    public PoemSegmentationController(ILibiadaDatabaseEntitiesFactory dbFactory,
+    public PoemSegmentationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                       IViewDataHelper viewDataHelper,
                                       ITaskManager taskManager,
                                       ICommonSequenceRepository commonSequenceRepository)

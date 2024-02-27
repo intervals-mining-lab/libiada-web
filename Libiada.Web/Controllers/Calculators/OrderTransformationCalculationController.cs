@@ -16,9 +16,9 @@ using Libiada.Web.Helpers;
 
 using Newtonsoft.Json;
 
+using Microsoft.EntityFrameworkCore;
+
 using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
-
-
 
 /// <summary>
 /// The order transformation calculation controller.
@@ -26,7 +26,7 @@ using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
 [Authorize(Roles = "Admin")]
 public class OrderTransformationCalculationController : AbstractResultController
 {
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
     private readonly Cache cache;
@@ -34,7 +34,7 @@ public class OrderTransformationCalculationController : AbstractResultController
     /// <summary>
     /// Initializes a new instance of the <see cref="OrderTransformationCalculationController"/> class.
     /// </summary>
-    public OrderTransformationCalculationController(ILibiadaDatabaseEntitiesFactory dbFactory, 
+    public OrderTransformationCalculationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
                                                     IViewDataHelper viewDataHelper, 
                                                     ITaskManager taskManager,
                                                     IFullCharacteristicRepository characteristicTypeLinkRepository,

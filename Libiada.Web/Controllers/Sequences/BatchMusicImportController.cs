@@ -14,13 +14,13 @@ using Libiada.Web.Tasks;
 [Authorize(Roles = "Admin")]
 public class BatchMusicImportController : AbstractResultController
 {
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly Cache cache;
 
     /// <summary>
     /// The batch music import controller.
     /// </summary>
-    public BatchMusicImportController(ILibiadaDatabaseEntitiesFactory dbFactory, ITaskManager taskManager, Cache cache) 
+    public BatchMusicImportController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, ITaskManager taskManager, Cache cache) 
         : base(TaskType.BatchMusicImport, taskManager)
     {
         this.dbFactory = dbFactory;

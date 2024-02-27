@@ -18,11 +18,11 @@ using Libiada.Web.Tasks;
 [Authorize(Roles = "Admin")]
 public class BatchGeneticImportFromGenBankSearchFileController : AbstractResultController
 {
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly INcbiHelper ncbiHelper;
     private readonly Cache cache;
 
-    public BatchGeneticImportFromGenBankSearchFileController(ILibiadaDatabaseEntitiesFactory dbFactory,
+    public BatchGeneticImportFromGenBankSearchFileController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                                              ITaskManager taskManager,
                                                              INcbiHelper ncbiHelper,
                                                              Cache cache)

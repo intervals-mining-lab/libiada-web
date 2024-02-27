@@ -26,7 +26,7 @@ public class SubsequencesSimilarityController : AbstractResultController
     /// The db.
     /// </summary>
     private readonly LibiadaDatabaseEntities db;
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
 
     /// <summary>
@@ -50,7 +50,7 @@ public class SubsequencesSimilarityController : AbstractResultController
     /// <summary>
     /// Initializes a new instance of the <see cref="SubsequencesSimilarityController"/> class.
     /// </summary>
-    public SubsequencesSimilarityController(ILibiadaDatabaseEntitiesFactory dbFactory,
+    public SubsequencesSimilarityController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                             IViewDataHelper viewDataHelper,
                                             ITaskManager taskManager,
                                             IFullCharacteristicRepository characteristicTypeLinkRepository,

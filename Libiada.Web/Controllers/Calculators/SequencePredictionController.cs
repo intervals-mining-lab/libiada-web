@@ -22,7 +22,7 @@ using Libiada.Web.Tasks;
 [Authorize(Roles = "Admin")]
 public class SequencePredictionController : AbstractResultController
 {
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
     private readonly Cache cache;
@@ -30,7 +30,7 @@ public class SequencePredictionController : AbstractResultController
     /// <summary>
     /// Initializes a new instance of the <see cref="SequencePredictionController"/> class.
     /// </summary>
-    public SequencePredictionController(ILibiadaDatabaseEntitiesFactory dbFactory, 
+    public SequencePredictionController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
                                         IViewDataHelper viewDataHelper, 
                                         ITaskManager taskManager,
                                         IFullCharacteristicRepository characteristicTypeLinkRepository,

@@ -27,7 +27,7 @@ public class TaskManager : ITaskManager
     /// Gets the tasks.
     /// </summary>
     private readonly List<Task> tasks = [];
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
 
     /// <summary>
     /// The signalr hub.
@@ -35,7 +35,7 @@ public class TaskManager : ITaskManager
     private readonly IHubContext<TaskManagerHub> signalrHubContext;
     private readonly IPushNotificationHelper pushNotificationHelper;
 
-    public TaskManager(ILibiadaDatabaseEntitiesFactory dbFactory, IHubContext<TaskManagerHub> signalrHubContext, IPushNotificationHelper pushNotificationHelper, IHttpContextAccessor httpContextAccessor)
+    public TaskManager(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, IHubContext<TaskManagerHub> signalrHubContext, IPushNotificationHelper pushNotificationHelper, IHttpContextAccessor httpContextAccessor)
     {
         this.httpContextAccessor = httpContextAccessor;
         this.dbFactory = dbFactory;

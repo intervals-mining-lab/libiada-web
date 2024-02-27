@@ -26,7 +26,7 @@ public class RelationCalculationController : AbstractResultController
     /// </summary>
     private readonly LibiadaDatabaseEntities db; 
 
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
 
     /// <summary>
     /// The sequence repository.
@@ -43,7 +43,7 @@ public class RelationCalculationController : AbstractResultController
     /// <summary>
     /// Initializes a new instance of the <see cref="RelationCalculationController"/> class.
     /// </summary>
-    public RelationCalculationController(ILibiadaDatabaseEntitiesFactory dbFactory, 
+    public RelationCalculationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
                                          IViewDataHelper viewDataHelper, 
                                          ITaskManager taskManager, 
                                          ICommonSequenceRepository commonSequenceRepository,

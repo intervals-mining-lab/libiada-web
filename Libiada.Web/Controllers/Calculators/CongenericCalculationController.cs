@@ -25,7 +25,7 @@ public class CongenericCalculationController : AbstractResultController
     /// <summary>
     /// The db.
     /// </summary>
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
     private readonly ICongenericCharacteristicRepository congenericCharacteristicRepository;
 
@@ -39,7 +39,7 @@ public class CongenericCalculationController : AbstractResultController
     /// <summary>
     /// Initializes a new instance of the <see cref="CongenericCalculationController"/> class.
     /// </summary>
-    public CongenericCalculationController(ILibiadaDatabaseEntitiesFactory dbFactory,
+    public CongenericCalculationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                            IViewDataHelper viewDataHelper,
                                            ITaskManager taskManager,
                                            ICongenericCharacteristicRepository congenericCharacteristicRepository,

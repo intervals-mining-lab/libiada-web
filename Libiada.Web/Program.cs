@@ -43,6 +43,10 @@ builder.Services.AddResponseCompression(options =>
 DbProviderFactories.RegisterFactory("Npgsql", NpgsqlFactory.Instance);
 
 // Add services to the container.
+
+//Adding factory first because otherwise DbContextOptionsBuilder wiil be added as scoped 
+builder.Services.AddDbContextFactory<LibiadaDatabaseEntities>(options => options.UseNpgsql(connectionString));
+
 builder.Services.AddDbContext<LibiadaDatabaseEntities>(options => options.UseNpgsql(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -51,8 +55,6 @@ builder.Services.AddDefaultIdentity<AspNetUser>(options => options.SignIn.Requir
                 .AddEntityFrameworkStores<LibiadaDatabaseEntities>()
                 .AddDefaultTokenProviders();
 
-var options = new DbContextOptionsBuilder<LibiadaDatabaseEntities>().UseNpgsql(connectionString).Options;
-builder.Services.AddSingleton<ILibiadaDatabaseEntitiesFactory>(new LibiadaDatabaseEntitiesFactory(options));
 builder.Services.AddSingleton<Cache>();
 
 builder.Services.AddSingleton<IPushNotificationHelper, PushNotificationHelper>();

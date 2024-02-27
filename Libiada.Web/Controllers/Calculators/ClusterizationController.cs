@@ -26,7 +26,7 @@ public class ClusterizationController : AbstractResultController
     /// <summary>
     /// The db.
     /// </summary>
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
 
     /// <summary>
@@ -44,7 +44,7 @@ public class ClusterizationController : AbstractResultController
     /// <summary>
     /// Initializes a new instance of the <see cref="ClusterizationController"/> class.
     /// </summary>
-    public ClusterizationController(ILibiadaDatabaseEntitiesFactory dbFactory, 
+    public ClusterizationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
                                     IViewDataHelper viewDataHelper, 
                                     ITaskManager taskManager, 
                                     IFullCharacteristicRepository characteristicTypeLinkRepository,

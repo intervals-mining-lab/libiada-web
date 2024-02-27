@@ -22,12 +22,12 @@ using Libiada.Web.Tasks;
 [Route("api/[controller]/[action]")]
 public class LocalCalculationWebApiController : ControllerBase
 {
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly ICommonSequenceRepository commonSequenceRepository;
     private readonly IFullCharacteristicRepository fullCharacteristicRepository;
     private readonly ITaskManager taskManager;
 
-    public LocalCalculationWebApiController(ILibiadaDatabaseEntitiesFactory dbFactory, 
+    public LocalCalculationWebApiController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
                                             ICommonSequenceRepository commonSequenceRepository,
                                             IFullCharacteristicRepository fullCharacteristicRepository,
                                             ITaskManager taskManager)

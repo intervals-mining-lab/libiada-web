@@ -12,15 +12,15 @@ public class PushNotificationHelper : IPushNotificationHelper
     /// The subject.
     /// </summary>
     const string subject = @"https://foarlab.org/";
-    private readonly LibiadaDatabaseEntities db;
     private readonly string privateKey;
     private readonly string publicKey;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
 
-    public PushNotificationHelper(ILibiadaDatabaseEntitiesFactory dbFactory, IConfiguration configuration)
+    public PushNotificationHelper(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, IConfiguration configuration)
     {
-        this.db = dbFactory.CreateDbContext();
         publicKey = configuration["PublicVapidKey"] ?? throw new Exception($"PublicVapidKey is not found in confiuguration.");
         privateKey = configuration["PrivateVapidKey"] ?? throw new Exception($"PrivateVapidKey is not found in confiuguration.");
+        this.dbFactory = dbFactory;
     }
 
     /// <summary>
@@ -34,6 +34,7 @@ public class PushNotificationHelper : IPushNotificationHelper
     /// </param>
     public void Send(int userId, Dictionary<string, string> data)
     {
+        using var db = dbFactory.CreateDbContext();
         var subscribers = db.AspNetPushNotificationSubscribers.Where(s => s.UserId == userId);
 
         if (subscribers.Any())

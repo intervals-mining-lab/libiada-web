@@ -11,6 +11,8 @@ using Libiada.Database.Models.Repositories.Sequences;
 
 using Newtonsoft.Json;
 
+using Microsoft.EntityFrameworkCore;
+
 /// <summary>
 /// The sequence mixer controller.
 /// </summary>
@@ -20,7 +22,7 @@ public class SequenceMixerController : Controller
     /// <summary>
     /// The db.
     /// </summary>
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
 
     private readonly MatterRepository matterRepository;
 
@@ -64,7 +66,7 @@ public class SequenceMixerController : Controller
     /// <summary>
     /// Initializes a new instance of the <see cref="SequenceMixerController"/> class.
     /// </summary>
-    public SequenceMixerController(ILibiadaDatabaseEntitiesFactory dbFactory, 
+    public SequenceMixerController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
                                    IViewDataHelper viewDataHelper,
                                    Cache cache)
     {

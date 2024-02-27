@@ -15,11 +15,11 @@ using Newtonsoft.Json;
 [Authorize(Roles = "Admin")]
 public class NcbiNuccoreSearchController : AbstractResultController
 {
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly INcbiHelper ncbiHelper;
     private readonly Cache cache;
 
-    public NcbiNuccoreSearchController(ILibiadaDatabaseEntitiesFactory dbFactory,
+    public NcbiNuccoreSearchController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                        ITaskManager taskManager,
                                        INcbiHelper ncbiHelper,
                                        Cache cache)

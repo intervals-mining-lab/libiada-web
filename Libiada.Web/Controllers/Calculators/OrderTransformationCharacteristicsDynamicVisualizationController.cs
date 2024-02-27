@@ -21,7 +21,7 @@ using Libiada.Web.Helpers;
 [Authorize(Roles = "Admin")]
 public class OrderTransformationCharacteristicsDynamicVisualizationController : AbstractResultController
 {
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
     private readonly Cache cache;
@@ -29,7 +29,7 @@ public class OrderTransformationCharacteristicsDynamicVisualizationController : 
     /// <summary>
     /// Initializes a new instance of the <see cref="OrderTransformationCharacteristicsDynamicVisualizationController"/> class.
     /// </summary>
-    public OrderTransformationCharacteristicsDynamicVisualizationController(ILibiadaDatabaseEntitiesFactory dbFactory,
+    public OrderTransformationCharacteristicsDynamicVisualizationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                                                             IViewDataHelper viewDataHelper,
                                                                             ITaskManager taskManager,
                                                                             IFullCharacteristicRepository characteristicTypeLinkRepository,

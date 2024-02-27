@@ -19,7 +19,7 @@ using Libiada.Web.Tasks;
 [Authorize(Roles = "Admin")]
 public class SubsequencesCalculationController : AbstractResultController
 {
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
     private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
@@ -28,7 +28,7 @@ public class SubsequencesCalculationController : AbstractResultController
     /// <summary>
     /// Initializes a new instance of the <see cref="SubsequencesCalculationController"/> class.
     /// </summary>
-    public SubsequencesCalculationController(ILibiadaDatabaseEntitiesFactory dbFactory,
+    public SubsequencesCalculationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                              IViewDataHelper viewDataHelper,
                                              ITaskManager taskManager,
                                              IFullCharacteristicRepository characteristicTypeLinkRepository,

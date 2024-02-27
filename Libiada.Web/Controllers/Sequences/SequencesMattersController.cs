@@ -24,7 +24,7 @@ using FileHelper = Helpers.FileHelper;
 /// </summary>
 public abstract class SequencesMattersController : AbstractResultController
 {
-    protected readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    protected readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
     private readonly INcbiHelper ncbiHelper;
     private readonly Cache cache;
@@ -36,7 +36,7 @@ public abstract class SequencesMattersController : AbstractResultController
     /// The task Type.
     /// </param>
     protected SequencesMattersController(TaskType taskType,
-                                         ILibiadaDatabaseEntitiesFactory dbFactory,
+                                         IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                          IViewDataHelper viewDataHelper,
                                          ITaskManager taskManager,
                                          INcbiHelper ncbiHelper,

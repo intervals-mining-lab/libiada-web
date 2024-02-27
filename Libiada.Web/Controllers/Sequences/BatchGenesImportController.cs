@@ -15,7 +15,7 @@ using Libiada.Web.Tasks;
 [Authorize(Roles = "Admin")]
 public class BatchGenesImportController : AbstractResultController
 {
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
     private readonly INcbiHelper ncbiHelper;
     private readonly Cache cache;
@@ -23,7 +23,7 @@ public class BatchGenesImportController : AbstractResultController
     /// <summary>
     /// Initializes a new instance of the <see cref="BatchGenesImportController"/> class.
     /// </summary>
-    public BatchGenesImportController(ILibiadaDatabaseEntitiesFactory dbFactory, 
+    public BatchGenesImportController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
                                       IViewDataHelper viewDataHelper, 
                                       ITaskManager taskManager,
                                       INcbiHelper ncbiHelper,

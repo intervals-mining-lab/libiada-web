@@ -22,7 +22,7 @@ public class AccordanceCalculationController : AbstractResultController
     /// <summary>
     /// The database context factory.
     /// </summary>
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
 
     private readonly IViewDataHelper viewDataHelper;
 
@@ -40,7 +40,7 @@ public class AccordanceCalculationController : AbstractResultController
     /// <summary>
     /// Initializes a new instance of the <see cref="AccordanceCalculationController"/> class.
     /// </summary>
-    public AccordanceCalculationController(ILibiadaDatabaseEntitiesFactory dbFactory, 
+    public AccordanceCalculationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
                                            IViewDataHelper viewDataHelper, 
                                            ITaskManager taskManager,
                                            IAccordanceCharacteristicRepository characteristicTypeLinkRepository,

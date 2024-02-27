@@ -22,7 +22,7 @@ public class OrderTransformerController : AbstractResultController
     /// <summary>
     /// The db.
     /// </summary>
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
 
     /// <summary>
@@ -33,7 +33,7 @@ public class OrderTransformerController : AbstractResultController
     /// <summary>
     /// Initializes a new instance of the <see cref="OrderTransformerController"/> class.
     /// </summary>
-    public OrderTransformerController(ILibiadaDatabaseEntitiesFactory dbFactory,
+    public OrderTransformerController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                       IViewDataHelper viewDataHelper,
                                       ITaskManager taskManager,
                                       ICommonSequenceRepository commonSequenceRepository)

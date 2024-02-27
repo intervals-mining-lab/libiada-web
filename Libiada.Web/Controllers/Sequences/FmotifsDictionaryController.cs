@@ -19,7 +19,7 @@ public class FmotifsDictionaryController : SequencesMattersController
     /// <summary>
     /// Initializes a new instance of the <see cref="FmotifsDictionaryController"/> class.
     /// </summary>
-    public FmotifsDictionaryController(ILibiadaDatabaseEntitiesFactory dbFactory, 
+    public FmotifsDictionaryController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
                                        IViewDataHelper viewDataHelper, 
                                        ITaskManager taskManager,
                                        INcbiHelper ncbiHelper,

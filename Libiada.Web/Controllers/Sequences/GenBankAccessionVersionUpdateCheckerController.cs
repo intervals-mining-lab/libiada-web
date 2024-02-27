@@ -11,11 +11,11 @@ using Libiada.Web.Tasks;
 
 public class GenBankAccessionVersionUpdateCheckerController : AbstractResultController
 {
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly INcbiHelper ncbiHelper;
     private readonly Cache cache;
 
-    public GenBankAccessionVersionUpdateCheckerController(ILibiadaDatabaseEntitiesFactory dbFactory,
+    public GenBankAccessionVersionUpdateCheckerController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                                           ITaskManager taskManager,
                                                           INcbiHelper ncbiHelper,
                                                           Cache cache)
