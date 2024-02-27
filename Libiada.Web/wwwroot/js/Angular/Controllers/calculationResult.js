@@ -11,7 +11,7 @@
                     $scope.legend.push({ id: j + 1, name: j + 1, visible: true });
 
                     // hack for the legend's dot color
-                    document.styleSheets[0].insertRule(".legend" + (j + 1) + ":after { background:" + $scope.colorScale(j) + "}");
+                    document.styleSheets[0].insertRule(".legend" + (j + 1) + ":after { background:" + $scope.colorScale(j + 1) + "}");
 
                 }
             } else {
@@ -20,7 +20,7 @@
                     $scope.legend.push({ id: k + 1, name: $scope.characteristics[k].MatterName, visible: true });
 
                     // hack for the legend's dot color
-                    document.styleSheets[0].insertRule(".legend" + (k + 1) + ":after { background:" + $scope.colorScale(k) + "}");
+                    document.styleSheets[0].insertRule(".legend" + (k + 1) + ":after { background:" + $scope.colorScale(k + 1) + "}");
                 }
             }
         }
