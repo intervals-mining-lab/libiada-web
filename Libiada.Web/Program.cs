@@ -44,10 +44,9 @@ DbProviderFactories.RegisterFactory("Npgsql", NpgsqlFactory.Instance);
 
 // Add services to the container.
 
-//Adding factory first because otherwise DbContextOptionsBuilder wiil be added as scoped 
+//Adding db context factory and it automaticly adds db context 
 builder.Services.AddDbContextFactory<LibiadaDatabaseEntities>(options => options.UseNpgsql(connectionString));
 
-builder.Services.AddDbContext<LibiadaDatabaseEntities>(options => options.UseNpgsql(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<AspNetUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -92,6 +91,7 @@ builder.Services.Configure<RazorViewEngineOptions>(options =>
 
 builder.Services.AddControllersWithViews();
 
+// TODO: fix naming
 builder.Services.AddSignalR().AddJsonProtocol(options => { options.PayloadSerializerOptions.PropertyNamingPolicy = null; });
 
 var app = builder.Build();
