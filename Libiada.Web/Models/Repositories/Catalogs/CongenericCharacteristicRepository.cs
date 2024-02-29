@@ -55,9 +55,9 @@ public class CongenericCharacteristicRepository
         }
         else
         {
-            links = Aliases.UserAvailableLinks.ToArray();
-            characteristics = Aliases.UserAvailableCongenericCharacteristics.ToArray();
-            arrangementTypes = Aliases.UserAvailableArrangementTypes.ToArray();
+            links = StaticCollections.UserAvailableLinks.ToArray();
+            characteristics = StaticCollections.UserAvailableCongenericCharacteristics.ToArray();
+            arrangementTypes = StaticCollections.UserAvailableArrangementTypes.ToArray();
         }
 
         var result = new List<CharacteristicSelectListItem>(characteristics.Length);

@@ -55,8 +55,8 @@ public class AccordanceCharacteristicRepository
         }
         else
         {
-            links = Aliases.UserAvailableLinks.ToArray();
-            characteristics = Aliases.UserAvailableAccordanceCharacteristics.ToArray();
+            links = StaticCollections.UserAvailableLinks.ToArray();
+            characteristics = StaticCollections.UserAvailableAccordanceCharacteristics.ToArray();
         }
 
         var result = new List<CharacteristicSelectListItem>(characteristics.Length);

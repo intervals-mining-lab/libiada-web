@@ -53,8 +53,8 @@ public class BinaryCharacteristicRepository
         }
         else
         {
-            links = Aliases.UserAvailableLinks.ToArray();
-            characteristics = Aliases.UserAvailableBinaryCharacteristics.ToArray();
+            links = StaticCollections.UserAvailableLinks.ToArray();
+            characteristics = StaticCollections.UserAvailableBinaryCharacteristics.ToArray();
         }
 
         var result = new List<CharacteristicSelectListItem>(characteristics.Length);

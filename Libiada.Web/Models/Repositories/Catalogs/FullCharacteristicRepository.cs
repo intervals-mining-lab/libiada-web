@@ -55,9 +55,9 @@ public class FullCharacteristicRepository
         }
         else
         {
-            links = Aliases.UserAvailableLinks.ToArray();
-            characteristics = Aliases.UserAvailableFullCharacteristics.ToArray();
-            arrangementTypes = Aliases.UserAvailableArrangementTypes.ToArray();
+            links = StaticCollections.UserAvailableLinks.ToArray();
+            characteristics = StaticCollections.UserAvailableFullCharacteristics.ToArray();
+            arrangementTypes = StaticCollections.UserAvailableArrangementTypes.ToArray();
         }
 
         var result = new List<CharacteristicSelectListItem>(characteristics.Length);

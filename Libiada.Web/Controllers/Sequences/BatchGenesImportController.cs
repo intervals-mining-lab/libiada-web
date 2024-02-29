@@ -50,7 +50,7 @@ public class BatchGenesImportController : AbstractResultController
         var matterIds = db.DnaSequences.Include(c => c.Matter)
             .Where(c => !string.IsNullOrEmpty(c.RemoteId)
                      && !sequencesWithSubsequencesIds.Contains(c.Id)
-                     && Aliases.SequenceTypesWithSubsequences.Contains(c.Matter.SequenceType))
+                     && StaticCollections.SequenceTypesWithSubsequences.Contains(c.Matter.SequenceType))
             .Select(c => c.MatterId).ToArray();
 
         var data = viewDataHelper.FillViewData(1, int.MaxValue, m => matterIds.Contains(m.Id), "Import");

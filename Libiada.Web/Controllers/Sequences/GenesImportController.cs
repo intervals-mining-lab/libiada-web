@@ -53,7 +53,7 @@ public class GenesImportController : AbstractResultController
                           .Include(c => c.Matter)
                           .Where(c => !string.IsNullOrEmpty(c.RemoteId)
                                    && !genesSequenceIds.Contains(c.Id)
-                                   && Aliases.SequenceTypesWithSubsequences.Contains(c.Matter.SequenceType))
+                                   && StaticCollections.SequenceTypesWithSubsequences.Contains(c.Matter.SequenceType))
                           .Select(c => c.MatterId).ToList();
 
         var data = viewDataHelper.FillViewData(1, 1, m => matterIds.Contains(m.Id), "Import");
