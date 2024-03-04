@@ -69,7 +69,6 @@ public class TaskManager : ITaskManager
         IPrincipal user = httpContextAccessor.HttpContext.User;
         databaseTask = new CalculationTask
         {
-            Created = DateTimeOffset.UtcNow,
             Description = taskType.GetDisplayValue(),
             Status = TaskState.InQueue,
             UserId = user.GetUserId(),
