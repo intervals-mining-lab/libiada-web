@@ -23,7 +23,7 @@ using System.Linq;
 public class CongenericCalculationController : AbstractResultController
 {
     /// <summary>
-    /// The db.
+    /// Database context factory.
     /// </summary>
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;

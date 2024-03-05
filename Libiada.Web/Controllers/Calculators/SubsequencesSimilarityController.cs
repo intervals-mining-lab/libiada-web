@@ -23,7 +23,7 @@ using Libiada.Web.Helpers;
 public class SubsequencesSimilarityController : AbstractResultController
 {
     /// <summary>
-    /// The db.
+    /// Database context.
     /// </summary>
     private readonly LibiadaDatabaseEntities db;
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;

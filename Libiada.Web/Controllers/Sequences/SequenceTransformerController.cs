@@ -16,7 +16,7 @@ using Newtonsoft.Json;
 public class SequenceTransformerController : Controller
 {
     /// <summary>
-    /// The db.
+    /// Database context factory.
     /// </summary>
     private readonly LibiadaDatabaseEntities db;
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;

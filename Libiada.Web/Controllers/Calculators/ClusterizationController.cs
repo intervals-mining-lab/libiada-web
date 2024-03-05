@@ -24,7 +24,7 @@ using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
 public class ClusterizationController : AbstractResultController
 {
     /// <summary>
-    /// The db.
+    /// Database context factory.
     /// </summary>
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;

@@ -36,8 +36,8 @@ public class ViewDataHelper : IViewDataHelper
     /// <summary>
     /// Initializes a new instance of the <see cref="ViewDataHelper"/> class.
     /// </summary>
-    /// <param name="db">
-    /// The db.
+    /// <param name="dbFactory">
+    /// Database context factory.
     /// </param>
     public ViewDataHelper(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                           IPrincipal user,

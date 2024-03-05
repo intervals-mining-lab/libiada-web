@@ -22,7 +22,7 @@ using Libiada.Web.Helpers;
 public class RelationCalculationController : AbstractResultController
 {
     /// <summary>
-    /// The db.
+    /// Database context.
     /// </summary>
     private readonly LibiadaDatabaseEntities db; 
 

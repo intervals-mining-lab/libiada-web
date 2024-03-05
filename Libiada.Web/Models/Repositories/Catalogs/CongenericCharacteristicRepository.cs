@@ -27,7 +27,7 @@ public class CongenericCharacteristicRepository
     /// Initializes a new instance of the <see cref="CongenericCharacteristicRepository"/> class.
     /// </summary>
     /// <param name="db">
-    /// The db.
+    /// Database context.
     /// </param>
     public CongenericCharacteristicRepository(LibiadaDatabaseEntities db, IPrincipal currentUser)
     {

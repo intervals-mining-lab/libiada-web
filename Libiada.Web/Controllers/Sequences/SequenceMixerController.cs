@@ -20,7 +20,7 @@ using Microsoft.EntityFrameworkCore;
 public class SequenceMixerController : Controller
 {
     /// <summary>
-    /// The db.
+    /// Database context factory.
     /// </summary>
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
 

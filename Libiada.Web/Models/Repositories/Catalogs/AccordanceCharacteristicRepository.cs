@@ -28,7 +28,7 @@ public class AccordanceCharacteristicRepository
     /// Initializes a new instance of the <see cref="AccordanceCharacteristicRepository"/> class.
     /// </summary>
     /// <param name="db">
-    /// The db.
+    /// Database context.
     /// </param>
     public AccordanceCharacteristicRepository(LibiadaDatabaseEntities db, IPrincipal currentUser)
     {

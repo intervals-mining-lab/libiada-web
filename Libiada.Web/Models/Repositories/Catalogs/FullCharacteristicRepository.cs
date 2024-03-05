@@ -27,7 +27,7 @@ public class FullCharacteristicRepository
     /// Initializes a new instance of the <see cref="FullCharacteristicRepository"/> class.
     /// </summary>
     /// <param name="db">
-    /// The db.
+    /// Database context.
     /// </param>
     public FullCharacteristicRepository(LibiadaDatabaseEntities db, IPrincipal currentUser)
     {

@@ -27,7 +27,7 @@ public class BinaryCharacteristicRepository
     /// Initializes a new instance of the <see cref="BinaryCharacteristicRepository"/> class.
     /// </summary>
     /// <param name="db">
-    /// The db.
+    /// Database context.
     /// </param>
     public BinaryCharacteristicRepository(LibiadaDatabaseEntities db, IPrincipal currentUser)
     {

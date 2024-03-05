@@ -18,7 +18,7 @@ using Libiada.Web.Helpers;
 public class OrderTransformationConvergenceController : AbstractResultController
 {
     /// <summary>
-    /// The db.
+    /// Database context factory.
     /// </summary>
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
 
