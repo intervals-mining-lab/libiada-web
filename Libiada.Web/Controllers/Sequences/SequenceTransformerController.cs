@@ -97,14 +97,14 @@ public class SequenceTransformerController : Controller
                                              ? DnaTransformer.EncodeAmino(sourceChain)
                                              : DnaTransformer.EncodeTriplets(sourceChain);
 
-            List<long> alphabet = elementRepository.ToDbElements(transformedChain.Alphabet, notation, false);
+            long[] alphabet = elementRepository.ToDbElements(transformedChain.Alphabet, notation, false);
 
             var result = new CommonSequence
             {
                 MatterId = matterId,
                 Notation = notation,
                 Alphabet = alphabet,
-                Order = transformedChain.Order.ToList()
+                Order = transformedChain.Order
             };
 
             dnaSequenceRepository.Create(result, false);

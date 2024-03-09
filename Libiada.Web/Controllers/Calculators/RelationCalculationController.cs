@@ -245,7 +245,7 @@ public class RelationCalculationController : AbstractResultController
 
         if (calculatedCount < alphabetCardinality * alphabetCardinality)
         {
-            List<long> sequenceElements = db.CommonSequences.Single(cs => cs.Id == sequenceId).Alphabet;
+            long[] sequenceElements = db.CommonSequences.Single(cs => cs.Id == sequenceId).Alphabet;
             for (int i = 0; i < alphabetCardinality; i++)
             {
                 for (int j = 0; j < alphabetCardinality; j++)
@@ -290,7 +290,7 @@ public class RelationCalculationController : AbstractResultController
     [NonAction]
     private void CalculateFrequencyCharacteristics(short characteristicLinkId, int frequencyCount, Chain chain, long sequenceId, IBinaryCalculator calculator, Link link)
     {
-        List<long> sequenceElements = db.CommonSequences.Single(cs => cs.Id == sequenceId).Alphabet;
+        long[] sequenceElements = db.CommonSequences.Single(cs => cs.Id == sequenceId).Alphabet;
         var newCharacteristics = new List<BinaryCharacteristicValue>();
         BinaryCharacteristicValue[] databaseCharacteristics = db.BinaryCharacteristicValues
             .Where(b => b.SequenceId == sequenceId && b.CharacteristicLinkId == characteristicLinkId)

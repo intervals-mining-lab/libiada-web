@@ -177,14 +177,14 @@ public class SequenceMixerController : Controller
 
         matterRepository.SaveToDatabase(resultMatter);
 
-        List<long> alphabet = elementRepository.ToDbElements(chain.Alphabet, notation, false);
+        long[] alphabet = elementRepository.ToDbElements(chain.Alphabet, notation, false);
 
         var result = new CommonSequence
         {
             Notation = notation,
             MatterId = resultMatter.Id,
             Alphabet = alphabet,
-            Order = chain.Order.ToList()
+            Order = chain.Order
         };
 
         switch (matter.Nature)

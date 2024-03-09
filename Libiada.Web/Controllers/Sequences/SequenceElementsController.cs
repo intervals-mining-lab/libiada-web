@@ -34,8 +34,8 @@ public class SequenceElementsController : Controller
     /// </returns>
     public IEnumerable<SelectListItem> Get(int id)
     {
-        List<Element> sequenceElements = commonSequenceRepository.GetElements(id);
-        return sequenceElements.ConvertAll(e => new SelectListItem
+        Element[] sequenceElements = commonSequenceRepository.GetElements(id);
+        return sequenceElements.Select(e => new SelectListItem
         {
             Value = e.Id.ToString(),
             Text = e.Name,
