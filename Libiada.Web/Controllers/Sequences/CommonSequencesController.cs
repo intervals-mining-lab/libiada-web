@@ -105,7 +105,7 @@ public class CommonSequencesController : SequencesMattersController
         {
             return NotFound();
         }
-        var remoteDb = commonSequence.RemoteDb == null ? Array.Empty<RemoteDb>() : new[] { (RemoteDb)commonSequence.RemoteDb };
+        var remoteDb = commonSequence.RemoteDb == null ? [] : new[] { (RemoteDb)commonSequence.RemoteDb };
         ViewBag.MatterId = new SelectList(cache.Matters.ToArray(), "Id", "Name", commonSequence.MatterId);
         ViewBag.Notation = Extensions.EnumExtensions.GetSelectList(new[] { commonSequence.Notation });
         ViewBag.RemoteDb = Extensions.EnumExtensions.GetSelectList(remoteDb);
@@ -134,7 +134,7 @@ public class CommonSequencesController : SequencesMattersController
             return RedirectToAction("Index");
         }
 
-        var remoteDb = commonSequence.RemoteDb == null ? Array.Empty<RemoteDb>() : new[] { (RemoteDb)commonSequence.RemoteDb };
+        var remoteDb = commonSequence.RemoteDb == null ? [] : new[] { (RemoteDb)commonSequence.RemoteDb };
 
         ViewBag.MatterId = new SelectList(cache.Matters.ToArray(), "Id", "Name", commonSequence.MatterId);
         ViewBag.Notation = Extensions.EnumExtensions.GetSelectList(new[] { commonSequence.Notation });
