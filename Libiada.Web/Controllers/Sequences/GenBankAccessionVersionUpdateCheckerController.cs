@@ -53,10 +53,10 @@ public class GenBankAccessionVersionUpdateCheckerController : AbstractResultCont
                                             .ToArray();
 
             sequencesData = sequencesWithAccessions
-                                    .ToDictionary(s => s.RemoteId.Split('.')[0], s => new AccessionUpdateSearchResult()
+                                    .ToDictionary(s => s.RemoteId!.Split('.')[0], s => new AccessionUpdateSearchResult()
                                     {
-                                        LocalAccession = s.RemoteId,
-                                        LocalVersion = Convert.ToByte(s.RemoteId.Split('?')[0].Split('.')[1]),
+                                        LocalAccession = s.RemoteId!,
+                                        LocalVersion = Convert.ToByte(s.RemoteId!.Split('?')[0].Split('.')[1]),
                                         Name = s.Matter.Name.Split('|')[0].Trim(),
                                         LocalUpdateDate = s.Matter.Modified.ToString(OutputFormats.DateFormat),
                                         LocalUpdateDateTime = s.Matter.Modified
