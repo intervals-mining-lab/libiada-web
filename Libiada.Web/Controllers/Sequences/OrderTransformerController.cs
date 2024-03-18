@@ -28,7 +28,7 @@ public class OrderTransformerController : AbstractResultController
     /// <summary>
     /// The sequence repository.
     /// </summary>
-    private readonly ICommonSequenceRepository commonSequenceRepository;
+    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OrderTransformerController"/> class.
@@ -36,12 +36,12 @@ public class OrderTransformerController : AbstractResultController
     public OrderTransformerController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                       IViewDataHelper viewDataHelper,
                                       ITaskManager taskManager,
-                                      ICommonSequenceRepository commonSequenceRepository)
+                                      ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory)
         : base(TaskType.OrderTransformer, taskManager)
     {
         this.dbFactory = dbFactory;
         this.viewDataHelper = viewDataHelper;
-        this.commonSequenceRepository = commonSequenceRepository;
+        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
     }
 
     /// <summary>
@@ -88,6 +88,7 @@ public class OrderTransformerController : AbstractResultController
             // TODO: add nature params
             using var db = dbFactory.CreateDbContext();
             var sequenceId = db.CommonSequences.Single(c => c.MatterId == matterId).Id;
+            using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
             var sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
             for (int j = 0; j < iterationsCount; j++)
             {

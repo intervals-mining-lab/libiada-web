@@ -33,7 +33,7 @@ public class SubsequencesDistributionController : AbstractResultController
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
     private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
     private readonly ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator;
-    private readonly ICommonSequenceRepository commonSequenceRepository;
+    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
     private readonly Cache cache;
 
     /// <summary>
@@ -45,7 +45,7 @@ public class SubsequencesDistributionController : AbstractResultController
                                               IFullCharacteristicRepository characteristicTypeLinkRepository,
                                               ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator,
                                               ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator,
-                                              ICommonSequenceRepository commonSequenceRepository, 
+                                              ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory, 
                                               Cache cache)
         : base(TaskType.SubsequencesDistribution, taskManager)
     {
@@ -54,7 +54,7 @@ public class SubsequencesDistributionController : AbstractResultController
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         this.subsequencesCharacteristicsCalculator = subsequencesCharacteristicsCalculator;
         this.sequencesCharacteristicsCalculator = sequencesCharacteristicsCalculator;
-        this.commonSequenceRepository = commonSequenceRepository;
+        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
         this.cache = cache;
     }
 
@@ -183,6 +183,7 @@ public class SubsequencesDistributionController : AbstractResultController
         {
             ISequence[] bioSequences;
             using var db = dbFactory.CreateDbContext();
+            using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
             var subsequenceExtractor = new SubsequenceExtractor(db, commonSequenceRepository);
             bioSequences = subsequenceExtractor.GetBioSequencesForFastaConverter(subsequencesIds);
 

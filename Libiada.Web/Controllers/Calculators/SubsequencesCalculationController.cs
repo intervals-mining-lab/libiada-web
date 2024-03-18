@@ -23,7 +23,6 @@ public class SubsequencesCalculationController : AbstractResultController
     private readonly IViewDataHelper viewDataHelper;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
     private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
-    private readonly ICommonSequenceRepository commonSequenceRepository;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SubsequencesCalculationController"/> class.
@@ -32,15 +31,13 @@ public class SubsequencesCalculationController : AbstractResultController
                                              IViewDataHelper viewDataHelper,
                                              ITaskManager taskManager,
                                              IFullCharacteristicRepository characteristicTypeLinkRepository,
-                                             ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator,
-                                             ICommonSequenceRepository commonSequenceRepository)
+                                             ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator)
         : base(TaskType.SubsequencesCalculation, taskManager)
     {
         this.dbFactory = dbFactory;
         this.viewDataHelper = viewDataHelper;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         this.subsequencesCharacteristicsCalculator = subsequencesCharacteristicsCalculator;
-        this.commonSequenceRepository = commonSequenceRepository;
     }
 
     /// <summary>

@@ -32,7 +32,7 @@ public class ClusterizationController : AbstractResultController
     /// <summary>
     /// The sequence repository.
     /// </summary>
-    private readonly ICommonSequenceRepository commonSequenceRepository;
+    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
     private readonly Cache cache;
 
     /// <summary>
@@ -49,13 +49,13 @@ public class ClusterizationController : AbstractResultController
                                     ITaskManager taskManager, 
                                     IFullCharacteristicRepository characteristicTypeLinkRepository,
                                     ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator,
-                                    ICommonSequenceRepository commonSequenceRepository,
+                                    ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory,
                                     Cache cache) 
         : base(TaskType.Clusterization, taskManager)
     {
         this.dbFactory = dbFactory;
         this.viewDataHelper = viewDataHelper;
-        this.commonSequenceRepository = commonSequenceRepository;
+        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
         this.cache = cache;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         this.sequencesCharacteristicsCalculator = sequencesCharacteristicsCalculator;
@@ -155,6 +155,7 @@ public class ClusterizationController : AbstractResultController
                                                     .Where(m => matterIds.Contains(m.Id))
                                                     .ToDictionary(m => m.Id, m => m.Name);
 
+            using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
             long[][] sequenceIds;
             sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds,
                                                                   notations,

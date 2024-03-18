@@ -67,6 +67,7 @@ builder.Services.AddSingleton<IAccordanceCharacteristicRepository, AccordanceCha
 builder.Services.AddSingleton<IBinaryCharacteristicRepository, BinaryCharacteristicRepository>();
 builder.Services.AddSingleton<ICongenericCharacteristicRepository, CongenericCharacteristicRepository>();
 builder.Services.AddSingleton<IFullCharacteristicRepository, FullCharacteristicRepository>();
+builder.Services.AddSingleton<ICommonSequenceRepositoryFactory, CommonSequenceRepositoryFactory>();
 
 builder.Services.AddScoped<ISequencesCharacteristicsCalculator, SequencesCharacteristicsCalculator>();
 builder.Services.AddScoped<ICongenericSequencesCharacteristicsCalculator, CongenericSequencesCharacteristicsCalculator>();
@@ -76,8 +77,6 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IPrincipal>(provider => provider.GetService<IHttpContextAccessor>()?.HttpContext?.User);
 
 builder.Services.AddTransient<IViewDataHelper, ViewDataHelper>();
-
-builder.Services.AddTransient<ICommonSequenceRepository, CommonSequenceRepository>();
 
 builder.Services.Configure<RazorViewEngineOptions>(options =>
 {

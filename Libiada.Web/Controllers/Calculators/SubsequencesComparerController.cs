@@ -33,7 +33,7 @@ public class SubsequencesComparerController : AbstractResultController
     private readonly IFullCharacteristicRepository fullCharacteristicRepository;
     private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
     private readonly ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator;
-    private readonly ICommonSequenceRepository commonSequenceRepository;
+    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
     private readonly GeneticSequenceRepository geneticSequenceRepository;
 
     /// <summary>
@@ -45,7 +45,7 @@ public class SubsequencesComparerController : AbstractResultController
                                           IFullCharacteristicRepository fullCharacteristicRepository,
                                           ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator,
                                           ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator,
-                                          ICommonSequenceRepository commonSequenceRepository,
+                                          ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory,
                                           Cache cache)
         : base(TaskType.SubsequencesComparer, taskManager)
     {
@@ -54,7 +54,7 @@ public class SubsequencesComparerController : AbstractResultController
         this.fullCharacteristicRepository = fullCharacteristicRepository;
         this.subsequencesCharacteristicsCalculator = subsequencesCharacteristicsCalculator;
         this.sequencesCharacteristicsCalculator = sequencesCharacteristicsCalculator;
-        this.commonSequenceRepository = commonSequenceRepository;
+        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
         geneticSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
     }
 
@@ -246,6 +246,7 @@ public class SubsequencesComparerController : AbstractResultController
         )
     {
         using var db = dbFactory.CreateDbContext();
+        using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
         var localCharacteristicsCalculator = new LocalCharacteristicsCalculator(db, fullCharacteristicRepository, commonSequenceRepository);
 
         var cache = new Dictionary<(int matterIndex, int subsequenceIndex), double[]>();

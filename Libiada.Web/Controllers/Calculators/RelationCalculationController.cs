@@ -31,7 +31,7 @@ public class RelationCalculationController : AbstractResultController
     /// <summary>
     /// The sequence repository.
     /// </summary>
-    private readonly ICommonSequenceRepository commonSequenceRepository;
+    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
 
     /// <summary>
     /// The characteristic type repository.
@@ -46,14 +46,14 @@ public class RelationCalculationController : AbstractResultController
     public RelationCalculationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
                                          IViewDataHelper viewDataHelper, 
                                          ITaskManager taskManager, 
-                                         ICommonSequenceRepository commonSequenceRepository,
+                                         ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory,
                                          IBinaryCharacteristicRepository characteristicTypeLinkRepository,
                                          Cache cache)
         : base(TaskType.RelationCalculation, taskManager)
     {
         this.dbFactory = dbFactory;
         this.db = dbFactory.CreateDbContext();
-        this.commonSequenceRepository = commonSequenceRepository;
+        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         this.cache = cache;
         this.viewDataHelper = viewDataHelper;
@@ -133,6 +133,7 @@ public class RelationCalculationController : AbstractResultController
         {
             string characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
             Matter matter = cache.Matters.Single(m => m.Id == matterId);
+            using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
             long sequenceId = commonSequenceRepository.GetSequenceIds(new[] { matterId }, 
                                                                       notation, 
                                                                       language, 

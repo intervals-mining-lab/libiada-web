@@ -22,7 +22,7 @@ using Libiada.Web.Tasks;
 public class SequenceCheckController : AbstractResultController
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly ICommonSequenceRepository commonSequenceRepository;
+    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
     private readonly Cache cache;
 
     /// <summary>
@@ -30,12 +30,12 @@ public class SequenceCheckController : AbstractResultController
     /// </summary>
     public SequenceCheckController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
                                    ITaskManager taskManager, 
-                                   ICommonSequenceRepository commonSequenceRepository, 
+                                   ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory, 
                                    Cache cache) 
         : base(TaskType.SequenceCheck, taskManager)
     {
         this.dbFactory = dbFactory;
-        this.commonSequenceRepository = commonSequenceRepository;
+        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
         this.cache = cache;
     }
 
@@ -99,6 +99,7 @@ public class SequenceCheckController : AbstractResultController
             BaseChain dbChain;
             using var db = dbFactory.CreateDbContext();
             long sequenceId = db.CommonSequences.Single(c => c.MatterId == matterId).Id;
+            using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
             dbChain = commonSequenceRepository.GetLibiadaBaseChain(sequenceId);
 
 

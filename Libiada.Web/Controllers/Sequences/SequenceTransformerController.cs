@@ -30,7 +30,7 @@ public class SequenceTransformerController : Controller
     /// <summary>
     /// The sequence repository.
     /// </summary>
-    private readonly ICommonSequenceRepository commonSequenceRepository;
+    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
 
     /// <summary>
     /// The element repository.
@@ -42,14 +42,14 @@ public class SequenceTransformerController : Controller
     /// </summary>
     public SequenceTransformerController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
                                          IViewDataHelper viewDataHelper,
-                                         ICommonSequenceRepository commonSequenceRepository, 
+                                         ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory, 
                                          Cache cache)
     {
         this.dbFactory = dbFactory;
         this.db = dbFactory.CreateDbContext();
         this.viewDataHelper = viewDataHelper;
         dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
-        this.commonSequenceRepository = commonSequenceRepository;
+        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
         elementRepository = new ElementRepository(dbFactory.CreateDbContext());
     }
 
@@ -87,7 +87,7 @@ public class SequenceTransformerController : Controller
     {
         // TODO: make transformType into enum
         Notation notation = transformType.Equals("toAmino") ? Notation.AminoAcids : Notation.Triplets;
-
+        using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
         foreach (var matterId in matterIds)
         {
             var sequenceId = db.CommonSequences.Single(c => c.MatterId == matterId && c.Notation == Notation.Nucleotides).Id;

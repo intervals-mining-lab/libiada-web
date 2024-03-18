@@ -23,17 +23,17 @@ using Libiada.Web.Tasks;
 public class LocalCalculationWebApiController : ControllerBase
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly ICommonSequenceRepository commonSequenceRepository;
+    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
     private readonly IFullCharacteristicRepository fullCharacteristicRepository;
     private readonly ITaskManager taskManager;
 
     public LocalCalculationWebApiController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
-                                            ICommonSequenceRepository commonSequenceRepository,
+                                            ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory,
                                             IFullCharacteristicRepository fullCharacteristicRepository,
                                             ITaskManager taskManager)
     {
         this.dbFactory = dbFactory;
-        this.commonSequenceRepository = commonSequenceRepository;
+        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
         this.fullCharacteristicRepository = fullCharacteristicRepository;
         this.taskManager = taskManager;
     }
@@ -64,6 +64,7 @@ public class LocalCalculationWebApiController : ControllerBase
         int step)
     {
         using var db = dbFactory.CreateDbContext();
+        using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
         var calculator = new LocalCharacteristicsCalculator(db, fullCharacteristicRepository, commonSequenceRepository);
         var characteristics = calculator.GetSubsequenceCharacteristic(subsequenceId, characteristicLinkId, windowSize, step);
 

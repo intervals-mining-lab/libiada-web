@@ -13,14 +13,14 @@ public class SequenceElementsController : Controller
     /// <summary>
     /// The sequence repository.
     /// </summary>
-    private readonly ICommonSequenceRepository commonSequenceRepository;
+    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SequenceElementsController"/> class.
     /// </summary>
-    public SequenceElementsController(ICommonSequenceRepository commonSequenceRepository)
+    public SequenceElementsController(ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory)
     {
-        this.commonSequenceRepository = commonSequenceRepository;
+        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
     }
 
     /// <summary>
@@ -34,6 +34,7 @@ public class SequenceElementsController : Controller
     /// </returns>
     public IEnumerable<SelectListItem> Get(int id)
     {
+        using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
         Element[] sequenceElements = commonSequenceRepository.GetElements(id);
         return sequenceElements.Select(e => new SelectListItem
         {

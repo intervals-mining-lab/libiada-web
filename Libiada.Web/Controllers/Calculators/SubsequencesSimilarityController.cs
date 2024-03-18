@@ -7,7 +7,6 @@ using Libiada.Core.Extensions;
 using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Models.Repositories.Catalogs;
 
-using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Models.Calculators;
 using Libiada.Database.Tasks;
 
@@ -30,11 +29,6 @@ public class SubsequencesSimilarityController : AbstractResultController
     private readonly IViewDataHelper viewDataHelper;
 
     /// <summary>
-    /// The subsequence extractor.
-    /// </summary>
-    private readonly SubsequenceExtractor subsequenceExtractor;
-
-    /// <summary>
     /// The sequence attribute repository.
     /// </summary>
     private readonly SequenceAttributeRepository sequenceAttributeRepository;
@@ -44,7 +38,6 @@ public class SubsequencesSimilarityController : AbstractResultController
     /// </summary>
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
     private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
-    private readonly ICommonSequenceRepository commonSequenceRepository;
     private readonly Cache cache;
 
     /// <summary>
@@ -55,17 +48,14 @@ public class SubsequencesSimilarityController : AbstractResultController
                                             ITaskManager taskManager,
                                             IFullCharacteristicRepository characteristicTypeLinkRepository,
                                             ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator,
-                                            ICommonSequenceRepository commonSequenceRepository,
                                             Cache cache)
         : base(TaskType.SubsequencesSimilarity, taskManager)
     {
         this.dbFactory = dbFactory;
         this.db = dbFactory.CreateDbContext();
         this.viewDataHelper = viewDataHelper;
-        subsequenceExtractor = new SubsequenceExtractor(db, commonSequenceRepository);
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         this.subsequencesCharacteristicsCalculator = subsequencesCharacteristicsCalculator;
-        this.commonSequenceRepository = commonSequenceRepository;
         this.cache = cache;
         sequenceAttributeRepository = new SequenceAttributeRepository(db);
     }

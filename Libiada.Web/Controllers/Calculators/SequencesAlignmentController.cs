@@ -25,7 +25,6 @@ public class SequencesAlignmentController : AbstractResultController
     /// </summary>
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
     private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
-    private readonly ICommonSequenceRepository commonSequenceRepository;
     private readonly Cache cache;
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
@@ -38,13 +37,11 @@ public class SequencesAlignmentController : AbstractResultController
                                         ITaskManager taskManager,
                                         IFullCharacteristicRepository characteristicTypeLinkRepository,
                                         ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator,
-                                        ICommonSequenceRepository commonSequenceRepository,
                                         Cache cache)
         : base(TaskType.SequencesAlignment, taskManager)
     {
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         this.subsequencesCharacteristicsCalculator = subsequencesCharacteristicsCalculator;
-        this.commonSequenceRepository = commonSequenceRepository;
         this.cache = cache;
         this.dbFactory = dbFactory;
         this.viewDataHelper = viewDataHelper;

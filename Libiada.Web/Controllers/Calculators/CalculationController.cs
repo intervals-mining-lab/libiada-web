@@ -25,7 +25,7 @@ public class CalculationController : AbstractResultController
     private readonly Cache cache;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
     private readonly ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator;
-    private readonly ICommonSequenceRepository commonSequenceRepository;
+    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CalculationController"/> class.
@@ -36,7 +36,7 @@ public class CalculationController : AbstractResultController
                                  Cache cache, 
                                  IFullCharacteristicRepository characteristicTypeLinkRepository,
                                  ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator,
-                                 ICommonSequenceRepository commonSequenceRepository)
+                                 ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory)
         : base(TaskType.Calculation, taskManager)
     {
         this.dbFactory = dbFactory;
@@ -44,7 +44,7 @@ public class CalculationController : AbstractResultController
         this.cache = cache;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         this.sequencesCharacteristicsCalculator = sequencesCharacteristicsCalculator;
-        this.commonSequenceRepository = commonSequenceRepository;
+        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
     }
 
     /// <summary>
@@ -118,7 +118,7 @@ public class CalculationController : AbstractResultController
         return CreateTask(() =>
         {
             Dictionary<long, string> mattersNames;
-
+            using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
             long[][] sequenceIds;
             sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds,
                                                                   notations,

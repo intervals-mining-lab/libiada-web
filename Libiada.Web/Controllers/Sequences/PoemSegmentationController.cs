@@ -14,17 +14,17 @@ public class PoemSegmentationController : AbstractResultController
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
-    private readonly ICommonSequenceRepository commonSequenceRepository;
+    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
 
     public PoemSegmentationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                       IViewDataHelper viewDataHelper,
                                       ITaskManager taskManager,
-                                      ICommonSequenceRepository commonSequenceRepository)
+                                      ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory)
        : base(TaskType.PoemSegmentation, taskManager)
     {
         this.dbFactory = dbFactory;
         this.viewDataHelper = viewDataHelper;
-        this.commonSequenceRepository = commonSequenceRepository;
+        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
     }
 
     // GET: PoemSequenceSegmentation
@@ -49,6 +49,7 @@ public class PoemSegmentationController : AbstractResultController
             using var db = dbFactory.CreateDbContext();
             var sequenceId = db.LiteratureSequences.Single(l => l.MatterId == matterId && l.Notation == Notation.Consonance).Id;
             var sequenceName = db.Matters.Single(l => l.Id == matterId).Name;
+            using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
             var chain = commonSequenceRepository.GetLibiadaBaseChain(sequenceId);
             var thresholdString = startThreshold.Replace('.', ',');
             var threshold = Convert.ToDouble(thresholdString);

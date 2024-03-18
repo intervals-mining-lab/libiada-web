@@ -32,7 +32,7 @@ public class CongenericCalculationController : AbstractResultController
     /// <summary>
     /// The sequence repository.
     /// </summary>
-    private readonly ICommonSequenceRepository commonSequenceRepository;
+    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
     private readonly ICongenericSequencesCharacteristicsCalculator congenericSequencesCharacteristicsCalculator;
     private readonly Cache cache;
 
@@ -43,7 +43,7 @@ public class CongenericCalculationController : AbstractResultController
                                            IViewDataHelper viewDataHelper,
                                            ITaskManager taskManager,
                                            ICongenericCharacteristicRepository congenericCharacteristicRepository,
-                                           ICommonSequenceRepository commonSequenceRepository,
+                                           ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory,
                                            ICongenericSequencesCharacteristicsCalculator congenericSequencesCharacteristicsCalculator,
                                            Cache cache)
         : base(TaskType.CongenericCalculation, taskManager)
@@ -51,7 +51,7 @@ public class CongenericCalculationController : AbstractResultController
         this.dbFactory = dbFactory;
         this.viewDataHelper = viewDataHelper;
         this.congenericCharacteristicRepository = congenericCharacteristicRepository;
-        this.commonSequenceRepository = commonSequenceRepository;
+        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
         this.congenericSequencesCharacteristicsCalculator = congenericSequencesCharacteristicsCalculator;
         this.cache = cache;
     }
@@ -125,7 +125,7 @@ public class CongenericCalculationController : AbstractResultController
             long[][] sequenceIds;
 
             mattersNames = cache.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
-
+            using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
             sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds, notations, languages, translators, pauseTreatments, sequentialTransfers, trajectories);
 
             //// characteristics names

@@ -31,7 +31,7 @@ public class LocalCalculationController : AbstractResultController
     /// <summary>
     /// The sequence repository.
     /// </summary>
-    private readonly ICommonSequenceRepository commonSequenceRepository;
+    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
 
     /// <summary>
     /// The characteristic type repository.
@@ -44,13 +44,13 @@ public class LocalCalculationController : AbstractResultController
     /// </summary>
     public LocalCalculationController(IViewDataHelper viewDataHelper, 
                                       ITaskManager taskManager,
-                                      ICommonSequenceRepository commonSequenceRepository,
+                                      ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory,
                                       IFullCharacteristicRepository characteristicTypeLinkRepository,
                                       Cache cache)
         : base(TaskType.LocalCalculation, taskManager)
     {
         this.viewDataHelper = viewDataHelper;
-        this.commonSequenceRepository = commonSequenceRepository;
+        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         this.cache = cache;
     }
@@ -147,7 +147,7 @@ public class LocalCalculationController : AbstractResultController
             var links = new Link[characteristicLinkIds.Length];
             Array.Sort(matterIds);
             Dictionary<long, Matter> matters = cache.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id);
-
+            using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
             for (int k = 0; k < matterIds.Length; k++)
             {
                 long matterId = matterIds[k];
