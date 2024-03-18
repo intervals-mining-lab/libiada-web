@@ -56,6 +56,8 @@ builder.Services.AddDefaultIdentity<AspNetUser>(options => options.SignIn.Requir
 
 builder.Services.AddSingleton<Cache>();
 
+builder.Services.AddHttpClient();
+
 builder.Services.AddSingleton<IPushNotificationHelper, PushNotificationHelper>();
 builder.Services.AddSingleton<ITaskManager, TaskManager>();
 
