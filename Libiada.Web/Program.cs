@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Razor;
 
 using System.Data.Common;
-using System.Security.Principal;
 
 using Libiada.Database.Helpers;
 using Libiada.Database.Models.Calculators;
@@ -50,7 +49,7 @@ builder.Services.AddDbContextFactory<LibiadaDatabaseEntities>(options => options
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<AspNetUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddRoles<AspNetRole>()
+                .AddRoles<IdentityRole<int>>()
                 .AddEntityFrameworkStores<LibiadaDatabaseEntities>()
                 .AddDefaultTokenProviders();
 
@@ -74,7 +73,9 @@ builder.Services.AddScoped<ICongenericSequencesCharacteristicsCalculator, Congen
 builder.Services.AddScoped<ISubsequencesCharacteristicsCalculator, SubsequencesCharacteristicsCalculator>();
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddTransient<IPrincipal>(provider => provider.GetService<IHttpContextAccessor>()?.HttpContext?.User);
+builder.Services.AddTransient(provider => ((provider.GetService<IHttpContextAccessor>() ?? throw new Exception($"IHttpContextAccessor is not found."))
+                                                    .HttpContext ?? throw new Exception($"HttpContext is not found."))
+                                                    .User);
 
 builder.Services.AddTransient<IViewDataHelper, ViewDataHelper>();
 

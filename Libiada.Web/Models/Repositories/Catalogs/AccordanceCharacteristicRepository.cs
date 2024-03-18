@@ -1,6 +1,6 @@
 ﻿namespace Libiada.Web.Models.Repositories.Catalogs;
 
-using System.Security.Principal;
+using System.Security.Claims;
 
 using Libiada.Core.Core;
 using Libiada.Core.Core.ArrangementManagers;
@@ -22,7 +22,7 @@ public class AccordanceCharacteristicRepository
     /// The accordance characteristics links.
     /// </summary>
     private readonly AccordanceCharacteristicLink[] characteristicsLinks;
-    private readonly IPrincipal currentUser;
+    private readonly ClaimsPrincipal currentUser;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AccordanceCharacteristicRepository"/> class.
@@ -30,7 +30,7 @@ public class AccordanceCharacteristicRepository
     /// <param name="db">
     /// Database context.
     /// </param>
-    public AccordanceCharacteristicRepository(LibiadaDatabaseEntities db, IPrincipal currentUser)
+    public AccordanceCharacteristicRepository(LibiadaDatabaseEntities db, ClaimsPrincipal currentUser)
     {
         characteristicsLinks = db.AccordanceCharacteristicLinks.ToArray();
         this.currentUser = currentUser;

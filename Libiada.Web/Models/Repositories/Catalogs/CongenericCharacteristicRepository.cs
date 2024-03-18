@@ -1,6 +1,6 @@
 ﻿namespace Libiada.Web.Models.Repositories.Catalogs;
 
-using System.Security.Principal;
+using System.Security.Claims;
 
 using Libiada.Core.Core;
 using Libiada.Core.Core.ArrangementManagers;
@@ -21,7 +21,7 @@ public class CongenericCharacteristicRepository
     /// The congeneric characteristic links.
     /// </summary>
     private readonly CongenericCharacteristicLink[] characteristicsLinks;
-    private readonly IPrincipal currentUser;
+    private readonly ClaimsPrincipal currentUser;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CongenericCharacteristicRepository"/> class.
@@ -29,7 +29,7 @@ public class CongenericCharacteristicRepository
     /// <param name="db">
     /// Database context.
     /// </param>
-    public CongenericCharacteristicRepository(LibiadaDatabaseEntities db, IPrincipal currentUser)
+    public CongenericCharacteristicRepository(LibiadaDatabaseEntities db, ClaimsPrincipal currentUser)
     {
         characteristicsLinks = db.CongenericCharacteristicLinks.ToArray();
         this.currentUser = currentUser;

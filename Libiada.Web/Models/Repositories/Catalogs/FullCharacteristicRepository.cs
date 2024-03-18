@@ -1,6 +1,6 @@
 ﻿namespace Libiada.Web.Models.Repositories.Catalogs;
 
-using System.Security.Principal;
+using System.Security.Claims;
 
 using Libiada.Core.Core;
 using Libiada.Core.Core.ArrangementManagers;
@@ -21,7 +21,7 @@ public class FullCharacteristicRepository
     /// The characteristic type links.
     /// </summary>
     private readonly FullCharacteristicLink[] characteristicsLinks;
-    private readonly IPrincipal currentUser;
+    private readonly ClaimsPrincipal currentUser;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FullCharacteristicRepository"/> class.
@@ -29,7 +29,7 @@ public class FullCharacteristicRepository
     /// <param name="db">
     /// Database context.
     /// </param>
-    public FullCharacteristicRepository(LibiadaDatabaseEntities db, IPrincipal currentUser)
+    public FullCharacteristicRepository(LibiadaDatabaseEntities db, ClaimsPrincipal currentUser)
     {
         characteristicsLinks = db.FullCharacteristicLinks.ToArray();
         this.currentUser = currentUser;

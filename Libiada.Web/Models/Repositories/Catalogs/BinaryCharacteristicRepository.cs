@@ -1,6 +1,6 @@
 ﻿namespace Libiada.Web.Models.Repositories.Catalogs;
 
-using System.Security.Principal;
+using System.Security.Claims;
 
 using Libiada.Core.Core;
 using Libiada.Core.Core.ArrangementManagers;
@@ -21,7 +21,7 @@ public class BinaryCharacteristicRepository
     /// The binary characteristic links.
     /// </summary>
     private readonly BinaryCharacteristicLink[] characteristicsLinks;
-    private readonly IPrincipal currentUser;
+    private readonly ClaimsPrincipal currentUser;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BinaryCharacteristicRepository"/> class.
@@ -29,7 +29,7 @@ public class BinaryCharacteristicRepository
     /// <param name="db">
     /// Database context.
     /// </param>
-    public BinaryCharacteristicRepository(LibiadaDatabaseEntities db, IPrincipal currentUser)
+    public BinaryCharacteristicRepository(LibiadaDatabaseEntities db, ClaimsPrincipal currentUser)
     {
         characteristicsLinks = db.BinaryCharacteristicLinks.ToArray();
         this.currentUser = currentUser;

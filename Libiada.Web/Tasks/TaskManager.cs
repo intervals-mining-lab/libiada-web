@@ -3,6 +3,7 @@
 using Microsoft.AspNetCore.SignalR;
 
 using System.Security.Principal;
+using System.Security.Claims;
 using System.Runtime.CompilerServices;
 
 using Libiada.Database.Tasks;
@@ -15,6 +16,7 @@ using Libiada.Web.Extensions;
 using Newtonsoft.Json;
 
 using SystemTask = System.Threading.Tasks.Task;
+using Microsoft.AspNetCore.Identity;
 
 /// <summary>
 /// The task manager.
@@ -35,7 +37,11 @@ public class TaskManager : ITaskManager
     private readonly IHubContext<TaskManagerHub> signalrHubContext;
     private readonly IPushNotificationHelper pushNotificationHelper;
 
-    public TaskManager(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, IHubContext<TaskManagerHub> signalrHubContext, IPushNotificationHelper pushNotificationHelper, IHttpContextAccessor httpContextAccessor)
+    public TaskManager(
+        IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
+        IHubContext<TaskManagerHub> signalrHubContext,
+        IPushNotificationHelper pushNotificationHelper,
+        IHttpContextAccessor httpContextAccessor)
     {
         this.httpContextAccessor = httpContextAccessor;
         this.dbFactory = dbFactory;
@@ -66,7 +72,7 @@ public class TaskManager : ITaskManager
     {
         CalculationTask databaseTask;
         Task task;
-        IPrincipal user = httpContextAccessor.HttpContext.User;
+        ClaimsPrincipal user = httpContextAccessor.HttpContext.User;
         databaseTask = new CalculationTask
         {
             Description = taskType.GetDisplayValue(),
@@ -137,7 +143,7 @@ public class TaskManager : ITaskManager
     {
         lock (tasks)
         {
-            IPrincipal user = httpContextAccessor.HttpContext.User;
+            ClaimsPrincipal user = httpContextAccessor.HttpContext.User;
             Task task = tasks.Single(t => t.TaskData.Id == id);
             if (task.TaskData.UserId == user.GetUserId() || user.IsAdmin())
             {
@@ -193,7 +199,7 @@ public class TaskManager : ITaskManager
 
             lock (task)
             {
-                IPrincipal user = httpContextAccessor.HttpContext.User;
+                ClaimsPrincipal user = httpContextAccessor.HttpContext.User;
                 if (!user.IsAdmin() && task.TaskData.UserId != user.GetUserId())
                 {
                     throw new AccessViolationException("You do not have access to the current task");
@@ -241,7 +247,7 @@ public class TaskManager : ITaskManager
         lock (tasks)
         {
             List<Task> result = tasks;
-            IPrincipal user = httpContextAccessor.HttpContext.User;
+            ClaimsPrincipal user = httpContextAccessor.HttpContext.User;
             if (!user.IsAdmin())
             {
                 var userId = user.GetUserId();
@@ -467,7 +473,10 @@ public class TaskManager : ITaskManager
 
         await signalrHubContext.Clients.Group("admins").SendAsync("TaskEvent", taskEvent.ToString(), result);
         using var db = dbFactory.CreateDbContext();
-        if (!db.Users.Include(u => u.Roles).Single(u => u.Id == task.UserId).Roles.Any(r => r.Name == "Admin"))
+        var signInManager = (httpContextAccessor.HttpContext ?? throw new Exception("HttpContext is null")).RequestServices.GetService<SignInManager<AspNetUser>>();
+        var claimsFactory = (signInManager ?? throw new Exception("SignInManager is null")).ClaimsFactory;
+        ClaimsPrincipal user = await claimsFactory.CreateAsync(db.Users.Single(u => u.Id == task.UserId));
+        if (!user.IsAdmin())
         {
             await signalrHubContext.Clients.Group(task.UserId.ToString()).SendAsync("TaskEvent", taskEvent.ToString(), result);
         }

@@ -1,6 +1,6 @@
 ﻿namespace Libiada.Web.Controllers;
 
-using Libiada.Web.Helpers;
+using Libiada.Web.Extensions;
 
 using Newtonsoft.Json;
 

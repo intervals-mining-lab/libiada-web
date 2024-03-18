@@ -1,7 +1,7 @@
 ﻿namespace Libiada.Web.Helpers;
 
 using System.ComponentModel;
-using System.Security.Principal;
+using System.Security.Claims;
 
 using Libiada.Core.Music;
 
@@ -27,7 +27,7 @@ public class ViewDataHelper : IViewDataHelper
     /// <summary>
     /// The current user.
     /// </summary>
-    private readonly IPrincipal user;
+    private readonly ClaimsPrincipal user;
     private readonly IFullCharacteristicRepository fullCharacteristicModelRepository;
     private readonly ICongenericCharacteristicRepository congenericCharacteristicModelRepository;
     private readonly IAccordanceCharacteristicRepository accordanceCharacteristicModelRepository;
@@ -40,7 +40,7 @@ public class ViewDataHelper : IViewDataHelper
     /// Database context factory.
     /// </param>
     public ViewDataHelper(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                          IPrincipal user,
+                          ClaimsPrincipal user,
                           IFullCharacteristicRepository fullCharacteristicRepository,
                           ICongenericCharacteristicRepository congenericCharacteristicRepository,
                           IAccordanceCharacteristicRepository accordanceCharacteristicRepository,
