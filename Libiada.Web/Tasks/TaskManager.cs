@@ -2,7 +2,6 @@
 
 using Microsoft.AspNetCore.SignalR;
 
-using System.Security.Principal;
 using System.Security.Claims;
 using System.Runtime.CompilerServices;
 
@@ -72,7 +71,7 @@ public class TaskManager : ITaskManager
     {
         CalculationTask databaseTask;
         Task task;
-        ClaimsPrincipal user = httpContextAccessor.HttpContext.User;
+        ClaimsPrincipal user = httpContextAccessor.GetCurrentUser();
         databaseTask = new CalculationTask
         {
             Description = taskType.GetDisplayValue(),
@@ -139,11 +138,11 @@ public class TaskManager : ITaskManager
     /// <param name="id">
     /// The task id.
     /// </param>
-    public TaskData DeleteTask(long id)
+    public TaskData? DeleteTask(long id)
     {
         lock (tasks)
         {
-            ClaimsPrincipal user = httpContextAccessor.HttpContext.User;
+            ClaimsPrincipal user = httpContextAccessor.GetCurrentUser();
             Task task = tasks.Single(t => t.TaskData.Id == id);
             if (task.TaskData.UserId == user.GetUserId() || user.IsAdmin())
             {
@@ -159,8 +158,12 @@ public class TaskManager : ITaskManager
                     tasks.Remove(task);
                     using var db = dbFactory.CreateDbContext();
                     CalculationTask? databaseTask = db.CalculationTasks.Find(id);
-                    db.CalculationTasks.Remove(databaseTask);
-                    db.SaveChanges();
+                    if(databaseTask is not null)
+                    {
+                        db.CalculationTasks.Remove(databaseTask);
+                        db.SaveChanges();
+                    }
+                    
                     return task.TaskData;
                 }
             }
@@ -199,7 +202,7 @@ public class TaskManager : ITaskManager
 
             lock (task)
             {
-                ClaimsPrincipal user = httpContextAccessor.HttpContext.User;
+                ClaimsPrincipal user = httpContextAccessor.GetCurrentUser();
                 if (!user.IsAdmin() && task.TaskData.UserId != user.GetUserId())
                 {
                     throw new AccessViolationException("You do not have access to the current task");
@@ -247,7 +250,7 @@ public class TaskManager : ITaskManager
         lock (tasks)
         {
             List<Task> result = tasks;
-            ClaimsPrincipal user = httpContextAccessor.HttpContext.User;
+            ClaimsPrincipal user = httpContextAccessor.GetCurrentUser();
             if (!user.IsAdmin())
             {
                 var userId = user.GetUserId();
@@ -312,7 +315,7 @@ public class TaskManager : ITaskManager
                         {
                             using (cancellationTokenSource.Token.Register(Thread.CurrentThread.Abort))
                             {
-                                ExecuteTaskAction((Task)t);
+                                ExecuteTaskAction((Task)t!);
                             }
 
                         }, task, token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
@@ -473,7 +476,8 @@ public class TaskManager : ITaskManager
 
         await signalrHubContext.Clients.Group("admins").SendAsync("TaskEvent", taskEvent.ToString(), result);
         using var db = dbFactory.CreateDbContext();
-        var signInManager = (httpContextAccessor.HttpContext ?? throw new Exception("HttpContext is null")).RequestServices.GetService<SignInManager<AspNetUser>>();
+        var signInManager = (httpContextAccessor.HttpContext ?? throw new Exception("HttpContext is null"))
+                            .RequestServices.GetService<SignInManager<AspNetUser>>();
         var claimsFactory = (signInManager ?? throw new Exception("SignInManager is null")).ClaimsFactory;
         ClaimsPrincipal user = await claimsFactory.CreateAsync(db.Users.Single(u => u.Id == task.UserId));
         if (!user.IsAdmin())
