@@ -21,6 +21,8 @@ using Bio.IO.FastA;
 using Bio;
 
 using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
+using System.Net.Http;
+using System.Xml;
 
 /// <summary>
 /// The subsequences distribution controller.
@@ -35,6 +37,12 @@ public class SubsequencesDistributionController : AbstractResultController
     private readonly ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator;
     private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
     private readonly Cache cache;
+    private readonly IHttpClientFactory httpClientFactory;
+
+    /// <summary>
+    /// The base url for all alignment requests.
+    /// </summary>
+    private readonly Uri BaseAddress = new(@"https://www.ebi.ac.uk/Tools/services/rest/");
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SubsequencesDistributionController"/> class.
@@ -45,8 +53,9 @@ public class SubsequencesDistributionController : AbstractResultController
                                               IFullCharacteristicRepository characteristicTypeLinkRepository,
                                               ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator,
                                               ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator,
-                                              ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory, 
-                                              Cache cache)
+                                              ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory,
+                                              Cache cache,
+                                              IHttpClientFactory httpClientFactory)
         : base(TaskType.SubsequencesDistribution, taskManager)
     {
         this.dbFactory = dbFactory;
@@ -56,6 +65,7 @@ public class SubsequencesDistributionController : AbstractResultController
         this.sequencesCharacteristicsCalculator = sequencesCharacteristicsCalculator;
         this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
         this.cache = cache;
+        this.httpClientFactory = httpClientFactory;
     }
 
     /// <summary>
@@ -135,7 +145,6 @@ public class SubsequencesDistributionController : AbstractResultController
             var sequencesData = new SequenceData[matterIds.Length];
             for (int i = 0; i < matterIds.Length; i++)
             {
-               
                 // all subsequence calculations
                 SubsequenceData[] subsequencesData = subsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
                     characteristicLinkIds,
@@ -150,7 +159,7 @@ public class SubsequencesDistributionController : AbstractResultController
             // sorting organisms by their characteristic
             Array.Sort(sequencesData, (x, y) => x.Characteristic.CompareTo(y.Characteristic));
             List<AttributeValue> allAttributeValues = attributeValuesCache.AllAttributeValues;
-            var result = new Dictionary<string, object>
+            var result = new Dictionary<string, object>(7)
                             {
                                 { "result", sequencesData },
                                 { "subsequencesCharacteristicsNames", subsequencesCharacteristicsNames },
@@ -185,28 +194,27 @@ public class SubsequencesDistributionController : AbstractResultController
             using var db = dbFactory.CreateDbContext();
             using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
             var subsequenceExtractor = new SubsequenceExtractor(db, commonSequenceRepository);
+            
             bioSequences = subsequenceExtractor.GetBioSequencesForFastaConverter(subsequencesIds);
-
-
-            string fasta;
+            
             FastAFormatter formatter = new FastAFormatter();
-            using (MemoryStream stream = new MemoryStream())
-            {
-                formatter.Format(stream, bioSequences);
-                fasta = Encoding.ASCII.GetString(stream.ToArray());
-            }
+            using MemoryStream stream = new MemoryStream();
+            formatter.Format(stream, bioSequences);
+            string fasta = Encoding.ASCII.GetString(stream.ToArray());
+            
+            // TODO: make email global parameter
+            string data = $"email=info@foarlab.org&sequence={fasta}";
+            const string urlClustalo = $"clustalo/run";
+            using var httpClient = httpClientFactory.CreateClient();
+            httpClient.BaseAddress = BaseAddress;
+            StringContent postData = new(data, Encoding.UTF8, "application/x-www-form-urlencoded");
 
-            string result;
-            using (var webClient = new WebClient())
-            {
-                webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-                Uri url = new Uri("https://www.ebi.ac.uk/Tools/services/rest/clustalo/run");
+            using HttpResponseMessage response = httpClient.PostAsync(urlClustalo, postData)
+                .ContinueWith((postTask) => postTask.Result.EnsureSuccessStatusCode()).Result;
 
-                // TODO: make email global parameter
-                result = webClient.UploadString(url, $"email=info@foarlab.org&sequence={fasta}");
-            }
+            string requestResult = response.Content.ReadAsStringAsync().Result;
 
-            return JsonConvert.SerializeObject(new { Status = "Success", Result = result });
+            return JsonConvert.SerializeObject(new { Status = "Success", Result = requestResult });
         }
         catch (Exception ex)
         {
