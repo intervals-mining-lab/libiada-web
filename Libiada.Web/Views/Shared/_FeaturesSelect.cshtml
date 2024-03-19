@@ -1,17 +1,15 @@
-﻿@model Subsequence
-
-@Html.LabelFor(model => model.Feature, new { @class = "col-form-label col-md-2 h4" })
+﻿<label class="col-form-label col-md-2 h4">Features</label>
 <div ng-repeat="feature in ::features">
     <div class="form-check">
         <input type="checkbox"
                class="form-check-input"
                name="features"
-               id="{{::'features'+feature.Value}}"
+               id="features{{::feature.Value}}"
                checked
                ng-value="::feature.Value"
                ng-model="feature.Selected"
                ng-change="filterByFeature(feature)" />
-        <label class="form-check-label" for="{{::'features'+feature.Value}}">
+        <label class="form-check-label" for="features{{::feature.Value}}">
             {{::feature.Text}}
         </label>
     </div>

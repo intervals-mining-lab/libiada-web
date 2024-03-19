@@ -509,7 +509,7 @@
                     $scope.alignmentInProcess = false;
                     let result = response.data;
                     if (result.Status === "Success") {
-                        window.open("https://www.ebi.ac.uk/Tools/services/web/toolresult.ebi?jobId=" + result.Result, '_blank');
+                        window.open("https://www.ebi.ac.uk/jdispatcher/msa/clustalo/summary?jobId=" + result.Result, '_blank');
                     }
                     else {
                         alert("Failed to create alignment task", result.Message);

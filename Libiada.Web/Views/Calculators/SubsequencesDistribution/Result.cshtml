@@ -225,13 +225,13 @@
                     </div>
                     <div id="filter-tab-pane" class="tab-pane fade" role="tabpanel" aria-labelledby="filter-tab" tabindex="0">
                         @{
-                            await Html.RenderPartialAsync("_Filters");
-                        }
+                             await Html.RenderPartialAsync("_Filters");
+                         }
                     </div>
                     <div id="features-tab-pane" class="tab-pane fade" role="tabpanel" aria-labelledby="features-tab" tabindex="0">
                         @{
-                                    await Html.RenderPartialAsync("_FeaturesSelect");
-}
+                             await Html.RenderPartialAsync("_FeaturesSelect");
+                         }
                     </div>
                     <div id="tooltip-tab-pane" class="tab-pane fade" role="tabpanel" aria-labelledby="tooltip-tab" tabindex="0">
                         <div class="row" ng-if="tooltipElements.length > 1">
@@ -294,9 +294,9 @@
                                 <input type="checkbox"
                                        class="form-check-input"
                                        name="selectSubsequenceForAlignment"
-                                       id="selectSubsequenceForAlignment"
+                                       id="selectSubsequenceForAlignment{{$index}}"
                                        ng-model="tooltipElement.selectedForAlignment" />
-                                <label class="form-check-label" for="selectSubsequenceForAlignment">
+                                <label class="form-check-label" for="selectSubsequenceForAlignment{{$index}}">
                                     Select sequence for alignment
                                 </label>
                             </div>
