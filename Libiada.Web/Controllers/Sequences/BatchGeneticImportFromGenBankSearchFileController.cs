@@ -50,10 +50,10 @@ public class BatchGeneticImportFromGenBankSearchFileController : AbstractResultC
         int maxLength,
         List<IFormFile> files)
     {
-        var fileStreams = files.Select(Helpers.FileHelper.GetFileStream).ToList();
+        var fileStreams = files.Select(Helpers.FileHelper.GetFileStream);
         return CreateTask(() =>
         {
-            using var genBankSearchResultsStream = fileStreams[0];
+            using Stream genBankSearchResultsStream = fileStreams.Single();
             string searchResults = FileHelper.ReadSequenceFromStream(genBankSearchResultsStream);
             string[] accessions;
             if (filterMinLength)
@@ -69,12 +69,12 @@ public class BatchGeneticImportFromGenBankSearchFileController : AbstractResultC
                     NcbiHelper.GetIdsFromNcbiSearchResults(searchResults, importPartial);
             }
             accessions = accessions.Distinct().Select(a => a.Split('.')[0]).ToArray();
-            var importResults = new List<MatterImportResult>(accessions.Length);
+            List<MatterImportResult> importResults = new(accessions.Length);
             using var db = dbFactory.CreateDbContext();
             var matterRepository = new MatterRepository(db, cache);
             var dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
 
-            var (existingAccessions, accessionsToImport) = dnaSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
+            (string[] existingAccessions, string[] accessionsToImport) = dnaSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
 
             importResults.AddRange(existingAccessions.ConvertAll(existingAccession => new MatterImportResult
             {
@@ -85,7 +85,7 @@ public class BatchGeneticImportFromGenBankSearchFileController : AbstractResultC
             
             foreach (string accession in accessionsToImport)
             {
-                var importResult = new MatterImportResult() { MatterName = accession };
+                MatterImportResult importResult = new() { MatterName = accession };
 
                 try
                 {
@@ -110,7 +110,7 @@ public class BatchGeneticImportFromGenBankSearchFileController : AbstractResultC
                         RemoteDb = RemoteDb.GenBank,
                         RemoteId = metadata.Version.CompoundAccession
                     };
-                    bool partial = metadata.Definition.ToLower().Contains("partial");
+                    bool partial = metadata.Definition.Contains("partial", StringComparison.CurrentCultureIgnoreCase);
                     dnaSequenceRepository.Create(sequence, bioSequence, partial);
 
                     (importResult.Result, importResult.Status) = importGenes ?
@@ -143,8 +143,7 @@ public class BatchGeneticImportFromGenBankSearchFileController : AbstractResultC
 
             string[] names = importResults.Select(r => r.MatterName).ToArray();
 
-            // removing matters for which adding of sequence failed
-            
+            // removing matters for which creation of sequence failed
             Matter[] orphanMatters = db.Matters
                                        .Include(m => m.Sequence)
                                        .Where(m => names.Contains(m.Name) && m.Sequence.Count == 0)
@@ -183,7 +182,7 @@ public class BatchGeneticImportFromGenBankSearchFileController : AbstractResultC
         {
             using var db = dbFactory.CreateDbContext();
             var subsequenceImporter = new SubsequenceImporter(db, metadata.Features.All, sequence.Id);
-            var (featuresCount, nonCodingCount) = subsequenceImporter.CreateSubsequences();
+            (int featuresCount, int nonCodingCount) = subsequenceImporter.CreateSubsequences();
 
             string result = $"Successfully imported sequence, {featuresCount} features "
                           + $"and {nonCodingCount} non-coding subsequences";

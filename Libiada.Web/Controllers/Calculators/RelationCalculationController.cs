@@ -134,7 +134,7 @@ public class RelationCalculationController : AbstractResultController
             string characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
             Matter matter = cache.Matters.Single(m => m.Id == matterId);
             using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
-            long sequenceId = commonSequenceRepository.GetSequenceIds(new[] { matterId }, 
+            long sequenceId = commonSequenceRepository.GetSequenceIds([matterId], 
                                                                       notation, 
                                                                       language, 
                                                                       translator, 
@@ -143,7 +143,7 @@ public class RelationCalculationController : AbstractResultController
                                                                       trajectory).Single();
 
             Chain currentChain = commonSequenceRepository.GetLibiadaChain(sequenceId);
-            var sequence = db.CommonSequences.Include(cs => cs.Matter).Single(m => m.Id == sequenceId);
+            CommonSequence sequence = db.CommonSequences.Include(cs => cs.Matter).Single(m => m.Id == sequenceId);
 
             var result = new Dictionary<string, object>
             {
@@ -175,16 +175,16 @@ public class RelationCalculationController : AbstractResultController
                                        .Select(rc => new { rc.FirstElementId, rc.SecondElementId, rc.Value })
                                        .ToArray();
 
-                var firstElements = new List<string>();
-                var secondElements = new List<string>();
+                List<string> firstElements = [];
+                List<string> secondElements = [];
                 for (int i = 0; i < filterSize; i++)
                 {
                     long firstElementId = filteredResult[i].FirstElementId;
-                    var firstElement = db.Elements.Single(e => e.Id == firstElementId);
+                    Element firstElement = db.Elements.Single(e => e.Id == firstElementId);
                     firstElements.Add(firstElement.Name ?? firstElement.Value);
 
                     long secondElementId = filteredResult[i].SecondElementId;
-                    var secondElement = db.Elements.Single(e => e.Id == secondElementId);
+                    Element secondElement = db.Elements.Single(e => e.Id == secondElementId);
                     secondElements.Add(secondElement.Name ?? secondElement.Value);
                 }
 
@@ -199,7 +199,7 @@ public class RelationCalculationController : AbstractResultController
                                         .Where(b => b.SequenceId == sequenceId && b.CharacteristicLinkId == characteristicLinkId)
                                         .GroupBy(b => b.FirstElementId)
                                         .ToDictionary(b => b.Key, b => b.ToDictionary(bb => bb.SecondElementId, bb => bb.Value));
-                var elementsIds = db.CommonSequences.Single(cs => cs.Id == sequenceId).Alphabet;
+                long[] elementsIds = db.CommonSequences.Single(cs => cs.Id == sequenceId).Alphabet;
                 var elements = db.Elements
                                  .Where(e => elementsIds.Contains(e.Id))
                                  .OrderBy(e => e.Id)
@@ -237,7 +237,7 @@ public class RelationCalculationController : AbstractResultController
     [NonAction]
     private void CalculateAllCharacteristics(short characteristicLinkId, long sequenceId, Chain chain, IBinaryCalculator calculator, Link link)
     {
-        var newCharacteristics = new List<BinaryCharacteristicValue>();
+        List<BinaryCharacteristicValue> newCharacteristics = [];
         BinaryCharacteristicValue[] databaseCharacteristics = db.BinaryCharacteristicValues
             .Where(b => b.SequenceId == sequenceId && b.CharacteristicLinkId == characteristicLinkId)
             .ToArray();
@@ -292,7 +292,7 @@ public class RelationCalculationController : AbstractResultController
     private void CalculateFrequencyCharacteristics(short characteristicLinkId, int frequencyCount, Chain chain, long sequenceId, IBinaryCalculator calculator, Link link)
     {
         long[] sequenceElements = db.CommonSequences.Single(cs => cs.Id == sequenceId).Alphabet;
-        var newCharacteristics = new List<BinaryCharacteristicValue>();
+        List<BinaryCharacteristicValue> newCharacteristics = [];
         BinaryCharacteristicValue[] databaseCharacteristics = db.BinaryCharacteristicValues
             .Where(b => b.SequenceId == sequenceId && b.CharacteristicLinkId == characteristicLinkId)
             .ToArray();

@@ -99,8 +99,8 @@ public class CustomSequenceOrderTransformationCalculationController : AbstractRe
         return CreateTask(() =>
         {
             int sequencesCount = localFile ? files.Count : customSequences.Length;
-            var sequences = new string[sequencesCount];
-            var sequencesNames = new string[sequencesCount];
+            string[] sequences = new string[sequencesCount];
+            string[] sequencesNames = new string[sequencesCount];
 
             for (int i = 0; i < sequencesCount; i++)
             {
@@ -120,7 +120,7 @@ public class CustomSequenceOrderTransformationCalculationController : AbstractRe
             var sequencesCharacteristics = new SequenceCharacteristics[sequences.Length];
             for (int j = 0; j < sequences.Length; j++)
             {
-                var characteristics = new double[characteristicLinkIds.Length];
+                double[] characteristics = new double[characteristicLinkIds.Length];
                 for (int k = 0; k < characteristicLinkIds.Length; k++)
                 {
                     var sequence = new Chain(sequences[j]);

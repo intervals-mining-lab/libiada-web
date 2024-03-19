@@ -59,7 +59,7 @@ public class AccordanceCharacteristicRepository
             characteristics = StaticCollections.UserAvailableAccordanceCharacteristics.ToArray();
         }
 
-        var result = new List<CharacteristicSelectListItem>(characteristics.Length);
+        List<CharacteristicSelectListItem> result = new(characteristics.Length);
 
         foreach (AccordanceCharacteristic characteristic in characteristics)
         {
@@ -67,10 +67,10 @@ public class AccordanceCharacteristicRepository
                 .Where(cl => cl.AccordanceCharacteristic == characteristic && links.Contains(cl.Link))
                 .Select(cl => new SelectListItem { Value = ((byte)cl.Link).ToString(), Text = cl.Link.GetDisplayValue() })
                 .ToList();
-            var arrangementTypeSelectListItems = new List<SelectListItem>
-                                                     {
-                                                         new SelectListItem { Value = ((byte)arrangementType).ToString(), Text = arrangementType.GetDisplayValue() }
-                                                     };
+            List<SelectListItem> arrangementTypeSelectListItems =
+                                                     [
+                                                         new() { Value = ((byte)arrangementType).ToString(), Text = arrangementType.GetDisplayValue() }
+                                                     ];
             result.Add(new CharacteristicSelectListItem((byte)characteristic, characteristic.GetDisplayValue(), linkSelectListItems, arrangementTypeSelectListItems));
         }
 

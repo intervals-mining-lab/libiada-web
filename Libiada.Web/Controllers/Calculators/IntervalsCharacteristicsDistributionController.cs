@@ -78,20 +78,15 @@ public class IntervalsCharacteristicsDistributionController : AbstractResultCont
         return CreateTask(() =>
         {
             var orderGenerator = new OrderGenerator();
-            List<int[]> orders;
-            switch (generateStrict)
+            List<int[]> orders = generateStrict switch
             {
-                case 0:
-                    orders = orderGenerator.StrictGenerateOrders(length, alphabetCardinality);
-                    break;
-                case 1:
-                    orders = orderGenerator.GenerateOrders(length, alphabetCardinality);
-                    break;
-                default: throw new ArgumentException($"Invalid type of order generator param: {generateStrict}");
-            }
-            var calculator = new CustomSequencesCharacterisitcsCalculator(characteristicTypeLinkRepository, characteristicLinkIds);
+                0 => orderGenerator.StrictGenerateOrders(length, alphabetCardinality),
+                1 => orderGenerator.GenerateOrders(length, alphabetCardinality),
+                _ => throw new ArgumentException($"Invalid type of order generator param: {generateStrict}"),
+            };
+            CustomSequencesCharacterisitcsCalculator calculator = new(characteristicTypeLinkRepository, characteristicLinkIds);
             var characteristics = calculator.Calculate(orders.Select(order => new Chain(order))).ToList();
-            var sequencesCharacteristics = new List<SequenceCharacteristics>();
+            List<SequenceCharacteristics> sequencesCharacteristics = [];
             for (int i = 0; i < orders.Count; i++)
             {
                 sequencesCharacteristics.Add(new SequenceCharacteristics
@@ -106,7 +101,7 @@ public class IntervalsCharacteristicsDistributionController : AbstractResultCont
                                                                                  double.IsNegativeInfinity(v) ||
                                                                                  double.IsPositiveInfinity(v)));
 
-            var characteristicNames = new string[characteristicLinkIds.Length];
+            string[] characteristicNames = new string[characteristicLinkIds.Length];
             var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
 
             for (int k = 0; k < characteristicLinkIds.Length; k++)
@@ -122,22 +117,22 @@ public class IntervalsCharacteristicsDistributionController : AbstractResultCont
 
             var index = Enumerable.Range(0, characteristicLinkIds.Length);
 
-            var resultIntervals = new Dictionary<string, Dictionary<IntervalsDistribution, Dictionary<int[], SequenceCharacteristics>>>();
-            foreach (var link in EnumExtensions.ToArray<Link>())
+            Dictionary<string, Dictionary<IntervalsDistribution, Dictionary<int[], SequenceCharacteristics>>> resultIntervals = [];
+            foreach (Link link in EnumExtensions.ToArray<Link>())
             {
                 if (link == Link.NotApplied)
                 {
                     continue;
                 }
                 var accordance = IntervalsDistributionExtractor.GetOrdersIntervalsDistributionsAccordance(orders.ToArray(), link);
-                var resultAccordance = new Dictionary<IntervalsDistribution, Dictionary<int[], SequenceCharacteristics>>();
+                Dictionary<IntervalsDistribution, Dictionary<int[], SequenceCharacteristics>> resultAccordance = [];
                 foreach (var element in accordance)
                 {
-                    resultAccordance.Add(element.Key, new Dictionary<int[], SequenceCharacteristics>());
-                    foreach (var order in element.Value)
+                    resultAccordance.Add(element.Key, []);
+                    foreach (int[] order in element.Value)
                     {
                         // TODO refactor this
-                        var characteristic = sequencesCharacteristics
+                        SequenceCharacteristics characteristic = sequencesCharacteristics
                                           .FirstOrDefault(el => el.MatterName.SequenceEqual(string.Join(",", order.Select(n => n.ToString()).ToArray())));
                         resultAccordance[element.Key].Add(order, characteristic);
                     }

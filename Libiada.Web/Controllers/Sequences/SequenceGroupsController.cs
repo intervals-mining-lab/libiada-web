@@ -53,7 +53,7 @@ public class SequenceGroupsController : Controller
             return BadRequest();
         }
 
-        SequenceGroup sequenceGroup = await db.SequenceGroups.FindAsync(id);
+        SequenceGroup? sequenceGroup = await db.SequenceGroups.FindAsync(id);
         if (sequenceGroup == null)
         {
             return NotFound();
@@ -97,8 +97,8 @@ public class SequenceGroupsController : Controller
         {
             sequenceGroup.CreatorId = User.GetUserId();
             sequenceGroup.ModifierId = User.GetUserId();
-            var matters = db.Matters.Where(m => matterIds.Contains(m.Id)).ToArray();
-            foreach (var matter in matters)
+            Matter[] matters = db.Matters.Where(m => matterIds.Contains(m.Id)).ToArray();
+            foreach (Matter matter in matters)
             {
                 sequenceGroup.Matters.Add(matter);
             }
@@ -160,12 +160,12 @@ public class SequenceGroupsController : Controller
     {
         if (ModelState.IsValid)
         {
-            var originalSequenceGroup = db.SequenceGroups.Include(sg => sg.Matters).Single(sg => sg.Id == sequenceGroup.Id);
+            SequenceGroup originalSequenceGroup = db.SequenceGroups.Include(sg => sg.Matters).Single(sg => sg.Id == sequenceGroup.Id);
             originalSequenceGroup.Name = sequenceGroup.Name;
             originalSequenceGroup.Nature = sequenceGroup.Nature;
             originalSequenceGroup.SequenceGroupType = sequenceGroup.SequenceGroupType;
             originalSequenceGroup.ModifierId = User.GetUserId();
-            var matters = db.Matters.Where(m => matterIds.Contains(m.Id)).ToArray();
+            Matter[] matters = db.Matters.Where(m => matterIds.Contains(m.Id)).ToArray();
             originalSequenceGroup.Matters.Clear();
             foreach (var matter in matters)
             {
@@ -196,7 +196,7 @@ public class SequenceGroupsController : Controller
             return BadRequest();
         }
 
-        SequenceGroup sequenceGroup = await db.SequenceGroups.FindAsync(id);
+        SequenceGroup? sequenceGroup = await db.SequenceGroups.FindAsync(id);
         if (sequenceGroup == null)
         {
             return NotFound();

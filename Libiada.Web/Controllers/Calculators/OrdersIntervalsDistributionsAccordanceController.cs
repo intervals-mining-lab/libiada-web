@@ -56,34 +56,29 @@ public class OrdersIntervalsDistributionsAccordanceController : AbstractResultCo
         return CreateTask(() =>
         {
             var orderGenerator = new OrderGenerator();
-            List<int[]> orders;
-            switch (generateStrict)
+            List<int[]> orders = generateStrict switch
             {
-                case 0:
-                    orders = orderGenerator.StrictGenerateOrders(length, alphabetCardinality);
-                    break;
-                case 1:
-                    orders = orderGenerator.GenerateOrders(length, alphabetCardinality);
-                    break;
-                default: throw new ArgumentException("Invalid type of generate");
-            }
+                0 => orderGenerator.StrictGenerateOrders(length, alphabetCardinality),
+                1 => orderGenerator.GenerateOrders(length, alphabetCardinality),
+                _ => throw new ArgumentException("Invalid type of generate"),
+            };
             var distributionsAccordance = new Dictionary<string, Dictionary<Dictionary<int, int>, List<int[]>>>();
-            foreach (var link in EnumExtensions.ToArray<Link>())
+            foreach (Link link in EnumExtensions.ToArray<Link>())
             {
                 if (link == Link.NotApplied)
                 {
                     continue;
                 }
                 var accordance = new Dictionary<Dictionary<int, int>, List<int[]>>();
-                foreach (var order in orders)
+                foreach (int[] order in orders)
                 {
                     var sequence = new Chain(order.Select(Convert.ToInt16).ToArray());
                     var fullIntervals = new Dictionary<int, int>();
                     var alphabet = sequence.Alphabet.ToList();
-                    foreach (var el in alphabet)
+                    foreach (IBaseObject el in alphabet)
                     {
-                        var congIntervals = sequence.CongenericChain(el).GetArrangement(link);
-                        foreach (var interval in congIntervals)
+                        int[] congIntervals = sequence.CongenericChain(el).GetArrangement(link);
+                        foreach (int interval in congIntervals)
                         {
                             if (fullIntervals.Any(e => e.Key == interval))
                             {
@@ -101,7 +96,7 @@ public class OrdersIntervalsDistributionsAccordanceController : AbstractResultCo
                     }
                     else
                     {
-                        accordance.Add(fullIntervals, new List<int[]> { order });
+                        accordance.Add(fullIntervals, [order]);
                     }
                 }
                 

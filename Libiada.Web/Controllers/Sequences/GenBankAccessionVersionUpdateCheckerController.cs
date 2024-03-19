@@ -63,7 +63,7 @@ public class GenBankAccessionVersionUpdateCheckerController : AbstractResultCont
                                     });
 
 
-            List<NuccoreObject> searchResults = new List<NuccoreObject>();
+            List<NuccoreObject> searchResults = [];
 
             // slicing accessions into chunks to prevent "too long request" error
             string[] accessions = sequencesData.Keys.ToArray();
@@ -72,7 +72,7 @@ public class GenBankAccessionVersionUpdateCheckerController : AbstractResultCont
             for (int i = 0; i < accessions.Length; i += maxChunkSize)
             {
                 int actualChunkSize = System.Math.Min(maxChunkSize, accessions.Length - i);
-                var accessionsChunk = new string[actualChunkSize];
+                string[] accessionsChunk = new string[actualChunkSize];
                 Array.Copy(accessions, i, accessionsChunk, 0, actualChunkSize);
                 (string ncbiWebEnvironment, string queryKey) = ncbiHelper.ExecuteEPostRequest(string.Join(",", accessionsChunk));
                 searchResults.AddRange(ncbiHelper.ExecuteESummaryRequest(ncbiWebEnvironment, queryKey, true));
@@ -80,11 +80,11 @@ public class GenBankAccessionVersionUpdateCheckerController : AbstractResultCont
 
             for (int i = 0; i < searchResults.Count; i++)
             {
-                var searchResult = searchResults[i];
+                NuccoreObject searchResult = searchResults[i];
                 searchResult.Title = MatterRepository.TrimGenBankNameEnding(searchResult.Title);
 
-                var newAccession = searchResult.AccessionVersion.Split('.');
-                var sequenceData = sequencesData[newAccession[0]];
+                string[] newAccession = searchResult.AccessionVersion.Split('.');
+                AccessionUpdateSearchResult sequenceData = sequencesData[newAccession[0]];
                 sequenceData.RemoteVersion = Convert.ToByte(newAccession[1]);
                 sequenceData.RemoteName = searchResult.Title;
                 sequenceData.RemoteOrganism = searchResult.Organism;

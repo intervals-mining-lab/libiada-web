@@ -41,10 +41,10 @@ public class PushNotificationHelper : IPushNotificationHelper
         {
             foreach (var subscriber in subscribers)
             {
-                var endpoint = subscriber.Endpoint;
-                var p256dh = subscriber.P256dh;
-                var auth = subscriber.Auth;
-                var payload = JsonConvert.SerializeObject(data);
+                string endpoint = subscriber.Endpoint;
+                string p256dh = subscriber.P256dh;
+                string auth = subscriber.Auth;
+                string payload = JsonConvert.SerializeObject(data);
 
                 var subscription = new PushSubscription(endpoint, p256dh, auth);
                 var options = new Dictionary<string, object>()

@@ -39,14 +39,14 @@ public class BatchImagesImportController : AbstractResultController
         return CreateTask(() =>
         {
             using var db = dbFactory.CreateDbContext();
-            var importResults = new List<MatterImportResult>();
+            List<MatterImportResult> importResults = [];
 
             Matter[] matters = db.Matters.Where(m => m.Nature == Nature.Image).ToArray();
             var matterRepository = new MatterRepository(db, cache);
 
             for (int i = 0; i < files.Count; i++)
             {
-                var file = files[i];
+                IFormFile file = files[i];
                 string sequenceName = file.FileName.Substring(0, file.FileName.LastIndexOf('.'));
 
                 var importResult = new MatterImportResult()
@@ -68,7 +68,7 @@ public class BatchImagesImportController : AbstractResultController
                     }
 
                     using Stream sequenceStream = fileStreams[i];
-                    var fileBytes = new byte[sequenceStream.Length];
+                    byte[] fileBytes = new byte[sequenceStream.Length];
                     sequenceStream.Read(fileBytes, 0, (int)sequenceStream.Length);
 
                     var matter = new Matter

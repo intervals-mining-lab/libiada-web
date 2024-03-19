@@ -103,7 +103,7 @@ public class CustomSequenceCalculationController : AbstractResultController
         return CreateTask(() =>
             {
                 int sequencesCount = localFile ? files.Count : customSequences.Length;
-                var sequencesNames = new string[sequencesCount];
+                string[] sequencesNames = new string[sequencesCount];
                 var sequences = new Chain[sequencesCount];
                 if (localFile)
                 {
@@ -126,9 +126,9 @@ public class CustomSequenceCalculationController : AbstractResultController
                                 break;
                             case "image":
                                 var image = Image.Load<Rgba32>(fileStreams[i]);
-                                var sequence = ImageProcessor.ProcessImage(image, new IImageTransformer[0], new IMatrixTransformer[0], new LineOrderExtractor());
+                                BaseChain sequence = ImageProcessor.ProcessImage(image, [], [], new LineOrderExtractor());
                                 var alphabet = new Alphabet { NullValue.Instance() };
-                                var incompleteAlphabet = sequence.Alphabet;
+                                Alphabet incompleteAlphabet = sequence.Alphabet;
                                 for (int j = 0; j < incompleteAlphabet.Cardinality; j++)
                                 {
                                     alphabet.Add(incompleteAlphabet[j]);
@@ -138,7 +138,7 @@ public class CustomSequenceCalculationController : AbstractResultController
                                 break;
                             case "genetic":
                                 ISequence fastaSequence = NcbiHelper.GetFastaSequence(fileStreams[i]);
-                                var stringSequence = fastaSequence.ConvertToString();
+                                string stringSequence = fastaSequence.ConvertToString();
                                 sequences[i] = new Chain(stringSequence);
                                 sequencesNames[i] = fastaSequence.ID;
                                 break;
@@ -167,7 +167,7 @@ public class CustomSequenceCalculationController : AbstractResultController
                                 int dataID = reader.ReadInt32();
                                 int dataSize = reader.ReadInt32();
                                 byte[] byteArray = reader.ReadBytes(dataSize);
-                                var shortArray = new short[byteArray.Length / 2];
+                                short[] shortArray = new short[byteArray.Length / 2];
                                 Buffer.BlockCopy(byteArray, 0, shortArray, 0, byteArray.Length);
                                 //shortArray = Amplitude(shortArray, 20);
                                 shortArray = Sampling(shortArray, 50);
@@ -188,9 +188,9 @@ public class CustomSequenceCalculationController : AbstractResultController
                     }
                 }
 
-                var calculator = new CustomSequencesCharacterisitcsCalculator(characteristicTypeLinkRepository, characteristicLinkIds);
+                CustomSequencesCharacterisitcsCalculator calculator = new(characteristicTypeLinkRepository, characteristicLinkIds);
                 var characteristics = calculator.Calculate(sequences).ToList();
-                var sequencesCharacteristics = new List<SequenceCharacteristics>();
+                List<SequenceCharacteristics> sequencesCharacteristics = [];
                 for (int i = 0; i < sequences.Length; i++)
                 {
                     sequencesCharacteristics.Add(new SequenceCharacteristics
@@ -200,7 +200,7 @@ public class CustomSequenceCalculationController : AbstractResultController
                     });
                 }
 
-                var characteristicNames = new string[characteristicLinkIds.Length];
+                string[] characteristicNames = new string[characteristicLinkIds.Length];
                 var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
                 for (int k = 0; k < characteristicLinkIds.Length; k++)
                 {
@@ -250,7 +250,7 @@ public class CustomSequenceCalculationController : AbstractResultController
         short[] result = new short[shortArray.Length];
         short min = shortArray.Min();
         short max = shortArray.Max();
-        var alphabet = new short[cardinality];
+        short[] alphabet = new short[cardinality];
         for (int i = 0; i < cardinality; i++)
         {
             alphabet[i] = (short)((max - min) * i / cardinality + min);

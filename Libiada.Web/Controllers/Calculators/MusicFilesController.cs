@@ -46,8 +46,8 @@ public class MusicFilesController : AbstractResultController
         var fileStreams = files.Select(Helpers.FileHelper.GetFileStream).ToList();
         return CreateTask(() =>
         {
-            var names = new string[files.Count];
-            var data = new object[files.Count];
+            string[] names = new string[files.Count];
+            object[] data = new object[files.Count];
 
             for (int i = 0; i < files.Count; i++)
             {

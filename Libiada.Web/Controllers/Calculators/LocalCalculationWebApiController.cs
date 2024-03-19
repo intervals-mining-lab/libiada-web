@@ -66,7 +66,7 @@ public class LocalCalculationWebApiController : ControllerBase
         using var db = dbFactory.CreateDbContext();
         using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
         var calculator = new LocalCharacteristicsCalculator(db, fullCharacteristicRepository, commonSequenceRepository);
-        var characteristics = calculator.GetSubsequenceCharacteristic(subsequenceId, characteristicLinkId, windowSize, step);
+        double[] characteristics = calculator.GetSubsequenceCharacteristic(subsequenceId, characteristicLinkId, windowSize, step);
 
         return JsonConvert.SerializeObject(characteristics);
     }
@@ -78,13 +78,13 @@ public class LocalCalculationWebApiController : ControllerBase
         DistanceCalculator distanceCalculator,
         Aggregator aggregator)
     {
-        var data = taskManager.GetTaskData(taskId);
+        string data = taskManager.GetTaskData(taskId);
 
         var characteristicsObject = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(data);
         var characteristics = characteristicsObject["characteristics"];
         LocalCharacteristicsData[] chars = characteristics.ToObject<LocalCharacteristicsData[]>();
 
-        var series = new double[chars.Length][];
+        double[][] series = new double[chars.Length][];
 
         for (int i = 0; i < chars.Length; i++)
         {
@@ -100,14 +100,14 @@ public class LocalCalculationWebApiController : ControllerBase
             calculatorsFactory.GetDistanceCalculator(distanceCalculator),
             aggregatorsFactory.GetAggregator(aggregator));
 
-        var result = new double[series.Length, series.Length];
+        double[,] result = new double[series.Length, series.Length];
 
         for (int i = 0; i < series.Length - 1; i++)
         {
-            var firstSeries = series[i];
+            double[] firstSeries = series[i];
             for (int j = i + 1; j < series.Length; j++)
             {
-                var secondSeries = series[j];
+                double[] secondSeries = series[j];
                 result[i,j] = comparer.GetDistance(firstSeries, secondSeries);
                 result[j,i] = result[i,j];
             }

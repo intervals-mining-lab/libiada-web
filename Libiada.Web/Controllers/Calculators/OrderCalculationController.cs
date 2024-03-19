@@ -75,12 +75,12 @@ public class OrderCalculationController : AbstractResultController
         return CreateTask(() =>
         {
             var orderGenerator = new OrderGenerator();
-            var orders = generateStrict ?
+            List<int[]> orders = generateStrict ?
                              orderGenerator.StrictGenerateOrders(length, alphabetCardinality) :
                              orderGenerator.GenerateOrders(length, alphabetCardinality);
 
-            var characteristics = new double[orders.Count][];
-            var sequencesCharacteristics = new List<SequenceCharacteristics>();
+            double[][] characteristics = new double[orders.Count][];
+            List<SequenceCharacteristics> sequencesCharacteristics = [];
             for (int i = 0; i < orders.Count; i++)
             {
                 sequencesCharacteristics.Add(new SequenceCharacteristics());
@@ -106,7 +106,7 @@ public class OrderCalculationController : AbstractResultController
                 };
             }
 
-            var characteristicNames = new string[characteristicLinkIds.Length];
+            string[] characteristicNames = new string[characteristicLinkIds.Length];
             var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
 
             for (int k = 0; k < characteristicLinkIds.Length; k++)
@@ -124,7 +124,7 @@ public class OrderCalculationController : AbstractResultController
                                                                                  double.IsNaN(v) ||
                                                                                  double.IsNegativeInfinity(v) ||
                                                                                  double.IsPositiveInfinity(v)));
-            var index = new int[characteristicsList.Length];
+            int[] index = new int[characteristicsList.Length];
             for (int i = 0; i < index.Length; i++)
             {
                 index[i] = i;

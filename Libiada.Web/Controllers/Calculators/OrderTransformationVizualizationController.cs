@@ -47,11 +47,14 @@ public class OrderTransformationVisualizationController : AbstractResultControll
     {
         return CreateTask(() =>
         {
-            var orderTransformer = new OrderTransformer();
+            OrderTransformer orderTransformer = new();
             orderTransformer.CalculateTransformations(length);
 
-            var transformationsSelectList = new List<SelectListItem> { new SelectListItem { Value = 0.ToString(), Text = "All" } };
-            transformationsSelectList.AddRange(Extensions.EnumExtensions.GetSelectList<OrderTransformation>());
+            List<SelectListItem> transformationsSelectList =
+            [
+                new() { Value = 0.ToString(), Text = "All" },
+                .. Extensions.EnumExtensions.GetSelectList<OrderTransformation>(),
+            ];
 
             var result = new Dictionary<string, object>
             {

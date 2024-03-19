@@ -59,7 +59,7 @@ public class SequenceMixerController : Controller
     /// <summary>
     /// The random generator.
     /// </summary>
-    private readonly Random randomGenerator = new Random();
+    private readonly Random randomGenerator = new();
     private readonly IViewDataHelper viewDataHelper;
     private readonly Cache cache;
 
@@ -137,26 +137,18 @@ public class SequenceMixerController : Controller
 
         using var db = dbFactory.CreateDbContext();
         Matter matter = cache.Matters.Single(m => m.Id == matterId);
-        long sequenceId;
-        switch (matter.Nature)
+        long sequenceId = matter.Nature switch
         {
-            case Nature.Literature:
-                sequenceId = db.LiteratureSequences.Single(l => l.MatterId == matterId
-                                                            && l.Notation == notation
-                                                            && l.Language == language
-                                                           && l.Translator == translator).Id;
-                break;
-            case Nature.Music:
-                sequenceId = db.MusicSequences.Single(m => m.MatterId == matterId
-                                                       && m.Notation == notation
-                                                       && m.PauseTreatment == pauseTreatment
-                                                       && m.SequentialTransfer == sequentialTransfer).Id;
-                break;
-            default:
-                sequenceId = db.CommonSequences.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
-                break;
-        }
-
+            Nature.Literature => db.LiteratureSequences.Single(l => l.MatterId == matterId
+                                                                        && l.Notation == notation
+                                                                        && l.Language == language
+                                                                       && l.Translator == translator).Id,
+            Nature.Music => db.MusicSequences.Single(m => m.MatterId == matterId
+                                                                   && m.Notation == notation
+                                                                   && m.PauseTreatment == pauseTreatment
+                                                                   && m.SequentialTransfer == sequentialTransfer).Id,
+            _ => db.CommonSequences.Single(c => c.MatterId == matterId && c.Notation == notation).Id,
+        };
         BaseChain chain = sequenceRepository.GetLibiadaBaseChain(sequenceId);
         for (int i = 0; i < scrambling; i++)
         {

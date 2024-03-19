@@ -119,7 +119,7 @@ public class OrderTransformationCharacteristicsDynamicVisualizationController : 
             for (int i = 0; i < matterIds.Length; i++)
             {
                 long matterId = matterIds[i];
-                long sequenceId = commonSequenceRepository.GetSequenceIds(new[] { matterId },
+                long sequenceId = commonSequenceRepository.GetSequenceIds([matterId],
                                                                           notation,
                                                                           language,
                                                                           translator,
@@ -133,7 +133,7 @@ public class OrderTransformationCharacteristicsDynamicVisualizationController : 
 
                 Chain sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
 
-                var characteristics = new double[transformationsSequence.Length * iterationsCount];
+                double[] characteristics = new double[transformationsSequence.Length * iterationsCount];
                 for (int j = 0; j < iterationsCount; j++)
                 {
                     for (int k = 0; k < transformationsSequence.Length; k++)

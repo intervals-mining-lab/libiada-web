@@ -76,9 +76,9 @@ public class SubsequencesCalculationController : AbstractResultController
             var sequencesData = new SequenceData[matterIds.Length];
             using var db = dbFactory.CreateDbContext();
             long[] parentSequenceIds;
-            var matterNames = new string[matterIds.Length];
-            var remoteIds = new string[matterIds.Length];
-            var subsequencesCharacteristicsNames = new string[characteristicLinkIds.Length];
+            string[] matterNames = new string[matterIds.Length];
+            string[] remoteIds = new string[matterIds.Length];
+            string[] subsequencesCharacteristicsNames = new string[characteristicLinkIds.Length];
             var subsequencesCharacteristicsList = new SelectListItem[characteristicLinkIds.Length];
 
             var parentSequences = db.DnaSequences.Include(s => s.Matter)
@@ -108,7 +108,7 @@ public class SubsequencesCalculationController : AbstractResultController
             var attributeValuesCache = new AttributeValueCacheManager(db);
             for (int i = 0; i < parentSequenceIds.Length; i++)
             {
-                var subsequencesData = subsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(characteristicLinkIds, features, parentSequenceIds[i]);
+                SubsequenceData[] subsequencesData = subsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(characteristicLinkIds, features, parentSequenceIds[i]);
 
                 attributeValuesCache.FillAttributeValues(subsequencesData);
 

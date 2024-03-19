@@ -119,38 +119,38 @@ public class SubsequencesSimilarityController : AbstractResultController
             long firstMatterId = matterIds[0];
             long firstParentSequenceId = db.CommonSequences.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
             SubsequenceData[] firstSequenceSubsequences = subsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
-                                                                new[] { characteristicLinkId },
+                                                                [characteristicLinkId],
                                                                 features,
                                                                 firstParentSequenceId);
             List<double> firstSequenceCharacteristics = firstSequenceSubsequences.Select(s => s.CharacteristicsValues[0]).ToList();
             Dictionary<long, AttributeValue[]> firstDbSubsequencesAttributes = sequenceAttributeRepository.GetAttributes(firstSequenceSubsequences.Select(s => s.Id));
-            var firstSequenceAttributes = new List<AttributeValue[]>();
+            List<AttributeValue[]> firstSequenceAttributes = [];
             foreach (SubsequenceData subsequence in firstSequenceSubsequences)
             {
                 firstDbSubsequencesAttributes.TryGetValue(subsequence.Id, out AttributeValue[] attributes);
-                attributes = attributes ?? new AttributeValue[0];
+                attributes ??= [];
                 firstSequenceAttributes.Add(attributes);
             }
 
             long secondMatterId = matterIds[1];
             long secondParentSequenceId = db.CommonSequences.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
             SubsequenceData[] secondSequenceSubsequences = subsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
-                                                                new[] { characteristicLinkId },
+                                                                [characteristicLinkId],
                                                                 features,
                                                                 secondParentSequenceId);
             List<double> secondSequenceCharacteristics = secondSequenceSubsequences.Select(s => s.CharacteristicsValues[0]).ToList();
             Dictionary<long, AttributeValue[]> secondDbSubsequencesAttributes = sequenceAttributeRepository.GetAttributes(secondSequenceSubsequences.Select(s => s.Id));
-            var secondSequenceAttributes = new List<AttributeValue[]>();
+            List<AttributeValue[]> secondSequenceAttributes = [];
             foreach (SubsequenceData subsequence in secondSequenceSubsequences)
             {
                 secondDbSubsequencesAttributes.TryGetValue(subsequence.Id, out AttributeValue[] attributes);
-                attributes = attributes ?? new AttributeValue[0];
+                attributes ??= [];
                 secondSequenceAttributes.Add(attributes);
             }
 
             double difference = double.Parse(maxDifference, CultureInfo.InvariantCulture);
 
-            var similarSubsequences = new List<(int, int)>();
+            List<(int, int)> similarSubsequences = [];
 
             for (int i = 0; i < firstSequenceCharacteristics.Count; i++)
             {
@@ -169,13 +169,13 @@ public class SubsequencesSimilarityController : AbstractResultController
                 }
             }
 
-            var characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
+            string characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
 
-            var similarity = similarSubsequences.Count * 200d / (firstSequenceSubsequences.Length + secondSequenceSubsequences.Length);
+            double similarity = similarSubsequences.Count * 200d / (firstSequenceSubsequences.Length + secondSequenceSubsequences.Length);
 
-            var firstSequenceSimilarity = similarSubsequences.Count * 100d / firstSequenceSubsequences.Length;
+            double firstSequenceSimilarity = similarSubsequences.Count * 100d / firstSequenceSubsequences.Length;
 
-            var secondSequenceSimilarity = similarSubsequences.Count * 100d / secondSequenceSubsequences.Length;
+            double secondSequenceSimilarity = similarSubsequences.Count * 100d / secondSequenceSubsequences.Length;
 
             var result = new Dictionary<string, object>
             {

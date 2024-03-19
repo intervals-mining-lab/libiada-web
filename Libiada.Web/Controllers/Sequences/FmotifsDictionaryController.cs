@@ -74,18 +74,18 @@ public class FmotifsDictionaryController : SequencesMattersController
 
         sortedFmotifs = sortedFmotifs.OrderByDescending(pair => pair.Value).ToDictionary(pair => pair.Key, pair => pair.Value);
 
-        var fmotifsChain = new List<Fmotif>();
+        List<Fmotif> fmotifsChain = [];
         foreach (var fmotif in sortedFmotifs.Keys)
         {
             var newFmotif = new Fmotif(fmotif.FmotifType, musicSequence.PauseTreatment, fmotif.Id);
 
-            var fmotifAlphabet = fmotif.Alphabet;
-            var fmotifOrder = fmotif.Order;
-            foreach (var position in fmotifOrder)
+            long[] fmotifAlphabet = fmotif.Alphabet;
+            int[] fmotifOrder = fmotif.Order;
+            foreach (int position in fmotifOrder)
             {
-                var dbNoteId = fmotifAlphabet[position - 1];
-                var dbNote = await db.Notes.Include(n => n.Pitches).SingleAsync(n => n.Id == dbNoteId);
-                var newPitches = new List<Pitch>();
+                long dbNoteId = fmotifAlphabet[position - 1];
+                Note dbNote = await db.Notes.Include(n => n.Pitches).SingleAsync(n => n.Id == dbNoteId);
+                List<Pitch> newPitches = [];
                 foreach (var pitch in dbNote.Pitches)
                 {
                     newPitches.Add(new Pitch(pitch.Midinumber));

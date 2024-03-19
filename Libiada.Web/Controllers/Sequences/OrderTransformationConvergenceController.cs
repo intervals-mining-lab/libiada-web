@@ -90,7 +90,7 @@ public class OrderTransformationConvergenceController : AbstractResultController
             var sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
             int loopIteration = -1;
             int lastIteration = -1;
-            var transformationsResult = new List<int[]>(iterationsCount + 1) { sequence.Order };
+            List<int[]> transformationsResult = new(iterationsCount + 1) { sequence.Order };
 
             for (int j = 0; j < iterationsCount; j++)
             {

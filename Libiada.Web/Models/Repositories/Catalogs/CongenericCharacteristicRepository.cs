@@ -60,7 +60,7 @@ public class CongenericCharacteristicRepository
             arrangementTypes = StaticCollections.UserAvailableArrangementTypes.ToArray();
         }
 
-        var result = new List<CharacteristicSelectListItem>(characteristics.Length);
+        List<CharacteristicSelectListItem> result = new(characteristics.Length);
 
         foreach (CongenericCharacteristic characteristic in characteristics)
         {

@@ -136,7 +136,7 @@ public class LocalCalculationController : AbstractResultController
     {
         return CreateTask(() =>
         {
-            var characteristicNames = new string[characteristicLinkIds.Length];
+            string[] characteristicNames = new string[characteristicLinkIds.Length];
             var partNames = new List<string>[matterIds.Length];
             var starts = new List<int>[matterIds.Length];
             var lengthes = new List<int>[matterIds.Length];
@@ -153,7 +153,7 @@ public class LocalCalculationController : AbstractResultController
                 long matterId = matterIds[k];
                 Nature nature = cache.Matters.Single(m => m.Id == matterId).Nature;
 
-                long sequenceId = commonSequenceRepository.GetSequenceIds(new[] { matterId },
+                long sequenceId = commonSequenceRepository.GetSequenceIds([matterId],
                                                                        notation,
                                                                        language,
                                                                        translator,
@@ -164,7 +164,7 @@ public class LocalCalculationController : AbstractResultController
                 chains[k] = commonSequenceRepository.GetLibiadaChain(sequenceId);
             }
 
-            for (var i = 0; i < characteristicLinkIds.Length; i++)
+            for (int i = 0; i < characteristicLinkIds.Length; i++)
             {
                 int characteristicLinkId = characteristicLinkIds[i];
                 FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
@@ -180,17 +180,17 @@ public class LocalCalculationController : AbstractResultController
 
                 CutRuleIterator iterator = cutRule.GetIterator();
 
-                var fragments = new List<Chain>();
-                partNames[i] = new List<string>();
-                starts[i] = new List<int>();
-                lengthes[i] = new List<int>();
+                List<Chain> fragments = [];
+                partNames[i] = [];
+                starts[i] = [];
+                lengthes[i] = [];
 
                 while (iterator.Next())
                 {
                     int start = iterator.GetStartPosition();
                     int end = iterator.GetEndPosition();
 
-                    var fragment = new List<IBaseObject>();
+                    List<IBaseObject> fragment = [];
                     for (int k = 0; start + k < end; k++)
                     {
                         fragment.Add(chains[i][start + k]);
@@ -206,7 +206,7 @@ public class LocalCalculationController : AbstractResultController
                 var fragmentsData = new FragmentData[fragments.Count];
                 for (int k = 0; k < fragments.Count; k++)
                 {
-                    var characteristics = new double[calculators.Length];
+                    double[] characteristics = new double[calculators.Length];
                     for (int j = 0; j < calculators.Length; j++)
                     {
                         characteristics[j] = calculators[j].Calculate(fragments[k], links[j]);
@@ -289,7 +289,7 @@ public class LocalCalculationController : AbstractResultController
     [NonAction]
     private double[][] CalculateDifference(double[][] characteristics)
     {
-        var result = new double[characteristics.Length - 1][];
+        double[][] result = new double[characteristics.Length - 1][];
 
         // cycle through fragments
         for (int i = 0; i < characteristics.Length - 1; i++)

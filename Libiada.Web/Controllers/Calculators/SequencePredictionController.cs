@@ -110,13 +110,13 @@ public class SequencePredictionController : AbstractResultController
             AverageRemoteness averageRemotenessCalc = new AverageRemoteness();
             double averageRemoteness = averageRemotenessCalc.Calculate(sequence, Link.Start);
             Alphabet alphabet = sequence.Alphabet;
-            var doubleAccuracy = double.Parse(accuracy, CultureInfo.InvariantCulture);
+            double doubleAccuracy = double.Parse(accuracy, CultureInfo.InvariantCulture);
 
             List<SequencePredictionData> sequencePredictionResult;
             Chain chain;
             (sequencePredictionResult, chain) = Predict(averageRemotenessCalc, sequence, initialLength, alphabet, averageRemoteness, doubleAccuracy);
 
-            var matching = FindPercentageOfMatching(sequence, chain, initialLength) * 100;
+            double matching = FindPercentageOfMatching(sequence, chain, initialLength) * 100;
 
 
             var result = new Dictionary<string, object>
@@ -204,7 +204,7 @@ public class SequencePredictionController : AbstractResultController
     [NonAction]
     private Chain Concat(Chain left, Chain right, int indexStart)
     {
-        var result = new List<IBaseObject>(indexStart + right.Length);
+        List<IBaseObject> result = new(indexStart + right.Length);
         result.AddRange(left.ToArray().SubArray(0, indexStart));
         result.AddRange(right.ToArray());
         return new Chain(result);
@@ -219,7 +219,7 @@ public class SequencePredictionController : AbstractResultController
         double averageRemoteness,
         double accuracy)
     {
-        var sequencePredictionResult = new List<SequencePredictionData>();
+        List<SequencePredictionData> sequencePredictionResult = [];
 
         int wordPositionStart = initialLength;
         Chain currentPredicion = null;
@@ -227,7 +227,7 @@ public class SequencePredictionController : AbstractResultController
         for (int i = initialLength; i < sequence.Length; i++)
         {
             currentPredicion = Copy(predicted, new Chain(i + 1));
-            Dictionary<double, ContenderValue> contenderValues = new Dictionary<double, ContenderValue>();
+            Dictionary<double, ContenderValue> contenderValues = [];
             bool isFound = false;
             foreach (IBaseObject element in alphabet)
             {

@@ -68,9 +68,9 @@ public class CustomSequenceSegmentationController : AbstractResultController
         {
             int sequencesCount = localFile ? files.Count : customSequences.Length;
 
-            var sequencesNames = new string[sequencesCount];
-            var sequences = new string[sequencesCount];
-            var results = new object[sequencesCount];
+            string[] sequencesNames = new string[sequencesCount];
+            string[] sequences = new string[sequencesCount];
+            object[] results = new object[sequencesCount];
 
             for (int i = 0; i < sequencesCount; i++)
             {

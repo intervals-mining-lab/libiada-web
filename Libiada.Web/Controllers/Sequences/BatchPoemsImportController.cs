@@ -44,7 +44,7 @@ public class BatchPoemsImportController : AbstractResultController
 
         return CreateTask(() =>
         {
-            var importResults = new List<MatterImportResult>();
+            List<MatterImportResult> importResults = [];
 
             Matter[] matters = cache.Matters.Where(m => m.Nature == Nature.Literature).ToArray();
 
@@ -67,7 +67,7 @@ public class BatchPoemsImportController : AbstractResultController
 
                     if (matters.Any(m => m.Name == sequenceName))
                     {
-                        var matter = matters.Single(m => m.Name == sequenceName);
+                        Matter matter = matters.Single(m => m.Name == sequenceName);
                         sequence.MatterId = matter.Id;
                         importResult.MatterName = matter.Name;
                         importResult.SequenceType = matter.SequenceType.GetDisplayValue();

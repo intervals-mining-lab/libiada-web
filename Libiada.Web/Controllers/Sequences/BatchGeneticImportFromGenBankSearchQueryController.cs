@@ -70,12 +70,12 @@ public class BatchGeneticImportFromGenBankSearchQueryController : AbstractResult
             }
             nuccoreObjects = ncbiHelper.ExecuteESummaryRequest(searchResults, importPartial);
             accessions = nuccoreObjects.Select(no => no.AccessionVersion.Split('.')[0]).Distinct().ToArray();
-            var importResults = new List<MatterImportResult>(accessions.Length);
+            List<MatterImportResult> importResults = new(accessions.Length);
             using var db = dbFactory.CreateDbContext();
             var matterRepository = new MatterRepository(db, cache);
             var dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
 
-            var (existingAccessions, accessionsToImport) = dnaSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
+            (string[] existingAccessions, string[] accessionsToImport) = dnaSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
 
             importResults.AddRange(existingAccessions.ConvertAll(existingAccession => new MatterImportResult
             {
@@ -111,7 +111,7 @@ public class BatchGeneticImportFromGenBankSearchQueryController : AbstractResult
                         RemoteDb = RemoteDb.GenBank,
                         RemoteId = metadata.Version.CompoundAccession
                     };
-                    bool partial = metadata.Definition.ToLower().Contains("partial");
+                    bool partial = metadata.Definition.Contains("partial", StringComparison.CurrentCultureIgnoreCase);
                     dnaSequenceRepository.Create(sequence, bioSequence, partial);
 
                     (importResult.Result, importResult.Status) = importGenes ?
@@ -144,7 +144,7 @@ public class BatchGeneticImportFromGenBankSearchQueryController : AbstractResult
 
             string[] names = importResults.Select(r => r.MatterName).ToArray();
 
-            // removing matters for which adding of sequence failed
+            // removing matters for which creation of sequence failed
             Matter[] orphanMatters = db.Matters
                                        .Include(m => m.Sequence)
                                        .Where(m => names.Contains(m.Name) && m.Sequence.Count == 0)
@@ -183,7 +183,7 @@ public class BatchGeneticImportFromGenBankSearchQueryController : AbstractResult
         {
             using var db = dbFactory.CreateDbContext();
             var subsequenceImporter = new SubsequenceImporter(db, metadata.Features.All, sequence.Id);
-            var (featuresCount, nonCodingCount) = subsequenceImporter.CreateSubsequences();
+            (int featuresCount, int nonCodingCount) = subsequenceImporter.CreateSubsequences();
 
             string result = $"Successfully imported sequence, {featuresCount} features "
                           + $"and {nonCodingCount} non-coding subsequences";

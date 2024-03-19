@@ -43,7 +43,7 @@ public abstract class AbstractResultController : Controller
         try
         {
             Task task = taskManager.GetTask(id);
-            var taskStatus = task.TaskData.TaskState;
+            TaskState taskStatus = task.TaskData.TaskState;
             if (taskStatus != TaskState.Completed && taskStatus != TaskState.Error)
             {
                 throw new Exception($"Task with id = {id} is not complete, current status is {taskStatus}");

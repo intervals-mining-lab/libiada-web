@@ -60,7 +60,7 @@ public class FullCharacteristicRepository
             arrangementTypes = StaticCollections.UserAvailableArrangementTypes.ToArray();
         }
 
-        var result = new List<CharacteristicSelectListItem>(characteristics.Length);
+        List<CharacteristicSelectListItem> result = new(characteristics.Length);
 
         foreach (FullCharacteristic characteristic in characteristics)
         {

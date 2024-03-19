@@ -116,7 +116,7 @@ public class EmailModel : PageModel
             var userId = await _userManager.GetUserIdAsync(user);
             var code = await _userManager.GenerateChangeEmailTokenAsync(user, Input.NewEmail);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            var callbackUrl = Url.Page(
+            string callbackUrl = Url.Page(
                 "/Account/ConfirmEmailChange",
                 pageHandler: null,
                 values: new { area = "Identity", userId = userId, email = Input.NewEmail, code = code },
@@ -152,7 +152,7 @@ public class EmailModel : PageModel
         var email = await _userManager.GetEmailAsync(user);
         var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-        var callbackUrl = Url.Page(
+        string callbackUrl = Url.Page(
             "/Account/ConfirmEmail",
             pageHandler: null,
             values: new { area = "Identity", userId = userId, code = code },

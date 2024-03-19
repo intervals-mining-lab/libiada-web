@@ -79,11 +79,11 @@ public class SequencesOrderDistributionController : AbstractResultController
                     break;
                 default: throw new ArgumentException("Invalid type of generate");
             }
-            var sequences = sequenceGenerator.GenerateSequences(length, alphabetCardinality);
+            List<BaseChain> sequences = sequenceGenerator.GenerateSequences(length, alphabetCardinality);
             var SequecesOrdersDistribution = new Dictionary<int[], List<BaseChain>>(new OrderEqualityComparer());
             foreach (int[] order in orders)
             {
-                SequecesOrdersDistribution.Add(order, new List<BaseChain>());
+                SequecesOrdersDistribution.Add(order, []);
             }
 
             foreach (BaseChain sequence in sequences)

@@ -120,7 +120,7 @@ public class SubsequencesComparerController : AbstractResultController
             var characteristics = new SubsequenceData[matterIds.Length][];
 
             long[] parentSequenceIds;
-            var matterNames = new string[matterIds.Length];
+            string[] matterNames = new string[matterIds.Length];
 
             int mattersCount = matterIds.Length;
             Dictionary<string, object> characteristicsTypesData;
@@ -176,10 +176,10 @@ public class SubsequencesComparerController : AbstractResultController
                     }
                     else
                     {
-                        matterAndSubsequenceIdsList = new List<(int matterIndex, int subsequenceIndex, double[] additionalCharacterisctics)> 
-                        { 
+                        matterAndSubsequenceIdsList =
+                        [
                             (matterIndex: i, subsequenceIndex: j, additionalCharacterisctics: subsequencesData[j].CharacteristicsValues.Skip(1).ToArray()) 
-                        }; // добавить в кортеж все характеристики кроме 0
+                        ]; // добавить в кортеж все характеристики кроме 0
                         characteristicValueSubsequences.Add(value, matterAndSubsequenceIdsList);
                     }
                 }
@@ -250,15 +250,15 @@ public class SubsequencesComparerController : AbstractResultController
         var localCharacteristicsCalculator = new LocalCharacteristicsCalculator(db, fullCharacteristicRepository, commonSequenceRepository);
 
         var cache = new Dictionary<(int matterIndex, int subsequenceIndex), double[]>();
-        var result = new List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)>();
+        List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> result = [];
 
         var alignersFactory = new AlignersFactory();
         var calculatorsFactory = new DistanceCalculatorsFactory();
         var aggregatorsFactory = new AggregatorsFactory();
 
-        var aligner = alignersFactory.GetAligner(Aligner.AllOffsetsAligner);
-        var distanceCalculator = calculatorsFactory.GetDistanceCalculator(DistanceCalculator.EuclideanDistanceBetweenOneDimensionalPointsCalculator);
-        var aggregator = aggregatorsFactory.GetAggregator(Aggregator.Average);
+        ITimeSeriesAligner aligner = alignersFactory.GetAligner(Aligner.AllOffsetsAligner);
+        IOneDimensionalPointsDistance distanceCalculator = calculatorsFactory.GetDistanceCalculator(DistanceCalculator.EuclideanDistanceBetweenOneDimensionalPointsCalculator);
+        IDistancesAggregator aggregator = aggregatorsFactory.GetAggregator(Aggregator.Average);
 
         var timeSeriesComparer = new OneDimensionalTimeSeriesComparer(aligner, distanceCalculator, aggregator);
 
@@ -280,7 +280,7 @@ public class SubsequencesComparerController : AbstractResultController
                 //TODO: get rid of hardcoded parameters
             }
 
-            var distance = timeSeriesComparer.GetDistance(firstLocalCharacteristics, secondLocalCharacteristics);
+            double distance = timeSeriesComparer.GetDistance(firstLocalCharacteristics, secondLocalCharacteristics);
             if (distance <= 1.5)
             {
                 result.Add((similarPair.firstSequence, similarPair.secondSequence, distance));
@@ -341,7 +341,7 @@ public class SubsequencesComparerController : AbstractResultController
         SubsequenceData[][] characteristics,
         int mattersCount)
     {
-        var similarities = new object[mattersCount, mattersCount];
+        object[,] similarities = new object[mattersCount, mattersCount];
         for (int i = 0; i < mattersCount; i++)
         {
             for (int j = 0; j < mattersCount; j++)
@@ -439,7 +439,7 @@ public class SubsequencesComparerController : AbstractResultController
         Dictionary<double, List<(int matterId, int subsequenceIndex, double[] additionalCharacteristics /*все кроме 1*/)>> characteristicValueSubsequences,
         double[] percentageDifferences)
     {
-        var similarPairs = new List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)>(characteristicValueSubsequences.Count);
+        List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> similarPairs = new(characteristicValueSubsequences.Count);
         
         foreach (double key in characteristicValueSubsequences.Keys)
         {
@@ -498,7 +498,7 @@ public class SubsequencesComparerController : AbstractResultController
     private List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> ExtractAllPossiblePairs(
         List<(int matterIndex, int subsequenceIndex, double[] additionalCharacteristics)> list, double[] differences) // добавить доп характеристики + массив dif
     {
-        var result = new List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)>();
+        List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> result = [];
         if (list.Count < 2)
         {
             return result;
@@ -508,11 +508,11 @@ public class SubsequencesComparerController : AbstractResultController
         {
             for (int j = i + 1; j < list.Count; j++)
             {
-                var areSimilar = true;
+                bool areSimilar = true;
                 // Не понял
                 for (int k = 0; k < differences.Length - 1; k++)
                 {
-                    var difference = CalculateAverageDifference(list[i].additionalCharacteristics[k], list[j].additionalCharacteristics[k]);
+                    double difference = CalculateAverageDifference(list[i].additionalCharacteristics[k], list[j].additionalCharacteristics[k]);
                     if (difference > differences[k + 1])
                     {
                         areSimilar = false;
@@ -553,7 +553,7 @@ public class SubsequencesComparerController : AbstractResultController
         double primaryDifference
     )
     {
-        var result = new List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)>();
+        List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> result = [];
 
 
         foreach (var firstElement in firstList)
@@ -562,11 +562,11 @@ public class SubsequencesComparerController : AbstractResultController
             {
                 //result.Add((firstElement, secondElement, differences)); // аналогично
 
-                var areSimilar = true;
+                bool areSimilar = true;
                 // Не понял
                 for (int k = 0; k < differences.Length - 1; k++)
                 {
-                    var difference = CalculateAverageDifference(firstElement.additionalCharacteristics[k], secondElement.additionalCharacteristics[k]);
+                    double difference = CalculateAverageDifference(firstElement.additionalCharacteristics[k], secondElement.additionalCharacteristics[k]);
                     if (difference > differences[k + 1])
                     {
                         areSimilar = false;
@@ -605,7 +605,7 @@ public class SubsequencesComparerController : AbstractResultController
         {
             for (int j = 0; j < mattersCount; j++)
             {
-                similarityMatrix[i, j] = new List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>();
+                similarityMatrix[i, j] = [];
             }
         }
 

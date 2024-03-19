@@ -72,7 +72,7 @@ public class BatchSequenceImportController : AbstractResultController
         return CreateTask(() =>
         {
             accessions = accessions.Distinct().Select(a => a.Split('.')[0]).ToArray();
-            var importResults = new List<MatterImportResult>(accessions.Length);
+            List<MatterImportResult> importResults = new(accessions.Length);
             string[] accessionsToImport;
 
             var dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
@@ -192,7 +192,7 @@ public class BatchSequenceImportController : AbstractResultController
         {
             using var db = dbFactory.CreateDbContext();
             var subsequenceImporter = new SubsequenceImporter(db, metadata.Features.All, sequence.Id);
-            var (featuresCount, nonCodingCount) = subsequenceImporter.CreateSubsequences();
+            (int featuresCount, int nonCodingCount) = subsequenceImporter.CreateSubsequences();
 
             string result = $"Successfully imported sequence, {featuresCount} features "
                           + $"and {nonCodingCount} non-coding subsequences";

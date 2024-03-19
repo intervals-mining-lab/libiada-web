@@ -74,7 +74,7 @@ public class MultisequenceController : Controller
                                .ToDictionary(m => m.Id, m => m);
         for (int i = 0; i < matterIds.Length; i++)
         {
-            var matter = matters[matterIds[i]];
+            Matter matter = matters[matterIds[i]];
             matter.MultisequenceId = multisequence.Id;
             matter.MultisequenceNumber = multisequenceNumbers[i];
             db.Entry(matter).State = EntityState.Modified;
@@ -153,10 +153,10 @@ public class MultisequenceController : Controller
         {
             db.Entry(multisequence).State = EntityState.Modified;
 
-            var mattersToRemove = db.Matters.Where(m => m.MultisequenceId == multisequence.Id && !matterIds.Contains(m.Id)).ToArray();
+            Matter[] mattersToRemove = db.Matters.Where(m => m.MultisequenceId == multisequence.Id && !matterIds.Contains(m.Id)).ToArray();
             for (int i = 0; i < mattersToRemove.Length; i++)
             {
-                var matter = mattersToRemove[i];
+                Matter matter = mattersToRemove[i];
                 matter.MultisequenceId = null;
                 matter.MultisequenceNumber = null;
                 db.Entry(matter).State = EntityState.Modified;
@@ -165,7 +165,7 @@ public class MultisequenceController : Controller
             var mattersToAddOrUpdate = db.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m);
             for (int i = 0; i < matterIds.Length; i++)
             {
-                var matter = mattersToAddOrUpdate[matterIds[i]];
+                Matter matter = mattersToAddOrUpdate[matterIds[i]];
                 matter.MultisequenceId = multisequence.Id;
                 matter.MultisequenceNumber = multisequenceNumbers[i];
                 db.Entry(matter).State = EntityState.Modified;
@@ -206,7 +206,7 @@ public class MultisequenceController : Controller
             return BadRequest();
         }
 
-        Multisequence multisequence = await db.Multisequences.Include(m => m.Matters).SingleOrDefaultAsync(m => m.Id == id);
+        Multisequence? multisequence = await db.Multisequences.Include(m => m.Matters).SingleOrDefaultAsync(m => m.Id == id);
         if (multisequence == null)
         {
             return NotFound();
@@ -230,8 +230,8 @@ public class MultisequenceController : Controller
     public async Task<ActionResult> DeleteConfirmed(long id)
     {
         Multisequence multisequence = await db.Multisequences.Include(m => m.Matters).SingleAsync(m => m.Id == id);
-        var matters = multisequence.Matters.ToArray();
-        foreach (var matter in matters)
+        Matter[] matters = multisequence.Matters.ToArray();
+        foreach (Matter matter in matters)
         {
             matter.MultisequenceId = null;
             matter.MultisequenceNumber = null;
@@ -257,21 +257,21 @@ public class MultisequenceController : Controller
     private Dictionary<string, long[]> SplitMattersIntoReferenceAnsNotReference(Matter[] matters)
     {
         matters = matters.Where(m => m.Nature == Nature.Genetic && MultisequenceRepository.SequenceTypesFilter.Contains(m.SequenceType)).ToArray();
-        var matterNameSpliters = new[] { "|", "chromosome", "plasmid", "segment" };
+        string[] matterNameSpliters = ["|", "chromosome", "plasmid", "segment"];
         var mattersNames = matters.Select(m => (m.Id, m.Name.Split(matterNameSpliters, StringSplitOptions.RemoveEmptyEntries)[0].Trim())).ToArray();
-        var accessions = new string[matters.Length];
-        var referenceArray = new List<(long, string)>(matters.Length / 2);
-        var notReferenceArray = new List<(long, string)>(matters.Length / 2);
+        string[] accessions = new string[matters.Length];
+        List<(long, string)> referenceArray = new(matters.Length / 2);
+        List<(long, string)> notReferenceArray = new(matters.Length / 2);
         for (int i = 0; i < matters.Length; i++)
         {
             Matter matter = matters[i];
-            if (matter.Name.IndexOf('|') == -1)
+            if (!matter.Name.Contains('|'))
             {
                 throw new Exception();
             }
 
             accessions[i] = matter.Name.Split('|').Last().Trim();
-            if (accessions[i].IndexOf('_') != -1)
+            if (accessions[i].Contains('_'))
             {
                 referenceArray.Add(mattersNames[i]);
             }
@@ -321,7 +321,7 @@ public class MultisequenceController : Controller
                                         .ToArray() }
             };
 
-        var data = JsonConvert.SerializeObject(groupingResult);
+        string data = JsonConvert.SerializeObject(groupingResult);
 
         return data;
     }
@@ -339,7 +339,7 @@ public class MultisequenceController : Controller
     [HttpPost]
     public ActionResult GroupMattersIntoMultisequences(Dictionary<string, long[]> multisequenceMatters)
     {
-        var multisequencesNames = multisequenceMatters.Keys.ToArray();
+        string[] multisequencesNames = multisequenceMatters.Keys.ToArray();
         Multisequence[] multisequences = new Multisequence[multisequencesNames.Length];
 
         for (int i = 0; i < multisequencesNames.Length; i++)
@@ -359,8 +359,8 @@ public class MultisequenceController : Controller
         {
             try
             {
-                var matterIds = multisequenceMatters[multisequence.Name];
-                foreach (var matterId in matterIds)
+                long[] matterIds = multisequenceMatters[multisequence.Name];
+                foreach (long matterId in matterIds)
                 {
                     db.Entry(matters[matterId]).State = EntityState.Modified;
                     matters[matterId].MultisequenceId = multisequence.Id;

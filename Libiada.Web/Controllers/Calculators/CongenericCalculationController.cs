@@ -158,7 +158,7 @@ public class CongenericCalculationController : AbstractResultController
             int characteristicsCount = unitedAlphabet.Length * characteristicLinkIds.Length;
             for (int i = 0; i < matterIds.Length; i++)
             {
-                var characteristicsValues = new double[characteristicsCount];
+                double[] characteristicsValues = new double[characteristicsCount];
 
                 for(int j = 0; j < unitedAlphabet.Length; j++)
                 {
@@ -176,7 +176,7 @@ public class CongenericCalculationController : AbstractResultController
                 };
             }
 
-            var characteristicNames = new string[characteristicsCount];
+            string[] characteristicNames = new string[characteristicsCount];
             var characteristicsList = new SelectListItem[characteristicsCount];
             for (int j = 0; j < unitedAlphabet.Length; j++)
             {
@@ -195,13 +195,13 @@ public class CongenericCalculationController : AbstractResultController
                 }
             }
 
-            var theoreticalRanks = new List<List<List<double>>>();
+            List<List<List<double>>> theoreticalRanks = [];
 
             // cycle through matters; first level of characteristics array
             for (int w = 0; w < matterIds.Length; w++)
             {
                 long matterId = matterIds[w];
-                theoreticalRanks.Add(new List<List<double>>());
+                theoreticalRanks.Add([]);
 
                 // cycle through characteristics and notations; second level of characteristics array
                 for (int i = 0; i < characteristicLinkIds.Length; i++)
@@ -212,7 +212,7 @@ public class CongenericCalculationController : AbstractResultController
                     if (cache.Matters.Single(m => m.Id == matterId).Nature == Nature.Literature)
                     {
                         Language language = languages[i];
-                        Translator? translator = translators[i];
+                        Translator translator = translators[i];
 
                         sequenceId = db.LiteratureSequences.Single(l => l.MatterId == matterId
                                                                   && l.Notation == notation
@@ -229,16 +229,16 @@ public class CongenericCalculationController : AbstractResultController
                     // theoretical frequencies of orlov criterion
                     if (theoretical)
                     {
-                        theoreticalRanks[w].Add(new List<double>());
+                        theoreticalRanks[w].Add([]);
                         ICongenericCalculator countCalculator = CongenericCalculatorsFactory.CreateCalculator(CongenericCharacteristic.ElementsCount);
-                        var counts = new List<int>();
+                        List<int> counts = [];
                         for (int f = 0; f < chain.Alphabet.Cardinality; f++)
                         {
                             counts.Add((int)countCalculator.Calculate(chain.CongenericChain(f), Link.NotApplied));
                         }
 
                         ICongenericCalculator frequencyCalculator = CongenericCalculatorsFactory.CreateCalculator(CongenericCharacteristic.Probability);
-                        var frequency = new List<double>();
+                        List<double> frequency = [];
                         for (int f = 0; f < chain.Alphabet.Cardinality; f++)
                         {
                             frequency.Add(frequencyCalculator.Calculate(chain.CongenericChain(f), Link.NotApplied));

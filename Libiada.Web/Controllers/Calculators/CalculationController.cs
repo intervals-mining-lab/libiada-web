@@ -149,7 +149,7 @@ public class CalculationController : AbstractResultController
                 };
             }
 
-            var characteristicNames = new string[characteristicLinkIds.Length];
+            string[] characteristicNames = new string[characteristicLinkIds.Length];
             var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
             for (int k = 0; k < characteristicLinkIds.Length; k++)
             {

@@ -142,7 +142,7 @@ public class OrderTransformationCalculationController : AbstractResultController
             for (int i = 0; i < matterIds.Length; i++)
             {
                 long matterId = matterIds[i];
-                var characteristics = new double[characteristicLinkIds.Length];
+                double[] characteristics = new double[characteristicLinkIds.Length];
                 for (int j = 0; j < characteristicLinkIds.Length; j++)
                 {
                     Notation notation = notations[j];
@@ -173,7 +173,7 @@ public class OrderTransformationCalculationController : AbstractResultController
                 };
             }
 
-            var characteristicNames = new string[characteristicLinkIds.Length];
+            string[] characteristicNames = new string[characteristicLinkIds.Length];
             var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
             for (int k = 0; k < characteristicLinkIds.Length; k++)
             {

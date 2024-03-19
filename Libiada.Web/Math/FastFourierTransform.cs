@@ -18,8 +18,8 @@ public static class FastFourierTransform
     /// </returns>
     public static double[][] CalculateFastFourierTransform(double[][] characteristics)
     {
-        var powerOfTwo = PowerOfTwoCeiling(characteristics.Length);
-        var result = new double[powerOfTwo][];
+        int powerOfTwo = PowerOfTwoCeiling(characteristics.Length);
+        double[][] result = new double[powerOfTwo][];
         for (int j = 0; j < powerOfTwo; j++)
         {
             result[j] = new double[characteristics[0].Length];

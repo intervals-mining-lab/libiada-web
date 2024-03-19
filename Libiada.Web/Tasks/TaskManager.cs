@@ -105,7 +105,7 @@ public class TaskManager : ITaskManager
     public IEnumerable<TaskData> DeleteAllTasks()
     {
         List<Task> tasksToDelete = GetUserTasks();
-        var result = new List<TaskData>(tasksToDelete.Count);
+        List<TaskData> result = new(tasksToDelete.Count);
         for (int i = tasksToDelete.Count - 1; i >= 0; i--)
         {
             result.Add(DeleteTask(tasksToDelete[i].TaskData.Id));
@@ -123,7 +123,9 @@ public class TaskManager : ITaskManager
     public IEnumerable<TaskData> DeleteTasksWithState(TaskState taskState)
     {
         List<Task> tasksToDelete = GetUserTasksWithState(taskState);
-        var result = new List<TaskData>(tasksToDelete.Count);
+
+        List<TaskData> result = new(tasksToDelete.Count);
+
         for (int i = tasksToDelete.Count - 1; i >= 0; i--)
         {
             result.Add(DeleteTask(tasksToDelete[i].TaskData.Id));
@@ -230,7 +232,7 @@ public class TaskManager : ITaskManager
     public string GetTaskData(long id, string key = "data")
     {
         Task task = GetTask(id);
-        var taskStatus = task.TaskData.TaskState;
+        TaskState taskStatus = task.TaskData.TaskState;
         if (taskStatus != TaskState.Completed && taskStatus != TaskState.Error)
         {
             throw new Exception("Task state is not 'complete'");
@@ -253,7 +255,7 @@ public class TaskManager : ITaskManager
             ClaimsPrincipal user = httpContextAccessor.GetCurrentUser();
             if (!user.IsAdmin())
             {
-                var userId = user.GetUserId();
+                int userId = user.GetUserId();
                 result = result.Where(t => t.TaskData.UserId == userId).ToList();
             }
 
@@ -414,7 +416,7 @@ public class TaskManager : ITaskManager
             TaskAwaiter taskAwaiter;
             lock (task)
             {
-                var taskData = task.TaskData;
+                TaskData taskData = task.TaskData;
                 taskData.Completed = DateTimeOffset.UtcNow;
                 taskData.ExecutionTime = taskData.Completed - taskData.Started;
                 taskData.TaskState = TaskState.Error;

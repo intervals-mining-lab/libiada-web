@@ -8,7 +8,7 @@ using Libiada.Core.Extensions;
 
 using Libiada.Database.Models.CalculatorsData;
 
-using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
+using EnumExtensions = Core.Extensions.EnumExtensions;
 
 public class OrderTransformer
 {
@@ -58,11 +58,11 @@ public class OrderTransformer
     {
         OrderTransformation[] transformationTypes = EnumExtensions.ToArray<OrderTransformation>();
         bool completed = false;
-        var ordersForChecking = new List<int> { id };
-        var checkedOrders = new List<int> { id };
+        List<int> ordersForChecking = [id];
+        List<int> checkedOrders = [id];
         while (!completed)
         {
-            var newOrders = new List<int>();
+            List<int> newOrders = [];
             foreach (int order in ordersForChecking)
             {
                 for (int i = 0; i < transformationTypes.Length; i++)

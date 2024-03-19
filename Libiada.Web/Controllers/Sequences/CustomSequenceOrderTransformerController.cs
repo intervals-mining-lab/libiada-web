@@ -82,9 +82,9 @@ public class CustomSequenceOrderTransformerController : AbstractResultController
         return CreateTask(() =>
         {
             int sequencesCount = localFile ? files.Count : customSequences.Length;
-            var sourceSequences = new string[sequencesCount];
+            string[] sourceSequences = new string[sequencesCount];
             var sequences = new Chain[sequencesCount];
-            var names = new string[sequencesCount];
+            string[] names = new string[sequencesCount];
 
             for (int i = 0; i < sequencesCount; i++)
             {

@@ -75,7 +75,7 @@ public class SequenceCheckController : AbstractResultController
             }
 
             // Initialize the stream.
-            using var fileStream = Helpers.FileHelper.GetFileStream(file);
+            using Stream fileStream = Helpers.FileHelper.GetFileStream(file);
             byte[] input = new byte[fileStream.Length];
             // Read the file into the byte array.
             fileStream.Read(input, 0, (int)fileStream.Length);

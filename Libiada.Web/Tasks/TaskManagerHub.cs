@@ -135,7 +135,7 @@ public class TaskManagerHub : Hub<ITaskManagerClient>
     {
         try
         {
-            var taskData = taskManager.DeleteTask(id);
+            TaskData taskData = taskManager.DeleteTask(id);
             await Send(TaskEvent.DeleteTask, taskData);
         }
         catch (Exception e)

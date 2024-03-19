@@ -16,16 +16,16 @@ public static class AutoCorrelation
     /// </returns>
     public static double[][] CalculateAutocorrelation(double[][] characteristics)
     {
-        var transposedResult = new double[characteristics[0].Length][];
+        double[][] transposedResult = new double[characteristics[0].Length][];
 
         // cycle through all characteristics
         for (int i = 0; i < characteristics[0].Length; i++)
         {
-            var currentCharacteristic = characteristics.Select(c => c[i]).ToArray();
+            double[] currentCharacteristic = characteristics.Select(c => c[i]).ToArray();
             transposedResult[i] = CalculateAutocorrelation(currentCharacteristic);
         }
 
-        var result = new double[transposedResult[0].Length][];
+        double[][] result = new double[transposedResult[0].Length][];
         for (int i = 0; i < transposedResult.Length; i++)
         {
             result[i] = transposedResult.Select(r => r[i]).ToArray();
@@ -166,9 +166,9 @@ public static class AutoCorrelation
     public static double[] GetAutoCorrelationOfSeries(double[] x)
     {
         int half = x.Length / 2;
-        var autoCorrelation = new double[half];
-        var a = new double[half];
-        var b = new double[half];
+        double[] autoCorrelation = new double[half];
+        double[] a = new double[half];
+        double[] b = new double[half];
         for (int i = 0; i < half; i++)
         {
             a[i] = x[i];

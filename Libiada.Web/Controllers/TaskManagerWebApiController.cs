@@ -84,7 +84,7 @@ public class TaskManagerWebApiController : ControllerBase
     {
         try
         {
-            var taskData = GetTaskData(taskId, filtered ? "filteredSimilarityMatrix" : "similarityMatrix");
+            string taskData = GetTaskData(taskId, filtered ? "filteredSimilarityMatrix" : "similarityMatrix");
 
             var similarityMatrix = JsonConvert.DeserializeObject<List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>[,]>(taskData);
 

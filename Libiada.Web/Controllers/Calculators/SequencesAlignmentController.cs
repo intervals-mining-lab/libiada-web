@@ -155,7 +155,7 @@ public class SequencesAlignmentController : AbstractResultController
             }
 
             var distanceCalculator = GetDistanceCalculator(validationType);
-            var distances = new List<double>();
+            List<double> distances = [];
             int optimalRotation = CalculateMeasureForRotation(longer, shorter, distances, distanceCalculator);
 
             string characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
@@ -192,19 +192,14 @@ public class SequencesAlignmentController : AbstractResultController
     [NonAction]
     private Func<double, double, double> GetDistanceCalculator(string validationType)
     {
-        switch (validationType)
+        return validationType switch
         {
-            case "Similarity":
-                return (first, second) => System.Math.Abs(System.Math.Min(first, second));
-            case "Difference":
-                return (first, second) => -System.Math.Abs(first - second);
-            case "NormalizedDifference":
-                return (first, second) => -System.Math.Abs((first - second) / (first + second));
-            case "Equality":
-                return (first, second) => System.Math.Abs(first - second) < (System.Math.Abs(first + second) / 20) ? 1 : 0;
-            default:
-                throw new ArgumentException("unknown validation type", nameof(validationType));
-        }
+            "Similarity" => (first, second) => System.Math.Abs(System.Math.Min(first, second)),
+            "Difference" => (first, second) => -System.Math.Abs(first - second),
+            "NormalizedDifference" => (first, second) => -System.Math.Abs((first - second) / (first + second)),
+            "Equality" => (first, second) => System.Math.Abs(first - second) < (System.Math.Abs(first + second) / 20) ? 1 : 0,
+            _ => throw new ArgumentException("unknown validation type", nameof(validationType)),
+        };
     }
 
     /// <summary>
@@ -232,7 +227,7 @@ public class SequencesAlignmentController : AbstractResultController
         double maximumEquality = 0;
         for (int i = 0; i < first.Count; i++)
         {
-            var distance = Measure(first, second, measure);
+            double distance = Measure(first, second, measure);
             if (maximumEquality < distance)
             {
                 optimalRotation = i;
@@ -259,7 +254,7 @@ public class SequencesAlignmentController : AbstractResultController
     [NonAction]
     private List<double> Rotate(List<double> list)
     {
-        var first = list[0];
+        double first = list[0];
         list.RemoveAt(0);
         list.Add(first);
         return list;

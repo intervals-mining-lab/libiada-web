@@ -77,7 +77,7 @@ public class NcbiNuccoreSearchController : AbstractResultController
                 accessions = searchResults.Select(no => no.AccessionVersion.Split('.')[0]).Distinct().ToArray();
             }
 
-            var results = new List<MatterImportResult>(accessions.Length);
+            List<MatterImportResult> results = new(accessions.Length);
 
             string[] existingAccessions;
 
@@ -88,7 +88,7 @@ public class NcbiNuccoreSearchController : AbstractResultController
             searchResults = searchResults
                                 .Where(sr => !existingAccessions.Contains(sr.AccessionVersion.Split('.')[0]))
                                 .ToList();
-            foreach (var searchResult in searchResults)
+            foreach (NuccoreObject searchResult in searchResults)
             {
                 results.Add(new MatterImportResult()
                 {
@@ -110,7 +110,7 @@ public class NcbiNuccoreSearchController : AbstractResultController
                 filteresOutSearchResults = filteresOutSearchResults
                                         .Where(sr => !existingAccessions.Contains(sr.AccessionVersion.Split('.')[0]))
                                         .ToList();
-                foreach (var filteresOutSearchResult in filteresOutSearchResults)
+                foreach (NuccoreObject filteresOutSearchResult in filteresOutSearchResults)
                 {
                     results.Add(new MatterImportResult()
                     {

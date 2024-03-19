@@ -137,7 +137,7 @@ public class AccordanceCalculationController : AbstractResultController
                                  { "calculationType", calculationType }
                              };
 
-            var sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds,
+            long[] sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds,
                                                                       notation,
                                                                       language,
                                                                       translator,
@@ -162,9 +162,9 @@ public class AccordanceCalculationController : AbstractResultController
                         throw new Exception("Alphabets of sequences are not equal.");
                     }
 
-                    characteristics.Add(0, new Dictionary<int, double>());
-                    characteristics.Add(1, new Dictionary<int, double>());
-                    var alphabet = new List<string>();
+                    characteristics.Add(0, []);
+                    characteristics.Add(1, []);
+                    List<string> alphabet = [];
 
                     for (int i = 0; i < firstChainAlphabet.Cardinality; i++)
                     {
@@ -185,25 +185,25 @@ public class AccordanceCalculationController : AbstractResultController
                     break;
 
                 case "All":
-                    var firstAlphabet = new List<string>();
+                    List<string> firstAlphabet = [];
                     for (int i = 0; i < firstChain.Alphabet.Cardinality; i++)
                     {
-                        characteristics.Add(i, new Dictionary<int, double>());
+                        characteristics.Add(i, []);
                         IBaseObject firstElement = firstChainAlphabet[i];
                         firstAlphabet.Add(firstElement.ToString());
                         for (int j = 0; j < secondChainAlphabet.Cardinality; j++)
                         {
-                            var secondElement = secondChainAlphabet[j];
+                            IBaseObject secondElement = secondChainAlphabet[j];
 
-                            var firstCongenericChain = firstChain.CongenericChain(firstElement);
-                            var secondCongenericChain = secondChain.CongenericChain(secondElement);
+                            CongenericChain firstCongenericChain = firstChain.CongenericChain(firstElement);
+                            CongenericChain secondCongenericChain = secondChain.CongenericChain(secondElement);
 
-                            var characteristicValue = calculator.Calculate(firstCongenericChain, secondCongenericChain, link);
+                            double characteristicValue = calculator.Calculate(firstCongenericChain, secondCongenericChain, link);
                             characteristics[i].Add(j, characteristicValue);
                         }
                     }
 
-                    var secondAlphabet = new List<string>();
+                    List<string> secondAlphabet = [];
                     for (int j = 0; j < secondChainAlphabet.Cardinality; j++)
                     {
                         secondAlphabet.Add(secondChainAlphabet[j].ToString());

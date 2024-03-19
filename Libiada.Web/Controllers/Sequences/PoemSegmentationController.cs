@@ -58,9 +58,9 @@ public class PoemSegmentationController : AbstractResultController
 
             PoemSegmenter poemSegmenter = new PoemSegmenter(chain.ToString(), wordLength, threshold, balanceDouble);
 
-            var resultSegmentation = poemSegmenter.StartSegmentation();
+            (Dictionary<string, int>, string, string) resultSegmentation = poemSegmenter.StartSegmentation();
             var consonanceDictionary = resultSegmentation.Item1.OrderByDescending(d => d.Value).ToDictionary(d => d.Key, d => d.Value);
-            var poemChain = resultSegmentation.Item2;
+            string poemChain = resultSegmentation.Item2;
             var result = new Dictionary<string, object>
             {
                 {"segmentedString", consonanceDictionary},
