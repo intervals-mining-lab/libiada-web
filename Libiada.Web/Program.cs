@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.ResponseCompression;
 
 using System.Data.Common;
+using System.IO.Compression;
 
 using Libiada.Database.Helpers;
 using Libiada.Database.Models.Calculators;
@@ -38,6 +40,9 @@ builder.Services.AddResponseCompression(options =>
     {
         options.EnableForHttps = true;
     });
+
+builder.Services.Configure<BrotliCompressionProviderOptions>(options => options.Level = CompressionLevel.Optimal);
+builder.Services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Optimal);
 
 DbProviderFactories.RegisterFactory("Npgsql", NpgsqlFactory.Instance);
 
