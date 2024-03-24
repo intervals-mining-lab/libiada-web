@@ -74,7 +74,7 @@ public static class EnumExtensions
     public static IEnumerable<SelectListItem> GetSelectList<T>(IEnumerable<T> selectedValues, bool useDisplayValueAsValue = false)
     where T : struct, IComparable, IFormattable, IConvertible
     {
-        T[] values = Libiada.Core.Extensions.EnumExtensions.ToArray<T>();
+        T[] values = Core.Extensions.EnumExtensions.ToArray<T>();
         return values.ToSelectList(selectedValues, useDisplayValueAsValue);
     }
 

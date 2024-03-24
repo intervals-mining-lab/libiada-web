@@ -18,7 +18,7 @@ using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
 
-using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
+using EnumExtensions = Core.Extensions.EnumExtensions;
 
 
 

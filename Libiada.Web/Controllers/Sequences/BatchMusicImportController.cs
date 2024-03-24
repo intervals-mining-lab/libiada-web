@@ -44,7 +44,7 @@ public class BatchMusicImportController : AbstractResultController
     public ActionResult Index(List<IFormFile> files)
     {
         // TODO: use temp files instead of this
-        var fileStreams = files.Select(Helpers.FileHelper.GetFileStream).ToList();
+        var fileStreams = files.Select(FileHelper.GetFileStream).ToList();
 
         return CreateTask(() =>
         {

@@ -40,7 +40,7 @@ public class DownloadPersonalDataModel : PageModel
         // Only include personal data for download
         var personalData = new Dictionary<string, string>();
         var personalDataProps = typeof(AspNetUser).GetProperties().Where(
-                        prop => System.Attribute.IsDefined(prop, typeof(PersonalDataAttribute)));
+                        prop => Attribute.IsDefined(prop, typeof(PersonalDataAttribute)));
         foreach (var p in personalDataProps)
         {
             personalData.Add(p.Name, p.GetValue(user)?.ToString() ?? "null");

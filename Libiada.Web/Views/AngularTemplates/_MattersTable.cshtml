@@ -25,6 +25,7 @@
                 <div class="row">
                     <div class="col">
                         <input type="text"
+                               id="matterSearch"
                                class="form-control"
                                placeholder="Start typing name to see results"
                                ng-model="$ctrl.searchMatterText"
@@ -38,19 +39,23 @@
             </th>
             <th>
                 <select class="form-select"
+                        id="groupSelect"
                         ng-model="$ctrl.group"
-                        ng-options="g.Value as g.Text for g in $ctrl.groups | filter:{ Nature: $ctrl.nature }"
-                        ng-change="$ctrl.toogleMattersVisibility(false)">
-                    <option value="">-- All groups --</option>
+                        ng-options="g.Text for g in $ctrl.groups | filter:{ Nature: $ctrl.nature }"
+                        ng-change="$ctrl.toogleMattersVisibility($ctrl.groupAndTypeRequired)">
+                    <option ng-if="::!$ctrl.groupAndTypeRequired" value="">-- All groups --</option>
                 </select>
+                <input type="hidden" name="Group" ng-value="$ctrl.group.Value" />
             </th>
             <th>
                 <select class="form-select"
+                        id="sequenceTypeSelect"
                         ng-model="$ctrl.sequenceType"
-                        ng-options="s.Value as s.Text for s in $ctrl.sequenceTypes | filter:{ Nature: $ctrl.nature }"
-                        ng-change="$ctrl.toogleMattersVisibility(false)">
-                    <option value="">-- All sequence types --</option>
+                        ng-options="s.Text for s in $ctrl.sequenceTypes | filter:{ Nature: $ctrl.nature }"
+                        ng-change="$ctrl.toogleMattersVisibility($ctrl.groupAndTypeRequired)">
+                    <option ng-if="::!$ctrl.groupAndTypeRequired" value="">-- All sequence types --</option>
                 </select>
+                <input type="hidden" name="SequenceType" ng-value="$ctrl.sequenceType.Value" />
             </th>
         </tr>
         <tr>

@@ -15,7 +15,7 @@ using Newtonsoft.Json;
 
 using Libiada.SequenceGenerator;
 
-using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
+using EnumExtensions = Core.Extensions.EnumExtensions;
 
 /// <summary>
 /// Calculates accordance of orders by intervals distributions.

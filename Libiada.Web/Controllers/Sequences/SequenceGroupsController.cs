@@ -2,10 +2,11 @@
 
 using Libiada.Web.Extensions;
 using Libiada.Web.Helpers;
+using Libiada.Web.Models.CalculatorsData;
 
 using Newtonsoft.Json;
 
-using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
+using EnumExtensions = Core.Extensions.EnumExtensions;
 
 /// <summary>
 /// The sequence groups controller.
@@ -90,13 +91,13 @@ public class SequenceGroupsController : Controller
     /// </returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Create(//[Bind(Include = "Id,Name,Nature,SequenceGroupType")] 
-    SequenceGroup sequenceGroup, long[] matterIds)
+    public async Task<ActionResult> Create(SequenceGroup sequenceGroup, long[] matterIds)
     {
-        if (ModelState.IsValid)
+        sequenceGroup.CreatorId = User.GetUserId();
+        sequenceGroup.ModifierId = User.GetUserId();
+        ModelState.ClearValidationState(nameof(sequenceGroup));
+        if (!TryValidateModel(sequenceGroup, nameof(sequenceGroup)))
         {
-            sequenceGroup.CreatorId = User.GetUserId();
-            sequenceGroup.ModifierId = User.GetUserId();
             Matter[] matters = db.Matters.Where(m => matterIds.Contains(m.Id)).ToArray();
             foreach (Matter matter in matters)
             {
@@ -136,7 +137,21 @@ public class SequenceGroupsController : Controller
 
         var selectedMatterIds = sequenceGroup.Matters.Select(m => m.Id);
         var viewData = viewDataHelper.FillViewData(1, int.MaxValue, m => true, m => selectedMatterIds.Contains(m.Id), "Save");
+        viewData["sequenceGroupTypes"] = EnumExtensions.ToArray<SequenceGroupType>().ToSelectListWithNature();
+
+        // TODO: try to optimize this
+        SelectListItemWithNature[] sequenceTypes = ((IEnumerable<SelectListItemWithNature>)viewData["sequenceTypes"]).ToArray();
+        string sequenceTypeValue = Convert.ToByte(sequenceGroup.SequenceType).ToString();
+        SelectListItemWithNature sequenceTypeSelectListItem = sequenceTypes.Single(st => st.Value == sequenceTypeValue);
+        viewData["sequenceTypeIndex"] = Array.IndexOf(sequenceTypes, sequenceTypeSelectListItem);
+
+        SelectListItemWithNature[] groups = ((IEnumerable<SelectListItemWithNature>)viewData["sequenceTypes"]).ToArray();
+        string groupValue = Convert.ToByte(sequenceGroup.Group).ToString();
+        SelectListItemWithNature groupSelectListItem = groups.Single(g => g.Value == groupValue);
+        viewData["groupIndex"] = Array.IndexOf(groups, groupSelectListItem);
+
         ViewBag.data = JsonConvert.SerializeObject(viewData);
+        
 
         return View(sequenceGroup);
     }
@@ -155,8 +170,7 @@ public class SequenceGroupsController : Controller
     /// </returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Edit(//[Bind(Include = "Id,Name,Nature,SequenceGroupType")] 
-        SequenceGroup sequenceGroup, long[] matterIds)
+    public async Task<ActionResult> Edit(SequenceGroup sequenceGroup, long[] matterIds)
     {
         if (ModelState.IsValid)
         {
@@ -218,7 +232,12 @@ public class SequenceGroupsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> DeleteConfirmed(int id)
     {
-        SequenceGroup sequenceGroup = await db.SequenceGroups.FindAsync(id);
+        SequenceGroup? sequenceGroup = await db.SequenceGroups.FindAsync(id);
+        if (sequenceGroup == null)
+        {
+            return NotFound();
+        }
+
         db.SequenceGroups.Remove(sequenceGroup);
         await db.SaveChangesAsync();
         return RedirectToAction("Index");

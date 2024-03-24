@@ -49,7 +49,10 @@
                        groups="groups"
                        sequence-types="sequenceTypes"
                        maximum-selected-matters="::maximumSelectedMatters"
-                       selected-matters-count="selectedMattersCount">
+                       selected-matters-count="selectedMattersCount"
+                       group-and-type-required="::true"
+                       initial-sequence-type-index="sequenceTypeIndex"
+                       initial-group-index="groupIndex">
         </matters-table>
         @{
             await Html.RenderPartialAsync("_MattersSubmit");

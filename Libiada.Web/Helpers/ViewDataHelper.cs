@@ -11,7 +11,7 @@ using Libiada.Web.Models.CalculatorsData;
 using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Attributes;
 
-using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
+using EnumExtensions = Core.Extensions.EnumExtensions;
 
 /// <summary>
 /// Class filling data for Views.
@@ -78,7 +78,7 @@ public class ViewDataHelper : IViewDataHelper
         else
         {
             natures = new[] { Nature.Genetic }.ToSelectList();
-            notations = new[] { Notation.Nucleotides };
+            notations = [Notation.Nucleotides];
             remoteDbs = EnumExtensions.ToArray<RemoteDb>().Where(rd => rd.GetNature() == Nature.Genetic);
             sequenceTypes = EnumExtensions.ToArray<SequenceType>().Where(st => st.GetNature() == Nature.Genetic);
             groups = EnumExtensions.ToArray<Group>().Where(g => g.GetNature() == Nature.Genetic);
@@ -169,7 +169,7 @@ public class ViewDataHelper : IViewDataHelper
         else
         {
             natures = new[] { Nature.Genetic }.ToSelectList();
-            notations = new[] { Notation.Nucleotides };
+            notations = [Notation.Nucleotides];
             sequenceTypes = EnumExtensions.ToArray<SequenceType>().Where(st => st.GetNature() == Nature.Genetic);
             groups = EnumExtensions.ToArray<Group>().Where(g => g.GetNature() == Nature.Genetic);
         }
@@ -181,8 +181,8 @@ public class ViewDataHelper : IViewDataHelper
         data.Add("translators", Extensions.EnumExtensions.GetSelectList<Translator>());
         data.Add("pauseTreatments", Extensions.EnumExtensions.GetSelectList<PauseTreatment>());
         data.Add("trajectories", EnumExtensions.SelectAllWithAttribute<ImageOrderExtractor>(typeof(ImageOrderExtractorAttribute)).ToSelectList());
-        data.Add("sequenceTypes", sequenceTypes.ToSelectListWithNature(true));
-        data.Add("groups", groups.ToSelectListWithNature(true));
+        data.Add("sequenceTypes", sequenceTypes.ToSelectListWithNature());
+        data.Add("groups", groups.ToSelectListWithNature());
 
         return data;
     }
@@ -263,8 +263,8 @@ public class ViewDataHelper : IViewDataHelper
         data.Add("notations", geneticNotations.ToSelectListWithNature());
         data.Add("nature", ((byte)Nature.Genetic).ToString());
         data.Add("features", features.ToSelectListWithNature(selectedFeatures));
-        data.Add("sequenceTypes", sequenceTypes.ToSelectListWithNature(true));
-        data.Add("groups", groups.ToSelectListWithNature(true));
+        data.Add("sequenceTypes", sequenceTypes.ToSelectListWithNature());
+        data.Add("groups", groups.ToSelectListWithNature());
 
         return data;
     }
@@ -384,8 +384,8 @@ public class ViewDataHelper : IViewDataHelper
         }
 
         data.Add("natures", natures);
-        data.Add("sequenceTypes", sequenceTypes.ToSelectListWithNature(true));
-        data.Add("groups", groups.ToSelectListWithNature(true));
+        data.Add("sequenceTypes", sequenceTypes.ToSelectListWithNature());
+        data.Add("groups", groups.ToSelectListWithNature());
 
         return data;
     }

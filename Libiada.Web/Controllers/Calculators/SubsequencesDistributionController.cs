@@ -20,7 +20,7 @@ using Libiada.Database.Tasks;
 using Bio.IO.FastA;
 using Bio;
 
-using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
+using EnumExtensions = Core.Extensions.EnumExtensions;
 using System.Net.Http;
 using System.Xml;
 

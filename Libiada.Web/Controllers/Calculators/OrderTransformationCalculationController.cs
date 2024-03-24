@@ -18,7 +18,7 @@ using Newtonsoft.Json;
 
 using Microsoft.EntityFrameworkCore;
 
-using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
+using EnumExtensions = Core.Extensions.EnumExtensions;
 
 /// <summary>
 /// The order transformation calculation controller.

@@ -62,7 +62,7 @@ public class CustomSequenceSegmentationController : AbstractResultController
         int balance,
         List<IFormFile> files)
     {
-        var fileStreams = files.Select(Helpers.FileHelper.GetFileStream).ToList();
+        var fileStreams = files.Select(FileHelper.GetFileStream).ToList();
 
         return CreateTask(() =>
         {

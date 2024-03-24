@@ -17,7 +17,13 @@
         <dd>@Html.DisplayFor(model => model.Nature)</dd>
 
         <dt>@Html.DisplayNameFor(model => model.SequenceGroupType)</dt>
-        <dd>@Html.DisplayFor(model => model.SequenceGroupType)</dd>
+        <dd>@(Model.SequenceGroupType == null ? "" : ((SequenceGroupType)Model.SequenceGroupType).GetDisplayValue())</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.SequenceType)</dt>
+        <dd>@Model.SequenceType.GetDisplayValue()</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Group)</dt>
+        <dd>@Model.Group.GetDisplayValue()</dd>
 
         <dt>@Html.DisplayNameFor(model => model.Creator)</dt>
         <dd>@Html.DisplayFor(model => model.Creator.UserName)</dd>
@@ -39,8 +45,6 @@
         <thead>
             <tr>
                 <th>@(Html.DisplayNameFor(model => model.Matters.First().Name))</th>
-                <th>@(Html.DisplayNameFor(model => model.Matters.First().Group))</th>
-                <th>@(Html.DisplayNameFor(model => model.Matters.First().SequenceType))</th>
             </tr>
         </thead>
         <tbody>
@@ -48,8 +52,6 @@
             {
                 <tr>
                     <td>@matter.Name</td>
-                    <td>@matter.Group.GetDisplayValue()</td>
-                    <td>@matter.SequenceType.GetDisplayValue()</td>
                 </tr>
             }
         </tbody>

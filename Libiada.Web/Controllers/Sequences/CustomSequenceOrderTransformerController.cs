@@ -13,7 +13,7 @@ using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
 
-using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
+using EnumExtensions = Core.Extensions.EnumExtensions;
 
 /// <summary>
 /// The custom sequence order transformer controller.

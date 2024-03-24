@@ -93,7 +93,7 @@ public abstract class SequencesMattersController : AbstractResultController
     /// </returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Create(//[Bind(Include = "Id,Notation,RemoteDb,RemoteId,Description,Matter,MatterId")] 
+    public ActionResult Create(
         CommonSequence commonSequence,
         bool localFile,
         IFormFile? file,

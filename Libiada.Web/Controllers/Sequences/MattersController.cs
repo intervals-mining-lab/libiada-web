@@ -9,7 +9,7 @@ using Libiada.Database.Helpers;
 
 using Newtonsoft.Json;
 
-using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
+using EnumExtensions = Core.Extensions.EnumExtensions;
 
 /// <summary>
 /// The matters controller.
@@ -134,9 +134,7 @@ public class MattersController : SequencesMattersController
     /// </returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Edit(
-    // [Bind(Include = "Id,Name,Nature,Description,Group,SequenceType,MultisequenceId,MultisequenceNumber,CollectionCountry,CollectionDate")] 
-    Matter matter)
+    public async Task<ActionResult> Edit(Matter matter)
     {
         using var db = dbFactory.CreateDbContext();
         if (ModelState.IsValid)

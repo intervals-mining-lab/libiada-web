@@ -10,7 +10,7 @@ using Libiada.Core.Extensions;
 using Libiada.Web.Models.CalculatorsData;
 using Libiada.Web.Extensions;
 
-using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
+using EnumExtensions = Core.Extensions.EnumExtensions;
 
 /// <summary>
 /// The binary characteristic repository.

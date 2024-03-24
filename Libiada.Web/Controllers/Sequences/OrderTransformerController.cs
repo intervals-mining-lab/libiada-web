@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 using Libiada.Web.Tasks;
 using Libiada.Web.Helpers;
 
-using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
+using EnumExtensions = Core.Extensions.EnumExtensions;
 
 /// <summary>
 /// The order transformation controller.

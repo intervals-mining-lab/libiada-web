@@ -4,10 +4,9 @@ using Bio.Extensions;
 
 using Libiada.Web.Helpers;
 
-using Libiada.Database.Models.Repositories.Sequences;
-
 using Newtonsoft.Json;
 
+using static Database.Models.Repositories.Sequences.MultisequenceRepository;
 
 /// <summary>
 /// 
@@ -43,7 +42,7 @@ public class MultisequenceController : Controller
     /// </returns>
     public ActionResult Create()
     {
-        var data = viewDataHelper.FillViewData(2, int.MaxValue, m => MultisequenceRepository.SequenceTypesFilter.Contains(m.SequenceType) && m.MultisequenceId == null, "Create");
+        var data = viewDataHelper.FillViewData(2, int.MaxValue, m => SequenceTypesFilter.Contains(m.SequenceType) && m.MultisequenceId == null, "Create");
         ViewBag.data = JsonConvert.SerializeObject(data);
 
         return View();
@@ -57,7 +56,7 @@ public class MultisequenceController : Controller
     /// </returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Create(//[Bind(Include = "Name,Nature")] 
+    public ActionResult Create(
         Multisequence multisequence,
         short[] multisequenceNumbers,
         long[] matterIds)
@@ -130,7 +129,7 @@ public class MultisequenceController : Controller
         var selectedMatterIds = multisequence.Matters.Select(m => m.Id);
         var data = viewDataHelper.FillViewData(2,
                                                int.MaxValue,
-                                               m => (MultisequenceRepository.SequenceTypesFilter.Contains(m.SequenceType)
+                                               m => (SequenceTypesFilter.Contains(m.SequenceType)
                                                     && m.MultisequenceId == null)
                                                     || selectedMatterIds.Contains(m.Id),
                                                m => selectedMatterIds.Contains(m.Id),
@@ -144,7 +143,7 @@ public class MultisequenceController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Edit(//[Bind(Include = "Id,Name,Nature")]
+    public async Task<ActionResult> Edit(
                                          Multisequence multisequence,
                                          short[] multisequenceNumbers,
                                          long[] matterIds)
@@ -178,7 +177,7 @@ public class MultisequenceController : Controller
         var sellectedMatterIds = multisequence.Matters.Select(m => m.Id);
         var data = viewDataHelper.FillViewData(2,
                                                int.MaxValue,
-                                               m => (MultisequenceRepository.SequenceTypesFilter.Contains(m.SequenceType)
+                                               m => (SequenceTypesFilter.Contains(m.SequenceType)
                                                     && m.MultisequenceId == null)
                                                     || sellectedMatterIds.Contains(m.Id),
                                                m => sellectedMatterIds.Contains(m.Id),
@@ -256,7 +255,7 @@ public class MultisequenceController : Controller
     [NonAction]
     private Dictionary<string, long[]> SplitMattersIntoReferenceAnsNotReference(Matter[] matters)
     {
-        matters = matters.Where(m => m.Nature == Nature.Genetic && MultisequenceRepository.SequenceTypesFilter.Contains(m.SequenceType)).ToArray();
+        matters = matters.Where(m => m.Nature == Nature.Genetic && SequenceTypesFilter.Contains(m.SequenceType)).ToArray();
         string[] matterNameSpliters = ["|", "chromosome", "plasmid", "segment"];
         var mattersNames = matters.Select(m => (m.Id, m.Name.Split(matterNameSpliters, StringSplitOptions.RemoveEmptyEntries)[0].Trim())).ToArray();
         string[] accessions = new string[matters.Length];
@@ -306,7 +305,7 @@ public class MultisequenceController : Controller
     /// </returns>
     public string GroupMattersIntoMultisequences(long[] excludeMatterIds)
     {
-        Matter[] matters = db.Matters.Where(m => MultisequenceRepository.SequenceTypesFilter.Contains(m.SequenceType)).ToArray();
+        Matter[] matters = db.Matters.Where(m => SequenceTypesFilter.Contains(m.SequenceType)).ToArray();
         Dictionary<string, long[]> multisequences = SplitMattersIntoReferenceAnsNotReference(matters);
         var result = multisequences.Select(m => new { name = m.Key, matterIds = m.Value }).ToArray();
         var matterIds = result.SelectMany(r => r.matterIds);
@@ -366,7 +365,7 @@ public class MultisequenceController : Controller
                     matters[matterId].MultisequenceId = multisequence.Id;
                 }
 
-                MultisequenceRepository.SetSequenceNumbers(matterIds.Select(m => matters[m]).ToArray());
+                SetSequenceNumbers(matterIds.Select(m => matters[m]).ToArray());
                 db.SaveChanges();
             }
             catch (Exception e)

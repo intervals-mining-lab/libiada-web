@@ -7,7 +7,14 @@
         ctrl.$onInit = () => {
             ctrl.showRefSeqOnly = true;
             ctrl.checkboxes = ctrl.maximumSelectedMatters > 1;
-            ctrl.selectedMattersCount = 0;
+            ctrl.searchMatterText = "";
+
+            if (ctrl.groupAndTypeRequired) {
+                let groupIndex = ctrl.initialGroupIndex || 0;
+                ctrl.group = ctrl.groups[groupIndex];
+                let sequenceTypeIndex = ctrl.initialSequenceTypeIndex || 0;
+                ctrl.sequenceType = ctrl.sequenceTypes[sequenceTypeIndex];
+            }
 
             if (ctrl.checkboxes) {
                 ctrl.mattersInputName = "matterIds";
@@ -16,6 +23,8 @@
                 ctrl.mattersInputName = "matterId";
                 ctrl.mattersInputType = "radio";
             }
+
+            ctrl.selectedMattersCount = ctrl.matters.filter(m => m.Selected).length;
 
             ctrl.toogleMattersVisibility(false);
             if (ctrl.displayMultisequenceNumber) {
@@ -26,7 +35,7 @@
                 if (ctrl.multisequenceNumbers) {
                     ctrl.selectedMattersCount = ctrl.multisequenceNumbers.length;
                     ctrl.multisequenceNumberCounter += ctrl.multisequenceNumbers.length;
-                    
+
                     for (let i = 0; i < ctrl.multisequenceNumbers.length; i++) {
                         const matterId = ctrl.multisequenceNumbers[i].Id;
                         const number = ctrl.multisequenceNumbers[i].MultisequenceNumber;
@@ -42,7 +51,12 @@
         };
 
         ctrl.$onChanges = changes => {
-            if (changes.nature && !changes.nature.isFirstChange()) {
+            if ((changes.nature && !changes.nature.isFirstChange())) {
+                if (ctrl.groupAndTypeRequired) {
+                    ctrl.group = ctrl.groups.filter(g => g.Nature === +ctrl.nature)[0];
+                    ctrl.sequenceType = ctrl.sequenceTypes.filter(st => st.Nature === +ctrl.nature)[0];
+                }
+                
                 ctrl.toogleMattersVisibility(true);
             }
         };
@@ -74,13 +88,17 @@
             }
         }
 
-        ctrl.toogleMattersVisibility = (isNewNature, ignoreSearch) => {
-            if (isNewNature) {
-                ctrl.matters.forEach(m => m.Selected = false);
+        ctrl.toogleMattersVisibility = (resetSelection, ignoreSearch) => {
+            if (resetSelection) {
+                ctrl.matters.forEach(m => {
+                    m.Selected = false;
+                    $(`#matter${m.Value}`).prop("checked", false);
+                });
+                ctrl.selectedMattersCount = 0;
             }
 
             const oldVisibleMatters = ctrl.getVisibleMatters();
-            ctrl.matters.forEach(m => ignoreSearch ? ctrl.setMatterVisibilityWithoutSearch(m) : ctrl.setMatterVisibility(m));
+            ctrl.matters.forEach(m => m.Visible = ignoreSearch ? ctrl.isMatterVisibleWithoutSearch(m) : ctrl.isMatterVisible(m));
             const visibleMatters = ctrl.getVisibleMatters();
 
             const mattersToHide = oldVisibleMatters.filter(m => !visibleMatters.includes(m));
@@ -108,6 +126,7 @@
                     <td>${m.SequenceType}</td>
                 </tr>`).join());
 
+            // binding checkbox state change event
             mattersToShow.forEach(m => $(`#matter${m.Value}`).change(
                 () => {
                     ctrl.toggleMatterSelection(m);
@@ -116,24 +135,17 @@
             ));
         };
 
-        ctrl.setMatterVisibilityWithoutSearch = matter => {
-            matter.Visible = matter.Selected ||
-                (matter.Nature == ctrl.nature
-                && matter.Group.includes(ctrl.group || "")
-                && matter.SequenceType.includes(ctrl.sequenceType || "")
-                && (ctrl.nature != ctrl.geneticNature || !ctrl.showRefSeqOnly || ctrl.isRefSeq(matter)));
-        };
+        ctrl.isMatterVisibleWithoutSearch = matter => matter.Selected || ctrl.checkMatterVisibilitty(matter);
 
-        ctrl.setMatterVisibility = matter => {
-            ctrl.searchMatterText = ctrl.searchMatterText || "";
-            matter.Visible = matter.Selected ||
-                (ctrl.searchMatterText.length >= 4
-                && matter.Nature == ctrl.nature
-                && matter.Group.includes(ctrl.group || "")
-                && matter.SequenceType.includes(ctrl.sequenceType || "")
-                && matter.Text.toUpperCase().includes(ctrl.searchMatterText.toUpperCase())
-                && (ctrl.nature != ctrl.geneticNature || !ctrl.showRefSeqOnly || ctrl.isRefSeq(matter)));
-        };
+        ctrl.isMatterVisible = matter => matter.Selected ||
+            (ctrl.searchMatterText.length >= 4
+                && ctrl.checkMatterVisibilitty(matter)
+                && matter.Text.toUpperCase().includes(ctrl.searchMatterText.toUpperCase()));
+
+        ctrl.checkMatterVisibilitty = matter => matter.Nature == ctrl.nature
+            && matter.Group.includes(ctrl.group.Text || "")
+            && matter.SequenceType.includes(ctrl.sequenceType.Text || "")
+            && (ctrl.nature != ctrl.geneticNature || !ctrl.showRefSeqOnly || ctrl.isRefSeq(matter));
 
         // checks if genetic sequence is referense sequence 
         // (its genbank id contains "_")
@@ -150,14 +162,7 @@
         };
 
         ctrl.unselectAllVisibleMatters = () => {
-            ctrl.matters.filter(m => m.Selected).forEach(matter => {
-                $(`#matter${matter.Value}`).prop("checked", false);
-                matter.Selected = false;
-                ctrl.setMatterVisibility(matter);
-            });
-
-            ctrl.selectedMattersCount = 0;
-            ctrl.toogleMattersVisibility(false);
+            ctrl.toogleMattersVisibility(true);
         };
 
         ctrl.toggleMatterSelection = matter => {
@@ -195,7 +200,10 @@
             maximumSelectedMatters: "<",
             selectedMattersCount: "=",
             displayMultisequenceNumber: "<",
-            multisequenceNumbers: "<"
+            multisequenceNumbers: "<",
+            groupAndTypeRequired: "<",
+            initialSequenceTypeIndex: "<",
+            initialGroupIndex: "<"
         }
     });
 }

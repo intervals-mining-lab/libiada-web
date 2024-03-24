@@ -15,7 +15,7 @@ using Libiada.Database.Models.Calculators;
 
 using Newtonsoft.Json;
 
-using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
+using EnumExtensions = Core.Extensions.EnumExtensions;
 
 /// <summary>
 /// The clusterization controller.
