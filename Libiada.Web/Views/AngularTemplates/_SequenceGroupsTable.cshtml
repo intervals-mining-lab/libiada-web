@@ -1,0 +1,56 @@
+﻿@model IEnumerable<SequenceGroup>
+<br />
+<div class="mb-1 mt-2 btn-group" role="group" aria-label="Select / unselect vsible sequenceGroups">
+    <input type="button" class="btn btn-success" ng-click="$ctrl.selectAllVisibleSequenceGroups()" value="Select all visible sequence groups" />
+    <input type="button" class="btn btn-secondary" ng-click="$ctrl.unselectAllSequenceGroups()" value="Clear selection" />
+</div>
+<h4>Sequences groups:</h4>
+<table ng-cloak class="table table-bordered table-hover table-sm mb-3">
+    <thead>
+        <tr>
+            <th>
+                <div class="row">
+                    <div class="col">
+                        <input type="text"
+                               id="sequenceGroupSearch"
+                               class="form-control"
+                               placeholder="Start typing name to see results"
+                               ng-model="$ctrl.searchSequenceGroupText"
+                               ng-init="$ctrl.searchSequenceGroupText=''"
+                               ng-change="$ctrl.toogleSequenceGroupsVisibility(false)" />
+                    </div>
+                    <div class="col" ng-show="!$ctrl.searchSequenceGroupText && $ctrl.group && $ctrl.sequenceType">
+                        or <input type="button" class="btn btn-outline-secondary" ng-click="$ctrl.toogleSequenceGroupsVisibility(false, true)" value="show all" />
+                    </div>
+                </div>
+            </th>
+            <th>
+                <select class="form-select"
+                        id="groupSelect"
+                        ng-model="$ctrl.group"
+                        ng-options="g.Text for g in $ctrl.groups | filter:{ Nature: $ctrl.nature }"
+                        ng-change="$ctrl.toogleSequenceGroupsVisibility(flase)">
+                    <option value="">-- All groups --</option>
+                </select>
+                <input type="hidden" name="Group" ng-value="$ctrl.group.Value" />
+            </th>
+            <th>
+                <select class="form-select"
+                        id="sequenceTypeSelect"
+                        ng-model="$ctrl.sequenceType"
+                        ng-options="s.Text for s in $ctrl.sequenceTypes | filter:{ Nature: $ctrl.nature }"
+                        ng-change="$ctrl.toogleSequenceGroupsVisibility(flase)">
+                    <option value="">-- All sequence types --</option>
+                </select>
+                <input type="hidden" name="SequenceType" ng-value="$ctrl.sequenceType.Value" />
+            </th>
+        </tr>
+        <tr>
+            <th>@(Html.DisplayNameFor(model => model.Name))</th>
+            <th>@(Html.DisplayNameFor(model => model.Group))</th>
+            <th>@(Html.DisplayNameFor(model => model.SequenceType))</th>
+        </tr>
+    </thead>
+    <tbody id="sequenceGroupsSelectList">
+    </tbody>
+</table>

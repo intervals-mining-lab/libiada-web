@@ -10,9 +10,10 @@
             ctrl.searchMatterText = "";
 
             if (ctrl.groupAndTypeRequired) {
-                let groupIndex = ctrl.initialGroupIndex || 0;
+                const groupIndex = ctrl.initialGroupIndex || 0;
                 ctrl.group = ctrl.groups[groupIndex];
-                let sequenceTypeIndex = ctrl.initialSequenceTypeIndex || 0;
+
+                const sequenceTypeIndex = ctrl.initialSequenceTypeIndex || 0;
                 ctrl.sequenceType = ctrl.sequenceTypes[sequenceTypeIndex];
             }
 
@@ -24,9 +25,15 @@
                 ctrl.mattersInputType = "radio";
             }
 
-            ctrl.selectedMattersCount = ctrl.matters.filter(m => m.Selected).length;
-
+            const selectedMatters = ctrl.matters.filter(m => m.Selected);
+            ctrl.selectedMattersCount = selectedMatters.length;
+            ctrl.visibleMatters = selectedMatters;
+            ctrl.visibleMatters.forEach(vm => vm.Visible = true);
             ctrl.toogleMattersVisibility(false);
+
+            // returning clear selection function to controller for callbacks
+            ctrl.setUnselectAllMattersFunction({ func: ctrl.unselectAllMatters });
+
             if (ctrl.displayMultisequenceNumber) {
                 ctrl.multisequenceNumberCounter = 1;
                 $("#mattersSelectList").on("change", `input[name="${ctrl.mattersInputName}"]`, ctrl.updateMultisequenceNumber);
@@ -51,12 +58,12 @@
         };
 
         ctrl.$onChanges = changes => {
-            if ((changes.nature && !changes.nature.isFirstChange())) {
+            if (changes.nature && !changes.nature.isFirstChange()) {
                 if (ctrl.groupAndTypeRequired) {
                     ctrl.group = ctrl.groups.filter(g => g.Nature === +ctrl.nature)[0];
                     ctrl.sequenceType = ctrl.sequenceTypes.filter(st => st.Nature === +ctrl.nature)[0];
                 }
-                
+
                 ctrl.toogleMattersVisibility(true);
             }
         };
@@ -86,7 +93,7 @@
                 $(`#multisequenceNumberCell${matterId}`).empty();
                 ctrl.multisequenceNumberCounter--;
             }
-        }
+        };
 
         ctrl.toogleMattersVisibility = (resetSelection, ignoreSearch) => {
             if (resetSelection) {
@@ -97,15 +104,17 @@
                 ctrl.selectedMattersCount = 0;
             }
 
-            const oldVisibleMatters = ctrl.getVisibleMatters();
+            // Updating mattrs visibility flag
             ctrl.matters.forEach(m => m.Visible = ignoreSearch ? ctrl.isMatterVisibleWithoutSearch(m) : ctrl.isMatterVisible(m));
-            const visibleMatters = ctrl.getVisibleMatters();
+            const mattersToHide = ctrl.visibleMatters.filter(m => !m.Visible);
+            const newVisibleMatters = ctrl.matters.filter(m => m.Visible);
+            const mattersToShow = newVisibleMatters.filter(m => !ctrl.visibleMatters.some(m2 => m2.Value === m.Value));
+            ctrl.visibleMatters = newVisibleMatters;
 
-            const mattersToHide = oldVisibleMatters.filter(m => !visibleMatters.includes(m));
-            const mattersToShow = visibleMatters.filter(m => !oldVisibleMatters.includes(m));
-
+            // removing not visible matters from table 
             $(mattersToHide.map(m => `#matterRow${m.Value}`).join(",")).remove();
 
+            //adding newly visible matters to table
             $("#mattersSelectList").append(mattersToShow.map(m =>
                 `<tr id="matterRow${m.Value}">
                     ${ctrl.displayMultisequenceNumber ?
@@ -143,27 +152,24 @@
                 && matter.Text.toUpperCase().includes(ctrl.searchMatterText.toUpperCase()));
 
         ctrl.checkMatterVisibilitty = matter => matter.Nature == ctrl.nature
-            && matter.Group.includes(ctrl.group.Text || "")
-            && matter.SequenceType.includes(ctrl.sequenceType.Text || "")
+            && (!ctrl.group || matter.Group.includes(ctrl.group.Text))
+            && (!ctrl.sequenceType || matter.SequenceType.includes(ctrl.sequenceType.Text))
             && (ctrl.nature != ctrl.geneticNature || !ctrl.showRefSeqOnly || ctrl.isRefSeq(matter));
 
         // checks if genetic sequence is referense sequence 
         // (its genbank id contains "_")
         ctrl.isRefSeq = matter => matter.Text.split("|").slice(-1)[0].indexOf("_") !== -1;
 
-        ctrl.selectAllVisibleMatters = () => {
-            ctrl.getVisibleMatters().forEach(matter => {
+        ctrl.selectAllVisibleMatters = () =>
+            ctrl.visibleMatters.forEach(matter => {
                 if (!matter.Selected && (ctrl.selectedMattersCount < ctrl.maximumSelectedMatters)) {
                     $(`#matter${matter.Value}`).prop("checked", true);
                     matter.Selected = true;
                     ctrl.selectedMattersCount++;
                 }
             });
-        };
 
-        ctrl.unselectAllVisibleMatters = () => {
-            ctrl.toogleMattersVisibility(true);
-        };
+        ctrl.unselectAllMatters = () => ctrl.toogleMattersVisibility(true);
 
         ctrl.toggleMatterSelection = matter => {
             if (matter.Selected) {
@@ -185,25 +191,24 @@
                 }
             }
         };
-
-        ctrl.getVisibleMatters = () => ctrl.matters.filter(m => m.Visible);
     }
 
     angular.module("libiada").component("mattersTable", {
         templateUrl: window.location.origin + "/AngularTemplates/_MattersTable",
         controller: ["$scope", "filterFilter", MattersTableController],
         bindings: {
+            selectedMattersCount: "=",
             matters: "<",
             nature: "<",
             groups: "<",
             sequenceTypes: "<",
             maximumSelectedMatters: "<",
-            selectedMattersCount: "=",
             displayMultisequenceNumber: "<",
             multisequenceNumbers: "<",
+            initialSequenceTypeIndex: "<?",
+            initialGroupIndex: "<?",
             groupAndTypeRequired: "<",
-            initialSequenceTypeIndex: "<",
-            initialGroupIndex: "<"
+            setUnselectAllMattersFunction: "&"
         }
     });
 }

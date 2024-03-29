@@ -1,6 +1,6 @@
 ﻿namespace Libiada.Web.Helpers;
 
-public interface IViewDataHelper
+public interface IViewDataHelper : IDisposable
 {
     Dictionary<string, object> FillMatterCreationViewData();
     Dictionary<string, object> FillSubsequencesViewData(int minSelectedMatters, int maxSelectedMatters, string submitName);

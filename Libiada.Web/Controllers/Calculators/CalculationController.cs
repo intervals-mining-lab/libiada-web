@@ -103,7 +103,9 @@ public class CalculationController : AbstractResultController
     [HttpPost]
     [ValidateAntiForgeryToken]
     public ActionResult Index(
+        string tableType,
         long[] matterIds,
+        int[] sequenceGroupIds,
         short[] characteristicLinkIds,
         Notation[] notations,
         Language[] languages,
@@ -117,7 +119,22 @@ public class CalculationController : AbstractResultController
     {
         return CreateTask(() =>
         {
-            Dictionary<long, string> mattersNames;
+            IEnumerable<SelectListItem>? sequenceGroupsSelectList = null;
+            Dictionary<long, int>? mattersIdsSequenceGroupIds = null;
+            if (tableType.Equals("sequenceGroups"))
+            {
+                using var db = dbFactory.CreateDbContext();
+                SequenceGroup[] sequenceGroups = db.SequenceGroups.Where(sg => sequenceGroupIds.Contains(sg.Id)).Include(sg => sg.Matters).ToArray();
+                matterIds = sequenceGroups.Select(sg => sg.Matters.Select(m => m.Id)).SelectMany(m => m).ToArray();
+                int distinctMattersCount = matterIds.Distinct().ToArray().Length;
+                if (matterIds.Length != distinctMattersCount) throw new ArgumentException("Sequence groups contain intesecting sets of sequences", nameof(sequenceGroupIds));
+
+                mattersIdsSequenceGroupIds = sequenceGroups.SelectMany(sg => sg.Matters.Select(m => new { id = sg.Id, matterId = m.Id }))
+                                                           .ToDictionary(sg => sg.matterId, sg => sg.id);
+
+                sequenceGroupsSelectList = SelectListHelper.GetSequenceGroupSelectList(sg => sequenceGroupIds.Contains(sg.Id), db);
+            }
+
             using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
             long[][] sequenceIds;
             sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds,
@@ -127,7 +144,7 @@ public class CalculationController : AbstractResultController
                                                                   pauseTreatments,
                                                                   sequentialTransfers,
                                                                   trajectories);
-            mattersNames = cache.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
+            Dictionary<long, string> mattersNames = cache.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
 
             double[][] characteristics;
             if (!rotate && !complementary)
@@ -145,6 +162,7 @@ public class CalculationController : AbstractResultController
                 sequencesCharacteristics[i] = new SequenceCharacteristics
                 {
                     MatterName = mattersNames[matterIds[i]],
+                    SequenceGroupId = mattersIdsSequenceGroupIds?[matterIds[i]],
                     Characteristics = characteristics[i]
                 };
             }
@@ -166,8 +184,12 @@ public class CalculationController : AbstractResultController
             {
                     { "characteristics", sequencesCharacteristics },
                     { "characteristicNames", characteristicNames },
-                    { "characteristicsList", characteristicsList }
+                    { "characteristicsList", characteristicsList },
+
             };
+
+            if (sequenceGroupsSelectList is not null) result.Add("sequenceGroups", sequenceGroupsSelectList);
+            
 
             return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
         });

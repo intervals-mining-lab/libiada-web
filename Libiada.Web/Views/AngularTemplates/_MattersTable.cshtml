@@ -12,9 +12,9 @@
         Show only reference sequences
     </label>
 </div>
-<div class="mb-1 btn-group" ng-if="::($ctrl.checkboxes && !$ctrl.displayMultisequenceNumber)" role="group" aria-label="Select / unselect vsible matters">
+<div class="mb-1 btn-group" ng-if="::($ctrl.checkboxes && !$ctrl.displayMultisequenceNumber)" role="group" aria-label="Select / unselect vsible sequences">
     <input type="button" class="btn btn-success" ng-click="$ctrl.selectAllVisibleMatters()" value="Select all visible sequences" />
-    <input type="button" class="btn btn-secondary" ng-click="$ctrl.unselectAllVisibleMatters()" value="Clear selection" />
+    <input type="button" class="btn btn-secondary" ng-click="$ctrl.unselectAllMatters()" value="Clear selection" />
 </div>
 <h4>Sequences:</h4>
 <table ng-cloak class="table table-bordered table-hover table-sm mb-3">
@@ -39,7 +39,7 @@
             </th>
             <th>
                 <select class="form-select"
-                        id="groupSelect"
+                        id="matterGroupSelect"
                         ng-model="$ctrl.group"
                         ng-options="g.Text for g in $ctrl.groups | filter:{ Nature: $ctrl.nature }"
                         ng-change="$ctrl.toogleMattersVisibility($ctrl.groupAndTypeRequired)">
@@ -49,7 +49,7 @@
             </th>
             <th>
                 <select class="form-select"
-                        id="sequenceTypeSelect"
+                        id="matterSequenceTypeSelect"
                         ng-model="$ctrl.sequenceType"
                         ng-options="s.Text for s in $ctrl.sequenceTypes | filter:{ Nature: $ctrl.nature }"
                         ng-change="$ctrl.toogleMattersVisibility($ctrl.groupAndTypeRequired)">

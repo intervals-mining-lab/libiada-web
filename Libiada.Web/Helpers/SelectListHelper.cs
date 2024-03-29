@@ -57,6 +57,34 @@ public static class SelectListHelper
     }
 
     /// <summary>
+    /// Creates list of sequence groups table rows.
+    /// </summary>
+    /// <param name="db">
+    /// The database connection.
+    /// </param>
+    /// <returns>
+    /// The <see cref="IEnumerable{MattersTableRow}"/>.
+    /// </returns>
+    public static IEnumerable<MattersTableRow> GetSequenceGroupSelectList(Func<SequenceGroup, bool> filter, LibiadaDatabaseEntities db)
+    {
+        return db.SequenceGroups.Where(filter).OrderBy(m => m.Created).Select(sg => new MattersTableRow(sg, false)).ToArray();
+    }
+
+    /// <summary>
+    /// Creates list of sequence groups table rows.
+    /// </summary>
+    /// <param name="db">
+    /// The database connection.
+    /// </param>
+    /// <returns>
+    /// The <see cref="IEnumerable{MattersTableRow}"/>.
+    /// </returns>
+    public static IEnumerable<MattersTableRow> GetSequenceGroupSelectList(LibiadaDatabaseEntities db)
+    {
+        return GetSequenceGroupSelectList(sg => true, db);
+    }
+
+    /// <summary>
     /// Creates select list of all multisequences.
     /// </summary>
     /// <param name="db">
@@ -72,6 +100,6 @@ public static class SelectListHelper
             Value = ms.Id.ToString(), 
             Text = ms.Name, 
             Nature = (byte)ms.Nature 
-        });
+        }).ToArray();
     }
 }

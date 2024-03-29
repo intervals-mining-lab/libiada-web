@@ -14,7 +14,7 @@
         </div>
     </div>
     <div class="row mb-1" ng-show="characteristic.characteristicType.Links.length > 1">
-        <label class="col-form-label col-md-2" for="link">Link:</label>
+        <label class="col-form-label col-md-2" for="link{{$index}}">Link:</label>
         <div class="col-md-10">
             <select class="form-select"
                     title="Link"
@@ -26,7 +26,7 @@
     @if (User.IsAdmin())
     {
         <div class="row mb-1" ng-show="characteristic.characteristicType.ArrangementTypes.length > 1">
-            <label class="col-form-label col-md-2" for="arrangementType">Arrangement type:</label>
+            <label class="col-form-label col-md-2" for="arrangementType{{$index}}">Arrangement type:</label>
             <div class="col-md-10">
                 <select class="form-select"
                         title="Arrangement type"
@@ -36,7 +36,7 @@
             </div>
         </div>
         <div class="row mb-1" ng-hide="$ctrl.hideNotation">
-            <label class="col-form-label col-md-2" for="notation">Notation:</label>
+            <label class="col-form-label col-md-2" for="notation{{$index}}">Notation:</label>
             <div class="col-md-10">
                 <select class="form-select"
                         title="Notation"
@@ -64,7 +64,7 @@
         </div>
         <div ng-switch-when="@((byte)Nature.Music)">
             <div class="row mb-1">
-                <label class="col-form-label col-md-2" for="pauseTreatment">Pause treatment:</label>
+                <label class="col-form-label col-md-2" for="pauseTreatment{{$index}}">Pause treatment:</label>
                 <div class="col-md-10">
                     <select class="form-select"
                             title="PauseTreatment"
@@ -82,14 +82,14 @@
                        ng-model="characteristic.sequentialTransfer"
                        value="true" />
                 <input type="hidden" name="sequentialTransfers" value="false" />
-                <label class="form-check-label" for="sequentialTransfers">
+                <label class="form-check-label" for="sequentialTransfers{{$index}}">
                     Sequential transfer
                 </label>
             </div>
         </div>
         <div ng-switch-when="@((byte)Nature.Literature)">
             <div class="row mb-1">
-                <label class="col-form-label col-md-2" for="language">Language:</label>
+                <label class="col-form-label col-md-2" for="language{{$index}}">Language:</label>
                 <div class="col-md-10">
                     <select class="form-select"
                             title="Language"
@@ -100,7 +100,7 @@
                 </div>
             </div>
             <div class="row mb-1">
-                <label class="col-form-label col-md-2" for="translator">Translator:</label>
+                <label class="col-form-label col-md-2" for="translator{{$index}}">Translator:</label>
                 <div class="col-md-10">
                     <select class="form-select"
                             title="Translator"
@@ -115,7 +115,7 @@
         </div>
         <div ng-switch-when="@((byte)Nature.Image)">
             <div class="row mb-1">
-                <label class="col-form-label col-md-2" for="trajectory">Reading trajectory:</label>
+                <label class="col-form-label col-md-2" for="trajectory{{$index}}">Reading trajectory:</label>
                 <div class="col-md-10">
                     <select class="form-select"
                             title="Reading trajectory"

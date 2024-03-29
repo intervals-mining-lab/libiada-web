@@ -93,12 +93,11 @@ builder.Services.Configure<RazorViewEngineOptions>(options =>
     options.ViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
     options.ViewLocationFormats.Add("/Views/Sequences/{1}/{0}.cshtml");
     options.ViewLocationFormats.Add("/Views/Calculators/{1}/{0}.cshtml");
-    options.ViewLocationFormats.Add("/Views/AngularTemplates/{0}.cshtml");
 });
 
 builder.Services.AddControllersWithViews();
 
-// TODO: fix naming
+// TODO: fix json naming
 builder.Services.AddSignalR().AddJsonProtocol(options => { options.PayloadSerializerOptions.PropertyNamingPolicy = null; });
 
 var app = builder.Build();

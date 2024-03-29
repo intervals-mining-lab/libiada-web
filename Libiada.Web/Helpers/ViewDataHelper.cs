@@ -22,7 +22,6 @@ public class ViewDataHelper : IViewDataHelper
     /// The database model.
     /// </summary>
     private readonly LibiadaDatabaseEntities db;
-    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
 
     /// <summary>
     /// The current user.
@@ -46,7 +45,6 @@ public class ViewDataHelper : IViewDataHelper
                           IAccordanceCharacteristicRepository accordanceCharacteristicRepository,
                           IBinaryCharacteristicRepository binaryCharacteristicRepository)
     {
-        this.dbFactory = dbFactory;
         this.db = dbFactory.CreateDbContext();
         this.user = user;
         this.fullCharacteristicModelRepository = fullCharacteristicRepository;
@@ -439,7 +437,13 @@ public class ViewDataHelper : IViewDataHelper
         {
             { "minimumSelectedMatters", minSelectedMatters },
             { "maximumSelectedMatters", maxSelectedMatters },
-            { "matters", SelectListHelper.GetMatterSelectList(filter, selectionFilter, db) }
+            { "matters", SelectListHelper.GetMatterSelectList(filter, selectionFilter, db) },
+            { "sequenceGroups", SelectListHelper.GetSequenceGroupSelectList(db) }
         };
+    }
+
+    public void Dispose()
+    {
+        db.Dispose();
     }
 }

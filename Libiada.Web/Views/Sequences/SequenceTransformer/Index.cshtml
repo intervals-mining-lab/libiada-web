@@ -26,13 +26,13 @@
         <fieldset>
             <legend>Transform nucleotide sequences to:</legend>
             <div class="form-check">
-                <input type="radio" class="form-check-input" name="transformType" id="transformTypeAmino" value="toAmino" checked />
+                <input type="radio" class="form-check-input" name="transformType" id="transformTypeAmino" value="toAmino" checked/>
                 <label class="form-check-label" for="transformTypeAmino">
                     Amino
                 </label>
             </div>
             <div class="form-check">
-                <input type="radio" class="form-check-input" name="transformType" value="toTriplet" id="transformTypeTriplet" />
+                <input type="radio" class="form-check-input" name="transformType" id="transformTypeTriplet" value="toTriplet"/>
                 <label class="form-check-label" for="transformTypeTriplet">
                     Triplet
                 </label>
@@ -41,7 +41,7 @@
         <hr />
         @{
             await Html.RenderPartialAsync("_MattersSubmit");
-}
+        }
     </div>
 }
 @section Scripts {

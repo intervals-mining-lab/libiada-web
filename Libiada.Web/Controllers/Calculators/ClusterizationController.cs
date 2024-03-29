@@ -16,6 +16,7 @@ using Libiada.Database.Models.Calculators;
 using Newtonsoft.Json;
 
 using EnumExtensions = Core.Extensions.EnumExtensions;
+using Libiada.Database.Models.CalculatorsData;
 
 /// <summary>
 /// The clusterization controller.
@@ -150,8 +151,7 @@ public class ClusterizationController : AbstractResultController
     {
         return CreateTask(() =>
         {
-            Dictionary<long, string> mattersNames;
-            Dictionary<long, string> matters = cache.Matters
+            Dictionary<long, string> mattersNames = cache.Matters
                                                     .Where(m => matterIds.Contains(m.Id))
                                                     .ToDictionary(m => m.Id, m => m.Name);
 
@@ -166,7 +166,6 @@ public class ClusterizationController : AbstractResultController
                                                                   trajectories);
 
             using var db = dbFactory.CreateDbContext();
-            mattersNames = db.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
 
             double[][] characteristics;
 
@@ -184,13 +183,13 @@ public class ClusterizationController : AbstractResultController
 
             IClusterizator clusterizator = ClusterizatorsFactory.CreateClusterizator(clusterizationType, clusterizationParams);
             int[] clusterizationResult = clusterizator.Cluster(clustersCount, characteristics);
-            var mattersCharacteristics = new object[matterIds.Length];
+            var mattersCharacteristics = new SequenceCharacteristics[matterIds.Length];
             for (int i = 0; i < clusterizationResult.Length; i++)
             {
-                mattersCharacteristics[i] = new
+                mattersCharacteristics[i] = new SequenceCharacteristics
                 {
                     MatterName = mattersNames[matterIds[i]],
-                    cluster = clusterizationResult[i] + 1,
+                    SequenceGroupId = i,
                     Characteristics = characteristics[i]
                 };
             }
@@ -208,12 +207,21 @@ public class ClusterizationController : AbstractResultController
                 };
             }
 
+            var actualClustersCount = clusterizationResult.Distinct().Count();
+
+            IEnumerable<SelectListItem> sequenceGroupsSelectlist = Enumerable.Range(0, actualClustersCount)
+            .Select(i => new SelectListItem 
+                {
+                Text = $"Cluster {i + 1}",
+                Value = i.ToString(),
+                });
+
             var result = new Dictionary<string, object>
             {
                 { "characteristicNames", characteristicNames },
                 { "characteristics", mattersCharacteristics },
                 { "characteristicsList", characteristicsList },
-                { "clustersCount", clusterizationResult.Distinct().Count() }
+                { "sequenceGroupsSelectlist", sequenceGroupsSelectlist }
             };
 
             return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };

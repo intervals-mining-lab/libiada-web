@@ -15,7 +15,23 @@
             }
         }
 
+        function setUnselectAllMattersFunction(func) {
+            $scope.unselectAllMatters = func;
+        }
+
+        function setUnselectAllSequenceGroupsFunction(func) {
+            $scope.unselectAllSequenceGroups = func;
+        }
+
+        function clearSelection() {
+            if ($scope.unselectAllMatters) $scope.unselectAllMatters();
+            if ($scope.unselectAllSequenceGroups) $scope.unselectAllSequenceGroups();
+        }
+
         $scope.filterByNature = filterByNature;
+        $scope.setUnselectAllMattersFunction = setUnselectAllMattersFunction;
+        $scope.setUnselectAllSequenceGroupsFunction = setUnselectAllSequenceGroupsFunction;
+        $scope.clearSelection = clearSelection;
 
         $scope.disableSubmit = $scope.minimumSelectedMatters > 0;
         if (!$scope.nature) $scope.nature = $scope.natures[0].Value;
@@ -25,6 +41,7 @@
         $scope.language = $scope.languages[0];
         $scope.translator = $scope.translators[0];
         $scope.pauseTreatment = $scope.pauseTreatments ? $scope.pauseTreatments[0] : null;
+        $scope.calculaionFor = "matters";
 
         // if we are in clusterization
         if ($scope.ClusterizatorsTypes) {

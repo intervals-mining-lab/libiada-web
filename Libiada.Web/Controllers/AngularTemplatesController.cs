@@ -4,69 +4,19 @@
 /// Controller for partial views.
 /// Needed for angular templates.
 /// </summary>
+[Route("[controller]")]
 public class AngularTemplatesController : Controller
 {
     /// <summary>
-    /// The matters table partial view.
+    /// Universal action for all angular template views.
     /// </summary>
+    /// <param name="viewName">
+    /// Name of the view.
+    /// </param>
     /// <returns>
     /// The <see cref="PartialViewResult"/>.
     /// </returns>
-    public IActionResult _MattersTable() => PartialView();
-
-    /// <summary>
-    /// The scroll jumper partial view.
-    /// </summary>
-    /// <returns>
-    /// The <see cref="PartialViewResult"/>.
-    /// </returns>
-    public IActionResult _ScrollJumper() => PartialView();
-
-    /// <summary>
-    /// The loading Window partial view.
-    /// </summary>
-    /// <returns>
-    /// The <see cref="PartialViewResult"/>.
-    /// </returns>
-    public IActionResult _LoadingWindow() => PartialView();
-
-    /// <summary>
-    /// The Characteristic partial view.
-    /// </summary>
-    /// <returns>
-    /// The <see cref="PartialViewResult"/>.
-    /// </returns>
-    public IActionResult _Characteristic() => PartialView();
-
-    /// <summary>
-    /// Characteristics nature parameters partial view.
-    /// </summary>
-    /// <returns>
-    /// The <see cref="PartialViewResult"/>.
-    /// </returns>
-    public IActionResult _CharacteristicNatureParams() => PartialView();
-
-    /// <summary>
-    /// The Characteristics partial view.
-    /// </summary>
-    /// <returns>
-    /// The <see cref="PartialViewResult"/>.
-    /// </returns>
-    public IActionResult _Characteristics() => PartialView();
-
-    /// <summary>
-    /// The characteristics without notation.
-    /// </summary>
-    /// <returns>
-    /// The <see cref="PartialViewResult"/>.
-    /// </returns>
-    public IActionResult _CharacteristicsWithoutNotation() => PartialView();
-
-    /// <summary>
-    /// The Order Transformations partial view.
-    /// </summary>
-    /// <returns>
-    /// The <see cref="PartialViewResult"/>.
-    /// </returns>
-    public IActionResult _OrderTransformations() => PartialView();
+    [HttpGet("{viewName}")]
+    public IActionResult HandleUnknownAction(string viewName) => PartialView(viewName);
+    
 }
