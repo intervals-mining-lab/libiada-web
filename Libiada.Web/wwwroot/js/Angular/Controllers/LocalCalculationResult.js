@@ -236,9 +236,9 @@
                         .datum(value)
                         .attr("class", "line")
                         .attr("d", line)
-                        .attr('stroke', d => color(d[0].characteristicId))
-                        .attr('stroke-width', 1)
-                        .attr('fill', 'none');
+                        .attr("stroke", d => color(d[0].characteristicId))
+                        .attr("stroke-width", 1)
+                        .attr("fill", "none");
                 });
             }
 

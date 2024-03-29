@@ -49,7 +49,7 @@
                         <div class="form-check">
                             <input type="checkbox"
                                    class="form-check-input"
-                                   name="sequenceGroupsIds"
+                                   name="sequenceGroupIds"
                                    id="sequenceGroup${sg.Value}"
                                    value="${sg.Value}" 
                                    ${sg.Selected ? `checked` : ``} />

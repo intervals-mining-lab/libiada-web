@@ -135,7 +135,7 @@
             let color = d3.scaleLinear()
                 .domain([0, 0.1, 0.5, 1])
                 .range(["lightcoral", "gold", "yellow", "limegreen"]);
-            return { 'background-color': color(value) };
+            return { "background-color": color(value) };
         }
 
         // calculates and displays local characteristics for given subsequences
@@ -310,9 +310,9 @@
                         .datum(value)
                         .attr("class", "line")
                         .attr("d", line)
-                        .attr('stroke', d => color(d[0].id))
-                        .attr('stroke-width', 1)
-                        .attr('fill', 'none')
+                        .attr("stroke", d => color(d[0].id))
+                        .attr("stroke-width", 1)
+                        .attr("fill", "none")
                         .attr("opacity", 0.6);
                 });
             });
@@ -411,6 +411,6 @@
     }
 
     angular.module("libiada")
-        .filter('makePositive', makePositive)
+        .filter("makePositive", makePositive)
         .controller("SubsequencesComparerResultCtrl", ["$scope", "$http", subsequencesComparerResult]);
 }

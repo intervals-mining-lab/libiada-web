@@ -5,22 +5,24 @@
 
         function fillLegend() {
             $scope.legend = [];
-            if ($scope.clustersCount) {
-                $scope.colorScale = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.clustersCount]);
-                for (let j = 0; j < $scope.clustersCount; j++) {
-                    $scope.legend.push({ id: j + 1, name: j + 1, visible: true });
+            if ($scope.sequenceGroups) {
+                $scope.colorScale = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.sequenceGroups.length]);
+                for (let j = 0; j < $scope.sequenceGroups.length; j++) {
+                    const color = $scope.colorScale(j + 1);
+                    $scope.legend.push({ id: +$scope.sequenceGroups[j].Value, name: $scope.sequenceGroups[j].Text, visible: true, color: color });
 
                     // hack for the legend's dot color
-                    document.styleSheets[0].insertRule(".legend" + (j + 1) + ":after { background:" + $scope.colorScale(j + 1) + "}");
+                    document.styleSheets[0].insertRule(`.legend${$scope.sequenceGroups[j].Value}:after { background:${color} }`);
 
                 }
             } else {
                 $scope.colorScale = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.characteristics.length]);
                 for (let k = 0; k < $scope.characteristics.length; k++) {
-                    $scope.legend.push({ id: k + 1, name: $scope.characteristics[k].MatterName, visible: true });
+                    const color = $scope.colorScale(k + 1);
+                    $scope.legend.push({ id: k + 1, name: $scope.characteristics[k].MatterName, visible: true, color: color });
 
                     // hack for the legend's dot color
-                    document.styleSheets[0].insertRule(".legend" + (k + 1) + ":after { background:" + $scope.colorScale(k + 1) + "}");
+                    document.styleSheets[0].insertRule(`.legend${k + 1}:after { background:${color} }`);
                 }
             }
         }
@@ -38,11 +40,13 @@
 
             for (let i = 0; i < $scope.characteristics.length; i++) {
                 let characteristic = $scope.characteristics[i];
+                const legendIndex = characteristic.SequenceGroupId ? $scope.legend.findIndex(l => l.id === characteristic.SequenceGroupId) : i;
                 $scope.points.push({
                     id: i + 1,
+                    legendIndex: legendIndex,
+                    legendId: characteristic.SequenceGroupId ? characteristic.SequenceGroupId : i,
                     name: characteristic.MatterName,
-                    characteristics: characteristic.Characteristics,
-                    cluster: characteristic.cluster ? characteristic.cluster : characteristic.MatterName
+                    characteristics: characteristic.Characteristics
                 });
             }
         }
@@ -116,7 +120,7 @@
 
                 },
                 showlegend: false,
-                xaxis: { categoryorder: 'total ascending' },
+                xaxis: { categoryorder: "total ascending" },
                 yaxis: {
                     range: [min, max],
                     title: {
@@ -126,14 +130,14 @@
             };
 
             $scope.chartData = $scope.points.map(p => ({
-                hoverinfo: 'text+x+y',
+                hoverinfo: "text+x+y",
                 x: [p.name],
                 y: [p.characteristics[characteristicIndex]],
-                marker: { color: $scope.colorScale(p.id) },
-                type: 'bar',
-                customdata: { id: p.id },
+                marker: { color: $scope.legend[p.legendIndex].color },
+                type: "bar",
+                customdata: { legendId: p.legendId },
                 name: p.name,
-                visible: $scope.legend.find(l => l.id === p.id).visible ? "true" : "legendonly"
+                visible: $scope.legend[p.legendIndex].visible ? "true" : "legendonly"
             }));
         }
 
@@ -151,13 +155,13 @@
                 showlegend: false,
                 hovermode: "closest",
                 xaxis: {
-                    //type: $scope.plotTypeX ? 'log' : '',
+                    //type: $scope.plotTypeX ? "log" : "",
                     title: {
                         text: $scope.characteristicNames[firstCharacteristicIndex]
                     }
                 },
                 yaxis: {
-                    //type: $scope.plotTypeY ? 'log' : '',
+                    //type: $scope.plotTypeY ? "log" : "",
                     title: {
                         text: $scope.characteristicNames[secondCharacteristicIndex]
                     }
@@ -165,16 +169,16 @@
             };
 
             $scope.chartData = $scope.points.map(p => ({
-                hoverinfo: 'text+x+y',
-                type: 'scattergl',
+                hoverinfo: "text+x+y",
+                type: "scattergl",
                 x: [p.characteristics[firstCharacteristicIndex]],
                 y: [p.characteristics[secondCharacteristicIndex]],
                 text: p.name,
                 mode: "markers",
-                marker: { opacity: 0.8, color: $scope.colorScale(p.id) },
+                marker: { opacity: 0.8, color: $scope.legend[p.legendIndex].color },
                 name: p.name,
-                customdata: { id: p.id },
-                visible: $scope.legend.find(l => l.id === p.id).visible
+                customdata: { legendId: p.legendId },
+                visible: $scope.legend[p.legendIndex].visible
             }));
         }
 
@@ -185,19 +189,17 @@
             let thirdCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[2].value);
 
             $scope.chartData = $scope.points.map(p => ({
-                hoverinfo: 'text+x+y+z',
+                hoverinfo: "text+x+y+z",
                 x: [p.characteristics[firstCharacteristicIndex]],
                 y: [p.characteristics[secondCharacteristicIndex]],
                 z: [p.characteristics[thirdCharacteristicIndex]],
                 text: p.name,
                 mode: "markers",
-                marker: {
-                    opacity: 0.8, color: $scope.colorScale(p.id)
-                },
+                marker: { opacity: 0.8, color: $scope.legend[p.legendIndex].color },
                 name: p.name,
-                type: 'scatter3d',
-                customdata: { id: p.id },
-                visible: $scope.legend.find(l => l.id === p.id).visible
+                type: "scatter3d",
+                customdata: { legendId: p.legendId },
+                visible: $scope.legend[p.legendIndex].visible
             }));
 
             $scope.layout = {
@@ -210,7 +212,7 @@
                 showlegend: false,
                 scene: {
                     xaxis: {
-                        //type: $scope.plotTypeX ? 'log' : '',
+                        //type: $scope.plotTypeX ? "log" : "",
                         title: {
                             text: $scope.characteristicNames[firstCharacteristicIndex],
                             font: {
@@ -219,7 +221,7 @@
                         },
                     },
                     yaxis: {
-                        //type: $scope.plotTypeY ? 'log' : '',
+                        //type: $scope.plotTypeY ? "log" : "",
                         title: {
                             text: $scope.characteristicNames[secondCharacteristicIndex],
                             font: {
@@ -228,7 +230,7 @@
                         }
                     },
                     zaxis: {
-                        //type: $scope.plotTypeY ? 'log' : '',
+                        //type: $scope.plotTypeY ? "log" : "",
                         title: {
                             text: $scope.characteristicNames[thirdCharacteristicIndex],
                             font: {
@@ -244,11 +246,11 @@
             let characteristicsIndices = $scope.chartCharacteristics.map(c => $scope.characteristicsList.indexOf(c.value));
 
             $scope.chartData = [{
-                type: 'parcoords',
+                type: "parcoords",
                 //pad: [80, 80, 80, 80],
                 line: {
-                    color: $scope.points.map(p => p.id),
-                    colorscale: 'Turbo'
+                    color: $scope.points.map(p => p.legendIndex),
+                    colorscale: "Turbo"
                 },
 
                 dimensions: characteristicsIndices.map(ci => ({
@@ -293,18 +295,15 @@
                 let selectedPoint = $scope.points[data.points[0].curveNumber];
                 $scope.showTooltip(selectedPoint);
             });
-
-            $scope.chartDisplayed = true;
         }
 
         function legendClick(legendItem) {
             if ($scope.chartData && $scope.chartData[0].customdata) {
-                let index;
+                let index = [];
                 let update = { visible: legendItem.visible ? "legendonly" : true };
                 for (let i = 0; i < $scope.chartData.length; i++) {
-                    if ($scope.chartData[i].customdata.id === legendItem.id) {
-                        index = i;
-                        break;
+                    if ($scope.chartData[i].customdata.legendId === legendItem.id) {
+                        index.push(i);
                     }
                 }
 
@@ -322,22 +321,22 @@
         }
 
         function dragbarMouseDown() {
-            let right = document.getElementById('sidebar');
-            let bar = document.getElementById('dragbar');
+            let right = document.getElementById("sidebar");
+            let bar = document.getElementById("dragbar");
 
             const drag = (e) => {
                 document.selection ? document.selection.empty() : window.getSelection().removeAllRanges();
-                $scope.chartElement.style.width = (e.pageX - bar.offsetWidth / 2) + 'px';
+                $scope.chartElement.style.width = `${e.pageX - bar.offsetWidth / 2}px`;
 
                 Plotly.relayout($scope.chartElement, { autosize: true });
             };
 
-            bar.addEventListener('mousedown', () => {
-                document.addEventListener('mousemove', drag);
+            bar.addEventListener("mousedown", () => {
+                document.addEventListener("mousemove", drag);
             });
 
-            bar.addEventListener('mouseup', () => {
-                document.removeEventListener('mousemove', drag);
+            bar.addEventListener("mouseup", () => {
+                document.removeEventListener("mousemove", drag);
             });
         }
 
@@ -345,11 +344,11 @@
 
             const workbook = new ExcelJS.Workbook();
             const worksheet = workbook.addWorksheet("My Sheet");
-            const font = { name: 'Courier New' };
-            const border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } }
+            const font = { name: "Courier New" };
+            const border = { top: { style: "thin" }, left: { style: "thin" }, bottom: { style: "thin" }, right: { style: "thin" } }
             let columns = [
-                { header: '№', key: 'id', width: 10, style: { font: font, border: border } },
-                { header: 'Sequence name', key: 'name', width: 32, style: { font: font, border: border } }
+                { header: "№", key: "id", width: 10, style: { font: font, border: border } },
+                { header: "Sequence name", key: "name", width: 32, style: { font: font, border: border } }
             ];
 
             columns = columns.concat($scope.characteristicNames.map(cn => ({ header: cn, key: cn, width: 20, style: { font: font, border: border } })));
@@ -364,7 +363,7 @@
 
             const buffer = await workbook.xlsx.writeBuffer();
 
-            const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
+            const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8" });
 
             // TODO: rewrite it using browser file API
             let saveBlobAsFile = function (blob) {
@@ -411,12 +410,8 @@
         $scope.exportToExcel = exportToExcel;
         $scope.renderResultsTable = renderResultsTable;
 
-        $scope.dotRadius = 4;
-        $scope.selectedDotRadius = $scope.dotRadius * 2;
-        $scope.chartElement = document.getElementById("chart");;
-        $scope.legendSettings = { show: true };
+        $scope.chartElement = document.getElementById("chart");
         $scope.characteristicsTableRendering = { rendered: false };
-        $scope.chartDisplayed = false;
         $scope.chartsCharacterisrticsCount = 1;
 
         $scope.loadingScreenHeader = "Loading data";

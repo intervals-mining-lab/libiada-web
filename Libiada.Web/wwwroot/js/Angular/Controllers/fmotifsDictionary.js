@@ -42,7 +42,7 @@
                 MIDI.chordOff(0, chord, this.velocity, this.timeline + this.barDuration * duration);
                 setTimeout(this.keyOff, (this.timeline + this.barDuration * duration) * 900, event);
                 setTimeout(this.noteOff, (this.timeline + this.barDuration * duration) * 900, event);
-                if (typeof moveTime !== 'undefined' && moveTime === true) {
+                if (typeof moveTime !== "undefined" && moveTime === true) {
                     this.move(duration);
                 }
             },

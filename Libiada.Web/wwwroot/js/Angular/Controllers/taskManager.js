@@ -3,7 +3,7 @@
 
     function taskManager($scope) {
         function onCloseConnection() {
-            alertify.error('Connection lost', 5);
+            alertify.error("Connection lost", 5);
         };
 
         function onHubStart(tasks) {
@@ -71,17 +71,17 @@
         }
 
         function deleteAllTasks() {
-            alertify.confirm('Confirm action', 'Are you sure you want to delete all tasks?',
+            alertify.confirm("Confirm action", "Are you sure you want to delete all tasks?",
                 () => {
                     $scope.tasks.forEach(t => t.Deleting = true);
                     $scope.$apply();
                     $scope.tasksHub.invoke("deleteAllTasks")
-                        .then(alertify.success('All tasks have been deleted.'));
+                        .then(alertify.success("All tasks have been deleted."));
                 }, () => { });
         }
 
         function deleteTasksWithStatus(taskStatus) {
-            alertify.confirm('Confirm action', `Are you sure you want to delete all tasks with "${taskStatus}" status?`,
+            alertify.confirm("Confirm action", `Are you sure you want to delete all tasks with "${taskStatus}" status?`,
                 () => {
                     $scope.tasks.filter(t => t.taskState === taskStatus).forEach(t => t.Deleting = true);
                     $scope.$apply();
@@ -91,13 +91,13 @@
         }
 
         function deleteTask(id) {
-            alertify.confirm('Confirm action', 'Are you sure you want to delete this task?',
+            alertify.confirm("Confirm action", "Are you sure you want to delete this task?",
                 () => {
                     let taskToDelete = $scope.tasks.find(t => t.Id === id);
                     taskToDelete.Deleting = true;
                     $scope.$apply();
                     $scope.tasksHub.invoke("deleteTask", id)
-                        .then(() => alertify.success('The task has been deleted.'))
+                        .then(() => alertify.success("The task has been deleted."))
                 }, () => { });
         }
 

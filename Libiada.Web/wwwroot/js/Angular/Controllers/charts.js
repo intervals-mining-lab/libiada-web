@@ -339,8 +339,8 @@
         $scope.characteristicsTableRendering = { rendered: false };
 
         $scope.keyCodes = {
-            'C': 67,
-            'V': 86
+            "C": 67,
+            "V": 86
         };
 
         $scope.inFocus = false;

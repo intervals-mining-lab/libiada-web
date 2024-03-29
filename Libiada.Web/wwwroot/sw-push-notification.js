@@ -1,9 +1,9 @@
-﻿self.addEventListener('push', (event) => {
+﻿self.addEventListener("push", (event) => {
     let notificationData = event.data.json();
-    let title = notificationData.title || '';
-    let body = notificationData.body || '';
-    let icon = notificationData.icon || '';
-    let tag = notificationData.tag || '/';
+    let title = notificationData.title || "";
+    let body = notificationData.body || "";
+    let icon = notificationData.icon || "";
+    let tag = notificationData.tag || "/";
 
     event.waitUntil(self.registration.showNotification(title,
         {
@@ -14,7 +14,7 @@
     );
 });
 
-self.addEventListener('notificationclick', event => {
+self.addEventListener("notificationclick", event => {
     target = event.notification.tag;
     event.notification.close();
 
@@ -22,7 +22,7 @@ self.addEventListener('notificationclick', event => {
         .then(clientList => {
             for (let i = 0; i < clientList.length; i++) {
                 let client = clientList[i];
-                if (client.url == target && 'focus' in client) {
+                if (client.url == target && "focus" in client) {
                     return client.focus();
                 }
             }
