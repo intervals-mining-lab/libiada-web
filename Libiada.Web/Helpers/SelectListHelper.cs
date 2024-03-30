@@ -7,15 +7,15 @@ public static class SelectListHelper
     /// <summary>
     /// Creates list of matter table rows.
     /// </summary>
-    /// <param name="db">
-    /// The database connection.
+    /// <param name="cache">
+    /// Matters in-memory cache..
     /// </param>
     /// <returns>
     /// The <see cref="IEnumerable{MattersTableRow}"/>.
     /// </returns>
-    public static IEnumerable<MattersTableRow> GetMatterSelectList(LibiadaDatabaseEntities db)
+    public static IEnumerable<MattersTableRow> GetMatterSelectList(Cache cache)
     {
-        return GetMatterSelectList(m => true, m => false, db);
+        return GetMatterSelectList(m => true, m => false, cache);
     }
 
     /// <summary>
@@ -27,15 +27,15 @@ public static class SelectListHelper
     /// /// <param name="selectionFilter">
     /// The matters selection filter.
     /// </param>
-    /// <param name="db">
-    /// The database connection.
+    /// <param name="cache">
+    /// Matters in-memory cache.
     /// </param>
     /// <returns>
     /// The <see cref="IEnumerable{MattersTableRow}"/>.
     /// </returns>
-    public static IEnumerable<MattersTableRow> GetMatterSelectList(Func<Matter, bool> filter, Func<Matter, bool> selectionFilter, LibiadaDatabaseEntities db)
+    public static IEnumerable<MattersTableRow> GetMatterSelectList(Func<Matter, bool> filter, Func<Matter, bool> selectionFilter, Cache cache)
     {
-        return GetMatterSelectList(db.Matters.Where(filter), selectionFilter);
+        return GetMatterSelectList(cache.Matters.Where(filter), selectionFilter);
     }
 
     /// <summary>

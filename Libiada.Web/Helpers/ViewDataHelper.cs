@@ -22,6 +22,7 @@ public class ViewDataHelper : IViewDataHelper
     /// The database model.
     /// </summary>
     private readonly LibiadaDatabaseEntities db;
+    private readonly Cache cache;
 
     /// <summary>
     /// The current user.
@@ -39,6 +40,7 @@ public class ViewDataHelper : IViewDataHelper
     /// Database context factory.
     /// </param>
     public ViewDataHelper(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
+                          Cache cache,
                           ClaimsPrincipal user,
                           IFullCharacteristicRepository fullCharacteristicRepository,
                           ICongenericCharacteristicRepository congenericCharacteristicRepository,
@@ -46,6 +48,7 @@ public class ViewDataHelper : IViewDataHelper
                           IBinaryCharacteristicRepository binaryCharacteristicRepository)
     {
         this.db = dbFactory.CreateDbContext();
+        this.cache = cache;
         this.user = user;
         this.fullCharacteristicModelRepository = fullCharacteristicRepository;
         this.congenericCharacteristicModelRepository = congenericCharacteristicRepository;
@@ -84,7 +87,7 @@ public class ViewDataHelper : IViewDataHelper
 
         return new Dictionary<string, object>
         {
-            { "matters", SelectListHelper.GetMatterSelectList(db) },
+            { "matters", SelectListHelper.GetMatterSelectList(cache) },
             { "natures", natures },
             { "notations", notations.ToSelectListWithNature() },
             { "remoteDbs", remoteDbs.ToSelectListWithNature() },
@@ -437,7 +440,7 @@ public class ViewDataHelper : IViewDataHelper
         {
             { "minimumSelectedMatters", minSelectedMatters },
             { "maximumSelectedMatters", maxSelectedMatters },
-            { "matters", SelectListHelper.GetMatterSelectList(filter, selectionFilter, db) },
+            { "matters", SelectListHelper.GetMatterSelectList(filter, selectionFilter, cache) },
             { "sequenceGroups", SelectListHelper.GetSequenceGroupSelectList(db) }
         };
     }
