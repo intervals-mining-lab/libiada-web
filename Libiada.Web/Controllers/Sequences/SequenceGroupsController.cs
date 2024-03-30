@@ -54,7 +54,12 @@ public class SequenceGroupsController : Controller
             return BadRequest();
         }
 
-        SequenceGroup? sequenceGroup = await db.SequenceGroups.FindAsync(id);
+        SequenceGroup? sequenceGroup = await db.SequenceGroups
+                                               .Include(sg => sg.Matters)
+                                               .Include(sg => sg.Creator)
+                                               .Include(sg => sg.Modifier)
+                                               .SingleOrDefaultAsync(sg => sg.Id == id);
+
         if (sequenceGroup == null)
         {
             return NotFound();
@@ -95,8 +100,9 @@ public class SequenceGroupsController : Controller
     {
         sequenceGroup.CreatorId = User.GetUserId();
         sequenceGroup.ModifierId = User.GetUserId();
-        ModelState.ClearValidationState(nameof(sequenceGroup));
-        if (!TryValidateModel(sequenceGroup, nameof(sequenceGroup)))
+        //ModelState.MarkFieldValid(nameof(sequenceGroup));
+
+        if (ModelState.IsValid)
         {
             Matter[] matters = db.Matters.Where(m => matterIds.Contains(m.Id)).ToArray();
             foreach (Matter matter in matters)
@@ -152,7 +158,6 @@ public class SequenceGroupsController : Controller
 
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         
-
         return View(sequenceGroup);
     }
 
@@ -179,6 +184,8 @@ public class SequenceGroupsController : Controller
             originalSequenceGroup.Nature = sequenceGroup.Nature;
             originalSequenceGroup.SequenceGroupType = sequenceGroup.SequenceGroupType;
             originalSequenceGroup.ModifierId = User.GetUserId();
+            originalSequenceGroup.Group = sequenceGroup.Group;
+            originalSequenceGroup.SequenceType = sequenceGroup.SequenceType;
             Matter[] matters = db.Matters.Where(m => matterIds.Contains(m.Id)).ToArray();
             originalSequenceGroup.Matters.Clear();
             foreach (var matter in matters)
@@ -210,7 +217,11 @@ public class SequenceGroupsController : Controller
             return BadRequest();
         }
 
-        SequenceGroup? sequenceGroup = await db.SequenceGroups.FindAsync(id);
+        SequenceGroup? sequenceGroup = await db.SequenceGroups
+                                               .Include(sg => sg.Matters)
+                                               .Include(sg => sg.Creator)
+                                               .Include(sg => sg.Modifier)
+                                               .SingleOrDefaultAsync(sg => sg.Id == id);
         if (sequenceGroup == null)
         {
             return NotFound();

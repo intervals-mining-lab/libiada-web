@@ -25,10 +25,8 @@
                 ctrl.mattersInputType = "radio";
             }
 
-            const selectedMatters = ctrl.matters.filter(m => m.Selected);
-            ctrl.selectedMattersCount = selectedMatters.length;
-            ctrl.visibleMatters = selectedMatters;
-            ctrl.visibleMatters.forEach(vm => vm.Visible = true);
+            ctrl.selectedMattersCount = ctrl.matters.filter(m => m.Selected).length;
+            ctrl.visibleMatters = [];
             ctrl.toogleMattersVisibility(false);
 
             // returning clear selection function to controller for callbacks

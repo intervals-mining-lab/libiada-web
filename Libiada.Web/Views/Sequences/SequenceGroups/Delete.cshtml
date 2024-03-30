@@ -27,13 +27,13 @@
         <dd>@Model.Group.GetDisplayValue()</dd>
 
         <dt>@Html.DisplayNameFor(model => model.Creator)</dt>
-        <dd>@Html.DisplayFor(model => model.Creator.UserName)</dd>
+        <dd>@Html.DisplayFor(model => model.Creator!.UserName)</dd>
 
         <dt>@Html.DisplayNameFor(model => model.Created)</dt>
         <dd>@Html.DisplayFor(model => model.Created)</dd>
 
         <dt>@Html.DisplayNameFor(model => model.Modifier)</dt>
-        <dd>@Html.DisplayFor(model => model.Modifier.UserName)</dd>
+        <dd>@Html.DisplayFor(model => model.Modifier!.UserName)</dd>
 
         <dt>@Html.DisplayNameFor(model => model.Modified)</dt>
         <dd>@Html.DisplayFor(model => model.Modified)</dd>
