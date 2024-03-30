@@ -135,7 +135,7 @@ public class SequenceGroupsController : Controller
         }
 
         SequenceGroup? sequenceGroup = await db.SequenceGroups.Include(m => m.Matters)
-                                                            .SingleOrDefaultAsync(sg => sg.Id == id);
+                                                              .SingleOrDefaultAsync(sg => sg.Id == id);
         if (sequenceGroup == null)
         {
             return NotFound();

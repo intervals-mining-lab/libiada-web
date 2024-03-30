@@ -32,9 +32,9 @@
             <td>@(item.SequenceGroupType == null ? "" : ((SequenceGroupType)item.SequenceGroupType).GetDisplayValue())</td>
             <td>@item.SequenceType.GetDisplayValue()</td>
             <td>@item.Group.GetDisplayValue()</td>
-            <td>@Html.DisplayFor(modelItem => item.Creator.UserName)</td>
+            <td>@Html.DisplayFor(modelItem => item.Creator!.UserName)</td>
             <td>@Html.DisplayFor(modelItem => item.Created)</td>
-            <td>@Html.DisplayFor(modelItem => item.Modifier.UserName)</td>
+            <td>@Html.DisplayFor(modelItem => item.Modifier!.UserName)</td>
             <td>@Html.DisplayFor(modelItem => item.Modified)</td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |

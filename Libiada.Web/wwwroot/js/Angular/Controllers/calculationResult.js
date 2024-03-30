@@ -13,7 +13,6 @@
 
                     // hack for the legend's dot color
                     document.styleSheets[0].insertRule(`.legend${$scope.sequenceGroups[j].Value}:after { background:${color} }`);
-
                 }
             } else {
                 $scope.colorScale = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.characteristics.length]);
@@ -44,7 +43,7 @@
                 $scope.points.push({
                     id: i + 1,
                     legendIndex: legendIndex,
-                    legendId: characteristic.SequenceGroupId ? characteristic.SequenceGroupId : i,
+                    legendId: characteristic.SequenceGroupId ? characteristic.SequenceGroupId : i + 1,
                     name: characteristic.MatterName,
                     characteristics: characteristic.Characteristics
                 });
@@ -341,7 +340,6 @@
         }
 
         async function exportToExcel() {
-
             const workbook = new ExcelJS.Workbook();
             const worksheet = workbook.addWorksheet("My Sheet");
             const font = { name: "Courier New" };
@@ -351,12 +349,17 @@
                 { header: "Sequence name", key: "name", width: 32, style: { font: font, border: border } }
             ];
 
+            if ($scope.sequenceGroups) columns.push({ header: "Sequences group", key: "sequenceGroup", width: 10, style: { font: font, border: border } });
+
             columns = columns.concat($scope.characteristicNames.map(cn => ({ header: cn, key: cn, width: 20, style: { font: font, border: border } })));
 
             worksheet.columns = columns;
 
             for (let i = 0; i < $scope.characteristics.length; i++) {
                 let row = { id: i + 1, name: $scope.characteristics[i].MatterName };
+
+                if ($scope.sequenceGroups) row.sequenceGroup = $scope.characteristics[i].SequenceGroupId;
+
                 $scope.characteristics[i].Characteristics.forEach((cv, j) => row[$scope.characteristicNames[j]] = cv);
                 worksheet.addRow(row).commit();
             }
@@ -388,6 +391,7 @@
                         `<tr id="resultRow${i}">
                         <td>${i + 1}</td>
                         <td>${c.MatterName}</td>
+                        ${$scope.sequenceGroups ? `<td>${c.SequenceGroupId}</td>` : ""}
                         ${c.Characteristics.map(c => `<td>${c}</td>`).join()}`
                     ).join());
                 }

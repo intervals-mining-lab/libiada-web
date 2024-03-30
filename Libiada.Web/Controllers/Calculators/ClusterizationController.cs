@@ -189,7 +189,7 @@ public class ClusterizationController : AbstractResultController
                 mattersCharacteristics[i] = new SequenceCharacteristics
                 {
                     MatterName = mattersNames[matterIds[i]],
-                    SequenceGroupId = i,
+                    SequenceGroupId = clusterizationResult[i] + 1,
                     Characteristics = characteristics[i]
                 };
             }
@@ -213,7 +213,7 @@ public class ClusterizationController : AbstractResultController
             .Select(i => new SelectListItem 
                 {
                 Text = $"Cluster {i + 1}",
-                Value = i.ToString(),
+                Value = (i + 1).ToString(),
                 });
 
             var result = new Dictionary<string, object>
@@ -221,7 +221,7 @@ public class ClusterizationController : AbstractResultController
                 { "characteristicNames", characteristicNames },
                 { "characteristics", mattersCharacteristics },
                 { "characteristicsList", characteristicsList },
-                { "sequenceGroupsSelectlist", sequenceGroupsSelectlist }
+                { "sequenceGroups", sequenceGroupsSelectlist }
             };
 
             return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };

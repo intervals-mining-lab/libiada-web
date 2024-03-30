@@ -231,6 +231,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>Sequence name</th>
+                                <th ng-if="sequenceGroups">Sequences group</th>
                                 <th ng-repeat="characteristicName in ::characteristicNames" ng-bind="::characteristicName" />
                             </tr>
                         </thead>
