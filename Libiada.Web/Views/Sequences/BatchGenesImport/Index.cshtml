@@ -21,12 +21,14 @@
                        selected-matters-count="selectedMattersCount"
                        group-and-type-required="::false">
         </matters-table>
-        @{
-            await Html.RenderPartialAsync("_MattersSubmit");
-}
+        <matters-submit selected-matters-count="selectedMattersCount"
+                       submit-name="Import"
+                       minimum-selected-matters="{{::minimumSelectedMatters}}">
+        </matters-submit>
     </div>
 }
 
 @section Scripts {
     <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersSubmit.js" asp-append-version="true"></script>
 }

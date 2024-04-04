@@ -56,34 +56,35 @@
         <div id="chart" class="font-monospace mb-2">
         </div>
 
-        @*  @{await Html.RenderPartialAsync("_Filters");}
-            <div ng-repeat="sequenceData in sequencesData">
-                <h3 ng-bind="sequenceData.MatterName"></h3>
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>Feature</th>
-                            <th>Subsequence attributes</th>
-                            <th>Subsequence position</th>
-                            <th ng-repeat="characteristicName in ::subsequencesCharacteristicsNames" ng-bind="::characteristicName" />
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="subsequenceData in ::sequenceData.SubsequencesData">
-                            <td ng-bind="::features[subsequenceData.FeatureId]" />
-                            <td ng-bind-html="getAttributesText(subsequenceData.Attributes)" />
-                            <td>
-                                <div ng-repeat="start in ::subsequenceData.Starts">Start: {{::start}} Length:{{::subsequenceData.Lengths[$index]}}</div>
-                            </td>
-                            <td ng-repeat="characteristicValue in ::subsequenceData.CharacteristicsValues" ng-bind="::characteristicValue" />
-                        </tr>
-                    </tbody>
-                </table>
-            </div>*@
+        @*  <filters addFilter="::addFilter" deleteFilter="::deleteFilter"></filters>
+    <div ng-repeat="sequenceData in sequencesData">
+    <h3 ng-bind="sequenceData.MatterName"></h3>
+    <table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+    <th>Feature</th>
+    <th>Subsequence attributes</th>
+    <th>Subsequence position</th>
+    <th ng-repeat="characteristicName in ::subsequencesCharacteristicsNames" ng-bind="::characteristicName" />
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="subsequenceData in ::sequenceData.SubsequencesData">
+    <td ng-bind="::features[subsequenceData.FeatureId]" />
+    <td ng-bind-html="getAttributesText(subsequenceData.Attributes)" />
+    <td>
+    <div ng-repeat="start in ::subsequenceData.Starts">Start: {{::start}} Length:{{::subsequenceData.Lengths[$index]}}</div>
+    </td>
+    <td ng-repeat="characteristicValue in ::subsequenceData.CharacteristicsValues" ng-bind="::characteristicValue" />
+    </tr>
+    </tbody>
+    </table>
+    </div>*@
     </div>
+}
 
-    @section Scripts {
+@section Scripts {
     <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
     <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
-    }
+    <script src="~/js/Angular/Components/filters.js" asp-append-version="true"></script>
 }

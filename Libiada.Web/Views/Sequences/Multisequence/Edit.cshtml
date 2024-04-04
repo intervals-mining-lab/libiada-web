@@ -60,10 +60,10 @@
                        multisequence-numbers="::multisequenceNumbers"
                        group-and-type-required="::false">
         </matters-table>
-
-        @{
-            await Html.RenderPartialAsync("_MattersSubmit");
-        }
+        <matters-submit selected-matters-count="selectedMattersCount"
+                       submit-name="Save"
+                       minimum-selected-matters="{{::minimumSelectedMatters}}">
+        </matters-submit>
         <div class="row mb-3">
             <div class="col-md-2">
                 @Html.ActionLink("Back to List", "Index")
@@ -75,4 +75,5 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersSubmit.js" asp-append-version="true"></script>
 }

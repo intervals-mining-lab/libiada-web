@@ -1,12 +1,19 @@
 ﻿function characteristics() {
     "use strict";
 
-    function Characteristics(filterFilter) {
+    function CharacteristicsController(filterFilter) {
         let ctrl = this;
 
-        ctrl.characteristics = [];
+        ctrl.$onInit = () => {
+            ctrl.characteristics = [];
+            ctrl.addCharacteristic();
+        };
 
-        ctrl.$onInit = () => { };
+        ctrl.$onChanges = changes => {
+            if (changes.nature) {
+                ctrl.filterByNature();
+            }
+        };
 
         ctrl.filterByNature = () => {
             if (!ctrl.hideNotation) {
@@ -18,12 +25,6 @@
             }
         };
 
-        ctrl.$onChanges = changes => {
-            if (changes.nature) {
-                ctrl.filterByNature();
-            }
-        };
-
         ctrl.addCharacteristic = () => {
             ctrl.characteristics.push({
                 characteristicType: ctrl.characteristicTypes[0],
@@ -32,10 +33,10 @@
 
                 // if notation is a part of characteristic
                 notation: ctrl.hideNotation ? 0 : filterFilter(ctrl.notations, { Nature: ctrl.nature })[0],
-                language: ctrl.languages ? ctrl.languages[0] : null,
-                translator: ctrl.translators ? ctrl.translators[0] : null,
-                pauseTreatment: ctrl.pauseTreatments ? ctrl.pauseTreatments[0] : null,
-                trajectory: ctrl.trajectories ? ctrl.trajectories[0] : null
+                language: ctrl.languages?.[0],
+                translator: ctrl.translators?.[0],
+                pauseTreatment: ctrl.pauseTreatments?.[0],
+                trajectory: ctrl.trajectories?.[0]
             });
         };
 
@@ -50,16 +51,16 @@
     }
 
     angular.module("libiada").component("characteristics", {
-        templateUrl: window.location.origin + "/AngularTemplates/_Characteristics",
-        controller: ["filterFilter", Characteristics],
+        templateUrl: `${window.location.origin}/AngularTemplates/_Characteristics`,
+        controller: ["filterFilter", CharacteristicsController],
         bindings: {
             characteristicTypes: "<",
             nature: "<",
             notations: "<",
-            languages: "<",
-            translators: "<",
-            pauseTreatments: "<",
-            trajectories: "<",
+            languages: "<?",
+            translators: "<?",
+            pauseTreatments: "<?",
+            trajectories: "<?",
             characteristicsDictionary: "<",
             percentageDifferenseNeeded: "<",
             hideNotation: "@"

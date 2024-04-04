@@ -23,9 +23,9 @@
                        selected-matters-count="selectedMattersCount"
                        group-and-type-required="::false">
         </matters-table>
-        @{
-            await Html.RenderPartialAsync("_FeaturesSelect");
-}
+
+        <features-select features="::features"></features-select>
+
         <hr />
         <characteristic characteristic-types="::characteristicTypes"
                         characteristics-dictionary="::characteristicsDictionary"
@@ -56,13 +56,16 @@
                 Don't exclude similar subsequences
             </label>
         </div>
-        @{
-            await Html.RenderPartialAsync("_MattersSubmit");
-}
+        <matters-submit selected-matters-count="selectedMattersCount"
+                       submit-name="Compare"
+                       minimum-selected-matters="{{::minimumSelectedMatters}}">
+        </matters-submit>
     </div>
 }
 
 @section Scripts {
     <script src="~/js/Angular/Components/characteristic.js" asp-append-version="true"></script>
     <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersSubmit.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/featuresSelect.js" asp-append-version="true"></script>
 }

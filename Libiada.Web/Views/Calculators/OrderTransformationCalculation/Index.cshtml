@@ -13,9 +13,10 @@
     @Html.AntiForgeryToken()
     <div ng-controller="OrderTransformerCtrl">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @{
-            await Html.RenderPartialAsync("_NatureSelect");
-}
+        <nature-select natures="natures"
+                       nature="nature"
+                       filter-by-nature="filterByNature">
+        </nature-select>
         <matters-table matters="matters"
                        nature="nature"
                        groups="groups"
@@ -37,9 +38,10 @@
                          pause-treatments="::pauseTreatments"
                          trajectories="::trajectories">
         </characteristics>
-        @{
-        await Html.RenderPartialAsync("_MattersSubmit");
-}
+        <matters-submit selected-matters-count="selectedMattersCount"
+                       minimum-selected-matters="{{::minimumSelectedMatters}}"
+                       selected-sequence-groups-count="selectedSequenceGroupsCount">
+        </matters-submit>
     </div>
 }
 
@@ -47,4 +49,6 @@
     <script src="~/js/Angular/Components/orderTransformations.js" asp-append-version="true"></script>
     <script src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
     <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/natureSelect.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersSubmit.js" asp-append-version="true"></script>
 }

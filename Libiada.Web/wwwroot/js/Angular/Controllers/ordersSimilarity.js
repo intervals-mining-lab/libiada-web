@@ -9,8 +9,6 @@
         }
 
         $scope.filterByNature = filterByNature;
-
-        $scope.nature = $scope.natures[0].Value;
     }
 
     angular.module("libiada").controller("OrdersSimilarityCtrl", ["$scope", "filterFilter", ordersSimilarity]);

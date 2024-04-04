@@ -46,8 +46,8 @@
         // constructs string representing tooltip text (inner html)
         function fillPointTooltip(d) {
             let tooltipContent = [];
-            tooltipContent.push("Order: " + d.order);
-            tooltipContent.push("Count of sequences: " + d.sequences.length);
+            tooltipContent.push(`Order: ${d.order}`);
+            tooltipContent.push(`Count of sequences: ${d.sequences.length}`);
             tooltipContent.push("Sequences: ");
 
             let pointsSequences = [];
@@ -82,8 +82,8 @@
 
             tooltip.html(tooltipHtml.join("</br></br>"));
 
-            tooltip.style("left", (event.pageX + 10) + "px")
-                .style("top", (event.pageY - 8) + "px");
+            tooltip.style("left", `${event.pageX + 10}px`)
+                .style("top", `${event.pageY - 8}px`);
 
             tooltip.hideTooltip = false;
         }
@@ -183,7 +183,7 @@
                 .attr("height", $scope.height)
                 .attr("class", "chart-svg")
                 .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                .attr("transform", `translate(${margin.left},${margin.top})`);
 
             // add the tooltip area to the webpage
             let tooltip = d3.select("#chart").append("div")
@@ -199,12 +199,12 @@
             // x-axis
             svg.append("g")
                 .attr("class", "x axis")
-                .attr("transform", "translate(0," + height + ")")
+                .attr("transform", `translate(0,${height})`)
                 .call(xAxis);
 
             svg.append("text")
                 .attr("class", "label")
-                .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top) + ")")
+                .attr("transform", `translate(${width / 2} ,${height + margin.top})`)
                 .style("text-anchor", "middle")
                 .text("Orders")
                 .style("font-size", "12pt");

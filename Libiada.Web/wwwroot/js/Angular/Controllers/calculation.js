@@ -6,8 +6,8 @@
 
         function filterByNature() {
             if (!$scope.hideNotation) {
-                let notation = filterFilter($scope.notations, { Nature: $scope.nature })[0];
-                $scope.notation = notation;
+                $scope.notation = filterFilter($scope.notations, { Nature: $scope.nature })[0];
+
                 // if notation is not linked to characteristic
                 angular.forEach($scope.characteristics, characteristic => {
                     characteristic.notation = notation;
@@ -33,14 +33,11 @@
         $scope.setUnselectAllSequenceGroupsFunction = setUnselectAllSequenceGroupsFunction;
         $scope.clearSelection = clearSelection;
 
-        $scope.disableSubmit = $scope.minimumSelectedMatters > 0;
-        if (!$scope.nature) $scope.nature = $scope.natures[0].Value;
-
         // if notation is not linked to characteristic
         $scope.notation = filterFilter($scope.notations, { Nature: $scope.nature })[0];
         $scope.language = $scope.languages[0];
         $scope.translator = $scope.translators[0];
-        $scope.pauseTreatment = $scope.pauseTreatments ? $scope.pauseTreatments[0] : null;
+        $scope.pauseTreatment ??= $scope.pauseTreatments[0];
         $scope.calculaionFor = "matters";
 
         // if we are in clusterization

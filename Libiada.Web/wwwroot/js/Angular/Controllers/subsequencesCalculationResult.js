@@ -21,7 +21,7 @@
             let attributesText = [];
             for (let i = 0; i < attributes.length; i++) {
                 let attributeValue = $scope.attributeValues[attributes[i]];
-                attributesText.push($scope.attributes[attributeValue.attribute] + (attributeValue.value === "" ? "" : " = " + attributeValue.value));
+                attributesText.push($scope.attributes[attributeValue.attribute] + (attributeValue.value === "" ? "" : ` = ${attributeValue.value}`));
             }
 
             return $sce.trustAsHtml(attributesText.join("<br/>"));
@@ -43,34 +43,28 @@
             return false;
         }
 
-        // adds and applies new filter
-        function addFilter() {
-            if ($scope.newFilter.length > 0) {
-                $scope.filters.push({ value: $scope.newFilter });
-
-                d3.selectAll(".dot")
-                    .attr("visibility", d => {
-                        let filterValue = $scope.newFilter.toUpperCase();
-                        let visible = $scope.isAttributeEqual(d, "product", filterValue);
-                        visible = visible || $scope.isAttributeEqual(d, "locus_tag", filterValue);
-                        d.filtersVisible.push(visible);
-                        return $scope.dotVisible(d) ? "visible" : "hidden";
-                    });
-
-                $scope.fillVisiblePoints();
-                $scope.newFilter = "";
-            }
-            // todo: add error message if filter is empty
-        }
-
-        // deletes given filter
-        function deleteFilter(filter) {
+        // applies new filter
+        function addFilter(newFilter) {
             d3.selectAll(".dot")
                 .attr("visibility", d => {
-                    d.FiltersVisible.splice($scope.filters.indexOf(filter), 1);
+                    let filterValue = newFilter.toUpperCase();
+                    let visible = $scope.isAttributeEqual(d, "product", filterValue);
+                    visible = visible || $scope.isAttributeEqual(d, "locus_tag", filterValue);
+                    d.filtersVisible.push(visible);
                     return $scope.dotVisible(d) ? "visible" : "hidden";
                 });
-            $scope.filters.splice($scope.filters.indexOf(filter), 1);
+
+            $scope.fillVisiblePoints();
+        }
+
+        // removes given filter
+        function deleteFilter(filter, filterIndex) {
+            d3.selectAll(".dot")
+                .attr("visibility", d => {
+                    d.FiltersVisible.splice(filterIndex, 1);
+                    return $scope.dotVisible(d) ? "visible" : "hidden";
+                });
+
             $scope.fillVisiblePoints();
         }
 
@@ -148,9 +142,11 @@
                 case 1: // CDS
                 case 2: // RRNA
                 case 3: // TRNA
-                    let firstProductId = $scope.getAttributeIdByName(d, "product");
-                    let secondProductId = $scope.getAttributeIdByName(dot, "product");
-                    if ($scope.attributeValues[firstProductId].value.toUpperCase() !== $scope.attributeValues[secondProductId].value.toUpperCase()) {
+                    const firstProductId = $scope.getAttributeIdByName(d, "product");
+                    const secondProductId = $scope.getAttributeIdByName(dot, "product");
+                    const firstAttributeValue = $scope.attributeValues[firstProductId].value.toUpperCase();
+                    const secondAttributeValue = $scope.attributeValues[secondProductId].value.toUpperCase();
+                    if (firstAttributeValue !== secondAttributeValue) {
                         return false;
                     }
                     break;
@@ -167,7 +163,8 @@
 
             tooltip.selectedDots = svg.selectAll(".dot")
                 .filter(dot => {
-                    if ($scope.xValue(dot) === $scope.xValue(d) && $scope.yValue(dot) === $scope.yValue(d)) {
+                    if ($scope.xValue(dot) === $scope.xValue(d)
+                     && $scope.yValue(dot) === $scope.yValue(d)) {
                         tooltipHtml.push($scope.fillPointTooltip(dot));
                         return true;
                     } else {
@@ -179,8 +176,8 @@
 
             tooltip.html(tooltipHtml.join("</br></br>"));
 
-            tooltip.style("left", (event.pageX + 10) + "px")
-                .style("top", (event.pageY - 8) + "px");
+            tooltip.style("left", `${event.pageX + 10}px`)
+                .style("top", `${event.pageY - 8}px`);
 
             tooltip.hideTooltip = false;
         }
@@ -190,11 +187,11 @@
             let tooltipContent = [];
             let genBankLink = "<a target='_blank' rel='noopener' href='https://www.ncbi.nlm.nih.gov/nuccore/";
 
-            let header = d.remoteId ? genBankLink + d.remoteId + "'>" + d.matterName + "</a>" : d.matterName;
+            let header = d.remoteId ? `${genBankLink}${d.remoteId}'>${d.matterName}</a>` : d.matterName;
             tooltipContent.push(header);
 
             if (d.remoteId) {
-                let peptideGenbankLink = genBankLink + d.remoteId + "'>Peptide ncbi page</a>";
+                let peptideGenbankLink = `${genBankLink}${d.remoteId}'>Peptide ncbi page</a>`;
                 tooltipContent.push(peptideGenbankLink);
             }
 
@@ -208,12 +205,12 @@
             let start = d.positions[0] + 1;
             let end = d.positions[0] + d.lengths[0];
             let positionGenbankLink = d.remoteId ?
-                genBankLink + d.remoteId + "?from=" + start + "&to=" + end + "'>" + d.positions.join(", ") + "</a>" :
+                `${genBankLink}${d.remoteId}?from=${start}&to=${end}'>${d.positions.join(", ")}</a>` :
                 d.positions.join(", ");
-            tooltipContent.push("Position: " + positionGenbankLink);
-            tooltipContent.push("Length: " + d.lengths.join(", "));
+            tooltipContent.push(`Position: ${positionGenbankLink}`);
+            tooltipContent.push(`Length: ${d.lengths.join(", ")}`);
             // TODO: show all characteristics
-            tooltipContent.push("(" + $scope.xValue(d) + ", " + $scope.yValue(d) + ")");
+            tooltipContent.push(`(${$scope.xValue(d)}, ${$scope.yValue(d)})`);
 
             return tooltipContent.join("</br>");
         }
@@ -330,7 +327,7 @@
                 .attr("height", $scope.height)
                 .attr("class", "chart-svg")
                 .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                .attr("transform", `translate(${margin.left},${margin.top})`);
 
             // add the tooltip area to the webpage
             let tooltip = d3.select("#chart").append("div")
@@ -346,12 +343,12 @@
             // x-axis
             svg.append("g")
                 .attr("class", "x axis")
-                .attr("transform", "translate(0," + height + ")")
+                .attr("transform", `translate(0,${height})`)
                 .call(xAxis);
 
             svg.append("text")
                 .attr("class", "label")
-                .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top - $scope.legendHeight) + ")")
+                .attr("transform", `translate(${width / 2} ,${height + margin.top - $scope.legendHeight})`)
                 .style("text-anchor", "middle")
                 .text($scope.lineChart ? "Rank" : $scope.firstCharacteristic.Text)
                 .style("font-size", "12pt");
@@ -423,21 +420,19 @@
                 .style("fill", d => color(d.colorId))
                 .style("stroke", d => color(d.colorId))
                 .style("stroke-width", 4)
-                .attr("transform", "translate(0, -" + $scope.legendHeight + ")");
+                .attr("transform", `translate(0, -${$scope.legendHeight})`);
 
             // draw legend text
             legend.append("text")
                 .attr("x", 24)
                 .attr("y", 9)
                 .attr("dy", ".35em")
-                .attr("transform", "translate(0, -" + $scope.legendHeight + ")")
+                .attr("transform", `translate(0, -${$scope.legendHeight})`)
                 .text(d => d.name)
                 .style("font-size", "9pt");
 
             $scope.loading = false;
         }
-
-        $scope.setCheckBoxesState = SetCheckBoxesState;
 
         $scope.draw = draw;
         $scope.dotVisible = dotVisible;
@@ -460,7 +455,6 @@
         $scope.selectedDotRadius = $scope.dotRadius * 3;
         $scope.visiblePoints = [];
         $scope.characteristicComparers = [];
-        $scope.filters = [];
         $scope.productFilter = "";
 
         $scope.loadingScreenHeader = "Loading subsequences characteristics";

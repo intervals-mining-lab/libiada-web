@@ -135,7 +135,7 @@ public class CongenericCalculationController : AbstractResultController
             //    if (isLiteratureSequence)
             //    {
             //        Language language = languages[k];
-            //        characteristicNames.Add(characteristicType + " " + language.GetDisplayValue());
+            //        characteristicNames.Add($"{characteristicType} {language.GetDisplayValue()}");
             //    }
             //    else
             //    {

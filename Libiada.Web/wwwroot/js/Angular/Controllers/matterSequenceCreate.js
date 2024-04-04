@@ -9,7 +9,7 @@
 
             arraysForFiltration.forEach(arrayName => {
                 if (angular.isDefined($scope[arrayName])) {
-                    $scope[arrayName + "Filtered"] = filterFilter($scope[arrayName], { Nature: $scope.nature });
+                    $scope[`${arrayName}Filtered`] = filterFilter($scope[arrayName], { Nature: $scope.nature });
                 }
             });
 
@@ -24,7 +24,7 @@
         function remoteIdChanged(remoteId) {
             let nameParts = $scope.name.split(" | ");
             if (nameParts.length <= 2) {
-                $scope.name = nameParts[0] + (remoteId ? " | " + remoteId : "");
+                $scope.name = `${nameParts[0]}${remoteId ? ` | ${remoteId}` : ""}`;
             }
         }
 
@@ -37,7 +37,6 @@
         $scope.remoteIdChanged = remoteIdChanged;
 
         $scope.original = false;
-        $scope.localFile = false;
         $scope.languageId = $scope.languages[0].Value;
         $scope.translatorId = $scope.translators[0].Value;
         $scope.nature = $scope.natures[0].Value;

@@ -1,5 +1,5 @@
 ﻿<h4 class="col-md-2 h4">Features</h4>
-<div ng-repeat="feature in ::features">
+<div ng-repeat="feature in ::$ctrl.features">
     <div class="form-check">
         <input type="checkbox"
                class="form-check-input"
@@ -8,13 +8,13 @@
                checked
                ng-value="::feature.Value"
                ng-model="feature.Selected"
-               ng-change="filterByFeature(feature)" />
+               ng-change="$ctrl.filterByFeature(feature)" />
         <label class="form-check-label" for="features{{::feature.Value}}">
             {{::feature.Text}}
         </label>
     </div>
 </div>
 <div class="btn-group mt-2" role="group" aria-label="Select / unselect features">
-    <input type="button" class="btn btn-secondary" ng-click="setCheckBoxesState(features, false, filterByFeature)" value="Clear selection" />
-    <input type="button" class="btn btn-success" ng-click="setCheckBoxesState(features, true, filterByFeature)" value="Select all" />
+    <input type="button" class="btn btn-secondary" ng-click="$ctrl.setCheckBoxesState(false)" value="Clear selection" />
+    <input type="button" class="btn btn-success" ng-click="$ctrl.setCheckBoxesState(true)" value="Select all" />
 </div>

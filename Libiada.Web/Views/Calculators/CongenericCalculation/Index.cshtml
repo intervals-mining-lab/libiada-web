@@ -13,9 +13,10 @@
     @Html.AntiForgeryToken()
     <div ng-controller="CalculationCtrl">
         @(Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" }))
-        @{
-            await Html.RenderPartialAsync("_NatureSelect");
-}
+        <nature-select natures="natures"
+                       nature="nature"
+                       filter-by-nature="filterByNature">
+        </nature-select>
         <matters-table matters="matters"
                        nature="nature"
                        groups="groups"
@@ -47,13 +48,16 @@
                 Calculate theoretical rank distribution
             </label>
         </div>
-        @{
-        await Html.RenderPartialAsync("_MattersSubmit");
-}
+        <matters-submit selected-matters-count="selectedMattersCount"
+                       minimum-selected-matters="{{::minimumSelectedMatters}}"
+                       selected-sequence-groups-count="selectedSequenceGroupsCount">
+        </matters-submit>
     </div>
 }
 
 @section Scripts {
     <script src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
     <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/natureSelect.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersSubmit.js" asp-append-version="true"></script>
 }

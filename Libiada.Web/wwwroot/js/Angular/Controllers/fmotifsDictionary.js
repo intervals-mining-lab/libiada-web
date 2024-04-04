@@ -5,7 +5,7 @@
         MapModelFromJson($scope, data);
 
         // initializes MIDI player
-        $scope.onload = function () {
+        $scope.onLoad = () => {
             MIDI.loadPlugin({
                 soundfontUrl: "../../js/",
                 instrument: "acoustic_grand_piano",
@@ -16,7 +16,6 @@
                     //MIDI.programChange(0, MIDI.GM.byName["acoustic_guitar_steel"].program);
                 }
             });
-
         };
 
         let chordIndex;
@@ -54,8 +53,8 @@
                     let pitch = note.Pitches[i];
                     let step = pitch.MidiNumber % 12;
                     let currentOctave = pitch.Octave > min ? 1 : 0;
-                    let key = d3.select("#visualization_" + $scope.data.fmotifs[event].Id)
-                        .select(".key_" + (step + currentOctave * 12))
+                    let key = d3.select(`#visualization_${$scope.data.fmotifs[event].Id}`)
+                        .select(`.key_${step + currentOctave * 12}`)
                         .selectAll("rect");
                     key.style("fill", "blue")
                         .style("fill-opacity", 1);
@@ -63,8 +62,8 @@
             },
             keyOff: function(event) {
                 for (let i = 0; i < 24; i++) {
-                    let key = d3.select("#visualization_" + $scope.data.fmotifs[event].Id)
-                        .select(".key_" + (i))
+                    let key = d3.select(`#visualization_${$scope.data.fmotifs[event].Id}`)
+                        .select(`.key_${i}`)
                         .selectAll("rect");
                     if (getLine(i % 12).alter === 0) {
                         key.style("fill", "none");
@@ -74,8 +73,8 @@
                 }
             },
             noteOn: function(event) {
-                let chord = d3.select("#notation_" + $scope.data.fmotifs[event].Id)
-                    .select(".chord_" + (chordIndex));
+                let chord = d3.select(`#notation_${$scope.data.fmotifs[event].Id}`)
+                    .select(`.chord_${chordIndex}`);
                 chord.selectAll("ellipse")
                     .style("fill", "blue");
                 chord.selectAll("rect")
@@ -90,8 +89,8 @@
                     .style("stroke", "black");
             },
             noteOff: function(event) {
-                let chord = d3.select("#notation_" + $scope.data.fmotifs[event].Id)
-                    .select(".chord_" + (chordIndex));
+                let chord = d3.select(`#notation_${$scope.data.fmotifs[event].Id}`)
+                    .select(`.chord_${chordIndex}`);
                 chord.selectAll("ellipse")
                     .style("fill", "black");
                 chord.selectAll("rect")
@@ -155,7 +154,7 @@
             for (let i = 0; i < 24; i++) {
                 if (getLine(i % 12).alter === 0) {
                     visualization.append("g")
-                        .attr("class", "key_" + i)
+                        .attr("class", `key_${i}`)
                         .append("rect")
                         .attr("width", 25)
                         .attr("height", 100)
@@ -169,7 +168,7 @@
             for (let i = 0; i < 24; i++) {
                 if (getLine(i % 12).alter === 1) {
                     visualization.append("g")
-                        .attr("class", "key_" + i)
+                        .attr("class", `key_${i}`)
                         .append("rect")
                         .attr("width", 17)
                         .attr("height", 70)
@@ -380,13 +379,13 @@
             for (let i = 0; i < $scope.data.fmotifs.length; i++) {
                 let fmotif = $scope.data.fmotifs[i];
                 let horizontalInterval = getHorizontalInterval(fmotif);
-                notation = d3.select("#notation_" + fmotif.Id)
+                notation = d3.select(`#notation_${fmotif.Id}`)
                     .append("svg")
                     .attr("width", 450)
                     .attr("height", 140)
                     .style("display", "block")
                     .style("margin", "auto");
-                visualization = d3.select("#visualization_" + fmotif.Id)
+                visualization = d3.select(`#visualization_${fmotif.Id}`)
                     .append("svg")
                     .attr("width", 350)
                     .attr("height", 100)
@@ -405,7 +404,7 @@
                 for (let j = 0; j < fmotif.NoteList.length; j++) {
                     let note = fmotif.NoteList[j];
                     let chord = notation.append("g")
-                        .attr("class", "chord_" + j);
+                        .attr("class", `chord_${j}`);
                     let x = (j + 1) * horizontalInterval;
                     if (note.Pitches.length === 0) {
                         drawPause(chord, note, x);

@@ -74,8 +74,8 @@
 
             tooltip.html(tooltipHtml.join("</br></br>"));
 
-            tooltip.style("left", (event.pageX + 10) + "px")
-                .style("top", (event.pageY - 8) + "px");
+            tooltip.style("left", `${event.pageX + 10}px`)
+                .style("top", `${event.pageY - 8}px`);
 
             tooltip.hideTooltip = false;
         }
@@ -174,7 +174,7 @@
                 .attr("height", $scope.height)
                 .attr("class", "chart-svg")
                 .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                .attr("transform", `translate(${margin.left},${margin.top})`);
 
             // add the tooltip area to the webpage
             let tooltip = d3.select("#chart").append("div")
@@ -190,16 +190,16 @@
             // x-axis
             svg.append("g")
                 .attr("class", "x axis")
-                .attr("transform", "translate(0," + height + ")")
+                .attr("transform", `translate(0,${height})`)
                 .call(xAxis);
 
             let chTX = $scope.characteristic.Text.split("  ");
 
             svg.append("text")
                 .attr("class", "label")
-                .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top) + ")")
+                .attr("transform", `translate(${width / 2} ,${height + margin.top})`)
                 .style("text-anchor", "middle")
-                .text("Intervals distributon link " + chTX[chTX.length - 1])
+                .text(`Intervals distributon link ${chTX[chTX.length - 1]}`)
                 .style("font-size", "12pt");
 
             // y-axis

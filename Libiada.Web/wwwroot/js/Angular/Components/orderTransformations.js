@@ -6,6 +6,8 @@
 
         ctrl.$onInit = () => {
             ctrl.transformationsSequence = [];
+
+            ctrl.addTransformation()
         };
 
         ctrl.addTransformation = () => {
@@ -14,13 +16,15 @@
             });
         };
 
-        ctrl.deleteTransformation = transformation => 
-            ctrl.transformationsSequence.splice(ctrl.transformationsSequence.indexOf(transformation), 1);
+        ctrl.deleteTransformation = transformation => {
+            const transformationIndex = ctrl.transformationsSequence.indexOf(transformation);
+            ctrl.transformationsSequence.splice(transformationIndex, 1);
+        };
     }
 
     angular.module("libiada").component("orderTransformations", {
-        templateUrl: window.location.origin + "/AngularTemplates/_OrderTransformations",
-        controller: [OrderTransformationsController],
+        templateUrl: `${window.location.origin}/AngularTemplates/_OrderTransformations`,
+        controller: OrderTransformationsController,
         bindings: {
             transformations: "<"
         }

@@ -30,9 +30,8 @@
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
         </div>
-        @{
-            await Html.RenderPartialAsync("_NatureSelect");
-}
+        <nature-select natures="natures" nature="nature">
+        </nature-select>
         <div class="row mb-1">
             <div class="col-md-10">
                 <label class="form-label" for="sequenceGroupType">Sequence group type</label>
@@ -55,9 +54,10 @@
                        initial-sequence-type-index="sequenceTypeIndex"
                        initial-group-index="groupIndex">
         </matters-table>
-        @{
-            await Html.RenderPartialAsync("_MattersSubmit");
-}
+        <matters-submit selected-matters-count="selectedMattersCount"
+                       submit-name="Save"
+                       minimum-selected-matters="{{::minimumSelectedMatters}}">
+        </matters-submit>
         <div class="row mb-2">
             <div class="col-md-2">
                 @Html.ActionLink("Back to List", "Index")
@@ -69,4 +69,6 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/natureSelect.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersSubmit.js" asp-append-version="true"></script>
 }

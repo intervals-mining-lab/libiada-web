@@ -8,12 +8,11 @@
             <label class="form-label" for="Nature">Nature</label>
             <select class="form-select"
                     id="Nature"
-                    ng-model="nature"
-                    ng-options="n.Value as n.Text for n in ::natures"
-                    ng-change="filterByNature()"
-                    ng-init="filterByNature()">
+                    ng-model="$ctrl.nature"
+                    ng-options="n.Value as n.Text for n in ::$ctrl.natures"
+                    ng-change="$ctrl.filterByNature()">
             </select>
-            <input type="hidden" name="Nature" ng-value="nature" />
+            <input type="hidden" name="Nature" ng-value="$ctrl.nature" />
         </div>
     </div>
 }

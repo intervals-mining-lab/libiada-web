@@ -14,9 +14,10 @@
     <div ng-controller="CalculationCtrl">
         <h4>Sequences and parameters</h4>
         <hr />
-        @{
-            await Html.RenderPartialAsync("_NatureSelect");
-}
+        <nature-select natures="natures"
+                       nature="nature"
+                       filter-by-nature="filterByNature">
+        </nature-select>
         <matters-table matters="matters"
                        nature="nature"
                        groups="groups"
@@ -54,13 +55,16 @@
             </div>
         </div>
         <hr />
-        @{
-        await Html.RenderPartialAsync("_MattersSubmit");
-}
+        <matters-submit selected-matters-count="selectedMattersCount"
+                       submit-name="Predict"
+                       minimum-selected-matters="{{::minimumSelectedMatters}}">
+        </matters-submit>
     </div>
 }
 
 @section Scripts {
     <script src="~/js/Angular/Components/characteristic.js" asp-append-version="true"></script>
     <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/natureSelect.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersSubmit.js" asp-append-version="true"></script>
 }

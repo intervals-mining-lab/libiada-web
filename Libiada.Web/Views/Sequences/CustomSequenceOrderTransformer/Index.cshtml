@@ -13,11 +13,11 @@
     @Html.AntiForgeryToken()
     <div ng-controller="CustomCalculationCtrl">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @{
-            await Html.RenderPartialAsync("_CustomSequences");
-}
-        <order-transformations transformations="::transformations">
-        </order-transformations>
+        
+        <custom-sequences image-transformers="::imageTransformers"></custom-sequences>
+        
+        <order-transformations transformations="::transformations"></order-transformations>
+        
         <div class="row mb-2">
             <div class="col-md-10">
                 <input type="submit" value="Calculate" class="btn btn-secondary" />
@@ -28,4 +28,5 @@
 
 @section Scripts {
     <script src="~/js/Angular/Components/orderTransformations.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/customSequences.js" asp-append-version="true"></script>
 }

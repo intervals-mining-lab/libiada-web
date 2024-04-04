@@ -14,9 +14,10 @@
     <div ng-controller="OrderTransformerCtrl">
         <h4>Sequences and parameters</h4>
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @{
-            await Html.RenderPartialAsync("_NatureSelect");
-}
+        <nature-select natures="natures"
+                       nature="nature"
+                       filter-by-nature="filterByNature">
+        </nature-select>
         <matters-table matters="matters"
                        nature="nature"
                        groups="groups"
@@ -36,9 +37,10 @@
                         pause-treatments="::pauseTreatments"
                         trajectories="::trajectories">
         </characteristic>
-        @{
-        await Html.RenderPartialAsync("_MattersSubmit");
-}
+        <matters-submit selected-matters-count="selectedMattersCount"
+                       minimum-selected-matters="{{::minimumSelectedMatters}}"
+                       selected-sequence-groups-count="selectedSequenceGroupsCount">
+        </matters-submit>
     </div>
 }
 
@@ -46,4 +48,6 @@
     <script src="~/js/Angular/Components/orderTransformations.js" asp-append-version="true"></script>
     <script src="~/js/Angular/Components/characteristic.js" asp-append-version="true"></script>
     <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/natureSelect.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersSubmit.js" asp-append-version="true"></script>
 }

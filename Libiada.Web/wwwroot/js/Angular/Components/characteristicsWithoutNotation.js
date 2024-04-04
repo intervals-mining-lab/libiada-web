@@ -1,45 +1,44 @@
 ﻿function characteristicsWithoutNotation() {
     "use strict";
 
-    function CharacteristicsWithoutNotation() {
+    function CharacteristicsWithoutNotationController() {
         let ctrl = this;
 
-        ctrl.characteristics = [];
-
-        ctrl.$onInit = () => { };
-
-        ctrl.$onChanges = changes => { };
+        ctrl.$onInit = () => {
+            ctrl.characteristics = [];
+            ctrl.addCharacteristic();
+        };
 
         ctrl.addCharacteristic = () => {
             ctrl.characteristics.push({
                 characteristicType: ctrl.characteristicTypes[0],
                 link: ctrl.characteristicTypes[0].Links[0],
                 arrangementType: ctrl.characteristicTypes[0].ArrangementTypes[0],
-                language: ctrl.languages ? ctrl.languages[0] : null,
-                translator: ctrl.translators ? ctrl.translators[0] : null,
-                pauseTreatment: ctrl.pauseTreatments ? ctrl.pauseTreatments[0] : null
+                language: ctrl.languages?.[0],
+                translator: ctrl.translators?.[0],
+                pauseTreatment: ctrl.pauseTreatments?.[0]
             });
         };
 
         ctrl.deleteCharacteristic = characteristic => {
-            ctrl.characteristics.splice(ctrl.characteristics.indexOf(characteristic), 1);
+            const characteristicIndex = ctrl.characteristics.indexOf(characteristic);
+            ctrl.characteristics.splice(characteristicIndex, 1);
         };
 
         ctrl.selectLink = characteristic => {
-            "use strict";
             characteristic.link = characteristic.characteristicType.Links[0];
             characteristic.arrangementType = characteristic.characteristicType.ArrangementTypes[0];
         };
     }
 
     angular.module("libiada").component("characteristicsWithoutNotation", {
-        templateUrl: window.location.origin + "/AngularTemplates/_CharacteristicsWithoutNotation",
-        controller: [CharacteristicsWithoutNotation],
+        templateUrl: `${window.location.origin}/AngularTemplates/_CharacteristicsWithoutNotation`,
+        controller: CharacteristicsWithoutNotationController,
         bindings: {
             characteristicTypes: "<",
-            languages: "<",
-            translators: "<",
-            pauseTreatments: "<",
+            languages: "<?",
+            translators: "<?",
+            pauseTreatments: "<?",
             characteristicsDictionary: "<",
             hideNotation: "@"
         }

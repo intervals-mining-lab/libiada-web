@@ -281,7 +281,7 @@ public class MultisequenceController : Controller
         }
 
         Dictionary<string, long[]> multisequencesRefMatters = referenceArray.GroupBy(mn => mn.Item2)
-            .ToDictionary(mn => mn.Key + " ref", mn => mn.Select(m => m.Item1).ToArray());
+            .ToDictionary(mn => $"{mn.Key} ref", mn => mn.Select(m => m.Item1).ToArray());
 
         Dictionary<string, long[]> multisequencesNotRefMatters = notReferenceArray.GroupBy(mn => mn.Item2)
             .ToDictionary(mn => mn.Key, mn => mn.Select(m => m.Item1).ToArray());

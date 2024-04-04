@@ -165,8 +165,8 @@
         // constructs string representing tooltip text (inner html)
         function fillPointTooltip(d) {
             let tooltipContent = [];
-            tooltipContent.push("Order ID: " + d.value);
-            tooltipContent.push("Order: " + $scope.orders[d.value]);
+            tooltipContent.push(`Order ID: ${d.value}`);
+            tooltipContent.push(`Order: ${$scope.orders[d.value]}`);
             return tooltipContent.join("</br>");
         }
 
@@ -203,7 +203,7 @@
                 .enter()
                 .append("g")
                 .attr("class", "dotlegend")
-                .attr("transform", (vt, i) => "translate(0," + i * 20 + ")")
+                .attr("transform", (vt, i) => `translate(0,${i * 20})`)
                 .append("rect")
                 .attr("width", 15)
                 .attr("height", 15)
@@ -220,8 +220,8 @@
                 });
 
 
-            tooltip.style("left", (event.pageX + 10) + "px")
-                .style("top", (event.pageY - 8) + "px");
+            tooltip.style("left", `${event.pageX + 10}px`)
+                .style("top", `${event.pageY - 8}px`);
 
             tooltip.hideTooltip = false;
         }
@@ -308,13 +308,13 @@
                 .attr("class", "chart-svg");
 
             let g = svg.append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                .attr("transform", `translate(${margin.left},${margin.top})`);
 
             // add defs for lines ends
             let defs = svg.append("defs");
             for (let i = 0; i < $scope.legend.length; i++) {
                 defs.append("marker")
-                    .attr("id", "arrow" + i)
+                    .attr("id", `arrow${i}`)
                     .attr("viewBox", "0 -5 10 10")
                     .attr("refX", 6)
                     .attr("refY", 0)
@@ -341,12 +341,12 @@
             // x-axis
             g.append("g")
                 .attr("class", "x axis")
-                .attr("transform", "translate(0," + height + ")")
+                .attr("transform", `translate(0,${height})`)
                 .call(xAxis);
 
             g.append("text")
                 .attr("class", "label")
-                .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top - $scope.legendHeight) + ")")
+                .attr("transform", `translate(${width / 2} ,${height + margin.top - $scope.legendHeight})`)
                 .style("text-anchor", "middle")
                 .text("Iteration")
                 .style("font-size", "12pt");
@@ -376,7 +376,7 @@
                 .attr("y1", d => yScale(d.y1))
                 .attr("x2", d => xScale(d.x2))
                 .attr("y2", d => yScale(d.y2))
-                .attr("marker-end", d => "url(#arrow" + d.arrowType + ")")
+                .attr("marker-end", d => `url(#arrow${d.arrowType})`)
                 .style("stroke", d => color(d.colorId))
                 .style("stroke-width", "2")
                 .attr("visibility", "visible");
@@ -387,7 +387,7 @@
                 .enter()
                 .append("g")
                 .attr("class", "legend")
-                .attr("transform", (d, i) => "translate(0," + i * 20 + ")")
+                .attr("transform", (d, i) => `translate(0,${i * 20})`)
                 .on("click", function (event, d) {
                     d.visible = !d.visible;
                     let legendEntry = d3.select(event.currentTarget);
@@ -433,14 +433,14 @@
                 .style("fill", d => color(d.id))
                 .style("stroke", d => color(d.id))
                 .style("stroke-width", 4)
-                .attr("transform", "translate(0, -" + $scope.legendHeight + ")");
+                .attr("transform", `translate(0, -${$scope.legendHeight})`);
 
             // draw legend text
             legend.append("text")
                 .attr("x", 24)
                 .attr("y", 9)
                 .attr("dy", ".35em")
-                .attr("transform", "translate(0, -" + $scope.legendHeight + ")")
+                .attr("transform", `translate(0, -${$scope.legendHeight})`)
                 .text(d => d.name)
                 .style("font-size", "9pt");
         }

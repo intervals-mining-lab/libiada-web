@@ -17,9 +17,10 @@
     <div ng-controller="CalculationCtrl">
         <h4>Sequences and parameters</h4>
         <hr />
-        @{
-            await Html.RenderPartialAsync("_NatureSelect");
-        }
+        <nature-select natures="natures"
+                       nature="nature"
+                       filter-by-nature="filterByNature">
+        </nature-select>
         <div class="btn-group" role="group" aria-label="Table type radio toggle button group">
             <input type="radio"
                    class="btn-check"
@@ -100,13 +101,16 @@
         }
         <input type="hidden" name="complementary" value="false" />
         <input type="hidden" name="rotate" value="false" />
-        @{
-            await Html.RenderPartialAsync("_MattersSubmit");
-        }
+        <matters-submit selected-matters-count="selectedMattersCount"
+                       minimum-selected-matters="{{::minimumSelectedMatters}}"
+                       selected-sequence-groups-count="selectedSequenceGroupsCount">
+        </matters-submit>
     </div>
 }
 @section Scripts {
     <script src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
     <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
     <script src="~/js/Angular/Components/sequenceGroupsTable.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/natureSelect.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersSubmit.js" asp-append-version="true"></script>
 }

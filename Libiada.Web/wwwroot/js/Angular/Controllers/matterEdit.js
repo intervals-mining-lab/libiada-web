@@ -9,7 +9,7 @@
 
             arraysForFiltration.forEach(arrayName => {
                 if (angular.isDefined($scope[arrayName])) {
-                    $scope[arrayName + "Filtered"] = filterFilter($scope[arrayName], { Nature: $scope.nature });
+                    $scope[`${arrayName}Filtered`] = filterFilter($scope[arrayName], { Nature: $scope.nature });
                 }
             });
 

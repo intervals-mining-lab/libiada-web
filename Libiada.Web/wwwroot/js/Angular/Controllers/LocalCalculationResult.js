@@ -37,12 +37,12 @@
         function fillPointTooltip(d) {
             let tooltipContent = [];
             tooltipContent.push(d.matterName);
-            tooltipContent.push("Name: " + d.name);
-            tooltipContent.push("Fragment №: " + d.id);
+            tooltipContent.push(`Name: ${d.name}`);
+            tooltipContent.push(`Fragment №: ${d.id}`);
             let pointSharacteristics = [];
             let characteristics = $scope.characteristics[d.characteristicId].FragmentsData[d.id].Characteristics;
             for (let i = 0; i < characteristics.length; i++) {
-                pointSharacteristics.push($scope.characteristicsList[i].Text + ": " + characteristics[i]);
+                pointSharacteristics.push(`${$scope.characteristicsList[i].Text}: ${characteristics[i]}`);
             }
 
             tooltipContent.push(pointSharacteristics.join("<br/>"));
@@ -72,8 +72,8 @@
 
             tooltip.html(tooltipHtml.join("</br></br>"));
 
-            tooltip.style("left", (event.pageX + 10) + "px")
-                .style("top", (event.pageY - 8) + "px");
+            tooltip.style("left", `${event.pageX + 10}px`)
+                .style("top", `${event.pageY - 8}px`);
 
             tooltip.hideTooltip = false;
         }
@@ -197,12 +197,12 @@
             // x-axis
             svg.append("g")
                 .attr("class", "x axis")
-                .attr("transform", "translate(0," + height + ")")
+                .attr("transform", `translate(0,${height})`)
                 .call(xAxis);
 
             svg.append("text")
                 .attr("class", "label")
-                .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top - $scope.legendHeight) + ")")
+                .attr("transform", `translate(${width / 2} ,${height + margin.top - $scope.legendHeight})`)
                 .style("text-anchor", "middle")
                 .text($scope.lineChart ? "Fragment №" : $scope.firstCharacteristic.Text)
                 .style("font-size", "12pt");
@@ -264,7 +264,7 @@
                 .enter()
                 .append("g")
                 .attr("class", "legend")
-                .attr("transform", (_d, i) => "translate(0," + i * 20 + ")")
+                .attr("transform", (_d, i) => `translate(0,${i * 20})`)
                 .on("click", function (event, d) {
                     d.visible = !d.visible;
                     let legendEntry = d3.select(event.currentTarget);
@@ -289,14 +289,14 @@
                 .style("fill", d => color(d.id))
                 .style("stroke", d => color(d.id))
                 .style("stroke-width", 4)
-                .attr("transform", "translate(0, -" + $scope.legendHeight + ")");
+                .attr("transform", `translate(0, -${$scope.legendHeight})`);
 
             // draw legend text
             legend.append("text")
                 .attr("x", 24)
                 .attr("y", 9)
                 .attr("dy", ".35em")
-                .attr("transform", "translate(0, -" + $scope.legendHeight + ")")
+                .attr("transform", `translate(0, -${$scope.legendHeight})`)
                 .text(d => d.name)
                 .style("font-size", "9pt");
         }

@@ -12,7 +12,6 @@
             $scope.matters = [];
             $scope.legend = [];
             $scope.characteristicComparers = [];
-            $scope.filters = [];
             $scope.plotTypeX = "";
             $scope.plotTypeY = "";
             $scope.productFilter = "";
@@ -26,9 +25,11 @@
 
             // preventing scroll in key up and key down
             window.addEventListener("keydown", e => {
-                if ($scope.isKeyUpOrDown(e.keyCode)) {
+                if (e.key === "ArrowDown" || e.key === "ArrowUp") {
                     e.preventDefault();
-                    $scope.keyUpDownPress(e.keyCode);
+                    if (!e.repeat) {
+                        $scope.keyUpDownPress(e.key);
+                    }
                 }
             }, false);
 
@@ -68,7 +69,7 @@
                 let sequenceData = $scope.result[i];
                 $scope.matters.push({ id: sequenceData.MatterId, name: sequenceData.MatterName, visible: true, index: i, color: $scope.colorScale(i) });
                 // hack for legend dot color
-                document.styleSheets[0].insertRule(".legend" + sequenceData.MatterId + ":after { background:" + $scope.colorScale(i) + "}");
+                document.styleSheets[0].insertRule(`.legend${sequenceData.MatterId}:after { background:${$scope.colorScale(i)} }`);
                 $scope.points.push([]);
                 $scope.visiblePoints.push([]);
                 for (let j = 0; j < sequenceData.SubsequencesData.length; j++) {
@@ -137,41 +138,33 @@
         }
 
         // adds and applies new filter
-        function addFilter() {
-            if ($scope.newFilter.length > 0) {
-                $scope.filters.push({ value: $scope.newFilter });
+        function addFilter(newFilter) {
+            let filterValue = newFilter.toUpperCase();
 
-                let filterValue = $scope.filters[$scope.filters.length - 1].value.toUpperCase();
-
-                for (let i = 0; i < $scope.points.length; i++) {
-                    for (let j = 0; j < $scope.points[i].length; j++) {
-                        let point = $scope.points[i][j];
-                        let visible = $scope.isAttributeEqual(point, "product", filterValue);
-                        visible = visible || $scope.isAttributeEqual(point, "locus_tag", filterValue);
-                        point.filtersVisible.push(visible);
-                        point.visible = $scope.dotVisible(point);
-                    }
-                }
-
-                $scope.redrawGenesMap();
-
-                $scope.newFilter = "";
-            }
-            // todo: add error message if filter is empty
-        }
-
-        // deletes given filter
-        function deleteFilter(filter) {
             for (let i = 0; i < $scope.points.length; i++) {
                 for (let j = 0; j < $scope.points[i].length; j++) {
                     let point = $scope.points[i][j];
-
-                    point.filtersVisible.splice($scope.filters.indexOf(filter), 1);
+                    let visible = $scope.isAttributeEqual(point, "product", filterValue);
+                    visible = visible || $scope.isAttributeEqual(point, "locus_tag", filterValue);
+                    point.filtersVisible.push(visible);
                     point.visible = $scope.dotVisible(point);
                 }
             }
 
-            $scope.filters.splice($scope.filters.indexOf(filter), 1);
+            $scope.redrawGenesMap();
+        }
+
+        // deletes given filter
+        function deleteFilter(filter, filterIndex) {
+            for (let i = 0; i < $scope.points.length; i++) {
+                for (let j = 0; j < $scope.points[i].length; j++) {
+                    let point = $scope.points[i][j];
+
+                    point.filtersVisible.splice(filterIndex, 1);
+                    point.visible = $scope.dotVisible(point);
+                }
+            }
+
             $scope.redrawGenesMap();
         }
 
@@ -223,7 +216,7 @@
             let attributesText = [];
             for (let i = 0; i < attributes.length; i++) {
                 let attributeValue = $scope.attributeValues[attributes[i]];
-                attributesText.push($scope.attributes[attributeValue.attribute] + (attributeValue.value === "" ? "" : " = " + attributeValue.value));
+                attributesText.push($scope.attributes[attributeValue.attribute] + (attributeValue.value === "" ? "" : ` = ${attributeValue.value}`));
             }
 
             return attributesText;
@@ -330,16 +323,12 @@
             return tooltipElement;
         }
 
-        function isKeyUpOrDown(keyCode) {
-            return keyCode === 40 || keyCode === 38;
-        }
-
         function cText(points, index) {
             return points.map(() => $scope.matters[index].name);
         }
 
         // selects nearest diffieret point of the same organism when "up" or "down" key pressed 
-        function keyUpDownPress(keyCode) {
+        function keyUpDownPress(key) {
             let nextPointIndex = -1;
             let visibleMattersPoints = $scope.visiblePoints[$scope.selectedMatterIndex];
 
@@ -348,7 +337,7 @@
                 let firstPointCharacteristic;
                 let secondPointCharacteristic;
                 switch (keyCode) {
-                    case 38: // up
+                    case "ArrowUp":
                         for (let i = $scope.selectedPointIndex + 1; i < visibleMattersPoints.length; i++) {
                             characteristic = $scope.subsequenceCharacteristic.Value;
                             firstPointCharacteristic = visibleMattersPoints[$scope.selectedPointIndex].subsequenceCharacteristics[characteristic];
@@ -360,7 +349,7 @@
                             }
                         }
                         break;
-                    case 40: // down
+                    case "ArrowDown":
                         for (let j = $scope.selectedPointIndex - 1; j >= 0; j--) {
                             characteristic = $scope.subsequenceCharacteristic.Value;
                             firstPointCharacteristic = visibleMattersPoints[$scope.selectedPointIndex].subsequenceCharacteristics[characteristic];
@@ -509,7 +498,7 @@
                     $scope.alignmentInProcess = false;
                     let result = response.data;
                     if (result.Status === "Success") {
-                        window.open("https://www.ebi.ac.uk/jdispatcher/msa/clustalo/summary?jobId=" + result.Result, '_blank');
+                        window.open(`https://www.ebi.ac.uk/jdispatcher/msa/clustalo/summary?jobId=${result.Result}`, '_blank');
                     }
                     else {
                         alert("Failed to create alignment task", result.Message);
@@ -539,7 +528,6 @@
 
         $scope.onInit = onInit;
         $scope.fillPoints = fillPoints;
-        $scope.setCheckBoxesState = SetCheckBoxesState;
         $scope.redrawGenesMap = redrawGenesMap;
         $scope.dotVisible = dotVisible;
         $scope.dotsSimilar = dotsSimilar;
@@ -550,7 +538,6 @@
         $scope.getAttributesText = getAttributesText;
         $scope.fillPointTooltip = fillPointTooltip;
         $scope.showTooltip = showTooltip;
-        $scope.isKeyUpOrDown = isKeyUpOrDown;
         $scope.addCharacteristicComparer = addCharacteristicComparer;
         $scope.deleteCharacteristicComparer = deleteCharacteristicComparer;
         $scope.addFilter = addFilter;

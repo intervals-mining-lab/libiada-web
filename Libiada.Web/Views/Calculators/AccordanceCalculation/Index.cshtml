@@ -15,9 +15,8 @@
         <h4>Sequences and parameters</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @{
-            await Html.RenderPartialAsync("_NatureSelect");
-        }
+        <nature-select natures="natures" nature="nature">
+        </nature-select>
         <matters-table matters="matters"
                        nature="nature"
                        groups="groups"
@@ -57,12 +56,12 @@
             </div>
         </fieldset>
         <hr />
-        @{
-            await Html.RenderPartialAsync("_MattersSubmit");
-        }
+        <matters-submit></matters-submit>
     </div>
 }
 @section Scripts {
     <script src="~/js/Angular/Components/characteristic.js" asp-append-version="true"></script>
     <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/natureSelect.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersSubmit.js" asp-append-version="true"></script>
 }

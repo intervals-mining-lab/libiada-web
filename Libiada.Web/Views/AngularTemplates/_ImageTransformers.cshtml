@@ -1,17 +1,17 @@
-﻿<div ng-if="fileType=='image'">
-    <div ng-repeat="transformer in selectedImageTransformers">
+﻿<div ng-if="$ctrl.fileType==='image'">
+    <div ng-repeat="transformer in $ctrl.selectedImageTransformers">
         <div class="row mb-1">
             <label class="col-form-label col-md-2" for="transformer">Transformer:</label>
             <div class="col-md-10">
                 <select class="form-select"
                         ng-model="transformer.Value"
-                        ng-options="s.Value as s.Text for s in ::imageTransformers"
+                        ng-options="s.Value as s.Text for s in ::$ctrl.imageTransformers"
                         id="transformer"></select>
             </div>
         </div>
         <div class="row mb-2">
             <div class="offset-md-2 col-md-10">
-                <button type="button" class="btn btn-danger" ng-click="deleteImageTransformation(transformer)">
+                <button type="button" class="btn btn-danger" ng-click="$ctrl.deleteImageTransformation(transformer)">
                     Delete transformation
                 </button>
             </div>
@@ -19,7 +19,7 @@
     </div>
     <div class="row mb-1">
         <div class="offset-md-2 col-md-10">
-            <button type="button" class="btn btn-success" ng-click="addImageTransformation()">
+            <button type="button" class="btn btn-success" ng-click="$ctrl.addImageTransformation()">
                 Add image tranformation
             </button>
         </div>

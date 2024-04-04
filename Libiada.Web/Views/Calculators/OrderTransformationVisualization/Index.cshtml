@@ -22,8 +22,10 @@
                 @Html.ValidationMessage("length", "", new { @class = "text-danger" })
             </div>
         </div>
-        @{
-            await Html.RenderPartialAsync("_MattersSubmit");
-}
+        <matters-submit submit-name="Generate orders"></matters-submit>
     </div>
+}
+
+@section Scripts {
+    <script src="~/js/Angular/Components/mattersSubmit.js" asp-append-version="true"></script>
 }

@@ -39,11 +39,14 @@
             </div>
         </fieldset>
         <hr />
-        @{
-            await Html.RenderPartialAsync("_MattersSubmit");
-        }
+        <matters-submit selected-matters-count="selectedMattersCount"
+                       submit-name="Transform"
+                       minimum-selected-matters="{{::minimumSelectedMatters}}"
+                       selected-sequence-groups-count="selectedSequenceGroupsCount">
+        </matters-submit>
     </div>
 }
 @section Scripts {
     <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersSubmit.js" asp-append-version="true"></script>
 }

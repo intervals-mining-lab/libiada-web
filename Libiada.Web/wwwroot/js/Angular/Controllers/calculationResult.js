@@ -9,7 +9,12 @@
                 $scope.colorScale = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.sequenceGroups.length]);
                 for (let j = 0; j < $scope.sequenceGroups.length; j++) {
                     const color = $scope.colorScale(j + 1);
-                    $scope.legend.push({ id: +$scope.sequenceGroups[j].Value, name: $scope.sequenceGroups[j].Text, visible: true, color: color });
+                    $scope.legend.push({
+                        id: parseInt($scope.sequenceGroups[j].Value),
+                        name: $scope.sequenceGroups[j].Text,
+                        visible: true,
+                        color: color
+                    });
 
                     // hack for the legend's dot color
                     document.styleSheets[0].insertRule(`.legend${$scope.sequenceGroups[j].Value}:after { background:${color} }`);
@@ -18,7 +23,12 @@
                 $scope.colorScale = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.characteristics.length]);
                 for (let k = 0; k < $scope.characteristics.length; k++) {
                     const color = $scope.colorScale(k + 1);
-                    $scope.legend.push({ id: k + 1, name: $scope.characteristics[k].MatterName, visible: true, color: color });
+                    $scope.legend.push({
+                        id: k + 1,
+                        name: $scope.characteristics[k].MatterName,
+                        visible: true,
+                        color: color
+                    });
 
                     // hack for the legend's dot color
                     document.styleSheets[0].insertRule(`.legend${k + 1}:after { background:${color} }`);
@@ -54,12 +64,12 @@
         // constructs string representing tooltip text (inner html)
         function fillPointTooltip(d) {
             let tooltipContent = [];
-            tooltipContent.push("Name: " + d.name);
+            tooltipContent.push(`Name: ${d.name}`);
 
             let pointData = $scope.characteristics[d.id - 1].Characteristics;
             let pointsCharacteristics = [];
             for (let i = 0; i < pointData.length; i++) {
-                pointsCharacteristics.push($scope.characteristicsList[i].Text + ": " + pointData[i]);
+                pointsCharacteristics.push(`${$scope.characteristicsList[i].Text}: ${pointData[i]}`);
             }
 
             tooltipContent.push(pointsCharacteristics.join("<br/>"));
@@ -375,7 +385,7 @@
                 a.style = "display: none";
                 let url = window.URL.createObjectURL(blob);
                 a.href = url;
-                a.download = $scope.excelFileName || "Results";
+                a.download = $scope.excelFileName ?? "Results";
                 a.click();
                 window.URL.revokeObjectURL(url);
                 a.remove();

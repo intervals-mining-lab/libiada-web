@@ -25,9 +25,8 @@
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
         </div>
-        @{
-            await Html.RenderPartialAsync("_NatureSelect");
-}
+        <nature-select natures="natures" nature="nature">
+        </nature-select>
         <div class="row mb-1">
             <div class="col-md-10">
                 <label class="form-label" for="sequenceGroupType">Sequence group type</label>
@@ -48,11 +47,10 @@
                        selected-matters-count="selectedMattersCount"
                        group-and-type-required="::true">
         </matters-table>
-        <div class="row mb-1">
-            <div class="col-md-12">
-                <input type="submit" value="Create" class="btn btn-secondary" />
-            </div>
-        </div>
+        <matters-submit selected-matters-count="selectedMattersCount"
+                       submit-name="Create"
+                       minimum-selected-matters="{{::minimumSelectedMatters}}">
+        </matters-submit>
     </div>
 }
 
@@ -63,4 +61,6 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/natureSelect.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersSubmit.js" asp-append-version="true"></script>
 }

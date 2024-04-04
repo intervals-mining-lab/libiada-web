@@ -22,9 +22,9 @@
                        selected-matters-count="selectedMattersCount"
                        group-and-type-required="::false">
         </matters-table>
-        @{
-            await Html.RenderPartialAsync("_FeaturesSelect");
-}
+
+        <features-select features="::features"></features-select>
+
         <hr />
         <characteristics characteristic-types="::characteristicTypes"
                          characteristics-dictionary="::characteristicsDictionary"
@@ -36,13 +36,16 @@
                          trajectories="::trajectories"
                          hide-notation="true">
         </characteristics>
-        @{
-        await Html.RenderPartialAsync("_MattersSubmit");
-}
+        <matters-submit selected-matters-count="selectedMattersCount"
+                       minimum-selected-matters="{{::minimumSelectedMatters}}"
+                       selected-sequence-groups-count="selectedSequenceGroupsCount">
+        </matters-submit>
     </div>
 }
 
 @section Scripts {
     <script src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
     <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersSubmit.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/featuresSelect.js" asp-append-version="true"></script>
 }

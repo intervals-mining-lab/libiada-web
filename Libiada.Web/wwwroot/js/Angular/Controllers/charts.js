@@ -13,7 +13,7 @@
                 // extracting sequence name column
                 $scope.sequencesName = characteristics.shift();
 
-                $scope.characteristicsList = characteristics.map((c, i) => ({ Value: i+1, Text: c }));
+                $scope.characteristicsList = characteristics.map((c, i) => ({ Value: i + 1, Text: c }));
                 $scope.firstCharacteristic = $scope.characteristicsList[0];
                 $scope.secondCharacteristic = $scope.characteristicsList.length > 1 ? $scope.characteristicsList[1] : $scope.characteristicsList[0];
 
@@ -56,7 +56,7 @@
 
         $document.ready(() => {
             //Handles the Ctrl + V keys for pasting
-            
+
 
             //If this is true, we wont respond to Ctrl + V
             $("body").on("focus", "input, textarea", () => { $scope.inFocus = true; });
@@ -100,12 +100,12 @@
         // constructs string representing tooltip text (inner html)
         function fillPointTooltip(d) {
             let tooltipContent = [];
-            tooltipContent.push("Name: " + d.name);
+            tooltipContent.push(`Name: ${d.name}`);
 
 
             let pointsCharacteristics = [];
             for (let i = 0; i < $scope.characteristicsList.length; i++) {
-                pointsCharacteristics.push($scope.characteristicsList[i].Text + ": " + $scope.parsedData[d.id][i+1]);
+                pointsCharacteristics.push(`${$scope.characteristicsList[i].Text}: ${$scope.parsedData[d.id][i + 1]}`);
             }
 
             tooltipContent.push(pointsCharacteristics.join("<br/>"));

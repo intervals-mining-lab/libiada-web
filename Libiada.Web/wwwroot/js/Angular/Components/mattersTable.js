@@ -10,10 +10,10 @@
             ctrl.searchMatterText = "";
 
             if (ctrl.groupAndTypeRequired) {
-                const groupIndex = ctrl.initialGroupIndex || 0;
+                const groupIndex = ctrl.initialGroupIndex ?? 0;
                 ctrl.group = ctrl.groups[groupIndex];
 
-                const sequenceTypeIndex = ctrl.initialSequenceTypeIndex || 0;
+                const sequenceTypeIndex = ctrl.initialSequenceTypeIndex ?? 0;
                 ctrl.sequenceType = ctrl.sequenceTypes[sequenceTypeIndex];
             }
 
@@ -58,8 +58,9 @@
         ctrl.$onChanges = changes => {
             if (changes.nature && !changes.nature.isFirstChange()) {
                 if (ctrl.groupAndTypeRequired) {
-                    ctrl.group = ctrl.groups.filter(g => g.Nature === +ctrl.nature)[0];
-                    ctrl.sequenceType = ctrl.sequenceTypes.filter(st => st.Nature === +ctrl.nature)[0];
+                    const nature = parseInt(ctrl.nature);
+                    ctrl.group = ctrl.groups.filter(g => g.Nature === nature)[0];
+                    ctrl.sequenceType = ctrl.sequenceTypes.filter(st => st.Nature === nature)[0];
                 }
 
                 ctrl.toogleMattersVisibility(true);
@@ -192,7 +193,7 @@
     }
 
     angular.module("libiada").component("mattersTable", {
-        templateUrl: window.location.origin + "/AngularTemplates/_MattersTable",
+        templateUrl: `${window.location.origin}/AngularTemplates/_MattersTable`,
         controller: ["$scope", "filterFilter", MattersTableController],
         bindings: {
             selectedMattersCount: "=",

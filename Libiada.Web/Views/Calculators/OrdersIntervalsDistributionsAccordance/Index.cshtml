@@ -45,8 +45,10 @@
             </div>
         </fieldset>
         <hr />
-        @{
-            await Html.RenderPartialAsync("_MattersSubmit");
-}
+        <matters-submit submit-name="Generate orders"></matters-submit>
     </div>
+}
+
+@section Scripts {
+    <script src="~/js/Angular/Components/mattersSubmit.js" asp-append-version="true"></script>
 }

@@ -31,8 +31,8 @@
         // constructs string representing tooltip text (inner html)
         function fillPointTooltip(d) {
             let tooltipContent = [];
-            tooltipContent.push("Name: " + d.name);
-            tooltipContent.push($scope.characteristicName + ": " + $scope.characteristics[d.id].characteristics[d.x]);
+            tooltipContent.push(`Name: ${d.name}`);
+            tooltipContent.push(`${$scope.characteristicName}: ${$scope.characteristics[d.id].characteristics[d.x]}`);
             tooltipContent.push($scope.transformationsList[d.x % $scope.transformationsList.length]);
             return tooltipContent.join("</br>");
         }
@@ -59,8 +59,8 @@
 
             tooltip.html(tooltipHtml.join("</br></br>"));
 
-            tooltip.style("left", (event.pageX + 10) + "px")
-                .style("top", (event.pageY - 8) + "px");
+            tooltip.style("left", `${event.pageX + 10}px`)
+                .style("top", `${event.pageY - 8}px`);
 
             tooltip.hideTooltip = false;
         }
@@ -142,7 +142,7 @@
                 .attr("height", $scope.height)
                 .attr("class", "chart-svg")
                 .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                .attr("transform", `translate(${margin.left},${margin.top})`);
 
             // add the tooltip area to the webpage
             let tooltip = d3.select("#chart").append("div")
@@ -158,13 +158,13 @@
             // x-axis
             svg.append("g")
                 .attr("class", "x axis")
-                .attr("transform", "translate(0," + height + ")")
+                .attr("transform", `translate(0,${height})`)
                 .call(xAxis);
 
             svg.append("text")
                 .attr("class", "label")
                 .attr("transform",
-                    "translate(" + (width / 2) + " ," + (height + margin.top - $scope.legendHeight) + ")")
+                    `translate(${width / 2} ,${height + margin.top - $scope.legendHeight})`)
                 .style("text-anchor", "middle")
                 .text("Transformation number")
                 .style("font-size", "12pt");
@@ -205,7 +205,7 @@
                 .enter()
                 .append("g")
                 .attr("class", "legend")
-                .attr("transform", (_d, i) => "translate(0," + i * 20 + ")")
+                .attr("transform", (_d, i) => `translate(0,${i * 20})`)
                 .on("click", function (event, d) {
                     d.visible = !d.visible;
                     let legendEntry = d3.select(event.currentTarget);
@@ -226,14 +226,14 @@
                 .style("fill", d => color(d.id))
                 .style("stroke", d => color(d.id))
                 .style("stroke-width", 4)
-                .attr("transform", "translate(0, -" + $scope.legendHeight + ")");
+                .attr("transform", `translate(0, -${$scope.legendHeight})`);
 
             // draw legend text
             legend.append("text")
                 .attr("x", 24)
                 .attr("y", 9)
                 .attr("dy", ".35em")
-                .attr("transform", "translate(0, -" + $scope.legendHeight + ")")
+                .attr("transform", `translate(0, -${$scope.legendHeight})`)
                 .text(d => d.name)
                 .style("font-size", "9pt");
         }

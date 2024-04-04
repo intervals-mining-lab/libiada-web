@@ -19,16 +19,16 @@
         // initializes data for chart
         function fillPoints() {
             $scope.points = [];
-            let first = +$scope.firstCharacteristic.Value;
-            let second = +$scope.secondCharacteristic.Value;
+            let firstIndex = parseInt($scope.firstCharacteristic.Value);
+            let secondIndex = parseInt($scope.secondCharacteristic.Value);
 
             for (let i = 0; i < $scope.characteristics.length; i++) {
                 let characteristic = $scope.characteristics[i];
                 $scope.points.push({
                     id: i + 1,
                     name: characteristic.MatterName,
-                    x: characteristic.Characteristics[first],
-                    y: characteristic.Characteristics[second],
+                    x: characteristic.Characteristics[firstIndex],
+                    y: characteristic.Characteristics[secondIndex],
                     cluster: characteristic.cluster ? characteristic.cluster : characteristic.MatterName
                 });
             }
@@ -38,12 +38,12 @@
         // constructs string representing tooltip text (inner html)
         function fillPointTooltip(d) {
             let tooltipContent = [];
-            tooltipContent.push("Name: " + d.name);
+            tooltipContent.push(`Name: ${d.name}`);
 
             let pointData = $scope.characteristics[d.id - 1].Characteristics;
             let pointsCharacteristics = [];
             for (let i = 0; i < pointData.length; i++) {
-                pointsCharacteristics.push($scope.characteristicsList[i].Text + ": " + pointData[i]);
+                pointsCharacteristics.push(`${$scope.characteristicsList[i].Text}: ${pointData[i]}`);
             }
 
             tooltipContent.push(pointsCharacteristics.join("<br/>"));
@@ -73,8 +73,8 @@
 
             tooltip.html(tooltipHtml.join("</br></br>"));
 
-            tooltip.style("left", (event.pageX + 10) + "px")
-                .style("top", (event.pageY - 8) + "px");
+            tooltip.style("left", `${event.pageX + 10}px`)
+                .style("top", `${event.pageY - 8}px`);
 
             tooltip.hideTooltip = false;
         }
@@ -147,7 +147,7 @@
                 .tickSizeOuter(0)
                 .tickPadding(10);
 
-            $scope.yMap = function (d) { return yScale($scope.yValue(d)); };
+            $scope.yMap = d => yScale($scope.yValue(d));
 
             // setup fill color
             let color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.legend.length]);
@@ -158,7 +158,7 @@
                 .attr("height", $scope.height + actualLegendHeight)
                 .attr("class", "chart-svg")
                 .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                .attr("transform", `translate(${margin.left},${margin.top})`);
 
             // add the tooltip area to the webpage
             let tooltip = d3.select("#chart").append("div")
@@ -166,20 +166,20 @@
                 .style("opacity", 0);
 
             // preventing tooltip hiding if dot clicked
-            tooltip.on("click", function () { tooltip.hideTooltip = false; });
+            tooltip.on("click", () => { tooltip.hideTooltip = false; });
 
             // hiding tooltip
-            d3.select("#chart").on("click", function () { $scope.clearTooltip(tooltip); });
+            d3.select("#chart").on("click", () => { $scope.clearTooltip(tooltip); });
 
             // x-axis
             svg.append("g")
                 .attr("class", "x axis")
-                .attr("transform", "translate(0," + height + ")")
+                .attr("transform", `translate(0,${height})`)
                 .call(xAxis);
 
             svg.append("text")
                 .attr("class", "label")
-                .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top - actualLegendHeight) + ")")
+                .attr("transform", `translate(${width / 2} ,${height + margin.top - actualLegendHeight})`)
                 .style("text-anchor", "middle")
                 .text($scope.firstCharacteristic.Text)
                 .style("font-size", "12pt");
@@ -221,7 +221,7 @@
                     .enter()
                     .append("g")
                     .attr("class", "legend")
-                    .attr("transform", (_d, i) => "translate(0," + i * 20 + ")")
+                    .attr("transform", (_d, i) => `translate(0,${i * 20})`)
                     .on("click", (event, d) => {
                         d.visible = !d.visible;
                         let legendEntry = d3.select(event.currentTarget);
@@ -242,14 +242,14 @@
                     .style("fill", d => color(d.id))
                     .style("stroke", d => color(d.id))
                     .style("stroke-width", 4)
-                    .attr("transform", "translate(0, -" + $scope.legendHeight + ")");
+                    .attr("transform", `translate(0, -${$scope.legendHeight})`);
 
                 // draw legend text
                 legend.append("text")
                     .attr("x", 24)
                     .attr("y", 9)
                     .attr("dy", ".35em")
-                    .attr("transform", "translate(0, -" + $scope.legendHeight + ")")
+                    .attr("transform", `translate(0, -${$scope.legendHeight})`)
                     .text(d => $scope.clustersCount ? `Cluster ${d.name}` : d.name)
                     .style("font-size", "9pt");
             }
@@ -305,7 +305,7 @@
                 a.style = "display: none";
                 let url = window.URL.createObjectURL(blob);
                 a.href = url;
-                a.download = $scope.excelFileName || "Results";
+                a.download = $scope.excelFileName ?? "Results";
                 a.click();
                 window.URL.revokeObjectURL(url);
                 a.remove();

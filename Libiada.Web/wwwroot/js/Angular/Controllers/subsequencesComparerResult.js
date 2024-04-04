@@ -4,21 +4,14 @@
     function subsequencesComparerResult($scope, $http) {
 
         // adds and applies new filter
-        function addFilter() {
-            if ($scope.newFilter.length > 0) {
-                $scope.filters.push({ value: $scope.newFilter });
-
-                for (let i = 0; i < $scope.equalElements.length; i++) {
-                    for (let j = 0; j < $scope.equalElements[i].length; j++) {
-                        if ($scope.equalElements[i][j]) {
-                            $scope.applyFilters($scope.equalElements[i][j]);
-                        }
+        function addFilter(newFilter) {
+            for (let i = 0; i < $scope.equalElements.length; i++) {
+                for (let j = 0; j < $scope.equalElements[i].length; j++) {
+                    if ($scope.equalElements[i][j]) {
+                        $scope.applyFilters($scope.equalElements[i][j]);
                     }
                 }
-
-                $scope.newFilter = "";
             }
-            // todo: add error message if filter is empty
         }
 
         // checks if element is visible
@@ -27,9 +20,7 @@
         }
 
         // deletes given filter
-        function deleteFilter(filter) {
-            let filterIndex = $scope.filters.indexOf(filter);
-            $scope.filters.splice(filterIndex, 1);
+        function deleteFilter(filter, filterIndex) {
             for (let i = 0; i < $scope.equalElements.length; i++) {
                 for (let j = 0; j < $scope.equalElements[i].length; j++) {
                     if ($scope.equalElements[i][j]) {
@@ -146,7 +137,7 @@
             let characteristicType = $scope.characteristic.characteristicType.Value;
             let link = $scope.characteristic.link.Value;
             let arrangementType = $scope.characteristic.arrangementType.Value;
-            let characteristicId = $scope.characteristicsDictionary["(" + characteristicType + ", " + link + ", " + arrangementType + ")"];
+            let characteristicId = $scope.characteristicsDictionary[`(${characteristicType}, ${link}, ${arrangementType})`];
 
             $http.get("/api/LocalCalculationWebApi/GetSubsequenceCharacteristic", {
                 params: {
@@ -205,7 +196,7 @@
             }
 
             // removing previous chart if any
-            d3.select(".chart" + index).remove();
+            d3.select(`.chart${index}`).remove();
 
             // chart size and margin settings
             let margin = { top: 30 + $scope.legendHeight, right: 30, bottom: 30, left: 60 };
@@ -261,22 +252,22 @@
             let color = d3.scaleOrdinal(["red", "blue"]);
 
             // add the graph canvas to the body of the webpage
-            let svg = d3.select("#chart" + index).append("svg")
+            let svg = d3.select(`#chart${index}`).append("svg")
                 .attr("width", $scope.width)
                 .attr("height", $scope.height)
-                .attr("class", "chart" + index)
+                .attr("class", `chart${index}`)
                 .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                .attr("transform", `translate(${margin.left},${margin.top})`);
 
             // x-axis
             svg.append("g")
                 .attr("class", "x axis")
-                .attr("transform", "translate(0," + height + ")")
+                .attr("transform", `translate(0,${height})`)
                 .call(xAxis);
 
             svg.append("text")
                 .attr("class", "label")
-                .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top - $scope.legendHeight) + ")")
+                .attr("transform", `translate(${width / 2} ,${height + margin.top - $scope.legendHeight})`)
                 .style("text-anchor", "middle")
                 .text("Fragment №")
                 .style("font-size", "12pt");
@@ -323,7 +314,7 @@
                 .enter()
                 .append("g")
                 .attr("class", "legend")
-                .attr("transform", (_d, i) => "translate(0," + i * 20 + ")")
+                .attr("transform", (_d, i) => `translate(0,${i * 20})`)
                 .on("click", function (event, d) {
                     d.visible = !d.visible;
                     let legendEntry = d3.select(event.currentTarget);
@@ -344,14 +335,14 @@
                 .style("fill", d => color(d.id))
                 .style("stroke", d => color(d.id))
                 .style("stroke-width", 4)
-                .attr("transform", "translate(0, -" + $scope.legendHeight + ")");
+                .attr("transform", `translate(0, -${$scope.legendHeight})`);
 
             // draw legend's text
             legend.append("text")
                 .attr("x", 24)
                 .attr("y", 9)
                 .attr("dy", ".35em")
-                .attr("transform", "translate(0, -" + $scope.legendHeight + ")")
+                .attr("transform", `translate(0, -${$scope.legendHeight})`)
                 .text(d => d.name)
                 .style("font-size", "9pt");
         }

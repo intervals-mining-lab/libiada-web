@@ -15,32 +15,64 @@
         <h4>Sequences and parameters</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @{
-            await Html.RenderPartialAsync("_CustomSequences");
-}
+
+        <custom-sequences image-transformers="::imageTransformers"></custom-sequences>
+
         <div class="row mb-1">
             <label class="col-form-label col-md-2" for="leftBorder">Left border:</label>
             <div class="col-md-10">
-                <input class="form-control" name="leftBorder" id="leftBorder" type="text" min="0" max="0.99999" step="0.1" ng-model="leftBorder" ng-init="leftBorder=0" />
+                <input class="form-control" 
+                       name="leftBorder" 
+                       id="leftBorder"
+                       type="text"
+                       min="0"
+                       max="0.99999"
+                       step="0.1"
+                       ng-model="leftBorder"
+                       ng-init="leftBorder=0" />
             </div>
         </div>
         <div class="row mb-1">
             <label class="col-form-label col-md-2" for="rightBorder">Right border:</label>
             <div class="col-md-10">
-                <input class="form-control" name="rightBorder" id="rightBorder" type="text" min="0.000000001" max="1" step="0.1" ng-model="rightBorder" ng-init="rightBorder=1" />
+                <input class="form-control"
+                       name="rightBorder"
+                       id="rightBorder"
+                       type="text"
+                       min="0.000000001"
+                       max="1"
+                       step="0.1"
+                       ng-model="rightBorder"
+                       ng-init="rightBorder=1" />
             </div>
         </div>
         <hr />
         <div class="row mb-1">
             <label class="col-form-label col-md-2" for="step">Step:</label>
             <div class="col-md-10">
-                <input class="form-control" name="step" id="step" type="text" min="0.00000000001" max="0.99999999" step="0.000001" ng-model="step" ng-init="step=0.01" />
+                <input class="form-control"
+                       name="step"
+                       id="step"
+                       type="text"
+                       min="0.00000000001"
+                       max="0.99999999"
+                       step="0.000001"
+                       ng-model="step"
+                       ng-init="step=0.01" />
             </div>
         </div>
         <div class="row mb-1">
             <label class="col-form-label col-md-2" for="precision">Precision:</label>
             <div class="col-md-10">
-                <input class="form-control" name="precision" id="precision" type="text" min="0.000000001" max="1" step="0.1" ng-model="precision" ng-init="precision=0.01" />
+                <input class="form-control"
+                       name="precision"
+                       id="precision"
+                       type="text"
+                       min="0.000000001"
+                       max="1"
+                       step="0.1"
+                       ng-model="precision"
+                       ng-init="precision=0.01" />
             </div>
         </div>
         <hr />
@@ -129,4 +161,8 @@
             </div>
         </div>
     </div>
+}
+
+@section Scripts {
+    <script src="~/js/Angular/Components/customSequences.js" asp-append-version="true"></script>
 }

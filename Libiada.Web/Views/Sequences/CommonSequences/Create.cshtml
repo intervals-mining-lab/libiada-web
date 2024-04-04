@@ -64,9 +64,7 @@
                 @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
             </div>
         </div>
-        @{
-            await Html.RenderPartialAsync("_LocalFile");
-        }
+        <local-file></local-file>
         <div ng-show="nature == @((byte)Nature.Genetic)">
             <div class="row mb-1">
                 @Html.LabelFor(model => model.RemoteDb, new { @class = "col-form-label col-md-2" })
@@ -161,4 +159,5 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/Angular/Components/localFile.js" asp-append-version="true"></script>
 }

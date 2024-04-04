@@ -15,22 +15,3 @@ function SelectLink(characteristic) {
     characteristic.link = characteristic.characteristicType.Links[0];
     characteristic.arrangementType = characteristic.characteristicType.ArrangementTypes[0];
 }
-
-function SetCheckBoxesState(checkboxes, state, filter) {
-    "use strict";
-
-    angular.forEach(checkboxes, item => {
-        item.Selected = state;
-        if (filter) {
-            filter(item);
-        }
-    });
-}
-
-function FakeFilterByFeature() {
-    return false;
-}
-
-function FakeDisableSubmit() {
-    return false;
-}

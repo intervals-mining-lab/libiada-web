@@ -24,13 +24,11 @@
                        selected-matters-count="selectedMattersCount"
                        group-and-type-required="::false">
         </matters-table>
-        @{
-            await Html.RenderPartialAsync("_FeaturesSelect");
-}
+
+        <features-select features="::features"></features-select>
+
         <hr />
-        @{
-        await Html.RenderPartialAsync("_Filters");
-}
+        <filters></filters>
         <h4>Sort matrix by characterisitc:</h4>
         <characteristic characteristic-types="::characteristicTypes"
                         characteristics-dictionary="::characteristicsDictionary"
@@ -72,9 +70,11 @@
             </div>
         }
         <input type="hidden" name="filterMatrix" value="false" />
-        @{
-            await Html.RenderPartialAsync("_MattersSubmit");
-}
+        <matters-submit selected-matters-count="selectedMattersCount"
+                       submit-name="Compare"
+                       minimum-selected-matters="{{::minimumSelectedMatters}}"
+                       selected-sequence-groups-count="selectedSequenceGroupsCount">
+        </matters-submit>
     </div>
 }
 
@@ -82,4 +82,7 @@
     <script src="~/js/Angular/Components/characteristic.js" asp-append-version="true"></script>
     <script src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
     <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersSubmit.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/featuresSelect.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/filters.js" asp-append-version="true"></script>
 }
