@@ -7,6 +7,7 @@
         ctrl.$onInit = () => { };
 
         ctrl.setCheckBoxesState = (state) => {
+            // TODO: optimize this
             angular.forEach(ctrl.features, item => {
                 item.Selected = state;
                 ctrl.additionalAction({ feature: item });

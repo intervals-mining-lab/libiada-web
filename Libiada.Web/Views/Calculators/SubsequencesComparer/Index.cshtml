@@ -48,13 +48,6 @@
                          trajectories="::trajectories"
                          percentage-differense-needed="::percentageDifferenseNeeded">
         </characteristics>
-        <div class="row mb-1">
-            <label class="col-form-label col-md-2" for="maxPercentageDifference">Maximum difference (%):</label>
-            <div class="col-md-10">
-                <input class="form-control" name="maxPercentageDifference" id="maxPercentageDifference" type="number" value="0" step="any" min="0" max="100" />
-                @Html.ValidationMessage("maxPercentageDifference", "", new { @class = "text-danger" })
-            </div>
-        </div>
         @if (User.IsAdmin())
         {
             <div class="form-check mb-2">
@@ -71,9 +64,9 @@
         }
         <input type="hidden" name="filterMatrix" value="false" />
         <matters-submit selected-matters-count="selectedMattersCount"
-                       submit-name="Compare"
-                       minimum-selected-matters="{{::minimumSelectedMatters}}"
-                       selected-sequence-groups-count="selectedSequenceGroupsCount">
+                        submit-name="Compare"
+                        minimum-selected-matters="{{::minimumSelectedMatters}}"
+                        selected-sequence-groups-count="selectedSequenceGroupsCount">
         </matters-submit>
     </div>
 }

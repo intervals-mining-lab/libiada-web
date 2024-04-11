@@ -8,7 +8,7 @@
                checked
                ng-value="::feature.Value"
                ng-model="feature.Selected"
-               ng-change="$ctrl.filterByFeature(feature)" />
+               ng-change="$ctrl.additionalAction({ feature: feature })" />
         <label class="form-check-label" for="features{{::feature.Value}}">
             {{::feature.Text}}
         </label>

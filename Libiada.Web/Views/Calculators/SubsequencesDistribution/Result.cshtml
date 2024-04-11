@@ -224,10 +224,10 @@
                         </div>
                     </div>
                     <div id="filter-tab-pane" class="tab-pane fade" role="tabpanel" aria-labelledby="filter-tab" tabindex="0">
-                        <filters addFilter="::addFilter" deleteFilter="::deleteFilter"></filters>
+                        <filters add-filter="addFilter(newFilter)" delete-filter="deleteFilter(filter, filterIndex)"></filters>
                     </div>
                     <div id="features-tab-pane" class="tab-pane fade" role="tabpanel" aria-labelledby="features-tab" tabindex="0">
-                        <features-select features="::features" additional-action="::filterByFeature"></features-select>
+                        <features-select features="::features" additional-action="filterByFeature(feature)"></features-select>
                     </div>
                     <div id="tooltip-tab-pane" class="tab-pane fade" role="tabpanel" aria-labelledby="tooltip-tab" tabindex="0">
                         <div class="row" ng-if="tooltipElements.length > 1">

@@ -9,8 +9,8 @@
         };
 
         ctrl.onAddingFilter = () => {
-            if (newFilter.length > 0) {
-                ctrl.filters.push({ value: newFilter });
+            if (ctrl.newFilter.length > 0) {
+                ctrl.filters.push({ value: ctrl.newFilter });
                 ctrl.addFilter({ newFilter: ctrl.newFilter });
                 ctrl.newFilter = "";
             }

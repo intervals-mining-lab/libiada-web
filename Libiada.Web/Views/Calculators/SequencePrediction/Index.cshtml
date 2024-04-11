@@ -16,7 +16,7 @@
         <hr />
         <nature-select natures="natures"
                        nature="nature"
-                       filter-by-nature="filterByNature">
+                       filter-by-nature="filterByNature()">
         </nature-select>
         <matters-table matters="matters"
                        nature="nature"
@@ -56,8 +56,8 @@
         </div>
         <hr />
         <matters-submit selected-matters-count="selectedMattersCount"
-                       submit-name="Predict"
-                       minimum-selected-matters="{{::minimumSelectedMatters}}">
+                        submit-name="Predict"
+                        minimum-selected-matters="{{::minimumSelectedMatters}}">
         </matters-submit>
     </div>
 }

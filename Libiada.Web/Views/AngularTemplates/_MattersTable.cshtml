@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<Matter>
-
+<br />
 <div class="form-check my-2" ng-init="$ctrl.geneticNature = @((byte)Nature.Genetic)" ng-show="$ctrl.nature == $ctrl.geneticNature">
     <input type="checkbox"
            class="form-check-input"
@@ -12,7 +12,7 @@
         Show only reference sequences
     </label>
 </div>
-<div class="mb-1 btn-group" ng-if="::($ctrl.checkboxes && !$ctrl.displayMultisequenceNumber)" role="group" aria-label="Select / unselect vsible sequences">
+<div class="mb-1 mt-2 btn-group" ng-if="::($ctrl.checkboxes && !$ctrl.displayMultisequenceNumber)" role="group" aria-label="Select / unselect vsible sequences">
     <input type="button" class="btn btn-success" ng-click="$ctrl.selectAllVisibleMatters()" value="Select all visible sequences" />
     <input type="button" class="btn btn-secondary" ng-click="$ctrl.unselectAllMatters()" value="Clear selection" />
 </div>

@@ -53,11 +53,11 @@
 
     <div ng-switch="$ctrl.nature">
         <div ng-switch-when="@((byte)Nature.Genetic)">
-            <div class="form-check" ng-if="$ctrl.percentageDifferenseNeeded">
+            <div ng-if="$ctrl.percentageDifferenseNeeded">
                 <div class="row mb-1">
-                    <label class="col-form-label col-md-2" for="maxPercentageDifferences">Maximum difference (%):</label>
+                    <label class="col-form-label col-md-2" for="maxPercentageDifferences{{$index}}">Maximum difference (%):</label>
                     <div class="col-md-10">
-                        <input class="form-control" name="maxPercentageDifferences" id="maxPercentageDifferences" type="number" value="0" step="any" min="0" max="100" />
+                        <input class="form-control" name="maxPercentageDifferences" id="maxPercentageDifferences{{$index}}" type="number" value="0" step="any" min="0" max="100" />
                     </div>
                 </div>
             </div>

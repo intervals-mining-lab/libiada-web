@@ -72,8 +72,8 @@
     <div ng-repeat="customSequence in $ctrl.customSequences">
         <div class="row mb-2">
             <div class="col-md-12">
-                <label class="form-label" for="customSequence">Sequence:</label>
-                <textarea class="form-control" rows="1" id="customSequence" ng-model="customSequence.sequence" name="customSequences"></textarea>
+                <label class="form-label" for="customSequence{{$index}}">Sequence:</label>
+                <textarea class="form-control" rows="1" id="customSequence{{$index}}" ng-model="customSequence.sequence" name="customSequences"></textarea>
             </div>
         </div>
         <div class="row mb-2">

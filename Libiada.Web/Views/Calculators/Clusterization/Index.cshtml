@@ -17,7 +17,7 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <nature-select natures="natures"
                        nature="nature"
-                       filter-by-nature="filterByNature">
+                       filter-by-nature="filterByNature()">
         </nature-select>
         <matters-table matters="matters"
                        nature="nature"
@@ -49,9 +49,9 @@
         <div class="row mb-2">
             <label class="col-form-label col-md-3" for="ClusterizationType">Clusterization type:</label>
             <div class="col-md-9">
-                <select class="form-select" 
-                        id="ClusterizationType" 
-                        ng-model="ClusterizationType" 
+                <select class="form-select"
+                        id="ClusterizationType"
+                        ng-model="ClusterizationType"
                         ng-options="n.Text for n in ::ClusterizatorsTypes"></select>
                 <input type="hidden" name="ClusterizationType" ng-value="ClusterizationType.Value" />
             </div>
@@ -100,7 +100,7 @@
             </div>
         </div>
         <matters-submit selected-matters-count="selectedMattersCount"
-                       minimum-selected-matters="{{::minimumSelectedMatters}}">
+                        minimum-selected-matters="{{::minimumSelectedMatters}}">
         </matters-submit>
     </div>
 }

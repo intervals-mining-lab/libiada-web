@@ -56,7 +56,9 @@
             </div>
         </fieldset>
         <hr />
-        <matters-submit></matters-submit>
+        <matters-submit selected-matters-count="selectedMattersCount"
+                        minimum-selected-matters="{{::minimumSelectedMatters}}">
+        </matters-submit>
     </div>
 }
 @section Scripts {

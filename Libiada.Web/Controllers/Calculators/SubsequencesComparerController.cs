@@ -29,32 +29,32 @@ using static Libiada.Core.Extensions.EnumExtensions;
 public class SubsequencesComparerController : AbstractResultController
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly IViewDataHelper viewDataHelper;
     private readonly IFullCharacteristicRepository fullCharacteristicRepository;
     private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
     private readonly ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator;
     private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
+    private readonly IServiceScopeFactory serviceScopeFactory;
     private readonly GeneticSequenceRepository geneticSequenceRepository;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SubsequencesComparerController"/> class.
     /// </summary>
-    public SubsequencesComparerController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
-                                          IViewDataHelper viewDataHelper, 
+    public SubsequencesComparerController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                           ITaskManager taskManager,
                                           IFullCharacteristicRepository fullCharacteristicRepository,
                                           ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator,
                                           ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator,
                                           ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory,
-                                          Cache cache)
+                                          Cache cache,
+                                          IServiceScopeFactory serviceScopeFactory)
         : base(TaskType.SubsequencesComparer, taskManager)
     {
         this.dbFactory = dbFactory;
-        this.viewDataHelper = viewDataHelper;
         this.fullCharacteristicRepository = fullCharacteristicRepository;
         this.subsequencesCharacteristicsCalculator = subsequencesCharacteristicsCalculator;
         this.sequencesCharacteristicsCalculator = sequencesCharacteristicsCalculator;
         this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
+        this.serviceScopeFactory = serviceScopeFactory;
         geneticSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
     }
 
@@ -64,11 +64,11 @@ public class SubsequencesComparerController : AbstractResultController
     /// <returns>
     /// The <see cref="ActionResult"/>.
     /// </returns>
-    public ActionResult Index()
+    public ActionResult Index([FromServices] IViewDataHelper viewDataHelper)
     {
-            var viewData = viewDataHelper.FillSubsequencesViewData(2, int.MaxValue, "Compare");
-            viewData.Add("percentageDifferenseNeeded", true);
-            ViewBag.data = JsonConvert.SerializeObject(viewData);
+        var viewData = viewDataHelper.FillSubsequencesViewData(2, int.MaxValue, "Compare");
+        viewData.Add("percentageDifferenseNeeded", true);
+        ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }
 
@@ -112,6 +112,7 @@ public class SubsequencesComparerController : AbstractResultController
         bool filterMatrix
     )
     {
+        var user = User;
         return CreateTask(() =>
         {
             double[] percentageDifferences = maxPercentageDifferences.Select(item => double.Parse(item, CultureInfo.InvariantCulture) / 100).ToArray();
@@ -148,7 +149,13 @@ public class SubsequencesComparerController : AbstractResultController
                 matterNames[n] = parentSequences[parentSequenceIds[n]].MatterName;
             }
 
-            characteristicsTypesData = viewDataHelper.GetCharacteristicsData(CharacteristicCategory.Full);
+            // TODO: refactor this
+            using (var scope = serviceScopeFactory.CreateScope())
+            {
+                var viewDataHelperFactory = scope.ServiceProvider.GetRequiredService<IViewDataHelperFactory>();
+                var viewDataHelper = viewDataHelperFactory.Create(user);
+                characteristicsTypesData = viewDataHelper.GetCharacteristicsData(CharacteristicCategory.Full);
+            }
 
             string sequenceCharacteristicName = fullCharacteristicRepository.GetCharacteristicName(characteristicLinkId);
             string characteristicName = fullCharacteristicRepository.GetCharacteristicName(characteristicLinkIds[0]);
@@ -178,7 +185,7 @@ public class SubsequencesComparerController : AbstractResultController
                     {
                         matterAndSubsequenceIdsList =
                         [
-                            (matterIndex: i, subsequenceIndex: j, additionalCharacterisctics: subsequencesData[j].CharacteristicsValues.Skip(1).ToArray()) 
+                            (matterIndex: i, subsequenceIndex: j, additionalCharacterisctics: subsequencesData[j].CharacteristicsValues.Skip(1).ToArray())
                         ]; // добавить в кортеж все характеристики кроме 0
                         characteristicValueSubsequences.Add(value, matterAndSubsequenceIdsList);
                     }
@@ -440,7 +447,7 @@ public class SubsequencesComparerController : AbstractResultController
         double[] percentageDifferences)
     {
         List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> similarPairs = new(characteristicValueSubsequences.Count);
-        
+
         foreach (double key in characteristicValueSubsequences.Keys)
         {
             similarPairs.AddRange(ExtractAllPossiblePairs(characteristicValueSubsequences[key], percentageDifferences));

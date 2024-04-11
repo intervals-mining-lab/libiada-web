@@ -2,36 +2,36 @@
 @using Libiada.Web.Helpers
 <div ng-repeat="characteristic in $ctrl.characteristics">
     <div class="row mb-2">
-        <label class="col-form-label col-md-2" for="characterisitc">Characteristic:</label>
+        <label class="col-form-label col-md-2" for="characterisitc{{$index}}">Characteristic:</label>
         <div class="col-md-10">
             <select class="form-select"
                     title="Characteristic"
                     ng-model="characteristic.characteristicType"
                     ng-options="c.Text for c in $ctrl.characteristicTypes"
                     ng-change="$ctrl.selectLink(characteristic)"
-                    id="characterisitc"></select>
+                    id="characterisitc{{$index}}"></select>
         </div>
     </div>
     <div class="row mb-2" ng-show="characteristic.characteristicType.Links.length > 1">
-        <label class="col-form-label col-md-2" for="link">Link:</label>
+        <label class="col-form-label col-md-2" for="link{{$index}}">Link:</label>
         <div class="col-md-10">
             <select class="form-select"
                     title="Link"
                     ng-model="characteristic.link"
                     ng-options="l.Text for l in characteristic.characteristicType.Links"
-                    id="link"></select>
+                    id="link{{$index}}"></select>
         </div>
     </div>
     @if (User.IsAdmin())
     {
         <div class="row mb-2" ng-show="characteristic.characteristicType.ArrangementTypes.length > 1">
-            <label class="col-form-label col-md-2" for="arrangementType">Arrangement type:</label>
+            <label class="col-form-label col-md-2" for="arrangementType{{$index}}">Arrangement type:</label>
             <div class="col-md-10">
                 <select class="form-select"
                         title="Arrangement type"
                         ng-model="characteristic.arrangementType"
                         ng-options="a.Text for a in characteristic.characteristicType.ArrangementTypes"
-                        id="arrangementType"></select>
+                        id="arrangementType{{$index}}"></select>
             </div>
         </div>
     }

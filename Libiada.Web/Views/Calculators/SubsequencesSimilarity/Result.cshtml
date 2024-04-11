@@ -6,9 +6,9 @@
 
 @if (ViewBag.Error == null)
 {
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "SubsequencesCalculationResult");
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "SubsequencesSimilarityResult");
 
-    <div ng-controller="SubsequencesCalculationResultCtrl">
+    <div ng-controller="SubsequencesSimilarityResultCtrl">
         <h4>{{::firstSequenceName}} and {{::secondSequenceName}} using {{::characteristicName}}</h4>
         <h5>{{::similarity}} % of subsequences are similar:</h5>
         <h5>{{::firstSequenceSimilarity}} % of the first sequence</h5>

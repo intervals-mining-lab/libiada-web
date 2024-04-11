@@ -77,7 +77,7 @@
                 Number of not equal subsequences from second sequence = {{similarityValue.secondNotEqualElementsCount}}
             </p>
         </div>
-        <filters filters="::filters" addFilter="::addFilter" deleteFilter="::deleteFilter"></filters>
+        <filters filters="filters" add-filter="addFilter(newFilter)" delete-filter="deleteFilter(filter, filterIndex)"></filters>
         <table class="table table-bordered table-striped" ng-repeat="equalElement in equalElementsToShow" ng-show="elementVisible(equalElement)">
             <tbody>
                 <tr>

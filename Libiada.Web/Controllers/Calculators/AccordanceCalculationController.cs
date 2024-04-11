@@ -29,7 +29,7 @@ public class AccordanceCalculationController : AbstractResultController
     /// <summary>
     /// The common sequence repository.
     /// </summary>
-    private readonly ICommonSequenceRepository commonSequenceRepository;
+    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
     private readonly Cache cache;
 
     /// <summary>
@@ -44,13 +44,13 @@ public class AccordanceCalculationController : AbstractResultController
                                            IViewDataHelper viewDataHelper, 
                                            ITaskManager taskManager,
                                            IAccordanceCharacteristicRepository characteristicTypeLinkRepository,
-                                           ICommonSequenceRepository commonSequenceRepository,
+                                           ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory,
                                            Cache cache)
         : base(TaskType.AccordanceCalculation, taskManager)
     {
         this.dbFactory = dbFactory;
         this.viewDataHelper = viewDataHelper;
-        this.commonSequenceRepository = commonSequenceRepository;
+        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
         this.cache = cache;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
     }
@@ -136,7 +136,7 @@ public class AccordanceCalculationController : AbstractResultController
                                  { "characteristicName", characteristicName },
                                  { "calculationType", calculationType }
                              };
-
+            using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
             long[] sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds,
                                                                       notation,
                                                                       language,

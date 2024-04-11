@@ -71,7 +71,10 @@ builder.Services.AddSingleton<IAccordanceCharacteristicRepository, AccordanceCha
 builder.Services.AddSingleton<IBinaryCharacteristicRepository, BinaryCharacteristicRepository>();
 builder.Services.AddSingleton<ICongenericCharacteristicRepository, CongenericCharacteristicRepository>();
 builder.Services.AddSingleton<IFullCharacteristicRepository, FullCharacteristicRepository>();
+
 builder.Services.AddSingleton<ICommonSequenceRepositoryFactory, CommonSequenceRepositoryFactory>();
+
+builder.Services.AddSingleton<IViewDataHelperFactory, ViewDataHelperFactory>();
 
 builder.Services.AddScoped<ISequencesCharacteristicsCalculator, SequencesCharacteristicsCalculator>();
 builder.Services.AddScoped<ICongenericSequencesCharacteristicsCalculator, CongenericSequencesCharacteristicsCalculator>();

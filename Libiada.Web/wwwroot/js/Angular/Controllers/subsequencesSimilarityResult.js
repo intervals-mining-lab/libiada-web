@@ -1,7 +1,7 @@
-﻿function SequencePredictionResultController() {
+﻿function SubsequencesSimilarityResultController() {
     "use strict";
 
-    function sequencePredictionResult($scope, $http) {
+    function subsequencesSimilarityResult($scope, $http) {
 
 
         $scope.loadingScreenHeader = "Loading data";
@@ -15,18 +15,14 @@
             .then(function (data) {
                 MapModelFromJson($scope, data.data);
 
-                $scope.legendHeight = $scope.legend.length * 20;
-                $scope.height = 800 + $scope.legendHeight;
-
                 $scope.loading = false;
             }, function () {
-                alert("Failed loading characteristic data");
+                alert("Failed loading similarity data");
                 $scope.loading = false;
             });
 
 
     }
 
-    angular.module("libiada").controller("SequencePredictionResultCtrl", ["$scope", "$http", sequencePredictionResult]);
-    
+    angular.module("libiada").controller("SubsequencesSimilarityResultCtrl", ["$scope", "$http", subsequencesSimilarityResult]);
 }

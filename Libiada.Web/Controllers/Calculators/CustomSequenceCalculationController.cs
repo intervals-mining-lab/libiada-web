@@ -183,7 +183,7 @@ public class CustomSequenceCalculationController : AbstractResultController
                 {
                     for (int i = 0; i < sequencesCount; i++)
                     {
-                        sequences[i] = delimiter != null ? new Chain(customSequences[i].Split((char)delimiter).Select(el => (IBaseObject)new ValueString(el)).ToList()) : new Chain(customSequences[i]);
+                        sequences[i] = delimiter != null ? new Chain(customSequences[i].Split((char)delimiter, StringSplitOptions.RemoveEmptyEntries).Select(el => (IBaseObject)new ValueString(el)).ToList()) : new Chain(customSequences[i]);
                         sequencesNames[i] = $"Custom sequence {i + 1}. Length: {customSequences[i].Length}";
                     }
                 }

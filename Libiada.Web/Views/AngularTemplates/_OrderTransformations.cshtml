@@ -1,13 +1,13 @@
 ﻿<hr />
 <div ng-repeat="transformation in $ctrl.transformationsSequence">
     <div class="row mb-1">
-        <label class="col-form-label col-md-2" for="operation">Transformation:</label>
+        <label class="col-form-label col-md-2" for="operation{{$index}}">Transformation:</label>
         <div class="col-md-10">
             <select class="form-select"
                     title="Operation"
                     ng-model="transformation.transformation"
                     ng-options="o.Text for o in ::$ctrl.transformations"
-                    id="operation"></select>
+                    id="operation{{$index}}"></select>
             <input type="hidden" name="transformationsSequence" ng-value="transformation.transformation.Value" />
         </div>
     </div>

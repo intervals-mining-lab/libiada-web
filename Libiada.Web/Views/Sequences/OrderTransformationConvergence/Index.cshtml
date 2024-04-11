@@ -14,7 +14,7 @@
     <div ng-controller="OrderTransformerCtrl">
         <nature-select natures="natures"
                        nature="nature"
-                       filter-by-nature="filterByNature">
+                       filter-by-nature="filterByNature()">
         </nature-select>
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <matters-table matters="matters"
@@ -36,8 +36,8 @@
         <order-transformations transformations="::transformations">
         </order-transformations>
         <matters-submit selected-matters-count="selectedMattersCount"
-                       submit-name="Transform"
-                       minimum-selected-matters="{{::minimumSelectedMatters}}">
+                        submit-name="Transform"
+                        minimum-selected-matters="{{::minimumSelectedMatters}}">
         </matters-submit>
     </div>
 }

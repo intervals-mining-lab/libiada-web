@@ -7,7 +7,6 @@ using Libiada.Database.Tasks;
 
 using Libiada.Core.Extensions;
 
-using Libiada.Web.Helpers;
 using Libiada.Web.Extensions;
 
 using SystemTask = System.Threading.Tasks.Task;
@@ -153,16 +152,17 @@ public class TaskManagerHub : Hub<ITaskManagerClient>
     /// <returns>
     /// The <see cref="ActionResult"/>.
     /// </returns>
-    public async SystemTask DeleteTasksWithState(TaskState taskState)
+    public async SystemTask DeleteTasksWithState(string taskStatus)
     {
         try
         {
+            TaskState taskState = taskStatus.ToEnum<TaskState>();
             var tasksData = taskManager.DeleteTasksWithState(taskState);
             await SystemTask.WhenAll(tasksData.Select(td => Send(TaskEvent.DeleteTask, td)));
         }
         catch (Exception e)
         {
-            throw new Exception($"Unable to delete tasks with state '{taskState}'", e);
+            throw new Exception($"Unable to delete tasks with status '{taskStatus}'", e);
         }
     }
 
