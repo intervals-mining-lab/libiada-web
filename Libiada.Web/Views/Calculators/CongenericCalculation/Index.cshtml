@@ -1,0 +1,63 @@
+﻿@{
+    ViewBag.Title = "Congeneric sequences characteristics calculation";
+}
+
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "Calculation");
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div ng-controller="CalculationCtrl">
+        @(Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" }))
+        <nature-select natures="natures"
+                       nature="nature"
+                       filter-by-nature="filterByNature()">
+        </nature-select>
+        <matters-table matters="matters"
+                       nature="nature"
+                       groups="groups"
+                       sequence-types="sequenceTypes"
+                       maximum-selected-matters="maximumSelectedMatters"
+                       selected-matters-count="selectedMattersCount"
+                       group-and-type-required="::false">
+        </matters-table>
+        <characteristics characteristic-types="::characteristicTypes"
+                         characteristics-dictionary="::characteristicsDictionary"
+                         nature="nature"
+                         notations="::notations"
+                         languages="::languages"
+                         translators="::translators"
+                         pause-treatments="::pauseTreatments"
+                         trajectories="::trajectories">
+        </characteristics>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" name="sort" id="sort" value="true" />
+            <input type="hidden" name="sort" value="false" />
+            <label class="form-check-label" for="sort">
+                Sort results in descending order
+            </label>
+        </div>
+        <div class="form-check mb-2">
+            <input type="checkbox" class="form-check-input" name="theoretical" id="theoretical" value="true" />
+            <input type="hidden" name="theoretical" value="false" />
+            <label class="form-check-label" for="theoretical">
+                Calculate theoretical rank distribution
+            </label>
+        </div>
+        <matters-submit selected-matters-count="selectedMattersCount"
+                        minimum-selected-matters="{{::minimumSelectedMatters}}"
+                        selected-sequence-groups-count="selectedSequenceGroupsCount">
+        </matters-submit>
+    </div>
+}
+
+@section Scripts {
+    <script src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/natureSelect.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersSubmit.js" asp-append-version="true"></script>
+}

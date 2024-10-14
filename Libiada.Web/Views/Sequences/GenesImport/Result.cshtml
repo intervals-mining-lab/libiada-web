@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "Subsequences import results";
+}
+
+@if (ViewBag.Error == null)
+{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchSequenceImportResult");
+
+    <div ng-controller="BatchSequenceImportResultCtrl">
+        <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
+        <h3 class="my-3">Subsequences import results for <span class="fw-bold" ng-bind="::matterName"></span></h3>
+        <table class="table table-bordered table-hover table-sm" ng-cloak>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Feature</th>
+                    <th>Gene position</th>
+                    <th>Gene length</th>
+                    <th>Partial</th>
+                    <th>Additional positions count</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="gene in ::genes">
+                    <td ng-bind="::$index + 1" />
+                    <td ng-bind="::features[gene.FeatureId]" />
+                    <td ng-bind="::gene.Starts[0]" />
+                    <td ng-bind="::gene.Lengths[0]" />
+                    <td ng-bind="::gene.Partial" />
+                    <td ng-bind="::gene.Starts.length - 1" />
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    @section Scripts {
+    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+    }
+}

@@ -1,0 +1,48 @@
+﻿@{
+    ViewBag.Title = "GenBank accessions update check result";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Error == null)
+{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchSequenceImportResult");
+
+    <div ng-controller="BatchSequenceImportResultCtrl">
+        <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
+        <div ng-disabled="loading">
+            <table class="table table-bordered table-hover" ng-cloak>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Sequence name</th>
+                        <th>Remote name</th>
+                        <th>Remote organism</th>
+                        <th>Local accession</th>
+                        <th>Local version</th>
+                        <th>Remote version</th>
+                        <th>Local update date</th>
+                        <th>Remote update date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="result in ::results" ng-class="::result.Updated ? result.NameUpdated ? 'table-warning' : 'table-danger' : result.NameUpdated ? '' : 'table-info'">
+                        <td ng-bind="::$index + 1" />
+                        <td ng-bind="::result.Name" />
+                        <td ng-bind="::result.RemoteName" />
+                        <td ng-bind="::result.RemoteOrganism" />
+                        <td ng-bind="::result.LocalAccession" />
+                        <td ng-bind="::result.LocalVersion" />
+                        <td ng-bind="::result.RemoteVersion" />
+                        <td ng-bind="::result.LocalUpdateDate" />
+                        <td ng-bind="::result.RemoteUpdateDate" />
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @section Scripts {
+    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+    }
+}

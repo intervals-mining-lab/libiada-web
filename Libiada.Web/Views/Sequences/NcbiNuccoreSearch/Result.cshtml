@@ -1,0 +1,41 @@
+﻿@{
+    ViewBag.Title = "Ncbi GenBank search results";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Error == null)
+{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchSequenceImportResult");
+
+    <div ng-controller="BatchSequenceImportResultCtrl">
+        <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
+        <div class="mb-3" ng-disabled="loading">
+            <h3>Found sequences:</h3>
+            <table class="table table-bordered table-hover" ng-cloak>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Sequence name</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="matter in ::result" ng-class="::calculateStatusClass(matter.Status)">
+                        <td ng-bind="::$index + 1" />
+                        <td ng-bind="::matter.MatterName" />
+                        <td ng-bind="::matter.Result" />
+                    </tr>
+                </tbody>
+            </table>
+            <h3>Found accessions:</h3>
+            <div ng-repeat="accession in ::accessions">
+                {{::accession}}
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+    }
+}

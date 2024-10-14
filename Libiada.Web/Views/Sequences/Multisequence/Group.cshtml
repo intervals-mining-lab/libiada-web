@@ -1,0 +1,86 @@
+﻿@{
+    ViewBag.Title = "Multisequence grouping result";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Error == null)
+{
+    using (Html.BeginForm())
+    {
+        await Html.RenderPartialAsync("_AngularControllerInitializer", "MultisequenceGrouping");
+
+        <div ng-controller="MultisequenceGroupingCtrl">
+            <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
+            <div ng-disabled="loading">
+                <table class="table table-bordered table-hover" ng-cloak>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Multisequence name</th>
+                            <th>Matters</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="multisequence in result">
+                            <td ng-bind="$index + 1" />
+                            <td>
+                                <div class="form-check">
+                                    <input type="checkbox"
+                                           class="form-check-input"
+                                           name="multisequencesNames"
+                                           id="{{::'multisequence' + multisequence.Id}}"
+                                           ng-value="::multisequence.name"
+                                           ng-disabled="multisequence.matterIds.length <= 1"
+                                           ng-checked="multisequence.matterIds.length > 1" />
+                                    <label class="form-check-label" for="{{::'multisequence' + multisequence.Id}}" ng-bind="::multisequence.name" />
+                                </div>
+                            </td>
+                            <td>
+                                <div ng-repeat="matterId in multisequence.matterIds">
+                                    <input type="hidden" name="{{'multisequenceMatters[' + multisequence.name + ']'}}" value="{{matterId}}" />
+                                    {{matters[matterId]}}
+
+                                    <button type="button" class="btn btn-danger btn-sm" ng-click="unbindMatter(multisequence, matterId)">X</button>
+                                    <br />
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="row mb-1">
+                    <input type="submit" value="Save" class="btn btn-success" />
+                </div>
+                <hr />
+                <h3> Ungrouped matters</h3>
+                <table class="table table-bordered table-hover" ng-cloak>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Matter name</th>
+                            <th>Group</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="matter in ungroupedMatters">
+                            <td ng-bind="$index + 1" />
+                            <td ng-bind="matter.Name" />
+                            <td>
+                                @* TODO: add autocomplete *@
+                                <select class="form-select"
+                                        name="{{'matter' + matter.Id}}"
+                                        ng-model="multisequence"
+                                        ng-options="multisequence.name for multisequence in result"></select>
+                                <button type="button" class="btn btn-secondary btn-sm" ng-click="bindMatter(multisequence, $index)">Distribute</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+
+    @section Scripts {
+    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+    }
+}

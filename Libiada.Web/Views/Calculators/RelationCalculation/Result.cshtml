@@ -1,0 +1,57 @@
+﻿@{
+    ViewBag.Title = "Relation characteristic calculation results";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Error == null)
+{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "ClusterizationResult");
+
+    <div ng-controller="ClusterizationResultCtrl">
+        <h3 ng-bind="::matterName"></h3>
+        <h4 ng-bind="::characteristicName"></h4>
+        <h4 ng-bind="::notationName"></h4>
+        <div ng-if="!isFilter">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>First element\Second element</th>
+                        <th ng-repeat="element in ::elements"
+                            ng-bind="::element.Name" />
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="element in ::elements">
+                        <td ng-bind="::element.Name" />
+                        <td ng-repeat="element in ::elements"
+                            ng-bind="::characteristics[elements[$parent.$index].Id][elements[$index].Id]" />
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div ng-if="isFilter">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>First element</th>
+                        <th>Second element</th>
+                        <th ng-bind="::characteristicName" />
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="result in ::filteredResult">
+                        <td ng-bind="::firstElements[$index]" />
+                        <td ng-bind="::secondElements[$index]" />
+                        <td ng-bind="::filteredResult[$index].Value" />
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @section Scripts {
+    <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+    }
+}

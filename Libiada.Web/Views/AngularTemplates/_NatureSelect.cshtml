@@ -1,0 +1,18 @@
+﻿@using Libiada.Web.Extensions
+@using Libiada.Web.Helpers
+
+@if (User.IsAdmin())
+{
+    <div class="row mb-2">
+        <div class="col-md-10">
+            <label class="form-label" for="Nature">Nature</label>
+            <select class="form-select"
+                    id="Nature"
+                    ng-model="$ctrl.nature"
+                    ng-options="n.Value as n.Text for n in ::$ctrl.natures"
+                    ng-change="$ctrl.filterByNature()">
+            </select>
+            <input type="hidden" name="Nature" ng-value="$ctrl.nature" />
+        </div>
+    </div>
+}

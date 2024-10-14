@@ -1,0 +1,21 @@
+﻿<div class="row">
+    <div class="col-auto my-2">
+        <label class="form-label" for="filterInput">Filter subsequences by product and locus_tag:</label>
+        <input class="form-control" type="text" ng-model="$ctrl.newFilter" id="filterInput" name="filterInput" />
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-10 mb-3">
+        <button type="button" class="btn btn-success" ng-click="$ctrl.onAddingFilter()">Add filter</button>
+    </div>
+</div>
+<h6 ng-show="filters.length > 0">Added filters:</h6>
+<div ng-repeat="filter in $ctrl.filters">
+    <div class="row">
+        <div class="col-md-10 mb-2">
+            <input type="text" readonly class="form-control-plaintext" name="filters" ng-bind="::filter.value" ng-value="::filter.value">
+            <button type="button" class="btn btn-danger" ng-click="$ctrl.onDeletingFilter(filter)">Delete filter</button>
+        </div>
+    </div>
+</div>
+<hr />

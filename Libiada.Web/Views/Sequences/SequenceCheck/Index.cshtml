@@ -1,0 +1,34 @@
+﻿@{
+    ViewBag.Title = "Sequences check";
+}
+
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchGeneticImportFromGenBankSearchFile");
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm("Index", "SequenceCheck", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div ng-controller="BatchGeneticImportFromGenBankSearchFileCtrl">
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="matterId">Sequence:</label>
+            <div class="col-md-10">
+                @Html.DropDownList("matterId", null, htmlAttributes: new { @class = "form-select" })
+            </div>
+        </div>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="file">Sequence file:</label>
+            <div class="col-md-10">
+                <input type="file" name="file" id="file" onchange="angular.element(this).scope().fileChanged(this)" />
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="offset-md-2 col-md-10">
+                <input type="submit" value="Check" class="btn btn-secondary" ng-disabled="!fileSelected.value" />
+            </div>
+        </div>
+    </div>
+}

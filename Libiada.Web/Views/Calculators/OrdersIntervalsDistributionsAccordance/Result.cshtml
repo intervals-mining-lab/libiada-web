@@ -1,0 +1,60 @@
+﻿@{
+    ViewBag.Title = "Orders Intervals Distributions Accordance";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Error == null)
+{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "OrdersIntervalsDistributionsAccordanceResult");
+
+    <div ng-controller="OrdersIntervalsDistributionsAccordanceResultCtrl">
+        <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
+        <div ng-disabled="loading">
+            <div class="row mb-1">
+                <label class="col-form-label col-md-2" for="linkType">Link:</label>
+                <div class="col-md-10">
+                    <select class="form-select"
+                            title="Link type"
+                            ng-model="linkType"
+                            ng-options="t.Text for t in ::linkList"
+                            id="linkType"></select>
+                </div>
+            </div>
+            <div class="row mb-1">
+                <label class="col-form-label col-md-2" for="height">Height:</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="height" id="height" type="number" min="500" step="20" ng-model="height" />
+                </div>
+            </div>
+            <div class="row mb-2">
+                <label class="col-form-label col-md-2" for="width">Width:</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="width" id="width" type="number" min="400" step="20" ng-model="width" />
+                </div>
+            </div>
+            <input type="button" class="btn btn-secondary mb-3" ng-click="draw()" value="Draw" />
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Number of orders per distribution</th>
+                        <th>Number of distributions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="level in accordanceLevels">
+                        <td ng-bind="level.level"></td>
+                        <td ng-bind="level.distributionsCount"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div id="chart" class="font-monospace mb-2">
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+    <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+    }
+}

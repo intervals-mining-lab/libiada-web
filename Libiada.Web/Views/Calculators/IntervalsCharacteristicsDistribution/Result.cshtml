@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = "Intervals Characteristics Distribution";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Error == null)
+{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "IntervalsCharacteristicsDistributionResult");
+
+    <div ng-controller="IntervalsCharacteristicsDistributionResultCtrl">
+        <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
+        <div ng-disabled="loading">
+            <div class="row mb-1">
+                <label class="col-form-label col-md-2" for="characteristic">Characteristic:</label>
+                <div class="col-md-10">
+                    <select class="form-select"
+                            title="Characteristic"
+                            ng-model="characteristic"
+                            ng-options="c.Text for c in ::characteristicsList"
+                            id="characteristic"></select>
+                </div>
+            </div>
+            <div class="row mb-1">
+                <label class="col-form-label col-md-2" for="height">Height:</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="height" id="height" type="number" min="500" step="20" ng-model="height" />
+                </div>
+            </div>
+            <div class="row mb-2">
+                <label class="col-form-label col-md-2" for="width">Width:</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="width" id="width" type="number" min="400" step="20" ng-model="width" />
+                </div>
+            </div>
+            <input type="button" class="btn btn-secondary mb-2" ng-click="draw()" value="Draw" />
+            <div id="chart" class="font-monospace mb-3">
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+    <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+    }
+}

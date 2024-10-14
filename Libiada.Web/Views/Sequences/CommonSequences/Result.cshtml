@@ -1,0 +1,59 @@
+﻿@{
+    ViewBag.Title = "Sequence import result";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Error == null)
+{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchSequenceImportResult");
+
+    <div ng-controller="BatchSequenceImportResultCtrl">
+        <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
+        <p>
+            Sequence <strong> @ViewBag.matterName </strong> imported successfully
+        </p>
+        <ul class="list-group">
+            <li class="list-group-item">
+                Nature: {{::Nature}}
+            </li>
+            <li class="list-group-item">
+                Notation: {{::Notation}}
+            </li>
+            <li class="list-group-item">
+                Group: {{::Group}}
+            </li>
+            <li class="list-group-item">
+                SequenceType: {{::SequenceType}}
+            </li>
+            <li class="list-group-item">
+                Description: {{::Description}}
+            </li>
+            <li class="list-group-item" ng-if="::RemoteId && RemoteId.length > 0">
+                Remote id: {{::RemoteId}}
+            </li>
+            <li class="list-group-item" ng-if="::Language && Language.length > 0">
+                Language: {{::Language}}
+            </li>
+            <li class="list-group-item" ng-if="::Original != null">
+                {{::Original ? 'Text is not translated' : 'Text is translated'}}
+            </li>
+            <li class="list-group-item" ng-if="::Translator && Translator.length > 0">
+                Translator: {{::Translator}}
+            </li>
+            <li class="list-group-item" ng-if="::Partial">
+                Sequence is partial
+            </li>
+            <li class="list-group-item" ng-if="::Precision">
+                Data precision: {{::Precision}}
+            </li>
+        </ul>
+        <div>
+            @Html.ActionLink("Import another sequence", "Create") or go @Html.ActionLink("back to List", "Index").
+        </div>
+    </div>
+
+    @section Scripts {
+    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+    }
+}

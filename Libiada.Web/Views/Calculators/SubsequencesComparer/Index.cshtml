@@ -1,0 +1,81 @@
+﻿@using Libiada.Web.Extensions
+@using Libiada.Web.Helpers
+@{
+    ViewBag.Title = "Subsequences comparer";
+}
+
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "SequencesAlignment");
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div ng-controller="SequencesAlignmentCtrl">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <matters-table matters="matters"
+                       nature="nature"
+                       groups="groups"
+                       sequence-types="sequenceTypes"
+                       maximum-selected-matters="::maximumSelectedMatters"
+                       selected-matters-count="selectedMattersCount"
+                       group-and-type-required="::false">
+        </matters-table>
+
+        <features-select features="::features"></features-select>
+
+        <hr />
+        <filters></filters>
+        <h4>Sort matrix by characterisitc:</h4>
+        <characteristic characteristic-types="::characteristicTypes"
+                        characteristics-dictionary="::characteristicsDictionary"
+                        nature="nature"
+                        notations="::notations"
+                        pause-treatments="::pauseTreatments"
+                        trajectories="::trajectories">
+        </characteristic>
+        <h4>Subsequences comparison characteristic:</h4>
+        <characteristics characteristic-types="::characteristicTypes"
+                         characteristics-dictionary="::characteristicsDictionary"
+                         nature="nature"
+                         notations="::notations"
+                         languages="::languages"
+                         translators="::translators"
+                         pause-treatments="::pauseTreatments"
+                         trajectories="::trajectories"
+                         percentage-differense-needed="::percentageDifferenseNeeded">
+        </characteristics>
+        @if (User.IsAdmin())
+        {
+            <div class="form-check mb-2">
+                <input type="checkbox"
+                       class="form-check-input"
+                       name="filterMatrix"
+                       id="filterMatrix"
+                       ng-model="filterMatrix"
+                       value="true" />
+                <label class="form-check-label" for="filterMatrix">
+                    Filter matrix using similarity metrics
+                </label>
+            </div>
+        }
+        <input type="hidden" name="filterMatrix" value="false" />
+        <matters-submit selected-matters-count="selectedMattersCount"
+                        submit-name="Compare"
+                        minimum-selected-matters="{{::minimumSelectedMatters}}"
+                        selected-sequence-groups-count="selectedSequenceGroupsCount">
+        </matters-submit>
+    </div>
+}
+
+@section Scripts {
+    <script src="~/js/Angular/Components/characteristic.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersSubmit.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/featuresSelect.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/filters.js" asp-append-version="true"></script>
+}

@@ -1,0 +1,66 @@
+﻿@model SequenceGroup
+
+@{
+    ViewBag.Title = "Sequences group";
+}
+
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "SequenceGroups");
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div ng-controller="sequenceGroupsCtrl">
+        <h4>SequenceGroup</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="row mb-1">
+            <div class="col-md-10">
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "form-label" })
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <nature-select natures="natures" nature="nature">
+        </nature-select>
+        <div class="row mb-1">
+            <div class="col-md-10">
+                <label class="form-label" for="sequenceGroupType">Sequence group type</label>
+                <select class="form-select"
+                        id="sequenceGroupType"
+                        ng-options="n.Value as n.Text for n in sequenceGroupTypes | filter:{ Nature: nature }"
+                        ng-model="sequenceGroupType">
+                    <option value="">-- None --</option>
+                </select>
+                <input type="hidden" name="SequenceGroupType" ng-value="sequenceGroupType" />
+            </div>
+        </div>
+        <matters-table matters="matters"
+                       nature="nature"
+                       groups="groups"
+                       sequence-types="sequenceTypes"
+                       maximum-selected-matters="::maximumSelectedMatters"
+                       selected-matters-count="selectedMattersCount"
+                       group-and-type-required="::true">
+        </matters-table>
+        <matters-submit selected-matters-count="selectedMattersCount"
+                        submit-name="Create"
+                        minimum-selected-matters="{{::minimumSelectedMatters}}">
+        </matters-submit>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/natureSelect.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersSubmit.js" asp-append-version="true"></script>
+}

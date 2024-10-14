@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "Batch genes import result";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Error == null)
+{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchSequenceImportResult");
+
+    <div ng-controller="BatchSequenceImportResultCtrl">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Sequence</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="matter in ::result" ng-class="::calculateStatusClass(matter.Status)">
+                    <td ng-bind="::$index + 1" />
+                    <td ng-bind="::matter.MatterName" />
+                    <td ng-bind="::matter.Result" />
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    @section Scripts {
+    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+    }
+}

@@ -1,0 +1,116 @@
+﻿@using Libiada.Web.Extensions
+@using Libiada.Web.Helpers
+
+@{
+    ViewBag.Title = "Characteristics calculation";
+}
+
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "Calculation");
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div ng-controller="CalculationCtrl">
+        <h4>Sequences and parameters</h4>
+        <hr />
+        <nature-select natures="natures"
+                       nature="nature"
+                       filter-by-nature="filterByNature()">
+        </nature-select>
+        <div class="btn-group" role="group" aria-label="Table type radio toggle button group">
+            <input type="radio"
+                   class="btn-check"
+                   name="tableType"
+                   id="mattersTableRadio"
+                   value="matters"
+                   ng-model="calculaionFor"
+                   autocomplete="off">
+            <label class="btn btn-outline-secondary" for="mattersTableRadio">Sequences</label>
+            <input type="radio"
+                   class="btn-check"
+                   name="tableType"
+                   id="sequenceGroupsTableRadio"
+                   value="sequenceGroups"
+                   ng-model="calculaionFor"
+                   ng-change="clearSelection()"
+                   autocomplete="off">
+            <label class="btn btn-outline-secondary" for="sequenceGroupsTableRadio">Sequence groups</label>
+        </div>
+        <matters-table ng-show="calculaionFor === 'matters'"
+                       matters="matters"
+                       nature="nature"
+                       groups="groups"
+                       sequence-types="sequenceTypes"
+                       maximum-selected-matters="::maximumSelectedMatters"
+                       selected-matters-count="selectedMattersCount"
+                       group-and-type-required="::false"
+                       set-unselect-all-matters-function="setUnselectAllMattersFunction(func)">
+        </matters-table>
+        <sequence-groups-table ng-show="calculaionFor === 'sequenceGroups'"
+                               sequence-groups="sequenceGroups"
+                               nature="nature"
+                               groups="groups"
+                               sequence-types="sequenceTypes"
+                               selected-sequence-groups-count="selectedSequenceGroupsCount"
+                               set-unselect-all-sequence-groups-function="setUnselectAllSequenceGroupsFunction(func)">
+        </sequence-groups-table>
+        <characteristics characteristic-types="::characteristicTypes"
+                         characteristics-dictionary="::characteristicsDictionary"
+                         nature="nature"
+                         notations="::notations"
+                         languages="::languages"
+                         translators="::translators"
+                         pause-treatments="::pauseTreatments"
+                         trajectories="::trajectories">
+        </characteristics>
+        @if (User.IsAdmin())
+        {
+            <div class="form-check" ng-if="nature==@((byte)Nature.Genetic)">
+                <input type="checkbox"
+                       class="form-check-input"
+                       name="complementary"
+                       id="complementary"
+                       value="true"
+                       ng-model="complementary" />
+                <label class="form-check-label" for="complementary">
+                    Calculate characteristic for complementary sequence
+                </label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox"
+                       class="form-check-input"
+                       name="rotate"
+                       id="rotate"
+                       value="true"
+                       ng-model="rotate" />
+                <label class="form-check-label" for="rotate">
+                    Rotate sequences cyclically
+                </label>
+            </div>
+            <div class="row" ng-show="rotate">
+                <label class="col-form-label col-md-2" for="rotationLength">Rotation length:</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="rotationLength" type="number" value="100" min="1" id="rotationLength" />
+                </div>
+            </div>
+            <hr />
+        }
+        <input type="hidden" name="complementary" value="false" />
+        <input type="hidden" name="rotate" value="false" />
+        <matters-submit selected-matters-count="selectedMattersCount"
+                        minimum-selected-matters="{{::minimumSelectedMatters}}"
+                        selected-sequence-groups-count="selectedSequenceGroupsCount">
+        </matters-submit>
+    </div>
+}
+@section Scripts {
+    <script src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/sequenceGroupsTable.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/natureSelect.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersSubmit.js" asp-append-version="true"></script>
+}

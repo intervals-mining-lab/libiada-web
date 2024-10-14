@@ -1,0 +1,72 @@
+﻿@{
+    ViewBag.Title = "Order transformation visualization";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Error == null)
+{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "OrderTransformationVisualizationResult");
+
+    <div ng-controller="OrderTransformationVisualizationResultCtrl">
+        <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
+        <div ng-disabled="loading">
+            <table st-table="ordersTable" class="table table-bordered table-hover" ng-cloak>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Order</th>
+                        <th>Count of unique final orders</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="order in ::orders">
+                        <td ng-bind="::$index" />
+                        <td ng-bind="::order" />
+                        <td ng-bind="::transformationsData[$index].UniqueFinalOrdersCount" />
+                    </tr>
+                </tbody>
+            </table>
+            <div class="row mb-1">
+                <label class="col-form-label col-md-2" for="initialOrder">Initial order Id:</label>
+                <div class="col-md-10">
+                    <select class="form-select"
+                            title="Initial order"
+                            ng-model="initialOrder"
+                            ng-options="orderId.id for orderId in ::ordersIds"
+                            id="initialOrder"></select>
+                </div>
+            </div>
+            <div class="row mb-1">
+                <label class="col-form-label col-md-2" for="transformationType">Transformation type:</label>
+                <div class="col-md-10">
+                    <select class="form-select"
+                            title="Transformation type"
+                            ng-model="transformationType"
+                            ng-options="t.Text for t in ::transformationsList"
+                            id="transformationType"></select>
+                </div>
+            </div>
+            <div class="row mb-1">
+                <label class="col-form-label col-md-2" for="height">Height:</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="height" id="height" type="number" min="{{::500 + legendHeight}}" step="20" ng-model="height" />
+                </div>
+            </div>
+            <div class="row mb-1">
+                <label class="col-form-label col-md-2" for="width">Width:</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="width" id="width" type="number" min="400" step="20" ng-model="width" />
+                </div>
+            </div>
+            <input type="button" class="btn btn-secondary mb-2" ng-click="draw()" value="Draw" />
+            <div id="chart" class="font-monospace  mb-2">
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+    <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+    }
+}

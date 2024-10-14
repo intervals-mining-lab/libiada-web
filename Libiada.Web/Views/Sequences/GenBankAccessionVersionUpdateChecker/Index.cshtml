@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "GenBank accessions update checker";
+}
+
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchGeneticImportFromGenBankSearchFile");
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div ng-controller="BatchGeneticImportFromGenBankSearchFileCtrl">
+        <div class="form-check mb-2">
+            <input type="checkbox"
+                   class="form-check-input"
+                   name="reinmportSequences"
+                   id="reinmportSequences"
+                   value="true" />
+            <input type="hidden" name="reinmportSequences" value="false" />
+            <label class="form-check-label" for="reinmportSequences">
+                Reimport updated sequences
+            </label>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-10">
+                <input type="submit" value="Check" class="btn btn-secondary" />
+            </div>
+        </div>
+    </div>
+}

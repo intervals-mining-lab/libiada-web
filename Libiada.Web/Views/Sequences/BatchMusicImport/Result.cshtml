@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "Batch music import result";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Error == null)
+{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchSequenceImportResult");
+
+    <div ng-controller="BatchSequenceImportResultCtrl">
+        <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
+        <div ng-disabled="loading">
+            <table class="table table-bordered table-hover" ng-cloak>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Sequence name</th>
+                        <th>Group</th>
+                        <th>Sequence type</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="matter in ::result" ng-class="::calculateStatusClass(matter.Status)">
+                        <td ng-bind="::$index + 1" />
+                        <td ng-bind="::matter.MatterName" />
+                        <td ng-bind="::matter.Group" />
+                        <td ng-bind="::matter.SequenceType" />
+                        <td ng-bind="::matter.Result" />
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @section Scripts {
+    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+    }
+}

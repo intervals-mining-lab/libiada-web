@@ -1,0 +1,176 @@
+﻿@{
+    ViewBag.Title = "Similarity matrix";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Error == null)
+{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "SubsequencesComparerResult");
+
+    <div ng-controller="SubsequencesComparerResultCtrl">
+        <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
+        <div>
+            Sequences characteristic: <b>{{sequenceCharacteristicName}}</b>
+        </div>
+        <div>
+            Subsequences characteristic: <b>{{characteristicName}}</b>
+        </div>
+        <br />
+        <div ng-show="filteredSimilarities" class="form-check">
+            <input type="checkbox"
+                   class="form-check-input"
+                   name="displayFiltered"
+                   id="displayFiltered"
+                   ng-model="flags.displayFiltered"
+                   value="false" />
+            <label class="form-check-label" for="displayFiltered">
+                Display filtered matrix
+            </label>
+        </div>
+        <table class="table table-bordered table-sm">
+            <tbody>
+                <tr>
+                    <td />
+                    <td ng-repeat="matterName in mattersNames" title="{{matterName}}">{{$index + 1}}</td>
+                </tr>
+                <tr ng-repeat="similarity in flags.displayFiltered ? filteredSimilarities : similarities">
+                    <td title="{{mattersNames[$index]}}">{{$index + 1}}</td>
+                    <td ng-repeat="value in similarity"
+                        ng-click="showEqualPairs($parent.$index, $index, value)"
+                        ng-style="getHighlightColor(value.formula1)"
+                        title="{{mattersNames[$parent.$index]}} &#13{{mattersNames[$index]}}">
+                        {{(value.formula1 * 100).toFixed(3)}}%
+                        <br />
+                        {{(value.formula2).toFixed(5)}}
+                        <br />
+                        {{(value.formula3 * 100).toFixed(3)}}%
+                    </td>
+                    <td title="{{mattersNames[$index]}}">{{$index + 1}}</td>
+                </tr>
+                <tr>
+                    <td />
+                    <td ng-repeat="matterName in mattersNames" title="{{matterName}}" ng-bind="$index + 1"></td>
+                </tr>
+            </tbody>
+        </table>
+        <hr />
+        <ul class="list-group">
+            <li class="list-group-item" ng-repeat="matterName in mattersNames"> <b> {{$index + 1}} - {{matterName}} </b> </li>
+        </ul>
+        <hr />
+        <div class="row mb-1">
+            <p>Maximum difference = {{::maxPercentageDifference}}%</p>
+        </div>
+        <div class="row mb-1" ng-show="similarityValueSelected">
+            <p>
+                Number of equal subsequences from first sequence = {{similarityValue.firstAbsolutelyEqualElementsCount}}
+                <br />
+                Number of similar subsequences from first sequence = {{similarityValue.firstNearlyEqualElementsCount}}
+                <br />
+                Number of not equal subsequences from first sequence = {{similarityValue.firstNotEqualElementsCount}}
+                <br />
+                Number of equal subsequences from second sequence = {{similarityValue.secondAbsolutelyEqualElementsCount}}
+                <br />
+                Number of similar subsequences from second sequence = {{similarityValue.secondNearlyEqualElementsCount}}
+                <br />
+                Number of not equal subsequences from second sequence = {{similarityValue.secondNotEqualElementsCount}}
+            </p>
+        </div>
+        <filters filters="filters" add-filter="addFilter(newFilter)" delete-filter="deleteFilter(filter, filterIndex)"></filters>
+        <table class="table table-bordered table-striped" ng-repeat="equalElement in equalElementsToShow" ng-show="elementVisible(equalElement)">
+            <tbody>
+                <tr>
+                    <td class="lh-sm">
+                        <b> {{$index + 1}}. </b>
+                        <br />
+                        First sequence: <b> {{mattersNames[firstMatterIndex]}} </b>
+                        <br />
+                        Feature: {{features[characteristics[firstMatterIndex][equalElement.Item1].FeatureId]}}
+                        <br />
+                        Positions = {{characteristics[firstMatterIndex][equalElement.Item1].Starts.join(', ')}}
+                        <br />
+                        Lengths = {{characteristics[firstMatterIndex][equalElement.Item1].Lengths.join(', ')}}
+                        <br />
+                        <div ng-repeat="attributeId in characteristics[firstMatterIndex][equalElement.Item1].Attributes">
+                            {{attributes[attributeValues[attributeId].attribute]}} = {{attributeValues[attributeId].value}}
+                        </div>
+                        <i> Characteristic value = {{characteristics[firstMatterIndex][equalElement.Item1].CharacteristicsValues[0]}} </i>
+                        <br />
+                        <br />
+                        Second sequence: <b> {{mattersNames[secondMatterIndex]}} </b>
+                        <br />
+                        Feature: {{features[characteristics[secondMatterIndex][equalElement.Item2].FeatureId]}}
+                        <br />
+                        Positions = {{characteristics[secondMatterIndex][equalElement.Item2].Starts.join(', ')}}
+                        <br />
+                        Lengths = {{characteristics[secondMatterIndex][equalElement.Item2].Lengths.join(', ')}}
+                        <br />
+                        <div ng-repeat="attributeId in characteristics[secondMatterIndex][equalElement.Item2].Attributes">
+                            {{attributes[attributeValues[attributeId].attribute]}} = {{attributeValues[attributeId].value}}
+                        </div>
+                        <i> Characteristic value = {{characteristics[secondMatterIndex][equalElement.Item2].CharacteristicsValues[0]}} </i>
+                        <br />
+                        <br />
+                        <i> Absolute difference = {{characteristics[firstMatterIndex][equalElement.Item1].CharacteristicsValues[0] - characteristics[secondMatterIndex][equalElement.Item2].CharacteristicsValues[0] | makePositive}}</i>
+                        <br />
+                        <i> Percentage difference = {{equalElement.Item3 * 100}}%</i>
+                        <div class="card">
+                            <div class="card-hader">
+                                <button type="button"
+                                        class="btn btn-outline-secondary btn-sm"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#additionalActions{{$index + 1}}"
+                                        aria-controls="additionalActions{{$index + 1}}"
+                                        aria-expanded="false">
+                                    +
+                                </button>
+                            </div>
+                            <div class="card-collapse collapse" id="additionalActions{{$index + 1}}">
+                                <div class="card-body">
+                                    <characteristic characteristic-types="characteristicTypes"
+                                                    characteristics-dictionary="characteristicsDictionary"
+                                                    nature="nature"
+                                                    notations="notations"
+                                                    characteristic="characteristic"
+                                                    title="Local characteristic"
+                                                    pause-treatments="pauseTreatments"
+                                                    trajectories="::trajectories">
+                                    </characteristic>
+                                    <div class="row mb-1">
+                                        <label class="col-form-label col-md-2" for="windowSize">Window size:</label>
+                                        <div class="col-md-10">
+                                            <input class="form-control" ng-model="slidingWindowParams.windowSize" type="number" min="1" id="windowSize" />
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1">
+                                        <label class="col-form-label col-md-2" for="step">Step size:</label>
+                                        <div class="col-md-10">
+                                            <input class="form-control" ng-model="slidingWindowParams.step" type="number" min="1" id="step" />
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1">
+                                        <div class="offset-md-2 col-md-10">
+                                            <input type="button"
+                                                   class="btn btn-secondary"
+                                                   ng-click="calculateLocalCharacteristics(characteristics[firstMatterIndex][equalElement.Item1].Id, characteristics[secondMatterIndex][equalElement.Item2].Id, $index)"
+                                                   value="CalculateLocalCharacteristics" />
+                                        </div>
+                                    </div>
+                                    <div id="chart{{$index}}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    @section Scripts {
+    <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/characteristic.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/filters.js" asp-append-version="true"></script>
+    }
+}

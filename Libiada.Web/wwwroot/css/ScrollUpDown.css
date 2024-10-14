@@ -1,0 +1,21 @@
+﻿.body-content {
+    padding-left: var(--sidebar-width);
+}
+
+footer {
+    padding-left: var(--sidebar-width);
+}
+
+.scroll-up-down {
+    margin-top: var(--navbar-height);
+}
+
+.arrow-button {
+    fill: #337ab7;
+    width: var(--sidebar-width);
+}
+
+.arrow-button:hover {
+    background: #eee;
+    transition: 0.4s;
+}

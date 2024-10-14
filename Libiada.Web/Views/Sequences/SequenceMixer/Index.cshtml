@@ -1,0 +1,68 @@
+﻿@{
+    ViewBag.Title = "Generate sequence rearrangements";
+}
+
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "OrdersSimilarity");
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div ng-controller="OrdersSimilarityCtrl">
+        <h4>Sequences and parameters</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <nature-select natures="natures"
+                       nature="nature"
+                       filter-by-nature="filterByNature()">
+        </nature-select>
+        <matters-table matters="matters"
+                       nature="nature"
+                       groups="groups"
+                       sequence-types="sequenceTypes"
+                       maximum-selected-matters="::maximumSelectedMatters"
+                       selected-matters-count="selectedMattersCount"
+                       group-and-type-required="::false">
+        </matters-table>
+        <div class="row mb-1">
+            <div class="col-md-10">
+                <select class="form-select"
+                        title="Notation"
+                        ng-model="notation"
+                        ng-options="n.Text for n in notations | filter:{ Nature: nature }">
+                </select>
+                <input type="hidden" name="notation" ng-value="notation.Value" />
+            </div>
+        </div>
+        <characteristic-nature-params characteristic="characteristic"
+                                      nature="nature"
+                                      notations="notations"
+                                      languages="::languages"
+                                      translators="::translators"
+                                      pauseTreatments="::pauseTreatments"
+                                      trajectories="::trajectories">
+        </characteristic-nature-params>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="scrambling">Scrambling count:</label>
+            <div class="col-md-10">
+                <input class="form-control" name="scrambling" id="scrambling" type="number" value="10" min="1" />
+                @Html.ValidationMessage("scrambling", "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <hr />
+        <matters-submit selected-matters-count="selectedMattersCount"
+                        submit-name="Mix"
+                        minimum-selected-matters="{{::minimumSelectedMatters}}">
+        </matters-submit>
+    </div>
+}
+
+@section Scripts {
+    <script src="~/js/Angular/Components/characteristicNatureParams.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/natureSelect.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersSubmit.js" asp-append-version="true"></script>
+}

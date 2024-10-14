@@ -1,0 +1,133 @@
+﻿<div class="form-check">
+    <input type="checkbox"
+           class="form-check-input"
+           name="localFile"
+           id="localFile"
+           ng-model="$ctrl.localFile"
+           value="true" />
+    <input type="hidden" name="localFile" value="false" />
+    <label class="form-check-label" for="localFile">
+        Load sequence from local file(s)
+    </label>
+</div>
+<div class="row mb-2" ng-show="$ctrl.localFile">
+    @* TODO: make it into an ng-repeat *@
+    <fieldset>
+        <legend>File type:</legend>
+        <div class="form-check">
+            <input type="radio"
+                   class="form-check-input"
+                   name="fileType"
+                   id="fileTypeGenetic"
+                   ng-model="$ctrl.fileType"
+                   value="genetic"
+                   checked />
+            <label class="form-check-label" for="fileTypeGenetic">
+                FASTA file (contains genetic sequence)
+            </label>
+        </div>
+        <div class="form-check">
+            <input type="radio"
+                   class="form-check-input"
+                   name="fileType"
+                   id="fileTypeText"
+                   ng-model="$ctrl.fileType"
+                   value="text" />
+            <label class="form-check-label" for="fileTypeText">
+                Text file (read by letters)
+            </label>
+        </div>
+        <div class="form-check">
+            <input type="radio"
+                   class="form-check-input"
+                   name="fileType"
+                   id="fileTypeImage"
+                   ng-model="$ctrl.fileType"
+                   value="image" />
+            <label class="form-check-label" for="fileTypeImage">
+                Image file
+            </label>
+        </div>
+        <div class="form-check">
+            <input type="radio"
+                   class="form-check-input"
+                   name="fileType"
+                   id="fileTypeWavFile"
+                   ng-model="$ctrl.fileType"
+                   value="wavFile" />
+            <label class="form-check-label" for="fileTypeWavFile">
+                WAV file
+            </label>
+        </div>
+    </fieldset>
+</div>
+<div class="row mb-2" ng-show="$ctrl.localFile">
+    <div class="col-md-12">
+        <label class="form-label" for="files">Sequence file(s):</label>
+        <input type="file" name="files" id="files" multiple />
+        @Html.ValidationMessage("files", "", new { @class = "text-danger" })
+    </div>
+</div>
+<div ng-hide="$ctrl.localFile">
+    <div ng-repeat="customSequence in $ctrl.customSequences">
+        <div class="row mb-2">
+            <div class="col-md-12">
+                <label class="form-label" for="customSequence{{$index}}">Sequence:</label>
+                <textarea class="form-control" rows="1" id="customSequence{{$index}}" ng-model="customSequence.sequence" name="customSequences"></textarea>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-10">
+                <button type="button" class="btn btn-danger" ng-click="$ctrl.deleteSequence(customSequence)" ng-disabled="$ctrl.customSequences.length <= 1">
+                    Delete sequence
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-2">
+        <div class="col-md-10">
+            <button type="button" class="btn btn-success" ng-click="$ctrl.addSequence()">
+                Add sequence
+            </button>
+        </div>
+    </div>
+    <div class="row mb-2">
+        <div class="col-md-12">
+            <label class="form-label" for="delimiter">Elements delimiter:</label>
+            <input type="text" class="form-control" name="delimiter" id="delimiter" maxlength="1" placeholder="Enter delimiter">
+        </div>
+    </div>
+</div>
+<div ng-if="$ctrl.fileType=='text'">
+    <div class="form-check">
+        <input type="checkbox"
+               class="form-check-input"
+               name="toLower"
+               id="toLower"
+               ng-model="$ctrl.toLower"
+               value="true" />
+        <input type="hidden" name="toLower" value="false" />
+        <label class="formv-label" for="toLower">
+            Convert to lower case
+        </label>
+    </div>
+    <div class="form-check">
+        <input type="checkbox"
+               class="form-check-input"
+               name="removePunctuation"
+               id="removePunctuation"
+               ng-model="$ctrl.removePunctuation"
+               value="true" />
+        <input type="hidden" name="removePunctuation" value="false" />
+        <label class="form-check-label" for="removePunctuation">
+            Remove punctuation
+        </label>
+    </div>
+    <hr />
+</div>
+<image-transformers file-type="$ctrl.fileType" image-transformers="::$ctrl.imageTransformers"></image-transformers>
+<hr />
+
+@section Scripts {
+    <script src="~/js/Angular/Components/imageTransformers.js" asp-append-version="true"></script>
+}

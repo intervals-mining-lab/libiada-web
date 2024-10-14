@@ -1,0 +1,53 @@
+﻿@{
+    ViewBag.Title = "Sequences Order Distribution";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Error == null)
+{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "SequencesOrderDistributionResult");
+
+    <div ng-controller="SequencesOrderDistributionResultCtrl">
+        <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
+        <div ng-disabled="loading">
+            <div ng-repeat="order in ::result">
+                <table class="table table-bordered table-hover" ng-cloak>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th ng-bind="::order.order" />
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="sequence in ::order.sequences">
+                            <td ng-bind="::$index+1" />
+                            <td ng-bind="::sequence" />
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row mb-1">
+                <label class="col-form-label col-md-2" for="height">Height:</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="height" id="height" type="number" min="500" step="20" ng-model="height" />
+                </div>
+            </div>
+            <div class="row mb-2">
+                <label class="col-form-label col-md-2" for="width">Width:</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="width" id="width" type="number" min="400" step="20" ng-model="width" />
+                </div>
+            </div>
+            <input type="button" class="btn btn-secondary mb-2" ng-click="draw()" value="Draw" />
+            <div id="chart" class="font-monospace mb-2">
+            </div>
+
+        </div>
+    </div>
+
+    @section Scripts {
+    <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+    }
+}

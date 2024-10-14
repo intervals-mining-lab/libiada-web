@@ -1,0 +1,26 @@
+﻿<div class="modal"
+     id="loadingDialog"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="loadingDialogHeader"
+     aria-hidden="true"
+     data-bs-backdrop="static"
+     data-bs-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="loadingDialogHeader" ng-bind="$ctrl.loadingScreenHeader"></h1>
+            </div>
+            <div class="modal-body">
+                <div class="progress">
+                    <div class="progress-bar bg-info progress-bar-striped progress-bar-animated w-100"
+                         role="progressbar"
+                         aria-valuenow="100"
+                         aria-valuemin="0"
+                         aria-valuemax="100">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

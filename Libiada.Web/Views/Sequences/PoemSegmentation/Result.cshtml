@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "Segmentation results";
+}
+
+<h2>@ViewBag.Title</h2>
+@if (ViewBag.Error == null)
+{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "ClusterizationResult");
+
+    <h3>@ViewBag.poemName</h3>
+    <div ng-controller="ClusterizationResultCtrl">
+        <table class="table table-bordered table-hover" ng-cloak>
+            <thead>
+                <tr>
+                    <th>Consonance</th>
+                    <th>Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="(key, value) in segmentedString">
+                    <td>{{key}}</td>
+                    <td>{{value}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <h4>Segmented Text</h4>
+        <p>
+            {{segmentedText}}
+        </p>
+        <hr />
+        <h4>Chain</h4>
+        <p>
+            {{poemChain}}
+        </p>
+    </div>
+
+    @section Scripts {
+    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+    }
+}

@@ -1,0 +1,134 @@
+﻿@{
+    ViewBag.Title = "Local characteristics";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Error == null)
+{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "LocalCalculationResult");
+
+    <div ng-controller="LocalCalculationResultCtrl">
+        <div ng-disabled="loading">
+            <input type="button" class="btn btn-secondary mb-2" ng-click="changeCharacteristicsTableVisibility()" value="Show characteristics table" />
+            <div ng-repeat="chainsCharacteristics in ::characteristics">
+                <h4>{{::$index+1}}. {{::chainsCharacteristics.MatterName}}</h4>
+                <table ng-if="isCharacteristicsTableVisible" st-table="characteristics" class="table table-bordered table-hover" ng-cloak>
+                    <thead>
+                        <tr>
+                            <th>Fragment name</th>
+                            <th>Start</th>
+                            <th>Length</th>
+                            <th ng-repeat="characteristicName in ::characteristicNames" ng-bind="::characteristicName" />
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="fragmentsData in ::chainsCharacteristics.FragmentsData">
+                            <td ng-bind="::fragmentsData.Name" />
+                            <td ng-bind="::fragmentsData.Start" />
+                            <td ng-bind="::fragmentsData.Length" />
+                            <td ng-repeat="value in ::fragmentsData.Characteristics" ng-bind="::value" />
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <hr />
+            <div class="row mb-2">
+                <label class="col-form-label col-md-2" for="aligner">Aligner:</label>
+                <div class="col-md-10">
+                    <select class="form-select"
+                            title="Aligner"
+                            ng-model="aligner"
+                            ng-options="c.Text for c in ::aligners"
+                            id="aligner"></select>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <label class="col-form-label col-md-2" for="distancesCalculator">Distances calculator:</label>
+                <div class="col-md-10">
+                    <select class="form-select"
+                            title="Distances calculator"
+                            ng-model="distanceCalculator"
+                            ng-options="c.Text for c in ::distanceCalculators"
+                            id="distancesCalculator"></select>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <label class="col-form-label col-md-2" for="aggregator">Aggregator:</label>
+                <div class="col-md-10">
+                    <select class="form-select"
+                            title="Aggregator"
+                            ng-model="aggregator"
+                            ng-options="c.Text for c in ::aggregators"
+                            id="aggregator"></select>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-10">
+                    <input type="button" class="btn btn-secondary mb-2" ng-click="calculateLocalCharacteristicsSimilarityMatrix()" value="Calculate similarity matrix" />
+                </div>
+            </div>
+            <table class="table table-bordered" ng-show="comparisonMatrix">
+                <caption>Aligner: {{usedAligner}}, Distances calculator: {{usedDistanceCalculator}}, Aggregator: {{usedAggregator}}</caption>
+                <tbody>
+                    <tr>
+                        <td>#</td>
+                        <td ng-repeat="comparisonRaw in comparisonMatrix" title="{{characteristics[$index].MatterName}}">{{$index + 1}}</td>
+                    </tr>
+                    <tr ng-repeat="comparisonRaw in comparisonMatrix">
+                        <td title="{{characteristics[$index].MatterName}}" ng-bind="$index + 1" />
+                        <td ng-repeat="comparisonValue in comparisonRaw track by $index"
+                            title="{{characteristics[$parent.$index].MatterName}} &#13{{characteristics[$index].MatterName}}"
+                            ng-bind="comparisonValue.toFixed(5)" />
+                    </tr>
+                </tbody>
+            </table>
+            <hr />
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" name="lineChart" id="lineChart" ng-model="lineChart" value="false" />
+                <label class="form-check-label" for="lineChart">
+                    Draw linechart
+                </label>
+            </div>
+            <div class="row mb-2">
+                <label class="col-form-label col-md-2" for="firstCharacteristic">First characteristic:</label>
+                <div class="col-md-10">
+                    <select class="form-select"
+                            title="First characteristic"
+                            ng-model="firstCharacteristic"
+                            ng-options="c.Text for c in ::characteristicsList"
+                            id="firstCharacteristic"></select>
+                </div>
+            </div>
+            <div class="row mb-2" ng-hide="lineChart">
+                <label class="col-form-label col-md-2" for="secondCharacteristic">Second characteristic:</label>
+                <div class="col-md-10">
+                    <select class="form-select"
+                            title="Second characteristic"
+                            ng-model="secondCharacteristic"
+                            ng-options="c.Text for c in ::characteristicsList"
+                            id="secondCharacteristic"></select>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <label class="col-form-label col-md-2" for="height">Height:</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="height" id="height" type="number" min="{{::500 + legendHeight}}" step="20" ng-model="height" />
+                </div>
+            </div>
+            <div class="row mb-2">
+                <label class="col-form-label col-md-2" for="width">Width:</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="width" id="width" type="number" min="400" step="20" ng-model="width" />
+                </div>
+            </div>
+            <input type="button" class="btn btn-secondary mb-2" ng-click="draw()" value="Draw" />
+            <div id="chart" class="font-monospace mb-3">
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+    <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
+    }
+}

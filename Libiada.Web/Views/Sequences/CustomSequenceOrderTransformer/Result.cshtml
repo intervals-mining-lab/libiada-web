@@ -1,0 +1,49 @@
+﻿@{
+    ViewBag.Title = "Order transformation result";
+}
+
+<h2>@ViewBag.Title</h2>
+@if (ViewBag.Error == null)
+{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "OrderTransformationResult");
+
+    <div ng-controller="OrderTransformationResultCtrl">
+        <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
+        <div ng-disabled="loading">
+            <table class="table table-bordered table-hover table-sm" ng-cloak>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Transformation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="transformation in ::transformationsList">
+                        <td ng-bind="::$index + 1" />
+                        <td ng-bind="::transformation" />
+                    </tr>
+                </tbody>
+            </table>
+            <h6 class="font-monospace mb-3">Transformations repeated {{::iterationsCount}} times</h6>
+            <h5>Resulting sequences:</h5>
+            <table class="table table-bordered table-hover table-sm" ng-cloak>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Sequence</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="sequence in ::sequences">
+                        <td ng-bind="::sequence.name" />
+                        <td ng-bind="::sequence.value" />
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @section Scripts {
+    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+    }
+}

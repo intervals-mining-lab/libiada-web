@@ -1,0 +1,46 @@
+﻿<hr />
+<div ng-repeat="transformation in $ctrl.transformationsSequence">
+    <div class="row mb-1">
+        <label class="col-form-label col-md-2" for="operation{{$index}}">Transformation:</label>
+        <div class="col-md-10">
+            <select class="form-select"
+                    title="Operation"
+                    ng-model="transformation.transformation"
+                    ng-options="o.Text for o in ::$ctrl.transformations"
+                    id="operation{{$index}}"></select>
+            <input type="hidden" name="transformationsSequence" ng-value="transformation.transformation.Value" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class=" offset-md-2 col-md-10">
+            <button type="button"
+                    class="btn btn-danger"
+                    ng-click="$ctrl.deleteTransformation(transformation)"
+                    ng-disabled="$ctrl.transformationsSequence.length <= 1">
+                Delete transformation
+            </button>
+        </div>
+    </div>
+</div>
+<div class="row mb-3">
+    <div class="offset-md-2  col-md-10">
+        <button type="button"
+                class="btn btn-success"
+                ng-click="$ctrl.addTransformation()">
+            Add transformation
+        </button>
+    </div>
+</div>
+<div class="row mb-1">
+    <label class="col-form-label col-md-2" for="iterationsCount">Repeat transformation n times:</label>
+    <div class="col-md-10">
+        <input class="form-control"
+               name="iterationsCount"
+               id="iterationsCount"
+               type="number"
+               min="1"
+               step="1"
+               value="1" />
+    </div>
+</div>
+<hr />

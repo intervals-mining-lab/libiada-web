@@ -1,0 +1,70 @@
+﻿@{
+    ViewBag.Title = "Sequence prediction";
+}
+
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "Calculation");
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div ng-controller="CalculationCtrl">
+        <h4>Sequences and parameters</h4>
+        <hr />
+        <nature-select natures="natures"
+                       nature="nature"
+                       filter-by-nature="filterByNature()">
+        </nature-select>
+        <matters-table matters="matters"
+                       nature="nature"
+                       groups="groups"
+                       sequence-types="sequenceTypes"
+                       maximum-selected-matters="::maximumSelectedMatters"
+                       selected-matters-count="selectedMattersCount"
+                       group-and-type-required="::false">
+        </matters-table>
+        <hr />
+        <characteristic characteristic-types="::characteristicTypes"
+                        characteristics-dictionary="::characteristicsDictionary"
+                        nature="nature"
+                        notations="::notations"
+                        languages="::languages"
+                        translators="::translators"
+                        pause-treatments="::pauseTreatments"
+                        trajectories="::trajectories">
+        </characteristic>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="step">Step size:</label>
+            <div class="col-md-10">
+                <input class="form-control" name="step" type="number" value="1" min="1" id="step" />
+            </div>
+        </div>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="initialLength">Initial sequence length:</label>
+            <div class="col-md-10">
+                <input class="form-control" name="initialLength" type="number" value="1000" min="1" id="initialLength" />
+            </div>
+        </div>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="accuracy">Accuracy:</label>
+            <div class="col-md-10">
+                <input class="form-control" name="accuracy" type="number" value="1" min="1" id="accuracy" />
+            </div>
+        </div>
+        <hr />
+        <matters-submit selected-matters-count="selectedMattersCount"
+                        submit-name="Predict"
+                        minimum-selected-matters="{{::minimumSelectedMatters}}">
+        </matters-submit>
+    </div>
+}
+
+@section Scripts {
+    <script src="~/js/Angular/Components/characteristic.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/natureSelect.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersSubmit.js" asp-append-version="true"></script>
+}

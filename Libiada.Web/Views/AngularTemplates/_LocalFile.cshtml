@@ -1,0 +1,18 @@
+﻿<div class="form-check">
+    <input type="checkbox"
+           class="form-check-input"
+           name="localFile"
+           id="localFile"
+           ng-model="$ctrl.localFile"
+           value="true" />
+    <input type="hidden" name="localFile" value="false" />
+    <label class="form-check-label" for="localFile">
+        Load sequence from local file
+    </label>
+</div>
+<div class="row mb-1" ng-show="$ctrl.localFile">
+    <label class="col-form-label col-md-2" for="file">Sequence file:</label>
+    <div class="col-md-10">
+        <input type="file" name="file" id="file" />
+    </div>
+</div>

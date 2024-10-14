@@ -1,0 +1,43 @@
+﻿@using static Libiada.Web.Controllers.Sequences.CommonSequencesController
+@model IEnumerable<CommonSequence>
+
+@{
+    ViewBag.Title = "Sequences list";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table table-bordered table-hover">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.MatterId)</th>
+        <th>@Html.DisplayNameFor(model => model.Notation)</th>
+        <th>@Html.DisplayNameFor(model => model.Created)</th>
+        <th>@Html.DisplayNameFor(model => model.Modified)</th>
+        <th>@Html.DisplayNameFor(model => model.RemoteId)</th>
+        <th>@Html.DisplayNameFor(model => model.Description)</th>
+        <th>@Html.DisplayNameFor(model => model.RemoteDb)</th>
+        <th />
+    </tr>
+
+    @foreach (SequenceViewModel item in ViewBag.Sequences)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.MatterName)</td>
+            <td>@Html.DisplayFor(modelItem => item.Notation)</td>
+            <td>@Html.DisplayFor(modelItem => item.Created)</td>
+            <td>@Html.DisplayFor(modelItem => item.Modified)</td>
+            <td>@Html.DisplayFor(modelItem => item.RemoteId)</td>
+            <td> @Html.DisplayFor(modelItem => item.Description) </td>
+            <td>@Html.DisplayFor(modelItem => item.RemoteDb)</td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>

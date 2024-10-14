@@ -1,0 +1,36 @@
+﻿@{
+    ViewBag.Title = "Sequences alignment";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Error == null)
+{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "ClusterizationResult");
+
+    <div ng-controller="ClusterizationResultCtrl">
+        <h4>Alignment type: {{::validationType}} using {{characteristicName}}</h4>
+        <h4>Optimal shift: {{::optimalRotation}}</h4>
+        <h4 ng-if="sort">Characteristics sorted descending</h4>
+        <h4 ng-if="cyclicShift">Cyclic shift is used</h4>
+        <h5 ng-bind="::firstSequenceName"></h5>
+        <h5 ng-bind="::secondSequenceName"></h5>
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Distances</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="distance in ::distances">
+                    <td ng-bind="::distance.Value" />
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    @section Scripts {
+    <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+    }
+}

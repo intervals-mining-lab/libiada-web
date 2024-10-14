@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "Order transformation result";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Error == null)
+{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "OrderTransformationResult");
+
+    <div ng-controller="OrderTransformationResultCtrl">
+        <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
+        <div ng-disabled="loading">
+            <table class="table table-bordered table-hover" ng-cloak>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Transformation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="transformation in ::transformationsList">
+                        <td ng-bind="::$index + 1" />
+                        <td ng-bind="::transformation" />
+                    </tr>
+                </tbody>
+            </table>
+            <h5 class="my-3">
+                Transformations repeated {{::iterationsCount}} times
+            </h5>
+            <h4>Transformed sequence:</h4>
+            <div class="font-monospace" ng-bind="::chain"></div>
+        </div>
+    </div>
+
+    @section Scripts {
+    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+    }
+}

@@ -1,0 +1,90 @@
+﻿@{
+    ViewBag.Title = "Subsequences characteristics";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Error == null)
+{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "SubsequencesCalculationResult");
+    <div ng-controller="SubsequencesCalculationResultCtrl">
+        <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
+        <div class="form-check">
+            <input type="checkbox"
+                   class="form-check-input"
+                   name="lineChart"
+                   id="lineChart"
+                   ng-model="lineChart"
+                   value="false" />
+            <label class="form-check-label" for="lineChart">
+                Draw rank distribution
+            </label>
+        </div>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="firstCharacteristic">First characteristic:</label>
+            <div class="col-md-10">
+                <select class="form-select"
+                        title="First characteristic"
+                        ng-model="firstCharacteristic"
+                        ng-options="c.Text for c in ::subsequencesCharacteristicsList"
+                        id="firstCharacteristic"></select>
+            </div>
+        </div>
+        <div class="row mb-1" ng-hide="lineChart">
+            <label class="col-form-label col-md-2" for="secondCharacteristic">Second characteristic:</label>
+            <div class="col-md-10">
+                <select class="form-select"
+                        title="Second characteristic"
+                        ng-model="secondCharacteristic"
+                        ng-options="c.Text for c in ::subsequencesCharacteristicsList"
+                        id="secondCharacteristic"></select>
+            </div>
+        </div>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="height">Height:</label>
+            <div class="col-md-10">
+                <input class="form-control" name="height" id="height" type="number" min="{{::500 + legendHeight}}" step="20" ng-model="height" />
+            </div>
+        </div>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="width">Width:</label>
+            <div class="col-md-10">
+                <input class="form-control" name="width" id="width" type="number" min="400" step="20" ng-model="width" />
+            </div>
+        </div>
+        <input type="button" class="btn btn-secondary mb-2" ng-click="draw()" value="Draw" />
+        <div id="chart" class="font-monospace mb-2">
+        </div>
+
+        @*  <filters add-filter="addFilter(newFilter)" delete-filter="deleteFilter(filter, filterIndex)"></filters>
+    <div ng-repeat="sequenceData in sequencesData">
+    <h3 ng-bind="sequenceData.MatterName"></h3>
+    <table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+    <th>Feature</th>
+    <th>Subsequence attributes</th>
+    <th>Subsequence position</th>
+    <th ng-repeat="characteristicName in ::subsequencesCharacteristicsNames" ng-bind="::characteristicName" />
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="subsequenceData in ::sequenceData.SubsequencesData">
+    <td ng-bind="::features[subsequenceData.FeatureId]" />
+    <td ng-bind-html="getAttributesText(subsequenceData.Attributes)" />
+    <td>
+    <div ng-repeat="start in ::subsequenceData.Starts">Start: {{::start}} Length:{{::subsequenceData.Lengths[$index]}}</div>
+    </td>
+    <td ng-repeat="characteristicValue in ::subsequenceData.CharacteristicsValues" ng-bind="::characteristicValue" />
+    </tr>
+    </tbody>
+    </table>
+    </div>*@
+    </div>
+}
+
+@section Scripts {
+    <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/filters.js" asp-append-version="true"></script>
+}

@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "Batch poems import";
+}
+
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchPoemsImport");
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm("Index", "BatchPoemsImport", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div ng-controller="BatchPoemsImportCtrl">
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="file">Poems files:</label>
+            <div class="col-md-10">
+                <input type="file" name="file" id="file" multiple onchange="angular.element(this).scope().fileChanged(this)" />
+            </div>
+        </div>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="notation">Notation of imported poems:</label>
+            <div class="col-md-10">
+                <select class="form-select"
+                        title="Notation"
+                        ng-model="notation"
+                        ng-options="n.Text for n in ::notations"
+                        id="notation"></select>
+            </div>
+        </div>
+        <div class="form-check" ng-show="notation.Value==@((byte)Notation.Letters)">
+            <input type="checkbox"
+                   class="form-check-input"
+                   name="dropPunctuation"
+                   id="dropPunctuation"
+                   value="true" />
+            <input type="hidden" name="dropPunctuation" value="false" />
+            <label class="form-check-label" for="dropPunctuation">
+                Drop punctuation
+            </label>
+        </div>
+        <input type="hidden" name="notation" ng-value="notation.Value" />
+        <div class="row mb-3">
+            <div class="offset-md-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-secondary" ng-disabled="!fileSelected.value" />
+            </div>
+        </div>
+    </div>
+}

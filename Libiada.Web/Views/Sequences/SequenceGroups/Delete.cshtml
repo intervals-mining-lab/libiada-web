@@ -1,0 +1,72 @@
+﻿@using Libiada.Core.Extensions
+@model SequenceGroup
+
+@{
+    ViewBag.Title = "Sequences group";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<h3>Are you sure you want to delete this group?</h3>
+<div>
+    <hr />
+    <dl>
+        <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+        <dd>@Html.DisplayFor(model => model.Name)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Nature)</dt>
+        <dd>@Html.DisplayFor(model => model.Nature)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.SequenceGroupType)</dt>
+        <dd>@(Model.SequenceGroupType == null ? "" : ((SequenceGroupType)Model.SequenceGroupType).GetDisplayValue())</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.SequenceType)</dt>
+        <dd>@Model.SequenceType.GetDisplayValue()</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Group)</dt>
+        <dd>@Model.Group.GetDisplayValue()</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Creator)</dt>
+        <dd>@Html.DisplayFor(model => model.Creator!.UserName)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Created)</dt>
+        <dd>@Html.DisplayFor(model => model.Created)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Modifier)</dt>
+        <dd>@Html.DisplayFor(model => model.Modifier!.UserName)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Modified)</dt>
+        <dd>@Html.DisplayFor(model => model.Modified)</dd>
+    </dl>
+    @if (Model.Matters.Count > 0)
+    {
+        <h5>Matters list:</h5>
+        <table class="table table-bordered table-hover table-sm">
+            <thead>
+                <tr>
+                    <th>@(Html.DisplayNameFor(model => model.Matters.First().Name))</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var matter in Model.Matters)
+                {
+                    <tr>
+                        <td>@matter.Name</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="row mb-3">
+            <div class="col-md-10">
+                <input type="submit" value="Delete" class="btn btn-danger" />
+                <div class="vr"></div>
+                @Html.ActionLink("Back to List", "Index")
+            </div>
+        </div>
+    }
+</div>

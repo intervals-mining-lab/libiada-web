@@ -1,0 +1,30 @@
+﻿@model IEnumerable<MusicSequence>
+
+@{
+    ViewBag.Title = "Fmotifs dictionaries";
+}
+
+<h2>@ViewBag.Title</h2>
+<p>
+    @Html.ActionLink("Add new compositions", "Index", "BatchMusicImport")
+</p>
+<table class="table table-bordered table-hover table-sm">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.MatterId)</th>
+        <th>@Html.DisplayNameFor(model => model.PauseTreatment)</th>
+        <th>@Html.DisplayNameFor(model => model.SequentialTransfer)</th>
+        <th>@Html.DisplayNameFor(model => model.Created)</th>
+        <th />
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Matter.Name)</td>
+            <td>@Html.DisplayFor(modelItem => item.PauseTreatment)</td>
+            <td>@(item.SequentialTransfer ? "Yes" : "No")</td>
+            <td>@Html.DisplayFor(modelItem => item.Created)</td>
+            <td>@Html.ActionLink("Details", "Details", new { id = item.Id })</td>
+        </tr>
+    }
+</table>

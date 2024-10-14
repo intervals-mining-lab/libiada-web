@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "Batch images import";
+}
+
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchMusicImport");
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm("Index", "BatchImagesImport", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div ng-controller="BatchMusicImportCtrl">
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="files">Images files:</label>
+            <div class="col-md-10">
+                <input type="file" name="files" id="files" multiple onchange="angular.element(this).scope().fileChanged(this)" />
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="offset-md-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-secondary" ng-disabled="!fileSelected.value" />
+            </div>
+        </div>
+    </div>
+}

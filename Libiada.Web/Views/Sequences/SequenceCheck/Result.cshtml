@@ -1,0 +1,24 @@
+﻿@{
+    ViewBag.Title = "Sequence check result";
+}
+
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchSequenceImportResult");
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Error == null)
+{
+    <div ng-controller="BatchSequenceImportResultCtrl">
+        <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
+        <h4 ng-class="::calculateStatusClass(status)" ng-bind="::message"></h4>
+        <h6 class="mb-2">
+            @Html.ActionLink("Check another sequence", "Index")
+        </h6>
+    </div>
+
+    @section Scripts {
+    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+    }
+}

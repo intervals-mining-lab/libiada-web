@@ -1,0 +1,168 @@
+﻿@{
+    ViewBag.Title = "Segmentation of custom sequences";
+}
+
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "CustomCalculation");
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div ng-controller="CustomCalculationCtrl">
+        <h4>Sequences and parameters</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <custom-sequences image-transformers="::imageTransformers"></custom-sequences>
+
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="leftBorder">Left border:</label>
+            <div class="col-md-10">
+                <input class="form-control" 
+                       name="leftBorder" 
+                       id="leftBorder"
+                       type="text"
+                       min="0"
+                       max="0.99999"
+                       step="0.1"
+                       ng-model="leftBorder"
+                       ng-init="leftBorder=0" />
+            </div>
+        </div>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="rightBorder">Right border:</label>
+            <div class="col-md-10">
+                <input class="form-control"
+                       name="rightBorder"
+                       id="rightBorder"
+                       type="text"
+                       min="0.000000001"
+                       max="1"
+                       step="0.1"
+                       ng-model="rightBorder"
+                       ng-init="rightBorder=1" />
+            </div>
+        </div>
+        <hr />
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="step">Step:</label>
+            <div class="col-md-10">
+                <input class="form-control"
+                       name="step"
+                       id="step"
+                       type="text"
+                       min="0.00000000001"
+                       max="0.99999999"
+                       step="0.000001"
+                       ng-model="step"
+                       ng-init="step=0.01" />
+            </div>
+        </div>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="precision">Precision:</label>
+            <div class="col-md-10">
+                <input class="form-control"
+                       name="precision"
+                       id="precision"
+                       type="text"
+                       min="0.000000001"
+                       max="1"
+                       step="0.1"
+                       ng-model="precision"
+                       ng-init="precision=0.01" />
+            </div>
+        </div>
+        <hr />
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="threshold">Threshold:</label>
+            <div class="col-md-10">
+                <select class="form-select"
+                        title="Threshold"
+                        ng-model="threshold"
+                        ng-options="c.Text for c in thresholds"
+                        ng-init="threshold=thresholds[0]"
+                        id="threshold"></select>
+                <input type="hidden" name="threshold" ng-value="threshold.Value" />
+            </div>
+        </div>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="wordLengthDecrement">Word length decrement:</label>
+            <div class="col-md-10">
+                <input class="form-control"
+                       name="wordLengthDecrement"
+                       id="wordLengthDecrement"
+                       type="number"
+                       min="1"
+                       max="{{wordLength - 1}}"
+                       step="1"
+                       ng-model="wordLengthDecrement"
+                       ng-init="wordLengthDecrement=1" />
+            </div>
+        </div>
+        <hr />
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="segmentationCriterion">Segmentation criterion:</label>
+            <div class="col-md-10">
+                <select class="form-select"
+                        title="Segmentation criterion"
+                        ng-model="segmentationCriterion"
+                        ng-options="c.Text for c in segmentationCriteria"
+                        ng-init="segmentationCriterion=segmentationCriteria[0]"
+                        id="segmentationCriterion"></select>
+                <input type="hidden" name="segmentationCriterion" ng-value="segmentationCriterion.Value" />
+            </div>
+        </div>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="wordLength">Word length:</label>
+            <div class="col-md-10">
+                <input class="form-control"
+                       name="wordLength"
+                       id="wordLength"
+                       type="number"
+                       min="1"
+                       step="1"
+                       ng-model="wordLength"
+                       ng-init="wordLength=9" />
+            </div>
+        </div>
+        <hr />
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="deviationCalculationMethod">Deviation calculation method:</label>
+            <div class="col-md-10">
+                <select class="form-select"
+                        title="Deviation calculation method"
+                        ng-model="deviationCalculationMethod"
+                        ng-options="c.Text for c in deviationCalculationMethods"
+                        ng-init="deviationCalculationMethod=deviationCalculationMethods[0]"
+                        id="deviationCalculationMethod"></select>
+                <input type="hidden" name="deviationCalculationMethod" ng-value="deviationCalculationMethod.Value" />
+            </div>
+        </div>
+        <div class="row mb-1">
+            <label class="col-form-label col-md-2" for="balance">Balance:</label>
+            <div class="col-md-10">
+                <input class="form-control"
+                       name="balance"
+                       id="balance"
+                       type="text"
+                       min="0"
+                       max="1"
+                       step="0.1"
+                       ng-model="balance"
+                       ng-init="balance=0" />
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-10">
+                <input type="submit" value="Calculate" class="btn btn-secondary" />
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script src="~/js/Angular/Components/customSequences.js" asp-append-version="true"></script>
+}

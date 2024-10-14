@@ -1,0 +1,69 @@
+﻿@{
+    ViewBag.Title = "Accordance calculation";
+}
+
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "Accordance");
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div ng-controller="AccordanceCtrl">
+        <h4>Sequences and parameters</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <nature-select natures="natures" nature="nature">
+        </nature-select>
+        <matters-table matters="matters"
+                       nature="nature"
+                       groups="groups"
+                       sequence-types="sequenceTypes"
+                       maximum-selected-matters="::maximumSelectedMatters"
+                       selected-matters-count="selectedMattersCount"
+                       group-and-type-required="::false">
+        </matters-table>
+        <characteristic characteristic-types="::characteristicTypes"
+                        characteristics-dictionary="::characteristicsDictionary"
+                        nature="nature"
+                        notations="::notations"
+                        languages="::languages"
+                        translators="::translators"
+                        pause-treatments="::pauseTreatments">
+        </characteristic>
+
+        <fieldset>
+            <legend>Calculation type:</legend>
+            <div class="form-check">
+                <input type="radio" class="form-check-input" name="calculationType" id="calculationTypeEquality" value="Equality" checked />
+                <label class="form-check-label" for="calculationTypeEquality">
+                    Equality of elements
+                </label>
+            </div>
+            <div class="form-check">
+                <input type="radio" class="form-check-input" name="calculationType" id="calculationTypeAll" value="All" />
+                <label class="form-check-label" for="calculationTypeAll">
+                    All-to-All
+                </label>
+            </div>
+            <div class="form-check">
+                <input type="radio" class="form-check-input" name="calculationType" id="calculationTypeSpecified" value="Specified" />
+                <label class="form-check-label" for="calculationTypeSpecified">
+                    Specified
+                </label>
+            </div>
+        </fieldset>
+        <hr />
+        <matters-submit selected-matters-count="selectedMattersCount"
+                        minimum-selected-matters="{{::minimumSelectedMatters}}">
+        </matters-submit>
+    </div>
+}
+@section Scripts {
+    <script src="~/js/Angular/Components/characteristic.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/natureSelect.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersSubmit.js" asp-append-version="true"></script>
+}

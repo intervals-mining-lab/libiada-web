@@ -1,0 +1,41 @@
+﻿@{
+    ViewBag.Title = "Sequence prediction result";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Error == null)
+{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "SequencePredictionResult");
+
+    <div ng-controller="SequencePredictionResultCtrl">
+        <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
+        <div ng-disabled="loading">
+            <h4>Sequence name: {{matterName}} </h4>
+            <h5> Correct prediction: {{matching.toFixed(4)}} % </h5>
+            <table class="table table-bordered table-hover" ng-cloak>
+                <thead>
+                    <tr>
+                        <th>Actual characteristic value</th>
+                        <th>Predicted characteristic value</th>
+                        <th>Fragment</th>
+                        <th>Predicted</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="characteristic in ::result"
+                        ng-class="characteristic.Fragment == characteristic.Predicted ? 'success' : 'danger'">
+                        <td ng-bind="::characteristic.ActualCharacteristic" />
+                        <td ng-bind="::characteristic.TheoreticalCharacteristic" />
+                        <td ng-bind="::characteristic.Fragment" />
+                        <td ng-bind="::characteristic.Predicted" />
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @section Scripts {
+    <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
+    }
+}

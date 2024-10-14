@@ -1,0 +1,59 @@
+#chart {
+    width: 70vw;
+    min-width: 300px;
+    margin: 0 auto;
+    min-height: 300px;
+}
+
+#dragbar {
+    width: 3px;
+    cursor: col-resize;
+    margin-left: 1px;
+}
+
+#sidebar {
+    flex: 1;
+    width: 30vw;
+    min-width: 225px;
+}
+
+.tab-content-full-height {
+    overflow-y: auto;
+    height: calc(100vh - 56px);
+}
+
+.subtab-content-full-height {
+    overflow-y: auto;
+    height: calc(100vh - 112px);
+}
+
+.no-margin .row {
+    margin: 0;
+}
+
+.check-color {
+    cursor: pointer;
+}
+
+.rounded-check .check-color:after {
+    cursor: pointer;
+    content: "";
+    width: 20px;
+    height: 20px;
+    display: flex;
+    opacity: 0;
+    border-radius: 50px;
+    box-shadow: inset 0px 1px 1px white, 0px 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+.rounded-check .check-color:hover::after {
+    opacity: 0.3;
+}
+
+.rounded-check input[type=checkbox] {
+    visibility: hidden;
+}
+
+    .rounded-check input[type=checkbox]:checked + .check-color:after {
+        opacity: 1;
+    }

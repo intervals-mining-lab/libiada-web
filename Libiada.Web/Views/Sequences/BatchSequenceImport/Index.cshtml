@@ -1,0 +1,64 @@
+﻿@{
+    ViewBag.Title = "Batch sequences import";
+}
+
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchSequenceImport");
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div ng-controller="BatchSequenceImportCtrl">
+        <div class="row mb-2">
+            <div class="col-md-10">
+                <label class="form-label" for="accessionsField">Input accession numbers:</label>
+                <textarea class="form-control" rows="1" id="accessionsField" ng-model="accessionsField" name="accessionsField"></textarea>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-10">
+                <h6>Warning: accession's version will be ignored</h6>
+                <button type="button" class="btn btn-success" ng-click="parseIds()">Add sequences</button>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-10">
+                acessions count={{accessions.length}}
+            </div>
+        </div>
+        <div ng-repeat="accession in accessions">
+            <div class="row mb-1">
+                <div class="col-md-10">
+                    <input type="hidden" name="accessions" ng-value="::accession.value" />
+                    <div ng-bind="::accession.value"></div>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-10">
+                    <button type="button" class="btn btn-danger btn-sm" ng-click="deleteId(accession)">Delete accession</button>
+                </div>
+            </div>
+        </div>
+        <div class="form-check my-3">
+            <input type="checkbox"
+                   class="form-check-input"
+                   name="importGenes"
+                   id="importGenes"
+                   value="true"
+                   checked />
+            <input type="hidden" name="importGenes" value="false" />
+            <label class="form-check-label" for="importGenes">
+                Also import genes
+            </label>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-10">
+                <input type="submit" value="Create" class="btn btn-secondary" ng-disabled="accessions.length < 1" />
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,113 @@
+﻿@{
+    ViewBag.Title = "Clusterization";
+}
+
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "Calculation");
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div ng-controller="CalculationCtrl">
+        <h4>Sequences and parameters</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <nature-select natures="natures"
+                       nature="nature"
+                       filter-by-nature="filterByNature()">
+        </nature-select>
+        <matters-table matters="matters"
+                       nature="nature"
+                       groups="groups"
+                       sequence-types="sequenceTypes"
+                       maximum-selected-matters="maximumSelectedMatters"
+                       selected-matters-count="selectedMattersCount"
+                       group-and-type-required="::false">
+        </matters-table>
+        <characteristics characteristic-types="::characteristicTypes"
+                         characteristics-dictionary="::characteristicsDictionary"
+                         nature="nature"
+                         notations="::notations"
+                         languages="::languages"
+                         translators="::translators"
+                         pause-treatments="::pauseTreatments"
+                         trajectories="::trajectories">
+        </characteristics>
+
+        <div class="row mb-2">
+            <label class="col-form-label col-md-3" for="clustersCount">
+                Clusters count {{ClusterizationType.Text == 'FRiS-Cluster' ? '(Minimum clusters)' : ''}}:
+            </label>
+            <div class="col-md-9">
+                <input class="form-control" name="clustersCount" type="number" value="2" min="2" id="clustersCount" />
+                @Html.ValidationMessage("clustersCount", "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row mb-2">
+            <label class="col-form-label col-md-3" for="ClusterizationType">Clusterization type:</label>
+            <div class="col-md-9">
+                <select class="form-select"
+                        id="ClusterizationType"
+                        ng-model="ClusterizationType"
+                        ng-options="n.Text for n in ::ClusterizatorsTypes"></select>
+                <input type="hidden" name="ClusterizationType" ng-value="ClusterizationType.Value" />
+            </div>
+        </div>
+        <div ng-switch="ClusterizationType.Text">
+            <div ng-switch-when="KRAB clusterization">
+                <div class="row mb-2">
+                    <label class="col-form-label col-md-3" for="equipotencyWeight">Equipotency weight:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" name="equipotencyWeight" type="number" value="4" min="0" id="equipotencyWeight" />
+                        @Html.ValidationMessage("equipotencyWeight", "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label class="col-form-label col-md-3" for="normalizedDistanceWeight">Normalized distance weight:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" name="normalizedDistanceWeight" type="number" value="2" min="0" id="normalizedDistanceWeight" />
+                        @Html.ValidationMessage("normalizedDistanceWeight", "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label class="col-form-label col-md-3" for="distanceWeight">Distance weight:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" name="distanceWeight" type="number" value="1" min="0" id="distanceWeight" />
+                        @Html.ValidationMessage("distanceWeight", "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div ng-switch-when="Mean shift">
+                <div class="row mb-2">
+                    <label class="col-form-label col-md-3" for="bandwidth">Bandwidth:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" name="bandwidth" type="number" value="4" min="0" id="bandwidth" />
+                        @Html.ValidationMessage("bandwidth", "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div ng-switch-when="FRiS-Cluster">
+                <div class="row mb-2">
+                    <label class="col-form-label col-md-3" for="maximumClusters">Maximum Clusters:</label>
+                    <div class="col-md-9">
+                        <input class="form-control" name="maximumClusters" type="number" value="2" min="2" id="maximumClusters" />
+                        @Html.ValidationMessage("Maximum Clusters", "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <matters-submit selected-matters-count="selectedMattersCount"
+                        minimum-selected-matters="{{::minimumSelectedMatters}}">
+        </matters-submit>
+    </div>
+}
+
+@section Scripts {
+    <script src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/natureSelect.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/mattersSubmit.js" asp-append-version="true"></script>
+}

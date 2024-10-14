@@ -1,0 +1,77 @@
+﻿@{
+    ViewBag.Title = "Subsequences similarity";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Error == null)
+{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "SubsequencesSimilarityResult");
+
+    <div ng-controller="SubsequencesSimilarityResultCtrl">
+        <h4>{{::firstSequenceName}} and {{::secondSequenceName}} using {{::characteristicName}}</h4>
+        <h5>{{::similarity}} % of subsequences are similar:</h5>
+        <h5>{{::firstSequenceSimilarity}} % of the first sequence</h5>
+        <h5>{{::secondSequenceSimilarity}} % of the second sequence</h5>
+        <table class="table table-bordered table-hover table-sm lh-sm">
+            <thead>
+                <tr>
+                    <th>First sequence subsequence feature</th>
+                    <th>First sequence subsequence attributes</th>
+                    <th>First sequence subsequence position</th>
+                    <th>First sequence subsequence length</th>
+                    <th>Second sequence subsequence feature</th>
+                    <th>Second sequence subsequence attributes</th>
+                    <th>Second sequence subsequence position</th>
+                    <th>Second sequence subsequence length</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="similarSubsequence in ::similarSubsequences"
+                    ng-init="first = firstSequenceSubsequences[similarSubsequence.Item1]; second = secondSequenceSubsequences[similarSubsequence.Item2]">
+                    <td ng-bind="::features[first.FeatureId]" />
+                    <td>
+                        <ul class="list-unstyled">
+                            <li ng-repeat="attribute in ::firstSequenceAttributes[similarSubsequence.Item1]" ng-bind="::attribute.Value"></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <span>{{::first.Starts.join(", ")}}</span>
+                        <ul class="list-unstyled">
+                            <li ng-repeat="position in ::first.Position" ng-bind="::position.Start"></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <span>{{::first.Lengths.join(", ")}}</span>
+                        <ul class="list-unstyled">
+                            <li ng-repeat="position in ::first.Position" ng-bind="::position.Length"></li>
+                        </ul>
+                    </td>
+                    <td ng-bind="::features[second.FeatureId]"></td>
+                    <td>
+                        <ul class="list-unstyled">
+                            <li ng-repeat="attribute in ::secondSequenceAttributes[similarSubsequence.Item2]" ng-bind="::attribute.Value"></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <span>{{::second.Starts.join(", ")}}</span>
+                        <ul class="list-unstyled">
+                            <li ng-repeat="position in ::second.Position" ng-bind="::position.Start"></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <span>{{::second.Lengths.join(", ")}}</span>
+                        <ul class="list-unstyled">
+                            <li ng-repeat="position in ::second.Position" ng-bind="::position.Length"></li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    @section Scripts {
+    <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+    }
+}

@@ -1,0 +1,78 @@
+﻿@{
+    ViewBag.Title = "Genbank nicleotide database search";
+}
+
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchGeneticImportFromGenBankSearchFile");
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div ng-controller="BatchGeneticImportFromGenBankSearchFileCtrl">
+        <div class="row mb-2">
+            <div class="col-md-10">
+                <label class="form-label" for="searchQuery">GenBank search query:</label>
+                <input type="text" class="form-control" name="searchQuery" id="searchQuery" placeholder="Enter term" ng-model="searchQuery">
+            </div>
+        </div>
+        <div class="form-check">
+            <input type="checkbox"
+                   class="form-check-input"
+                   name="importPartial"
+                   id="importPartial"
+                   value="true" />
+            <input type="hidden" name="importPartial" value="false" />
+            <label class="form-check-label" for="importPartial">
+                Include partial sequences
+            </label>
+        </div>
+        <div class="form-check">
+            <input type="checkbox"
+                   class="form-check-input"
+                   name="filterMinLength"
+                   id="filterMinLength"
+                   value="true"
+                   ng-model="filterMinLength" />
+            <input type="hidden" name="filterMinLength" value="false" />
+            <label class="form-check-label" for="filterMinLength">
+                Filter sequences by min length
+            </label>
+        </div>
+        <div class="row mb-2" ng-show="filterMinLength">
+            <div class="col-md-10">
+                <label class="form-label" for="minLength">Minimum length:</label>
+                <input class="form-control" name="minLength" type="number" value="1000" min="1" id="minLength" />
+                @Html.ValidationMessage("minLength", "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-check">
+            <input type="checkbox"
+                   class="form-check-input"
+                   name="filterMaxLength"
+                   id="filterMaxLength"
+                   value="true"
+                   ng-model="filterMaxLength" />
+            <input type="hidden" name="filterMaxLength" value="false" />
+            <label class="form-check-label" for="filterMaxLength">
+                Filter sequences by max length
+            </label>
+        </div>
+        <div class="row mb-2" ng-show="filterMaxLength">
+            <div class="col-md-10">
+                <label class="form-label" for="maxLength">Maximum length:</label>
+                <input class="form-control" name="maxLength" type="number" value="1000000" min="1" id="maxLength" />
+                @Html.ValidationMessage("maxLength", "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <hr />
+        <div class="row mb-2">
+            <div class="col-md-10">
+                <input type="submit" value="Find" class="btn btn-secondary" ng-disabled="!searchQuery" />
+            </div>
+        </div>
+    </div>
+}

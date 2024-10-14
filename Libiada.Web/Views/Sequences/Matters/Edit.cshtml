@@ -1,0 +1,129 @@
+﻿@using Libiada.Web.Extensions
+@using Libiada.Web.Helpers
+@model Matter
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "MatterEdit");
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div ng-controller="MatterEditCtrl">
+        <h4>Matter</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        @if (User.IsAdmin())
+        {
+            <div class="row mb-1">
+                @Html.LabelFor(model => model.Nature, new { @class = "col-form-label col-md-2" })
+                <div class="col-md-10">
+                    <select class="form-select"
+                            ng-model="nature"
+                            ng-options="n.Value as n.Text for n in ::natures"
+                            ng-change="filterByNature()"></select>
+                    <input type="hidden" name="Nature" ng-value="nature" />
+                    @Html.ValidationMessageFor(model => model.Nature, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+        else
+        {
+            <div ng-hide="true" ng-init="filterByNature()"></div>
+            <input type="hidden" name="Nature" ng-value="nature" />
+        }
+
+        <div class="row mb-1">
+            @Html.LabelFor(model => model.Name, new { @class = "col-form-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row mb-1">
+            @Html.LabelFor(model => model.Description, new { @class = "col-form-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row mb-1">
+            @Html.Label("", "Sequences count", new { @class = "col-form-label col-md-2" })
+            <div class="col-md-10">
+                <input type="text" readonly class="form-control-plaintext" ng-bind="::sequencesCount" ng-value="::sequencesCount">
+            </div>
+        </div>
+        <div class="row mb-1">
+            @Html.LabelFor(model => model.Group, new { @class = "col-form-label col-md-2" })
+            <div class="col-md-10">
+                <select class="form-select"
+                        ng-options="g.Value as g.Text for g in groups | filter:{ Nature: nature }"
+                        ng-model="group"></select>
+                <input type="hidden" name="Group" ng-value="group" />
+                @Html.ValidationMessageFor(model => model.Group, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row mb-1">
+            @Html.LabelFor(model => model.SequenceType, new { @class = "col-form-label col-md-2" })
+            <div class="col-md-10">
+                <select class="form-select"
+                        ng-options="g.Value as g.Text for g in sequenceTypes | filter:{ Nature: nature }"
+                        ng-model="sequenceType"></select>
+                <input type="hidden" name="SequenceType" ng-value="sequenceType" />
+                @Html.ValidationMessageFor(model => model.SequenceType, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row mb-1">
+            @Html.LabelFor(model => model.Multisequence, new { @class = "col-form-label col-md-2" })
+            <div class="col-md-10">
+                <select class="form-select"
+                        ng-options="ms.Id as ms.Name for ms in multisequences | filter:{ Nature: nature }"
+                        ng-model="matter.MultisequenceId">
+                    <option value="">-- None --</option>
+                </select>
+                <input type="hidden" name="MultisequenceId" ng-value="matter.MultisequenceId" />
+                @Html.ValidationMessageFor(model => model.Multisequence, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row mb-1">
+            @Html.LabelFor(model => model.MultisequenceNumber, new { @class = "col-form-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.MultisequenceNumber, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.MultisequenceNumber, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row mb-1">
+            @Html.LabelFor(model => model.CollectionCountry, new { @class = "col-form-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CollectionCountry, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CollectionCountry, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row mb-1">
+            @Html.LabelFor(model => model.CollectionDate, new { @class = "col-form-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CollectionDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CollectionDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row my-2">
+            <div class="offset-md-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-secondary" />
+                @Html.ActionLink("Back to List", "Index")
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
