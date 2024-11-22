@@ -6,7 +6,6 @@ using Libiada.Core.Extensions;
 
 using Libiada.Database.Models.Calculators;
 using Libiada.Database.Models.Repositories.Catalogs;
-using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
 
 using Newtonsoft.Json;
@@ -203,7 +202,7 @@ public class SequencesAlignmentController : AbstractResultController
     }
 
     /// <summary>
-    /// The calculate measure for rotation.
+    /// Calculates measure for given rotation.
     /// </summary>
     /// <param name="first">
     /// The first.
