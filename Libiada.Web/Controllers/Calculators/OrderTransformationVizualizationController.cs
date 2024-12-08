@@ -5,7 +5,6 @@ using Libiada.Database.Tasks;
 using Newtonsoft.Json;
 
 using Libiada.Web.Tasks;
-using Libiada.Web.Models;
 
 /// <summary>
 /// Calculates distribution of sequences by order.
