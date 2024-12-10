@@ -127,7 +127,7 @@ public class SubsequencesSimilarityController : AbstractResultController
             List<AttributeValue[]> firstSequenceAttributes = [];
             foreach (SubsequenceData subsequence in firstSequenceSubsequences)
             {
-                firstDbSubsequencesAttributes.TryGetValue(subsequence.Id, out AttributeValue[] attributes);
+                firstDbSubsequencesAttributes.TryGetValue(subsequence.Id, out AttributeValue[]? attributes);
                 attributes ??= [];
                 firstSequenceAttributes.Add(attributes);
             }
@@ -143,7 +143,7 @@ public class SubsequencesSimilarityController : AbstractResultController
             List<AttributeValue[]> secondSequenceAttributes = [];
             foreach (SubsequenceData subsequence in secondSequenceSubsequences)
             {
-                secondDbSubsequencesAttributes.TryGetValue(subsequence.Id, out AttributeValue[] attributes);
+                secondDbSubsequencesAttributes.TryGetValue(subsequence.Id, out AttributeValue[]? attributes);
                 attributes ??= [];
                 secondSequenceAttributes.Add(attributes);
             }

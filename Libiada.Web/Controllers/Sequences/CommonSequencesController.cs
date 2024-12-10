@@ -38,18 +38,16 @@ public class CommonSequencesController : SequencesMattersController
     public async Task<ActionResult> Index()
     {
         using var db = dbFactory.CreateDbContext();
-        var commonSequence = db.CommonSequences.Include(c => c.Matter).Select(cs => new SequenceViewModel()
-        {
-            Id = cs.Id,
-            Created = cs.Created.ToString(),
-            Description = cs.Description ?? "",
-            MatterName = cs.Matter.Name,
-            Modified = cs.Modified.ToString(),
-            Notation = cs.Notation.GetDisplayValue(),
-            RemoteDb = cs.RemoteDb.ToString() ?? "",
-            RemoteId = cs.RemoteId ?? ""
-
-        });
+        var commonSequence = db.CommonSequences
+                               .Include(c => c.Matter)
+                               .Select(cs => new SequenceViewModel(cs.Id, 
+                                                                   cs.Matter.Name, 
+                                                                   cs.Notation.GetDisplayValue(), 
+                                                                   cs.RemoteDb.ToString() ?? "", 
+                                                                   cs.RemoteId ?? "", 
+                                                                   cs.Description ?? "", 
+                                                                   cs.Created.ToString(), 
+                                                                   cs.Modified.ToString()));
 
         ViewBag.Sequences = await commonSequence.ToListAsync();
 
@@ -186,15 +184,13 @@ public class CommonSequencesController : SequencesMattersController
         return RedirectToAction("Index");
     }
 
-    internal readonly struct SequenceViewModel()
-    {
-        public readonly long Id { get; init; }
-        public readonly string MatterName { get; init; }
-        public readonly string Notation { get; init; }
-        public readonly string RemoteDb { get; init; }
-        public readonly string RemoteId { get; init; }
-        public readonly string Description { get; init; }
-        public readonly string Created { get; init; }
-        public readonly string Modified { get; init; }
-    }
+    internal readonly record struct SequenceViewModel(
+        long Id,
+        string MatterName,
+        string Notation,
+        string RemoteDb,
+        string RemoteId,
+        string Description,
+        string Created,
+        string Modified);
 }
