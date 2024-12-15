@@ -88,7 +88,6 @@ public class CustomSequenceCalculationController : AbstractResultController
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(short[] characteristicLinkIds,
                               string[] customSequences,
                               bool localFile,

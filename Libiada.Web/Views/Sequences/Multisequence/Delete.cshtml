@@ -53,8 +53,6 @@
 </table>
 @using (Html.BeginForm())
 {
-    @Html.AntiForgeryToken()
-
     <div class="mb-3">
         <input type="submit" value="Delete" class="btn btn-secondary" />
         @Html.ActionLink("Back to List", "Index")

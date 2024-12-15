@@ -64,7 +64,6 @@ public class SequenceCheckController : AbstractResultController
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(long matterId, IFormFile file)
     {
         return CreateTask(() =>

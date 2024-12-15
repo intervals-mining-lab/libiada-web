@@ -10,8 +10,6 @@
 
 @using (Html.BeginForm("Index", "GenesImport", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
-    @Html.AntiForgeryToken()
-
     <div ng-controller="GenesImportCtrl">
         <matters-table matters="matters"
                        nature="nature"

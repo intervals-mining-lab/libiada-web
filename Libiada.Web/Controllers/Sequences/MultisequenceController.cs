@@ -55,7 +55,6 @@ public class MultisequenceController : Controller
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Create(
         Multisequence multisequence,
         short[] multisequenceNumbers,
@@ -142,7 +141,6 @@ public class MultisequenceController : Controller
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public async Task<ActionResult> Edit(
                                          Multisequence multisequence,
                                          short[] multisequenceNumbers,
@@ -225,7 +223,6 @@ public class MultisequenceController : Controller
     /// The <see cref="System.Threading.Tasks.Task"/>.
     /// </returns>
     [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
     public async Task<ActionResult> DeleteConfirmed(long id)
     {
         Multisequence multisequence = await db.Multisequences.Include(m => m.Matters).SingleAsync(m => m.Id == id);

@@ -125,7 +125,6 @@ public class SequenceMixerController : Controller
     /// Thrown if sequence nature is unknown.
     /// </exception>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(long matterId,
                               Notation notation,
                               Language? language,

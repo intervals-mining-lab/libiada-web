@@ -32,7 +32,6 @@ public class BatchImagesImportController : AbstractResultController
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(List<IFormFile> files)
     {
         var fileStreams = files.Select(Helpers.FileHelper.GetFileStream).ToList();

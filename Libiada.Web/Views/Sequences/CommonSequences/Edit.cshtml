@@ -9,8 +9,6 @@
 
 @using (Html.BeginForm())
 {
-    @Html.AntiForgeryToken()
-
     <h4>Sequence</h4>
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })

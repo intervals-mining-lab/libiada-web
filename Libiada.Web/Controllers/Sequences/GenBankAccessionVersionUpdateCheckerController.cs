@@ -33,7 +33,6 @@ public class GenBankAccessionVersionUpdateCheckerController : AbstractResultCont
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(bool reinmportSequences)
     {
         return CreateTask(() =>

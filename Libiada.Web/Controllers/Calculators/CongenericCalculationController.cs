@@ -106,7 +106,6 @@ public class CongenericCalculationController : AbstractResultController
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(
         long[] matterIds,
         short[] characteristicLinkIds,

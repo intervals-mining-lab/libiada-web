@@ -72,7 +72,6 @@ public class GenesImportController : AbstractResultController
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(long matterId)
     {
         return CreateTask(() =>

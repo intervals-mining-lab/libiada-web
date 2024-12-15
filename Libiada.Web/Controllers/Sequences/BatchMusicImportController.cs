@@ -40,7 +40,6 @@ public class BatchMusicImportController : AbstractResultController
     /// Uploaded MusicXML files.</param>
     /// <returns></returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(List<IFormFile> files)
     {
         // TODO: use temp files instead of this

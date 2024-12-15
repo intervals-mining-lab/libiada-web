@@ -95,7 +95,6 @@ public class SequenceGroupsController : Controller
     /// The <see cref="Task"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public async Task<ActionResult> Create(SequenceGroup sequenceGroup, long[] matterIds)
     {
         sequenceGroup.CreatorId = User.GetUserId();
@@ -174,7 +173,6 @@ public class SequenceGroupsController : Controller
     /// The <see cref="Task"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public async Task<ActionResult> Edit(SequenceGroup sequenceGroup, long[] matterIds)
     {
         if (ModelState.IsValid)
@@ -240,7 +238,6 @@ public class SequenceGroupsController : Controller
     /// The <see cref="Task"/>.
     /// </returns>
     [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
     public async Task<ActionResult> DeleteConfirmed(int id)
     {
         SequenceGroup? sequenceGroup = await db.SequenceGroups.FindAsync(id);

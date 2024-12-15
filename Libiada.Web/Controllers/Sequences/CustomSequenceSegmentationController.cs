@@ -46,7 +46,6 @@ public class CustomSequenceSegmentationController : AbstractResultController
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(
         string[] customSequences,
         bool localFile,

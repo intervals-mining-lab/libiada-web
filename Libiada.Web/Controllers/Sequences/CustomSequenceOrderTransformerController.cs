@@ -69,7 +69,6 @@ public class CustomSequenceOrderTransformerController : AbstractResultController
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(
         OrderTransformation[] transformationsSequence,
         int iterationsCount,

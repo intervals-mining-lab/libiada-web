@@ -133,7 +133,6 @@ public class MattersController : SequencesMattersController
     /// The <see cref="System.Threading.Tasks.Task"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public async Task<ActionResult> Edit(Matter matter)
     {
         using var db = dbFactory.CreateDbContext();
@@ -200,7 +199,6 @@ public class MattersController : SequencesMattersController
     /// The <see cref="System.Threading.Tasks.Task"/>.
     /// </returns>
     [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
     public async Task<ActionResult> DeleteConfirmed(long id)
     {
         using var db = dbFactory.CreateDbContext();

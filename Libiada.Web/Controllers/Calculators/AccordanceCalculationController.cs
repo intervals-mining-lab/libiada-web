@@ -108,7 +108,6 @@ public class AccordanceCalculationController : AbstractResultController
     /// Thrown alphabets of sequences are not equal.
     /// </exception>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(
         long[] matterIds,
         int characteristicLinkId,

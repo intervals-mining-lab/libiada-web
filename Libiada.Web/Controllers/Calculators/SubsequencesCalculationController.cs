@@ -68,7 +68,6 @@ public class SubsequencesCalculationController : AbstractResultController
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(long[] matterIds, short[] characteristicLinkIds, Feature[] features)
     {
         return CreateTask(() =>

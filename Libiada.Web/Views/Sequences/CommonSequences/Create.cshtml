@@ -13,8 +13,6 @@
 
 @using (Html.BeginForm("Create", "CommonSequences", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
-    @Html.AntiForgeryToken()
-
     <div ng-controller="MatterSequenceCreateCtrl">
         <h4>Sequence parameters</h4>
         <hr />

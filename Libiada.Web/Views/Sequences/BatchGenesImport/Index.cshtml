@@ -10,8 +10,6 @@
 
 @using (Html.BeginForm())
 {
-    @Html.AntiForgeryToken()
-
     <div ng-controller="GenesImportCtrl">
         <matters-table matters="matters"
                        nature="nature"

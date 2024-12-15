@@ -101,7 +101,6 @@ public class CalculationController : AbstractResultController
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(
         string tableType,
         long[] matterIds,

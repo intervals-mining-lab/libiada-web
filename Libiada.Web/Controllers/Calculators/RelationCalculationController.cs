@@ -114,7 +114,6 @@ public class RelationCalculationController : AbstractResultController
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(
         long matterId,
         short characteristicLinkId,

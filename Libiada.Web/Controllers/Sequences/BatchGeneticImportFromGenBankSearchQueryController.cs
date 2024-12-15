@@ -40,7 +40,6 @@ public class BatchGeneticImportFromGenBankSearchQueryController : AbstractResult
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(
         string searchQuery,
         bool importGenes,

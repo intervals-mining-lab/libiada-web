@@ -16,8 +16,6 @@
 
 @using (Html.BeginForm("Create", "Matters", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
-    @Html.AntiForgeryToken()
-
     <div ng-controller="MatterSequenceCreateCtrl">
         <h4>Matter and sequence parameters</h4>
         <hr />

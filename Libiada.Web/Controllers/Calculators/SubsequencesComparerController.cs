@@ -101,7 +101,6 @@ public class SubsequencesComparerController : AbstractResultController
     /// Thrown if count of matters is not 2.
     /// </exception>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(
         long[] matterIds,
         short characteristicLinkId,

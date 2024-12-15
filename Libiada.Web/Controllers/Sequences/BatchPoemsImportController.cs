@@ -37,7 +37,6 @@ public class BatchPoemsImportController : AbstractResultController
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(Notation notation, bool dropPunctuation, List<IFormFile> files)
     {
         var fileStreams = files.Select(Helpers.FileHelper.GetFileStream).ToList();

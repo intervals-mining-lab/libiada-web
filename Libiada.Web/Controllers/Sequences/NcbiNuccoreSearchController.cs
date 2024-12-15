@@ -37,7 +37,6 @@ public class NcbiNuccoreSearchController : AbstractResultController
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(
         string searchQuery,
         bool importPartial,

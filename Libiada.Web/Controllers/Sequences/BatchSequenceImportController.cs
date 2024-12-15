@@ -66,7 +66,6 @@ public class BatchSequenceImportController : AbstractResultController
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(string[] accessions, bool importGenes)
     {
         return CreateTask(() =>

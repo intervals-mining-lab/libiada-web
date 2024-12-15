@@ -10,7 +10,6 @@
 
 @using (Html.BeginForm("Index", "SequenceCheck", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
-    @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
     <div ng-controller="BatchGeneticImportFromGenBankSearchFileCtrl">
         <div class="row mb-1">

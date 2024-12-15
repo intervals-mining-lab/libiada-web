@@ -92,7 +92,6 @@ public abstract class SequencesMattersController : AbstractResultController
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Create(
         CommonSequence commonSequence,
         bool localFile,

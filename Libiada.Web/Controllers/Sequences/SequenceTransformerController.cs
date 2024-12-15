@@ -82,7 +82,6 @@ public class SequenceTransformerController : Controller
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(IEnumerable<long> matterIds, string transformType)
     {
         // TODO: make transformType into enum

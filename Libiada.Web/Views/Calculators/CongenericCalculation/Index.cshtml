@@ -10,7 +10,6 @@
 
 @using (Html.BeginForm())
 {
-    @Html.AntiForgeryToken()
     <div ng-controller="CalculationCtrl">
         @(Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" }))
         <nature-select natures="natures"

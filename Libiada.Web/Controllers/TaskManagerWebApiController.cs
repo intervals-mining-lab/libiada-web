@@ -84,6 +84,7 @@ public class TaskManagerWebApiController : ControllerBase
     {
         try
         {
+            // TOOD: check if GetTaskData returns json with error
             string taskData = GetTaskData(taskId, filtered ? "filteredSimilarityMatrix" : "similarityMatrix");
 
             var similarityMatrix = JsonConvert.DeserializeObject<List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>[,]>(taskData);

@@ -75,7 +75,6 @@
     </dl>
 
     @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
         <div class="mb-2">
             <input type="submit" value="Delete" class="btn btn-secondary" /> |
             @Html.ActionLink("Back to List", "Index")

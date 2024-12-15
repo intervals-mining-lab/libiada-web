@@ -120,7 +120,6 @@ public class CommonSequencesController : SequencesMattersController
     /// The <see cref="System.Threading.Tasks.Task"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public async Task<ActionResult> Edit(CommonSequence commonSequence)
     {
         if (ModelState.IsValid)
@@ -174,7 +173,6 @@ public class CommonSequencesController : SequencesMattersController
     /// The <see cref="System.Threading.Tasks.Task"/>.
     /// </returns>
     [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
     public async Task<ActionResult> DeleteConfirmed(long id)
     {
         using var db = dbFactory.CreateDbContext();

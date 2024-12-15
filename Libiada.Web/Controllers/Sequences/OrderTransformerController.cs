@@ -80,7 +80,6 @@ public class OrderTransformerController : AbstractResultController
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(long matterId, OrderTransformation[] transformationsSequence, int iterationsCount)
     {
         return CreateTask(() =>

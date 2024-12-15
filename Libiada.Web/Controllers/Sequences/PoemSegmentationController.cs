@@ -40,7 +40,6 @@ public class PoemSegmentationController : AbstractResultController
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(
         long matterId,
         int wordLength,
