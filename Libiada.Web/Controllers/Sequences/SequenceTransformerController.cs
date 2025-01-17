@@ -30,7 +30,7 @@ public class SequenceTransformerController : Controller
     /// <summary>
     /// The sequence repository.
     /// </summary>
-    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
+    private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
 
     /// <summary>
     /// The element repository.
@@ -42,14 +42,14 @@ public class SequenceTransformerController : Controller
     /// </summary>
     public SequenceTransformerController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
                                          IViewDataHelper viewDataHelper,
-                                         ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory, 
+                                         ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory, 
                                          Cache cache)
     {
         this.dbFactory = dbFactory;
         this.db = dbFactory.CreateDbContext();
         this.viewDataHelper = viewDataHelper;
         dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
-        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
+        this.sequenceRepositoryFactory = sequenceRepositoryFactory;
         elementRepository = new ElementRepository(dbFactory.CreateDbContext());
     }
 
@@ -61,7 +61,7 @@ public class SequenceTransformerController : Controller
     /// </returns>
     public ActionResult Index()
     {
-        long[] matterIds = db.DnaSequences.Where(d => d.Notation == Notation.Nucleotides).Select(d => d.MatterId).ToArray();
+        long[] matterIds = db.CombinedSequenceEntities.Where(d => d.Notation == Notation.Nucleotides).Select(d => d.MatterId).ToArray();
 
         var data = viewDataHelper.FillViewData(1, int.MaxValue, m => matterIds.Contains(m.Id), "Transform");
         data.Add("nature", (byte)Nature.Genetic);
@@ -86,11 +86,11 @@ public class SequenceTransformerController : Controller
     {
         // TODO: make transformType into enum
         Notation notation = transformType.Equals("toAmino") ? Notation.AminoAcids : Notation.Triplets;
-        using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
+        using var sequenceRepository = sequenceRepositoryFactory.Create();
         foreach (var matterId in matterIds)
         {
-            long sequenceId = db.CommonSequences.Single(c => c.MatterId == matterId && c.Notation == Notation.Nucleotides).Id;
-            Chain sourceChain = commonSequenceRepository.GetLibiadaChain(sequenceId);
+            long sequenceId = db.CombinedSequenceEntities.Single(c => c.MatterId == matterId && c.Notation == Notation.Nucleotides).Id;
+            Chain sourceChain = sequenceRepository.GetLibiadaChain(sequenceId);
 
             BaseChain transformedChain = transformType.Equals("toAmino")
                                              ? DnaTransformer.EncodeAmino(sourceChain)
@@ -98,17 +98,18 @@ public class SequenceTransformerController : Controller
 
             long[] alphabet = elementRepository.ToDbElements(transformedChain.Alphabet, notation, false);
 
-            var result = new CommonSequence
+            var result = new DnaSequence
             {
                 MatterId = matterId,
                 Notation = notation,
                 Alphabet = alphabet,
-                Order = transformedChain.Order
+                Order = transformedChain.Order,
+                Partial = false
             };
 
-            dnaSequenceRepository.Create(result, false);
+            dnaSequenceRepository.Create(result);
         }
 
-        return RedirectToAction("Index", "CommonSequences");
+        return RedirectToAction("Index", "CombinedSequencesEntity");
     }
 }

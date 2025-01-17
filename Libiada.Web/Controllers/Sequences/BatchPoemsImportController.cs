@@ -58,9 +58,12 @@ public class BatchPoemsImportController : AbstractResultController
 
                 try
                 {
-                    var sequence = new CommonSequence
+                    var sequence = new LiteratureSequence
                     {
-                        Notation = notation
+                        Notation = notation,
+                        Language = Language.Russian,
+                        Original = true,
+                        Translator = Translator.NoneOrManual
                     };
 
 
@@ -91,7 +94,7 @@ public class BatchPoemsImportController : AbstractResultController
 
                     var repository = new LiteratureSequenceRepository(dbFactory, cache);
 
-                    repository.Create(sequence, fileStreams[i], Language.Russian, true, Translator.NoneOrManual, dropPunctuation);
+                    repository.Create(sequence, fileStreams[i], dropPunctuation);
                     importResult.Status = "Success";
 
                     importResults.Add(importResult);

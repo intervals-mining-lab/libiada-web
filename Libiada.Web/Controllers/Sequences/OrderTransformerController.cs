@@ -28,7 +28,7 @@ public class OrderTransformerController : AbstractResultController
     /// <summary>
     /// The sequence repository.
     /// </summary>
-    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
+    private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OrderTransformerController"/> class.
@@ -36,12 +36,12 @@ public class OrderTransformerController : AbstractResultController
     public OrderTransformerController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                       IViewDataHelper viewDataHelper,
                                       ITaskManager taskManager,
-                                      ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory)
+                                      ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory)
         : base(TaskType.OrderTransformer, taskManager)
     {
         this.dbFactory = dbFactory;
         this.viewDataHelper = viewDataHelper;
-        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
+        this.sequenceRepositoryFactory = sequenceRepositoryFactory;
     }
 
     /// <summary>
@@ -86,9 +86,9 @@ public class OrderTransformerController : AbstractResultController
         {
             // TODO: add nature params
             using var db = dbFactory.CreateDbContext();
-            var sequenceId = db.CommonSequences.Single(c => c.MatterId == matterId).Id;
-            using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
-            var sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
+            var sequenceId = db.CombinedSequenceEntities.Single(c => c.MatterId == matterId).Id;
+            using var sequenceRepository = sequenceRepositoryFactory.Create();
+            var sequence = sequenceRepository.GetLibiadaChain(sequenceId);
             for (int j = 0; j < iterationsCount; j++)
             {
                 for (int i = 0; i < transformationsSequence.Length; i++)

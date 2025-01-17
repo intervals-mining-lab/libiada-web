@@ -25,7 +25,7 @@ public class CalculationController : AbstractResultController
     private readonly Cache cache;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
     private readonly ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator;
-    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
+    private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CalculationController"/> class.
@@ -36,7 +36,7 @@ public class CalculationController : AbstractResultController
                                  Cache cache, 
                                  IFullCharacteristicRepository characteristicTypeLinkRepository,
                                  ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator,
-                                 ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory)
+                                 ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory)
         : base(TaskType.Calculation, taskManager)
     {
         this.dbFactory = dbFactory;
@@ -44,7 +44,7 @@ public class CalculationController : AbstractResultController
         this.cache = cache;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         this.sequencesCharacteristicsCalculator = sequencesCharacteristicsCalculator;
-        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
+        this.sequenceRepositoryFactory = sequenceRepositoryFactory;
     }
 
     /// <summary>
@@ -134,15 +134,15 @@ public class CalculationController : AbstractResultController
                 sequenceGroupsSelectList = SelectListHelper.GetSequenceGroupSelectList(sg => sequenceGroupIds.Contains(sg.Id), db);
             }
 
-            using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
+            using var sequenceRepository = sequenceRepositoryFactory.Create();
             long[][] sequenceIds;
-            sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds,
-                                                                  notations,
-                                                                  languages,
-                                                                  translators,
-                                                                  pauseTreatments,
-                                                                  sequentialTransfers,
-                                                                  trajectories);
+            sequenceIds = sequenceRepository.GetSequenceIds(matterIds,
+                                                            notations,
+                                                            languages,
+                                                            translators,
+                                                            pauseTreatments,
+                                                            sequentialTransfers,
+                                                            trajectories);
             Dictionary<long, string> mattersNames = cache.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
 
             double[][] characteristics;

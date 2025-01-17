@@ -1,6 +1,6 @@
 ﻿@using Libiada.Web.Extensions
 @using Libiada.Web.Helpers
-@model CommonSequence
+@model CombinedSequenceEntity
 
 @{
     ViewBag.Title = "Create sequence";
@@ -11,7 +11,7 @@
 
 <div>@ViewBag.ErrorMessage</div>
 
-@using (Html.BeginForm("Create", "CommonSequences", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Create", "CombinedSequencesEntity", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     <div ng-controller="MatterSequenceCreateCtrl">
         <h4>Sequence parameters</h4>
@@ -53,13 +53,6 @@
                         ng-model="matterId"></select>
                 <input type="hidden" name="MatterId" ng-value="matterId" />
                 @Html.ValidationMessageFor(model => model.MatterId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="row mb-1">
-            @Html.LabelFor(model => model.Description, new { @class = "col-form-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", ng_model = "description" } })
-                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
             </div>
         </div>
         <local-file></local-file>

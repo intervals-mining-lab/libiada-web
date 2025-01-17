@@ -62,7 +62,7 @@ public class BatchMusicImportController : AbstractResultController
 
                 try
                 {
-                    var sequence = new CommonSequence();
+                    var sequence = new MusicSequence();
 
                     if (matters.Any(m => m.Name == sequenceName))
                     {

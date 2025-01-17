@@ -37,8 +37,11 @@ public class FmotifsDictionaryController : SequencesMattersController
     public async Task<ActionResult> Index()
     {
         using var db = dbFactory.CreateDbContext();
-        var musicSequence = db.MusicSequences.Where(m => m.Notation == Notation.FormalMotifs).Include(m => m.Matter);
-        return View(await musicSequence.ToListAsync());
+        var musicSequences = db.CombinedSequenceEntities
+                              .Where(m => m.Notation == Notation.FormalMotifs)
+                              .Include(m => m.Matter)
+                              .Select(s => s.ToMusicSequence());
+        return View(await musicSequences.ToListAsync());
 
     }
 
@@ -59,11 +62,14 @@ public class FmotifsDictionaryController : SequencesMattersController
         }
 
         using var db = dbFactory.CreateDbContext();
-        MusicSequence musicSequence = await db.MusicSequences.Include(m => m.Matter).SingleAsync(m => m.Id == id);
-        if (musicSequence == null)
+        var dbSequence = await db.CombinedSequenceEntities.Include(m => m.Matter).SingleAsync(m => m.Id == id);
+
+        if (dbSequence == null)
         {
             return NotFound();
         }
+
+        var musicSequence = dbSequence.ToMusicSequence();
 
         var musicChainAlphabet = musicSequence.Alphabet.Select(el => db.Fmotifs.Single(f => f.Id == el)).ToList();
         var sortedFmotifs = new Dictionary<Database.Models.Fmotif, int>();

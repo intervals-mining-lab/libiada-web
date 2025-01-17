@@ -103,15 +103,18 @@ public class BatchGeneticImportFromGenBankSearchQueryController : AbstractResult
                                     + $"Definition = {metadata.Definition}, "
                                     + $"Saved matter name = {importResult.MatterName}";
 
-                    var sequence = new CommonSequence
+                    bool partial = metadata.Definition.Contains("partial", StringComparison.CurrentCultureIgnoreCase);
+
+                    var sequence = new DnaSequence
                     {
                         Matter = matter,
                         Notation = Notation.Nucleotides,
                         RemoteDb = RemoteDb.GenBank,
-                        RemoteId = metadata.Version.CompoundAccession
+                        RemoteId = metadata.Version.CompoundAccession,
+                        Partial = partial
                     };
-                    bool partial = metadata.Definition.Contains("partial", StringComparison.CurrentCultureIgnoreCase);
-                    dnaSequenceRepository.Create(sequence, bioSequence, partial);
+                    
+                    dnaSequenceRepository.Create(sequence, bioSequence);
 
                     (importResult.Result, importResult.Status) = importGenes ?
                                                      ImportFeatures(metadata, sequence) :
@@ -145,8 +148,8 @@ public class BatchGeneticImportFromGenBankSearchQueryController : AbstractResult
 
             // removing matters for which creation of sequence failed
             Matter[] orphanMatters = db.Matters
-                                       .Include(m => m.Sequence)
-                                       .Where(m => names.Contains(m.Name) && m.Sequence.Count == 0)
+                                       .Include(m => m.Sequences)
+                                       .Where(m => names.Contains(m.Name) && m.Sequences.Count == 0)
                                        .ToArray();
 
             if (orphanMatters.Length > 0)
@@ -176,7 +179,7 @@ public class BatchGeneticImportFromGenBankSearchQueryController : AbstractResult
     /// and second element is import status as  string.
     /// </returns>
     [NonAction]
-    private (string result, string status) ImportFeatures(GenBankMetadata metadata, CommonSequence sequence)
+    private (string result, string status) ImportFeatures(GenBankMetadata metadata, DnaSequence sequence)
     {
         try
         {

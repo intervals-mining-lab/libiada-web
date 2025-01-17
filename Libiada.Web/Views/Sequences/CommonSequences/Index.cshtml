@@ -1,5 +1,5 @@
-﻿@using static Libiada.Web.Controllers.Sequences.CommonSequencesController
-@model IEnumerable<CommonSequence>
+﻿@using static Libiada.Web.Controllers.Sequences.CombinedSequencesEntityController
+@model IEnumerable<CombinedSequenceEntity>
 
 @{
     ViewBag.Title = "Sequences list";
@@ -17,20 +17,18 @@
         <th>@Html.DisplayNameFor(model => model.Created)</th>
         <th>@Html.DisplayNameFor(model => model.Modified)</th>
         <th>@Html.DisplayNameFor(model => model.RemoteId)</th>
-        <th>@Html.DisplayNameFor(model => model.Description)</th>
         <th>@Html.DisplayNameFor(model => model.RemoteDb)</th>
         <th />
     </tr>
 
-    @foreach (SequenceViewModel item in ViewBag.Sequences)
+    @foreach (CombinedSequenceEntity item in ViewBag.Sequences)
     {
         <tr>
-            <td>@Html.DisplayFor(modelItem => item.MatterName)</td>
+            <td>@Html.DisplayFor(modelItem => item.Matter.Name)</td>
             <td>@Html.DisplayFor(modelItem => item.Notation)</td>
             <td>@Html.DisplayFor(modelItem => item.Created)</td>
             <td>@Html.DisplayFor(modelItem => item.Modified)</td>
             <td>@Html.DisplayFor(modelItem => item.RemoteId)</td>
-            <td> @Html.DisplayFor(modelItem => item.Description) </td>
             <td>@Html.DisplayFor(modelItem => item.RemoteDb)</td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |

@@ -31,7 +31,7 @@ public class LocalCalculationController : AbstractResultController
     /// <summary>
     /// The sequence repository.
     /// </summary>
-    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
+    private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
 
     /// <summary>
     /// The characteristic type repository.
@@ -44,13 +44,13 @@ public class LocalCalculationController : AbstractResultController
     /// </summary>
     public LocalCalculationController(IViewDataHelper viewDataHelper, 
                                       ITaskManager taskManager,
-                                      ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory,
+                                      ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
                                       IFullCharacteristicRepository characteristicTypeLinkRepository,
                                       Cache cache)
         : base(TaskType.LocalCalculation, taskManager)
     {
         this.viewDataHelper = viewDataHelper;
-        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
+        this.sequenceRepositoryFactory = sequenceRepositoryFactory;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         this.cache = cache;
     }
@@ -146,13 +146,13 @@ public class LocalCalculationController : AbstractResultController
             var links = new Link[characteristicLinkIds.Length];
             Array.Sort(matterIds);
             Dictionary<long, Matter> matters = cache.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id);
-            using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
+            using var sequenceRepository = sequenceRepositoryFactory.Create();
             for (int k = 0; k < matterIds.Length; k++)
             {
                 long matterId = matterIds[k];
                 Nature nature = cache.Matters.Single(m => m.Id == matterId).Nature;
 
-                long sequenceId = commonSequenceRepository.GetSequenceIds([matterId],
+                long sequenceId = sequenceRepository.GetSequenceIds([matterId],
                                                                        notation,
                                                                        language,
                                                                        translator,
@@ -160,7 +160,7 @@ public class LocalCalculationController : AbstractResultController
                                                                        sequentialTransfer,
                                                                        trajectory).Single();
 
-                chains[k] = commonSequenceRepository.GetLibiadaChain(sequenceId);
+                chains[k] = sequenceRepository.GetLibiadaChain(sequenceId);
             }
 
             for (int i = 0; i < characteristicLinkIds.Length; i++)

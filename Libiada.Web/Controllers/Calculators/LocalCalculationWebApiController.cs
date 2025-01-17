@@ -23,17 +23,17 @@ using Libiada.Web.Tasks;
 public class LocalCalculationWebApiController : ControllerBase
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
+    private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
     private readonly IFullCharacteristicRepository fullCharacteristicRepository;
     private readonly ITaskManager taskManager;
 
     public LocalCalculationWebApiController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
-                                            ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory,
+                                            ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
                                             IFullCharacteristicRepository fullCharacteristicRepository,
                                             ITaskManager taskManager)
     {
         this.dbFactory = dbFactory;
-        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
+        this.sequenceRepositoryFactory = sequenceRepositoryFactory;
         this.fullCharacteristicRepository = fullCharacteristicRepository;
         this.taskManager = taskManager;
     }
@@ -64,8 +64,8 @@ public class LocalCalculationWebApiController : ControllerBase
         int step)
     {
         using var db = dbFactory.CreateDbContext();
-        using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
-        var calculator = new LocalCharacteristicsCalculator(db, fullCharacteristicRepository, commonSequenceRepository);
+        using var sequenceRepository = sequenceRepositoryFactory.Create();
+        var calculator = new LocalCharacteristicsCalculator(db, fullCharacteristicRepository, sequenceRepository);
         double[] characteristics = calculator.GetSubsequenceCharacteristic(subsequenceId, characteristicLinkId, windowSize, step);
 
         return JsonConvert.SerializeObject(characteristics);

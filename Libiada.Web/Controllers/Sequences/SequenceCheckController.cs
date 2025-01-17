@@ -22,20 +22,20 @@ using Libiada.Web.Tasks;
 public class SequenceCheckController : AbstractResultController
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
+    private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
     private readonly Cache cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SequenceCheckController"/> class.
     /// </summary>
-    public SequenceCheckController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
+    public SequenceCheckController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                    ITaskManager taskManager, 
-                                   ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory, 
+                                   ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory, 
                                    Cache cache) 
         : base(TaskType.SequenceCheck, taskManager)
     {
         this.dbFactory = dbFactory;
-        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
+        this.sequenceRepositoryFactory = sequenceRepositoryFactory;
         this.cache = cache;
     }
 
@@ -97,9 +97,9 @@ public class SequenceCheckController : AbstractResultController
             string status;
             BaseChain dbChain;
             using var db = dbFactory.CreateDbContext();
-            long sequenceId = db.CommonSequences.Single(c => c.MatterId == matterId).Id;
-            using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
-            dbChain = commonSequenceRepository.GetLibiadaBaseChain(sequenceId);
+            long sequenceId = db.CombinedSequenceEntities.Single(c => c.MatterId == matterId).Id;
+            using var sequenceRepository = sequenceRepositoryFactory.Create();
+            dbChain = sequenceRepository.GetLibiadaBaseChain(sequenceId);
 
 
             if (dbChain.Equals(chain))

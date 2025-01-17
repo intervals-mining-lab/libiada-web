@@ -33,7 +33,7 @@ public class ClusterizationController : AbstractResultController
     /// <summary>
     /// The sequence repository.
     /// </summary>
-    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
+    private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
     private readonly Cache cache;
 
     /// <summary>
@@ -50,13 +50,13 @@ public class ClusterizationController : AbstractResultController
                                     ITaskManager taskManager, 
                                     IFullCharacteristicRepository characteristicTypeLinkRepository,
                                     ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator,
-                                    ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory,
+                                    ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
                                     Cache cache) 
         : base(TaskType.Clusterization, taskManager)
     {
         this.dbFactory = dbFactory;
         this.viewDataHelper = viewDataHelper;
-        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
+        this.sequenceRepositoryFactory = sequenceRepositoryFactory;
         this.cache = cache;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         this.sequencesCharacteristicsCalculator = sequencesCharacteristicsCalculator;
@@ -154,15 +154,15 @@ public class ClusterizationController : AbstractResultController
                                                     .Where(m => matterIds.Contains(m.Id))
                                                     .ToDictionary(m => m.Id, m => m.Name);
 
-            using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
+            using var sequenceRepository = sequenceRepositoryFactory.Create();
             long[][] sequenceIds;
-            sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds,
-                                                                  notations,
-                                                                  languages,
-                                                                  translators,
-                                                                  pauseTreatments,
-                                                                  sequentialTransfers,
-                                                                  trajectories);
+            sequenceIds = sequenceRepository.GetSequenceIds(matterIds,
+                                                            notations,
+                                                            languages,
+                                                            translators,
+                                                            pauseTreatments,
+                                                            sequentialTransfers,
+                                                            trajectories);
 
             using var db = dbFactory.CreateDbContext();
 

@@ -32,7 +32,7 @@ public class SubsequencesComparerController : AbstractResultController
     private readonly IFullCharacteristicRepository fullCharacteristicRepository;
     private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
     private readonly ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator;
-    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
+    private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
     private readonly IServiceScopeFactory serviceScopeFactory;
     private readonly GeneticSequenceRepository geneticSequenceRepository;
 
@@ -44,7 +44,7 @@ public class SubsequencesComparerController : AbstractResultController
                                           IFullCharacteristicRepository fullCharacteristicRepository,
                                           ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator,
                                           ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator,
-                                          ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory,
+                                          ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
                                           Cache cache,
                                           IServiceScopeFactory serviceScopeFactory)
         : base(TaskType.SubsequencesComparer, taskManager)
@@ -53,7 +53,7 @@ public class SubsequencesComparerController : AbstractResultController
         this.fullCharacteristicRepository = fullCharacteristicRepository;
         this.subsequencesCharacteristicsCalculator = subsequencesCharacteristicsCalculator;
         this.sequencesCharacteristicsCalculator = sequencesCharacteristicsCalculator;
-        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
+        this.sequenceRepositoryFactory = sequenceRepositoryFactory;
         this.serviceScopeFactory = serviceScopeFactory;
         geneticSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
     }
@@ -133,7 +133,7 @@ public class SubsequencesComparerController : AbstractResultController
             matterIds = OrderMatterIds(matterIds, characteristicLinkId, chains);
 
             // Subsequences characteristics
-            var parentSequences = db.DnaSequences.Include(s => s.Matter)
+            var parentSequences = db.CombinedSequenceEntities.Include(s => s.Matter)
                                     .Where(s => s.Notation == Notation.Nucleotides && matterIds.Contains(s.MatterId))
                                     .Select(s => new { s.Id, s.MatterId, MatterName = s.Matter.Name })
                                     .ToDictionary(s => s.Id);
@@ -252,8 +252,8 @@ public class SubsequencesComparerController : AbstractResultController
         )
     {
         using var db = dbFactory.CreateDbContext();
-        using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
-        var localCharacteristicsCalculator = new LocalCharacteristicsCalculator(db, fullCharacteristicRepository, commonSequenceRepository);
+        using var sequenceRepository = sequenceRepositoryFactory.Create();
+        var localCharacteristicsCalculator = new LocalCharacteristicsCalculator(db, fullCharacteristicRepository, sequenceRepository);
 
         var cache = new Dictionary<(int matterIndex, int subsequenceIndex), double[]>();
         List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> result = [];

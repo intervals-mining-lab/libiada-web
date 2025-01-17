@@ -27,9 +27,9 @@ public class AccordanceCalculationController : AbstractResultController
     private readonly IViewDataHelper viewDataHelper;
 
     /// <summary>
-    /// The common sequence repository.
+    /// The sequence repository factory.
     /// </summary>
-    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
+    private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
     private readonly Cache cache;
 
     /// <summary>
@@ -44,13 +44,13 @@ public class AccordanceCalculationController : AbstractResultController
                                            IViewDataHelper viewDataHelper, 
                                            ITaskManager taskManager,
                                            IAccordanceCharacteristicRepository characteristicTypeLinkRepository,
-                                           ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory,
+                                           ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
                                            Cache cache)
         : base(TaskType.AccordanceCalculation, taskManager)
     {
         this.dbFactory = dbFactory;
         this.viewDataHelper = viewDataHelper;
-        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
+        this.sequenceRepositoryFactory = sequenceRepositoryFactory;
         this.cache = cache;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
     }
@@ -135,8 +135,8 @@ public class AccordanceCalculationController : AbstractResultController
                                  { "characteristicName", characteristicName },
                                  { "calculationType", calculationType }
                              };
-            using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
-            long[] sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds,
+            using var sequenceRepository = sequenceRepositoryFactory.Create();
+            long[] sequenceIds = sequenceRepository.GetSequenceIds(matterIds,
                                                                       notation,
                                                                       language,
                                                                       translator,
@@ -144,8 +144,8 @@ public class AccordanceCalculationController : AbstractResultController
                                                                       sequentialTransfer,
                                                                       trajectory);
 
-            Chain firstChain = commonSequenceRepository.GetLibiadaChain(sequenceIds[0]);
-            Chain secondChain = commonSequenceRepository.GetLibiadaChain(sequenceIds[1]);
+            Chain firstChain = sequenceRepository.GetLibiadaChain(sequenceIds[0]);
+            Chain secondChain = sequenceRepository.GetLibiadaChain(sequenceIds[1]);
 
             AccordanceCharacteristic accordanceCharacteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
             IAccordanceCalculator calculator = AccordanceCalculatorsFactory.CreateCalculator(accordanceCharacteristic);

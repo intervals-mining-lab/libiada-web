@@ -25,7 +25,7 @@ public class OrderTransformationConvergenceController : AbstractResultController
     /// <summary>
     /// The sequence repository.
     /// </summary>
-    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
+    private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
     private readonly IViewDataHelper viewDataHelper;
 
     /// <summary>
@@ -34,11 +34,11 @@ public class OrderTransformationConvergenceController : AbstractResultController
     public OrderTransformationConvergenceController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
                                                     IViewDataHelper viewDataHelper, 
                                                     ITaskManager taskManager,
-                                                    ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory) 
+                                                    ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory) 
         : base(TaskType.OrderTransformationConvergence, taskManager)
     {
         this.dbFactory = dbFactory;
-        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
+        this.sequenceRepositoryFactory = sequenceRepositoryFactory;
         this.viewDataHelper = viewDataHelper;
     }
 
@@ -84,9 +84,9 @@ public class OrderTransformationConvergenceController : AbstractResultController
         {
             // TODO: add nature params
             using var db = dbFactory.CreateDbContext();
-            var sequenceId = db.CommonSequences.Single(c => c.MatterId == matterId).Id;
-            using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
-            var sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
+            var sequenceId = db.CombinedSequenceEntities.Single(c => c.MatterId == matterId).Id;
+            using var sequenceRepository = sequenceRepositoryFactory.Create();
+            var sequence = sequenceRepository.GetLibiadaChain(sequenceId);
             int loopIteration = -1;
             int lastIteration = -1;
             List<int[]> transformationsResult = new(iterationsCount + 1) { sequence.Order };

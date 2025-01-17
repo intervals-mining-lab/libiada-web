@@ -1,6 +1,6 @@
 ﻿namespace Libiada.Web.Controllers.Calculators;
 
-using System.Net;
+using System.Net.Http;
 using System.Text;
 
 using Newtonsoft.Json;
@@ -21,8 +21,7 @@ using Bio.IO.FastA;
 using Bio;
 
 using EnumExtensions = Core.Extensions.EnumExtensions;
-using System.Net.Http;
-using System.Xml;
+
 
 /// <summary>
 /// The subsequences distribution controller.
@@ -35,7 +34,7 @@ public class SubsequencesDistributionController : AbstractResultController
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
     private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
     private readonly ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator;
-    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
+    private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
     private readonly Cache cache;
     private readonly IHttpClientFactory httpClientFactory;
 
@@ -53,7 +52,7 @@ public class SubsequencesDistributionController : AbstractResultController
                                               IFullCharacteristicRepository characteristicTypeLinkRepository,
                                               ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator,
                                               ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator,
-                                              ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory,
+                                              ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
                                               Cache cache,
                                               IHttpClientFactory httpClientFactory)
         : base(TaskType.SubsequencesDistribution, taskManager)
@@ -63,7 +62,7 @@ public class SubsequencesDistributionController : AbstractResultController
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         this.subsequencesCharacteristicsCalculator = subsequencesCharacteristicsCalculator;
         this.sequencesCharacteristicsCalculator = sequencesCharacteristicsCalculator;
-        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
+        this.sequenceRepositoryFactory = sequenceRepositoryFactory;
         this.cache = cache;
         this.httpClientFactory = httpClientFactory;
     }
@@ -112,7 +111,7 @@ public class SubsequencesDistributionController : AbstractResultController
             var attributeValuesCache = new AttributeValueCacheManager(db);
             long[] sequenceIds;
 
-            DnaSequence[] parentSequences = db.DnaSequences.Include(s => s.Matter)
+            CombinedSequenceEntity[] parentSequences = db.CombinedSequenceEntities.Include(s => s.Matter)
                                     .Where(s => s.Notation == Notation.Nucleotides && matterIds.Contains(s.MatterId))
                                     .OrderBy(s => s.MatterId)
                                     .ToArray();
@@ -191,8 +190,8 @@ public class SubsequencesDistributionController : AbstractResultController
         {
             ISequence[] bioSequences;
             using var db = dbFactory.CreateDbContext();
-            using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
-            var subsequenceExtractor = new SubsequenceExtractor(db, commonSequenceRepository);
+            using var sequenceRepository = sequenceRepositoryFactory.Create();
+            var subsequenceExtractor = new SubsequenceExtractor(db, sequenceRepository);
             
             bioSequences = subsequenceExtractor.GetBioSequencesForFastaConverter(subsequencesIds);
             

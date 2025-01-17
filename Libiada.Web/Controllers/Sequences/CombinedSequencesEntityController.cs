@@ -6,25 +6,23 @@ using Libiada.Database.Helpers;
 using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
 
-using Libiada.Core.Extensions;
-
 /// <summary>
-/// The common sequences controller.
+/// The combines sequences controller.
 /// </summary>
 [Authorize(Roles = "Admin")]
-public class CommonSequencesController : SequencesMattersController
+public class CombinedSequencesEntityController : SequencesMattersController
 {
     private readonly Cache cache;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="CommonSequencesController"/> class.
+    /// Initializes a new instance of the <see cref="CombinedSequencesEntityController"/> class.
     /// </summary>
-    public CommonSequencesController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
+    public CombinedSequencesEntityController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                      IViewDataHelper viewDataHelper,
                                      ITaskManager taskManager,
                                      INcbiHelper ncbiHelper,
                                      Cache cache)
-        : base(TaskType.CommonSequences, dbFactory, viewDataHelper, taskManager, ncbiHelper, cache)
+        : base(TaskType.SequencesUpload, dbFactory, viewDataHelper, taskManager, ncbiHelper, cache)
     {
         this.cache = cache;
     }
@@ -38,18 +36,9 @@ public class CommonSequencesController : SequencesMattersController
     public async Task<ActionResult> Index()
     {
         using var db = dbFactory.CreateDbContext();
-        var commonSequence = db.CommonSequences
-                               .Include(c => c.Matter)
-                               .Select(cs => new SequenceViewModel(cs.Id, 
-                                                                   cs.Matter.Name, 
-                                                                   cs.Notation.GetDisplayValue(), 
-                                                                   cs.RemoteDb.ToString() ?? "", 
-                                                                   cs.RemoteId ?? "", 
-                                                                   cs.Description ?? "", 
-                                                                   cs.Created.ToString(), 
-                                                                   cs.Modified.ToString()));
+        var sequences = db.CombinedSequenceEntities.Include(c => c.Matter);
 
-        ViewBag.Sequences = await commonSequence.ToListAsync();
+        ViewBag.Sequences = await sequences.ToListAsync();
 
         return View();
 
@@ -71,13 +60,13 @@ public class CommonSequencesController : SequencesMattersController
             return BadRequest();
         }
         using var db = dbFactory.CreateDbContext();
-        CommonSequence commonSequence = db.CommonSequences.Include(c => c.Matter).Single(c => c.Id == id);
-        if (commonSequence == null)
+        CombinedSequenceEntity? sequence = db.CombinedSequenceEntities.Include(c => c.Matter).Single(c => c.Id == id);
+        if (sequence == null)
         {
             return NotFound();
         }
 
-        return View(commonSequence);
+        return View(sequence);
 
     }
 
@@ -98,44 +87,44 @@ public class CommonSequencesController : SequencesMattersController
         }
 
         using var db = dbFactory.CreateDbContext();
-        CommonSequence? commonSequence = await db.CommonSequences.FindAsync(id);
-        if (commonSequence == null)
+        CombinedSequenceEntity? sequence = await db.CombinedSequenceEntities.FindAsync(id);
+        if (sequence == null)
         {
             return NotFound();
         }
-        RemoteDb[] remoteDb = commonSequence.RemoteDb == null ? [] : [(RemoteDb)commonSequence.RemoteDb];
-        ViewBag.MatterId = new SelectList(cache.Matters.ToArray(), "Id", "Name", commonSequence.MatterId);
-        ViewBag.Notation = Extensions.EnumExtensions.GetSelectList(new[] { commonSequence.Notation });
+        RemoteDb[] remoteDb = sequence.RemoteDb == null ? [] : [(RemoteDb)sequence.RemoteDb];
+        ViewBag.MatterId = new SelectList(cache.Matters.ToArray(), "Id", "Name", sequence.MatterId);
+        ViewBag.Notation = Extensions.EnumExtensions.GetSelectList([sequence.Notation]);
         ViewBag.RemoteDb = Extensions.EnumExtensions.GetSelectList(remoteDb);
-        return View(commonSequence);
+        return View(sequence);
     }
 
     /// <summary>
     /// The edit.
     /// </summary>
-    /// <param name="commonSequence">
+    /// <param name="sequence">
     /// The common sequence.
     /// </param>
     /// <returns>
     /// The <see cref="System.Threading.Tasks.Task"/>.
     /// </returns>
     [HttpPost]
-    public async Task<ActionResult> Edit(CommonSequence commonSequence)
+    public async Task<ActionResult> Edit(CombinedSequenceEntity sequence)
     {
         if (ModelState.IsValid)
         {
             using var db = dbFactory.CreateDbContext();
-            db.Entry(commonSequence).State = EntityState.Modified;
+            db.Entry(sequence).State = EntityState.Modified;
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        RemoteDb[] remoteDb = commonSequence.RemoteDb == null ? [] : [(RemoteDb)commonSequence.RemoteDb];
+        RemoteDb[] remoteDb = sequence.RemoteDb == null ? [] : [(RemoteDb)sequence.RemoteDb];
 
-        ViewBag.MatterId = new SelectList(cache.Matters.ToArray(), "Id", "Name", commonSequence.MatterId);
-        ViewBag.Notation = Extensions.EnumExtensions.GetSelectList(new[] { commonSequence.Notation });
+        ViewBag.MatterId = new SelectList(cache.Matters.ToArray(), "Id", "Name", sequence.MatterId);
+        ViewBag.Notation = Extensions.EnumExtensions.GetSelectList([sequence.Notation]);
         ViewBag.RemoteDb = Extensions.EnumExtensions.GetSelectList(remoteDb);
-        return View(commonSequence);
+        return View(sequence);
     }
 
     /// <summary>
@@ -154,13 +143,13 @@ public class CommonSequencesController : SequencesMattersController
             return BadRequest();
         }
         using var db = dbFactory.CreateDbContext();
-        CommonSequence commonSequence = db.CommonSequences.Include(c => c.Matter).Single(c => c.Id == id);
-        if (commonSequence == null)
+        CombinedSequenceEntity sequence = db.CombinedSequenceEntities.Include(c => c.Matter).Single(c => c.Id == id);
+        if (sequence == null)
         {
             return NotFound();
         }
 
-        return View(commonSequence);
+        return View(sequence);
     }
 
     /// <summary>
@@ -176,19 +165,9 @@ public class CommonSequencesController : SequencesMattersController
     public async Task<ActionResult> DeleteConfirmed(long id)
     {
         using var db = dbFactory.CreateDbContext();
-        CommonSequence commonSequence = await db.CommonSequences.FindAsync(id);
-        db.CommonSequences.Remove(commonSequence);
+        CombinedSequenceEntity sequence = await db.CombinedSequenceEntities.FindAsync(id);
+        db.CombinedSequenceEntities.Remove(sequence);
         await db.SaveChangesAsync();
         return RedirectToAction("Index");
     }
-
-    internal readonly record struct SequenceViewModel(
-        long Id,
-        string MatterName,
-        string Notation,
-        string RemoteDb,
-        string RemoteId,
-        string Description,
-        string Created,
-        string Modified);
 }

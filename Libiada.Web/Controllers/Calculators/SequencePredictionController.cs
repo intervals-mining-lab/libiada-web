@@ -92,11 +92,11 @@ public class SequencePredictionController : AbstractResultController
             IFullCalculator calculator;
             Link link;
 
-            var commonSequenceRepository = new CommonSequenceRepository(dbFactory, cache);
+            var sequenceRepository = new CombinedSequenceEntityRepository(dbFactory, cache);
             matterName = cache.Matters.Single(m => matterId == m.Id).Name;
             using var db = dbFactory.CreateDbContext();
-            var sequenceId = db.CommonSequences.Single(c => matterId == c.MatterId && c.Notation == notation).Id;
-            sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
+            var sequenceId = db.CombinedSequenceEntities.Single(c => matterId == c.MatterId && c.Notation == notation).Id;
+            sequence = sequenceRepository.GetLibiadaChain(sequenceId);
 
             characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
 
@@ -192,8 +192,8 @@ public class SequencePredictionController : AbstractResultController
     [NonAction]
     private Chain Copy(Chain source, Chain destanation)
     {
-        int commonLenth = System.Math.Min(source.Length, destanation.Length);
-        for (int i = 0; i < commonLenth; i++)
+        int commonLength = System.Math.Min(source.Length, destanation.Length);
+        for (int i = 0; i < commonLength; i++)
         {
             destanation.Set(source.Get(i), i);
         }

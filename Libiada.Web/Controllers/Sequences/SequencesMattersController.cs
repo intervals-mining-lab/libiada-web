@@ -64,7 +64,7 @@ public abstract class SequencesMattersController : AbstractResultController
     /// <summary>
     /// Sequence creation method.
     /// </summary>
-    /// <param name="commonSequence">
+    /// <param name="sequence">
     /// The sequence.
     /// </param>
     /// <param name="localFile">
@@ -92,15 +92,7 @@ public abstract class SequencesMattersController : AbstractResultController
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    public ActionResult Create(
-        CommonSequence commonSequence,
-        bool localFile,
-        IFormFile? file,
-        Language? language,
-        bool? original,
-        Translator? translator,
-        bool? partial,
-        int? precision)
+    public ActionResult Create(CombinedSequenceEntity sequence, bool localFile, IFormFile? file,int? precision)
     {
         return CreateTask(() =>
         {
@@ -112,10 +104,10 @@ public abstract class SequencesMattersController : AbstractResultController
                 }
 
                 Stream sequenceStream;
-                Nature nature = commonSequence.Notation.GetNature();
+                Nature nature = sequence.Notation.GetNature();
                 if (nature == Nature.Genetic && !localFile)
                 {
-                    sequenceStream = ncbiHelper.GetFastaFileStream(commonSequence.RemoteId);
+                    sequenceStream = ncbiHelper.GetFastaFileStream(sequence.RemoteId);
                 }
                 else
                 {
@@ -129,19 +121,62 @@ public abstract class SequencesMattersController : AbstractResultController
                     case Nature.Genetic:
                         ISequence bioSequence = NcbiHelper.GetFastaSequence(sequenceStream);
                         var dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
-                        dnaSequenceRepository.Create(commonSequence, bioSequence, partial ?? false);
+                        var dnaSequence = new DnaSequence
+                        {
+                            CreatorId = User.GetUserId(),
+                            ModifierId = User.GetUserId(),
+                            Notation = sequence.Notation,
+                            RemoteDb = sequence.RemoteDb,
+                            RemoteId = sequence.RemoteId,
+                            Partial = sequence.Partial ?? throw new Exception("Genetic sequence partial flag is not present in form data"),
+                            Matter = sequence.Matter
+                        };
+
+                        dnaSequenceRepository.Create(dnaSequence, bioSequence);
                         break;
                     case Nature.Music:
                         var musicSequenceRepository = new MusicSequenceRepository(dbFactory, cache);
-                        musicSequenceRepository.Create(commonSequence, sequenceStream);
+                        var musicSequence = new MusicSequence
+                        {
+                            CreatorId = User.GetUserId(),
+                            ModifierId = User.GetUserId(),
+                            Notation = sequence.Notation,
+                            RemoteDb = sequence.RemoteDb,
+                            RemoteId = sequence.RemoteId,
+                            PauseTreatment = sequence.PauseTreatment ?? throw new Exception("Music sequence pause treatment is not present in form data"),
+                            SequentialTransfer = sequence.SequentialTransfer ?? throw new Exception("Music sequence sequential transfer is not present in form data"),
+                            Matter = sequence.Matter
+                        };
+                        musicSequenceRepository.Create(musicSequence, sequenceStream);
                         break;
                     case Nature.Literature:
                         var literatureSequenceRepository = new LiteratureSequenceRepository(dbFactory, cache);
-                        literatureSequenceRepository.Create(commonSequence, sequenceStream, language ?? Language.Russian, original ?? true, translator ?? Translator.NoneOrManual);
+                        var literatureSequence = new LiteratureSequence
+                        {
+                            CreatorId = User.GetUserId(),
+                            ModifierId = User.GetUserId(),
+                            Notation = sequence.Notation,
+                            RemoteDb = sequence.RemoteDb,
+                            RemoteId = sequence.RemoteId,
+                            Language = sequence.Language ?? throw new Exception("Literature sequence language is not present in form data"),
+                            Original = sequence.Original ?? throw new Exception("Literature sequence original flag is not present in form data"),
+                            Translator = sequence.Translator ?? throw new Exception("Literature sequence translator is not present in form data"),
+                            Matter = sequence.Matter
+                        };
+                        literatureSequenceRepository.Create(literatureSequence, sequenceStream);
                         break;
                     case Nature.MeasurementData:
                         var dataSequenceRepository = new DataSequenceRepository(dbFactory, cache);
-                        dataSequenceRepository.Create(commonSequence, sequenceStream, precision ?? 0);
+                        var dataSequence = new DataSequence
+                        {
+                            CreatorId = User.GetUserId(),
+                            ModifierId = User.GetUserId(),
+                            Notation = sequence.Notation,
+                            RemoteDb = sequence.RemoteDb,
+                            RemoteId = sequence.RemoteId,
+                            Matter = sequence.Matter
+                        };
+                        dataSequenceRepository.Create(dataSequence, sequenceStream, precision ?? 0);
                         break;
                     case Nature.Image:
                         var matterRepository = new MatterRepository(db, cache);
@@ -156,30 +191,31 @@ public abstract class SequencesMattersController : AbstractResultController
                         var matter = new Matter
                         {
                             Nature = Nature.Image,
-                            SequenceType = commonSequence.Matter.SequenceType,
-                            Name = commonSequence.Matter.Name,
+                            SequenceType = sequence.Matter.SequenceType,
+                            Name = sequence.Matter.Name,
                             Source = fileBytes,
-                            Group = commonSequence.Matter.Group
+                            Group = sequence.Matter.Group
                         };
                         matterRepository.SaveToDatabase(matter);
                         break;
                     default:
                         throw new InvalidEnumArgumentException(nameof(nature), (int)nature, typeof(Nature));
                 }
-                string? multisequenceName = db.Multisequences.SingleOrDefault(ms => ms.Id == commonSequence.Matter.MultisequenceId)?.Name;
-                var result = new ImportResult(commonSequence, language, original, translator, partial, precision, multisequenceName);
+
+                string? multisequenceName = db.Multisequences.SingleOrDefault(ms => ms.Id == sequence.Matter.MultisequenceId)?.Name;
+                var result = new ImportResult(sequence, precision, multisequenceName);
 
                 return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
             }
             catch (Exception)
             {
                 using var db = dbFactory.CreateDbContext();
-                long matterId = commonSequence.MatterId;
+                long matterId = sequence.MatterId;
                 if (matterId != 0)
                 {
                     List<Matter> orphanMatter = db.Matters
-                        .Include(m => m.Sequence)
-                        .Where(m => m.Id == matterId && m.Sequence.Count == 0)
+                        .Include(m => m.Sequences)
+                        .Where(m => m.Id == matterId && m.Sequences.Count == 0)
                         .ToList();
 
                     if (orphanMatter.Count > 0)
@@ -296,11 +332,7 @@ public abstract class SequencesMattersController : AbstractResultController
         /// The multisequence name.
         /// </param>
         public ImportResult(
-            CommonSequence sequence,
-            Language? language,
-            bool? original,
-            Translator? translator,
-            bool? partial,
+            CombinedSequenceEntity sequence,
             double? precision,
             string? multisequenceName)
         {
@@ -313,10 +345,10 @@ public abstract class SequencesMattersController : AbstractResultController
             Group = matter.Group.GetDisplayValue();
             SequenceType = matter.SequenceType.GetDisplayValue();
             RemoteId = sequence.RemoteId;
-            Language = language?.GetDisplayValue();
-            Original = original;
-            Translator = translator?.GetDisplayValue();
-            Partial = partial;
+            Language = sequence.Language?.GetDisplayValue();
+            Original = sequence.Original;
+            Translator = sequence.Translator?.GetDisplayValue();
+            Partial = sequence.Partial;
             Precision = precision;
             MultisequenceName = multisequenceName;
             MultisequenceNumber = matter.MultisequenceNumber;

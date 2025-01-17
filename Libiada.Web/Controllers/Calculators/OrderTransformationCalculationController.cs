@@ -118,8 +118,8 @@ public class OrderTransformationCalculationController : AbstractResultController
             Dictionary<long, string> mattersNames = cache.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
             Chain[][] sequences = new Chain[matterIds.Length][];
 
-            var commonSequenceRepository = new CommonSequenceRepository(dbFactory, cache);
-            long[][] sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds,
+            var sequenceRepository = new CombinedSequenceEntityRepository(dbFactory, cache);
+            long[][] sequenceIds = sequenceRepository.GetSequenceIds(matterIds,
                                                                            notations,
                                                                            languages,
                                                                            translators,
@@ -131,7 +131,7 @@ public class OrderTransformationCalculationController : AbstractResultController
                 sequences[i] = new Chain[characteristicLinkIds.Length];
                 for (int j = 0; j < characteristicLinkIds.Length; j++)
                 {
-                    sequences[i][j] = commonSequenceRepository.GetLibiadaChain(sequenceIds[i][j]);
+                    sequences[i][j] = sequenceRepository.GetLibiadaChain(sequenceIds[i][j]);
                 }
             }
 

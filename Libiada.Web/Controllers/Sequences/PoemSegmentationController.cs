@@ -3,30 +3,30 @@
 using Libiada.Database.Tasks;
 using Libiada.Database.Models.Repositories.Sequences;
 
+using Libiada.Web.Helpers;
+using Libiada.Web.Tasks;
+
 using Newtonsoft.Json;
 
 using Segmenter.PoemsSegmenter;
-
-using Libiada.Web.Helpers;
-using Libiada.Web.Tasks;
 
 public class PoemSegmentationController : AbstractResultController
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
-    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
+    private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
     private readonly Cache cache;
 
     public PoemSegmentationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                       IViewDataHelper viewDataHelper,
                                       ITaskManager taskManager,
-                                      ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory,
+                                      ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
                                       Cache cache)
        : base(TaskType.PoemSegmentation, taskManager)
     {
         this.dbFactory = dbFactory;
         this.viewDataHelper = viewDataHelper;
-        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
+        this.sequenceRepositoryFactory = sequenceRepositoryFactory;
         this.cache = cache;
     }
 
@@ -49,10 +49,10 @@ public class PoemSegmentationController : AbstractResultController
         return CreateTask(() =>
         {
             using var db = dbFactory.CreateDbContext();
-            var sequenceId = db.LiteratureSequences.Single(l => l.MatterId == matterId && l.Notation == Notation.Consonance).Id;
+            var sequenceId = db.CombinedSequenceEntities.Single(l => l.MatterId == matterId && l.Notation == Notation.Consonance).Id;
             var sequenceName = cache.Matters.Single(l => l.Id == matterId).Name;
-            using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
-            var chain = commonSequenceRepository.GetLibiadaBaseChain(sequenceId);
+            using var sequenceRepository = sequenceRepositoryFactory.Create();
+            var chain = sequenceRepository.GetLibiadaBaseChain(sequenceId);
             var thresholdString = startThreshold.Replace('.', ',');
             var threshold = Convert.ToDouble(thresholdString);
             var balanceString = balance.Replace('.', ',');

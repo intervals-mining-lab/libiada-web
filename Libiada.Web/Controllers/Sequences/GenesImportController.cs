@@ -49,7 +49,7 @@ public class GenesImportController : AbstractResultController
         using var db = dbFactory.CreateDbContext();
         var genesSequenceIds = db.Subsequences.Select(s => s.SequenceId).Distinct();
 
-        var matterIds = db.DnaSequences
+        var matterIds = db.CombinedSequenceEntities
                           .Include(c => c.Matter)
                           .Where(c => !string.IsNullOrEmpty(c.RemoteId)
                                    && !genesSequenceIds.Contains(c.Id)
@@ -78,7 +78,7 @@ public class GenesImportController : AbstractResultController
         {
             Dictionary<string, object> result;
             using var db = dbFactory.CreateDbContext();
-            DnaSequence parentSequence = db.DnaSequences.Single(d => d.MatterId == matterId);
+            DnaSequence parentSequence = db.CombinedSequenceEntities.Single(d => d.MatterId == matterId).ToGeneticSequence();
             var subsequenceImporter = new SubsequenceImporter(db, parentSequence, ncbiHelper);
             subsequenceImporter.CreateSubsequences();
 

@@ -72,7 +72,7 @@ builder.Services.AddSingleton<IBinaryCharacteristicRepository, BinaryCharacteris
 builder.Services.AddSingleton<ICongenericCharacteristicRepository, CongenericCharacteristicRepository>();
 builder.Services.AddSingleton<IFullCharacteristicRepository, FullCharacteristicRepository>();
 
-builder.Services.AddSingleton<ICommonSequenceRepositoryFactory, CommonSequenceRepositoryFactory>();
+builder.Services.AddSingleton<ICombinedSequenceEntityRepositoryFactory, CombinedSequenceEntityRepositoryFactory>();
 
 builder.Services.AddSingleton<IViewDataHelperFactory, ViewDataHelperFactory>();
 

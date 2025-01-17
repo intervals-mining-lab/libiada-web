@@ -110,7 +110,7 @@ public class OrderTransformationCharacteristicsDynamicVisualizationController : 
     {
         return CreateTask(() =>
         {
-            var commonSequenceRepository = new CommonSequenceRepository(dbFactory, cache);
+            var sequenceRepository = new CombinedSequenceEntityRepository(dbFactory, cache);
             var mattersCharacteristics = new object[matterIds.Length];
             Array.Sort(matterIds);
             Dictionary<long, Matter> matters = cache.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id);
@@ -118,7 +118,7 @@ public class OrderTransformationCharacteristicsDynamicVisualizationController : 
             for (int i = 0; i < matterIds.Length; i++)
             {
                 long matterId = matterIds[i];
-                long sequenceId = commonSequenceRepository.GetSequenceIds([matterId],
+                long sequenceId = sequenceRepository.GetSequenceIds([matterId],
                                                                           notation,
                                                                           language,
                                                                           translator,
@@ -130,7 +130,7 @@ public class OrderTransformationCharacteristicsDynamicVisualizationController : 
                 FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
                 IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
 
-                Chain sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
+                Chain sequence = sequenceRepository.GetLibiadaChain(sequenceId);
 
                 double[] characteristics = new double[transformationsSequence.Length * iterationsCount];
                 for (int j = 0; j < iterationsCount; j++)

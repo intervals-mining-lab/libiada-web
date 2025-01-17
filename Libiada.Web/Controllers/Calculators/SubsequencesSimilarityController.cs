@@ -116,7 +116,7 @@ public class SubsequencesSimilarityController : AbstractResultController
             }
 
             long firstMatterId = matterIds[0];
-            long firstParentSequenceId = db.CommonSequences.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
+            long firstParentSequenceId = db.CombinedSequenceEntities.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
             SubsequenceData[] firstSequenceSubsequences = subsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
                                                                 [characteristicLinkId],
                                                                 features,
@@ -132,7 +132,7 @@ public class SubsequencesSimilarityController : AbstractResultController
             }
 
             long secondMatterId = matterIds[1];
-            long secondParentSequenceId = db.CommonSequences.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
+            long secondParentSequenceId = db.CombinedSequenceEntities.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
             SubsequenceData[] secondSequenceSubsequences = subsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
                                                                 [characteristicLinkId],
                                                                 features,

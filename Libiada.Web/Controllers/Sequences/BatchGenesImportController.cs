@@ -47,7 +47,7 @@ public class BatchGenesImportController : AbstractResultController
         using var db = dbFactory.CreateDbContext();
         var sequencesWithSubsequencesIds = db.Subsequences.Select(s => s.SequenceId).Distinct();
 
-        long[] matterIds = db.DnaSequences.Include(c => c.Matter)
+        long[] matterIds = db.CombinedSequenceEntities.Include(c => c.Matter)
             .Where(c => !string.IsNullOrEmpty(c.RemoteId)
                      && !sequencesWithSubsequencesIds.Contains(c.Id)
                      && StaticCollections.SequenceTypesWithSubsequences.Contains(c.Matter.SequenceType))
@@ -83,10 +83,11 @@ public class BatchGenesImportController : AbstractResultController
                                    .OrderBy(m => m.Id)
                                    .Select(m => m.Name)
                                    .ToArray();
-                DnaSequence[] parentSequences = db.DnaSequences
-                                        .Where(c => matterIds.Contains(c.MatterId))
-                                        .OrderBy(c => c.MatterId)
-                                        .ToArray();
+                DnaSequence[] parentSequences = db.CombinedSequenceEntities
+                                                  .Where(s => matterIds.Contains(s.MatterId))
+                                                  .OrderBy(s => s.MatterId)
+                                                  .Select(s => s.ToGeneticSequence())
+                                                  .ToArray();
 
                 for (int i = 0; i < parentSequences.Length; i++)
                 {

@@ -27,7 +27,7 @@ public class MattersController : SequencesMattersController
                              ITaskManager taskManager,
                              INcbiHelper ncbiHelper,
                              Cache cache)
-        : base(TaskType.Matters, dbFactory, viewDataHelper, taskManager, ncbiHelper, cache)
+        : base(TaskType.MattersImport, dbFactory, viewDataHelper, taskManager, ncbiHelper, cache)
     {
         this.cache = cache;
     }
@@ -74,7 +74,7 @@ public class MattersController : SequencesMattersController
             return NotFound();
         }
 
-        ViewBag.SequencesCount = db.CommonSequences.Count(c => c.MatterId == matter.Id);
+        ViewBag.SequencesCount = db.CombinedSequenceEntities.Count(c => c.MatterId == matter.Id);
 
         return View(matter);
 
@@ -106,7 +106,7 @@ public class MattersController : SequencesMattersController
                 { "natures", Extensions.EnumExtensions.GetSelectList(new[] { matter.Nature }) },
                 { "groups", EnumExtensions.ToArray<Group>().ToSelectListWithNature() },
                 { "sequenceTypes", EnumExtensions.ToArray<SequenceType>().ToSelectListWithNature() },
-                { "sequencesCount", db.CommonSequences.Count(c => c.MatterId == matter.Id) },
+                { "sequencesCount", db.CombinedSequenceEntities.Count(c => c.MatterId == matter.Id) },
                 { "matter", matter },
                 { "multisequences", db.Multisequences.ToList() },
                 { "nature", ((byte)matter.Nature).ToString() },
@@ -149,7 +149,7 @@ public class MattersController : SequencesMattersController
                 { "natures", Extensions.EnumExtensions.GetSelectList(new[] { matter.Nature }) },
                 { "groups", EnumExtensions.ToArray<Group>().ToSelectListWithNature() },
                 { "sequenceTypes", EnumExtensions.ToArray<SequenceType>().ToSelectListWithNature() },
-                { "sequencesCount", db.CommonSequences.Count(c => c.MatterId == matter.Id) },
+                { "sequencesCount", db.CombinedSequenceEntities.Count(c => c.MatterId == matter.Id) },
                 { "matter", matter },
                 { "multisequences", db.Multisequences.ToList() },
                 { "nature", ((byte)matter.Nature).ToString() },
@@ -184,7 +184,7 @@ public class MattersController : SequencesMattersController
             return NotFound();
         }
 
-        ViewBag.SequencesCount = db.CommonSequences.Count(c => c.MatterId == matter.Id);
+        ViewBag.SequencesCount = db.CombinedSequenceEntities.Count(c => c.MatterId == matter.Id);
         return View(matter);
 
     }

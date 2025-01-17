@@ -5,23 +5,17 @@ using Libiada.Database.Models.Repositories.Sequences;
 /// <summary>
 /// The sequence elements controller.
 /// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="SequenceElementsController"/> class.
+/// </remarks>
+/// <param name="sequenceRepositoryFactory">
+/// The sequence repository.
+/// </param>
 [Authorize]
 [Route("api/[controller]")]
 [ApiController]
-public class SequenceElementsController : Controller
+public class SequenceElementsController(ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory) : Controller
 {
-    /// <summary>
-    /// The sequence repository.
-    /// </summary>
-    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="SequenceElementsController"/> class.
-    /// </summary>
-    public SequenceElementsController(ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory)
-    {
-        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
-    }
 
     /// <summary>
     /// The get.
@@ -34,8 +28,8 @@ public class SequenceElementsController : Controller
     /// </returns>
     public IEnumerable<SelectListItem> Get(int id)
     {
-        using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
-        Element[] sequenceElements = commonSequenceRepository.GetElements(id);
+        using var sequenceRepository = sequenceRepositoryFactory.Create();
+        Element[] sequenceElements = sequenceRepository.GetElements(id);
         return sequenceElements.Select(e => new SelectListItem
         {
             Value = e.Id.ToString(),

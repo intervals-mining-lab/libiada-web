@@ -32,7 +32,7 @@ public class CongenericCalculationController : AbstractResultController
     /// <summary>
     /// The sequence repository.
     /// </summary>
-    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
+    private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
     private readonly ICongenericSequencesCharacteristicsCalculator congenericSequencesCharacteristicsCalculator;
     private readonly Cache cache;
 
@@ -43,7 +43,7 @@ public class CongenericCalculationController : AbstractResultController
                                            IViewDataHelper viewDataHelper,
                                            ITaskManager taskManager,
                                            ICongenericCharacteristicRepository congenericCharacteristicRepository,
-                                           ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory,
+                                           ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
                                            ICongenericSequencesCharacteristicsCalculator congenericSequencesCharacteristicsCalculator,
                                            Cache cache)
         : base(TaskType.CongenericCalculation, taskManager)
@@ -51,7 +51,7 @@ public class CongenericCalculationController : AbstractResultController
         this.dbFactory = dbFactory;
         this.viewDataHelper = viewDataHelper;
         this.congenericCharacteristicRepository = congenericCharacteristicRepository;
-        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
+        this.sequenceRepositoryFactory = sequenceRepositoryFactory;
         this.congenericSequencesCharacteristicsCalculator = congenericSequencesCharacteristicsCalculator;
         this.cache = cache;
     }
@@ -124,8 +124,8 @@ public class CongenericCalculationController : AbstractResultController
             long[][] sequenceIds;
 
             mattersNames = cache.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
-            using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
-            sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds, notations, languages, translators, pauseTreatments, sequentialTransfers, trajectories);
+            using var sequenceRepository = sequenceRepositoryFactory.Create();
+            sequenceIds = sequenceRepository.GetSequenceIds(matterIds, notations, languages, translators, pauseTreatments, sequentialTransfers, trajectories);
 
             //// characteristics names
             //for (int k = 0; k < characteristicLinkIds.Length; k++)
@@ -146,7 +146,7 @@ public class CongenericCalculationController : AbstractResultController
             
             using var db = dbFactory.CreateDbContext();
             var flatSequenceIds = sequenceIds.SelectMany(si => si);
-            var elementIds = db.CommonSequences
+            var elementIds = db.CombinedSequenceEntities
                                 .Where(cs => flatSequenceIds.Contains(cs.Id))
                                 .Select(cs => cs.Alphabet)
                                 .ToArray()
@@ -213,17 +213,17 @@ public class CongenericCalculationController : AbstractResultController
                         Language language = languages[i];
                         Translator translator = translators[i];
 
-                        sequenceId = db.LiteratureSequences.Single(l => l.MatterId == matterId
+                        sequenceId = db.CombinedSequenceEntities.Single(l => l.MatterId == matterId
                                                                   && l.Notation == notation
                                                                   && l.Language == language
                                                                   && translator == l.Translator).Id;
                     }
                     else
                     {
-                        sequenceId = db.CommonSequences.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
+                        sequenceId = db.CombinedSequenceEntities.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
                     }
 
-                    Chain chain = commonSequenceRepository.GetLibiadaChain(sequenceId);
+                    Chain chain = sequenceRepository.GetLibiadaChain(sequenceId);
 
                     // theoretical frequencies of orlov criterion
                     if (theoretical)

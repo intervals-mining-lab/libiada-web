@@ -80,7 +80,7 @@ public class SubsequencesCalculationController : AbstractResultController
             string[] subsequencesCharacteristicsNames = new string[characteristicLinkIds.Length];
             var subsequencesCharacteristicsList = new SelectListItem[characteristicLinkIds.Length];
 
-            var parentSequences = db.DnaSequences.Include(s => s.Matter)
+            var parentSequences = db.CombinedSequenceEntities.Include(s => s.Matter)
                                     .Where(s => s.Notation == Notation.Nucleotides && matterIds.Contains(s.MatterId))
                                     .Select(s => new { s.Id, MatterName = s.Matter.Name, s.RemoteId })
                                     .ToDictionary(s => s.Id);

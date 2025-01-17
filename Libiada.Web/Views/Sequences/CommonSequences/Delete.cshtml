@@ -1,5 +1,5 @@
 ﻿@using Libiada.Core.Extensions
-@model CommonSequence
+@model CombinedSequenceEntity
 
 @{
     ViewBag.Title = "Delete sequence";
@@ -36,13 +36,6 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.RemoteId)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Description)
         </dd>
 
         <dt>
