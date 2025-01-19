@@ -10,6 +10,7 @@ using Libiada.Core.Extensions;
 
 using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
+using Libiada.Web.Extensions;
 
 [Authorize(Roles = "Admin")]
 public class BatchMusicImportController : AbstractResultController
@@ -20,7 +21,7 @@ public class BatchMusicImportController : AbstractResultController
     /// <summary>
     /// The batch music import controller.
     /// </summary>
-    public BatchMusicImportController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, ITaskManager taskManager, Cache cache) 
+    public BatchMusicImportController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, ITaskManager taskManager, Cache cache)
         : base(TaskType.BatchMusicImport, taskManager)
     {
         this.dbFactory = dbFactory;
@@ -62,7 +63,11 @@ public class BatchMusicImportController : AbstractResultController
 
                 try
                 {
-                    var sequence = new MusicSequence();
+                    var sequence = new MusicSequence()
+                    {
+                        CreatorId = User.GetUserId(),
+                        ModifierId = User.GetUserId()
+                    };
 
                     if (matters.Any(m => m.Name == sequenceName))
                     {

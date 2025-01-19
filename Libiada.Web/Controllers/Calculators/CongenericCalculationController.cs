@@ -14,6 +14,7 @@ using Libiada.Database.Models.CalculatorsData;
 
 using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
+
 using System.Linq;
 
 /// <summary>
@@ -151,9 +152,12 @@ public class CongenericCalculationController : AbstractResultController
                                 .Select(cs => cs.Alphabet)
                                 .ToArray()
                                 .SelectMany(a => a)
-                                .Distinct();
+                                .Distinct()
+                                .ToArray();
 
-            var unitedAlphabet = db.Elements.Where(e => elementIds.Contains(e.Id)).Select(e => new { e.Id, Name = e.Name ?? e.Value }).ToArray();
+            Element[] elements = new ElementRepository(db).GetElements(elementIds);
+
+            var unitedAlphabet = elements.Select(e => new { e.Id, Name = e.Name ?? e.Value }).ToArray();
             int characteristicsCount = unitedAlphabet.Length * characteristicLinkIds.Length;
             for (int i = 0; i < matterIds.Length; i++)
             {

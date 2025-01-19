@@ -147,6 +147,7 @@ public abstract class SequencesMattersController : AbstractResultController
                             SequentialTransfer = sequence.SequentialTransfer ?? throw new Exception("Music sequence sequential transfer is not present in form data"),
                             Matter = sequence.Matter
                         };
+                        // TODO: deside if this method should create only one music sequence type or all of them 
                         musicSequenceRepository.Create(musicSequence, sequenceStream);
                         break;
                     case Nature.Literature:

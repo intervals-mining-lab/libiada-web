@@ -176,14 +176,19 @@ public class RelationCalculationController : AbstractResultController
 
                 List<string> firstElements = [];
                 List<string> secondElements = [];
+
+                ElementRepository elementRepository = new(db);
+                long[] allElementIds = filteredResult.Select(fr => fr.FirstElementId)
+                                                     .Union(filteredResult.Select(fr => fr.SecondElementId)).ToArray();
+                Element[] allElements = elementRepository.GetElements(allElementIds);
                 for (int i = 0; i < filterSize; i++)
                 {
                     long firstElementId = filteredResult[i].FirstElementId;
-                    Element firstElement = db.Elements.Single(e => e.Id == firstElementId);
+                    Element firstElement = allElements.Single(e => e.Id == firstElementId);
                     firstElements.Add(firstElement.Name ?? firstElement.Value);
 
                     long secondElementId = filteredResult[i].SecondElementId;
-                    Element secondElement = db.Elements.Single(e => e.Id == secondElementId);
+                    Element secondElement = allElements.Single(e => e.Id == secondElementId);
                     secondElements.Add(secondElement.Name ?? secondElement.Value);
                 }
 
@@ -198,15 +203,12 @@ public class RelationCalculationController : AbstractResultController
                                         .Where(b => b.SequenceId == sequenceId && b.CharacteristicLinkId == characteristicLinkId)
                                         .GroupBy(b => b.FirstElementId)
                                         .ToDictionary(b => b.Key, b => b.ToDictionary(bb => bb.SecondElementId, bb => bb.Value));
-                long[] elementsIds = db.CombinedSequenceEntities.Single(cs => cs.Id == sequenceId).Alphabet;
-                var elements = db.Elements
-                                 .Where(e => elementsIds.Contains(e.Id))
-                                 .OrderBy(e => e.Id)
-                                 .Select(e => new { Name = e.Name ?? e.Value, e.Id })
-                                 .ToArray();
+                long[] elementIds = db.CombinedSequenceEntities.Single(cs => cs.Id == sequenceId).Alphabet;
+                
+                Element[] elements = new ElementRepository(db).GetElements(elementIds);
                 
                 result.Add("characteristics", characteristics);
-                result.Add("elements", elements);
+                result.Add("elements", elements.Select(e => new { Name = e.Name ?? e.Value, e.Id }));
             }
 
             string json = JsonConvert.SerializeObject(result);
