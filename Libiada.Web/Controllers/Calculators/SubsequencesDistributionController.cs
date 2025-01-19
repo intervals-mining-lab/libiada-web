@@ -18,7 +18,6 @@ using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
 
 using Bio.IO.FastA;
-using Bio;
 
 using EnumExtensions = Core.Extensions.EnumExtensions;
 
@@ -188,7 +187,7 @@ public class SubsequencesDistributionController : AbstractResultController
     {
         try
         {
-            ISequence[] bioSequences;
+            Bio.ISequence[] bioSequences;
             using var db = dbFactory.CreateDbContext();
             using var sequenceRepository = sequenceRepositoryFactory.Create();
             var subsequenceExtractor = new SubsequenceExtractor(db, sequenceRepository);

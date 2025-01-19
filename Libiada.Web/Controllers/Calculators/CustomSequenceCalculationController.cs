@@ -2,7 +2,6 @@
 
 using System.Text.RegularExpressions;
 
-using Bio;
 using Bio.Extensions;
 
 using Libiada.Core.Core;
@@ -136,7 +135,7 @@ public class CustomSequenceCalculationController : AbstractResultController
                                 sequences[i] = new Chain(sequence.Order, alphabet);
                                 break;
                             case "genetic":
-                                ISequence fastaSequence = NcbiHelper.GetFastaSequence(fileStreams[i]);
+                                Bio.ISequence fastaSequence = NcbiHelper.GetFastaSequence(fileStreams[i]);
                                 string stringSequence = fastaSequence.ConvertToString();
                                 sequences[i] = new Chain(stringSequence);
                                 sequencesNames[i] = fastaSequence.ID;

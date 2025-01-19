@@ -1,6 +1,5 @@
 ﻿namespace Libiada.Web.Controllers.Sequences;
 
-using Bio;
 using Bio.Core.Extensions;
 using Bio.IO.GenBank;
 
@@ -89,7 +88,7 @@ public class BatchGeneticImportFromGenBankSearchQueryController : AbstractResult
 
                 try
                 {
-                    ISequence bioSequence = ncbiHelper.DownloadGenBankSequence(accession);
+                    Bio.ISequence bioSequence = ncbiHelper.DownloadGenBankSequence(accession);
                     GenBankMetadata metadata = NcbiHelper.GetMetadata(bioSequence);
                     importResult.MatterName = metadata.Version.CompoundAccession;
 

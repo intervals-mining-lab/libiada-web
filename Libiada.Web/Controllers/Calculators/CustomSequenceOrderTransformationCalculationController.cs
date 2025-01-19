@@ -1,6 +1,5 @@
 ﻿namespace Libiada.Web.Controllers.Calculators;
 
-using Bio;
 using Bio.Extensions;
 
 using Libiada.Database.Models.CalculatorsData;
@@ -105,7 +104,7 @@ public class CustomSequenceOrderTransformationCalculationController : AbstractRe
             {
                 if (localFile)
                 {
-                    ISequence fastaSequence = NcbiHelper.GetFastaSequence(fileStreams[i]);
+                    Bio.ISequence fastaSequence = NcbiHelper.GetFastaSequence(fileStreams[i]);
                     sequences[i] = fastaSequence.ConvertToString();
                     sequencesNames[i] = fastaSequence.ID;
                 }

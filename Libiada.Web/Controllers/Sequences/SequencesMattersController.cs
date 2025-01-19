@@ -2,8 +2,6 @@
 
 using System.ComponentModel;
 
-using Bio;
-
 using Libiada.Core.Extensions;
 
 using Libiada.Database.Helpers;
@@ -119,7 +117,7 @@ public abstract class SequencesMattersController : AbstractResultController
                 switch (nature)
                 {
                     case Nature.Genetic:
-                        ISequence bioSequence = NcbiHelper.GetFastaSequence(sequenceStream);
+                        Bio.ISequence bioSequence = NcbiHelper.GetFastaSequence(sequenceStream);
                         var dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
                         var dnaSequence = new DnaSequence
                         {
