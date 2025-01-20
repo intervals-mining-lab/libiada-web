@@ -139,7 +139,7 @@ public class LocalCalculationController : AbstractResultController
             var partNames = new List<string>[matterIds.Length];
             var starts = new List<int>[matterIds.Length];
             var lengthes = new List<int>[matterIds.Length];
-            var chains = new Chain[matterIds.Length];
+            var sequences = new ComposedSequence[matterIds.Length];
             var mattersCharacteristics = new object[matterIds.Length];
 
             var calculators = new IFullCalculator[characteristicLinkIds.Length];
@@ -160,7 +160,7 @@ public class LocalCalculationController : AbstractResultController
                                                                        sequentialTransfer,
                                                                        trajectory).Single();
 
-                chains[k] = sequenceRepository.GetLibiadaChain(sequenceId);
+                sequences[k] = sequenceRepository.GetLibiadaComposedSequence(sequenceId);
             }
 
             for (int i = 0; i < characteristicLinkIds.Length; i++)
@@ -171,15 +171,15 @@ public class LocalCalculationController : AbstractResultController
                 links[i] = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
             }
 
-            for (int i = 0; i < chains.Length; i++)
+            for (int i = 0; i < sequences.Length; i++)
             {
                 CutRule cutRule = growingWindow
-                        ? (CutRule)new CutRuleWithFixedStart(chains[i].Length, step)
-                        : new SimpleCutRule(chains[i].Length, step, length);
+                        ? (CutRule)new CutRuleWithFixedStart(sequences[i].Length, step)
+                        : new SimpleCutRule(sequences[i].Length, step, length);
 
                 CutRuleIterator iterator = cutRule.GetIterator();
 
-                List<Chain> fragments = [];
+                List<ComposedSequence> fragments = [];
                 partNames[i] = [];
                 starts[i] = [];
                 lengthes[i] = [];
@@ -192,10 +192,10 @@ public class LocalCalculationController : AbstractResultController
                     List<IBaseObject> fragment = [];
                     for (int k = 0; start + k < end; k++)
                     {
-                        fragment.Add(chains[i][start + k]);
+                        fragment.Add(sequences[i][start + k]);
                     }
 
-                    fragments.Add(new Chain(fragment));
+                    fragments.Add(new ComposedSequence(fragment));
 
                     partNames[i].Add(fragment.ToString());
                     starts[i].Add(iterator.GetStartPosition());

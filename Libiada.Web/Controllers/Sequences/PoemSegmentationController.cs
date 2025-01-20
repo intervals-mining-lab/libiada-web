@@ -52,21 +52,21 @@ public class PoemSegmentationController : AbstractResultController
             var sequenceId = db.CombinedSequenceEntities.Single(l => l.MatterId == matterId && l.Notation == Notation.Consonance).Id;
             var sequenceName = cache.Matters.Single(l => l.Id == matterId).Name;
             using var sequenceRepository = sequenceRepositoryFactory.Create();
-            var chain = sequenceRepository.GetLibiadaBaseChain(sequenceId);
+            var sequence = sequenceRepository.GetLibiadaSequence(sequenceId);
             var thresholdString = startThreshold.Replace('.', ',');
             var threshold = Convert.ToDouble(thresholdString);
             var balanceString = balance.Replace('.', ',');
             var balanceDouble = Convert.ToDouble(balanceString);
 
-            PoemSegmenter poemSegmenter = new PoemSegmenter(chain.ToString(), wordLength, threshold, balanceDouble);
+            PoemSegmenter poemSegmenter = new PoemSegmenter(sequence.ToString(), wordLength, threshold, balanceDouble);
 
             (Dictionary<string, int>, string, string) resultSegmentation = poemSegmenter.StartSegmentation();
             var consonanceDictionary = resultSegmentation.Item1.OrderByDescending(d => d.Value).ToDictionary(d => d.Key, d => d.Value);
-            string poemChain = resultSegmentation.Item2;
+            string poemSequence = resultSegmentation.Item2;
             var result = new Dictionary<string, object>
             {
                 {"segmentedString", consonanceDictionary},
-                {"poemChain", poemChain },
+                {"poemSequence", poemSequence },
                 {"poemName", sequenceName}
             };
 

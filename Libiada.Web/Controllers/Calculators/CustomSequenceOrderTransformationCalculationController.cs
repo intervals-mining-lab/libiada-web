@@ -121,12 +121,12 @@ public class CustomSequenceOrderTransformationCalculationController : AbstractRe
                 double[] characteristics = new double[characteristicLinkIds.Length];
                 for (int k = 0; k < characteristicLinkIds.Length; k++)
                 {
-                    var sequence = new Chain(sequences[j]);
+                    var sequence = new ComposedSequence(sequences[j]);
                     for (int l = 0; l < iterationsCount; l++)
                     {
                         for (int w = 0; w < transformationsSequence.Length; w++)
                         {
-                            sequence = transformationsSequence[w] == OrderTransformation.Dissimilar ? DissimilarChainFactory.Create(sequence)
+                            sequence = transformationsSequence[w] == OrderTransformation.Dissimilar ? DissimilarSequenceFactory.Create(sequence)
                                                                  : HighOrderFactory.Create(sequence, EnumExtensions.GetLink(transformationsSequence[w]));
                         }
                     }

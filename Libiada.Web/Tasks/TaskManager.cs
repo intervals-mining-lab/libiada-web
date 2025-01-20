@@ -178,7 +178,7 @@ public class TaskManager : ITaskManager
     /// The get tasks data.
     /// </summary>
     /// <returns>
-    /// The <see cref="IEnumerable{TaskData}"/>.
+    /// The <see cref="IEnumerable{Libiada.Web.Tasks.TaskData}"/>.
     /// </returns>
     public IEnumerable<TaskData> GetTasksData()
     {
@@ -245,7 +245,7 @@ public class TaskManager : ITaskManager
     /// Gets tasks available to user.
     /// </summary>
     /// <returns>
-    /// The <see cref="T:List{Task}"/>.
+    /// The <see cref="List{Libiada.Web.Tasks.Task}"/>.
     /// </returns>
     private List<Task> GetUserTasks()
     {
@@ -267,7 +267,7 @@ public class TaskManager : ITaskManager
     /// Gets tasks available to user with the specified state.
     /// </summary>
     /// <returns>
-    /// The <see cref="T:List{Task}"/>.
+    /// The <see cref="List{Libiada.Web.Tasks.Task}"/>.
     /// </returns>
     private List<Task> GetUserTasksWithState(TaskState taskState)
     {

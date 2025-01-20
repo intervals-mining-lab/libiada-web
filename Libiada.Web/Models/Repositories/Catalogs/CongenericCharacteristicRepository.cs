@@ -39,7 +39,7 @@ public class CongenericCharacteristicRepository
     /// The get congeneric characteristic types.
     /// </summary>
     /// <returns>
-    /// The <see cref="List{CharacteristicData}"/>.
+    /// The <see cref="List{Libiada.Web.Models.CalculatorsData.CharacteristicSelectListItem}"/>.
     /// </returns>
     public List<CharacteristicSelectListItem> GetCharacteristicTypes()
     {

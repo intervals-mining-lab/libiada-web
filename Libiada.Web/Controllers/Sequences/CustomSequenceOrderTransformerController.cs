@@ -82,7 +82,7 @@ public class CustomSequenceOrderTransformerController : AbstractResultController
         {
             int sequencesCount = localFile ? files.Count : customSequences.Length;
             string[] sourceSequences = new string[sequencesCount];
-            var sequences = new Chain[sequencesCount];
+            var sequences = new ComposedSequence[sequencesCount];
             string[] names = new string[sequencesCount];
 
             for (int i = 0; i < sequencesCount; i++)
@@ -103,13 +103,13 @@ public class CustomSequenceOrderTransformerController : AbstractResultController
 
             for (int k = 0; k < sequencesCount; k++)
             {
-                sequences[k] = new Chain(sourceSequences[k]);
+                sequences[k] = new ComposedSequence(sourceSequences[k]);
                 for (int j = 0; j < iterationsCount; j++)
                 {
                     for (int i = 0; i < transformationsSequence.Length; i++)
                     {
                         sequences[k] = transformationsSequence[i] == OrderTransformation.Dissimilar
-                                           ? DissimilarChainFactory.Create(sequences[k])
+                                           ? DissimilarSequenceFactory.Create(sequences[k])
                                            : HighOrderFactory.Create(sequences[k], EnumExtensions.GetLink(transformationsSequence[i]));
                     }
                 }

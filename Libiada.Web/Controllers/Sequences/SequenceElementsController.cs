@@ -24,7 +24,7 @@ public class SequenceElementsController(ICombinedSequenceEntityRepositoryFactory
     /// The id.
     /// </param>
     /// <returns>
-    /// The <see cref="IEnumerable{SelectListItem}"/>.
+    /// The <see cref="IEnumerable{Microsoft.AspNetCore.Mvc.Rendering.SelectListItem}"/>.
     /// </returns>
     public IEnumerable<SelectListItem> Get(int id)
     {

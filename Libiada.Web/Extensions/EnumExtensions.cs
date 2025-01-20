@@ -40,7 +40,7 @@ public static class EnumExtensions
     /// Enum type.
     /// </typeparam>
     /// <returns>
-    /// The <see cref="IEnumerable{SelectListItem}"/>.
+    /// The <see cref="IEnumerable{Microsoft.AspNetCore.Mvc.Rendering.SelectListItem}"/>.
     /// </returns>
     /// /// <remarks>
     /// Works only with byte enums.
@@ -66,7 +66,7 @@ public static class EnumExtensions
     /// Enum type.
     /// </typeparam>
     /// <returns>
-    /// The <see cref="IEnumerable{SelectListItem}"/>.
+    /// The <see cref="IEnumerable{Microsoft.AspNetCore.Mvc.Rendering.SelectListItem}"/>.
     /// </returns>
     /// /// <remarks>
     /// Works only with byte enums.
@@ -92,7 +92,7 @@ public static class EnumExtensions
     /// Enum type.
     /// </typeparam>
     /// <returns>
-    /// The <see cref="IEnumerable{SelectListItem}"/>.
+    /// The <see cref="IEnumerable{Microsoft.AspNetCore.Mvc.Rendering.SelectListItem}"/>.
     /// </returns>
     /// <exception cref="TypeArgumentException">
     /// Thrown if type argument is not enum.
@@ -135,7 +135,7 @@ public static class EnumExtensions
     /// Enum type.
     /// </typeparam>
     /// <returns>
-    /// The <see cref="IEnumerable{SelectListItem}"/>.
+    /// The <see cref="IEnumerable{Microsoft.AspNetCore.Mvc.Rendering.SelectListItem}"/>.
     /// </returns>
     /// <exception cref="TypeArgumentException">
     /// Thrown if type argument is not enum.
@@ -175,7 +175,7 @@ public static class EnumExtensions
     /// Enum type.
     /// </typeparam>
     /// <returns>
-    /// The <see cref="IEnumerable{SelectListItemWithNature}"/>.
+    /// The <see cref="IEnumerable{Libiada.Web.Models.CalculatorsData.SelectListItemWithNature}"/>.
     /// </returns>
     /// <exception cref="TypeArgumentException">
     /// Thrown if type argument is not enum.
@@ -219,7 +219,7 @@ public static class EnumExtensions
     /// Enum type.
     /// </typeparam>
     /// <returns>
-    /// The <see cref="IEnumerable{SelectListItemWithNature}"/>.
+    /// The <see cref="IEnumerable{Libiada.Web.Models.CalculatorsData.SelectListItemWithNature}"/>.
     /// </returns>
     /// <exception cref="TypeArgumentException">
     /// Thrown if type argument is not enum.

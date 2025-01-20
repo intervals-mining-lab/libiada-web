@@ -71,16 +71,16 @@ public class FmotifsDictionaryController : SequencesMattersController
 
         var musicSequence = dbSequence.ToMusicSequence();
 
-        var musicChainAlphabet = musicSequence.Alphabet.Select(el => db.Fmotifs.Single(f => f.Id == el)).ToList();
+        var musicSequenceAlphabet = musicSequence.Alphabet.Select(el => db.Fmotifs.Single(f => f.Id == el)).ToList();
         var sortedFmotifs = new Dictionary<Database.Models.Fmotif, int>();
-        for (int i = 0; i < musicChainAlphabet.Count; i++)
+        for (int i = 0; i < musicSequenceAlphabet.Count; i++)
         {
-            sortedFmotifs.Add(musicChainAlphabet[i], musicSequence.Order.Count(el => el == i + 1));
+            sortedFmotifs.Add(musicSequenceAlphabet[i], musicSequence.Order.Count(el => el == i + 1));
         }
 
         sortedFmotifs = sortedFmotifs.OrderByDescending(pair => pair.Value).ToDictionary(pair => pair.Key, pair => pair.Value);
 
-        List<Fmotif> fmotifsChain = [];
+        List<Fmotif> fmotifsSequence = [];
         foreach (var fmotif in sortedFmotifs.Keys)
         {
             var newFmotif = new Fmotif(fmotif.FmotifType, musicSequence.PauseTreatment, fmotif.Id);
@@ -105,12 +105,12 @@ public class FmotifsDictionaryController : SequencesMattersController
                 newFmotif.NoteList.Add(newNote);
             }
 
-            fmotifsChain.Add(newFmotif);
+            fmotifsSequence.Add(newFmotif);
         }
 
         var result = new Dictionary<string, object>
         {
-            { "fmotifs", fmotifsChain },
+            { "fmotifs", fmotifsSequence },
             { "sequentialTransfer", musicSequence.SequentialTransfer }
         };
         ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object> { { "data", result } });

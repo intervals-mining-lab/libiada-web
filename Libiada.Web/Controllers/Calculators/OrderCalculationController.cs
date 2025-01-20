@@ -87,7 +87,7 @@ public class OrderCalculationController : AbstractResultController
             }
             for (int j = 0; j < orders.Count; j++)
             {
-                var sequence = new Chain(orders[j].Select(Convert.ToInt16).ToArray());
+                var sequence = new ComposedSequence(orders[j].Select(Convert.ToInt16).ToArray());
                 characteristics[j] = new double[characteristicLinkIds.Length];
                 for (int k = 0; k < characteristicLinkIds.Length; k++)
                 {

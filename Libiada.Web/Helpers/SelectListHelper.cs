@@ -11,7 +11,7 @@ public static class SelectListHelper
     /// Matters in-memory cache..
     /// </param>
     /// <returns>
-    /// The <see cref="IEnumerable{MattersTableRow}"/>.
+    /// The <see cref="IEnumerable{Libiada.Web.Models.CalculatorsData.MattersTableRow}"/>.
     /// </returns>
     public static IEnumerable<MattersTableRow> GetMatterSelectList(Cache cache)
     {
@@ -31,7 +31,7 @@ public static class SelectListHelper
     /// Matters in-memory cache.
     /// </param>
     /// <returns>
-    /// The <see cref="IEnumerable{MattersTableRow}"/>.
+    /// The <see cref="IEnumerable{Libiada.Web.Models.CalculatorsData.MattersTableRow}"/>.
     /// </returns>
     public static IEnumerable<MattersTableRow> GetMatterSelectList(Func<Matter, bool> filter, Func<Matter, bool> selectionFilter, Cache cache)
     {
@@ -49,7 +49,7 @@ public static class SelectListHelper
     /// The sselection condition.
     /// </param>
     /// <returns>
-    /// The <see cref="T:IEnumerable{MattersTableRow}"/>.
+    /// The <see cref="IEnumerable{Libiada.Web.Models.CalculatorsData.MattersTableRow}"/>.
     /// </returns>
     public static IEnumerable<MattersTableRow> GetMatterSelectList(IEnumerable<Matter> matters, Func<Matter, bool> selected)
     {
@@ -63,7 +63,7 @@ public static class SelectListHelper
     /// The database connection.
     /// </param>
     /// <returns>
-    /// The <see cref="IEnumerable{MattersTableRow}"/>.
+    /// The <see cref="IEnumerable{Libiada.Web.Models.CalculatorsData.MattersTableRow}"/>.
     /// </returns>
     public static IEnumerable<MattersTableRow> GetSequenceGroupSelectList(Func<SequenceGroup, bool> filter, LibiadaDatabaseEntities db)
     {
@@ -77,7 +77,7 @@ public static class SelectListHelper
     /// The database connection.
     /// </param>
     /// <returns>
-    /// The <see cref="IEnumerable{MattersTableRow}"/>.
+    /// The <see cref="IEnumerable{Libiada.Web.Models.CalculatorsData.MattersTableRow}"/>.
     /// </returns>
     public static IEnumerable<MattersTableRow> GetSequenceGroupSelectList(LibiadaDatabaseEntities db)
     {
@@ -91,7 +91,7 @@ public static class SelectListHelper
     /// The database connection.
     /// </param>
     /// <returns>
-    ///  The <see cref="T:IEnumerable{SelectListItemWithNature}"/>.
+    ///  The <see cref="IEnumerable{Libiada.Web.Models.CalculatorsData.SelectListItemWithNature}"/>.
     /// </returns>
     public static IEnumerable<SelectListItemWithNature> GetMultisequenceSelectList(LibiadaDatabaseEntities db)
     {

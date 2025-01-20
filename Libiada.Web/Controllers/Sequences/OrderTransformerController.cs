@@ -88,12 +88,12 @@ public class OrderTransformerController : AbstractResultController
             using var db = dbFactory.CreateDbContext();
             var sequenceId = db.CombinedSequenceEntities.Single(c => c.MatterId == matterId).Id;
             using var sequenceRepository = sequenceRepositoryFactory.Create();
-            var sequence = sequenceRepository.GetLibiadaChain(sequenceId);
+            var sequence = sequenceRepository.GetLibiadaComposedSequence(sequenceId);
             for (int j = 0; j < iterationsCount; j++)
             {
                 for (int i = 0; i < transformationsSequence.Length; i++)
                 {
-                    sequence = transformationsSequence[i] == OrderTransformation.Dissimilar ? DissimilarChainFactory.Create(sequence)
+                    sequence = transformationsSequence[i] == OrderTransformation.Dissimilar ? DissimilarSequenceFactory.Create(sequence)
                                                          : HighOrderFactory.Create(sequence, EnumExtensions.GetLink(transformationsSequence[i]));
                 }
             }
@@ -102,7 +102,7 @@ public class OrderTransformerController : AbstractResultController
 
             var result = new Dictionary<string, object>
             {
-                { "chain", sequence.ToString(" ") },
+                { "sequence", sequence.ToString(" ") },
                 { "transformationsList", transformations },
                 { "iterationsCount", iterationsCount }
             };

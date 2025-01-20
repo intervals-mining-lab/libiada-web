@@ -11,8 +11,8 @@
     <div ng-controller="LocalCalculationResultCtrl">
         <div ng-disabled="loading">
             <input type="button" class="btn btn-secondary mb-2" ng-click="changeCharacteristicsTableVisibility()" value="Show characteristics table" />
-            <div ng-repeat="chainsCharacteristics in ::characteristics">
-                <h4>{{::$index+1}}. {{::chainsCharacteristics.MatterName}}</h4>
+            <div ng-repeat="sequencesCharacteristics in ::characteristics">
+                <h4>{{::$index+1}}. {{::sequencesCharacteristics.MatterName}}</h4>
                 <table ng-if="isCharacteristicsTableVisible" st-table="characteristics" class="table table-bordered table-hover" ng-cloak>
                     <thead>
                         <tr>
@@ -23,7 +23,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="fragmentsData in ::chainsCharacteristics.FragmentsData">
+                        <tr ng-repeat="fragmentsData in ::sequencesCharacteristics.FragmentsData">
                             <td ng-bind="::fragmentsData.Name" />
                             <td ng-bind="::fragmentsData.Start" />
                             <td ng-bind="::fragmentsData.Length" />

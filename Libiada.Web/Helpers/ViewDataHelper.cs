@@ -60,7 +60,7 @@ public class ViewDataHelper : IViewDataHelper
     /// Fills matter creation data.
     /// </summary>
     /// <returns>
-    /// The <see cref="Dictionary{String, Object}"/>.
+    /// The <see cref="Dictionary{string, object}"/>.
     /// </returns>
     public Dictionary<string, object> FillMatterCreationViewData()
     {
@@ -116,7 +116,7 @@ public class ViewDataHelper : IViewDataHelper
     /// The submit button name.
     /// </param>
     /// <returns>
-    /// The <see cref="Dictionary{String, Object}"/>.
+    /// The <see cref="Dictionary{string, object}"/>.
     /// </returns>
     public Dictionary<string, object> FillViewData(int minSelectedMatters,
                                                    int maxSelectedMatters,
@@ -145,7 +145,7 @@ public class ViewDataHelper : IViewDataHelper
     /// The submit button name.
     /// </param>
     /// <returns>
-    /// The <see cref="Dictionary{String, Object}"/>.
+    /// The <see cref="Dictionary{string, object}"/>.
     /// </returns>
     public Dictionary<string, object> FillViewData(int minSelectedMatters,
                                                    int maxSelectedMatters,
@@ -201,7 +201,7 @@ public class ViewDataHelper : IViewDataHelper
     /// The submit button name.
     /// </param>
     /// <returns>
-    /// The <see cref="Dictionary{String, Object}"/>.
+    /// The <see cref="Dictionary{string, object}"/>.
     /// </returns>
     public Dictionary<string, object> FillViewData(int minSelectedMatters, int maxSelectedMatters, string submitName)
     {
@@ -224,7 +224,7 @@ public class ViewDataHelper : IViewDataHelper
     /// The submit button name.
     /// </param>
     /// <returns>
-    /// The <see cref="Dictionary{String, Object}"/>.
+    /// The <see cref="Dictionary{string, object}"/>.
     /// </returns>
     public Dictionary<string, object> FillViewData(CharacteristicCategory characteristicsType, int minSelectedMatters, int maxSelectedMatters, string submitName)
     {
@@ -245,7 +245,7 @@ public class ViewDataHelper : IViewDataHelper
     /// The submit button name.
     /// </param>
     /// <returns>
-    /// The <see cref="Dictionary{String, Object}"/>.
+    /// The <see cref="Dictionary{string, object}"/>.
     /// </returns>
     public Dictionary<string, object> FillSubsequencesViewData(int minSelectedMatters, int maxSelectedMatters, string submitName)
     {
@@ -277,7 +277,7 @@ public class ViewDataHelper : IViewDataHelper
     /// The characteristics category.
     /// </param>
     /// <returns>
-    /// The <see cref="T:List"/>.
+    /// The <see cref="Dictionary{string, object}"/>.
     /// </returns>
     /// <exception cref="InvalidEnumArgumentException">
     /// Thrown if <see cref="CharacteristicCategory"/> is unknown.
@@ -360,7 +360,7 @@ public class ViewDataHelper : IViewDataHelper
     /// The maximum selected matters.
     /// </param>
     /// <returns>
-    /// The <see cref="Dictionary{String, Object}"/>.
+    /// The <see cref="Dictionary{string, object}"/>.
     /// </returns>
     public Dictionary<string, object> GetMattersData(int minSelectedMatters, int maxSelectedMatters)
     {
@@ -404,7 +404,7 @@ public class ViewDataHelper : IViewDataHelper
     /// Filter for matters.
     /// </param>
     /// <returns>
-    /// The <see cref="Dictionary{String, Object}"/>.
+    /// The <see cref="Dictionary{string, object}"/>.
     /// </returns>
     private Dictionary<string, object> GetMattersData(int minSelectedMatters,
                                                       int maxSelectedMatters,
@@ -429,7 +429,7 @@ public class ViewDataHelper : IViewDataHelper
     /// Filter for matter selection.
     /// </param>
     /// <returns>
-    /// The <see cref="Dictionary{String, Object}"/>.
+    /// The <see cref="Dictionary{string, object}"/>.
     /// </returns>
     private Dictionary<string, object> GetMattersData(int minSelectedMatters,
                                                       int maxSelectedMatters,

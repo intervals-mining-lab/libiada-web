@@ -127,10 +127,10 @@ public class SubsequencesComparerController : AbstractResultController
 
 
             // Sequences characteristic
-            long[] chains = geneticSequenceRepository.GetNucleotideSequenceIds(matterIds);
+            long[] sequences = geneticSequenceRepository.GetNucleotideSequenceIds(matterIds);
 
             // Sequences characteristic
-            matterIds = OrderMatterIds(matterIds, characteristicLinkId, chains);
+            matterIds = OrderMatterIds(matterIds, characteristicLinkId, sequences);
 
             // Subsequences characteristics
             var parentSequences = db.CombinedSequenceEntities.Include(s => s.Matter)
@@ -305,16 +305,16 @@ public class SubsequencesComparerController : AbstractResultController
     /// <param name="characteristicLinkId">
     /// The characteristic link id.
     /// </param>
-    /// <param name="chains">
-    /// The chains.
+    /// <param name="sequences">
+    /// The sequences.
     /// </param>
     /// <returns>
     /// The <see cref="T:long[]"/>.
     /// </returns>
     [NonAction]
-    private long[] OrderMatterIds(long[] matterIds, short characteristicLinkId, long[] chains)
+    private long[] OrderMatterIds(long[] matterIds, short characteristicLinkId, long[] sequences)
     {
-        double[] completeSequencesCharacteristics = sequencesCharacteristicsCalculator.Calculate(chains, characteristicLinkId);
+        double[] completeSequencesCharacteristics = sequencesCharacteristicsCalculator.Calculate(sequences, characteristicLinkId);
 
         var matterCharacteristics = new (long matterId, double charcterisitcValue)[matterIds.Length];
 
@@ -438,7 +438,7 @@ public class SubsequencesComparerController : AbstractResultController
     /// The percentage difference.
     /// </param>
     /// <returns>
-    /// The <see cref="T:List{((int, int), (int, int), double)}"/>.
+    /// The <see cref="List{((int, int), (int, int), double)}"/>.
     /// </returns>
     [NonAction]
     private List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> ExtractSimilarPairs(
@@ -498,7 +498,7 @@ public class SubsequencesComparerController : AbstractResultController
     /// The list for pairs extraction.
     /// </param>
     /// <returns>
-    /// The <see cref="T:List{((int,int), (int,int),double)}"/>.
+    /// The <see cref="List{((int,int), (int,int),double)}"/>.
     /// </returns>
     [NonAction]
     private List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> ExtractAllPossiblePairs(
@@ -549,7 +549,7 @@ public class SubsequencesComparerController : AbstractResultController
     /// Distance between sets.
     /// </param>
     /// <returns>
-    /// The <see cref="T:List{((int,int), (int,int),double)}"/>.
+    /// The <see cref="List{((int,int), (int,int),double)}"/>.
     /// </returns>
     [NonAction]
     private List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> ExtractAllPossiblePairs(

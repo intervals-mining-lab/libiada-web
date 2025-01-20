@@ -116,7 +116,7 @@ public class OrderTransformationCalculationController : AbstractResultController
         return CreateTask(() =>
         {
             Dictionary<long, string> mattersNames = cache.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
-            Chain[][] sequences = new Chain[matterIds.Length][];
+            ComposedSequence[][] sequences = new ComposedSequence[matterIds.Length][];
 
             var sequenceRepository = new CombinedSequenceEntityRepository(dbFactory, cache);
             long[][] sequenceIds = sequenceRepository.GetSequenceIds(matterIds,
@@ -128,10 +128,10 @@ public class OrderTransformationCalculationController : AbstractResultController
                                                                            trajectories);
             for (int i = 0; i < matterIds.Length; i++)
             {
-                sequences[i] = new Chain[characteristicLinkIds.Length];
+                sequences[i] = new ComposedSequence[characteristicLinkIds.Length];
                 for (int j = 0; j < characteristicLinkIds.Length; j++)
                 {
-                    sequences[i][j] = sequenceRepository.GetLibiadaChain(sequenceIds[i][j]);
+                    sequences[i][j] = sequenceRepository.GetLibiadaComposedSequence(sequenceIds[i][j]);
                 }
             }
 
@@ -147,12 +147,12 @@ public class OrderTransformationCalculationController : AbstractResultController
                     Notation notation = notations[j];
 
 
-                    Chain sequence = sequences[i][j];
+                    ComposedSequence sequence = sequences[i][j];
                     for (int l = 0; l < iterationsCount; l++)
                     {
                         for (int k = 0; k < transformationsSequence.Length; k++)
                         {
-                            sequence = transformationsSequence[k] == OrderTransformation.Dissimilar ? DissimilarChainFactory.Create(sequence)
+                            sequence = transformationsSequence[k] == OrderTransformation.Dissimilar ? DissimilarSequenceFactory.Create(sequence)
                                                                  : HighOrderFactory.Create(sequence, EnumExtensions.GetLink(transformationsSequence[k]));
                         }
                     }

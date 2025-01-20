@@ -90,20 +90,20 @@ public class SequenceTransformerController : Controller
         foreach (var matterId in matterIds)
         {
             long sequenceId = db.CombinedSequenceEntities.Single(c => c.MatterId == matterId && c.Notation == Notation.Nucleotides).Id;
-            Chain sourceChain = sequenceRepository.GetLibiadaChain(sequenceId);
+            ComposedSequence sourceSequence = sequenceRepository.GetLibiadaComposedSequence(sequenceId);
 
-            BaseChain transformedChain = transformType.Equals("toAmino")
-                                             ? DnaTransformer.EncodeAmino(sourceChain)
-                                             : DnaTransformer.EncodeTriplets(sourceChain);
+            Sequence transformedSequence = transformType.Equals("toAmino")
+                                             ? DnaTransformer.EncodeAmino(sourceSequence)
+                                             : DnaTransformer.EncodeTriplets(sourceSequence);
 
-            long[] alphabet = elementRepository.ToDbElements(transformedChain.Alphabet, notation, false);
+            long[] alphabet = elementRepository.ToDbElements(transformedSequence.Alphabet, notation, false);
 
             var result = new DnaSequence
             {
                 MatterId = matterId,
                 Notation = notation,
                 Alphabet = alphabet,
-                Order = transformedChain.Order,
+                Order = transformedSequence.Order,
                 Partial = false
             };
 

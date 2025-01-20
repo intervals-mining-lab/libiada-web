@@ -85,7 +85,7 @@ public class IntervalsCharacteristicsDistributionController : AbstractResultCont
                 _ => throw new ArgumentException($"Invalid type of order generator param: {generateStrict}"),
             };
             CustomSequencesCharacterisitcsCalculator calculator = new(characteristicTypeLinkRepository, characteristicLinkIds);
-            var characteristics = calculator.Calculate(orders.Select(order => new Chain(order))).ToList();
+            var characteristics = calculator.Calculate(orders.Select(order => new ComposedSequence(order))).ToList();
             List<SequenceCharacteristics> sequencesCharacteristics = [];
             for (int i = 0; i < orders.Count; i++)
             {

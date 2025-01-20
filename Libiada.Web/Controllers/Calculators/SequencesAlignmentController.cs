@@ -182,7 +182,7 @@ public class SequencesAlignmentController : AbstractResultController
     /// The validation type.
     /// </param>
     /// <returns>
-    /// The <see cref="Func{Double, Double, Double}"/>.
+    /// The <see cref="Func{double, double, double}"/>.
     /// </returns>
     /// <exception cref="ArgumentException">
     /// Thrown if validation type is unknown.
@@ -246,7 +246,7 @@ public class SequencesAlignmentController : AbstractResultController
     /// The list.
     /// </param>
     /// <returns>
-    /// The <see cref="List{Double}"/>.
+    /// The <see cref="List{double}"/>.
     /// </returns>
 
     [NonAction]

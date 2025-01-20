@@ -227,7 +227,7 @@ public class CongenericCalculationController : AbstractResultController
                         sequenceId = db.CombinedSequenceEntities.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
                     }
 
-                    Chain chain = sequenceRepository.GetLibiadaChain(sequenceId);
+                    ComposedSequence sequence = sequenceRepository.GetLibiadaComposedSequence(sequenceId);
 
                     // theoretical frequencies of orlov criterion
                     if (theoretical)
@@ -235,23 +235,23 @@ public class CongenericCalculationController : AbstractResultController
                         theoreticalRanks[w].Add([]);
                         ICongenericCalculator countCalculator = CongenericCalculatorsFactory.CreateCalculator(CongenericCharacteristic.ElementsCount);
                         List<int> counts = [];
-                        for (int f = 0; f < chain.Alphabet.Cardinality; f++)
+                        for (int f = 0; f < sequence.Alphabet.Cardinality; f++)
                         {
-                            counts.Add((int)countCalculator.Calculate(chain.CongenericChain(f), Link.NotApplied));
+                            counts.Add((int)countCalculator.Calculate(sequence.CongenericSequence(f), Link.NotApplied));
                         }
 
                         ICongenericCalculator frequencyCalculator = CongenericCalculatorsFactory.CreateCalculator(CongenericCharacteristic.Probability);
                         List<double> frequency = [];
-                        for (int f = 0; f < chain.Alphabet.Cardinality; f++)
+                        for (int f = 0; f < sequence.Alphabet.Cardinality; f++)
                         {
-                            frequency.Add(frequencyCalculator.Calculate(chain.CongenericChain(f), Link.NotApplied));
+                            frequency.Add(frequencyCalculator.Calculate(sequence.CongenericSequence(f), Link.NotApplied));
                         }
 
                         double maxFrequency = frequency.Max();
                         double k = 1 / System.Math.Log(counts.Max());
                         double b = (k / maxFrequency) - 1;
                         int n = 1;
-                        double plow = chain.Length;
+                        double plow = sequence.Length;
                         double p = k / (b + n);
                         while (p >= (1 / plow))
                         {
@@ -285,6 +285,7 @@ public class CongenericCalculationController : AbstractResultController
     [NonAction]
     private void SortKeyValuePairList(List<KeyValuePair<int, double>> arrayForSort)
     {
+        //TODO: refactor this to use tuples
         arrayForSort.Sort((firstPair, nextPair) => nextPair.Value.CompareTo(firstPair.Value));
     }
 }

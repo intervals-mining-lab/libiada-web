@@ -126,16 +126,16 @@ public class SequenceMixerController : Controller
                                                           && m.SequentialTransfer == sequentialTransfer).Id,
             _ => db.CombinedSequenceEntities.Single(c => c.MatterId == matterId && c.Notation == notation).Id,
         };
-        BaseChain chain = sequenceRepository.GetLibiadaBaseChain(sequenceId);
+        Sequence sequence = sequenceRepository.GetLibiadaSequence(sequenceId);
         for (int i = 0; i < scrambling; i++)
         {
-            int firstIndex = randomGenerator.Next(chain.Length);
-            int secondIndex = randomGenerator.Next(chain.Length);
+            int firstIndex = randomGenerator.Next(sequence.Length);
+            int secondIndex = randomGenerator.Next(sequence.Length);
 
-            IBaseObject firstElement = chain[firstIndex];
-            IBaseObject secondElement = chain[secondIndex];
-            chain[firstIndex] = secondElement;
-            chain[secondIndex] = firstElement;
+            IBaseObject firstElement = sequence[firstIndex];
+            IBaseObject secondElement = sequence[secondIndex];
+            sequence[firstIndex] = secondElement;
+            sequence[secondIndex] = firstElement;
         }
 
         var resultMatter = new Matter
@@ -146,7 +146,7 @@ public class SequenceMixerController : Controller
 
         matterRepository.SaveToDatabase(resultMatter);
 
-        long[] alphabet = elementRepository.ToDbElements(chain.Alphabet, notation, false);
+        long[] alphabet = elementRepository.ToDbElements(sequence.Alphabet, notation, false);
 
         CombinedSequenceEntity dbSequence = db.CombinedSequenceEntities.Single(c => c.Id == sequenceId);
 
@@ -155,7 +155,7 @@ public class SequenceMixerController : Controller
             Notation = notation,
             MatterId = resultMatter.Id,
             Alphabet = alphabet,
-            Order = chain.Order,
+            Order = sequence.Order,
             PauseTreatment = dbSequence.PauseTreatment,
             SequentialTransfer = dbSequence.SequentialTransfer,
             Language = dbSequence.Language,

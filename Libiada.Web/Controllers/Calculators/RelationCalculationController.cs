@@ -141,7 +141,7 @@ public class RelationCalculationController : AbstractResultController
                                                                       sequentialTransfer,
                                                                       trajectory).Single();
 
-            Chain currentChain = sequenceRepository.GetLibiadaChain(sequenceId);
+            ComposedSequence currentSequence = sequenceRepository.GetLibiadaComposedSequence(sequenceId);
             CombinedSequenceEntity sequence = db.CombinedSequenceEntities.Include(cs => cs.Matter).Single(m => m.Id == sequenceId);
 
             var result = new Dictionary<string, object>
@@ -158,11 +158,11 @@ public class RelationCalculationController : AbstractResultController
 
             if (frequencyFilter)
             {
-                CalculateFrequencyCharacteristics(characteristicLinkId, frequencyCount, currentChain, sequenceId, calculator, link);
+                CalculateFrequencyCharacteristics(characteristicLinkId, frequencyCount, currentSequence, sequenceId, calculator, link);
             }
             else
             {
-                CalculateAllCharacteristics(characteristicLinkId, sequenceId, currentChain, calculator, link);
+                CalculateAllCharacteristics(characteristicLinkId, sequenceId, currentSequence, calculator, link);
             }
 
             if (filter)
@@ -226,8 +226,8 @@ public class RelationCalculationController : AbstractResultController
     /// <param name="sequenceId">
     /// The sequence id.
     /// </param>
-    /// <param name="chain">
-    /// The chain.
+    /// <param name="sequence">
+    /// The sequence.
     /// </param>
     /// <param name="calculator">
     /// The calculator.
@@ -236,14 +236,14 @@ public class RelationCalculationController : AbstractResultController
     /// The link.
     /// </param>
     [NonAction]
-    private void CalculateAllCharacteristics(short characteristicLinkId, long sequenceId, Chain chain, IBinaryCalculator calculator, Link link)
+    private void CalculateAllCharacteristics(short characteristicLinkId, long sequenceId, ComposedSequence sequence, IBinaryCalculator calculator, Link link)
     {
         List<BinaryCharacteristicValue> newCharacteristics = [];
         BinaryCharacteristicValue[] databaseCharacteristics = db.BinaryCharacteristicValues
             .Where(b => b.SequenceId == sequenceId && b.CharacteristicLinkId == characteristicLinkId)
             .ToArray();
         int calculatedCount = databaseCharacteristics.Length;
-        int alphabetCardinality = chain.Alphabet.Cardinality;
+        int alphabetCardinality = sequence.Alphabet.Cardinality;
 
         if (calculatedCount < alphabetCardinality * alphabetCardinality)
         {
@@ -256,7 +256,7 @@ public class RelationCalculationController : AbstractResultController
                     long secondElementId = sequenceElements[j];
                     if (i != j && !databaseCharacteristics.Any(b => b.FirstElementId == firstElementId && b.SecondElementId == secondElementId))
                     {
-                        double result = calculator.Calculate(chain.GetRelationIntervalsManager(i + 1, j + 1), link);
+                        double result = calculator.Calculate(sequence.GetRelationIntervalsManager(i + 1, j + 1), link);
 
                         newCharacteristics.Add(characteristicTypeLinkRepository.CreateCharacteristic(sequenceId, characteristicLinkId, firstElementId, secondElementId, result));
                     }
@@ -277,8 +277,8 @@ public class RelationCalculationController : AbstractResultController
     /// <param name="frequencyCount">
     /// The frequency count.
     /// </param>
-    /// <param name="chain">
-    /// The chain.
+    /// <param name="sequence">
+    /// The sequence.
     /// </param>
     /// <param name="sequenceId">
     /// The sequence id.
@@ -290,7 +290,7 @@ public class RelationCalculationController : AbstractResultController
     /// The link.
     /// </param>
     [NonAction]
-    private void CalculateFrequencyCharacteristics(short characteristicLinkId, int frequencyCount, Chain chain, long sequenceId, IBinaryCalculator calculator, Link link)
+    private void CalculateFrequencyCharacteristics(short characteristicLinkId, int frequencyCount, ComposedSequence sequence, long sequenceId, IBinaryCalculator calculator, Link link)
     {
         long[] sequenceElements = db.CombinedSequenceEntities.Single(cs => cs.Id == sequenceId).Alphabet;
         List<BinaryCharacteristicValue> newCharacteristics = [];
@@ -299,12 +299,12 @@ public class RelationCalculationController : AbstractResultController
             .ToArray();
 
         // calculating frequencies of elements in alphabet
-        Alphabet alphabet = chain.Alphabet;
+        Alphabet alphabet = sequence.Alphabet;
         var frequencies = new (IBaseObject element, double frequency)[alphabet.Cardinality];
         for (int f = 0; f < alphabet.Cardinality; f++)
         {
             var probabilityCalculator = new Probability();
-            double result = probabilityCalculator.Calculate(chain.CongenericChain(f), Link.NotApplied);
+            double result = probabilityCalculator.Calculate(sequence.CongenericSequence(f), Link.NotApplied);
             frequencies[f] = (alphabet[f], result);
         }
 
@@ -324,7 +324,7 @@ public class RelationCalculationController : AbstractResultController
                 // searching characteristic in database
                 if (!databaseCharacteristics.Any(b => b.FirstElementId == firstElementId && b.SecondElementId == secondElementId))
                 {
-                    double result = calculator.Calculate(chain.GetRelationIntervalsManager(i + 1, j + 1), link);
+                    double result = calculator.Calculate(sequence.GetRelationIntervalsManager(i + 1, j + 1), link);
 
                     newCharacteristics.Add(characteristicTypeLinkRepository.CreateCharacteristic(sequenceId, characteristicLinkId, firstElementId, secondElementId, result));
                 }

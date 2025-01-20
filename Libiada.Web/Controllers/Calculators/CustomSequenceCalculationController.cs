@@ -102,7 +102,7 @@ public class CustomSequenceCalculationController : AbstractResultController
             {
                 int sequencesCount = localFile ? files.Count : customSequences.Length;
                 string[] sequencesNames = new string[sequencesCount];
-                var sequences = new Chain[sequencesCount];
+                var sequences = new ComposedSequence[sequencesCount];
                 if (localFile)
                 {
                     for (int i = 0; i < sequencesCount; i++)
@@ -119,12 +119,12 @@ public class CustomSequenceCalculationController : AbstractResultController
                                     string stringTextSequence = sr.ReadToEnd();
                                     if ((bool)toLower) stringTextSequence = stringTextSequence.ToLower();
                                     if ((bool)removePunctuation) stringTextSequence = Regex.Replace(stringTextSequence, @"[^\w\s]", "");
-                                    sequences[i] = new Chain(stringTextSequence);
+                                    sequences[i] = new ComposedSequence(stringTextSequence);
                                 }
                                 break;
                             case "image":
                                 var image = Image.Load<Rgba32>(fileStreams[i]);
-                                BaseChain sequence = ImageProcessor.ProcessImage(image, [], [], new LineOrderExtractor());
+                                Sequence sequence = ImageProcessor.ProcessImage(image, [], [], new LineOrderExtractor());
                                 var alphabet = new Alphabet { NullValue.Instance() };
                                 Alphabet incompleteAlphabet = sequence.Alphabet;
                                 for (int j = 0; j < incompleteAlphabet.Cardinality; j++)
@@ -132,12 +132,12 @@ public class CustomSequenceCalculationController : AbstractResultController
                                     alphabet.Add(incompleteAlphabet[j]);
                                 }
 
-                                sequences[i] = new Chain(sequence.Order, alphabet);
+                                sequences[i] = new ComposedSequence(sequence.Order, alphabet);
                                 break;
                             case "genetic":
                                 Bio.ISequence fastaSequence = NcbiHelper.GetFastaSequence(fileStreams[i]);
                                 string stringSequence = fastaSequence.ConvertToString();
-                                sequences[i] = new Chain(stringSequence);
+                                sequences[i] = new ComposedSequence(stringSequence);
                                 sequencesNames[i] = fastaSequence.ID;
                                 break;
                             case "wavFile":
@@ -170,7 +170,7 @@ public class CustomSequenceCalculationController : AbstractResultController
                                 //shortArray = Amplitude(shortArray, 20);
                                 shortArray = Sampling(shortArray, 50);
                                 //shortArray = shortArray.Select(s => (short)(s / 10)).ToArray();
-                                sequences[i] = new Chain(shortArray);
+                                sequences[i] = new ComposedSequence(shortArray);
                                 break;
                             default:
                                 throw new ArgumentException("Unknown file type", nameof(fileType));
@@ -181,7 +181,7 @@ public class CustomSequenceCalculationController : AbstractResultController
                 {
                     for (int i = 0; i < sequencesCount; i++)
                     {
-                        sequences[i] = delimiter != null ? new Chain(customSequences[i].Split((char)delimiter, StringSplitOptions.RemoveEmptyEntries).Select(el => (IBaseObject)new ValueString(el)).ToList()) : new Chain(customSequences[i]);
+                        sequences[i] = delimiter != null ? new ComposedSequence(customSequences[i].Split((char)delimiter, StringSplitOptions.RemoveEmptyEntries).Select(el => (IBaseObject)new ValueString(el)).ToList()) : new ComposedSequence(customSequences[i]);
                         sequencesNames[i] = $"Custom sequence {i + 1}. Length: {customSequences[i].Length}";
                     }
                 }

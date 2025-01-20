@@ -130,14 +130,14 @@ public class OrderTransformationCharacteristicsDynamicVisualizationController : 
                 FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
                 IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
 
-                Chain sequence = sequenceRepository.GetLibiadaChain(sequenceId);
+                ComposedSequence sequence = sequenceRepository.GetLibiadaComposedSequence(sequenceId);
 
                 double[] characteristics = new double[transformationsSequence.Length * iterationsCount];
                 for (int j = 0; j < iterationsCount; j++)
                 {
                     for (int k = 0; k < transformationsSequence.Length; k++)
                     {
-                        sequence = transformationsSequence[k] == OrderTransformation.Dissimilar ? DissimilarChainFactory.Create(sequence)
+                        sequence = transformationsSequence[k] == OrderTransformation.Dissimilar ? DissimilarSequenceFactory.Create(sequence)
                                                              : HighOrderFactory.Create(sequence, transformationsSequence[k].GetLink());
                         characteristics[transformationsSequence.Length * j + k] = calculator.Calculate(sequence, link);
                     }
