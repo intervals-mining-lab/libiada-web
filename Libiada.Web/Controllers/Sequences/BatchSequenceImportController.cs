@@ -73,9 +73,9 @@ public class BatchSequenceImportController : AbstractResultController
             List<MatterImportResult> importResults = new(accessions.Length);
             string[] accessionsToImport;
 
-            var dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
+            var geneticSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
             string[] existingAccessions;
-            (existingAccessions, accessionsToImport) = dnaSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
+            (existingAccessions, accessionsToImport) = geneticSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
 
             importResults.AddRange(existingAccessions.ConvertAll(existingAccession => new MatterImportResult
             {
@@ -98,7 +98,7 @@ public class BatchSequenceImportController : AbstractResultController
 
                     // TODO: refactor this to use DI (and probably factories) 
                     var matterRepository = new MatterRepository(db, cache);
-                    var dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
+                    var geneticSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
                     Matter matter = matterRepository.CreateMatterFromGenBankMetadata(metadata);
 
                     importResult.SequenceType = matter.SequenceType.GetDisplayValue();
@@ -111,7 +111,7 @@ public class BatchSequenceImportController : AbstractResultController
 
                     bool partial = metadata.Definition.ToLower().Contains("partial");
 
-                    var sequence = new DnaSequence
+                    var sequence = new GeneticSequence
                     {
                         Matter = matter,
                         Notation = Notation.Nucleotides,
@@ -121,7 +121,7 @@ public class BatchSequenceImportController : AbstractResultController
                     };
 
                     
-                    dnaSequenceRepository.Create(sequence, bioSequence);
+                    geneticSequenceRepository.Create(sequence, bioSequence);
 
                     (importResult.Result, importResult.Status) = importGenes ?
                                                          ImportFeatures(metadata, sequence) :
@@ -187,7 +187,7 @@ public class BatchSequenceImportController : AbstractResultController
     /// and second element is import status as  string.
     /// </returns>
     [NonAction]
-    private (string result, string status) ImportFeatures(GenBankMetadata metadata, DnaSequence sequence)
+    private (string result, string status) ImportFeatures(GenBankMetadata metadata, GeneticSequence sequence)
     {
         try
         {

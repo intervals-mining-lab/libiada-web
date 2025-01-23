@@ -70,9 +70,9 @@ public class BatchGeneticImportFromGenBankSearchFileController : AbstractResultC
             List<MatterImportResult> importResults = new(accessions.Length);
             using var db = dbFactory.CreateDbContext();
             var matterRepository = new MatterRepository(db, cache);
-            var dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
+            var geneticSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
 
-            (string[] existingAccessions, string[] accessionsToImport) = dnaSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
+            (string[] existingAccessions, string[] accessionsToImport) = geneticSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
 
             importResults.AddRange(existingAccessions.ConvertAll(existingAccession => new MatterImportResult
             {
@@ -103,7 +103,7 @@ public class BatchGeneticImportFromGenBankSearchFileController : AbstractResultC
 
                     bool partial = metadata.Definition.Contains("partial", StringComparison.CurrentCultureIgnoreCase);
 
-                    var sequence = new DnaSequence
+                    var sequence = new GeneticSequence
                     {
                         Matter = matter,
                         Notation = Notation.Nucleotides,
@@ -112,7 +112,7 @@ public class BatchGeneticImportFromGenBankSearchFileController : AbstractResultC
                         Partial = partial
                     };
                     
-                    dnaSequenceRepository.Create(sequence, bioSequence);
+                    geneticSequenceRepository.Create(sequence, bioSequence);
 
                     (importResult.Result, importResult.Status) = importGenes ?
                                                      ImportFeatures(metadata, sequence) :
@@ -177,7 +177,7 @@ public class BatchGeneticImportFromGenBankSearchFileController : AbstractResultC
     /// and second element is import status as  string.
     /// </returns>
     [NonAction]
-    private (string result, string status) ImportFeatures(GenBankMetadata metadata, DnaSequence sequence)
+    private (string result, string status) ImportFeatures(GenBankMetadata metadata, GeneticSequence sequence)
     {
         try
         {

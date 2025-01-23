@@ -83,7 +83,7 @@ public class BatchGenesImportController : AbstractResultController
                                    .OrderBy(m => m.Id)
                                    .Select(m => m.Name)
                                    .ToArray();
-                DnaSequence[] parentSequences = db.CombinedSequenceEntities
+                GeneticSequence[] parentSequences = db.CombinedSequenceEntities
                                                   .Where(s => matterIds.Contains(s.MatterId))
                                                   .OrderBy(s => s.MatterId)
                                                   .Select(s => s.ToGeneticSequence())
@@ -98,7 +98,7 @@ public class BatchGenesImportController : AbstractResultController
 
                     try
                     {
-                        DnaSequence parentSequence = parentSequences[i];
+                        GeneticSequence parentSequence = parentSequences[i];
                         var subsequenceImporter = new SubsequenceImporter(db, parentSequence, ncbiHelper);
 
                         subsequenceImporter.CreateSubsequences();

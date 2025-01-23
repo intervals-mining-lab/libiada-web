@@ -119,7 +119,7 @@ public abstract class SequencesMattersController : AbstractResultController
                     case Nature.Genetic:
                         Bio.ISequence bioSequence = NcbiHelper.GetFastaSequence(sequenceStream);
                         var dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
-                        var dnaSequence = new DnaSequence
+                        var dnaSequence = new GeneticSequence
                         {
                             CreatorId = User.GetUserId(),
                             ModifierId = User.GetUserId(),

@@ -98,7 +98,7 @@ public class SequenceTransformerController : Controller
 
             long[] alphabet = elementRepository.ToDbElements(transformedSequence.Alphabet, notation, false);
 
-            var result = new DnaSequence
+            var result = new GeneticSequence
             {
                 MatterId = matterId,
                 Notation = notation,

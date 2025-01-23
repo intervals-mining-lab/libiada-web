@@ -78,7 +78,7 @@ public class GenesImportController : AbstractResultController
         {
             Dictionary<string, object> result;
             using var db = dbFactory.CreateDbContext();
-            DnaSequence parentSequence = db.CombinedSequenceEntities.Single(d => d.MatterId == matterId).ToGeneticSequence();
+            GeneticSequence parentSequence = db.CombinedSequenceEntities.Single(d => d.MatterId == matterId).ToGeneticSequence();
             var subsequenceImporter = new SubsequenceImporter(db, parentSequence, ncbiHelper);
             subsequenceImporter.CreateSubsequences();
 

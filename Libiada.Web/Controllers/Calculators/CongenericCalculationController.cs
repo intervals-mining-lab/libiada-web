@@ -248,6 +248,7 @@ public class CongenericCalculationController : AbstractResultController
                         }
 
                         double maxFrequency = frequency.Max();
+                        // TODO: check if this should be Log2
                         double k = 1 / System.Math.Log(counts.Max());
                         double b = (k / maxFrequency) - 1;
                         int n = 1;
