@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Matter>
+﻿@model IEnumerable<ResearchObject>
 <br />
 <div class="form-check my-2" ng-init="$ctrl.geneticNature = @((byte)Nature.Genetic)" ng-show="$ctrl.nature == $ctrl.geneticNature">
     <input type="checkbox"
@@ -7,14 +7,14 @@
            id="showRefSeqOnly"
            checked
            ng-model="$ctrl.showRefSeqOnly"
-           ng-change="$ctrl.toogleMattersVisibility(false)" />
+           ng-change="$ctrl.toogleResearchObjectsVisibility(false)" />
     <label class="form-check-label" for="showRefSeqOnly">
         Show only reference sequences
     </label>
 </div>
 <div class="mb-1 mt-2 btn-group" ng-if="::($ctrl.checkboxes && !$ctrl.displayMultisequenceNumber)" role="group" aria-label="Select / unselect vsible sequences">
-    <input type="button" class="btn btn-success" ng-click="$ctrl.selectAllVisibleMatters()" value="Select all visible sequences" />
-    <input type="button" class="btn btn-secondary" ng-click="$ctrl.unselectAllMatters()" value="Clear selection" />
+    <input type="button" class="btn btn-success" ng-click="$ctrl.selectAllVisibleResearchObjects()" value="Select all visible sequences" />
+    <input type="button" class="btn btn-secondary" ng-click="$ctrl.unselectAllResearchObjects()" value="Clear selection" />
 </div>
 <h4>Sequences:</h4>
 <table ng-cloak class="table table-bordered table-hover table-sm mb-3">
@@ -25,33 +25,33 @@
                 <div class="row">
                     <div class="col">
                         <input type="text"
-                               id="matterSearch"
+                               id="researchObjectSearch"
                                class="form-control"
                                placeholder="Start typing name to see results"
-                               ng-model="$ctrl.searchMatterText"
-                               ng-change="$ctrl.toogleMattersVisibility(false)" />
+                               ng-model="$ctrl.searchResearchObjectText"
+                               ng-change="$ctrl.toogleResearchObjectsVisibility(false)" />
                     </div>
-                    <div class="col" ng-show="!$ctrl.searchMatterText && $ctrl.group && $ctrl.sequenceType">
-                        or <input type="button" class="btn btn-outline-secondary" ng-click="$ctrl.toogleMattersVisibility(false, true)" value="show all" />
+                    <div class="col" ng-show="!$ctrl.searchResearchObjectText && $ctrl.group && $ctrl.sequenceType">
+                        or <input type="button" class="btn btn-outline-secondary" ng-click="$ctrl.toogleResearchObjectsVisibility(false, true)" value="show all" />
                     </div>
                 </div>
             </th>
             <th>
                 <select class="form-select"
-                        id="matterGroupSelect"
+                        id="researchObjectGroupSelect"
                         ng-model="$ctrl.group"
                         ng-options="g.Text for g in $ctrl.groups | filter:{ Nature: $ctrl.nature }"
-                        ng-change="$ctrl.toogleMattersVisibility($ctrl.groupAndTypeRequired)">
+                        ng-change="$ctrl.toogleResearchObjectsVisibility($ctrl.groupAndTypeRequired)">
                     <option ng-if="::!$ctrl.groupAndTypeRequired" value="">-- All groups --</option>
                 </select>
                 <input type="hidden" name="Group" ng-value="$ctrl.group.Value" />
             </th>
             <th>
                 <select class="form-select"
-                        id="matterSequenceTypeSelect"
+                        id="researchObjectSequenceTypeSelect"
                         ng-model="$ctrl.sequenceType"
                         ng-options="s.Text for s in $ctrl.sequenceTypes | filter:{ Nature: $ctrl.nature }"
-                        ng-change="$ctrl.toogleMattersVisibility($ctrl.groupAndTypeRequired)">
+                        ng-change="$ctrl.toogleResearchObjectsVisibility($ctrl.groupAndTypeRequired)">
                     <option ng-if="::!$ctrl.groupAndTypeRequired" value="">-- All sequence types --</option>
                 </select>
                 <input type="hidden" name="SequenceType" ng-value="$ctrl.sequenceType.Value" />
@@ -64,6 +64,6 @@
             <th>@(Html.DisplayNameFor(model => model.SequenceType))</th>
         </tr>
     </thead>
-    <tbody id="mattersSelectList">
+    <tbody id="researchObjectsSelectList">
     </tbody>
 </table>

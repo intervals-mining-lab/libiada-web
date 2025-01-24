@@ -42,7 +42,7 @@ public class LocalCalculationController : AbstractResultController
     /// <summary>
     /// Initializes a new instance of the <see cref="LocalCalculationController"/> class.
     /// </summary>
-    public LocalCalculationController(IViewDataHelper viewDataHelper, 
+    public LocalCalculationController(IViewDataHelper viewDataHelper,
                                       ITaskManager taskManager,
                                       ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
                                       IFullCharacteristicRepository characteristicTypeLinkRepository,
@@ -71,8 +71,8 @@ public class LocalCalculationController : AbstractResultController
     /// <summary>
     /// The index.
     /// </summary>
-    /// <param name="matterIds">
-    /// The matter ids.
+    /// <param name="researchObjectIds">
+    /// The research objects ids.
     /// </param>
     /// <param name="characteristicLinkIds">
     /// The characteristic type and link ids.
@@ -118,7 +118,7 @@ public class LocalCalculationController : AbstractResultController
     /// </returns>
     [HttpPost]
     public ActionResult Index(
-        long[] matterIds,
+        long[] researchObjectIds,
         short[] characteristicLinkIds,
         int length,
         int step,
@@ -136,23 +136,23 @@ public class LocalCalculationController : AbstractResultController
         return CreateTask(() =>
         {
             string[] characteristicNames = new string[characteristicLinkIds.Length];
-            var partNames = new List<string>[matterIds.Length];
-            var starts = new List<int>[matterIds.Length];
-            var lengthes = new List<int>[matterIds.Length];
-            var sequences = new ComposedSequence[matterIds.Length];
-            var mattersCharacteristics = new object[matterIds.Length];
+            var partNames = new List<string>[researchObjectIds.Length];
+            var starts = new List<int>[researchObjectIds.Length];
+            var lengthes = new List<int>[researchObjectIds.Length];
+            var sequences = new ComposedSequence[researchObjectIds.Length];
+            var researchObjectsCharacteristics = new object[researchObjectIds.Length];
 
             var calculators = new IFullCalculator[characteristicLinkIds.Length];
             var links = new Link[characteristicLinkIds.Length];
-            Array.Sort(matterIds);
-            Dictionary<long, Matter> matters = cache.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id);
+            Array.Sort(researchObjectIds);
+            Dictionary<long, ResearchObject> researchObjects = cache.ResearchObjects.Where(m => researchObjectIds.Contains(m.Id)).ToDictionary(m => m.Id);
             using var sequenceRepository = sequenceRepositoryFactory.Create();
-            for (int k = 0; k < matterIds.Length; k++)
+            for (int k = 0; k < researchObjectIds.Length; k++)
             {
-                long matterId = matterIds[k];
-                Nature nature = cache.Matters.Single(m => m.Id == matterId).Nature;
+                long researchObjectId = researchObjectIds[k];
+                Nature nature = cache.ResearchObjects.Single(m => m.Id == researchObjectId).Nature;
 
-                long sequenceId = sequenceRepository.GetSequenceIds([matterId],
+                long sequenceId = sequenceRepository.GetSequenceIds([researchObjectId],
                                                                        notation,
                                                                        language,
                                                                        translator,
@@ -233,7 +233,7 @@ public class LocalCalculationController : AbstractResultController
                     autocorrelationData = AutoCorrelation.CalculateAutocorrelation(fragmentsData.Select(f => f.Characteristics).ToArray());
                 }
 
-                mattersCharacteristics[i] = new LocalCharacteristicsData(matters[matterIds[i]].Name,
+                researchObjectsCharacteristics[i] = new LocalCharacteristicsData(researchObjects[researchObjectIds[i]].Name,
                                                                          fragmentsData,
                                                                          differenceData,
                                                                          fourierData,
@@ -259,13 +259,13 @@ public class LocalCalculationController : AbstractResultController
 
             var result = new Dictionary<string, object>
             {
-                { "characteristics", mattersCharacteristics },
+                { "characteristics", researchObjectsCharacteristics },
                 { "notationName", notation.GetDisplayValue() },
                 { "starts", starts },
                 { "partNames", partNames },
                 { "lengthes", lengthes },
                 { "characteristicNames", characteristicNames },
-                { "matterIds", matterIds },
+                { "researchObjectIds", researchObjectIds },
                 { "characteristicsList", characteristicsList },
                 { "aligners", Extensions.EnumExtensions.GetSelectList<Aligner>() },
                 { "distanceCalculators", Extensions.EnumExtensions.GetSelectList<DistanceCalculator>() },

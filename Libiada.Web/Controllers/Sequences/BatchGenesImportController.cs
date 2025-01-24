@@ -23,8 +23,8 @@ public class BatchGenesImportController : AbstractResultController
     /// <summary>
     /// Initializes a new instance of the <see cref="BatchGenesImportController"/> class.
     /// </summary>
-    public BatchGenesImportController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
-                                      IViewDataHelper viewDataHelper, 
+    public BatchGenesImportController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
+                                      IViewDataHelper viewDataHelper,
                                       ITaskManager taskManager,
                                       INcbiHelper ncbiHelper,
                                       Cache cache)
@@ -47,13 +47,13 @@ public class BatchGenesImportController : AbstractResultController
         using var db = dbFactory.CreateDbContext();
         var sequencesWithSubsequencesIds = db.Subsequences.Select(s => s.SequenceId).Distinct();
 
-        long[] matterIds = db.CombinedSequenceEntities.Include(c => c.Matter)
+        long[] researchObjectIds = db.CombinedSequenceEntities.Include(c => c.ResearchObject)
             .Where(c => !string.IsNullOrEmpty(c.RemoteId)
                      && !sequencesWithSubsequencesIds.Contains(c.Id)
-                     && StaticCollections.SequenceTypesWithSubsequences.Contains(c.Matter.SequenceType))
-            .Select(c => c.MatterId).ToArray();
+                     && StaticCollections.SequenceTypesWithSubsequences.Contains(c.ResearchObject.SequenceType))
+            .Select(c => c.ResearchObjectId).ToArray();
 
-        var data = viewDataHelper.FillViewData(1, int.MaxValue, m => matterIds.Contains(m.Id), "Import");
+        var data = viewDataHelper.FillViewData(1, int.MaxValue, m => researchObjectIds.Contains(m.Id), "Import");
         data.Add("nature", (byte)Nature.Genetic);
         ViewBag.data = JsonConvert.SerializeObject(data);
 
@@ -63,37 +63,37 @@ public class BatchGenesImportController : AbstractResultController
     /// <summary>
     /// The index.
     /// </summary>
-    /// <param name="matterIds">
-    /// The matter ids.
+    /// <param name="researchObjectIds">
+    /// The research objects ids.
     /// </param>
     /// <returns>
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    public ActionResult Index(long[] matterIds)
+    public ActionResult Index(long[] researchObjectIds)
     {
         return CreateTask(() =>
             {
                 using var db = dbFactory.CreateDbContext();
-                string[] matterNames;
-                List<MatterImportResult> importResults = new(matterIds.Length);
+                string[] researchObjectNames;
+                List<ResearchObjectImportResult> importResults = new(researchObjectIds.Length);
 
-                matterNames = cache.Matters
-                                   .Where(m => matterIds.Contains(m.Id))
+                researchObjectNames = cache.ResearchObjects
+                                   .Where(m => researchObjectIds.Contains(m.Id))
                                    .OrderBy(m => m.Id)
                                    .Select(m => m.Name)
                                    .ToArray();
                 GeneticSequence[] parentSequences = db.CombinedSequenceEntities
-                                                  .Where(s => matterIds.Contains(s.MatterId))
-                                                  .OrderBy(s => s.MatterId)
+                                                  .Where(s => researchObjectIds.Contains(s.ResearchObjectId))
+                                                  .OrderBy(s => s.ResearchObjectId)
                                                   .Select(s => s.ToGeneticSequence())
                                                   .ToArray();
 
                 for (int i = 0; i < parentSequences.Length; i++)
                 {
-                    var importResult = new MatterImportResult()
+                    var importResult = new ResearchObjectImportResult()
                     {
-                        MatterName = matterNames[i]
+                        ResearchObjectName = researchObjectNames[i]
                     };
 
                     try

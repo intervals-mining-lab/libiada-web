@@ -31,8 +31,8 @@ public class SequencesAlignmentController : AbstractResultController
     /// <summary>
     /// Initializes a new instance of the <see cref="SequencesAlignmentController"/> class.
     /// </summary>
-    public SequencesAlignmentController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
-                                        IViewDataHelper viewDataHelper, 
+    public SequencesAlignmentController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
+                                        IViewDataHelper viewDataHelper,
                                         ITaskManager taskManager,
                                         IFullCharacteristicRepository characteristicTypeLinkRepository,
                                         ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator,
@@ -61,8 +61,8 @@ public class SequencesAlignmentController : AbstractResultController
     /// <summary>
     /// The index.
     /// </summary>
-    /// <param name="matterIds">
-    /// The matter ids.
+    /// <param name="researchObjectIds">
+    /// The research objects ids.
     /// </param>
     /// <param name="characteristicLinkId">
     /// The characteristic id.
@@ -87,11 +87,11 @@ public class SequencesAlignmentController : AbstractResultController
     /// </returns>
     /// <exception cref="ArgumentException">
     /// Thrown if validationType is unknown.
-    /// Or if count of matters is not 2.
+    /// Or if count of research objects is not 2.
     /// </exception>
     [HttpPost]
     public ActionResult Index(
-        long[] matterIds,
+        long[] researchObjectIds,
         short characteristicLinkId,
         Notation notation,
         Feature[] features,
@@ -101,25 +101,25 @@ public class SequencesAlignmentController : AbstractResultController
     {
         return CreateTask(() =>
         {
-            if (matterIds.Length != 2)
+            if (researchObjectIds.Length != 2)
             {
-                throw new ArgumentException("Count of selected matters must be 2.", nameof(matterIds));
+                throw new ArgumentException("Nuber of selected research objects must be 2.", nameof(researchObjectIds));
             }
 
-            string firstMatterName;
-            string secondMatterName;
+            string firstResearchObjectName;
+            string secondResearchObjectName;
             long firstParentId;
             long secondParentId;
 
             using var db = dbFactory.CreateDbContext();
 
-            long firstMatterId = matterIds[0];
-            firstMatterName = cache.Matters.Single(m => m.Id == firstMatterId).Name;
-            firstParentId = db.CombinedSequenceEntities.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
+            long firstResearchObjectId = researchObjectIds[0];
+            firstResearchObjectName = cache.ResearchObjects.Single(m => m.Id == firstResearchObjectId).Name;
+            firstParentId = db.CombinedSequenceEntities.Single(c => c.ResearchObjectId == firstResearchObjectId && c.Notation == notation).Id;
 
-            long secondMatterId = matterIds[1];
-            secondMatterName = cache.Matters.Single(m => m.Id == secondMatterId).Name;
-            secondParentId = db.CombinedSequenceEntities.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
+            long secondResearchObjectId = researchObjectIds[1];
+            secondResearchObjectName = cache.ResearchObjects.Single(m => m.Id == secondResearchObjectId).Name;
+            secondParentId = db.CombinedSequenceEntities.Single(c => c.ResearchObjectId == secondResearchObjectId && c.Notation == notation).Id;
 
             double[] firstSequenceCharacteristics = subsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(firstParentId, characteristicLinkId, features);
             double[] secondSequenceCharacteristics = subsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(secondParentId, characteristicLinkId, features);
@@ -160,8 +160,8 @@ public class SequencesAlignmentController : AbstractResultController
 
             var result = new Dictionary<string, object>
             {
-                { "firstSequenceName", firstMatterName },
-                { "secondSequenceName", secondMatterName },
+                { "firstSequenceName", firstResearchObjectName },
+                { "secondSequenceName", secondResearchObjectName },
                 { "characteristicName", characteristicName },
                 { "features", features.ConvertAll(p => p.GetDisplayValue()) },
                 { "optimalRotation", optimalRotation },

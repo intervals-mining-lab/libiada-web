@@ -12,22 +12,22 @@ using Newtonsoft.Json;
 using EnumExtensions = Core.Extensions.EnumExtensions;
 
 /// <summary>
-/// The matters controller.
+/// The research objects controller.
 /// </summary>
 [Authorize]
-public class MattersController : SequencesMattersController
+public class ResearchObjectsController : SequencesResearchObjectsController
 {
     private readonly Cache cache;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="MattersController"/> class.
+    /// Initializes a new instance of the <see cref="ResearchObjectsController"/> class.
     /// </summary>
-    public MattersController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
-                             IViewDataHelper viewDataHelper, 
+    public ResearchObjectsController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
+                             IViewDataHelper viewDataHelper,
                              ITaskManager taskManager,
                              INcbiHelper ncbiHelper,
                              Cache cache)
-        : base(TaskType.MattersImport, dbFactory, viewDataHelper, taskManager, ncbiHelper, cache)
+        : base(TaskType.ResearchObjectImport, dbFactory, viewDataHelper, taskManager, ncbiHelper, cache)
     {
         this.cache = cache;
     }
@@ -41,14 +41,14 @@ public class MattersController : SequencesMattersController
     public async Task<ActionResult> Index()
     {
         using var db = dbFactory.CreateDbContext();
-        List<Matter> matter = await db.Matters.Include(m => m.Multisequence).ToListAsync();
+        List<ResearchObject> researchObject = await db.ResearchObjects.Include(m => m.Multisequence).ToListAsync();
 
         if (!User.IsAdmin())
         {
-            matter = matter.Where(m => m.Nature == Nature.Genetic).ToList();
+            researchObject = researchObject.Where(m => m.Nature == Nature.Genetic).ToList();
         }
 
-        return View(matter);
+        return View(researchObject);
 
     }
 
@@ -68,15 +68,15 @@ public class MattersController : SequencesMattersController
             return BadRequest();
         }
         using var db = dbFactory.CreateDbContext();
-        Matter? matter = db.Matters.Include(m => m.Multisequence).SingleOrDefault(m => m.Id == id);
-        if (matter == null)
+        ResearchObject? researchObject = db.ResearchObjects.Include(m => m.Multisequence).SingleOrDefault(m => m.Id == id);
+        if (researchObject == null)
         {
             return NotFound();
         }
 
-        ViewBag.SequencesCount = db.CombinedSequenceEntities.Count(c => c.MatterId == matter.Id);
+        ViewBag.SequencesCount = db.CombinedSequenceEntities.Count(c => c.ResearchObjectId == researchObject.Id);
 
-        return View(matter);
+        return View(researchObject);
 
     }
 
@@ -96,22 +96,22 @@ public class MattersController : SequencesMattersController
             return BadRequest();
         }
         using var db = dbFactory.CreateDbContext();
-        Matter? matter = db.Matters.Include(m => m.Multisequence).SingleOrDefault(m => m.Id == id);
-        if (matter == null)
+        ResearchObject? researchObject = db.ResearchObjects.Include(m => m.Multisequence).SingleOrDefault(m => m.Id == id);
+        if (researchObject == null)
         {
             return NotFound();
         }
         var data = new Dictionary<string, object>
             {
-                { "natures", Extensions.EnumExtensions.GetSelectList(new[] { matter.Nature }) },
+                { "natures", Extensions.EnumExtensions.GetSelectList(new[] { researchObject.Nature }) },
                 { "groups", EnumExtensions.ToArray<Group>().ToSelectListWithNature() },
                 { "sequenceTypes", EnumExtensions.ToArray<SequenceType>().ToSelectListWithNature() },
-                { "sequencesCount", db.CombinedSequenceEntities.Count(c => c.MatterId == matter.Id) },
-                { "matter", matter },
+                { "sequencesCount", db.CombinedSequenceEntities.Count(c => c.ResearchObjectId == researchObject.Id) },
+                { "researchObject", researchObject },
                 { "multisequences", db.Multisequences.ToList() },
-                { "nature", ((byte)matter.Nature).ToString() },
-                { "group", ((byte)matter.Group).ToString() },
-                { "sequenceType", ((byte)matter.SequenceType).ToString() }
+                { "nature", ((byte)researchObject.Nature).ToString() },
+                { "group", ((byte)researchObject.Group).ToString() },
+                { "sequenceType", ((byte)researchObject.SequenceType).ToString() }
             };
 
         ViewBag.data = JsonConvert.SerializeObject(data, new JsonSerializerSettings()
@@ -119,26 +119,26 @@ public class MattersController : SequencesMattersController
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore
         });
 
-        return View(matter);
+        return View(researchObject);
 
     }
 
     /// <summary>
     /// The edit.
     /// </summary>
-    /// <param name="matter">
-    /// The matter.
+    /// <param name="researchObject">
+    /// The research object.
     /// </param>
     /// <returns>
     /// The <see cref="System.Threading.Tasks.Task"/>.
     /// </returns>
     [HttpPost]
-    public async Task<ActionResult> Edit(Matter matter)
+    public async Task<ActionResult> Edit(ResearchObject researchObject)
     {
         using var db = dbFactory.CreateDbContext();
         if (ModelState.IsValid)
         {
-            db.Entry(matter).State = EntityState.Modified;
+            db.Entry(researchObject).State = EntityState.Modified;
             await db.SaveChangesAsync();
             cache.Clear();
             return RedirectToAction("Index");
@@ -146,19 +146,19 @@ public class MattersController : SequencesMattersController
 
         var data = new Dictionary<string, object>
             {
-                { "natures", Extensions.EnumExtensions.GetSelectList(new[] { matter.Nature }) },
+                { "natures", Extensions.EnumExtensions.GetSelectList(new[] { researchObject.Nature }) },
                 { "groups", EnumExtensions.ToArray<Group>().ToSelectListWithNature() },
                 { "sequenceTypes", EnumExtensions.ToArray<SequenceType>().ToSelectListWithNature() },
-                { "sequencesCount", db.CombinedSequenceEntities.Count(c => c.MatterId == matter.Id) },
-                { "matter", matter },
+                { "sequencesCount", db.CombinedSequenceEntities.Count(c => c.ResearchObjectId == researchObject.Id) },
+                { "researchObject", researchObject },
                 { "multisequences", db.Multisequences.ToList() },
-                { "nature", ((byte)matter.Nature).ToString() },
-                { "group", ((byte)matter.Group).ToString() },
-                { "sequenceType", ((byte)matter.SequenceType).ToString() }
+                { "nature", ((byte)researchObject.Nature).ToString() },
+                { "group", ((byte)researchObject.Group).ToString() },
+                { "sequenceType", ((byte)researchObject.SequenceType).ToString() }
             };
 
         ViewBag.data = JsonConvert.SerializeObject(data);
-        return View(matter);
+        return View(researchObject);
 
     }
 
@@ -178,14 +178,14 @@ public class MattersController : SequencesMattersController
             return BadRequest();
         }
         using var db = dbFactory.CreateDbContext();
-        Matter? matter = await db.Matters.FindAsync(id);
-        if (matter == null)
+        ResearchObject? researchObject = await db.ResearchObjects.FindAsync(id);
+        if (researchObject == null)
         {
             return NotFound();
         }
 
-        ViewBag.SequencesCount = db.CombinedSequenceEntities.Count(c => c.MatterId == matter.Id);
-        return View(matter);
+        ViewBag.SequencesCount = db.CombinedSequenceEntities.Count(c => c.ResearchObjectId == researchObject.Id);
+        return View(researchObject);
 
     }
 
@@ -202,8 +202,8 @@ public class MattersController : SequencesMattersController
     public async Task<ActionResult> DeleteConfirmed(long id)
     {
         using var db = dbFactory.CreateDbContext();
-        Matter matter = await db.Matters.FindAsync(id);
-        db.Matters.Remove(matter);
+        ResearchObject researchObject = await db.ResearchObjects.FindAsync(id);
+        db.ResearchObjects.Remove(researchObject);
         await db.SaveChangesAsync();
         cache.Clear();
         return RedirectToAction("Index");

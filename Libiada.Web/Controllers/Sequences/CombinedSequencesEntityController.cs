@@ -10,7 +10,7 @@ using Libiada.Web.Tasks;
 /// The combines sequences controller.
 /// </summary>
 [Authorize(Roles = "Admin")]
-public class CombinedSequencesEntityController : SequencesMattersController
+public class CombinedSequencesEntityController : SequencesResearchObjectsController
 {
     private readonly Cache cache;
 
@@ -36,7 +36,7 @@ public class CombinedSequencesEntityController : SequencesMattersController
     public async Task<ActionResult> Index()
     {
         using var db = dbFactory.CreateDbContext();
-        var sequences = db.CombinedSequenceEntities.Include(c => c.Matter);
+        var sequences = db.CombinedSequenceEntities.Include(c => c.ResearchObject);
 
         ViewBag.Sequences = await sequences.ToListAsync();
 
@@ -60,7 +60,7 @@ public class CombinedSequencesEntityController : SequencesMattersController
             return BadRequest();
         }
         using var db = dbFactory.CreateDbContext();
-        CombinedSequenceEntity? sequence = db.CombinedSequenceEntities.Include(c => c.Matter).Single(c => c.Id == id);
+        CombinedSequenceEntity? sequence = db.CombinedSequenceEntities.Include(c => c.ResearchObject).Single(c => c.Id == id);
         if (sequence == null)
         {
             return NotFound();
@@ -93,7 +93,7 @@ public class CombinedSequencesEntityController : SequencesMattersController
             return NotFound();
         }
         RemoteDb[] remoteDb = sequence.RemoteDb == null ? [] : [(RemoteDb)sequence.RemoteDb];
-        ViewBag.MatterId = new SelectList(cache.Matters.ToArray(), "Id", "Name", sequence.MatterId);
+        ViewBag.ResearchObjectId = new SelectList(cache.ResearchObjects.ToArray(), "Id", "Name", sequence.ResearchObjectId);
         ViewBag.Notation = Extensions.EnumExtensions.GetSelectList([sequence.Notation]);
         ViewBag.RemoteDb = Extensions.EnumExtensions.GetSelectList(remoteDb);
         return View(sequence);
@@ -121,7 +121,7 @@ public class CombinedSequencesEntityController : SequencesMattersController
 
         RemoteDb[] remoteDb = sequence.RemoteDb == null ? [] : [(RemoteDb)sequence.RemoteDb];
 
-        ViewBag.MatterId = new SelectList(cache.Matters.ToArray(), "Id", "Name", sequence.MatterId);
+        ViewBag.ResearchObjectId = new SelectList(cache.ResearchObjects.ToArray(), "Id", "Name", sequence.ResearchObjectId);
         ViewBag.Notation = Extensions.EnumExtensions.GetSelectList([sequence.Notation]);
         ViewBag.RemoteDb = Extensions.EnumExtensions.GetSelectList(remoteDb);
         return View(sequence);
@@ -143,7 +143,7 @@ public class CombinedSequencesEntityController : SequencesMattersController
             return BadRequest();
         }
         using var db = dbFactory.CreateDbContext();
-        CombinedSequenceEntity sequence = db.CombinedSequenceEntities.Include(c => c.Matter).Single(c => c.Id == id);
+        CombinedSequenceEntity sequence = db.CombinedSequenceEntities.Include(c => c.ResearchObject).Single(c => c.Id == id);
         if (sequence == null)
         {
             return NotFound();

@@ -70,18 +70,18 @@
 
         // initializes data for genes map
         function fillPoints() {
-            $scope.matters = [];
+            $scope.researchObjects = [];
             $scope.points = [];
             for (let i = 0; i < $scope.sequencesData.length; i++) {
                 let sequenceData = $scope.sequencesData[i];
-                $scope.matters.push({ id: sequenceData.MatterId, name: sequenceData.MatterName, visible: true, colorId: i, visible: true });
+                $scope.researchObjects.push({ id: sequenceData.ResearchObjectId, name: sequenceData.ResearchObjectName, visible: true, colorId: i, visible: true });
                 $scope.points.push([]);
                 for (let j = 0; j < sequenceData.SubsequencesData.length; j++) {
                     let subsequenceData = sequenceData.SubsequencesData[j];
                     let point = {
                         id: subsequenceData.Id,
-                        matterId: sequenceData.MatterId,
-                        matterName: sequenceData.MatterName,
+                        researchObjectId: sequenceData.ResearchObjectId,
+                        researchObjectName: sequenceData.ResearchObjectName,
                         sequenceRemoteId: sequenceData.RemoteId,
                         attributes: subsequenceData.Attributes,
                         partial: subsequenceData.Partial,
@@ -187,7 +187,7 @@
             let tooltipContent = [];
             let genBankLink = "<a target='_blank' rel='noopener' href='https://www.ncbi.nlm.nih.gov/nuccore/";
 
-            let header = d.remoteId ? `${genBankLink}${d.remoteId}'>${d.matterName}</a>` : d.matterName;
+            let header = d.remoteId ? `${genBankLink}${d.remoteId}'>${d.researchObjectName}</a>` : d.researchObjectName;
             tooltipContent.push(header);
 
             if (d.remoteId) {
@@ -260,7 +260,7 @@
             }
 
             // all organisms are visible after redrawing
-            $scope.matters.forEach(matter => { matter.visible = true; });
+            $scope.researchObjects.forEach(researchObject => { researchObject.visible = true; });
 
             $scope.points.forEach(points => {
                 points.forEach(point => {
@@ -319,7 +319,7 @@
             $scope.yMap = d => yScale($scope.yValue(d));
 
             // setup fill color
-            let color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.matters.length]);
+            let color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.researchObjects.length]);
 
             // add the graph canvas to the body of the webpage
             let svg = d3.select("#chart").append("svg")
@@ -368,14 +368,14 @@
                 .text($scope.lineChart ? $scope.firstCharacteristic.Text : $scope.secondCharacteristic.Text)
                 .style("font-size", "12pt");
 
-            let mattersGroups = svg.selectAll(".matter")
+            let researchObjectsGroups = svg.selectAll(".researchObject")
                 .data($scope.points)
                 .enter()
                 .append("g")
-                .attr("class", "matter");
+                .attr("class", "researchObject");
 
             // draw dots
-            mattersGroups.selectAll(".dot")
+            researchObjectsGroups.selectAll(".dot")
                 .data(d => d)
                 .enter()
                 .append("ellipse")
@@ -392,7 +392,7 @@
 
             // draw legend
             let legend = svg.selectAll(".legend")
-                .data($scope.matters)
+                .data($scope.researchObjects)
                 .enter()
                 .append("g")
                 .attr("class", "legend")
@@ -406,7 +406,7 @@
                         .style("fill-opacity", () => d.visible ? 1 : 0);
 
                     svg.selectAll(".dot")
-                        .filter(dot => dot.matterId === d.id)
+                        .filter(dot => dot.researchObjectId === d.id)
                         .attr("visibility", dot => {
                             dot.legendVisible = d.visible;
                             return $scope.dotVisible(dot) ? "visible" : "hidden";

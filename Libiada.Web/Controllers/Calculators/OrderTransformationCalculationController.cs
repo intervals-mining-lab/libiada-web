@@ -34,8 +34,8 @@ public class OrderTransformationCalculationController : AbstractResultController
     /// <summary>
     /// Initializes a new instance of the <see cref="OrderTransformationCalculationController"/> class.
     /// </summary>
-    public OrderTransformationCalculationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
-                                                    IViewDataHelper viewDataHelper, 
+    public OrderTransformationCalculationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
+                                                    IViewDataHelper viewDataHelper,
                                                     ITaskManager taskManager,
                                                     IFullCharacteristicRepository characteristicTypeLinkRepository,
                                                     Cache cache)
@@ -67,8 +67,8 @@ public class OrderTransformationCalculationController : AbstractResultController
     /// <summary>
     /// The index.
     /// </summary>
-    /// <param name="matterIds">
-    /// The matter ids.
+    /// <param name="researchObjectIds">
+    /// The research objects ids.
     /// </param>
     /// <param name="transformationsSequence">
     /// The transformation ids.
@@ -102,7 +102,7 @@ public class OrderTransformationCalculationController : AbstractResultController
     /// </returns>
     [HttpPost]
     public ActionResult Index(
-        long[] matterIds,
+        long[] researchObjectIds,
         OrderTransformation[] transformationsSequence,
         int iterationsCount,
         short[] characteristicLinkIds,
@@ -115,18 +115,18 @@ public class OrderTransformationCalculationController : AbstractResultController
     {
         return CreateTask(() =>
         {
-            Dictionary<long, string> mattersNames = cache.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
-            ComposedSequence[][] sequences = new ComposedSequence[matterIds.Length][];
+            Dictionary<long, string> researchObjectsNames = cache.ResearchObjects.Where(m => researchObjectIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
+            ComposedSequence[][] sequences = new ComposedSequence[researchObjectIds.Length][];
 
             var sequenceRepository = new CombinedSequenceEntityRepository(dbFactory, cache);
-            long[][] sequenceIds = sequenceRepository.GetSequenceIds(matterIds,
+            long[][] sequenceIds = sequenceRepository.GetSequenceIds(researchObjectIds,
                                                                            notations,
                                                                            languages,
                                                                            translators,
                                                                            pauseTreatments,
                                                                            sequentialTransfers,
                                                                            trajectories);
-            for (int i = 0; i < matterIds.Length; i++)
+            for (int i = 0; i < researchObjectIds.Length; i++)
             {
                 sequences[i] = new ComposedSequence[characteristicLinkIds.Length];
                 for (int j = 0; j < characteristicLinkIds.Length; j++)
@@ -135,12 +135,12 @@ public class OrderTransformationCalculationController : AbstractResultController
                 }
             }
 
-            var sequencesCharacteristics = new SequenceCharacteristics[matterIds.Length];
-            Array.Sort(matterIds);
+            var sequencesCharacteristics = new SequenceCharacteristics[researchObjectIds.Length];
+            Array.Sort(researchObjectIds);
 
-            for (int i = 0; i < matterIds.Length; i++)
+            for (int i = 0; i < researchObjectIds.Length; i++)
             {
-                long matterId = matterIds[i];
+                long researchObjectId = researchObjectIds[i];
                 double[] characteristics = new double[characteristicLinkIds.Length];
                 for (int j = 0; j < characteristicLinkIds.Length; j++)
                 {
@@ -167,7 +167,7 @@ public class OrderTransformationCalculationController : AbstractResultController
 
                 sequencesCharacteristics[i] = new SequenceCharacteristics
                 {
-                    MatterName = mattersNames[matterId],
+                    ResearchObjectName = researchObjectsNames[researchObjectId],
                     Characteristics = characteristics
                 };
             }

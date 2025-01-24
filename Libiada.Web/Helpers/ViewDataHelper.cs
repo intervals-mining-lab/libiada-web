@@ -57,12 +57,12 @@ public class ViewDataHelper : IViewDataHelper
     }
 
     /// <summary>
-    /// Fills matter creation data.
+    /// Fills research object creation data.
     /// </summary>
     /// <returns>
     /// The <see cref="Dictionary{string, object}"/>.
     /// </returns>
-    public Dictionary<string, object> FillMatterCreationViewData()
+    public Dictionary<string, object> FillResearchObjectCreationViewData()
     {
         IEnumerable<SelectListItem> natures;
         IEnumerable<Notation> notations;
@@ -87,7 +87,7 @@ public class ViewDataHelper : IViewDataHelper
 
         return new Dictionary<string, object>
         {
-            { "matters", SelectListHelper.GetMatterSelectList(cache) },
+            { "researchObjects", SelectListHelper.GetResearchObjectSelectList(cache) },
             { "natures", natures },
             { "notations", notations.ToSelectListWithNature() },
             { "remoteDbs", remoteDbs.ToSelectListWithNature() },
@@ -103,14 +103,14 @@ public class ViewDataHelper : IViewDataHelper
     /// <summary>
     /// Fills view data.
     /// </summary>
-    /// <param name="minSelectedMatters">
-    /// The minimum selected matters.
+    /// <param name="minSelectedResearchObjects">
+    /// The minimum selected number of research objects.
     /// </param>
-    /// <param name="maxSelectedMatters">
-    /// The maximum selected matters.
+    /// <param name="maxSelectedResearchObjects">
+    /// The maximum selected number of research objects.
     /// </param>
     /// <param name="filter">
-    /// The matters filter.
+    /// The research objects filter.
     /// </param>
     /// <param name="submitName">
     /// The submit button name.
@@ -118,28 +118,28 @@ public class ViewDataHelper : IViewDataHelper
     /// <returns>
     /// The <see cref="Dictionary{string, object}"/>.
     /// </returns>
-    public Dictionary<string, object> FillViewData(int minSelectedMatters,
-                                                   int maxSelectedMatters,
-                                                   Func<Matter, bool> filter,
+    public Dictionary<string, object> FillViewData(int minSelectedResearchObjects,
+                                                   int maxSelectedResearchObjects,
+                                                   Func<ResearchObject, bool> filter,
                                                    string submitName)
     {
-        return FillViewData(minSelectedMatters, maxSelectedMatters, filter, m => false, submitName);
+        return FillViewData(minSelectedResearchObjects, maxSelectedResearchObjects, filter, m => false, submitName);
     }
 
     /// <summary>
     /// Fills view data.
     /// </summary>
-    /// <param name="minSelectedMatters">
-    /// The minimum selected matters.
+    /// <param name="minSelectedResearchObjects">
+    /// The minimum selected number of research objects.
     /// </param>
-    /// <param name="maxSelectedMatters">
-    /// The maximum selected matters.
+    /// <param name="maxSelectedResearchObjects">
+    /// The maximum selected number of research objects.
     /// </param>
     /// <param name="filter">
-    /// The matters filter.
+    /// The research objects filter.
     /// </param>
     /// /// <param name="selectionFilter">
-    /// The matters selection filter.
+    /// The research objects selection filter.
     /// </param>
     /// <param name="submitName">
     /// The submit button name.
@@ -147,13 +147,13 @@ public class ViewDataHelper : IViewDataHelper
     /// <returns>
     /// The <see cref="Dictionary{string, object}"/>.
     /// </returns>
-    public Dictionary<string, object> FillViewData(int minSelectedMatters,
-                                                   int maxSelectedMatters,
-                                                   Func<Matter, bool> filter,
-                                                   Func<Matter, bool> selectionFilter,
+    public Dictionary<string, object> FillViewData(int minSelectedResearchObjects,
+                                                   int maxSelectedResearchObjects,
+                                                   Func<ResearchObject, bool> filter,
+                                                   Func<ResearchObject, bool> selectionFilter,
                                                    string submitName)
     {
-        Dictionary<string, object> data = GetMattersData(minSelectedMatters, maxSelectedMatters, filter, selectionFilter);
+        Dictionary<string, object> data = GetResearchObjectsData(minSelectedResearchObjects, maxSelectedResearchObjects, filter, selectionFilter);
 
         IEnumerable<SelectListItem> natures;
         IEnumerable<Notation> notations;
@@ -191,11 +191,11 @@ public class ViewDataHelper : IViewDataHelper
     /// <summary>
     /// Fills view data.
     /// </summary>
-    /// <param name="minSelectedMatters">
-    /// The minimum Selected Matters.
+    /// <param name="minSelectedResearchObjects">
+    /// The minimum selected number of research objects.
     /// </param>
-    /// <param name="maxSelectedMatters">
-    /// The maximum Selected Matters.
+    /// <param name="maxSelectedResearchObjects">
+    /// The maximum selected number of research objects.
     /// </param>
     /// <param name="submitName">
     /// The submit button name.
@@ -203,9 +203,9 @@ public class ViewDataHelper : IViewDataHelper
     /// <returns>
     /// The <see cref="Dictionary{string, object}"/>.
     /// </returns>
-    public Dictionary<string, object> FillViewData(int minSelectedMatters, int maxSelectedMatters, string submitName)
+    public Dictionary<string, object> FillViewData(int minSelectedResearchObjects, int maxSelectedResearchObjects, string submitName)
     {
-        return FillViewData(minSelectedMatters, maxSelectedMatters, m => true, submitName);
+        return FillViewData(minSelectedResearchObjects, maxSelectedResearchObjects, m => true, submitName);
     }
 
     /// <summary>
@@ -214,11 +214,11 @@ public class ViewDataHelper : IViewDataHelper
     /// <param name="characteristicsType">
     /// The characteristics category.
     /// </param>
-    /// <param name="minSelectedMatters">
-    /// The minimum Selected Matters.
+    /// <param name="minSelectedResearchObjects">
+    /// The minimum selected number of research objects.
     /// </param>
-    /// <param name="maxSelectedMatters">
-    /// The maximum Selected Matters.
+    /// <param name="maxSelectedResearchObjects">
+    /// The maximum selected number of research objects.
     /// </param>
     /// <param name="submitName">
     /// The submit button name.
@@ -226,20 +226,20 @@ public class ViewDataHelper : IViewDataHelper
     /// <returns>
     /// The <see cref="Dictionary{string, object}"/>.
     /// </returns>
-    public Dictionary<string, object> FillViewData(CharacteristicCategory characteristicsType, int minSelectedMatters, int maxSelectedMatters, string submitName)
+    public Dictionary<string, object> FillViewData(CharacteristicCategory characteristicsType, int minSelectedResearchObjects, int maxSelectedResearchObjects, string submitName)
     {
-        Dictionary<string, object> data = FillViewData(minSelectedMatters, maxSelectedMatters, submitName);
+        Dictionary<string, object> data = FillViewData(minSelectedResearchObjects, maxSelectedResearchObjects, submitName);
         return data.Concat(GetCharacteristicsData(characteristicsType)).ToDictionary(x => x.Key, y => y.Value);
     }
 
     /// <summary>
     /// Fills subsequences calculation data dictionary.
     /// </summary>
-    /// <param name="minSelectedMatters">
-    /// The minimum Selected Matters.
+    /// <param name="minSelectedResearchObjects">
+    /// The minimum selected number of research objects.
     /// </param>
-    /// <param name="maxSelectedMatters">
-    /// The maximum Selected Matters.
+    /// <param name="maxSelectedResearchObjects">
+    /// The maximum selected number of research objects.
     /// </param>
     /// <param name="submitName">
     /// The submit button name.
@@ -247,12 +247,12 @@ public class ViewDataHelper : IViewDataHelper
     /// <returns>
     /// The <see cref="Dictionary{string, object}"/>.
     /// </returns>
-    public Dictionary<string, object> FillSubsequencesViewData(int minSelectedMatters, int maxSelectedMatters, string submitName)
+    public Dictionary<string, object> FillSubsequencesViewData(int minSelectedResearchObjects, int maxSelectedResearchObjects, string submitName)
     {
         var sequenceIds = db.Subsequences.Select(s => s.SequenceId).Distinct();
-        var matterIds = db.CombinedSequenceEntities.Where(c => sequenceIds.Contains(c.Id)).Select(c => c.MatterId).ToList();
+        var researchObjectIds = db.CombinedSequenceEntities.Where(c => sequenceIds.Contains(c.Id)).Select(c => c.ResearchObjectId).ToList();
 
-        Dictionary<string, object> data = GetMattersData(minSelectedMatters, maxSelectedMatters, m => matterIds.Contains(m.Id));
+        Dictionary<string, object> data = GetResearchObjectsData(minSelectedResearchObjects, maxSelectedResearchObjects, m => researchObjectIds.Contains(m.Id));
 
         var geneticNotations = EnumExtensions.ToArray<Notation>().Where(n => n.GetNature() == Nature.Genetic);
         var sequenceTypes = EnumExtensions.ToArray<SequenceType>().Where(st => st.GetNature() == Nature.Genetic);
@@ -351,20 +351,20 @@ public class ViewDataHelper : IViewDataHelper
     }
 
     /// <summary>
-    /// Fills matters data dictionary.
+    /// Fills research objects data dictionary.
     /// </summary>
-    /// <param name="minSelectedMatters">
-    /// The minimum selected matters.
+    /// <param name="minSelectedResearchObjects">
+    /// The minimum selected number of research objects.
     /// </param>
-    /// <param name="maxSelectedMatters">
-    /// The maximum selected matters.
+    /// <param name="maxSelectedResearchObjects">
+    /// The maximum selected number of research objects.
     /// </param>
     /// <returns>
     /// The <see cref="Dictionary{string, object}"/>.
     /// </returns>
-    public Dictionary<string, object> GetMattersData(int minSelectedMatters, int maxSelectedMatters)
+    public Dictionary<string, object> GetResearchObjectsData(int minSelectedResearchObjects, int maxSelectedResearchObjects)
     {
-        Dictionary<string, object> data = GetMattersData(minSelectedMatters, maxSelectedMatters, m => true);
+        Dictionary<string, object> data = GetResearchObjectsData(minSelectedResearchObjects, maxSelectedResearchObjects, m => true);
 
         // TODO: refactor to remume duplication with other methods or rewrite this whole class as builder
         IEnumerable<SelectListItem> natures;
@@ -392,55 +392,55 @@ public class ViewDataHelper : IViewDataHelper
     }
 
     /// <summary>
-    /// Fills matters data dictionary.
+    /// Fills research objects data dictionary.
     /// </summary>
-    /// <param name="minSelectedMatters">
-    /// The minimum selected matters.
+    /// <param name="minSelectedResearchObjects">
+    /// The minimum selected number of research objects.
     /// </param>
-    /// <param name="maxSelectedMatters">
-    /// The maximum selected matters.
+    /// <param name="maxSelectedResearchObjects">
+    /// The maximum selected number of research objects.
     /// </param>
     /// <param name="filter">
-    /// Filter for matters.
+    /// Filter for research objects.
     /// </param>
     /// <returns>
     /// The <see cref="Dictionary{string, object}"/>.
     /// </returns>
-    private Dictionary<string, object> GetMattersData(int minSelectedMatters,
-                                                      int maxSelectedMatters,
-                                                      Func<Matter, bool> filter)
+    private Dictionary<string, object> GetResearchObjectsData(int minSelectedResearchObjects,
+                                                      int maxSelectedResearchObjects,
+                                                      Func<ResearchObject, bool> filter)
     {
-        return GetMattersData(minSelectedMatters, maxSelectedMatters, filter, m => false);
+        return GetResearchObjectsData(minSelectedResearchObjects, maxSelectedResearchObjects, filter, m => false);
     }
 
     /// <summary>
-    /// Fills matters data dictionary.
+    /// Fills research objects data dictionary.
     /// </summary>
-    /// <param name="minSelectedMatters">
-    /// The minimum selected matters.
+    /// <param name="minSelectedResearchObjects">
+    /// The minimum selected number of research objects.
     /// </param>
-    /// <param name="maxSelectedMatters">
-    /// The maximum selected matters.
+    /// <param name="maxSelectedResearchObjects">
+    /// The maximum selected number of research objects.
     /// </param>
     /// <param name="filter">
-    /// Filter for matters.
+    /// Filter for research objects.
     /// </param>
     /// <param name="selectionFilter">
-    /// Filter for matter selection.
+    /// Filter for research object selection.
     /// </param>
     /// <returns>
     /// The <see cref="Dictionary{string, object}"/>.
     /// </returns>
-    private Dictionary<string, object> GetMattersData(int minSelectedMatters,
-                                                      int maxSelectedMatters,
-                                                      Func<Matter, bool> filter,
-                                                      Func<Matter, bool> selectionFilter)
+    private Dictionary<string, object> GetResearchObjectsData(int minSelectedResearchObjects,
+                                                      int maxSelectedResearchObjects,
+                                                      Func<ResearchObject, bool> filter,
+                                                      Func<ResearchObject, bool> selectionFilter)
     {
         return new Dictionary<string, object>
         {
-            { "minimumSelectedMatters", minSelectedMatters },
-            { "maximumSelectedMatters", maxSelectedMatters },
-            { "matters", SelectListHelper.GetMatterSelectList(filter, selectionFilter, cache) },
+            { "minimumSelectedResearchObjects", minSelectedResearchObjects },
+            { "maximumSelectedResearchObjects", maxSelectedResearchObjects },
+            { "researchObjects", SelectListHelper.GetResearchObjectSelectList(filter, selectionFilter, cache) },
             { "sequenceGroups", SelectListHelper.GetSequenceGroupSelectList(db) }
         };
     }

@@ -62,8 +62,8 @@ public class OrderTransformationCharacteristicsDynamicVisualizationController : 
     /// <summary>
     /// The index.
     /// </summary>
-    /// <param name="matterIds">
-    /// The matter ids.
+    /// <param name="researchObjectIds">
+    /// The research objects ids.
     /// </param>
     /// <param name="transformationsSequence">
     /// The transformation ids.
@@ -97,7 +97,7 @@ public class OrderTransformationCharacteristicsDynamicVisualizationController : 
     /// </returns>
     [HttpPost]
     public ActionResult Index(
-        long[] matterIds,
+        long[] researchObjectIds,
         OrderTransformation[] transformationsSequence,
         int iterationsCount,
         short characteristicLinkId,
@@ -111,14 +111,14 @@ public class OrderTransformationCharacteristicsDynamicVisualizationController : 
         return CreateTask(() =>
         {
             var sequenceRepository = new CombinedSequenceEntityRepository(dbFactory, cache);
-            var mattersCharacteristics = new object[matterIds.Length];
-            Array.Sort(matterIds);
-            Dictionary<long, Matter> matters = cache.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id);
+            var researchObjectsCharacteristics = new object[researchObjectIds.Length];
+            Array.Sort(researchObjectIds);
+            Dictionary<long, ResearchObject> researchObjects = cache.ResearchObjects.Where(m => researchObjectIds.Contains(m.Id)).ToDictionary(m => m.Id);
 
-            for (int i = 0; i < matterIds.Length; i++)
+            for (int i = 0; i < researchObjectIds.Length; i++)
             {
-                long matterId = matterIds[i];
-                long sequenceId = sequenceRepository.GetSequenceIds([matterId],
+                long researchObjectId = researchObjectIds[i];
+                long sequenceId = sequenceRepository.GetSequenceIds([researchObjectId],
                                                                           notation,
                                                                           language,
                                                                           translator,
@@ -143,7 +143,7 @@ public class OrderTransformationCharacteristicsDynamicVisualizationController : 
                     }
                 }
 
-                mattersCharacteristics[i] = new { matterName = matters[matterId].Name, characteristics };
+                researchObjectsCharacteristics[i] = new { researchObjectName = researchObjects[researchObjectId].Name, characteristics };
             }
 
             string characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
@@ -151,7 +151,7 @@ public class OrderTransformationCharacteristicsDynamicVisualizationController : 
 
             var result = new Dictionary<string, object>
                              {
-                                 { "characteristics", mattersCharacteristics },
+                                 { "characteristics", researchObjectsCharacteristics },
                                  { "characteristicName", characteristicName },
                                  { "transformationsList", transformationsSequence.Select(ts => ts.GetDisplayValue()) },
                                  { "iterationsCount", iterationsCount }

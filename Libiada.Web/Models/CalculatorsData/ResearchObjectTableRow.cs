@@ -4,9 +4,9 @@ using Libiada.Core.Extensions;
 using Libiada.Database.Models;
 
 /// <summary>
-/// The matters table row.
+/// The research object table row.
 /// </summary>
-public class MattersTableRow : SelectListItemWithNature
+public class ResearchObjectTableRow : SelectListItemWithNature
 {
     /// <summary>
     /// The group.
@@ -19,27 +19,27 @@ public class MattersTableRow : SelectListItemWithNature
     public readonly string SequenceType;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="MattersTableRow"/> class
-    /// from given matter instance.
+    /// Initializes a new instance of the <see cref="ResearchObjectTableRow"/> class
+    /// from given research object instance.
     /// </summary>
-    /// <param name="matter">
-    /// The matter to use data from.
+    /// <param name="researchObject">
+    /// The research object to use data from.
     /// </param>
     /// <param name="selected">
     /// Flag indicating if row is selected.
     /// </param>
-    public MattersTableRow(Matter matter, bool selected)
+    public ResearchObjectTableRow(ResearchObject researchObject, bool selected)
     {
-        Value = matter.Id.ToString();
-        Text = matter.Name;
+        Value = researchObject.Id.ToString();
+        Text = researchObject.Name;
         Selected = selected;
-        Nature = (byte)matter.Nature;
-        SequenceType = matter.SequenceType.GetDisplayValue();
-        Group = matter.Group.GetDisplayValue();
+        Nature = (byte)researchObject.Nature;
+        SequenceType = researchObject.SequenceType.GetDisplayValue();
+        Group = researchObject.Group.GetDisplayValue();
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="MattersTableRow"/> class
+    /// Initializes a new instance of the <see cref="ResearchObjectTableRow"/> class
     /// from given sequence group instance.
     /// </summary>
     /// <param name="sequenceGroup">
@@ -48,7 +48,7 @@ public class MattersTableRow : SelectListItemWithNature
     /// <param name="selected">
     /// Flag indicating if row is selected.
     /// </param>
-    public MattersTableRow(SequenceGroup sequenceGroup, bool selected)
+    public ResearchObjectTableRow(SequenceGroup sequenceGroup, bool selected)
     {
         Value = sequenceGroup.Id.ToString();
         Text = sequenceGroup.Name;

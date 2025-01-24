@@ -21,10 +21,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="matter in ::result" ng-class="::calculateStatusClass(matter.Status)">
+                    <tr ng-repeat="researchObject in ::result" ng-class="::calculateStatusClass(researchObject.Status)">
                         <td ng-bind="::$index + 1" />
-                        <td ng-bind="::matter.MatterName" />
-                        <td ng-bind="::matter.Result" />
+                        <td ng-bind="::researchObject.ResearchObjectName" />
+                        <td ng-bind="::researchObject.Result" />
                     </tr>
                 </tbody>
             </table>

@@ -1,7 +1,7 @@
-﻿function MatterEditController(data) {
+﻿function ResearchObjectEditController(data) {
     "use strict";
 
-    function matterEdit($scope, filterFilter) {
+    function researchObjectEdit($scope, filterFilter) {
         MapModelFromJson($scope, data);
 
         function filterByNature() {
@@ -20,5 +20,5 @@
         $scope.filterByNature = filterByNature;
     }
 
-    angular.module("libiada").controller("MatterEditCtrl", ["$scope", "filterFilter", matterEdit]);
+    angular.module("libiada").controller("ResearchObjectEditCtrl", ["$scope", "filterFilter", researchObjectEdit]);
 }

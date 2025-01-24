@@ -18,9 +18,9 @@ using Libiada.Web.Tasks;
 using FileHelper = Helpers.FileHelper;
 
 /// <summary>
-/// The sequences matters controller.
+/// The sequences and research objects controller.
 /// </summary>
-public abstract class SequencesMattersController : AbstractResultController
+public abstract class SequencesResearchObjectsController : AbstractResultController
 {
     protected readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
@@ -28,12 +28,12 @@ public abstract class SequencesMattersController : AbstractResultController
     private readonly Cache cache;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="SequencesMattersController"/> class.
+    /// Initializes a new instance of the <see cref="SequencesResearchObjectsController"/> class.
     /// </summary>
     /// <param name="taskType">
     /// The task Type.
     /// </param>
-    protected SequencesMattersController(TaskType taskType,
+    protected SequencesResearchObjectsController(TaskType taskType,
                                          IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                          IViewDataHelper viewDataHelper,
                                          ITaskManager taskManager,
@@ -55,7 +55,7 @@ public abstract class SequencesMattersController : AbstractResultController
     /// </returns>
     public ActionResult Create()
     {
-        ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillMatterCreationViewData());
+        ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillResearchObjectCreationViewData());
         return View();
     }
 
@@ -90,7 +90,7 @@ public abstract class SequencesMattersController : AbstractResultController
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    public ActionResult Create(CombinedSequenceEntity sequence, bool localFile, IFormFile? file,int? precision)
+    public ActionResult Create(CombinedSequenceEntity sequence, bool localFile, IFormFile? file, int? precision)
     {
         return CreateTask(() =>
         {
@@ -127,7 +127,7 @@ public abstract class SequencesMattersController : AbstractResultController
                             RemoteDb = sequence.RemoteDb,
                             RemoteId = sequence.RemoteId,
                             Partial = sequence.Partial ?? throw new Exception("Genetic sequence partial flag is not present in form data"),
-                            Matter = sequence.Matter
+                            ResearchObject = sequence.ResearchObject
                         };
 
                         dnaSequenceRepository.Create(dnaSequence, bioSequence);
@@ -143,7 +143,7 @@ public abstract class SequencesMattersController : AbstractResultController
                             RemoteId = sequence.RemoteId,
                             PauseTreatment = sequence.PauseTreatment ?? throw new Exception("Music sequence pause treatment is not present in form data"),
                             SequentialTransfer = sequence.SequentialTransfer ?? throw new Exception("Music sequence sequential transfer is not present in form data"),
-                            Matter = sequence.Matter
+                            ResearchObject = sequence.ResearchObject
                         };
                         // TODO: deside if this method should create only one music sequence type or all of them 
                         musicSequenceRepository.Create(musicSequence, sequenceStream);
@@ -160,7 +160,7 @@ public abstract class SequencesMattersController : AbstractResultController
                             Language = sequence.Language ?? throw new Exception("Literature sequence language is not present in form data"),
                             Original = sequence.Original ?? throw new Exception("Literature sequence original flag is not present in form data"),
                             Translator = sequence.Translator ?? throw new Exception("Literature sequence translator is not present in form data"),
-                            Matter = sequence.Matter
+                            ResearchObject = sequence.ResearchObject
                         };
                         literatureSequenceRepository.Create(literatureSequence, sequenceStream);
                         break;
@@ -173,12 +173,12 @@ public abstract class SequencesMattersController : AbstractResultController
                             Notation = sequence.Notation,
                             RemoteDb = sequence.RemoteDb,
                             RemoteId = sequence.RemoteId,
-                            Matter = sequence.Matter
+                            ResearchObject = sequence.ResearchObject
                         };
                         dataSequenceRepository.Create(dataSequence, sequenceStream, precision ?? 0);
                         break;
                     case Nature.Image:
-                        var matterRepository = new MatterRepository(db, cache);
+                        var researchObjectRepository = new ResearchObjectRepository(db, cache);
 
                         byte[] fileBytes;
                         using (Stream fileStream = FileHelper.GetFileStream(file))
@@ -187,21 +187,21 @@ public abstract class SequencesMattersController : AbstractResultController
                             fileStream.Read(fileBytes, 0, (int)fileStream.Length);
                         }
 
-                        var matter = new Matter
+                        var researchObject = new ResearchObject
                         {
                             Nature = Nature.Image,
-                            SequenceType = sequence.Matter.SequenceType,
-                            Name = sequence.Matter.Name,
+                            SequenceType = sequence.ResearchObject.SequenceType,
+                            Name = sequence.ResearchObject.Name,
                             Source = fileBytes,
-                            Group = sequence.Matter.Group
+                            Group = sequence.ResearchObject.Group
                         };
-                        matterRepository.SaveToDatabase(matter);
+                        researchObjectRepository.SaveToDatabase(researchObject);
                         break;
                     default:
                         throw new InvalidEnumArgumentException(nameof(nature), (int)nature, typeof(Nature));
                 }
 
-                string? multisequenceName = db.Multisequences.SingleOrDefault(ms => ms.Id == sequence.Matter.MultisequenceId)?.Name;
+                string? multisequenceName = db.Multisequences.SingleOrDefault(ms => ms.Id == sequence.ResearchObject.MultisequenceId)?.Name;
                 var result = new ImportResult(sequence, precision, multisequenceName);
 
                 return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
@@ -209,17 +209,17 @@ public abstract class SequencesMattersController : AbstractResultController
             catch (Exception)
             {
                 using var db = dbFactory.CreateDbContext();
-                long matterId = sequence.MatterId;
-                if (matterId != 0)
+                long researchObjectId = sequence.ResearchObjectId;
+                if (researchObjectId != 0)
                 {
-                    List<Matter> orphanMatter = db.Matters
+                    List<ResearchObject> orphanResearchObject = db.ResearchObjects
                         .Include(m => m.Sequences)
-                        .Where(m => m.Id == matterId && m.Sequences.Count == 0)
+                        .Where(m => m.Id == researchObjectId && m.Sequences.Count == 0)
                         .ToList();
 
-                    if (orphanMatter.Count > 0)
+                    if (orphanResearchObject.Count > 0)
                     {
-                        db.Matters.Remove(orphanMatter[0]);
+                        db.ResearchObjects.Remove(orphanResearchObject[0]);
                         db.SaveChanges();
                     }
                 }
@@ -335,14 +335,14 @@ public abstract class SequencesMattersController : AbstractResultController
             double? precision,
             string? multisequenceName)
         {
-            Matter matter = sequence.Matter;
+            ResearchObject researchObject = sequence.ResearchObject;
 
-            Name = matter.Name;
-            Description = matter.Description;
-            Nature = matter.Nature.GetDisplayValue();
+            Name = researchObject.Name;
+            Description = researchObject.Description;
+            Nature = researchObject.Nature.GetDisplayValue();
             Notation = sequence.Notation.GetDisplayValue();
-            Group = matter.Group.GetDisplayValue();
-            SequenceType = matter.SequenceType.GetDisplayValue();
+            Group = researchObject.Group.GetDisplayValue();
+            SequenceType = researchObject.SequenceType.GetDisplayValue();
             RemoteId = sequence.RemoteId;
             Language = sequence.Language?.GetDisplayValue();
             Original = sequence.Original;
@@ -350,9 +350,9 @@ public abstract class SequencesMattersController : AbstractResultController
             Partial = sequence.Partial;
             Precision = precision;
             MultisequenceName = multisequenceName;
-            MultisequenceNumber = matter.MultisequenceNumber;
-            CollectionCountry = matter.CollectionCountry;
-            CollectionDate = matter.CollectionDate;
+            MultisequenceNumber = researchObject.MultisequenceNumber;
+            CollectionCountry = researchObject.CollectionCountry;
+            CollectionDate = researchObject.CollectionDate;
         }
     }
 }

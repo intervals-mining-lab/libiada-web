@@ -9,7 +9,7 @@
     await Html.RenderPartialAsync("_AngularControllerInitializer", "ClusterizationResult");
 
     <div ng-controller="ClusterizationResultCtrl">
-        <h3 ng-bind="::matterName"></h3>
+        <h3 ng-bind="::researchObjectName"></h3>
         <h4 ng-bind="::characteristicName"></h4>
         <h4 ng-bind="::notationName"></h4>
         <div ng-if="!isFilter">

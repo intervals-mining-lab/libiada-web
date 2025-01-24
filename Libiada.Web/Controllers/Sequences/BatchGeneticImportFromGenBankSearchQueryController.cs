@@ -68,51 +68,51 @@ public class BatchGeneticImportFromGenBankSearchQueryController : AbstractResult
             }
             nuccoreObjects = ncbiHelper.ExecuteESummaryRequest(searchResults, importPartial);
             accessions = nuccoreObjects.Select(no => no.AccessionVersion.Split('.')[0]).Distinct().ToArray();
-            List<MatterImportResult> importResults = new(accessions.Length);
+            List<ResearchObjectImportResult> importResults = new(accessions.Length);
             using var db = dbFactory.CreateDbContext();
-            var matterRepository = new MatterRepository(db, cache);
+            var researchObjectRepository = new ResearchObjectRepository(db, cache);
             var geneticSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
 
             (string[] existingAccessions, string[] accessionsToImport) = geneticSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
 
-            importResults.AddRange(existingAccessions.ConvertAll(existingAccession => new MatterImportResult
+            importResults.AddRange(existingAccessions.ConvertAll(existingAccession => new ResearchObjectImportResult
             {
-                MatterName = existingAccession,
+                ResearchObjectName = existingAccession,
                 Result = "Sequence already exists",
                 Status = "Exists"
             }));
 
             foreach (string accession in accessionsToImport)
             {
-                var importResult = new MatterImportResult() { MatterName = accession };
+                var importResult = new ResearchObjectImportResult() { ResearchObjectName = accession };
 
                 try
                 {
                     Bio.ISequence bioSequence = ncbiHelper.DownloadGenBankSequence(accession);
                     GenBankMetadata metadata = NcbiHelper.GetMetadata(bioSequence);
-                    importResult.MatterName = metadata.Version.CompoundAccession;
+                    importResult.ResearchObjectName = metadata.Version.CompoundAccession;
 
-                    Matter matter = matterRepository.CreateMatterFromGenBankMetadata(metadata);
+                    ResearchObject researchObject = researchObjectRepository.CreateResearchObjectFromGenBankMetadata(metadata);
 
-                    importResult.SequenceType = matter.SequenceType.GetDisplayValue();
-                    importResult.Group = matter.Group.GetDisplayValue();
-                    importResult.MatterName = matter.Name;
+                    importResult.SequenceType = researchObject.SequenceType.GetDisplayValue();
+                    importResult.Group = researchObject.Group.GetDisplayValue();
+                    importResult.ResearchObjectName = researchObject.Name;
                     importResult.AllNames = $"Common name = {metadata.Source.CommonName}, "
                                     + $"Species = {metadata.Source.Organism.Species}, "
                                     + $"Definition = {metadata.Definition}, "
-                                    + $"Saved matter name = {importResult.MatterName}";
+                                    + $"Saved research object name = {importResult.ResearchObjectName}";
 
                     bool partial = metadata.Definition.Contains("partial", StringComparison.CurrentCultureIgnoreCase);
 
                     var sequence = new GeneticSequence
                     {
-                        Matter = matter,
+                        ResearchObject = researchObject,
                         Notation = Notation.Nucleotides,
                         RemoteDb = RemoteDb.GenBank,
                         RemoteId = metadata.Version.CompoundAccession,
                         Partial = partial
                     };
-                    
+
                     geneticSequenceRepository.Create(sequence, bioSequence);
 
                     (importResult.Result, importResult.Status) = importGenes ?
@@ -143,17 +143,17 @@ public class BatchGeneticImportFromGenBankSearchQueryController : AbstractResult
                 }
             }
 
-            string[] names = importResults.Select(r => r.MatterName).ToArray();
+            string[] names = importResults.Select(r => r.ResearchObjectName).ToArray();
 
-            // removing matters for which creation of sequence failed
-            Matter[] orphanMatters = db.Matters
+            // removing research objects for which creation of sequence failed
+            ResearchObject[] orphanResearchObjects = db.ResearchObjects
                                        .Include(m => m.Sequences)
                                        .Where(m => names.Contains(m.Name) && m.Sequences.Count == 0)
                                        .ToArray();
 
-            if (orphanMatters.Length > 0)
+            if (orphanResearchObjects.Length > 0)
             {
-                db.Matters.RemoveRange(orphanMatters);
+                db.ResearchObjects.RemoveRange(orphanResearchObjects);
                 db.SaveChanges();
             }
 

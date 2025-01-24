@@ -64,8 +64,8 @@ public class OrderTransformerController : AbstractResultController
     /// <summary>
     /// The index.
     /// </summary>
-    /// <param name="matterId">
-    /// The matter id.
+    /// <param name="researchObjectId">
+    /// The research object id.
     /// </param>
     /// <param name="transformationLinkIds">
     /// The transformation link ids.
@@ -80,13 +80,13 @@ public class OrderTransformerController : AbstractResultController
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    public ActionResult Index(long matterId, OrderTransformation[] transformationsSequence, int iterationsCount)
+    public ActionResult Index(long researchObjectId, OrderTransformation[] transformationsSequence, int iterationsCount)
     {
         return CreateTask(() =>
         {
             // TODO: add nature params
             using var db = dbFactory.CreateDbContext();
-            var sequenceId = db.CombinedSequenceEntities.Single(c => c.MatterId == matterId).Id;
+            var sequenceId = db.CombinedSequenceEntities.Single(c => c.ResearchObjectId == researchObjectId).Id;
             using var sequenceRepository = sequenceRepositoryFactory.Create();
             var sequence = sequenceRepository.GetLibiadaComposedSequence(sequenceId);
             for (int j = 0; j < iterationsCount; j++)

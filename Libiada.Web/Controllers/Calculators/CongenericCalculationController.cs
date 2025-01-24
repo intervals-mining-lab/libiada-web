@@ -73,8 +73,8 @@ public class CongenericCalculationController : AbstractResultController
     /// <summary>
     /// The index.
     /// </summary>
-    /// <param name="matterIds">
-    /// The matter ids.
+    /// <param name="researchObjectIds">
+    /// The research object ids.
     /// </param>
     /// <param name="characteristicLinkIds">
     /// The characteristic type and link ids.
@@ -108,7 +108,7 @@ public class CongenericCalculationController : AbstractResultController
     /// </returns>
     [HttpPost]
     public ActionResult Index(
-        long[] matterIds,
+        long[] researchObjectIds,
         short[] characteristicLinkIds,
         Notation[] notations,
         Language[] languages,
@@ -120,13 +120,13 @@ public class CongenericCalculationController : AbstractResultController
     {
         return CreateTask(() =>
         {
-            var sequencesCharacteristics = new SequenceCharacteristics[matterIds.Length];
-            Dictionary<long, string> mattersNames;
+            var sequencesCharacteristics = new SequenceCharacteristics[researchObjectIds.Length];
+            Dictionary<long, string> researchObjectsNames;
             long[][] sequenceIds;
 
-            mattersNames = cache.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
+            researchObjectsNames = cache.ResearchObjects.Where(m => researchObjectIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
             using var sequenceRepository = sequenceRepositoryFactory.Create();
-            sequenceIds = sequenceRepository.GetSequenceIds(matterIds, notations, languages, translators, pauseTreatments, sequentialTransfers, trajectories);
+            sequenceIds = sequenceRepository.GetSequenceIds(researchObjectIds, notations, languages, translators, pauseTreatments, sequentialTransfers, trajectories);
 
             //// characteristics names
             //for (int k = 0; k < characteristicLinkIds.Length; k++)
@@ -144,7 +144,7 @@ public class CongenericCalculationController : AbstractResultController
             //}
 
             var characteristics = congenericSequencesCharacteristicsCalculator.Calculate(sequenceIds, characteristicLinkIds);
-            
+
             using var db = dbFactory.CreateDbContext();
             var flatSequenceIds = sequenceIds.SelectMany(si => si);
             var elementIds = db.CombinedSequenceEntities
@@ -159,13 +159,13 @@ public class CongenericCalculationController : AbstractResultController
 
             var unitedAlphabet = elements.Select(e => new { e.Id, Name = e.Name ?? e.Value }).ToArray();
             int characteristicsCount = unitedAlphabet.Length * characteristicLinkIds.Length;
-            for (int i = 0; i < matterIds.Length; i++)
+            for (int i = 0; i < researchObjectIds.Length; i++)
             {
                 double[] characteristicsValues = new double[characteristicsCount];
 
-                for(int j = 0; j < unitedAlphabet.Length; j++)
+                for (int j = 0; j < unitedAlphabet.Length; j++)
                 {
-                    for(int k = 0; k < characteristicLinkIds.Length; k++)
+                    for (int k = 0; k < characteristicLinkIds.Length; k++)
                     {
                         bool hasValue = characteristics[sequenceIds[i][k]].TryGetValue((characteristicLinkIds[k], unitedAlphabet[j].Id), out double value);
                         characteristicsValues[j * characteristicLinkIds.Length + k] = hasValue ? value : double.NaN;
@@ -174,7 +174,7 @@ public class CongenericCalculationController : AbstractResultController
 
                 sequencesCharacteristics[i] = new SequenceCharacteristics
                 {
-                    MatterName = mattersNames[matterIds[i]],
+                    ResearchObjectName = researchObjectsNames[researchObjectIds[i]],
                     Characteristics = characteristicsValues
                 };
             }
@@ -200,10 +200,10 @@ public class CongenericCalculationController : AbstractResultController
 
             List<List<List<double>>> theoreticalRanks = [];
 
-            // cycle through matters; first level of characteristics array
-            for (int w = 0; w < matterIds.Length; w++)
+            // cycle through research objects; first level of characteristics array
+            for (int w = 0; w < researchObjectIds.Length; w++)
             {
-                long matterId = matterIds[w];
+                long researchObjectId = researchObjectIds[w];
                 theoreticalRanks.Add([]);
 
                 // cycle through characteristics and notations; second level of characteristics array
@@ -212,19 +212,19 @@ public class CongenericCalculationController : AbstractResultController
                     Notation notation = notations[i];
 
                     long sequenceId;
-                    if (cache.Matters.Single(m => m.Id == matterId).Nature == Nature.Literature)
+                    if (cache.ResearchObjects.Single(m => m.Id == researchObjectId).Nature == Nature.Literature)
                     {
                         Language language = languages[i];
                         Translator translator = translators[i];
 
-                        sequenceId = db.CombinedSequenceEntities.Single(l => l.MatterId == matterId
+                        sequenceId = db.CombinedSequenceEntities.Single(l => l.ResearchObjectId == researchObjectId
                                                                   && l.Notation == notation
                                                                   && l.Language == language
                                                                   && translator == l.Translator).Id;
                     }
                     else
                     {
-                        sequenceId = db.CombinedSequenceEntities.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
+                        sequenceId = db.CombinedSequenceEntities.Single(c => c.ResearchObjectId == researchObjectId && c.Notation == notation).Id;
                     }
 
                     ComposedSequence sequence = sequenceRepository.GetLibiadaComposedSequence(sequenceId);

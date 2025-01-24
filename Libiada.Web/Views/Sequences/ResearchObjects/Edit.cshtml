@@ -1,21 +1,21 @@
 ﻿@using Libiada.Web.Extensions
 @using Libiada.Web.Helpers
-@model Matter
+@model ResearchObject
 
 @{
     ViewBag.Title = "Edit";
 }
 
 @{
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "MatterEdit");
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "ResearchObjectEdit");
 }
 
 <h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm())
 {
-    <div ng-controller="MatterEditCtrl">
-        <h4>Matter</h4>
+    <div ng-controller="ResearchObjectEditCtrl">
+        <h4>Research object</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Id)
@@ -85,10 +85,10 @@
             <div class="col-md-10">
                 <select class="form-select"
                         ng-options="ms.Id as ms.Name for ms in multisequences | filter:{ Nature: nature }"
-                        ng-model="matter.MultisequenceId">
+                        ng-model="researchObject.MultisequenceId">
                     <option value="">-- None --</option>
                 </select>
-                <input type="hidden" name="MultisequenceId" ng-value="matter.MultisequenceId" />
+                <input type="hidden" name="MultisequenceId" ng-value="researchObject.MultisequenceId" />
                 @Html.ValidationMessageFor(model => model.Multisequence, "", new { @class = "text-danger" })
             </div>
         </div>

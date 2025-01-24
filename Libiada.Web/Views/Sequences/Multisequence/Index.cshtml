@@ -12,7 +12,7 @@
     {
         <div class="row mb-1">
             <div class="col-md-10">
-                <input type="submit" value="Group matters into multisequences" class="btn btn-secondary" />
+                <input type="submit" value="Group research objects into multisequences" class="btn btn-secondary" />
             </div>
         </div>
     }
@@ -23,7 +23,7 @@
 <table class="table table-bordered table-hover table-sm">
     <tr>
         <th>@Html.DisplayNameFor(model => model.Name)</th>
-        <th>@Html.DisplayNameFor(model => model.Matters)</th>
+        <th>@Html.DisplayNameFor(model => model.ResearchObjects)</th>
         @if (User.IsAdmin())
         {
             <th />
@@ -34,9 +34,9 @@
         <tr>
             <td>@Html.DisplayFor(modelItem => item.Name)</td>
             <td>
-                @foreach (var matter in item.Matters)
+                @foreach (var researchObject in item.ResearchObjects)
                 {
-                    <p><span class="fw-semibold">@Html.DisplayFor(modelItem => matter.MultisequenceNumber).</span><nbsp />@Html.DisplayFor(modelItem => matter.Name)</p>
+                    <p><span class="fw-semibold">@Html.DisplayFor(modelItem => researchObject.MultisequenceNumber).</span><nbsp />@Html.DisplayFor(modelItem => researchObject.Name)</p>
                 }
             </td>
             @if (User.IsAdmin())

@@ -28,6 +28,8 @@ using static Libiada.Core.Extensions.EnumExtensions;
 [Authorize]
 public class SubsequencesComparerController : AbstractResultController
 {
+    //TODO: replace all possible tupels with classes in this file 
+
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IFullCharacteristicRepository fullCharacteristicRepository;
     private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
@@ -75,8 +77,8 @@ public class SubsequencesComparerController : AbstractResultController
     /// <summary>
     /// The index.
     /// </summary>
-    /// <param name="matterIds">
-    /// The matter ids.
+    /// <param name="researchObjectIds">
+    /// The research objects ids.
     /// </param>
     /// <param name="characteristicLinkId">
     /// The characteristic type and link id.
@@ -97,12 +99,9 @@ public class SubsequencesComparerController : AbstractResultController
     /// <returns>
     /// The <see cref="ActionResult"/>.
     /// </returns>
-    /// <exception cref="ArgumentException">
-    /// Thrown if count of matters is not 2.
-    /// </exception>
     [HttpPost]
     public ActionResult Index(
-        long[] matterIds,
+        long[] researchObjectIds,
         short characteristicLinkId,
         short[] characteristicLinkIds,
         Feature[] features,
@@ -117,35 +116,35 @@ public class SubsequencesComparerController : AbstractResultController
             double[] percentageDifferences = maxPercentageDifferences.Select(item => double.Parse(item, CultureInfo.InvariantCulture) / 100).ToArray();
             using var db = dbFactory.CreateDbContext();
             var attributeValuesCache = new AttributeValueCacheManager(db);
-            var characteristics = new SubsequenceData[matterIds.Length][];
+            var characteristics = new SubsequenceData[researchObjectIds.Length][];
 
             long[] parentSequenceIds;
-            string[] matterNames = new string[matterIds.Length];
+            string[] researchObjectNames = new string[researchObjectIds.Length];
 
-            int mattersCount = matterIds.Length;
+            int researchObjectsCount = researchObjectIds.Length;
             Dictionary<string, object> characteristicsTypesData;
 
 
             // Sequences characteristic
-            long[] sequences = geneticSequenceRepository.GetNucleotideSequenceIds(matterIds);
+            long[] sequences = geneticSequenceRepository.GetNucleotideSequenceIds(researchObjectIds);
 
             // Sequences characteristic
-            matterIds = OrderMatterIds(matterIds, characteristicLinkId, sequences);
+            researchObjectIds = OrderResearchObjectIds(researchObjectIds, characteristicLinkId, sequences);
 
             // Subsequences characteristics
-            var parentSequences = db.CombinedSequenceEntities.Include(s => s.Matter)
-                                    .Where(s => s.Notation == Notation.Nucleotides && matterIds.Contains(s.MatterId))
-                                    .Select(s => new { s.Id, s.MatterId, MatterName = s.Matter.Name })
+            var parentSequences = db.CombinedSequenceEntities.Include(s => s.ResearchObject)
+                                    .Where(s => s.Notation == Notation.Nucleotides && researchObjectIds.Contains(s.ResearchObjectId))
+                                    .Select(s => new { s.Id, s.ResearchObjectId, ResearchObjectName = s.ResearchObject.Name })
                                     .ToDictionary(s => s.Id);
 
             parentSequenceIds = parentSequences
-                                .OrderBy(ps => Array.IndexOf(matterIds, ps.Value.MatterId))
+                                .OrderBy(ps => Array.IndexOf(researchObjectIds, ps.Value.ResearchObjectId))
                                 .Select(ps => ps.Key)
                                 .ToArray();
 
             for (int n = 0; n < parentSequenceIds.Length; n++)
             {
-                matterNames[n] = parentSequences[parentSequenceIds[n]].MatterName;
+                researchObjectNames[n] = parentSequences[parentSequenceIds[n]].ResearchObjectName;
             }
 
             // TODO: refactor this
@@ -159,10 +158,10 @@ public class SubsequencesComparerController : AbstractResultController
             string sequenceCharacteristicName = fullCharacteristicRepository.GetCharacteristicName(characteristicLinkId);
             string characteristicName = fullCharacteristicRepository.GetCharacteristicName(characteristicLinkIds[0]);
 
-            var characteristicValueSubsequences = new Dictionary<double, List<(int matterIndex, int subsequenceIndex, double[] additionalCharacteristics)>>();
+            var characteristicValueSubsequences = new Dictionary<double, List<(int researchObjectIndex, int subsequenceIndex, double[] additionalCharacteristics)>>();
 
-            // cycle through matters
-            for (int i = 0; i < mattersCount; i++)
+            // cycle through research objects
+            for (int i = 0; i < researchObjectsCount; i++)
             {
                 SubsequenceData[] subsequencesData = subsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
                         characteristicLinkIds,
@@ -176,46 +175,46 @@ public class SubsequencesComparerController : AbstractResultController
                 for (int j = 0; j < subsequencesData.Length; j++)
                 {
                     double value = subsequencesData[j].CharacteristicsValues[0]; // Получаем значения характеристик?
-                    if (characteristicValueSubsequences.TryGetValue(value, out List<(int matterIndex, int subsequenceIndex, double[] additionalCharacteristics)> matterAndSubsequenceIdsList))
+                    if (characteristicValueSubsequences.TryGetValue(value, out List<(int researchObjectIndex, int subsequenceIndex, double[] additionalCharacteristics)> researchObjectAndSubsequenceIdsList))
                     {
-                        matterAndSubsequenceIdsList.Add((i, j, subsequencesData[j].CharacteristicsValues.Skip(1).ToArray()));
+                        researchObjectAndSubsequenceIdsList.Add((i, j, subsequencesData[j].CharacteristicsValues.Skip(1).ToArray()));
                     }
                     else
                     {
-                        matterAndSubsequenceIdsList =
+                        researchObjectAndSubsequenceIdsList =
                         [
-                            (matterIndex: i, subsequenceIndex: j, additionalCharacterisctics: subsequencesData[j].CharacteristicsValues.Skip(1).ToArray())
+                            (researchObjectIndex: i, subsequenceIndex: j, additionalCharacterisctics: subsequencesData[j].CharacteristicsValues.Skip(1).ToArray())
                         ]; // добавить в кортеж все характеристики кроме 0
-                        characteristicValueSubsequences.Add(value, matterAndSubsequenceIdsList);
+                        characteristicValueSubsequences.Add(value, researchObjectAndSubsequenceIdsList);
                     }
                 }
             }
 
 
-            List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> similarPairs =
+            List<((int researchObjectIndex, int subsequenceIndex) firstSequence, (int researchObjectIndex, int subsequenceIndex) secondSequence, double difference)> similarPairs =
                 ExtractSimilarPairs(characteristicValueSubsequences, percentageDifferences);
 
             List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>[,] similarityMatrix =
-                FillSimilarityMatrix(mattersCount, similarPairs);
+                FillSimilarityMatrix(researchObjectsCount, similarPairs);
 
-            object[,] similarities = Similarities(similarityMatrix, characteristics, mattersCount);
+            object[,] similarities = Similarities(similarityMatrix, characteristics, researchObjectsCount);
 
-            List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> filteredSimilarPairs;
+            List<((int researchObjectIndex, int subsequenceIndex) firstSequence, (int researchObjectIndex, int subsequenceIndex) secondSequence, double difference)> filteredSimilarPairs;
             List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>[,] filteredSimilarityMatrix = null;
             object[,] filteredSimilarities = null;
 
             if (filterMatrix)
             {
                 filteredSimilarPairs = FilterSimilarityPairs(similarPairs, characteristics, characteristicLinkIds[0]);
-                filteredSimilarityMatrix = FillSimilarityMatrix(mattersCount, filteredSimilarPairs);
-                filteredSimilarities = Similarities(filteredSimilarityMatrix, characteristics, mattersCount);
+                filteredSimilarityMatrix = FillSimilarityMatrix(researchObjectsCount, filteredSimilarPairs);
+                filteredSimilarities = Similarities(filteredSimilarityMatrix, characteristics, researchObjectsCount);
             }
 
             List<AttributeValue> allAttributeValues = attributeValuesCache.AllAttributeValues;
 
             var result = new Dictionary<string, object>
             {
-                { "mattersNames", matterNames },
+                { "researchObjectsNames", researchObjectNames },
                 { "characteristicName", characteristicName },
                 { "similarities", similarities },
                 { "filteredSimilarities", filteredSimilarities },
@@ -244,9 +243,9 @@ public class SubsequencesComparerController : AbstractResultController
     }
 
     [NonAction]
-    private List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> FilterSimilarityPairs
+    private List<((int researchObjectIndex, int subsequenceIndex) firstSequence, (int researchObjectIndex, int subsequenceIndex) secondSequence, double difference)> FilterSimilarityPairs
         (
-            List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> similarPairs,
+            List<((int researchObjectIndex, int subsequenceIndex) firstSequence, (int researchObjectIndex, int subsequenceIndex) secondSequence, double difference)> similarPairs,
             SubsequenceData[][] characteristics,
             short subsequencesCharacteristicLinkId
         )
@@ -255,8 +254,8 @@ public class SubsequencesComparerController : AbstractResultController
         using var sequenceRepository = sequenceRepositoryFactory.Create();
         var localCharacteristicsCalculator = new LocalCharacteristicsCalculator(db, fullCharacteristicRepository, sequenceRepository);
 
-        var cache = new Dictionary<(int matterIndex, int subsequenceIndex), double[]>();
-        List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> result = [];
+        var cache = new Dictionary<(int researchObjectIndex, int subsequenceIndex), double[]>();
+        List<((int researchObjectIndex, int subsequenceIndex) firstSequence, (int researchObjectIndex, int subsequenceIndex) secondSequence, double difference)> result = [];
 
         var alignersFactory = new AlignersFactory();
         var calculatorsFactory = new DistanceCalculatorsFactory();
@@ -271,18 +270,18 @@ public class SubsequencesComparerController : AbstractResultController
         for (int i = 0; i < similarPairs.Count; i++)
         {
             var similarPair = similarPairs[i];
-            if (!cache.TryGetValue((similarPair.firstSequence.matterIndex, similarPair.firstSequence.subsequenceIndex), out double[] firstLocalCharacteristics))
+            if (!cache.TryGetValue((similarPair.firstSequence.researchObjectIndex, similarPair.firstSequence.subsequenceIndex), out double[] firstLocalCharacteristics))
             {
-                var subsequenceData = characteristics[similarPair.firstSequence.matterIndex][similarPair.firstSequence.subsequenceIndex];
+                var subsequenceData = characteristics[similarPair.firstSequence.researchObjectIndex][similarPair.firstSequence.subsequenceIndex];
                 firstLocalCharacteristics = localCharacteristicsCalculator.GetSubsequenceCharacteristic(subsequenceData.Id, subsequencesCharacteristicLinkId, 50, 1);
-                cache.Add((similarPair.firstSequence.matterIndex, similarPair.firstSequence.subsequenceIndex), firstLocalCharacteristics);
+                cache.Add((similarPair.firstSequence.researchObjectIndex, similarPair.firstSequence.subsequenceIndex), firstLocalCharacteristics);
                 //TODO: get rid of hardcoded parameters
             }
-            if (!cache.TryGetValue((similarPair.secondSequence.matterIndex, similarPair.secondSequence.subsequenceIndex), out double[] secondLocalCharacteristics))
+            if (!cache.TryGetValue((similarPair.secondSequence.researchObjectIndex, similarPair.secondSequence.subsequenceIndex), out double[] secondLocalCharacteristics))
             {
-                var subsequenceData = characteristics[similarPair.secondSequence.matterIndex][similarPair.secondSequence.subsequenceIndex];
+                var subsequenceData = characteristics[similarPair.secondSequence.researchObjectIndex][similarPair.secondSequence.subsequenceIndex];
                 secondLocalCharacteristics = localCharacteristicsCalculator.GetSubsequenceCharacteristic(subsequenceData.Id, subsequencesCharacteristicLinkId, 50, 1);
-                cache.Add((similarPair.secondSequence.matterIndex, similarPair.secondSequence.subsequenceIndex), secondLocalCharacteristics);
+                cache.Add((similarPair.secondSequence.researchObjectIndex, similarPair.secondSequence.subsequenceIndex), secondLocalCharacteristics);
                 //TODO: get rid of hardcoded parameters
             }
 
@@ -297,10 +296,10 @@ public class SubsequencesComparerController : AbstractResultController
     }
 
     /// <summary>
-    /// Orders matter ids by characteristic values.
+    /// Orders research objects ids by characteristic values.
     /// </summary>
-    /// <param name="matterIds">
-    /// The matter ids.
+    /// <param name="researchObjectIds">
+    /// The research objects ids.
     /// </param>
     /// <param name="characteristicLinkId">
     /// The characteristic link id.
@@ -312,18 +311,18 @@ public class SubsequencesComparerController : AbstractResultController
     /// The <see cref="T:long[]"/>.
     /// </returns>
     [NonAction]
-    private long[] OrderMatterIds(long[] matterIds, short characteristicLinkId, long[] sequences)
+    private long[] OrderResearchObjectIds(long[] researchObjectIds, short characteristicLinkId, long[] sequences)
     {
         double[] completeSequencesCharacteristics = sequencesCharacteristicsCalculator.Calculate(sequences, characteristicLinkId);
 
-        var matterCharacteristics = new (long matterId, double charcterisitcValue)[matterIds.Length];
+        var researchObjectCharacteristics = new (long researchObjectId, double charcterisitcValue)[researchObjectIds.Length];
 
         for (int i = 0; i < completeSequencesCharacteristics.Length; i++)
         {
-            matterCharacteristics[i] = (matterIds[i], completeSequencesCharacteristics[i]);
+            researchObjectCharacteristics[i] = (researchObjectIds[i], completeSequencesCharacteristics[i]);
         }
 
-        return matterCharacteristics.OrderBy(mc => mc.charcterisitcValue).Select(mc => mc.matterId).ToArray();
+        return researchObjectCharacteristics.OrderBy(mc => mc.charcterisitcValue).Select(mc => mc.researchObjectId).ToArray();
     }
 
     /// <summary>
@@ -335,8 +334,8 @@ public class SubsequencesComparerController : AbstractResultController
     /// <param name="characteristics">
     /// The characteristics.
     /// </param>
-    /// <param name="mattersCount">
-    /// The matters count.
+    /// <param name="researchObjectsCount">
+    /// The research objects count.
     /// </param>
     /// <returns>
     /// The <see cref="T:object[,]"/>.
@@ -345,12 +344,12 @@ public class SubsequencesComparerController : AbstractResultController
     private object[,] Similarities(
         List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>[,] similarityMatrix,
         SubsequenceData[][] characteristics,
-        int mattersCount)
+        int researchObjectsCount)
     {
-        object[,] similarities = new object[mattersCount, mattersCount];
-        for (int i = 0; i < mattersCount; i++)
+        object[,] similarities = new object[researchObjectsCount, researchObjectsCount];
+        for (int i = 0; i < researchObjectsCount; i++)
         {
-            for (int j = 0; j < mattersCount; j++)
+            for (int j = 0; j < researchObjectsCount; j++)
             {
                 int firstEqualCount = similarityMatrix[i, j]
                                       .Select(s => s.firstSubsequenceIndex)
@@ -441,11 +440,11 @@ public class SubsequencesComparerController : AbstractResultController
     /// The <see cref="List{((int, int), (int, int), double)}"/>.
     /// </returns>
     [NonAction]
-    private List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> ExtractSimilarPairs(
-        Dictionary<double, List<(int matterId, int subsequenceIndex, double[] additionalCharacteristics /*все кроме 1*/)>> characteristicValueSubsequences,
+    private List<((int researchObjectIndex, int subsequenceIndex) firstSequence, (int researchObjectIndex, int subsequenceIndex) secondSequence, double difference)> ExtractSimilarPairs(
+        Dictionary<double, List<(int researchObjectId, int subsequenceIndex, double[] additionalCharacteristics /*все кроме 1*/)>> characteristicValueSubsequences,
         double[] percentageDifferences)
     {
-        List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> similarPairs = new(characteristicValueSubsequences.Count);
+        List<((int researchObjectIndex, int subsequenceIndex) firstSequence, (int researchObjectIndex, int subsequenceIndex) secondSequence, double difference)> similarPairs = new(characteristicValueSubsequences.Count);
 
         foreach (double key in characteristicValueSubsequences.Keys)
         {
@@ -459,8 +458,8 @@ public class SubsequencesComparerController : AbstractResultController
             double difference = CalculateAverageDifference(orderedCharacteristicValue[i], orderedCharacteristicValue[j]);
             while (difference <= percentageDifferences[0]) // Не понял.
             {
-                List<(int matterIndex, int subsequenceIndex, double[] additionalCharacteristics)> firstComponentIndex = characteristicValueSubsequences[orderedCharacteristicValue[i]];
-                List<(int matterIndex, int subsequenceIndex, double[] additionalCharacteristics)> secondComponentIndex = characteristicValueSubsequences[orderedCharacteristicValue[j]];
+                List<(int researchObjectIndex, int subsequenceIndex, double[] additionalCharacteristics)> firstComponentIndex = characteristicValueSubsequences[orderedCharacteristicValue[i]];
+                List<(int researchObjectIndex, int subsequenceIndex, double[] additionalCharacteristics)> secondComponentIndex = characteristicValueSubsequences[orderedCharacteristicValue[j]];
                 similarPairs.AddRange(ExtractAllPossiblePairs(firstComponentIndex, secondComponentIndex, percentageDifferences, difference));
 
                 j++;
@@ -501,10 +500,10 @@ public class SubsequencesComparerController : AbstractResultController
     /// The <see cref="List{((int,int), (int,int),double)}"/>.
     /// </returns>
     [NonAction]
-    private List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> ExtractAllPossiblePairs(
-        List<(int matterIndex, int subsequenceIndex, double[] additionalCharacteristics)> list, double[] differences) // добавить доп характеристики + массив dif
+    private List<((int researchObjectIndex, int subsequenceIndex) firstSequence, (int researchObjectIndex, int subsequenceIndex) secondSequence, double difference)> ExtractAllPossiblePairs(
+        List<(int researchObjectIndex, int subsequenceIndex, double[] additionalCharacteristics)> list, double[] differences) // добавить доп характеристики + массив dif
     {
-        List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> result = [];
+        List<((int researchObjectIndex, int subsequenceIndex) firstSequence, (int researchObjectIndex, int subsequenceIndex) secondSequence, double difference)> result = [];
         if (list.Count < 2)
         {
             return result;
@@ -527,7 +526,7 @@ public class SubsequencesComparerController : AbstractResultController
                 }
                 if (areSimilar)
                 {
-                    result.Add(((list[i].matterIndex, list[i].subsequenceIndex), (list[j].matterIndex, list[j].subsequenceIndex), 0)); // добавить "если" разница не больше dif то добавляем, выкинуть нулевой элемент
+                    result.Add(((list[i].researchObjectIndex, list[i].subsequenceIndex), (list[j].researchObjectIndex, list[j].subsequenceIndex), 0)); // добавить "если" разница не больше dif то добавляем, выкинуть нулевой элемент
                 }
             }
         }
@@ -552,14 +551,14 @@ public class SubsequencesComparerController : AbstractResultController
     /// The <see cref="List{((int,int), (int,int),double)}"/>.
     /// </returns>
     [NonAction]
-    private List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> ExtractAllPossiblePairs(
-        List<(int matterIndex, int subsequenceIndex, double[] additionalCharacteristics)> firstList,
-        List<(int matterIndex, int subsequenceIndex, double[] additionalCharacteristics)> secondList,
+    private List<((int researchObjectIndex, int subsequenceIndex) firstSequence, (int researchObjectIndex, int subsequenceIndex) secondSequence, double difference)> ExtractAllPossiblePairs(
+        List<(int researchObjectIndex, int subsequenceIndex, double[] additionalCharacteristics)> firstList,
+        List<(int researchObjectIndex, int subsequenceIndex, double[] additionalCharacteristics)> secondList,
         double[] differences,
         double primaryDifference
     )
     {
-        List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> result = [];
+        List<((int researchObjectIndex, int subsequenceIndex) firstSequence, (int researchObjectIndex, int subsequenceIndex) secondSequence, double difference)> result = [];
 
 
         foreach (var firstElement in firstList)
@@ -581,7 +580,7 @@ public class SubsequencesComparerController : AbstractResultController
                 }
                 if (areSimilar)
                 {
-                    result.Add(((firstElement.matterIndex, firstElement.subsequenceIndex), (secondElement.matterIndex, secondElement.subsequenceIndex), primaryDifference)); // добавить "если" разница не больше dif то добавляем, выкинуть нулевой элемент
+                    result.Add(((firstElement.researchObjectIndex, firstElement.subsequenceIndex), (secondElement.researchObjectIndex, secondElement.subsequenceIndex), primaryDifference)); // добавить "если" разница не больше dif то добавляем, выкинуть нулевой элемент
                 }
             }
         }
@@ -592,8 +591,8 @@ public class SubsequencesComparerController : AbstractResultController
     /// <summary>
     /// Fills similarity matrix from similarity pairs list.
     /// </summary>
-    /// <param name="mattersCount">
-    /// The matters count.
+    /// <param name="researchObjectsCount">
+    /// The research objects count.
     /// </param>
     /// <param name="similarPairs">
     /// The similar pairs.
@@ -603,29 +602,29 @@ public class SubsequencesComparerController : AbstractResultController
     /// </returns>
     [NonAction]
     private List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>[,] FillSimilarityMatrix(
-        int mattersCount,
-        List<((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference)> similarPairs)
+        int researchObjectsCount,
+        List<((int researchObjectIndex, int subsequenceIndex) firstSequence, (int researchObjectIndex, int subsequenceIndex) secondSequence, double difference)> similarPairs)
     {
-        var similarityMatrix = new List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>[mattersCount, mattersCount];
-        for (int i = 0; i < mattersCount; i++)
+        var similarityMatrix = new List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>[researchObjectsCount, researchObjectsCount];
+        for (int i = 0; i < researchObjectsCount; i++)
         {
-            for (int j = 0; j < mattersCount; j++)
+            for (int j = 0; j < researchObjectsCount; j++)
             {
                 similarityMatrix[i, j] = [];
             }
         }
 
-        foreach (((int matterIndex, int subsequenceIndex) firstSequence, (int matterIndex, int subsequenceIndex) secondSequence, double difference) in similarPairs)
+        foreach (((int researchObjectIndex, int subsequenceIndex) firstSequence, (int researchObjectIndex, int subsequenceIndex) secondSequence, double difference) in similarPairs)
         {
-            (int firstMatter, int firstSubsequence) = firstSequence;
-            (int secondMatter, int secondSubsequence) = secondSequence;
+            (int firstResearchObject, int firstSubsequence) = firstSequence;
+            (int secondResearchObject, int secondSubsequence) = secondSequence;
 
             (int firstSubsequenceIndex, int secondSubsequenceIndex, double difference) similarityData = (firstSubsequence, secondSubsequence, difference);
-            similarityMatrix[firstMatter, secondMatter].Add(similarityData);
+            similarityMatrix[firstResearchObject, secondResearchObject].Add(similarityData);
 
             //  TODO: get rid of duplicate data
             (int firstSubsequenceIndex, int secondSubsequenceIndex, double difference) symmetricalSimilarityData = (secondSubsequence, firstSubsequence, difference);
-            similarityMatrix[secondMatter, firstMatter].Add(symmetricalSimilarityData);
+            similarityMatrix[secondResearchObject, firstResearchObject].Add(symmetricalSimilarityData);
         }
 
         return similarityMatrix;

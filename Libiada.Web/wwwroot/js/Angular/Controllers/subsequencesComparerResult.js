@@ -40,12 +40,12 @@
                     let filterValue = $scope.filters[j].value.toUpperCase();
 
                     let firstSubsequenceIndex = elements[i].firstSubsequenceIndex;
-                    let firstVisible = $scope.isAttributeEqual($scope.firstMatterIndex, firstSubsequenceIndex, "product", filterValue);
-                    firstVisible = firstVisible || $scope.isAttributeEqual($scope.firstMatterIndex, firstSubsequenceIndex, "locus_tag", filterValue);
+                    let firstVisible = $scope.isAttributeEqual($scope.firstResearchObjectIndex, firstSubsequenceIndex, "product", filterValue);
+                    firstVisible = firstVisible || $scope.isAttributeEqual($scope.firstResearchObjectIndex, firstSubsequenceIndex, "locus_tag", filterValue);
 
                     let secondSubsequenceIndex = elements[i].secondSubsequenceIndex;
-                    let secondVisible = $scope.isAttributeEqual($scope.secondMatterIndex, secondSubsequenceIndex, "product", filterValue);
-                    secondVisible = secondVisible || $scope.isAttributeEqual($scope.secondMatterIndex, secondSubsequenceIndex, "locus_tag", filterValue);
+                    let secondVisible = $scope.isAttributeEqual($scope.secondResearchObjectIndex, secondSubsequenceIndex, "product", filterValue);
+                    secondVisible = secondVisible || $scope.isAttributeEqual($scope.secondResearchObjectIndex, secondSubsequenceIndex, "locus_tag", filterValue);
 
                     elements[i].filtersVisible.push(firstVisible || secondVisible);
                 }
@@ -53,15 +53,15 @@
         }
 
         // returns attribute index by its name if any
-        function getAttributeIdByName(matterIndex, subsequenceIndex, attributeName) {
-            return $scope.characteristics[matterIndex][subsequenceIndex].Attributes.find(a =>
+        function getAttributeIdByName(researchObjectIndex, subsequenceIndex, attributeName) {
+            return $scope.characteristics[researchObjectIndex][subsequenceIndex].Attributes.find(a =>
                 $scope.attributes[$scope.attributeValues[a].attribute] === attributeName
             );
         }
 
         // returns true if dot has given attribute and its value equal to the given value
-        function isAttributeEqual(matterIndex, subsequenceIndex, attributeName, expectedValue) {
-            let attributeId = $scope.getAttributeIdByName(matterIndex, subsequenceIndex, attributeName);
+        function isAttributeEqual(researchObjectIndex, subsequenceIndex, attributeName, expectedValue) {
+            let attributeId = $scope.getAttributeIdByName(researchObjectIndex, subsequenceIndex, attributeName);
             if (attributeId) {
                 let product = $scope.attributeValues[attributeId].value.toUpperCase();
                 return product.indexOf(expectedValue) !== -1;
@@ -70,13 +70,13 @@
             return false;
         }
 
-        // shows list of equal elements only for given pair of matters
+        // shows list of equal elements only for given pair of research objects
         function showEqualPairs(firstIndex, secondIndex, similarityValue) {
             $scope.loading = true;
             $scope.loadingScreenHeader = "Loading equal subsequences list...";
 
-            $scope.firstMatterIndex = firstIndex;
-            $scope.secondMatterIndex = secondIndex;
+            $scope.firstResearchObjectIndex = firstIndex;
+            $scope.secondResearchObjectIndex = secondIndex;
 
             $scope.similarityValue = similarityValue;
             $scope.similarityValueSelected = true;
@@ -383,10 +383,10 @@
             .then(data => {
                 MapModelFromJson($scope, data.data);
 
-                $scope.equalElements = new Array($scope.mattersNames.length);
+                $scope.equalElements = new Array($scope.researchObjectsNames.length);
 
-                for (let i = 0; i < $scope.mattersNames.length; i++) {
-                    $scope.equalElements[i] = new Array($scope.mattersNames.length);
+                for (let i = 0; i < $scope.researchObjectsNames.length; i++) {
+                    $scope.equalElements[i] = new Array($scope.researchObjectsNames.length);
                 }
 
                 $scope.loading = false;

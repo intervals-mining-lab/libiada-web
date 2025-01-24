@@ -1,11 +1,11 @@
-﻿function MatterSequenceCreateController(data) {
+﻿function ResearchObjectSequenceCreateController(data) {
     "use strict";
 
-    function matterSequenceCreate($scope, filterFilter) {
+    function researchObjectSequenceCreate($scope, filterFilter) {
         MapModelFromJson($scope, data);
 
         function filterByNature() {
-            let arraysForFiltration = ["notations", "remoteDbs", "matters", "groups", "sequenceTypes"];
+            let arraysForFiltration = ["notations", "remoteDbs", "researchObjects", "groups", "sequenceTypes"];
 
             arraysForFiltration.forEach(arrayName => {
                 if (angular.isDefined($scope[arrayName])) {
@@ -16,8 +16,8 @@
             $scope.notationId = $scope.notationsFiltered[0].Value;
             $scope.group = $scope.groupsFiltered[0].Value;
             $scope.sequenceType = $scope.sequenceTypesFiltered[0].Value;
-            if (angular.isDefined($scope.mattersFiltered) && angular.isDefined($scope.mattersFiltered[0])) {
-                $scope.matterId = $scope.mattersFiltered[0].Value;
+            if (angular.isDefined($scope.researchObjectsFiltered) && angular.isDefined($scope.researchObjectsFiltered[0])) {
+                $scope.researchObjectId = $scope.researchObjectsFiltered[0].Value;
             }
         }
 
@@ -43,5 +43,5 @@
         $scope.name = "";
     }
 
-    angular.module("libiada").controller("MatterSequenceCreateCtrl", ["$scope", "filterFilter", matterSequenceCreate]);
+    angular.module("libiada").controller("ResearchObjectSequenceCreateCtrl", ["$scope", "filterFilter", researchObjectSequenceCreate]);
 }

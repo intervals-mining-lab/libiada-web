@@ -40,9 +40,9 @@ public class SequenceTransformerController : Controller
     /// <summary>
     /// Initializes a new instance of the <see cref="SequenceTransformerController"/> class.
     /// </summary>
-    public SequenceTransformerController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
+    public SequenceTransformerController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                          IViewDataHelper viewDataHelper,
-                                         ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory, 
+                                         ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
                                          Cache cache)
     {
         this.dbFactory = dbFactory;
@@ -61,9 +61,9 @@ public class SequenceTransformerController : Controller
     /// </returns>
     public ActionResult Index()
     {
-        long[] matterIds = db.CombinedSequenceEntities.Where(d => d.Notation == Notation.Nucleotides).Select(d => d.MatterId).ToArray();
+        long[] researchObjectIds = db.CombinedSequenceEntities.Where(d => d.Notation == Notation.Nucleotides).Select(d => d.ResearchObjectId).ToArray();
 
-        var data = viewDataHelper.FillViewData(1, int.MaxValue, m => matterIds.Contains(m.Id), "Transform");
+        var data = viewDataHelper.FillViewData(1, int.MaxValue, m => researchObjectIds.Contains(m.Id), "Transform");
         data.Add("nature", (byte)Nature.Genetic);
         ViewBag.data = JsonConvert.SerializeObject(data);
         return View();
@@ -72,7 +72,7 @@ public class SequenceTransformerController : Controller
     /// <summary>
     /// The index.
     /// </summary>
-    /// <param name="matterIds">
+    /// <param name="researchObjectIds">
     /// The sequence ids.
     /// </param>
     /// <param name="transformType">
@@ -82,14 +82,14 @@ public class SequenceTransformerController : Controller
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    public ActionResult Index(IEnumerable<long> matterIds, string transformType)
+    public ActionResult Index(IEnumerable<long> researchObjectIds, string transformType)
     {
         // TODO: make transformType into enum
         Notation notation = transformType.Equals("toAmino") ? Notation.AminoAcids : Notation.Triplets;
         using var sequenceRepository = sequenceRepositoryFactory.Create();
-        foreach (var matterId in matterIds)
+        foreach (var researchObjectId in researchObjectIds)
         {
-            long sequenceId = db.CombinedSequenceEntities.Single(c => c.MatterId == matterId && c.Notation == Notation.Nucleotides).Id;
+            long sequenceId = db.CombinedSequenceEntities.Single(c => c.ResearchObjectId == researchObjectId && c.Notation == Notation.Nucleotides).Id;
             ComposedSequence sourceSequence = sequenceRepository.GetLibiadaComposedSequence(sequenceId);
 
             Sequence transformedSequence = transformType.Equals("toAmino")
@@ -100,7 +100,7 @@ public class SequenceTransformerController : Controller
 
             var result = new GeneticSequence
             {
-                MatterId = matterId,
+                ResearchObjectId = researchObjectId,
                 Notation = notation,
                 Alphabet = alphabet,
                 Order = transformedSequence.Order,

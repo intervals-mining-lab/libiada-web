@@ -18,7 +18,7 @@
                         <tr>
                             <th>#</th>
                             <th>Multisequence name</th>
-                            <th>Matters</th>
+                            <th>Research objects</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -31,17 +31,17 @@
                                            name="multisequencesNames"
                                            id="{{::'multisequence' + multisequence.Id}}"
                                            ng-value="::multisequence.name"
-                                           ng-disabled="multisequence.matterIds.length <= 1"
-                                           ng-checked="multisequence.matterIds.length > 1" />
+                                           ng-disabled="multisequence.researchObjectIds.length <= 1"
+                                           ng-checked="multisequence.researchObjectIds.length > 1" />
                                     <label class="form-check-label" for="{{::'multisequence' + multisequence.Id}}" ng-bind="::multisequence.name" />
                                 </div>
                             </td>
                             <td>
-                                <div ng-repeat="matterId in multisequence.matterIds">
-                                    <input type="hidden" name="{{'multisequenceMatters[' + multisequence.name + ']'}}" value="{{matterId}}" />
-                                    {{matters[matterId]}}
+                                <div ng-repeat="researchObjectId in multisequence.researchObjectIds">
+                                    <input type="hidden" name="{{'multisequenceResearchObjects[' + multisequence.name + ']'}}" value="{{researchObjectId}}" />
+                                    {{researchObjects[researchObjectId]}}
 
-                                    <button type="button" class="btn btn-danger btn-sm" ng-click="unbindMatter(multisequence, matterId)">X</button>
+                                    <button type="button" class="btn btn-danger btn-sm" ng-click="unbindResearchObject(multisequence, researchObjectId)">X</button>
                                     <br />
                                 </div>
                             </td>
@@ -52,26 +52,26 @@
                     <input type="submit" value="Save" class="btn btn-success" />
                 </div>
                 <hr />
-                <h3> Ungrouped matters</h3>
+                <h3> Ungrouped research objects</h3>
                 <table class="table table-bordered table-hover" ng-cloak>
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Matter name</th>
+                            <th>Research object name</th>
                             <th>Group</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="matter in ungroupedMatters">
+                        <tr ng-repeat="researchObject in ungroupedResearchObjects">
                             <td ng-bind="$index + 1" />
-                            <td ng-bind="matter.Name" />
+                            <td ng-bind="researchObject.Name" />
                             <td>
                                 @* TODO: add autocomplete *@
                                 <select class="form-select"
-                                        name="{{'matter' + matter.Id}}"
+                                        name="{{'researchObject' + researchObject.Id}}"
                                         ng-model="multisequence"
                                         ng-options="multisequence.name for multisequence in result"></select>
-                                <button type="button" class="btn btn-secondary btn-sm" ng-click="bindMatter(multisequence, $index)">Distribute</button>
+                                <button type="button" class="btn btn-secondary btn-sm" ng-click="bindResearchObject(multisequence, $index)">Distribute</button>
                             </td>
                         </tr>
                     </tbody>

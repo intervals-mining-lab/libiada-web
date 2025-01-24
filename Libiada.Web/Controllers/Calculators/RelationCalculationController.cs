@@ -24,7 +24,7 @@ public class RelationCalculationController : AbstractResultController
     /// <summary>
     /// Database context.
     /// </summary>
-    private readonly LibiadaDatabaseEntities db; 
+    private readonly LibiadaDatabaseEntities db;
 
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
 
@@ -43,9 +43,9 @@ public class RelationCalculationController : AbstractResultController
     /// <summary>
     /// Initializes a new instance of the <see cref="RelationCalculationController"/> class.
     /// </summary>
-    public RelationCalculationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
-                                         IViewDataHelper viewDataHelper, 
-                                         ITaskManager taskManager, 
+    public RelationCalculationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
+                                         IViewDataHelper viewDataHelper,
+                                         ITaskManager taskManager,
                                          ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
                                          IBinaryCharacteristicRepository characteristicTypeLinkRepository,
                                          Cache cache)
@@ -74,8 +74,8 @@ public class RelationCalculationController : AbstractResultController
     /// <summary>
     /// The index.
     /// </summary>
-    /// <param name="matterId">
-    /// The matter id.
+    /// <param name="researchObjectId">
+    /// The research object id.
     /// </param>
     /// <param name="characteristicLinkId">
     /// The characteristic type and link id.
@@ -115,7 +115,7 @@ public class RelationCalculationController : AbstractResultController
     /// </returns>
     [HttpPost]
     public ActionResult Index(
-        long matterId,
+        long researchObjectId,
         short characteristicLinkId,
         Notation notation,
         Language? language,
@@ -131,23 +131,23 @@ public class RelationCalculationController : AbstractResultController
         return CreateTask(() =>
         {
             string characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
-            Matter matter = cache.Matters.Single(m => m.Id == matterId);
+            ResearchObject researchObject = cache.ResearchObjects.Single(m => m.Id == researchObjectId);
             using var sequenceRepository = sequenceRepositoryFactory.Create();
-            long sequenceId = sequenceRepository.GetSequenceIds([matterId], 
-                                                                      notation, 
-                                                                      language, 
-                                                                      translator, 
-                                                                      pauseTreatment, 
+            long sequenceId = sequenceRepository.GetSequenceIds([researchObjectId],
+                                                                      notation,
+                                                                      language,
+                                                                      translator,
+                                                                      pauseTreatment,
                                                                       sequentialTransfer,
                                                                       trajectory).Single();
 
             ComposedSequence currentSequence = sequenceRepository.GetLibiadaComposedSequence(sequenceId);
-            CombinedSequenceEntity sequence = db.CombinedSequenceEntities.Include(cs => cs.Matter).Single(m => m.Id == sequenceId);
+            CombinedSequenceEntity sequence = db.CombinedSequenceEntities.Include(cs => cs.ResearchObject).Single(m => m.Id == sequenceId);
 
             var result = new Dictionary<string, object>
             {
                 { "isFilter", filter },
-                { "matterName", sequence.Matter.Name },
+                { "researchObjectName", sequence.ResearchObject.Name },
                 { "notationName", sequence.Notation.GetDisplayValue() },
                 { "characteristicName", characteristicName }
             };
@@ -204,9 +204,9 @@ public class RelationCalculationController : AbstractResultController
                                         .GroupBy(b => b.FirstElementId)
                                         .ToDictionary(b => b.Key, b => b.ToDictionary(bb => bb.SecondElementId, bb => bb.Value));
                 long[] elementIds = db.CombinedSequenceEntities.Single(cs => cs.Id == sequenceId).Alphabet;
-                
+
                 Element[] elements = new ElementRepository(db).GetElements(elementIds);
-                
+
                 result.Add("characteristics", characteristics);
                 result.Add("elements", elements.Select(e => new { Name = e.Name ?? e.Value, e.Id }));
             }
@@ -309,7 +309,7 @@ public class RelationCalculationController : AbstractResultController
         }
 
         // ordering alphabet by frequencies
-        Array.Sort(frequencies, (x,y) => x.frequency.CompareTo(y.frequency));
+        Array.Sort(frequencies, (x, y) => x.frequency.CompareTo(y.frequency));
 
         // calculating relation characteristic only for elements with maximum frequency
         for (int i = 0; i < frequencyCount; i++)

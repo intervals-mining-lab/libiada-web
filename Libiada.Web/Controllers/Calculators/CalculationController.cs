@@ -33,7 +33,7 @@ public class CalculationController : AbstractResultController
     public CalculationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                  IViewDataHelper viewDataHelper,
                                  ITaskManager taskManager,
-                                 Cache cache, 
+                                 Cache cache,
                                  IFullCharacteristicRepository characteristicTypeLinkRepository,
                                  ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator,
                                  ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory)
@@ -64,8 +64,8 @@ public class CalculationController : AbstractResultController
     /// <summary>
     /// The index.
     /// </summary>
-    /// <param name="matterIds">
-    /// The matters ids.
+    /// <param name="researchObjectIds">
+    /// The research objects ids.
     /// </param>
     /// <param name="characteristicLinkIds">
     /// The characteristic type and link ids.
@@ -103,7 +103,7 @@ public class CalculationController : AbstractResultController
     [HttpPost]
     public ActionResult Index(
         string tableType,
-        long[] matterIds,
+        long[] researchObjectIds,
         int[] sequenceGroupIds,
         short[] characteristicLinkIds,
         Notation[] notations,
@@ -119,31 +119,31 @@ public class CalculationController : AbstractResultController
         return CreateTask(() =>
         {
             IEnumerable<SelectListItem>? sequenceGroupsSelectList = null;
-            Dictionary<long, int>? mattersIdsSequenceGroupIds = null;
+            Dictionary<long, int>? researchObjectsIdsSequenceGroupIds = null;
             if (tableType.Equals("sequenceGroups"))
             {
                 using var db = dbFactory.CreateDbContext();
-                SequenceGroup[] sequenceGroups = db.SequenceGroups.Where(sg => sequenceGroupIds.Contains(sg.Id)).Include(sg => sg.Matters).ToArray();
-                matterIds = sequenceGroups.Select(sg => sg.Matters.Select(m => m.Id)).SelectMany(m => m).ToArray();
-                int distinctMattersCount = matterIds.Distinct().ToArray().Length;
-                if (matterIds.Length != distinctMattersCount) throw new ArgumentException("Sequence groups contain intesecting sets of sequences", nameof(sequenceGroupIds));
+                SequenceGroup[] sequenceGroups = db.SequenceGroups.Where(sg => sequenceGroupIds.Contains(sg.Id)).Include(sg => sg.ResearchObjects).ToArray();
+                researchObjectIds = sequenceGroups.Select(sg => sg.ResearchObjects.Select(m => m.Id)).SelectMany(m => m).ToArray();
+                int distinctResearchObjectsCount = researchObjectIds.Distinct().ToArray().Length;
+                if (researchObjectIds.Length != distinctResearchObjectsCount) throw new ArgumentException("Sequence groups contain intesecting sets of sequences", nameof(sequenceGroupIds));
 
-                mattersIdsSequenceGroupIds = sequenceGroups.SelectMany(sg => sg.Matters.Select(m => new { id = sg.Id, matterId = m.Id }))
-                                                           .ToDictionary(sg => sg.matterId, sg => sg.id);
+                researchObjectsIdsSequenceGroupIds = sequenceGroups.SelectMany(sg => sg.ResearchObjects.Select(m => new { id = sg.Id, researchObjectId = m.Id }))
+                                                           .ToDictionary(sg => sg.researchObjectId, sg => sg.id);
 
                 sequenceGroupsSelectList = SelectListHelper.GetSequenceGroupSelectList(sg => sequenceGroupIds.Contains(sg.Id), db);
             }
 
             using var sequenceRepository = sequenceRepositoryFactory.Create();
             long[][] sequenceIds;
-            sequenceIds = sequenceRepository.GetSequenceIds(matterIds,
+            sequenceIds = sequenceRepository.GetSequenceIds(researchObjectIds,
                                                             notations,
                                                             languages,
                                                             translators,
                                                             pauseTreatments,
                                                             sequentialTransfers,
                                                             trajectories);
-            Dictionary<long, string> mattersNames = cache.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
+            Dictionary<long, string> researchObjectsNames = cache.ResearchObjects.Where(m => researchObjectIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
 
             double[][] characteristics;
             if (!rotate && !complementary)
@@ -155,13 +155,13 @@ public class CalculationController : AbstractResultController
                 characteristics = sequencesCharacteristicsCalculator.Calculate(sequenceIds, characteristicLinkIds, rotate, complementary, rotationLength);
             }
 
-            var sequencesCharacteristics = new SequenceCharacteristics[matterIds.Length];
-            for (int i = 0; i < matterIds.Length; i++)
+            var sequencesCharacteristics = new SequenceCharacteristics[researchObjectIds.Length];
+            for (int i = 0; i < researchObjectIds.Length; i++)
             {
                 sequencesCharacteristics[i] = new SequenceCharacteristics
                 {
-                    MatterName = mattersNames[matterIds[i]],
-                    SequenceGroupId = mattersIdsSequenceGroupIds?[matterIds[i]],
+                    ResearchObjectName = researchObjectsNames[researchObjectIds[i]],
+                    SequenceGroupId = researchObjectsIdsSequenceGroupIds?[researchObjectIds[i]],
                     Characteristics = characteristics[i]
                 };
             }
@@ -188,7 +188,7 @@ public class CalculationController : AbstractResultController
             };
 
             if (sequenceGroupsSelectList is not null) result.Add("sequenceGroups", sequenceGroupsSelectList);
-            
+
 
             return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
         });

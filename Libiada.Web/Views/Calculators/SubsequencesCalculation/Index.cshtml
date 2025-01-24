@@ -13,14 +13,14 @@
     <div ng-controller="SubsequencesCalculationCtrl">
         <h4>Sequences and parameters</h4>
         @Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
-        <matters-table matters="matters"
-                       nature="nature"
-                       groups="groups"
-                       sequence-types="sequenceTypes"
-                       maximum-selected-matters="::maximumSelectedMatters"
-                       selected-matters-count="selectedMattersCount"
-                       group-and-type-required="::false">
-        </matters-table>
+        <research-objects-table research-objects="researchObjects"
+                                nature="nature"
+                                groups="groups"
+                                sequence-types="sequenceTypes"
+                                maximum-selected-research-objects="::maximumSelectedResearchObjects"
+                                selected-research-objects-count="selectedResearchObjectsCount"
+                                group-and-type-required="::false">
+        </research-objects-table>
 
         <features-select features="::features"></features-select>
 
@@ -35,16 +35,16 @@
                          trajectories="::trajectories"
                          hide-notation="true">
         </characteristics>
-        <matters-submit selected-matters-count="selectedMattersCount"
-                        minimum-selected-matters="{{::minimumSelectedMatters}}"
-                        selected-sequence-groups-count="selectedSequenceGroupsCount">
-        </matters-submit>
+        <research-objects-submit selected-research-objects-count="selectedResearchObjectsCount"
+                                 minimum-selected-research-objects="{{::minimumSelectedResearchObjects}}"
+                                 selected-sequence-groups-count="selectedSequenceGroupsCount">
+        </research-objects-submit>
     </div>
 }
 
 @section Scripts {
     <script src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
-    <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
-    <script src="~/js/Angular/Components/mattersSubmit.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/researchObjectsTable.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/researchObjectsSubmit.js" asp-append-version="true"></script>
     <script src="~/js/Angular/Components/featuresSelect.js" asp-append-version="true"></script>
 }

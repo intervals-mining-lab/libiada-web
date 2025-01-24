@@ -11,7 +11,7 @@
     <div ng-controller="SequencePredictionResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <div ng-disabled="loading">
-            <h4>Sequence name: {{matterName}} </h4>
+            <h4>Sequence name: {{researchObjectName}} </h4>
             <h5> Correct prediction: {{matching.toFixed(4)}} % </h5>
             <table class="table table-bordered table-hover" ng-cloak>
                 <thead>

@@ -193,7 +193,7 @@ public class CustomSequenceCalculationController : AbstractResultController
                 {
                     sequencesCharacteristics.Add(new SequenceCharacteristics
                     {
-                        MatterName = sequencesNames[i],
+                        ResearchObjectName = sequencesNames[i],
                         Characteristics = characteristics[i]
                     });
                 }

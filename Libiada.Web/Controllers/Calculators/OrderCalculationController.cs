@@ -101,7 +101,7 @@ public class OrderCalculationController : AbstractResultController
 
                 sequencesCharacteristics[j] = new SequenceCharacteristics
                 {
-                    MatterName = string.Join(",", orders[j].Select(n => n.ToString()).ToArray()),
+                    ResearchObjectName = string.Join(",", orders[j].Select(n => n.ToString()).ToArray()),
                     Characteristics = characteristics[j]
                 };
             }

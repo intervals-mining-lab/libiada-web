@@ -76,7 +76,7 @@ public class NcbiNuccoreSearchController : AbstractResultController
                 accessions = searchResults.Select(no => no.AccessionVersion.Split('.')[0]).Distinct().ToArray();
             }
 
-            List<MatterImportResult> results = new(accessions.Length);
+            List<ResearchObjectImportResult> results = new(accessions.Length);
 
             string[] existingAccessions;
 
@@ -89,17 +89,17 @@ public class NcbiNuccoreSearchController : AbstractResultController
                                 .ToList();
             foreach (NuccoreObject searchResult in searchResults)
             {
-                results.Add(new MatterImportResult()
+                results.Add(new ResearchObjectImportResult()
                 {
-                    MatterName = $"{searchResult.Title} | {searchResult.AccessionVersion}",
+                    ResearchObjectName = $"{searchResult.Title} | {searchResult.AccessionVersion}",
                     Result = "Found new sequence",
                     Status = "Success"
                 });
             }
 
-            results.AddRange(existingAccessions.ConvertAll(existingAccession => new MatterImportResult
+            results.AddRange(existingAccessions.ConvertAll(existingAccession => new ResearchObjectImportResult
             {
-                MatterName = existingAccession,
+                ResearchObjectName = existingAccession,
                 Result = "Sequence already exists",
                 Status = "Exists"
             }));
@@ -111,9 +111,9 @@ public class NcbiNuccoreSearchController : AbstractResultController
                                         .ToList();
                 foreach (NuccoreObject filteresOutSearchResult in filteresOutSearchResults)
                 {
-                    results.Add(new MatterImportResult()
+                    results.Add(new ResearchObjectImportResult()
                     {
-                        MatterName = $"{filteresOutSearchResult.Title} | {filteresOutSearchResult.AccessionVersion}",
+                        ResearchObjectName = $"{filteresOutSearchResult.Title} | {filteresOutSearchResult.AccessionVersion}",
                         Result = "Filtered out",
                         Status = "Error"
                     });

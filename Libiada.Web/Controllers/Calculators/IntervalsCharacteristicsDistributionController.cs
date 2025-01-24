@@ -91,7 +91,7 @@ public class IntervalsCharacteristicsDistributionController : AbstractResultCont
             {
                 sequencesCharacteristics.Add(new SequenceCharacteristics
                 {
-                    MatterName = string.Join(",", orders[i].Select(n => n.ToString()).ToArray()),
+                    ResearchObjectName = string.Join(",", orders[i].Select(n => n.ToString()).ToArray()),
                     Characteristics = characteristics[i]
                 });
             }
@@ -133,7 +133,7 @@ public class IntervalsCharacteristicsDistributionController : AbstractResultCont
                     {
                         // TODO refactor this
                         SequenceCharacteristics characteristic = sequencesCharacteristics
-                                          .FirstOrDefault(el => el.MatterName.SequenceEqual(string.Join(",", order.Select(n => n.ToString()).ToArray())));
+                                          .FirstOrDefault(el => el.ResearchObjectName.SequenceEqual(string.Join(",", order.Select(n => n.ToString()).ToArray())));
                         resultAccordance[element.Key].Add(order, characteristic);
                     }
                 }

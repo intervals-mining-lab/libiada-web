@@ -41,7 +41,7 @@ public class PoemSegmentationController : AbstractResultController
 
     [HttpPost]
     public ActionResult Index(
-        long matterId,
+        long researchObjectId,
         int wordLength,
         string startThreshold,
         string balance)
@@ -49,8 +49,8 @@ public class PoemSegmentationController : AbstractResultController
         return CreateTask(() =>
         {
             using var db = dbFactory.CreateDbContext();
-            var sequenceId = db.CombinedSequenceEntities.Single(l => l.MatterId == matterId && l.Notation == Notation.Consonance).Id;
-            var sequenceName = cache.Matters.Single(l => l.Id == matterId).Name;
+            var sequenceId = db.CombinedSequenceEntities.Single(l => l.ResearchObjectId == researchObjectId && l.Notation == Notation.Consonance).Id;
+            var sequenceName = cache.ResearchObjects.Single(l => l.Id == researchObjectId).Name;
             using var sequenceRepository = sequenceRepositoryFactory.Create();
             var sequence = sequenceRepository.GetLibiadaSequence(sequenceId);
             var thresholdString = startThreshold.Replace('.', ',');

@@ -6,7 +6,7 @@
         function fillLegend() {
             $scope.legend = [];
             for (let k = 0; k < $scope.characteristics.length; k++) {
-                $scope.legend.push({ id: k, name: $scope.characteristics[k].matterName, visible: true });
+                $scope.legend.push({ id: k, name: $scope.characteristics[k].researchObjectName, visible: true });
             }
         }
 
@@ -19,7 +19,7 @@
                 for (let j = 0; j < characteristic.length; j++) {
                     $scope.points.push({
                         id: i,
-                        name: $scope.characteristics[i].matterName,
+                        name: $scope.characteristics[i].researchObjectName,
                         x: j,
                         y: characteristic[j]
                     });

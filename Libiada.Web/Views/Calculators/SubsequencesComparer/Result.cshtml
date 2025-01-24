@@ -32,31 +32,31 @@
             <tbody>
                 <tr>
                     <td />
-                    <td ng-repeat="matterName in mattersNames" title="{{matterName}}">{{$index + 1}}</td>
+                    <td ng-repeat="researchObjectName in researchObjectsNames" title="{{researchObjectName}}">{{$index + 1}}</td>
                 </tr>
                 <tr ng-repeat="similarity in flags.displayFiltered ? filteredSimilarities : similarities">
-                    <td title="{{mattersNames[$index]}}">{{$index + 1}}</td>
+                    <td title="{{researchObjectsNames[$index]}}">{{$index + 1}}</td>
                     <td ng-repeat="value in similarity"
                         ng-click="showEqualPairs($parent.$index, $index, value)"
                         ng-style="getHighlightColor(value.formula1)"
-                        title="{{mattersNames[$parent.$index]}} &#13{{mattersNames[$index]}}">
+                        title="{{researchObjectsNames[$parent.$index]}} &#13{{researchObjectsNames[$index]}}">
                         {{(value.formula1 * 100).toFixed(3)}}%
                         <br />
                         {{(value.formula2).toFixed(5)}}
                         <br />
                         {{(value.formula3 * 100).toFixed(3)}}%
                     </td>
-                    <td title="{{mattersNames[$index]}}">{{$index + 1}}</td>
+                    <td title="{{researchObjectsNames[$index]}}">{{$index + 1}}</td>
                 </tr>
                 <tr>
                     <td />
-                    <td ng-repeat="matterName in mattersNames" title="{{matterName}}" ng-bind="$index + 1"></td>
+                    <td ng-repeat="researchObjectName in researchObjectsNames" title="{{researchObjectName}}" ng-bind="$index + 1"></td>
                 </tr>
             </tbody>
         </table>
         <hr />
         <ul class="list-group">
-            <li class="list-group-item" ng-repeat="matterName in mattersNames"> <b> {{$index + 1}} - {{matterName}} </b> </li>
+            <li class="list-group-item" ng-repeat="researchObjectName in researchObjectsNames"> <b> {{$index + 1}} - {{researchObjectName}} </b> </li>
         </ul>
         <hr />
         <div class="row mb-1">
@@ -84,35 +84,35 @@
                     <td class="lh-sm">
                         <b> {{$index + 1}}. </b>
                         <br />
-                        First sequence: <b> {{mattersNames[firstMatterIndex]}} </b>
+                        First sequence: <b> {{researchObjectsNames[firstResearchObjectIndex]}} </b>
                         <br />
-                        Feature: {{features[characteristics[firstMatterIndex][equalElement.Item1].FeatureId]}}
+                        Feature: {{features[characteristics[firstResearchObjectIndex][equalElement.Item1].FeatureId]}}
                         <br />
-                        Positions = {{characteristics[firstMatterIndex][equalElement.Item1].Starts.join(', ')}}
+                        Positions = {{characteristics[firstResearchObjectIndex][equalElement.Item1].Starts.join(', ')}}
                         <br />
-                        Lengths = {{characteristics[firstMatterIndex][equalElement.Item1].Lengths.join(', ')}}
+                        Lengths = {{characteristics[firstResearchObjectIndex][equalElement.Item1].Lengths.join(', ')}}
                         <br />
-                        <div ng-repeat="attributeId in characteristics[firstMatterIndex][equalElement.Item1].Attributes">
+                        <div ng-repeat="attributeId in characteristics[firstResearchObjectIndex][equalElement.Item1].Attributes">
                             {{attributes[attributeValues[attributeId].attribute]}} = {{attributeValues[attributeId].value}}
                         </div>
-                        <i> Characteristic value = {{characteristics[firstMatterIndex][equalElement.Item1].CharacteristicsValues[0]}} </i>
+                        <i> Characteristic value = {{characteristics[firstResearchObjectIndex][equalElement.Item1].CharacteristicsValues[0]}} </i>
                         <br />
                         <br />
-                        Second sequence: <b> {{mattersNames[secondMatterIndex]}} </b>
+                        Second sequence: <b> {{researchObjectsNames[secondResearchObjectIndex]}} </b>
                         <br />
-                        Feature: {{features[characteristics[secondMatterIndex][equalElement.Item2].FeatureId]}}
+                        Feature: {{features[characteristics[secondResearchObjectIndex][equalElement.Item2].FeatureId]}}
                         <br />
-                        Positions = {{characteristics[secondMatterIndex][equalElement.Item2].Starts.join(', ')}}
+                        Positions = {{characteristics[secondResearchObjectIndex][equalElement.Item2].Starts.join(', ')}}
                         <br />
-                        Lengths = {{characteristics[secondMatterIndex][equalElement.Item2].Lengths.join(', ')}}
+                        Lengths = {{characteristics[secondResearchObjectIndex][equalElement.Item2].Lengths.join(', ')}}
                         <br />
-                        <div ng-repeat="attributeId in characteristics[secondMatterIndex][equalElement.Item2].Attributes">
+                        <div ng-repeat="attributeId in characteristics[secondResearchObjectIndex][equalElement.Item2].Attributes">
                             {{attributes[attributeValues[attributeId].attribute]}} = {{attributeValues[attributeId].value}}
                         </div>
-                        <i> Characteristic value = {{characteristics[secondMatterIndex][equalElement.Item2].CharacteristicsValues[0]}} </i>
+                        <i> Characteristic value = {{characteristics[secondResearchObjectIndex][equalElement.Item2].CharacteristicsValues[0]}} </i>
                         <br />
                         <br />
-                        <i> Absolute difference = {{characteristics[firstMatterIndex][equalElement.Item1].CharacteristicsValues[0] - characteristics[secondMatterIndex][equalElement.Item2].CharacteristicsValues[0] | makePositive}}</i>
+                        <i> Absolute difference = {{characteristics[firstResearchObjectIndex][equalElement.Item1].CharacteristicsValues[0] - characteristics[secondResearchObjectIndex][equalElement.Item2].CharacteristicsValues[0] | makePositive}}</i>
                         <br />
                         <i> Percentage difference = {{equalElement.Item3 * 100}}%</i>
                         <div class="card">
@@ -153,7 +153,7 @@
                                         <div class="offset-md-2 col-md-10">
                                             <input type="button"
                                                    class="btn btn-secondary"
-                                                   ng-click="calculateLocalCharacteristics(characteristics[firstMatterIndex][equalElement.Item1].Id, characteristics[secondMatterIndex][equalElement.Item2].Id, $index)"
+                                                   ng-click="calculateLocalCharacteristics(characteristics[firstResearchObjectIndex][equalElement.Item1].Id, characteristics[secondResearchObjectIndex][equalElement.Item2].Id, $index)"
                                                    value="CalculateLocalCharacteristics" />
                                         </div>
                                     </div>

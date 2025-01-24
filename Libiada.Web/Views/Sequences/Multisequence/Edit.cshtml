@@ -48,20 +48,20 @@
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
         </div>
-        <matters-table matters="matters"
-                       nature="nature"
-                       groups="groups"
-                       sequence-types="sequenceTypes"
-                       maximum-selected-matters="::maximumSelectedMatters"
-                       selected-matters-count="selectedMattersCount"
-                       display-multisequence-number="::displayMultisequenceNumber"
-                       multisequence-numbers="::multisequenceNumbers"
-                       group-and-type-required="::false">
-        </matters-table>
-        <matters-submit selected-matters-count="selectedMattersCount"
-                        submit-name="Save"
-                        minimum-selected-matters="{{::minimumSelectedMatters}}">
-        </matters-submit>
+        <research-objects-table research-objects="researchObjects"
+                                nature="nature"
+                                groups="groups"
+                                sequence-types="sequenceTypes"
+                                maximum-selected-research-objects="::maximumSelectedResearchObjects"
+                                selected-research-objects-count="selectedResearchObjectsCount"
+                                display-multisequence-number="::displayMultisequenceNumber"
+                                multisequence-numbers="::multisequenceNumbers"
+                                group-and-type-required="::false">
+        </research-objects-table>
+        <research-objects-submit selected-research-objects-count="selectedResearchObjectsCount"
+                                 submit-name="Save"
+                                 minimum-selected-research-objects="{{::minimumSelectedResearchObjects}}">
+        </research-objects-submit>
         <div class="row mb-3">
             <div class="col-md-2">
                 @Html.ActionLink("Back to List", "Index")
@@ -72,6 +72,6 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
-    <script src="~/js/Angular/Components/mattersSubmit.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/researchObjectsTable.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/researchObjectsSubmit.js" asp-append-version="true"></script>
 }

@@ -47,7 +47,7 @@ public class GenBankAccessionVersionUpdateCheckerController : AbstractResultCont
             var dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
             using var db = dbFactory.CreateDbContext();
             var sequencesWithAccessions = db.CombinedSequenceEntities
-                                            .Include(ds => ds.Matter)
+                                            .Include(ds => ds.ResearchObject)
                                             .Where(ds => ds.Notation == Notation.Nucleotides && !string.IsNullOrEmpty(ds.RemoteId))
                                             .ToArray();
 
@@ -56,9 +56,9 @@ public class GenBankAccessionVersionUpdateCheckerController : AbstractResultCont
                                     {
                                         LocalAccession = s.RemoteId!,
                                         LocalVersion = Convert.ToByte(s.RemoteId!.Split('?')[0].Split('.')[1]),
-                                        Name = s.Matter.Name.Split('|')[0].Trim(),
-                                        LocalUpdateDate = s.Matter.Modified.ToString(OutputFormats.DateFormat),
-                                        LocalUpdateDateTime = s.Matter.Modified
+                                        Name = s.ResearchObject.Name.Split('|')[0].Trim(),
+                                        LocalUpdateDate = s.ResearchObject.Modified.ToString(OutputFormats.DateFormat),
+                                        LocalUpdateDateTime = s.ResearchObject.Modified
                                     });
 
 
@@ -80,7 +80,7 @@ public class GenBankAccessionVersionUpdateCheckerController : AbstractResultCont
             for (int i = 0; i < searchResults.Count; i++)
             {
                 NuccoreObject searchResult = searchResults[i];
-                searchResult.Title = MatterRepository.TrimGenBankNameEnding(searchResult.Title);
+                searchResult.Title = ResearchObjectRepository.TrimGenBankNameEnding(searchResult.Title);
 
                 string[] newAccession = searchResult.AccessionVersion.Split('.');
                 AccessionUpdateSearchResult sequenceData = sequencesData[newAccession[0]];

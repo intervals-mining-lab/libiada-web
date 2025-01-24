@@ -1,6 +1,6 @@
 ﻿@using Libiada.Core.Extensions;
 
-@model Matter
+@model ResearchObject
 
 @{
     ViewBag.Title = "Delete";
@@ -10,7 +10,7 @@
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>Matter</h4>
+    <h4>Research object</h4>
     <hr />
     <dl>
         <dt>@Html.DisplayNameFor(model => model.Name)</dt>
@@ -60,7 +60,7 @@
         <div class="mb-2">
             @if (ViewBag.SequencesCount > 0)
             {
-                <h6 class="text-danger"> Sorry, matter with child sequences cannot be deleted</h6>
+                <h6 class="text-danger"> Sorry, research object with child sequences cannot be deleted</h6>
             }
             else
             {

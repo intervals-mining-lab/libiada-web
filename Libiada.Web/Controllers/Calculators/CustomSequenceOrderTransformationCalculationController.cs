@@ -140,7 +140,7 @@ public class CustomSequenceOrderTransformationCalculationController : AbstractRe
 
                 sequencesCharacteristics[j] = new SequenceCharacteristics
                 {
-                    MatterName = sequencesNames[j],
+                    ResearchObjectName = sequencesNames[j],
                     Characteristics = characteristics
                 };
             }

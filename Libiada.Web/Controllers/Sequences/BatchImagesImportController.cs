@@ -18,7 +18,7 @@ public class BatchImagesImportController : AbstractResultController
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly Cache cache;
 
-    public BatchImagesImportController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, ITaskManager taskManager, Cache cache) 
+    public BatchImagesImportController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, ITaskManager taskManager, Cache cache)
         : base(TaskType.BatchImagesImport, taskManager)
     {
         this.dbFactory = dbFactory;
@@ -38,19 +38,19 @@ public class BatchImagesImportController : AbstractResultController
         return CreateTask(() =>
         {
             using var db = dbFactory.CreateDbContext();
-            List<MatterImportResult> importResults = [];
+            List<ResearchObjectImportResult> importResults = [];
 
-            Matter[] matters = db.Matters.Where(m => m.Nature == Nature.Image).ToArray();
-            var matterRepository = new MatterRepository(db, cache);
+            ResearchObject[] researchObjects = db.ResearchObjects.Where(m => m.Nature == Nature.Image).ToArray();
+            var researchObjectRepository = new ResearchObjectRepository(db, cache);
 
             for (int i = 0; i < files.Count; i++)
             {
                 IFormFile file = files[i];
                 string sequenceName = file.FileName.Substring(0, file.FileName.LastIndexOf('.'));
 
-                var importResult = new MatterImportResult()
+                var importResult = new ResearchObjectImportResult()
                 {
-                    MatterName = sequenceName
+                    ResearchObjectName = sequenceName
                 };
 
                 try
@@ -60,7 +60,7 @@ public class BatchImagesImportController : AbstractResultController
                         throw new FileNotFoundException($"No image file is provided. Iteration: {i}");
                     }
 
-                    if (matters.Any(m => m.Name == sequenceName))
+                    if (researchObjects.Any(m => m.Name == sequenceName))
                     {
                         importResult.Result = "Image already exists";
                         continue;
@@ -70,7 +70,7 @@ public class BatchImagesImportController : AbstractResultController
                     byte[] fileBytes = new byte[sequenceStream.Length];
                     sequenceStream.Read(fileBytes, 0, (int)sequenceStream.Length);
 
-                    var matter = new Matter
+                    var researchObject = new ResearchObject
                     {
                         Name = sequenceName,
                         Group = Group.Picture,
@@ -79,11 +79,11 @@ public class BatchImagesImportController : AbstractResultController
                         SequenceType = SequenceType.CompleteImage
                     };
 
-                    matterRepository.SaveToDatabase(matter);
-                    importResult.Result = "Successfully imported image and created matter";
+                    researchObjectRepository.SaveToDatabase(researchObject);
+                    importResult.Result = "Successfully imported image and created research object";
                     importResult.Status = "Success";
-                    importResult.SequenceType = matter.SequenceType.GetDisplayValue();
-                    importResult.Group = matter.Group.GetDisplayValue();
+                    importResult.SequenceType = researchObject.SequenceType.GetDisplayValue();
+                    importResult.Group = researchObject.Group.GetDisplayValue();
                     importResults.Add(importResult);
                 }
                 catch (Exception exception)

@@ -55,8 +55,8 @@ public class SubsequencesCalculationController : AbstractResultController
     /// <summary>
     /// The index.
     /// </summary>
-    /// <param name="matterIds">
-    /// The matter ids.
+    /// <param name="researchObjectIds">
+    /// The research objects ids.
     /// </param>
     /// <param name="characteristicLinkIds">
     /// The characteristic type and link ids.
@@ -68,27 +68,27 @@ public class SubsequencesCalculationController : AbstractResultController
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    public ActionResult Index(long[] matterIds, short[] characteristicLinkIds, Feature[] features)
+    public ActionResult Index(long[] researchObjectIds, short[] characteristicLinkIds, Feature[] features)
     {
         return CreateTask(() =>
         {
-            var sequencesData = new SequenceData[matterIds.Length];
+            var sequencesData = new SequenceData[researchObjectIds.Length];
             using var db = dbFactory.CreateDbContext();
             long[] parentSequenceIds;
-            string[] matterNames = new string[matterIds.Length];
-            string[] remoteIds = new string[matterIds.Length];
+            string[] researchObjectNames = new string[researchObjectIds.Length];
+            string[] remoteIds = new string[researchObjectIds.Length];
             string[] subsequencesCharacteristicsNames = new string[characteristicLinkIds.Length];
             var subsequencesCharacteristicsList = new SelectListItem[characteristicLinkIds.Length];
 
-            var parentSequences = db.CombinedSequenceEntities.Include(s => s.Matter)
-                                    .Where(s => s.Notation == Notation.Nucleotides && matterIds.Contains(s.MatterId))
-                                    .Select(s => new { s.Id, MatterName = s.Matter.Name, s.RemoteId })
+            var parentSequences = db.CombinedSequenceEntities.Include(s => s.ResearchObject)
+                                    .Where(s => s.Notation == Notation.Nucleotides && researchObjectIds.Contains(s.ResearchObjectId))
+                                    .Select(s => new { s.Id, ResearchObjectName = s.ResearchObject.Name, s.RemoteId })
                                     .ToDictionary(s => s.Id);
             parentSequenceIds = parentSequences.Keys.ToArray();
 
             for (int n = 0; n < parentSequenceIds.Length; n++)
             {
-                matterNames[n] = parentSequences[parentSequenceIds[n]].MatterName;
+                researchObjectNames[n] = parentSequences[parentSequenceIds[n]].ResearchObjectName;
                 remoteIds[n] = parentSequences[parentSequenceIds[n]].RemoteId;
             }
 
@@ -111,7 +111,7 @@ public class SubsequencesCalculationController : AbstractResultController
 
                 attributeValuesCache.FillAttributeValues(subsequencesData);
 
-                sequencesData[i] = new SequenceData(matterIds[i], matterNames[i], remoteIds[i], default, subsequencesData);
+                sequencesData[i] = new SequenceData(researchObjectIds[i], researchObjectNames[i], remoteIds[i], default, subsequencesData);
             }
 
             List<AttributeValue> allAttributeValues = attributeValuesCache.AllAttributeValues;

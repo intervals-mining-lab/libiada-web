@@ -30,8 +30,8 @@ public class SequencePredictionController : AbstractResultController
     /// <summary>
     /// Initializes a new instance of the <see cref="SequencePredictionController"/> class.
     /// </summary>
-    public SequencePredictionController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
-                                        IViewDataHelper viewDataHelper, 
+    public SequencePredictionController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
+                                        IViewDataHelper viewDataHelper,
                                         ITaskManager taskManager,
                                         IFullCharacteristicRepository characteristicTypeLinkRepository,
                                         Cache cache)
@@ -59,8 +59,8 @@ public class SequencePredictionController : AbstractResultController
     /// <summary>
     /// The index.
     /// </summary>
-    /// <param name="matterId">
-    /// The matter id.
+    /// <param name="researchObjectId">
+    /// The research object id.
     /// </param>
     /// <param name="characteristicLinkId">
     /// The characteristic link id.
@@ -76,7 +76,7 @@ public class SequencePredictionController : AbstractResultController
     /// </returns>
     [HttpPost]
     public ActionResult Index(
-        long matterId,
+        long researchObjectId,
         short characteristicLinkId,
         Notation notation,
         int step,
@@ -86,16 +86,16 @@ public class SequencePredictionController : AbstractResultController
         return CreateTask(() =>
         {
             string characteristicName;
-            string matterName;
+            string researchObjectName;
             double[] characteristics;
             ComposedSequence sequence;
             IFullCalculator calculator;
             Link link;
 
             var sequenceRepository = new CombinedSequenceEntityRepository(dbFactory, cache);
-            matterName = cache.Matters.Single(m => matterId == m.Id).Name;
+            researchObjectName = cache.ResearchObjects.Single(m => researchObjectId == m.Id).Name;
             using var db = dbFactory.CreateDbContext();
-            var sequenceId = db.CombinedSequenceEntities.Single(c => matterId == c.MatterId && c.Notation == notation).Id;
+            var sequenceId = db.CombinedSequenceEntities.Single(c => researchObjectId == c.ResearchObjectId && c.Notation == notation).Id;
             sequence = sequenceRepository.GetLibiadaComposedSequence(sequenceId);
 
             characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
@@ -121,7 +121,7 @@ public class SequencePredictionController : AbstractResultController
             var result = new Dictionary<string, object>
             {
                 { "result", sequencePredictionResult },
-                { "matterName", matterName },
+                { "researchObjectName", researchObjectName },
                 { "matching", matching }
             };
 

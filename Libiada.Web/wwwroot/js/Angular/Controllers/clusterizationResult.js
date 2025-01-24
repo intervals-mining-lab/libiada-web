@@ -11,7 +11,7 @@
                 }
             } else {
                 for (let k = 0; k < $scope.characteristics.length; k++) {
-                    $scope.legend.push({ id: k + 1, name: $scope.characteristics[k].MatterName, visible: true });
+                    $scope.legend.push({ id: k + 1, name: $scope.characteristics[k].ResearchObjectName, visible: true });
                 }
             }
         }
@@ -26,10 +26,10 @@
                 let characteristic = $scope.characteristics[i];
                 $scope.points.push({
                     id: i + 1,
-                    name: characteristic.MatterName,
+                    name: characteristic.ResearchObjectName,
                     x: characteristic.Characteristics[firstIndex],
                     y: characteristic.Characteristics[secondIndex],
-                    cluster: characteristic.cluster ? characteristic.cluster : characteristic.MatterName
+                    cluster: characteristic.cluster ? characteristic.cluster : characteristic.ResearchObjectName
                 });
             }
         }
@@ -261,7 +261,7 @@
             let legend = d3.selectAll(".legend");
 
             legend.each(l => l.visible = visibility);
-            
+
             legend.selectAll("rect")
                 .style("fill-opacity", () => visibility ? 1 : 0);
 
@@ -289,7 +289,7 @@
             worksheet.columns = columns;
 
             for (let i = 0; i < $scope.characteristics.length; i++) {
-                let row = { id: i + 1, name: $scope.characteristics[i].MatterName };
+                let row = { id: i + 1, name: $scope.characteristics[i].ResearchObjectName };
                 $scope.characteristics[i].Characteristics.forEach((cv, j) => row[$scope.characteristicNames[j]] = cv);
                 worksheet.addRow(row).commit();
             }
@@ -320,7 +320,7 @@
                     $("#calculationResults").append($scope.characteristics.map((c, i) =>
                         `<tr id="resultRow${i}">
                         <td>${i + 1}</td>
-                        <td>${c.MatterName}</td>
+                        <td>${c.ResearchObjectName}</td>
                         ${c.Characteristics.map(c => `<td>${c}</td>`).join()}`
                     ).join());
                 }

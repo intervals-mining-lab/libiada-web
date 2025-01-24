@@ -20,22 +20,22 @@
         <dd>@Model.Nature.GetDisplayValue()</dd>
     </dl>
 </div>
-<h4>@Html.DisplayNameFor(model => model.Matters)</h4>
+<h4>@Html.DisplayNameFor(model => model.ResearchObjects)</h4>
 
 <table class="table table-bordered table-hover">
     <tr>
-        <th>@Html.DisplayNameFor(model => model.Matters.First().Name)</th>
-        <th>@Html.DisplayNameFor(model => model.Matters.First().Description)</th>
-        <th>@Html.DisplayNameFor(model => model.Matters.First().Created)</th>
-        <th>@Html.DisplayNameFor(model => model.Matters.First().Modified)</th>
-        <th>@Html.DisplayNameFor(model => model.Matters.First().Nature)</th>
-        <th>@Html.DisplayNameFor(model => model.Matters.First().Group)</th>
-        <th>@Html.DisplayNameFor(model => model.Matters.First().SequenceType)</th>
-        <th>@Html.DisplayNameFor(model => model.Matters.First().MultisequenceNumber)</th>
-        <th>@Html.DisplayNameFor(model => model.Matters.First().CollectionCountry)</th>
-        <th>@Html.DisplayNameFor(model => model.Matters.First().CollectionDate)</th>
+        <th>@Html.DisplayNameFor(model => model.ResearchObjects.First().Name)</th>
+        <th>@Html.DisplayNameFor(model => model.ResearchObjects.First().Description)</th>
+        <th>@Html.DisplayNameFor(model => model.ResearchObjects.First().Created)</th>
+        <th>@Html.DisplayNameFor(model => model.ResearchObjects.First().Modified)</th>
+        <th>@Html.DisplayNameFor(model => model.ResearchObjects.First().Nature)</th>
+        <th>@Html.DisplayNameFor(model => model.ResearchObjects.First().Group)</th>
+        <th>@Html.DisplayNameFor(model => model.ResearchObjects.First().SequenceType)</th>
+        <th>@Html.DisplayNameFor(model => model.ResearchObjects.First().MultisequenceNumber)</th>
+        <th>@Html.DisplayNameFor(model => model.ResearchObjects.First().CollectionCountry)</th>
+        <th>@Html.DisplayNameFor(model => model.ResearchObjects.First().CollectionDate)</th>
     </tr>
-    @foreach (var item in Model.Matters)
+    @foreach (var item in Model.ResearchObjects)
     {
         <tr>
             <td>@Html.DisplayFor(modelItem => item.Name)</td>

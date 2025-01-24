@@ -7,7 +7,7 @@
             $scope.legend = [];
 
             for (let k = 0; k < $scope.characteristics.length; k++) {
-                $scope.legend.push({ id: k, name: $scope.characteristics[k].MatterName, visible: true });
+                $scope.legend.push({ id: k, name: $scope.characteristics[k].ResearchObjectName, visible: true });
             }
         }
 
@@ -27,7 +27,7 @@
                         name: fragmentData.Name,
                         x: fragmentData.Characteristics[first],
                         y: fragmentData.Characteristics[second],
-                        matterName: characteristic.MatterName
+                        researchObjectName: characteristic.ResearchObjectName
                     });
                 }
             }
@@ -36,7 +36,7 @@
         // constructs string representing tooltip text (inner html)
         function fillPointTooltip(d) {
             let tooltipContent = [];
-            tooltipContent.push(d.matterName);
+            tooltipContent.push(d.researchObjectName);
             tooltipContent.push(`Name: ${d.name}`);
             tooltipContent.push(`Fragment №: ${d.id}`);
             let pointSharacteristics = [];
@@ -228,7 +228,7 @@
                     .y($scope.yMap);
 
                 // Group the entries by symbol
-                let dataGroups = d3.group($scope.points, d => d.matterName);
+                let dataGroups = d3.group($scope.points, d => d.researchObjectName);
 
                 // Loop through each symbol / key
                 dataGroups.forEach(value => {
@@ -274,11 +274,11 @@
                         .style("fill-opacity", () => d.visible ? 1 : 0);
 
                     svg.selectAll(".dot")
-                        .filter(dot => dot.matterName === d.name)
+                        .filter(dot => dot.researchObjectName === d.name)
                         .attr("visibility", () => d.visible ? "visible" : "hidden");
 
                     svg.selectAll(".line")
-                        .filter(line => line[0].matterName === d.name)
+                        .filter(line => line[0].researchObjectName === d.name)
                         .attr("visibility", () => d.visible ? "visible" : "hidden");
                 });
 

@@ -30,7 +30,7 @@ public class MultisequenceController : Controller
     /// <returns></returns>
     public ActionResult Index()
     {
-        List<Multisequence> multisequences = db.Multisequences.Include(ms => ms.Matters).ToList();
+        List<Multisequence> multisequences = db.Multisequences.Include(ms => ms.ResearchObjects).ToList();
         return View(multisequences);
     }
 
@@ -58,7 +58,7 @@ public class MultisequenceController : Controller
     public ActionResult Create(
         Multisequence multisequence,
         short[] multisequenceNumbers,
-        long[] matterIds)
+        long[] researchObjectIds)
     {
         if (!ModelState.IsValid)
         {
@@ -68,14 +68,14 @@ public class MultisequenceController : Controller
         db.Multisequences.Add(multisequence);
         db.SaveChanges();
 
-        var matters = db.Matters.Where(m => matterIds.Contains(m.Id))
+        var researchObjects = db.ResearchObjects.Where(m => researchObjectIds.Contains(m.Id))
                                .ToDictionary(m => m.Id, m => m);
-        for (int i = 0; i < matterIds.Length; i++)
+        for (int i = 0; i < researchObjectIds.Length; i++)
         {
-            Matter matter = matters[matterIds[i]];
-            matter.MultisequenceId = multisequence.Id;
-            matter.MultisequenceNumber = multisequenceNumbers[i];
-            db.Entry(matter).State = EntityState.Modified;
+            ResearchObject researchObject = researchObjects[researchObjectIds[i]];
+            researchObject.MultisequenceId = multisequence.Id;
+            researchObject.MultisequenceNumber = multisequenceNumbers[i];
+            db.Entry(researchObject).State = EntityState.Modified;
         }
 
         db.SaveChanges();
@@ -99,7 +99,7 @@ public class MultisequenceController : Controller
             return BadRequest();
         }
 
-        Multisequence? multisequence = db.Multisequences.Include(m => m.Matters)
+        Multisequence? multisequence = db.Multisequences.Include(m => m.ResearchObjects)
                                                       .SingleOrDefault(m => m.Id == id);
         if (multisequence == null)
         {
@@ -118,22 +118,22 @@ public class MultisequenceController : Controller
             return BadRequest();
         }
 
-        Multisequence? multisequence = db.Multisequences.Include(m => m.Matters)
+        Multisequence? multisequence = db.Multisequences.Include(m => m.ResearchObjects)
                                                       .SingleOrDefault(m => m.Id == id);
         if (multisequence == null)
         {
             return NotFound();
         }
 
-        var selectedMatterIds = multisequence.Matters.Select(m => m.Id);
+        var selectedResearchObjectIds = multisequence.ResearchObjects.Select(m => m.Id);
         var data = viewDataHelper.FillViewData(2,
                                                int.MaxValue,
                                                m => (SequenceTypesFilter.Contains(m.SequenceType)
                                                     && m.MultisequenceId == null)
-                                                    || selectedMatterIds.Contains(m.Id),
-                                               m => selectedMatterIds.Contains(m.Id),
+                                                    || selectedResearchObjectIds.Contains(m.Id),
+                                               m => selectedResearchObjectIds.Contains(m.Id),
                                                "Save");
-        data.Add("multisequenceNumbers", multisequence.Matters.Select(m => new { m.Id, m.MultisequenceNumber }));
+        data.Add("multisequenceNumbers", multisequence.ResearchObjects.Select(m => new { m.Id, m.MultisequenceNumber }));
         ViewBag.data = JsonConvert.SerializeObject(data);
 
         return View(multisequence);
@@ -144,41 +144,41 @@ public class MultisequenceController : Controller
     public async Task<ActionResult> Edit(
                                          Multisequence multisequence,
                                          short[] multisequenceNumbers,
-                                         long[] matterIds)
+                                         long[] researchObjectIds)
     {
         if (ModelState.IsValid)
         {
             db.Entry(multisequence).State = EntityState.Modified;
 
-            Matter[] mattersToRemove = db.Matters.Where(m => m.MultisequenceId == multisequence.Id && !matterIds.Contains(m.Id)).ToArray();
-            for (int i = 0; i < mattersToRemove.Length; i++)
+            ResearchObject[] researchObjectsToRemove = db.ResearchObjects.Where(m => m.MultisequenceId == multisequence.Id && !researchObjectIds.Contains(m.Id)).ToArray();
+            for (int i = 0; i < researchObjectsToRemove.Length; i++)
             {
-                Matter matter = mattersToRemove[i];
-                matter.MultisequenceId = null;
-                matter.MultisequenceNumber = null;
-                db.Entry(matter).State = EntityState.Modified;
+                ResearchObject researchObject = researchObjectsToRemove[i];
+                researchObject.MultisequenceId = null;
+                researchObject.MultisequenceNumber = null;
+                db.Entry(researchObject).State = EntityState.Modified;
             }
 
-            var mattersToAddOrUpdate = db.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m);
-            for (int i = 0; i < matterIds.Length; i++)
+            var researchObjectsToAddOrUpdate = db.ResearchObjects.Where(m => researchObjectIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m);
+            for (int i = 0; i < researchObjectIds.Length; i++)
             {
-                Matter matter = mattersToAddOrUpdate[matterIds[i]];
-                matter.MultisequenceId = multisequence.Id;
-                matter.MultisequenceNumber = multisequenceNumbers[i];
-                db.Entry(matter).State = EntityState.Modified;
+                ResearchObject researchObject = researchObjectsToAddOrUpdate[researchObjectIds[i]];
+                researchObject.MultisequenceId = multisequence.Id;
+                researchObject.MultisequenceNumber = multisequenceNumbers[i];
+                db.Entry(researchObject).State = EntityState.Modified;
             }
 
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        var sellectedMatterIds = multisequence.Matters.Select(m => m.Id);
+        var sellectedResearchObjectIds = multisequence.ResearchObjects.Select(m => m.Id);
         var data = viewDataHelper.FillViewData(2,
                                                int.MaxValue,
                                                m => (SequenceTypesFilter.Contains(m.SequenceType)
                                                     && m.MultisequenceId == null)
-                                                    || sellectedMatterIds.Contains(m.Id),
-                                               m => sellectedMatterIds.Contains(m.Id),
+                                                    || sellectedResearchObjectIds.Contains(m.Id),
+                                               m => sellectedResearchObjectIds.Contains(m.Id),
                                                "Create");
 
         ViewBag.data = JsonConvert.SerializeObject(data);
@@ -203,7 +203,7 @@ public class MultisequenceController : Controller
             return BadRequest();
         }
 
-        Multisequence? multisequence = await db.Multisequences.Include(m => m.Matters).SingleOrDefaultAsync(m => m.Id == id);
+        Multisequence? multisequence = await db.Multisequences.Include(m => m.ResearchObjects).SingleOrDefaultAsync(m => m.Id == id);
         if (multisequence == null)
         {
             return NotFound();
@@ -225,13 +225,13 @@ public class MultisequenceController : Controller
     [HttpPost, ActionName("Delete")]
     public async Task<ActionResult> DeleteConfirmed(long id)
     {
-        Multisequence multisequence = await db.Multisequences.Include(m => m.Matters).SingleAsync(m => m.Id == id);
-        Matter[] matters = multisequence.Matters.ToArray();
-        foreach (Matter matter in matters)
+        Multisequence multisequence = await db.Multisequences.Include(m => m.ResearchObjects).SingleAsync(m => m.Id == id);
+        ResearchObject[] researchObjects = multisequence.ResearchObjects.ToArray();
+        foreach (ResearchObject researchObject in researchObjects)
         {
-            matter.MultisequenceId = null;
-            matter.MultisequenceNumber = null;
-            db.Entry(matter).State = EntityState.Modified;
+            researchObject.MultisequenceId = null;
+            researchObject.MultisequenceNumber = null;
+            db.Entry(researchObject).State = EntityState.Modified;
         }
 
         db.Multisequences.Remove(multisequence);
@@ -241,50 +241,50 @@ public class MultisequenceController : Controller
     }
 
     /// <summary>
-    /// Divides matters into reference and not reference and groups them.
+    /// Divides research objects into reference and not reference and groups them.
     /// </summary>
-    /// <param name="matters">
-    /// List of matters.
+    /// <param name="researchObjects">
+    /// List of research objects.
     /// </param>
     /// <returns>
-    /// Returns grouped matters.
+    /// Returns grouped research objects.
     /// </returns>
     [NonAction]
-    private Dictionary<string, long[]> SplitMattersIntoReferenceAnsNotReference(Matter[] matters)
+    private Dictionary<string, long[]> SplitResearchObjectsIntoReferenceAnsNotReference(ResearchObject[] researchObjects)
     {
-        matters = matters.Where(m => m.Nature == Nature.Genetic && SequenceTypesFilter.Contains(m.SequenceType)).ToArray();
-        string[] matterNameSpliters = ["|", "chromosome", "plasmid", "segment"];
-        var mattersNames = matters.Select(m => (m.Id, m.Name.Split(matterNameSpliters, StringSplitOptions.RemoveEmptyEntries)[0].Trim())).ToArray();
-        string[] accessions = new string[matters.Length];
-        List<(long, string)> referenceArray = new(matters.Length / 2);
-        List<(long, string)> notReferenceArray = new(matters.Length / 2);
-        for (int i = 0; i < matters.Length; i++)
+        researchObjects = researchObjects.Where(m => m.Nature == Nature.Genetic && SequenceTypesFilter.Contains(m.SequenceType)).ToArray();
+        string[] researchObjectNameSpliters = ["|", "chromosome", "plasmid", "segment"];
+        var researchObjectsNames = researchObjects.Select(m => (m.Id, m.Name.Split(researchObjectNameSpliters, StringSplitOptions.RemoveEmptyEntries)[0].Trim())).ToArray();
+        string[] accessions = new string[researchObjects.Length];
+        List<(long, string)> referenceArray = new(researchObjects.Length / 2);
+        List<(long, string)> notReferenceArray = new(researchObjects.Length / 2);
+        for (int i = 0; i < researchObjects.Length; i++)
         {
-            Matter matter = matters[i];
-            if (!matter.Name.Contains('|'))
+            ResearchObject researchObject = researchObjects[i];
+            if (!researchObject.Name.Contains('|'))
             {
                 throw new Exception();
             }
 
-            accessions[i] = matter.Name.Split('|').Last().Trim();
+            accessions[i] = researchObject.Name.Split('|').Last().Trim();
             if (accessions[i].Contains('_'))
             {
-                referenceArray.Add(mattersNames[i]);
+                referenceArray.Add(researchObjectsNames[i]);
             }
             else
             {
-                notReferenceArray.Add(mattersNames[i]);
+                notReferenceArray.Add(researchObjectsNames[i]);
             }
         }
 
-        Dictionary<string, long[]> multisequencesRefMatters = referenceArray.GroupBy(mn => mn.Item2)
+        Dictionary<string, long[]> multisequencesRefResearchObjects = referenceArray.GroupBy(mn => mn.Item2)
             .ToDictionary(mn => $"{mn.Key} ref", mn => mn.Select(m => m.Item1).ToArray());
 
-        Dictionary<string, long[]> multisequencesNotRefMatters = notReferenceArray.GroupBy(mn => mn.Item2)
+        Dictionary<string, long[]> multisequencesNotRefResearchObjects = notReferenceArray.GroupBy(mn => mn.Item2)
             .ToDictionary(mn => mn.Key, mn => mn.Select(m => m.Item1).ToArray());
 
-        return multisequencesRefMatters.Concat(multisequencesNotRefMatters)
-                                       .ToDictionary(x => x.Key, y => y.Value);
+        return multisequencesRefResearchObjects.Concat(multisequencesNotRefResearchObjects)
+                                               .ToDictionary(x => x.Key, y => y.Value);
 
     }
 
@@ -294,25 +294,25 @@ public class MultisequenceController : Controller
     }
 
     /// <summary>
-    /// Gets genetic matters names and ids from database.
+    /// Gets genetic research objects names and ids from database.
     /// </summary>
-    /// <param name="excludeMatterIds"></param>
+    /// <param name="excludeResearchObjectIds"></param>
     /// <returns>
     /// Returns multisequences with sequences included in them.
     /// </returns>
-    public string GroupMattersIntoMultisequences(long[] excludeMatterIds)
+    public string GroupResearchObjectsIntoMultisequences(long[] excludeResearchObjectIds)
     {
-        Matter[] matters = db.Matters.Where(m => SequenceTypesFilter.Contains(m.SequenceType)).ToArray();
-        Dictionary<string, long[]> multisequences = SplitMattersIntoReferenceAnsNotReference(matters);
-        var result = multisequences.Select(m => new { name = m.Key, matterIds = m.Value }).ToArray();
-        var matterIds = result.SelectMany(r => r.matterIds);
-        var mattersDictionary = matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
+        ResearchObject[] researchObjects = db.ResearchObjects.Where(m => SequenceTypesFilter.Contains(m.SequenceType)).ToArray();
+        Dictionary<string, long[]> multisequences = SplitResearchObjectsIntoReferenceAnsNotReference(researchObjects);
+        var result = multisequences.Select(m => new { name = m.Key, researchObjectIds = m.Value }).ToArray();
+        var researchObjectIds = result.SelectMany(r => r.researchObjectIds);
+        var researchObjectsDictionary = researchObjects.Where(m => researchObjectIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
         var groupingResult = new Dictionary<string, object>
             {
                 {"result", result},
-                { "matters", mattersDictionary},
-                { "ungroupedMatters", db.Matters
-                                        .Where(m => m.Nature == Nature.Genetic && !matterIds.Contains(m.Id))
+                { "researchObjects", researchObjectsDictionary},
+                { "ungroupedResearchObjects", db.ResearchObjects
+                                        .Where(m => m.Nature == Nature.Genetic && !researchObjectIds.Contains(m.Id))
                                         .Select(m => new { m.Id, m.Name })
                                         .ToArray() }
             };
@@ -325,17 +325,17 @@ public class MultisequenceController : Controller
     /// <summary>
     /// Writes multisequences data into database.
     /// </summary>
-    /// <param name="multisequenceMatters">
-    /// Dictionary of multisequences with matters.
+    /// <param name="multisequenceResearchObjects">
+    /// Dictionary of multisequences with research objects.
     /// </param>
     /// <param name="multisequencesNames">
     /// Multisequence names list.
     /// </param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult GroupMattersIntoMultisequences(Dictionary<string, long[]> multisequenceMatters)
+    public ActionResult GroupResearchObjectsIntoMultisequences(Dictionary<string, long[]> multisequenceResearchObjects)
     {
-        string[] multisequencesNames = multisequenceMatters.Keys.ToArray();
+        string[] multisequencesNames = multisequenceResearchObjects.Keys.ToArray();
         Multisequence[] multisequences = new Multisequence[multisequencesNames.Length];
 
         for (int i = 0; i < multisequencesNames.Length; i++)
@@ -350,19 +350,19 @@ public class MultisequenceController : Controller
         db.Multisequences.AddRange(multisequences);
         db.SaveChanges();
 
-        var matters = db.Matters.Where(mt => mt.Nature == Nature.Genetic).ToDictionary(m => m.Id, m => m);
+        var researchObjects = db.ResearchObjects.Where(mt => mt.Nature == Nature.Genetic).ToDictionary(m => m.Id, m => m);
         foreach (Multisequence multisequence in multisequences)
         {
             try
             {
-                long[] matterIds = multisequenceMatters[multisequence.Name];
-                foreach (long matterId in matterIds)
+                long[] researchObjectIds = multisequenceResearchObjects[multisequence.Name];
+                foreach (long researchObjectId in researchObjectIds)
                 {
-                    db.Entry(matters[matterId]).State = EntityState.Modified;
-                    matters[matterId].MultisequenceId = multisequence.Id;
+                    db.Entry(researchObjects[researchObjectId]).State = EntityState.Modified;
+                    researchObjects[researchObjectId].MultisequenceId = multisequence.Id;
                 }
 
-                SetSequenceNumbers(matterIds.Select(m => matters[m]).ToArray());
+                SetSequenceNumbers(researchObjectIds.Select(m => researchObjects[m]).ToArray());
                 db.SaveChanges();
             }
             catch (Exception e)

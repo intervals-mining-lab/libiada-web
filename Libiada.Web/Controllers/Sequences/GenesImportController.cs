@@ -25,8 +25,8 @@ public class GenesImportController : AbstractResultController
     /// <summary>
     /// Initializes a new instance of the <see cref="GenesImportController"/> class.
     /// </summary>
-    public GenesImportController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
-                                 IViewDataHelper viewDataHelper, 
+    public GenesImportController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
+                                 IViewDataHelper viewDataHelper,
                                  ITaskManager taskManager,
                                  INcbiHelper ncbiHelper,
                                  Cache cache)
@@ -49,14 +49,14 @@ public class GenesImportController : AbstractResultController
         using var db = dbFactory.CreateDbContext();
         var genesSequenceIds = db.Subsequences.Select(s => s.SequenceId).Distinct();
 
-        var matterIds = db.CombinedSequenceEntities
-                          .Include(c => c.Matter)
+        var researchObjectIds = db.CombinedSequenceEntities
+                          .Include(c => c.ResearchObject)
                           .Where(c => !string.IsNullOrEmpty(c.RemoteId)
                                    && !genesSequenceIds.Contains(c.Id)
-                                   && StaticCollections.SequenceTypesWithSubsequences.Contains(c.Matter.SequenceType))
-                          .Select(c => c.MatterId).ToList();
+                                   && StaticCollections.SequenceTypesWithSubsequences.Contains(c.ResearchObject.SequenceType))
+                          .Select(c => c.ResearchObjectId).ToList();
 
-        var data = viewDataHelper.FillViewData(1, 1, m => matterIds.Contains(m.Id), "Import");
+        var data = viewDataHelper.FillViewData(1, 1, m => researchObjectIds.Contains(m.Id), "Import");
         data.Add("nature", (byte)Nature.Genetic);
         ViewBag.data = JsonConvert.SerializeObject(data);
         return View();
@@ -65,26 +65,26 @@ public class GenesImportController : AbstractResultController
     /// <summary>
     /// The index.
     /// </summary>
-    /// <param name="matterId">
-    /// The matter id.
+    /// <param name="researchObjectId">
+    /// The research object id.
     /// </param>
     /// <returns>
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    public ActionResult Index(long matterId)
+    public ActionResult Index(long researchObjectId)
     {
         return CreateTask(() =>
         {
             Dictionary<string, object> result;
             using var db = dbFactory.CreateDbContext();
-            GeneticSequence parentSequence = db.CombinedSequenceEntities.Single(d => d.MatterId == matterId).ToGeneticSequence();
+            GeneticSequence parentSequence = db.CombinedSequenceEntities.Single(d => d.ResearchObjectId == researchObjectId).ToGeneticSequence();
             var subsequenceImporter = new SubsequenceImporter(db, parentSequence, ncbiHelper);
             subsequenceImporter.CreateSubsequences();
 
 
             var features = EnumExtensions.ToArray<Feature>().ToDictionary(f => (byte)f, f => f.GetDisplayValue());
-            string matterName = cache.Matters.Single(m => m.Id == matterId).Name;
+            string researchObjectName = cache.ResearchObjects.Single(m => m.Id == researchObjectId).Name;
             SubsequenceData[] sequenceSubsequences = db.Subsequences
                 .Where(s => s.SequenceId == parentSequence.Id)
                 .Include(s => s.Position)
@@ -94,7 +94,7 @@ public class GenesImportController : AbstractResultController
 
             result = new Dictionary<string, object>
             {
-                { "matterName", matterName },
+                { "researchObjectName", researchObjectName },
                 { "genes", sequenceSubsequences },
                 { "features", features }
             };

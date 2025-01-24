@@ -12,7 +12,7 @@
 </p>
 <table class="table table-bordered table-hover">
     <tr>
-        <th>@Html.DisplayNameFor(model => model.MatterId)</th>
+        <th>@Html.DisplayNameFor(model => model.ResearchObjectId)</th>
         <th>@Html.DisplayNameFor(model => model.Notation)</th>
         <th>@Html.DisplayNameFor(model => model.Created)</th>
         <th>@Html.DisplayNameFor(model => model.Modified)</th>
@@ -24,7 +24,7 @@
     @foreach (CombinedSequenceEntity item in ViewBag.Sequences)
     {
         <tr>
-            <td>@Html.DisplayFor(modelItem => item.Matter.Name)</td>
+            <td>@Html.DisplayFor(modelItem => item.ResearchObject.Name)</td>
             <td>@Html.DisplayFor(modelItem => item.Notation)</td>
             <td>@Html.DisplayFor(modelItem => item.Created)</td>
             <td>@Html.DisplayFor(modelItem => item.Modified)</td>

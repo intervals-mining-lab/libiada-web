@@ -26,7 +26,7 @@ public class SequenceMixerController : Controller
     /// </summary>
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
 
-    private readonly MatterRepository matterRepository;
+    private readonly ResearchObjectRepository researchObjectRepository;
 
     /// <summary>
     /// The sequence repository.
@@ -48,13 +48,13 @@ public class SequenceMixerController : Controller
     /// <summary>
     /// Initializes a new instance of the <see cref="SequenceMixerController"/> class.
     /// </summary>
-    public SequenceMixerController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
+    public SequenceMixerController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                    IViewDataHelper viewDataHelper,
                                    Cache cache)
     {
         this.dbFactory = dbFactory;
-        matterRepository = new MatterRepository(dbFactory.CreateDbContext(), cache);
-        sequenceRepository = new CombinedSequenceEntityRepository(dbFactory, cache);   
+        researchObjectRepository = new ResearchObjectRepository(dbFactory.CreateDbContext(), cache);
+        sequenceRepository = new CombinedSequenceEntityRepository(dbFactory, cache);
         elementRepository = new ElementRepository(dbFactory.CreateDbContext());
         this.viewDataHelper = viewDataHelper;
         this.cache = cache;
@@ -75,8 +75,8 @@ public class SequenceMixerController : Controller
     /// <summary>
     /// The index.
     /// </summary>
-    /// <param name="matterId">
-    /// The matter id.
+    /// <param name="researchObjectId">
+    /// The research object id.
     /// </param>
     /// <param name="notation">
     /// The notation id.
@@ -103,7 +103,7 @@ public class SequenceMixerController : Controller
     /// Thrown if sequence nature is unknown.
     /// </exception>
     [HttpPost]
-    public ActionResult Index(long matterId,
+    public ActionResult Index(long researchObjectId,
                               Notation notation,
                               Language? language,
                               Translator? translator,
@@ -113,18 +113,18 @@ public class SequenceMixerController : Controller
     {
 
         using var db = dbFactory.CreateDbContext();
-        Matter matter = cache.Matters.Single(m => m.Id == matterId);
-        long sequenceId = matter.Nature switch
+        ResearchObject researchObject = cache.ResearchObjects.Single(m => m.Id == researchObjectId);
+        long sequenceId = researchObject.Nature switch
         {
-            Nature.Literature => db.CombinedSequenceEntities.Single(l => l.MatterId == matterId
+            Nature.Literature => db.CombinedSequenceEntities.Single(l => l.ResearchObjectId == researchObjectId
                                                                     && l.Notation == notation
                                                                     && l.Language == language
                                                                     && l.Translator == translator).Id,
-            Nature.Music => db.CombinedSequenceEntities.Single(m => m.MatterId == matterId
+            Nature.Music => db.CombinedSequenceEntities.Single(m => m.ResearchObjectId == researchObjectId
                                                           && m.Notation == notation
                                                           && m.PauseTreatment == pauseTreatment
                                                           && m.SequentialTransfer == sequentialTransfer).Id,
-            _ => db.CombinedSequenceEntities.Single(c => c.MatterId == matterId && c.Notation == notation).Id,
+            _ => db.CombinedSequenceEntities.Single(c => c.ResearchObjectId == researchObjectId && c.Notation == notation).Id,
         };
         Sequence sequence = sequenceRepository.GetLibiadaSequence(sequenceId);
         for (int i = 0; i < scrambling; i++)
@@ -138,13 +138,13 @@ public class SequenceMixerController : Controller
             sequence[secondIndex] = firstElement;
         }
 
-        var resultMatter = new Matter
-            {
-                Nature = matter.Nature,
-                Name = $"{matter.Name} {scrambling} mixes"
-            };
+        var resultResearchObject = new ResearchObject
+        {
+            Nature = researchObject.Nature,
+            Name = $"{researchObject.Name} {scrambling} mixes"
+        };
 
-        matterRepository.SaveToDatabase(resultMatter);
+        researchObjectRepository.SaveToDatabase(resultResearchObject);
 
         long[] alphabet = elementRepository.ToDbElements(sequence.Alphabet, notation, false);
 
@@ -153,7 +153,7 @@ public class SequenceMixerController : Controller
         var newSequence = new CombinedSequenceEntity
         {
             Notation = notation,
-            MatterId = resultMatter.Id,
+            ResearchObjectId = resultResearchObject.Id,
             Alphabet = alphabet,
             Order = sequence.Order,
             PauseTreatment = dbSequence.PauseTreatment,
@@ -168,6 +168,6 @@ public class SequenceMixerController : Controller
 
         sequenceRepository.Create(newSequence);
 
-        return RedirectToAction("Index", "Matters");
+        return RedirectToAction("Index", "ResearchObjects");
     }
 }

@@ -7,31 +7,31 @@
 }
 
 @{
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "MatterSequenceCreate");
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "ResearchObjectSequenceCreate");
 }
 
 <h2>@ViewBag.Title</h2>
 
 <div>@ViewBag.ErrorMessage</div>
 
-@using (Html.BeginForm("Create", "Matters", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Create", "ResearchObjects", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
-    <div ng-controller="MatterSequenceCreateCtrl">
-        <h4>Matter and sequence parameters</h4>
+    <div ng-controller="ResearchObjectSequenceCreateCtrl">
+        <h4>Research object and sequence parameters</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @if (User.IsAdmin())
         {
             <div class="row mb-1">
-                @Html.LabelFor(model => model.Matter.Nature, new { @class = "col-form-label col-md-2" })
+                @Html.LabelFor(model => model.ResearchObject.Nature, new { @class = "col-form-label col-md-2" })
                 <div class="col-md-10">
                     <select class="form-select"
                             ng-model="nature"
                             ng-options="n.Value as n.Text for n in ::natures"
                             ng-change="filterByNature()"
                             ng-init="filterByNature()"></select>
-                    <input type="hidden" name="Matter.Nature" ng-value="nature" />
-                    @Html.ValidationMessageFor(model => model.Matter.Nature, "", new { @class = "text-danger" })
+                    <input type="hidden" name="ResearchObject.Nature" ng-value="nature" />
+                    @Html.ValidationMessageFor(model => model.ResearchObject.Nature, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="row mb-1" ng-hide="nature == @((byte)Nature.Music)">
@@ -49,74 +49,74 @@
         {
             <div ng-hide="true" ng-init="filterByNature()"></div>
             <input type="hidden" name="Notation" ng-value="notationId" />
-            <input type="hidden" name="Matter.Nature" ng-value="nature" />
+            <input type="hidden" name="ResearchObject.Nature" ng-value="nature" />
         }
 
         <div class="row mb-1">
-            @Html.LabelFor(model => model.Matter.Name, new { @class = "col-form-label col-md-2" })
+            @Html.LabelFor(model => model.ResearchObject.Name, new { @class = "col-form-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Matter.Name, new { htmlAttributes = new { @class = "form-control", ng_model = "name" } })
-                @Html.ValidationMessageFor(model => model.Matter.Name, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.ResearchObject.Name, new { htmlAttributes = new { @class = "form-control", ng_model = "name" } })
+                @Html.ValidationMessageFor(model => model.ResearchObject.Name, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="row mb-1">
-            @Html.LabelFor(model => model.Matter.Description, new { @class = "col-form-label col-md-2" })
+            @Html.LabelFor(model => model.ResearchObject.Description, new { @class = "col-form-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Matter.Description, new { htmlAttributes = new { @class = "form-control", ng_model = "description" } })
-                @Html.ValidationMessageFor(model => model.Matter.Description, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.ResearchObject.Description, new { htmlAttributes = new { @class = "form-control", ng_model = "description" } })
+                @Html.ValidationMessageFor(model => model.ResearchObject.Description, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="row mb-1">
-            @Html.LabelFor(model => model.Matter.Group, new { @class = "col-form-label col-md-2" })
+            @Html.LabelFor(model => model.ResearchObject.Group, new { @class = "col-form-label col-md-2" })
             <div class="col-md-10">
                 <select class="form-select"
                         ng-options="g.Value as g.Text for g in groups | filter:{ Nature: nature }"
                         ng-model="group"></select>
-                <input type="hidden" name="Matter.Group" ng-value="group" />
-                @Html.ValidationMessageFor(model => model.Matter.Group, "", new { @class = "text-danger" })
+                <input type="hidden" name="ResearchObject.Group" ng-value="group" />
+                @Html.ValidationMessageFor(model => model.ResearchObject.Group, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="row mb-1">
-            @Html.LabelFor(model => model.Matter.SequenceType, new { @class = "col-form-label col-md-2" })
+            @Html.LabelFor(model => model.ResearchObject.SequenceType, new { @class = "col-form-label col-md-2" })
             <div class="col-md-10">
                 <select class="form-select"
                         ng-options="g.Value as g.Text for g in sequenceTypes | filter:{ Nature: nature }"
                         ng-model="sequenceType"></select>
-                <input type="hidden" name="Matter.SequenceType" ng-value="sequenceType" />
-                @Html.ValidationMessageFor(model => model.Matter.SequenceType, "", new { @class = "text-danger" })
+                <input type="hidden" name="ResearchObject.SequenceType" ng-value="sequenceType" />
+                @Html.ValidationMessageFor(model => model.ResearchObject.SequenceType, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="row mb-1">
-            @Html.LabelFor(model => model.Matter.Multisequence, new { @class = "col-form-label col-md-2" })
+            @Html.LabelFor(model => model.ResearchObject.Multisequence, new { @class = "col-form-label col-md-2" })
             <div class="col-md-10">
                 <select class="form-select"
                         ng-options="ms.Value as ms.Text for ms in multisequences | filter:{ Nature: nature }"
-                        ng-model="matter.MultisequenceId">
+                        ng-model="researchObject.MultisequenceId">
                     <option value="">-- None --</option>
                 </select>
-                <input type="hidden" name="Matter.MultisequenceId" ng-value="matter.MultisequenceId" />
-                @Html.ValidationMessageFor(model => model.Matter.Multisequence, "", new { @class = "text-danger" })
+                <input type="hidden" name="ResearchObject.MultisequenceId" ng-value="researchObject.MultisequenceId" />
+                @Html.ValidationMessageFor(model => model.ResearchObject.Multisequence, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="row mb-1">
-            @Html.LabelFor(model => model.Matter.MultisequenceNumber, new { @class = "col-form-label col-md-2" })
+            @Html.LabelFor(model => model.ResearchObject.MultisequenceNumber, new { @class = "col-form-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Matter.MultisequenceNumber, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Matter.MultisequenceNumber, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.ResearchObject.MultisequenceNumber, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ResearchObject.MultisequenceNumber, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="row mb-1">
-            @Html.LabelFor(model => model.Matter.CollectionCountry, new { @class = "col-form-label col-md-2" })
+            @Html.LabelFor(model => model.ResearchObject.CollectionCountry, new { @class = "col-form-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Matter.CollectionCountry, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Matter.CollectionCountry, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.ResearchObject.CollectionCountry, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ResearchObject.CollectionCountry, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="row mb-1">
-            @Html.LabelFor(model => model.Matter.CollectionDate, new { @class = "col-form-label col-md-2" })
+            @Html.LabelFor(model => model.ResearchObject.CollectionDate, new { @class = "col-form-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Matter.CollectionDate, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Matter.CollectionDate, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.ResearchObject.CollectionDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ResearchObject.CollectionDate, "", new { @class = "text-danger" })
             </div>
         </div>
         <local-file></local-file>

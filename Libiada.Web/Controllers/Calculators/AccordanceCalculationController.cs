@@ -40,8 +40,8 @@ public class AccordanceCalculationController : AbstractResultController
     /// <summary>
     /// Initializes a new instance of the <see cref="AccordanceCalculationController"/> class.
     /// </summary>
-    public AccordanceCalculationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
-                                           IViewDataHelper viewDataHelper, 
+    public AccordanceCalculationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
+                                           IViewDataHelper viewDataHelper,
                                            ITaskManager taskManager,
                                            IAccordanceCharacteristicRepository characteristicTypeLinkRepository,
                                            ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
@@ -71,8 +71,8 @@ public class AccordanceCalculationController : AbstractResultController
     /// <summary>
     /// The index.
     /// </summary>
-    /// <param name="matterIds">
-    /// The matter ids.
+    /// <param name="researchObjectIds">
+    /// The research objects ids.
     /// </param>
     /// <param name="characteristicLinkId">
     /// The characteristic type and link id.
@@ -102,14 +102,14 @@ public class AccordanceCalculationController : AbstractResultController
     /// The <see cref="ActionResult"/>.
     /// </returns>
     /// <exception cref="ArgumentException">
-    /// Thrown if count of matter ids is not 2.
+    /// Thrown if count of research object ids is not 2.
     /// </exception>
     /// <exception cref="Exception">
     /// Thrown alphabets of sequences are not equal.
     /// </exception>
     [HttpPost]
     public ActionResult Index(
-        long[] matterIds,
+        long[] researchObjectIds,
         int characteristicLinkId,
         Notation notation,
         Language? language,
@@ -121,9 +121,9 @@ public class AccordanceCalculationController : AbstractResultController
     {
         return CreateTask(() =>
         {
-            if (matterIds.Length != 2)
+            if (researchObjectIds.Length != 2)
             {
-                throw new ArgumentException("Number of selected matters must be 2.", nameof(matterIds));
+                throw new ArgumentException("Number of selected research objects must be 2.", nameof(researchObjectIds));
             }
 
             var characteristics = new Dictionary<int, Dictionary<int, double>>();
@@ -131,12 +131,12 @@ public class AccordanceCalculationController : AbstractResultController
             var result = new Dictionary<string, object>
                              {
                                  { "characteristics", characteristics },
-                                 { "matterNames", cache.Matters.Where(m => matterIds.Contains(m.Id)).Select(m => m.Name).ToList() },
+                                 { "researchObjectNames", cache.ResearchObjects.Where(m => researchObjectIds.Contains(m.Id)).Select(m => m.Name).ToList() },
                                  { "characteristicName", characteristicName },
                                  { "calculationType", calculationType }
                              };
             using var sequenceRepository = sequenceRepositoryFactory.Create();
-            long[] sequenceIds = sequenceRepository.GetSequenceIds(matterIds,
+            long[] sequenceIds = sequenceRepository.GetSequenceIds(researchObjectIds,
                                                                       notation,
                                                                       language,
                                                                       translator,

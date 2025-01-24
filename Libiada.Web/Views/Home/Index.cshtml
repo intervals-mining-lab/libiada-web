@@ -11,7 +11,7 @@
     <div class="row mb-3">
         <div class="col-md-4">
             <h2>Data</h2>
-            @Html.ActionLink(User.IsAdmin() ? "Matters" : "Sequences", "Index", "Matters")
+            @Html.ActionLink(User.IsAdmin() ? "Research objects" : "Sequences", "Index", "ResearchObjects")
             <br />
             @if (User.IsAdmin())
             {
@@ -119,8 +119,8 @@
 }
 else
 {
-<div class="mb-3 fs-5">
+    <div class="mb-3 fs-5">
         <a asp-area="Identity" asp-page="/Account/Login">Log in</a> or
         <a asp-area="Identity" asp-page="/Account/Register">Register</a> to use Libiada service.
-</div>
+    </div>
 }

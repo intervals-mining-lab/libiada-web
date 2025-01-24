@@ -14,17 +14,17 @@ using Libiada.Web.Tasks;
 /// The Fmotifs dictionary controller.
 /// </summary>
 [Authorize(Roles = "Admin")]
-public class FmotifsDictionaryController : SequencesMattersController
+public class FmotifsDictionaryController : SequencesResearchObjectsController
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="FmotifsDictionaryController"/> class.
     /// </summary>
-    public FmotifsDictionaryController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
-                                       IViewDataHelper viewDataHelper, 
+    public FmotifsDictionaryController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
+                                       IViewDataHelper viewDataHelper,
                                        ITaskManager taskManager,
                                        INcbiHelper ncbiHelper,
-                                       Cache cache) 
-        : base(TaskType.FmotifsDictionary, dbFactory, viewDataHelper, taskManager,ncbiHelper, cache)
+                                       Cache cache)
+        : base(TaskType.FmotifsDictionary, dbFactory, viewDataHelper, taskManager, ncbiHelper, cache)
     {
     }
 
@@ -39,7 +39,7 @@ public class FmotifsDictionaryController : SequencesMattersController
         using var db = dbFactory.CreateDbContext();
         var musicSequences = db.CombinedSequenceEntities
                               .Where(m => m.Notation == Notation.FormalMotifs)
-                              .Include(m => m.Matter)
+                              .Include(m => m.ResearchObject)
                               .Select(s => s.ToMusicSequence());
         return View(await musicSequences.ToListAsync());
 
@@ -62,7 +62,7 @@ public class FmotifsDictionaryController : SequencesMattersController
         }
 
         using var db = dbFactory.CreateDbContext();
-        var dbSequence = await db.CombinedSequenceEntities.Include(m => m.Matter).SingleAsync(m => m.Id == id);
+        var dbSequence = await db.CombinedSequenceEntities.Include(m => m.ResearchObject).SingleAsync(m => m.Id == id);
 
         if (dbSequence == null)
         {

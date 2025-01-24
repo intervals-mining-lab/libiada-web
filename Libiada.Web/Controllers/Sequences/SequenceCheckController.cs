@@ -29,9 +29,9 @@ public class SequenceCheckController : AbstractResultController
     /// Initializes a new instance of the <see cref="SequenceCheckController"/> class.
     /// </summary>
     public SequenceCheckController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                   ITaskManager taskManager, 
-                                   ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory, 
-                                   Cache cache) 
+                                   ITaskManager taskManager,
+                                   ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
+                                   Cache cache)
         : base(TaskType.SequenceCheck, taskManager)
     {
         this.dbFactory = dbFactory;
@@ -47,15 +47,15 @@ public class SequenceCheckController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        ViewBag.matterId = new SelectList(cache.Matters.Where(m => m.Nature == Nature.Genetic).ToArray(), "id", "name");
+        ViewBag.researchObjectId = new SelectList(cache.ResearchObjects.Where(m => m.Nature == Nature.Genetic).ToArray(), "id", "name");
         return View();
     }
 
     /// <summary>
     /// The index.
     /// </summary>
-    /// <param name="matterId">
-    /// The matter id.
+    /// <param name="researchObjectId">
+    /// The research object id.
     /// </param>
     /// <param name="file">
     /// The file.
@@ -64,7 +64,7 @@ public class SequenceCheckController : AbstractResultController
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    public ActionResult Index(long matterId, IFormFile file)
+    public ActionResult Index(long researchObjectId, IFormFile file)
     {
         return CreateTask(() =>
         {
@@ -97,7 +97,7 @@ public class SequenceCheckController : AbstractResultController
             string status;
             Sequence dbSequence;
             using var db = dbFactory.CreateDbContext();
-            long sequenceId = db.CombinedSequenceEntities.Single(c => c.MatterId == matterId).Id;
+            long sequenceId = db.CombinedSequenceEntities.Single(c => c.ResearchObjectId == researchObjectId).Id;
             using var sequenceRepository = sequenceRepositoryFactory.Create();
             dbSequence = sequenceRepository.GetLibiadaSequence(sequenceId);
 
