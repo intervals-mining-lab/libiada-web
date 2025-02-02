@@ -23,7 +23,7 @@ public class BatchSequenceImportController : AbstractResultController
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly INcbiHelper ncbiHelper;
-    private readonly ResearchObjectsCache cache;
+    private readonly IResearchObjectsCache cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BatchSequenceImportController"/> class.
@@ -31,7 +31,7 @@ public class BatchSequenceImportController : AbstractResultController
     public BatchSequenceImportController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                          ITaskManager taskManager,
                                          INcbiHelper ncbiHelper,
-                                         ResearchObjectsCache cache)
+                                         IResearchObjectsCache cache)
         : base(TaskType.BatchSequenceImport, taskManager)
     {
         this.dbFactory = dbFactory;

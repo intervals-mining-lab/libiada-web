@@ -19,7 +19,7 @@ public class BatchGenesImportController : AbstractResultController
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
     private readonly INcbiHelper ncbiHelper;
-    private readonly ResearchObjectsCache cache;
+    private readonly IResearchObjectsCache cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BatchGenesImportController"/> class.
@@ -28,7 +28,7 @@ public class BatchGenesImportController : AbstractResultController
                                       IViewDataHelper viewDataHelper,
                                       ITaskManager taskManager,
                                       INcbiHelper ncbiHelper,
-                                      ResearchObjectsCache cache)
+                                      IResearchObjectsCache cache)
         : base(TaskType.BatchGenesImport, taskManager)
     {
         this.dbFactory = dbFactory;

@@ -39,7 +39,7 @@ public class SubsequencesSimilarityController : AbstractResultController
     /// </summary>
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
     private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
-    private readonly ResearchObjectsCache cache;
+    private readonly IResearchObjectsCache cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SubsequencesSimilarityController"/> class.
@@ -49,7 +49,7 @@ public class SubsequencesSimilarityController : AbstractResultController
                                             ITaskManager taskManager,
                                             IFullCharacteristicRepository characteristicTypeLinkRepository,
                                             ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator,
-                                            ResearchObjectsCache cache)
+                                            IResearchObjectsCache cache)
         : base(TaskType.SubsequencesSimilarity, taskManager)
     {
         this.dbFactory = dbFactory;

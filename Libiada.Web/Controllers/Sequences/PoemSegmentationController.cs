@@ -15,13 +15,13 @@ public class PoemSegmentationController : AbstractResultController
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
     private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
-    private readonly ResearchObjectsCache cache;
+    private readonly IResearchObjectsCache cache;
 
     public PoemSegmentationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                       IViewDataHelper viewDataHelper,
                                       ITaskManager taskManager,
                                       ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
-                                      ResearchObjectsCache cache)
+                                      IResearchObjectsCache cache)
        : base(TaskType.PoemSegmentation, taskManager)
     {
         this.dbFactory = dbFactory;

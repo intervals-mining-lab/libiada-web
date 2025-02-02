@@ -18,7 +18,7 @@ using Libiada.Database.Models.Repositories.Sequences;
 [Authorize]
 public class ResearchObjectsController : SequencesResearchObjectsController
 {
-    private readonly ResearchObjectsCache cache;
+    private readonly IResearchObjectsCache cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ResearchObjectsController"/> class.
@@ -27,7 +27,7 @@ public class ResearchObjectsController : SequencesResearchObjectsController
                              IViewDataHelper viewDataHelper,
                              ITaskManager taskManager,
                              INcbiHelper ncbiHelper,
-                             ResearchObjectsCache cache)
+                             IResearchObjectsCache cache)
         : base(TaskType.ResearchObjectImport, dbFactory, viewDataHelper, taskManager, ncbiHelper, cache)
     {
         this.cache = cache;

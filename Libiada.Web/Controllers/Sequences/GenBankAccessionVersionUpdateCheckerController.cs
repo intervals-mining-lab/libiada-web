@@ -13,12 +13,12 @@ public class GenBankAccessionVersionUpdateCheckerController : AbstractResultCont
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly INcbiHelper ncbiHelper;
-    private readonly ResearchObjectsCache cache;
+    private readonly IResearchObjectsCache cache;
 
     public GenBankAccessionVersionUpdateCheckerController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                                           ITaskManager taskManager,
                                                           INcbiHelper ncbiHelper,
-                                                          ResearchObjectsCache cache)
+                                                          IResearchObjectsCache cache)
         : base(TaskType.GenBankAccessionVersionUpdateChecker, taskManager)
     {
         this.dbFactory = dbFactory;

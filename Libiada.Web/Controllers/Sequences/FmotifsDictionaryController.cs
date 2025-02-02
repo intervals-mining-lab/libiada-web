@@ -24,7 +24,7 @@ public class FmotifsDictionaryController : SequencesResearchObjectsController
                                        IViewDataHelper viewDataHelper,
                                        ITaskManager taskManager,
                                        INcbiHelper ncbiHelper,
-                                       ResearchObjectsCache cache)
+                                       IResearchObjectsCache cache)
         : base(TaskType.FmotifsDictionary, dbFactory, viewDataHelper, taskManager, ncbiHelper, cache)
     {
     }

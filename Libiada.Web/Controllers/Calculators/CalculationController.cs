@@ -22,7 +22,7 @@ public class CalculationController : AbstractResultController
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
-    private readonly ResearchObjectsCache cache;
+    private readonly IResearchObjectsCache cache;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
     private readonly ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator;
     private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
@@ -33,7 +33,7 @@ public class CalculationController : AbstractResultController
     public CalculationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                  IViewDataHelper viewDataHelper,
                                  ITaskManager taskManager,
-                                 ResearchObjectsCache cache,
+                                 IResearchObjectsCache cache,
                                  IFullCharacteristicRepository characteristicTypeLinkRepository,
                                  ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator,
                                  ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory)

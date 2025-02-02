@@ -5,7 +5,7 @@ using Libiada.Database.Models.Repositories.Sequences;
 using System.Security.Claims;
 
 public class ViewDataHelperFactory(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                          ResearchObjectsCache cache,
+                          IResearchObjectsCache cache,
                           IFullCharacteristicRepository fullCharacteristicRepository,
                           ICongenericCharacteristicRepository congenericCharacteristicRepository,
                           IAccordanceCharacteristicRepository accordanceCharacteristicRepository,
@@ -13,7 +13,7 @@ public class ViewDataHelperFactory(IDbContextFactory<LibiadaDatabaseEntities> db
 
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory = dbFactory;
-    private readonly ResearchObjectsCache cache = cache;
+    private readonly IResearchObjectsCache cache = cache;
     private readonly IFullCharacteristicRepository fullCharacteristicRepository = fullCharacteristicRepository;
     private readonly ICongenericCharacteristicRepository congenericCharacteristicRepository = congenericCharacteristicRepository;
     private readonly IAccordanceCharacteristicRepository accordanceCharacteristicRepository = accordanceCharacteristicRepository;

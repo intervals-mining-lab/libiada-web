@@ -37,7 +37,7 @@ public class LocalCalculationController : AbstractResultController
     /// The characteristic type repository.
     /// </summary>
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
-    private readonly ResearchObjectsCache cache;
+    private readonly IResearchObjectsCache cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="LocalCalculationController"/> class.
@@ -46,7 +46,7 @@ public class LocalCalculationController : AbstractResultController
                                       ITaskManager taskManager,
                                       ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
                                       IFullCharacteristicRepository characteristicTypeLinkRepository,
-                                      ResearchObjectsCache cache)
+                                      IResearchObjectsCache cache)
         : base(TaskType.LocalCalculation, taskManager)
     {
         this.viewDataHelper = viewDataHelper;

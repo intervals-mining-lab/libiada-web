@@ -17,9 +17,9 @@ using Microsoft.EntityFrameworkCore;
 public class BatchPoemsImportController : AbstractResultController
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly ResearchObjectsCache cache;
+    private readonly IResearchObjectsCache cache;
 
-    public BatchPoemsImportController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, ITaskManager taskManager, ResearchObjectsCache cache)
+    public BatchPoemsImportController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, ITaskManager taskManager, IResearchObjectsCache cache)
         : base(TaskType.BatchPoemsImport, taskManager)
     {
         this.dbFactory = dbFactory;

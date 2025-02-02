@@ -17,12 +17,12 @@ public class NcbiNuccoreSearchController : AbstractResultController
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly INcbiHelper ncbiHelper;
-    private readonly ResearchObjectsCache cache;
+    private readonly IResearchObjectsCache cache;
 
     public NcbiNuccoreSearchController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                        ITaskManager taskManager,
                                        INcbiHelper ncbiHelper,
-                                       ResearchObjectsCache cache)
+                                       IResearchObjectsCache cache)
         : base(TaskType.NcbiNuccoreSearch, taskManager)
     {
         this.dbFactory = dbFactory;

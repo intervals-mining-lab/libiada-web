@@ -23,7 +23,7 @@ public class ViewDataHelper : IViewDataHelper
     /// The database model.
     /// </summary>
     private readonly LibiadaDatabaseEntities db;
-    private readonly ResearchObjectsCache cache;
+    private readonly IResearchObjectsCache cache;
 
     /// <summary>
     /// The current user.
@@ -41,7 +41,7 @@ public class ViewDataHelper : IViewDataHelper
     /// Database context factory.
     /// </param>
     public ViewDataHelper(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                          ResearchObjectsCache cache,
+                          IResearchObjectsCache cache,
                           ClaimsPrincipal user,
                           IFullCharacteristicRepository fullCharacteristicRepository,
                           ICongenericCharacteristicRepository congenericCharacteristicRepository,

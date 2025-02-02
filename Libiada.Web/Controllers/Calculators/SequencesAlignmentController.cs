@@ -25,7 +25,7 @@ public class SequencesAlignmentController : AbstractResultController
     /// </summary>
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
     private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
-    private readonly ResearchObjectsCache cache;
+    private readonly IResearchObjectsCache cache;
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
 
@@ -37,7 +37,7 @@ public class SequencesAlignmentController : AbstractResultController
                                         ITaskManager taskManager,
                                         IFullCharacteristicRepository characteristicTypeLinkRepository,
                                         ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator,
-                                        ResearchObjectsCache cache)
+                                        IResearchObjectsCache cache)
         : base(TaskType.SequencesAlignment, taskManager)
     {
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;

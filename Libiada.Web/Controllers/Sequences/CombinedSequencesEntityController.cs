@@ -13,7 +13,7 @@ using Libiada.Database.Models.Repositories.Sequences;
 [Authorize(Roles = "Admin")]
 public class CombinedSequencesEntityController : SequencesResearchObjectsController
 {
-    private readonly ResearchObjectsCache cache;
+    private readonly IResearchObjectsCache cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CombinedSequencesEntityController"/> class.
@@ -22,7 +22,7 @@ public class CombinedSequencesEntityController : SequencesResearchObjectsControl
                                      IViewDataHelper viewDataHelper,
                                      ITaskManager taskManager,
                                      INcbiHelper ncbiHelper,
-                                     ResearchObjectsCache cache)
+                                     IResearchObjectsCache cache)
         : base(TaskType.SequencesUpload, dbFactory, viewDataHelper, taskManager, ncbiHelper, cache)
     {
         this.cache = cache;

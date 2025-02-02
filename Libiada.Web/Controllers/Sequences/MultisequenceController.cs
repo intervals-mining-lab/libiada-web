@@ -15,9 +15,9 @@ public class MultisequenceController : Controller
 {
     private readonly LibiadaDatabaseEntities db;
     private readonly IViewDataHelper viewDataHelper;
-    private readonly ResearchObjectsCache cache;
+    private readonly IResearchObjectsCache cache;
 
-    public MultisequenceController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ResearchObjectsCache cache)
+    public MultisequenceController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, IResearchObjectsCache cache)
     {
         this.db = db;
         this.viewDataHelper = viewDataHelper;
