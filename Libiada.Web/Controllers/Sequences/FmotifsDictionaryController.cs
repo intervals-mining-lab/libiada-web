@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 
 using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
+using Libiada.Database.Models.Repositories.Sequences;
 
 /// <summary>
 /// The Fmotifs dictionary controller.
@@ -23,7 +24,7 @@ public class FmotifsDictionaryController : SequencesResearchObjectsController
                                        IViewDataHelper viewDataHelper,
                                        ITaskManager taskManager,
                                        INcbiHelper ncbiHelper,
-                                       Cache cache)
+                                       ResearchObjectsCache cache)
         : base(TaskType.FmotifsDictionary, dbFactory, viewDataHelper, taskManager, ncbiHelper, cache)
     {
     }

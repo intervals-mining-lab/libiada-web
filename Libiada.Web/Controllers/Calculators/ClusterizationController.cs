@@ -34,7 +34,7 @@ public class ClusterizationController : AbstractResultController
     /// The sequence repository.
     /// </summary>
     private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
-    private readonly Cache cache;
+    private readonly ResearchObjectsCache cache;
 
     /// <summary>
     /// The characteristic type repository.
@@ -51,7 +51,7 @@ public class ClusterizationController : AbstractResultController
                                     IFullCharacteristicRepository characteristicTypeLinkRepository,
                                     ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator,
                                     ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
-                                    Cache cache)
+                                    ResearchObjectsCache cache)
         : base(TaskType.Clusterization, taskManager)
     {
         this.dbFactory = dbFactory;

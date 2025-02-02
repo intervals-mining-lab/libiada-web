@@ -34,7 +34,7 @@ public class SubsequencesDistributionController : AbstractResultController
     private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
     private readonly ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator;
     private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
-    private readonly Cache cache;
+    private readonly ResearchObjectsCache cache;
     private readonly IHttpClientFactory httpClientFactory;
 
     /// <summary>
@@ -52,7 +52,7 @@ public class SubsequencesDistributionController : AbstractResultController
                                               ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator,
                                               ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator,
                                               ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
-                                              Cache cache,
+                                              ResearchObjectsCache cache,
                                               IHttpClientFactory httpClientFactory)
         : base(TaskType.SubsequencesDistribution, taskManager)
     {

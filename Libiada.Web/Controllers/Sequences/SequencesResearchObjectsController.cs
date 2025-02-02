@@ -25,7 +25,7 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
     protected readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
     private readonly INcbiHelper ncbiHelper;
-    private readonly Cache cache;
+    private readonly ResearchObjectsCache cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SequencesResearchObjectsController"/> class.
@@ -38,7 +38,7 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
                                          IViewDataHelper viewDataHelper,
                                          ITaskManager taskManager,
                                          INcbiHelper ncbiHelper,
-                                         Cache cache)
+                                         ResearchObjectsCache cache)
         : base(taskType, taskManager)
     {
         this.dbFactory = dbFactory;

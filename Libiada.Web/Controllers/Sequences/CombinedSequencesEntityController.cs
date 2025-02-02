@@ -5,6 +5,7 @@ using Libiada.Database.Helpers;
 
 using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
+using Libiada.Database.Models.Repositories.Sequences;
 
 /// <summary>
 /// The combines sequences controller.
@@ -12,7 +13,7 @@ using Libiada.Web.Tasks;
 [Authorize(Roles = "Admin")]
 public class CombinedSequencesEntityController : SequencesResearchObjectsController
 {
-    private readonly Cache cache;
+    private readonly ResearchObjectsCache cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CombinedSequencesEntityController"/> class.
@@ -21,7 +22,7 @@ public class CombinedSequencesEntityController : SequencesResearchObjectsControl
                                      IViewDataHelper viewDataHelper,
                                      ITaskManager taskManager,
                                      INcbiHelper ncbiHelper,
-                                     Cache cache)
+                                     ResearchObjectsCache cache)
         : base(TaskType.SequencesUpload, dbFactory, viewDataHelper, taskManager, ncbiHelper, cache)
     {
         this.cache = cache;

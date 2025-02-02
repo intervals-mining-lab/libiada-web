@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 
 using Libiada.Web.Tasks;
 using Libiada.Web.Helpers;
+using Libiada.Database.Models.Repositories.Sequences;
 
 /// <summary>
 /// The alignment controller.
@@ -24,7 +25,7 @@ public class SequencesAlignmentController : AbstractResultController
     /// </summary>
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
     private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
-    private readonly Cache cache;
+    private readonly ResearchObjectsCache cache;
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
 
@@ -36,7 +37,7 @@ public class SequencesAlignmentController : AbstractResultController
                                         ITaskManager taskManager,
                                         IFullCharacteristicRepository characteristicTypeLinkRepository,
                                         ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator,
-                                        Cache cache)
+                                        ResearchObjectsCache cache)
         : base(TaskType.SequencesAlignment, taskManager)
     {
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;

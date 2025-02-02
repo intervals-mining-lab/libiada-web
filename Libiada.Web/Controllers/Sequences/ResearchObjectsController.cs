@@ -10,6 +10,7 @@ using Libiada.Database.Helpers;
 using Newtonsoft.Json;
 
 using EnumExtensions = Core.Extensions.EnumExtensions;
+using Libiada.Database.Models.Repositories.Sequences;
 
 /// <summary>
 /// The research objects controller.
@@ -17,7 +18,7 @@ using EnumExtensions = Core.Extensions.EnumExtensions;
 [Authorize]
 public class ResearchObjectsController : SequencesResearchObjectsController
 {
-    private readonly Cache cache;
+    private readonly ResearchObjectsCache cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ResearchObjectsController"/> class.
@@ -26,7 +27,7 @@ public class ResearchObjectsController : SequencesResearchObjectsController
                              IViewDataHelper viewDataHelper,
                              ITaskManager taskManager,
                              INcbiHelper ncbiHelper,
-                             Cache cache)
+                             ResearchObjectsCache cache)
         : base(TaskType.ResearchObjectImport, dbFactory, viewDataHelper, taskManager, ncbiHelper, cache)
     {
         this.cache = cache;

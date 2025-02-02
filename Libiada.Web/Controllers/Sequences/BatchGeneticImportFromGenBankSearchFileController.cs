@@ -19,12 +19,12 @@ public class BatchGeneticImportFromGenBankSearchFileController : AbstractResultC
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly INcbiHelper ncbiHelper;
-    private readonly Cache cache;
+    private readonly ResearchObjectsCache cache;
 
     public BatchGeneticImportFromGenBankSearchFileController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                                              ITaskManager taskManager,
                                                              INcbiHelper ncbiHelper,
-                                                             Cache cache)
+                                                             ResearchObjectsCache cache)
         : base(TaskType.BatchGeneticImportFromGenBankSearchFile, taskManager)
     {
         this.dbFactory = dbFactory;

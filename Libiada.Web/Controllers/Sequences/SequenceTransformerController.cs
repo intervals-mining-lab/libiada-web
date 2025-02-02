@@ -43,7 +43,7 @@ public class SequenceTransformerController : Controller
     public SequenceTransformerController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                          IViewDataHelper viewDataHelper,
                                          ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
-                                         Cache cache)
+                                         ResearchObjectsCache cache)
     {
         this.dbFactory = dbFactory;
         this.db = dbFactory.CreateDbContext();

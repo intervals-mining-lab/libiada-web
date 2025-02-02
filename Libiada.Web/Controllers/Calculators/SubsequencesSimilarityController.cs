@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 
 using Libiada.Web.Tasks;
 using Libiada.Web.Helpers;
+using Libiada.Database.Models.Repositories.Sequences;
 
 /// <summary>
 /// The subsequences similarity controller.
@@ -38,7 +39,7 @@ public class SubsequencesSimilarityController : AbstractResultController
     /// </summary>
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
     private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
-    private readonly Cache cache;
+    private readonly ResearchObjectsCache cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SubsequencesSimilarityController"/> class.
@@ -48,7 +49,7 @@ public class SubsequencesSimilarityController : AbstractResultController
                                             ITaskManager taskManager,
                                             IFullCharacteristicRepository characteristicTypeLinkRepository,
                                             ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator,
-                                            Cache cache)
+                                            ResearchObjectsCache cache)
         : base(TaskType.SubsequencesSimilarity, taskManager)
     {
         this.dbFactory = dbFactory;

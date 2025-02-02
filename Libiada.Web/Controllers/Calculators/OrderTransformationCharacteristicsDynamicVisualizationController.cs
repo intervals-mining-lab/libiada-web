@@ -24,7 +24,7 @@ public class OrderTransformationCharacteristicsDynamicVisualizationController : 
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
-    private readonly Cache cache;
+    private readonly ResearchObjectsCache cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OrderTransformationCharacteristicsDynamicVisualizationController"/> class.
@@ -33,7 +33,7 @@ public class OrderTransformationCharacteristicsDynamicVisualizationController : 
                                                                             IViewDataHelper viewDataHelper,
                                                                             ITaskManager taskManager,
                                                                             IFullCharacteristicRepository characteristicTypeLinkRepository,
-                                                                            Cache cache)
+                                                                            ResearchObjectsCache cache)
         : base(TaskType.OrderTransformationCharacteristicsDynamicVisualization, taskManager)
     {
         this.dbFactory = dbFactory;

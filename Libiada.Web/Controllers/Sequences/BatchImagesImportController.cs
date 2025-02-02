@@ -16,9 +16,9 @@ using Microsoft.EntityFrameworkCore;
 public class BatchImagesImportController : AbstractResultController
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly Cache cache;
+    private readonly ResearchObjectsCache cache;
 
-    public BatchImagesImportController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, ITaskManager taskManager, Cache cache)
+    public BatchImagesImportController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, ITaskManager taskManager, ResearchObjectsCache cache)
         : base(TaskType.BatchImagesImport, taskManager)
     {
         this.dbFactory = dbFactory;

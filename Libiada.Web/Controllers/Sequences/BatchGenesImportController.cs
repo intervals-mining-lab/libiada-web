@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 
 using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
+using Libiada.Database.Models.Repositories.Sequences;
 
 /// <summary>
 /// The batch genes import controller.
@@ -18,7 +19,7 @@ public class BatchGenesImportController : AbstractResultController
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
     private readonly INcbiHelper ncbiHelper;
-    private readonly Cache cache;
+    private readonly ResearchObjectsCache cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BatchGenesImportController"/> class.
@@ -27,7 +28,7 @@ public class BatchGenesImportController : AbstractResultController
                                       IViewDataHelper viewDataHelper,
                                       ITaskManager taskManager,
                                       INcbiHelper ncbiHelper,
-                                      Cache cache)
+                                      ResearchObjectsCache cache)
         : base(TaskType.BatchGenesImport, taskManager)
     {
         this.dbFactory = dbFactory;
@@ -105,9 +106,9 @@ public class BatchGenesImportController : AbstractResultController
 
 
                         int featuresCount = db.Subsequences.Count(s => s.SequenceId == parentSequence.Id
-                                                                     && s.Feature != Feature.NonCodingSequence);
+                                                                    && s.Feature != Feature.NonCodingSequence);
                         int nonCodingCount = db.Subsequences.Count(s => s.SequenceId == parentSequence.Id
-                                                                    && s.Feature == Feature.NonCodingSequence);
+                                                                   && s.Feature == Feature.NonCodingSequence);
 
                         importResult.Status = "Success";
                         importResult.Result = $"Successfully imported {featuresCount} features and {nonCodingCount} non coding subsequences";

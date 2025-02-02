@@ -43,14 +43,14 @@ public class SequenceMixerController : Controller
     /// </summary>
     private readonly Random randomGenerator = new();
     private readonly IViewDataHelper viewDataHelper;
-    private readonly Cache cache;
+    private readonly ResearchObjectsCache cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SequenceMixerController"/> class.
     /// </summary>
     public SequenceMixerController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                    IViewDataHelper viewDataHelper,
-                                   Cache cache)
+                                   ResearchObjectsCache cache)
     {
         this.dbFactory = dbFactory;
         researchObjectRepository = new ResearchObjectRepository(dbFactory.CreateDbContext(), cache);

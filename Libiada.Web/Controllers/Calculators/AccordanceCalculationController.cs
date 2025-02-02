@@ -30,7 +30,7 @@ public class AccordanceCalculationController : AbstractResultController
     /// The sequence repository factory.
     /// </summary>
     private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
-    private readonly Cache cache;
+    private readonly ResearchObjectsCache cache;
 
     /// <summary>
     /// The characteristic type link repository.
@@ -45,7 +45,7 @@ public class AccordanceCalculationController : AbstractResultController
                                            ITaskManager taskManager,
                                            IAccordanceCharacteristicRepository characteristicTypeLinkRepository,
                                            ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
-                                           Cache cache)
+                                           ResearchObjectsCache cache)
         : base(TaskType.AccordanceCalculation, taskManager)
     {
         this.dbFactory = dbFactory;

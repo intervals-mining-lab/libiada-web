@@ -37,7 +37,7 @@ public class RelationCalculationController : AbstractResultController
     /// The characteristic type repository.
     /// </summary>
     private readonly IBinaryCharacteristicRepository characteristicTypeLinkRepository;
-    private readonly Cache cache;
+    private readonly ResearchObjectsCache cache;
     private readonly IViewDataHelper viewDataHelper;
 
     /// <summary>
@@ -48,7 +48,7 @@ public class RelationCalculationController : AbstractResultController
                                          ITaskManager taskManager,
                                          ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
                                          IBinaryCharacteristicRepository characteristicTypeLinkRepository,
-                                         Cache cache)
+                                         ResearchObjectsCache cache)
         : base(TaskType.RelationCalculation, taskManager)
     {
         this.dbFactory = dbFactory;

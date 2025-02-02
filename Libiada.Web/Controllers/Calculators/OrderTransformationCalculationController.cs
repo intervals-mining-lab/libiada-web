@@ -29,7 +29,7 @@ public class OrderTransformationCalculationController : AbstractResultController
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
-    private readonly Cache cache;
+    private readonly ResearchObjectsCache cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OrderTransformationCalculationController"/> class.
@@ -38,7 +38,7 @@ public class OrderTransformationCalculationController : AbstractResultController
                                                     IViewDataHelper viewDataHelper,
                                                     ITaskManager taskManager,
                                                     IFullCharacteristicRepository characteristicTypeLinkRepository,
-                                                    Cache cache)
+                                                    ResearchObjectsCache cache)
         : base(TaskType.OrderTransformationCalculation, taskManager)
     {
         this.dbFactory = dbFactory;

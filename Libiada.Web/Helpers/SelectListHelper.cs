@@ -1,5 +1,6 @@
 ﻿namespace Libiada.Web.Helpers;
 
+using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Web.Models.CalculatorsData;
 
 public static class SelectListHelper
@@ -13,7 +14,7 @@ public static class SelectListHelper
     /// <returns>
     /// The <see cref="IEnumerable{Libiada.Web.Models.CalculatorsData.ResearchObjectTableRow}"/>.
     /// </returns>
-    public static IEnumerable<ResearchObjectTableRow> GetResearchObjectSelectList(Cache cache)
+    public static IEnumerable<ResearchObjectTableRow> GetResearchObjectSelectList(ResearchObjectsCache cache)
     {
         return GetResearchObjectSelectList(m => true, m => false, cache);
     }
@@ -33,7 +34,7 @@ public static class SelectListHelper
     /// <returns>
     /// The <see cref="IEnumerable{Libiada.Web.Models.CalculatorsData.ResearchObjectTableRow}"/>.
     /// </returns>
-    public static IEnumerable<ResearchObjectTableRow> GetResearchObjectSelectList(Func<ResearchObject, bool> filter, Func<ResearchObject, bool> selectionFilter, Cache cache)
+    public static IEnumerable<ResearchObjectTableRow> GetResearchObjectSelectList(Func<ResearchObject, bool> filter, Func<ResearchObject, bool> selectionFilter, ResearchObjectsCache cache)
     {
         return GetResearchObjectSelectList(cache.ResearchObjects.Where(filter), selectionFilter);
     }

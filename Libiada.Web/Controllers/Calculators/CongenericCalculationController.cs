@@ -35,7 +35,7 @@ public class CongenericCalculationController : AbstractResultController
     /// </summary>
     private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
     private readonly ICongenericSequencesCharacteristicsCalculator congenericSequencesCharacteristicsCalculator;
-    private readonly Cache cache;
+    private readonly ResearchObjectsCache cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CongenericCalculationController"/> class.
@@ -46,7 +46,7 @@ public class CongenericCalculationController : AbstractResultController
                                            ICongenericCharacteristicRepository congenericCharacteristicRepository,
                                            ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
                                            ICongenericSequencesCharacteristicsCalculator congenericSequencesCharacteristicsCalculator,
-                                           Cache cache)
+                                           ResearchObjectsCache cache)
         : base(TaskType.CongenericCalculation, taskManager)
     {
         this.dbFactory = dbFactory;

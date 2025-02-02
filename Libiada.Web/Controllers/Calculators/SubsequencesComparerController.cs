@@ -47,7 +47,7 @@ public class SubsequencesComparerController : AbstractResultController
                                           ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator,
                                           ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator,
                                           ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
-                                          Cache cache,
+                                          ResearchObjectsCache cache,
                                           IServiceScopeFactory serviceScopeFactory)
         : base(TaskType.SubsequencesComparer, taskManager)
     {

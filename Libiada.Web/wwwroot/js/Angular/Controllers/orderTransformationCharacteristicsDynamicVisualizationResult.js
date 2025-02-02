@@ -258,7 +258,7 @@
 
         $scope.loading = true;
 
-        $http.get(`/api/TaskManagerWebApi/GetTaskData/${$scope.taskId}`)
+        $http.get(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
             .then(function (data) {
                 MapModelFromJson($scope, data.data);
 

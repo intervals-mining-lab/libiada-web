@@ -25,7 +25,7 @@ public class SequencePredictionController : AbstractResultController
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
-    private readonly Cache cache;
+    private readonly ResearchObjectsCache cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SequencePredictionController"/> class.
@@ -34,7 +34,7 @@ public class SequencePredictionController : AbstractResultController
                                         IViewDataHelper viewDataHelper,
                                         ITaskManager taskManager,
                                         IFullCharacteristicRepository characteristicTypeLinkRepository,
-                                        Cache cache)
+                                        ResearchObjectsCache cache)
         : base(TaskType.SequencePrediction, taskManager)
     {
         this.dbFactory = dbFactory;

@@ -20,12 +20,12 @@ public class BatchGeneticImportFromGenBankSearchQueryController : AbstractResult
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly INcbiHelper ncbiHelper;
-    private readonly Cache cache;
+    private readonly ResearchObjectsCache cache;
 
     public BatchGeneticImportFromGenBankSearchQueryController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                                               ITaskManager taskManager,
                                                               INcbiHelper ncbiHelper,
-                                                              Cache cache)
+                                                              ResearchObjectsCache cache)
         : base(TaskType.BatchGeneticImportFromGenBankSearchQuery, taskManager)
     {
         this.dbFactory = dbFactory;

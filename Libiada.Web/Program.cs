@@ -58,7 +58,7 @@ builder.Services.AddDefaultIdentity<AspNetUser>(options => options.SignIn.Requir
                 .AddEntityFrameworkStores<LibiadaDatabaseEntities>()
                 .AddDefaultTokenProviders();
 
-builder.Services.AddSingleton<Cache>();
+builder.Services.AddSingleton<IResearchObjectsCache, ResearchObjectsCache>();
 
 builder.Services.AddHttpClient();
 

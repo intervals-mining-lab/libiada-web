@@ -1,7 +1,7 @@
 ﻿namespace Libiada.Web.Controllers.Sequences;
 
 using Bio.Extensions;
-
+using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Web.Helpers;
 
 using Newtonsoft.Json;
@@ -15,9 +15,9 @@ public class MultisequenceController : Controller
 {
     private readonly LibiadaDatabaseEntities db;
     private readonly IViewDataHelper viewDataHelper;
-    private readonly Cache cache;
+    private readonly ResearchObjectsCache cache;
 
-    public MultisequenceController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, Cache cache)
+    public MultisequenceController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, ResearchObjectsCache cache)
     {
         this.db = db;
         this.viewDataHelper = viewDataHelper;

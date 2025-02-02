@@ -20,14 +20,14 @@ using Libiada.Web.Tasks;
 [Authorize]
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class LocalCalculationWebApiController : ControllerBase
+public class LocalCalculationApiController : ControllerBase
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
     private readonly IFullCharacteristicRepository fullCharacteristicRepository;
     private readonly ITaskManager taskManager;
 
-    public LocalCalculationWebApiController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
+    public LocalCalculationApiController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
                                             ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
                                             IFullCharacteristicRepository fullCharacteristicRepository,
                                             ITaskManager taskManager)
@@ -39,25 +39,25 @@ public class LocalCalculationWebApiController : ControllerBase
     }
 
     /// <summary>
-    /// The get subsequence characteristic.
+    /// Calculates local characteristics for given subsequence.
     /// </summary>
     /// <param name="subsequenceId">
-    /// The subsequence id.
+    /// The subsequence identifier.
     /// </param>
     /// <param name="characteristicLinkId">
     /// The characteristic type link id.
     /// </param>
     /// <param name="windowSize">
-    /// The window size.
+    /// The sliding window size.
     /// </param>
     /// <param name="step">
-    /// The step.
+    /// The sliding window shift.
     /// </param>
     /// <returns>
-    /// The <see cref="string"/>.
+    /// Json containing local characteristics as <see cref="T:double[]"/>..
     /// </returns>
     [HttpGet]
-    public string GetSubsequenceCharacteristic(
+    public ActionResult<double[]> GetSubsequenceCharacteristic(
         long subsequenceId,
         short characteristicLinkId,
         int windowSize,
@@ -68,11 +68,29 @@ public class LocalCalculationWebApiController : ControllerBase
         var calculator = new LocalCharacteristicsCalculator(db, fullCharacteristicRepository, sequenceRepository);
         double[] characteristics = calculator.GetSubsequenceCharacteristic(subsequenceId, characteristicLinkId, windowSize, step);
 
-        return JsonConvert.SerializeObject(characteristics);
+        return characteristics;
     }
 
+    /// <summary>
+    /// Calculates similarity matrix for the given local characteristics task.
+    /// </summary>
+    /// <param name="taskId">
+    /// The task identifier.
+    /// </param>
+    /// <param name="aligner">
+    /// The aligner.
+    /// </param>
+    /// <param name="distanceCalculator">
+    /// The distance calculator.
+    /// </param>
+    /// <param name="aggregator">
+    /// The aggregator.
+    /// </param>
+    /// <returns>
+    /// Json containing similarity matrix as <see cref="T:double[,]"/>.
+    /// </returns>
     [HttpGet]
-    public string CalculateLocalCharacteristicsSimilarityMatrix(
+    public ActionResult<Dictionary<string, object>> CalculateLocalCharacteristicsSimilarityMatrix(
         int taskId,
         Aligner aligner,
         DistanceCalculator distanceCalculator,
@@ -113,14 +131,12 @@ public class LocalCalculationWebApiController : ControllerBase
             }
         }
 
-        var response = new Dictionary<string, object>
+        return new Dictionary<string, object>
         {
             { "aligner", aligner },
             { "distanceCalculator", distanceCalculator },
             { "aggregator", aggregator },
             { "result", result }
         };
-
-        return JsonConvert.SerializeObject(response);
     }
 }

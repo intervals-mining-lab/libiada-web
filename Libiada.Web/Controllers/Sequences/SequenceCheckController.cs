@@ -23,7 +23,7 @@ public class SequenceCheckController : AbstractResultController
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
-    private readonly Cache cache;
+    private readonly ResearchObjectsCache cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SequenceCheckController"/> class.
@@ -31,7 +31,7 @@ public class SequenceCheckController : AbstractResultController
     public SequenceCheckController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                    ITaskManager taskManager,
                                    ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
-                                   Cache cache)
+                                   ResearchObjectsCache cache)
         : base(TaskType.SequenceCheck, taskManager)
     {
         this.dbFactory = dbFactory;

@@ -5,7 +5,7 @@
         let location = window.location.href.split("/");
         $scope.taskId = location[location.length - 1];
 
-        $http.get(`/api/TaskManagerWebApi/GetTaskData/${$scope.taskId}`)
+        $http.get(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
             .then(function (data) {
                 MapModelFromJson($scope, data.data);
             }, function () {

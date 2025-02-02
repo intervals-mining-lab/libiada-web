@@ -12,18 +12,11 @@ using Libiada.Web.Tasks;
 [Authorize]
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class TaskManagerWebApiController : ControllerBase
+public class TaskManagerApiController(LibiadaDatabaseEntities db, IConfiguration configuration, ITaskManager taskManager) : ControllerBase
 {
-    private readonly LibiadaDatabaseEntities db;
-    private readonly IConfiguration configuration;
-    private readonly ITaskManager taskManager;
-
-    public TaskManagerWebApiController(LibiadaDatabaseEntities db, IConfiguration configuration, ITaskManager taskManager)
-    {
-        this.db = db;
-        this.configuration = configuration;
-        this.taskManager = taskManager;
-    }
+    private readonly LibiadaDatabaseEntities db = db;
+    private readonly IConfiguration configuration = configuration;
+    private readonly ITaskManager taskManager = taskManager;
 
     /// <summary>
     /// Gets the task data by id.

@@ -12,6 +12,7 @@ using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Attributes;
 
 using EnumExtensions = Core.Extensions.EnumExtensions;
+using Libiada.Database.Models.Repositories.Sequences;
 
 /// <summary>
 /// Class filling data for Views.
@@ -22,7 +23,7 @@ public class ViewDataHelper : IViewDataHelper
     /// The database model.
     /// </summary>
     private readonly LibiadaDatabaseEntities db;
-    private readonly Cache cache;
+    private readonly ResearchObjectsCache cache;
 
     /// <summary>
     /// The current user.
@@ -40,7 +41,7 @@ public class ViewDataHelper : IViewDataHelper
     /// Database context factory.
     /// </param>
     public ViewDataHelper(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                          Cache cache,
+                          ResearchObjectsCache cache,
                           ClaimsPrincipal user,
                           IFullCharacteristicRepository fullCharacteristicRepository,
                           ICongenericCharacteristicRepository congenericCharacteristicRepository,
@@ -366,7 +367,7 @@ public class ViewDataHelper : IViewDataHelper
     {
         Dictionary<string, object> data = GetResearchObjectsData(minSelectedResearchObjects, maxSelectedResearchObjects, m => true);
 
-        // TODO: refactor to remume duplication with other methods or rewrite this whole class as builder
+        // TODO: refactor to remove duplication with other methods or rewrite this whole class as builder
         IEnumerable<SelectListItem> natures;
         IEnumerable<SequenceType> sequenceTypes;
         IEnumerable<Group> groups;
