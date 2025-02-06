@@ -55,7 +55,18 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
     /// </returns>
     public ActionResult Create()
     {
-        ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillResearchObjectCreationViewData());
+        var viewData = viewDataHelper.AddResearchObjects()
+                                     .AddNatures()
+                                     .AddNotations()
+                                     .AddRemoteDatabases()
+                                     .AddSequenceTypes()
+                                     .AddGroups()
+                                     .AddMultisequences()
+                                     .AddLanguages()
+                                     .AddTranslators()
+                                     .AddTrajectories()
+                                     .Build();
+        ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }
 

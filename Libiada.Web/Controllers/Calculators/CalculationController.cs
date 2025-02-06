@@ -12,6 +12,7 @@ using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Models.Calculators;
 using Libiada.Database.Tasks;
+using Libiada.Database.Models;
 
 
 /// <summary>
@@ -55,7 +56,20 @@ public class CalculationController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        var viewData = viewDataHelper.FillViewData(CharacteristicCategory.Full, 1, int.MaxValue, "Calculate");
+        var viewData = viewDataHelper.AddResearchObjects()
+                                     .AddMinMaxResearchObjects()
+                                     .AddSequenceGroups()
+                                     .AddNatures()
+                                     .AddNotations()
+                                     .AddLanguages()
+                                     .AddTranslators()
+                                     .AddPauseTreatments()
+                                     .AddTrajectories()
+                                     .AddSequenceTypes()
+                                     .AddGroups()
+                                     .AddSubmitName()
+                                     .AddCharacteristicsData(CharacteristicCategory.Full)
+                                     .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
 
@@ -126,12 +140,15 @@ public class CalculationController : AbstractResultController
                 SequenceGroup[] sequenceGroups = db.SequenceGroups.Where(sg => sequenceGroupIds.Contains(sg.Id)).Include(sg => sg.ResearchObjects).ToArray();
                 researchObjectIds = sequenceGroups.Select(sg => sg.ResearchObjects.Select(m => m.Id)).SelectMany(m => m).ToArray();
                 int distinctResearchObjectsCount = researchObjectIds.Distinct().ToArray().Length;
-                if (researchObjectIds.Length != distinctResearchObjectsCount) throw new ArgumentException("Sequence groups contain intesecting sets of sequences", nameof(sequenceGroupIds));
+                if (researchObjectIds.Length != distinctResearchObjectsCount)
+                {
+                    throw new ArgumentException("Sequence groups contain intesecting sets of sequences", nameof(sequenceGroupIds));
+                }
 
                 researchObjectsIdsSequenceGroupIds = sequenceGroups.SelectMany(sg => sg.ResearchObjects.Select(m => new { id = sg.Id, researchObjectId = m.Id }))
                                                            .ToDictionary(sg => sg.researchObjectId, sg => sg.id);
 
-                sequenceGroupsSelectList = SelectListHelper.GetSequenceGroupSelectList(sg => sequenceGroupIds.Contains(sg.Id), db);
+                sequenceGroupsSelectList = (IEnumerable<SelectListItem>)viewDataHelper.AddSequenceGroups(sg => sequenceGroupIds.Contains(sg.Id)).Build()["sequenceGroups"];
             }
 
             using var sequenceRepository = sequenceRepositoryFactory.Create();
