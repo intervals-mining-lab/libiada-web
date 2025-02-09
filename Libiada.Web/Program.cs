@@ -98,10 +98,9 @@ builder.Services.Configure<RazorViewEngineOptions>(options =>
     options.ViewLocationFormats.Add("/Views/Calculators/{1}/{0}.cshtml");
 });
 
-builder.Services.AddControllersWithViews(options =>
-{
-    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-});
+builder.Services
+       .AddControllersWithViews(options =>{ options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()); })
+       .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
 
 // TODO: fix json naming
 builder.Services.AddSignalR().AddJsonProtocol(options => { options.PayloadSerializerOptions.PropertyNamingPolicy = null; });

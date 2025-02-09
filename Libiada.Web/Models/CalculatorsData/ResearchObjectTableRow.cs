@@ -11,12 +11,12 @@ public class ResearchObjectTableRow : SelectListItemWithNature
     /// <summary>
     /// The group.
     /// </summary>
-    public new readonly string Group;
+    public new string Group { get; private set; }
 
     /// <summary>
     /// The sequence type.
     /// </summary>
-    public readonly string SequenceType;
+    public string SequenceType { get; private set; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ResearchObjectTableRow"/> class

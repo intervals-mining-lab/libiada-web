@@ -113,6 +113,7 @@
             }).then(function (result) {
                 const response = result.data;
                 $scope.comparisonMatrix = response.result;
+                // TODO: fill this data from responce
                 $scope.usedAligner = $scope.aligners[response.aligner - 1].Text;
                 $scope.usedDistanceCalculator = $scope.distanceCalculators[response.distanceCalculator - 1].Text;
                 $scope.usedAggregator = $scope.aggregators[response.aggregator - 1].Text;

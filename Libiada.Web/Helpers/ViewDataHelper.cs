@@ -65,7 +65,7 @@ public class ViewDataHelper : IViewDataHelper
     /// Adds the list of research objects table rows to the view data dictionary.
     /// </summary>
     /// <returns></returns>
-    public ViewDataHelper AddResearchObjects()
+    public IViewDataHelper AddResearchObjects()
     {
         return AddResearchObjects(m => true, m => false);
     }
@@ -80,7 +80,7 @@ public class ViewDataHelper : IViewDataHelper
     /// Function for determining which research objects should be selected.
     /// </param>
     /// <returns></returns>
-    public ViewDataHelper AddResearchObjects(Func<ResearchObject, bool> filter, Func<ResearchObject, bool> selection)
+    public IViewDataHelper AddResearchObjects(Func<ResearchObject, bool> filter, Func<ResearchObject, bool> selection)
     {
         IOrderedEnumerable<ResearchObject> researchObjects = cache.ResearchObjects
                                                                   .Where(filter)
@@ -98,7 +98,7 @@ public class ViewDataHelper : IViewDataHelper
     /// If set to <c>true</c> [includes only genetic nature].
     /// </param>
     /// <returns></returns>
-    public ViewDataHelper AddNatures(bool onlyGenetic = false)
+    public IViewDataHelper AddNatures(bool onlyGenetic = false)
     {
         Nature[] natures = user.IsAdmin() || onlyGenetic ? EnumExtensions.ToArray<Nature>() : [Nature.Genetic];
         viewData.Add("natures", natures.ToSelectList());
@@ -112,7 +112,7 @@ public class ViewDataHelper : IViewDataHelper
     /// If set to <c>true</c> [includes only genetic notations].
     /// </param>
     /// <returns></returns>
-    public ViewDataHelper AddNotations(bool onlyGenetic = false)
+    public IViewDataHelper AddNotations(bool onlyGenetic = false)
     {
         Notation[] notations = user.IsAdmin() ? EnumExtensions.ToArray<Notation>() : [Notation.Nucleotides];
         if (onlyGenetic)
@@ -128,7 +128,7 @@ public class ViewDataHelper : IViewDataHelper
     /// Adds remote databases select list to the view data dictionary.
     /// </summary>
     /// <returns></returns>
-    public ViewDataHelper AddRemoteDatabases()
+    public IViewDataHelper AddRemoteDatabases()
     {
         IEnumerable<RemoteDb> remoteDbs = EnumExtensions.ToArray<RemoteDb>();
         if (!user.IsAdmin())
@@ -147,7 +147,7 @@ public class ViewDataHelper : IViewDataHelper
     /// If set to <c>true</c> [includes only genetic sequence types].
     /// </param>
     /// <returns></returns>
-    public ViewDataHelper AddSequenceTypes(bool onlyGenetic = false)
+    public IViewDataHelper AddSequenceTypes(bool onlyGenetic = false)
     {
         IEnumerable<SequenceType> sequenceTypes = EnumExtensions.ToArray<SequenceType>();
         if (!user.IsAdmin() || onlyGenetic)
@@ -166,7 +166,7 @@ public class ViewDataHelper : IViewDataHelper
     /// If set to <c>true</c> [includes only genetic groups].
     /// </param>
     /// <returns></returns>
-    public ViewDataHelper AddGroups(bool onlyGenetic = false)
+    public IViewDataHelper AddGroups(bool onlyGenetic = false)
     {
         IEnumerable<Group> groups = EnumExtensions.ToArray<Group>();
         if (!user.IsAdmin() || onlyGenetic)
@@ -182,7 +182,7 @@ public class ViewDataHelper : IViewDataHelper
     ///  Adds features select list to the view data dictionary.
     /// </summary>
     /// <returns></returns>
-    public ViewDataHelper AddFeatures()
+    public IViewDataHelper AddFeatures()
     {
         IEnumerable<Feature> features = EnumExtensions.ToArray<Feature>().Where(f => f.GetNature() == Nature.Genetic);
         IEnumerable<Feature> selectedFeatures = features.Where(f => f != Feature.NonCodingSequence);
@@ -194,7 +194,7 @@ public class ViewDataHelper : IViewDataHelper
     /// Adds multisequences select list to the view data dictionary.
     /// </summary>
     /// <returns></returns>
-    public ViewDataHelper AddMultisequences()
+    public IViewDataHelper AddMultisequences()
     {
         SelectListItemWithNature[] multisequences = db.Multisequences
                                                       .Select(ms => new SelectListItemWithNature
@@ -213,7 +213,7 @@ public class ViewDataHelper : IViewDataHelper
     /// Adds languages select list to the view data dictionary.
     /// </summary>
     /// <returns></returns>
-    public ViewDataHelper AddLanguages()
+    public IViewDataHelper AddLanguages()
     {
         viewData.Add("languages", Extensions.EnumExtensions.GetSelectList<Language>());
         return this;
@@ -223,7 +223,7 @@ public class ViewDataHelper : IViewDataHelper
     /// Adds translators select list to the view data dictionary.
     /// </summary>
     /// <returns></returns>
-    public ViewDataHelper AddTranslators()
+    public IViewDataHelper AddTranslators()
     {
         viewData.Add("translators", Extensions.EnumExtensions.GetSelectList<Translator>());
         return this;
@@ -233,7 +233,7 @@ public class ViewDataHelper : IViewDataHelper
     /// Adds image reading trajectories select list to the view data dictionary.
     /// </summary>
     /// <returns></returns>
-    public ViewDataHelper AddTrajectories()
+    public IViewDataHelper AddTrajectories()
     {
         var imageOrderExtractors = EnumExtensions.SelectAllWithAttribute<ImageOrderExtractor>(typeof(ImageOrderExtractorAttribute));
         viewData.Add("trajectories", imageOrderExtractors.ToSelectList());
@@ -244,7 +244,7 @@ public class ViewDataHelper : IViewDataHelper
     /// Adds pause treatments select list to the view data dictionary.
     /// </summary>
     /// <returns></returns>
-    public ViewDataHelper AddPauseTreatments()
+    public IViewDataHelper AddPauseTreatments()
     {
         viewData.Add("pauseTreatments", Extensions.EnumExtensions.GetSelectList<PauseTreatment>());
         return this;
@@ -257,7 +257,7 @@ public class ViewDataHelper : IViewDataHelper
     /// Name of the submit button.
     /// </param>
     /// <returns></returns>
-    public ViewDataHelper AddSubmitName(string submitName = "Calculate")
+    public IViewDataHelper AddSubmitName(string submitName = "Calculate")
     {
         viewData.Add("submitName", submitName);
         return this;
@@ -273,7 +273,7 @@ public class ViewDataHelper : IViewDataHelper
     /// The maximum research objects selected.
     /// </param>
     /// <returns></returns>
-    public ViewDataHelper AddMinMaxResearchObjects(int min = 1, int max = int.MaxValue)
+    public IViewDataHelper AddMinMaxResearchObjects(int min = 1, int max = int.MaxValue)
     {
         viewData.Add("minimumSelectedResearchObjects", min);
         viewData.Add("maximumSelectedResearchObjects", max);
@@ -284,7 +284,7 @@ public class ViewDataHelper : IViewDataHelper
     /// Adds the sequence groups select list to the view data dictionary.
     /// </summary>
     /// <returns></returns>
-    public ViewDataHelper AddSequenceGroups()
+    public IViewDataHelper AddSequenceGroups()
     {
         return AddSequenceGroups(sg => true);
     }
@@ -296,7 +296,7 @@ public class ViewDataHelper : IViewDataHelper
     /// Filter for sequence groups.
     /// </param>
     /// <returns></returns>
-    public ViewDataHelper AddSequenceGroups(Func<SequenceGroup, bool> filter)
+    public IViewDataHelper AddSequenceGroups(Func<SequenceGroup, bool> filter)
     {
         ResearchObjectTableRow[] sequenceGoups = db.SequenceGroups
                                                    .Where(filter)
@@ -315,7 +315,7 @@ public class ViewDataHelper : IViewDataHelper
     /// The characteristics category.
     /// </param>
     /// <returns></returns>
-    public ViewDataHelper AddCharacteristicsData(CharacteristicCategory characteristicsCategory)
+    public IViewDataHelper AddCharacteristicsData(CharacteristicCategory characteristicsCategory)
     {
 
         List<CharacteristicSelectListItem> characteristicTypes;
