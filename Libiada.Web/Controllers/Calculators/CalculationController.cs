@@ -56,8 +56,7 @@ public class CalculationController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        var viewData = viewDataHelper.AddResearchObjects()
-                                     .AddMinMaxResearchObjects()
+        var viewData = viewDataHelper.AddMinMaxResearchObjects()
                                      .AddSequenceGroups()
                                      .AddNatures()
                                      .AddNotations()

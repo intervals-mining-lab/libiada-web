@@ -104,6 +104,8 @@ public class SequenceTransformerController : Controller
                 Notation = notation,
                 Alphabet = alphabet,
                 Order = transformedSequence.Order,
+                CreatorId = User.GetUserId(),
+                ModifierId = User.GetUserId(),
                 Partial = false
             };
 

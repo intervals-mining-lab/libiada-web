@@ -1,7 +1,7 @@
 ﻿function researchObjectsTable() {
     "use strict";
 
-    function ResearchObjectsTableController($scope, filterFilter) {
+    function ResearchObjectsTableController($scope, $http, filterFilter) {
         let ctrl = this;
 
         ctrl.$onInit = () => {
@@ -25,7 +25,10 @@
                 ctrl.researchObjectsInputType = "radio";
             }
 
-            ctrl.selectedResearchObjectsCount = ctrl.researchObjects.filter(m => m.Selected).length;
+            ctrl.researchObjectsProvided = typeof ctrl.researchObjects !== 'undefined';
+
+            ctrl.selectedResearchObjectsCount = ctrl.researchObjectsProvided ? ctrl.researchObjects.filter(m => m.Selected).length : 0;
+
             ctrl.visibleResearchObjects = [];
             ctrl.toogleResearchObjectsVisibility(false);
 
@@ -94,21 +97,40 @@
             }
         };
 
-        ctrl.toogleResearchObjectsVisibility = (resetSelection, ignoreSearch) => {
+        ctrl.toogleResearchObjectsVisibility = async (resetSelection, ignoreSearch) => {
             if (resetSelection) {
-                ctrl.researchObjects.forEach(m => {
+                ctrl.visibleResearchObjects.forEach(m => {
                     m.Selected = false;
-                    $(`#researchObject{m.Value}`).prop("checked", false);
+                    $(`#researchObject${m.Value}`).prop("checked", false);
                 });
                 ctrl.selectedResearchObjectsCount = 0;
             }
+            let researchObjectsToHide;
+            if (ctrl.researchObjectsProvided) {
+                // Updating research objects visibility flag
+                ctrl.researchObjects.forEach(m => m.Visible = ignoreSearch ? ctrl.isResearchObjectVisibleWithoutSearch(m) : ctrl.isResearchObjectVisible(m));
 
-            // Updating research objects visibility flag
-            ctrl.researchObjects.forEach(m => m.Visible = ignoreSearch ? ctrl.isResearchObjectVisibleWithoutSearch(m) : ctrl.isResearchObjectVisible(m));
-            const researchObjectsToHide = ctrl.visibleResearchObjects.filter(m => !m.Visible);
-            const newVisibleResearchObjects = ctrl.researchObjects.filter(m => m.Visible);
-            const researchObjectsToShow = newVisibleResearchObjects.filter(m => !ctrl.visibleResearchObjects.some(m2 => m2.Value === m.Value));
-            ctrl.visibleResearchObjects = newVisibleResearchObjects;
+                researchObjectsToHide = ctrl.visibleResearchObjects.filter(m => !m.Visible);
+                
+            } else {
+                if (ignoreSearch || ctrl.searchResearchObjectText.length > 3) {
+                    const requestParams = ctrl.FillResearchObjectsSearchParams();
+
+                    const result = await $http.get("/api/ResearchObjectApi/GetResearchObjects", { params: requestParams });
+
+                    ctrl.researchObjects = result.data;
+                    ctrl.researchObjects.forEach(m => m.Visible = true);
+                } else {
+                    ctrl.researchObjects = [];
+                }
+                
+                researchObjectsToHide = ctrl.visibleResearchObjects.filter(m => !m.Selected && !ctrl.researchObjects.some(m2 => m2.Value === m.Value));
+                
+            }
+
+            const researchObjectsToShow = ctrl.researchObjects.filter(m => m.Visible && !ctrl.visibleResearchObjects.some(m2 => m2.Value === m.Value));
+            ctrl.visibleResearchObjects = ctrl.visibleResearchObjects.filter(m => !researchObjectsToHide.some(m2 => m2.Value === m.Value))
+                .concat(...researchObjectsToShow);
 
             // removing not visible research objects from table
             $(researchObjectsToHide.map(m => `#researchObjectRow${m.Value}`).join(",")).remove();
@@ -143,6 +165,19 @@
             ));
         };
 
+        ctrl.FillResearchObjectsSearchParams = () => {
+            const params = {
+                nature: ctrl.nature,
+                refSeqOnly: ctrl.showRefSeqOnly
+            };
+
+            if (ctrl.searchResearchObjectText) params.searchQuery = ctrl.searchResearchObjectText;
+            if (ctrl.group) params.group = ctrl.group.Value;
+            if (ctrl.sequenceType) params.sequenceType = ctrl.sequenceType.Value;
+
+            return params;
+        }
+
         ctrl.isResearchObjectVisibleWithoutSearch = researchObject => researchObject.Selected || ctrl.checkResearchObjectVisibilitty(researchObject);
 
         ctrl.isResearchObjectVisible = researchObject => researchObject.Selected ||
@@ -176,7 +211,7 @@
                 ctrl.selectedResearchObjectsCount--;
             } else {
                 if (ctrl.maximumSelectedResearchObjects === 1) {
-                    ctrl.researchObjects.forEach(m => m.Selected = false);
+                    ctrl.visibleResearchObjects.forEach(m => m.Selected = false);
                     researchObject.Selected = true;
                     ctrl.selectedResearchObjectsCount = 1;
                 } else {
@@ -194,10 +229,10 @@
 
     angular.module("libiada").component("researchObjectsTable", {
         templateUrl: `${window.location.origin}/AngularTemplates/_ResearchObjectsTable`,
-        controller: ["$scope", "filterFilter", ResearchObjectsTableController],
+        controller: ["$scope", "$http", "filterFilter", ResearchObjectsTableController],
         bindings: {
             selectedResearchObjectsCount: "=",
-            researchObjects: "<",
+            researchObjects: "<?",
             nature: "<",
             groups: "<",
             sequenceTypes: "<",

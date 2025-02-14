@@ -117,7 +117,9 @@ public class BatchSequenceImportController : AbstractResultController
                         Notation = Notation.Nucleotides,
                         RemoteDb = RemoteDb.GenBank,
                         RemoteId = metadata.Version.CompoundAccession,
-                        Partial = partial
+                        Partial = partial,
+                        CreatorId = User.GetUserId(),
+                        ModifierId = User.GetUserId(),
                     };
 
 

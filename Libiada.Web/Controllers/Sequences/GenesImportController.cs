@@ -5,12 +5,13 @@ using Libiada.Core.Extensions;
 using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Tasks;
 using Libiada.Database.Helpers;
+using Libiada.Database.Models.Repositories.Sequences;
 
 using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
-using Libiada.Database.Models.Repositories.Sequences;
+
 
 /// <summary>
 /// The genes import controller.
@@ -88,7 +89,7 @@ public class GenesImportController : AbstractResultController
             string researchObjectName = cache.ResearchObjects.Single(m => m.Id == researchObjectId).Name;
             SubsequenceData[] sequenceSubsequences = db.Subsequences
                 .Where(s => s.SequenceId == parentSequence.Id)
-                .Include(s => s.Position)
+                .Include(s => s.Positions)
                 .ToArray()
                 .Select(s => new SubsequenceData(s))
                 .ToArray();
