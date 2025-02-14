@@ -8,6 +8,7 @@ using Libiada.Web.Helpers;
 using Libiada.Database.Models.Repositories.Sequences;
 
 using Newtonsoft.Json;
+using Libiada.Web.Extensions;
 
 /// <summary>
 /// The DNA transformation controller.
