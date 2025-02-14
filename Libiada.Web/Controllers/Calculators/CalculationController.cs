@@ -12,7 +12,8 @@ using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Models.Calculators;
 using Libiada.Database.Tasks;
-using Libiada.Database.Models;
+
+using Libiada.Web.Models.CalculatorsData;
 
 
 /// <summary>
@@ -147,7 +148,11 @@ public class CalculationController : AbstractResultController
                 researchObjectsIdsSequenceGroupIds = sequenceGroups.SelectMany(sg => sg.ResearchObjects.Select(m => new { id = sg.Id, researchObjectId = m.Id }))
                                                            .ToDictionary(sg => sg.researchObjectId, sg => sg.id);
 
-                sequenceGroupsSelectList = (IEnumerable<SelectListItem>)viewDataHelper.AddSequenceGroups(sg => sequenceGroupIds.Contains(sg.Id)).Build()["sequenceGroups"];
+                sequenceGroupsSelectList = db.SequenceGroups
+                                             .Where(sg => sequenceGroupIds.Contains(sg.Id))
+                                             .OrderBy(m => m.Created)
+                                             .Select(sg => new ResearchObjectTableRow(sg, false))
+                                             .ToArray();
             }
 
             using var sequenceRepository = sequenceRepositoryFactory.Create();

@@ -10,17 +10,14 @@ using Libiada.Database.Models.Repositories.Sequences;
 
 using Newtonsoft.Json;
 
+
 /// <summary>
 /// The DNA transformation controller.
 /// </summary>
 [Authorize(Roles = "Admin")]
 public class SequenceTransformerController : Controller
 {
-    /// <summary>
-    /// Database context factory.
-    /// </summary>
     private readonly LibiadaDatabaseEntities db;
-    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataHelper viewDataHelper;
 
     /// <summary>
@@ -46,7 +43,6 @@ public class SequenceTransformerController : Controller
                                          ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
                                          IResearchObjectsCache cache)
     {
-        this.dbFactory = dbFactory;
         this.db = dbFactory.CreateDbContext();
         this.viewDataHelper = viewDataHelper;
         dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
@@ -64,8 +60,15 @@ public class SequenceTransformerController : Controller
     {
         long[] researchObjectIds = db.CombinedSequenceEntities.Where(d => d.Notation == Notation.Nucleotides).Select(d => d.ResearchObjectId).ToArray();
 
-        var data = viewDataHelper.FillViewData(1, int.MaxValue, m => researchObjectIds.Contains(m.Id), "Transform");
-        data.Add("nature", (byte)Nature.Genetic);
+        var data = viewDataHelper.AddResearchObjects(m => researchObjectIds.Contains(m.Id), m => false)
+                                 .AddMinMaxResearchObjects()
+                                 .AddSequenceGroups()
+                                 .SetNature(Nature.Genetic)
+                                 .AddNotations()
+                                 .AddSequenceTypes()
+                                 .AddGroups()
+                                 .AddSubmitName("Transform")
+                                 .Build();
         ViewBag.data = JsonConvert.SerializeObject(data);
         return View();
     }

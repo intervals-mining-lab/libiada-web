@@ -55,11 +55,20 @@ public class OrderTransformationCalculationController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        Dictionary<string, object> data = viewDataHelper.FillViewData(CharacteristicCategory.Full, 1, int.MaxValue, "Calculate");
-
-        var transformations = Extensions.EnumExtensions.GetSelectList<OrderTransformation>();
-        data.Add("transformations", transformations);
-
+        Dictionary<string, object> data = viewDataHelper.AddMinMaxResearchObjects()
+                                                        .AddSequenceGroups()
+                                                        .AddNatures()
+                                                        .AddNotations()
+                                                        .AddLanguages()
+                                                        .AddTranslators()
+                                                        .AddPauseTreatments()
+                                                        .AddTrajectories()
+                                                        .AddOrderTransformations()
+                                                        .AddSequenceTypes()
+                                                        .AddGroups()
+                                                        .AddSubmitName()
+                                                        .AddCharacteristicsData(CharacteristicCategory.Full)
+                                                        .Build();
         ViewBag.data = JsonConvert.SerializeObject(data);
         return View();
     }

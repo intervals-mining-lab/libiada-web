@@ -6,11 +6,11 @@ using Libiada.Web.Tasks;
 
 using Libiada.Database.Tasks;
 using Libiada.Database.Helpers;
+using Libiada.Database.Models.Repositories.Sequences;
 
 using Newtonsoft.Json;
 
 using EnumExtensions = Core.Extensions.EnumExtensions;
-using Libiada.Database.Models.Repositories.Sequences;
 
 /// <summary>
 /// The research objects controller.

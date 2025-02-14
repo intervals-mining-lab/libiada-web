@@ -28,7 +28,6 @@ public class OrderTransformationVisualizationController : AbstractResultControll
     /// </returns>
     public ActionResult Index()
     {
-        ViewBag.data = "{}";
         return View();
     }
 
@@ -51,7 +50,7 @@ public class OrderTransformationVisualizationController : AbstractResultControll
 
             List<SelectListItem> transformationsSelectList =
             [
-                new() { Value = 0.ToString(), Text = "All" },
+                new() { Value = "0", Text = "All" },
                 .. Extensions.EnumExtensions.GetSelectList<OrderTransformation>(),
             ];
 

@@ -51,7 +51,8 @@ public class IntervalsCharacteristicsDistributionController : AbstractResultCont
     {
         var imageTransformers = Extensions.EnumExtensions.GetSelectList<ImageTransformer>();
 
-        Dictionary<string, object> viewData = viewDataHelper.GetCharacteristicsData(CharacteristicCategory.Full);
+        Dictionary<string, object> viewData = viewDataHelper.AddCharacteristicsData(CharacteristicCategory.Full)
+                                                            .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }

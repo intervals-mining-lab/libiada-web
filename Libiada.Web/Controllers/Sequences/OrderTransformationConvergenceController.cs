@@ -50,11 +50,18 @@ public class OrderTransformationConvergenceController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        var data = viewDataHelper.FillViewData(1, 1, "Transform");
-
-        var transformations = Extensions.EnumExtensions.GetSelectList<OrderTransformation>();
-        data.Add("transformations", transformations);
-
+        var data = viewDataHelper.AddMinMaxResearchObjects(1, 1)
+                                 .AddNatures()
+                                 .AddNotations()
+                                 .AddLanguages()
+                                 .AddTranslators()
+                                 .AddPauseTreatments()
+                                 .AddTrajectories()
+                                 .AddSequenceTypes()
+                                 .AddGroups()
+                                 .AddOrderTransformations()
+                                 .AddSubmitName("Transform")
+                                 .Build();
         ViewBag.data = JsonConvert.SerializeObject(data);
         return View();
     }

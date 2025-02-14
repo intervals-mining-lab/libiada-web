@@ -34,7 +34,6 @@ public class BatchGeneticImportFromGenBankSearchQueryController : AbstractResult
     }
     public ActionResult Index()
     {
-        ViewBag.data = JsonConvert.SerializeObject(string.Empty);
         return View();
     }
 

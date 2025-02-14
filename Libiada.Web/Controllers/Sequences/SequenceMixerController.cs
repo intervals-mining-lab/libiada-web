@@ -7,13 +7,11 @@ using Libiada.Database.Models;
 using Libiada.Database.Models.Repositories.Sequences;
 
 using Libiada.Web.Helpers;
+using Libiada.Web.Extensions;
 
 using Newtonsoft.Json;
 
 using Microsoft.EntityFrameworkCore;
-using Libiada.Web.Extensions;
-
-
 
 /// <summary>
 /// The sequence mixer controller.
@@ -68,7 +66,18 @@ public class SequenceMixerController : Controller
     /// </returns>
     public ActionResult Index()
     {
-        ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillViewData(1, 1, "Mix"));
+        var viewData = viewDataHelper.AddMinMaxResearchObjects(1, 1)
+                                     .AddNatures()
+                                     .AddNotations()
+                                     .AddLanguages()
+                                     .AddTranslators()
+                                     .AddPauseTreatments()
+                                     .AddTrajectories()
+                                     .AddSequenceTypes()
+                                     .AddGroups()
+                                     .AddSubmitName("Mix")
+                                     .Build();
+        ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }
 
@@ -117,13 +126,13 @@ public class SequenceMixerController : Controller
         long sequenceId = researchObject.Nature switch
         {
             Nature.Literature => db.CombinedSequenceEntities.Single(l => l.ResearchObjectId == researchObjectId
-                                                                    && l.Notation == notation
-                                                                    && l.Language == language
-                                                                    && l.Translator == translator).Id,
+                                                                      && l.Notation == notation
+                                                                      && l.Language == language
+                                                                      && l.Translator == translator).Id,
             Nature.Music => db.CombinedSequenceEntities.Single(m => m.ResearchObjectId == researchObjectId
-                                                          && m.Notation == notation
-                                                          && m.PauseTreatment == pauseTreatment
-                                                          && m.SequentialTransfer == sequentialTransfer).Id,
+                                                                 && m.Notation == notation
+                                                                 && m.PauseTreatment == pauseTreatment
+                                                                 && m.SequentialTransfer == sequentialTransfer).Id,
             _ => db.CombinedSequenceEntities.Single(c => c.ResearchObjectId == researchObjectId && c.Notation == notation).Id,
         };
         Sequence sequence = sequenceRepository.GetLibiadaSequence(sequenceId);

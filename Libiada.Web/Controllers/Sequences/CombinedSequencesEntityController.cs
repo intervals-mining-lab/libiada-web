@@ -2,10 +2,10 @@
 
 using Libiada.Database.Tasks;
 using Libiada.Database.Helpers;
+using Libiada.Database.Models.Repositories.Sequences;
 
 using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
-using Libiada.Database.Models.Repositories.Sequences;
 
 /// <summary>
 /// The combines sequences controller.

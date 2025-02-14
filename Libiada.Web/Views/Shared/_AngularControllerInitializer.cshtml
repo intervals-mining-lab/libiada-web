@@ -10,7 +10,7 @@
 
     @if(ViewBag.data != null)
     {
-        @:var data = @Html.Raw(ViewBag.data);
+        @:let data = @Html.Raw(ViewBag.data ?? "{}");
         @:controllerConstructor(data);
     }
     else

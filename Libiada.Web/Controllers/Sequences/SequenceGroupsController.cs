@@ -76,8 +76,15 @@ public class SequenceGroupsController : Controller
     /// </returns>
     public ActionResult Create()
     {
-        var viewData = viewDataHelper.GetResearchObjectsData(1, int.MaxValue);
-        viewData["sequenceGroupTypes"] = EnumExtensions.ToArray<SequenceGroupType>().ToSelectListWithNature();
+        var viewData = viewDataHelper.AddResearchObjects()
+                                     .AddMinMaxResearchObjects()
+                                     .AddSequenceGroups()
+                                     .AddNatures()
+                                     .AddSequenceTypes()
+                                     .AddGroups()
+                                     .AddSequenceGroupTypes()
+                                     .AddSubmitName("Create")
+                                     .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }
@@ -141,8 +148,15 @@ public class SequenceGroupsController : Controller
         }
 
         var selectedResearchObjectIds = sequenceGroup.ResearchObjects.Select(m => m.Id);
-        var viewData = viewDataHelper.FillViewData(1, int.MaxValue, m => true, m => selectedResearchObjectIds.Contains(m.Id), "Save");
-        viewData["sequenceGroupTypes"] = EnumExtensions.ToArray<SequenceGroupType>().ToSelectListWithNature();
+        var viewData = viewDataHelper.AddResearchObjects(m => true, m => selectedResearchObjectIds.Contains(m.Id))
+                                     .AddMinMaxResearchObjects()
+                                     .AddSequenceGroups()
+                                     .AddNatures()
+                                     .AddSequenceTypes()
+                                     .AddGroups()
+                                     .AddSequenceGroupTypes()
+                                     .AddSubmitName("Save")
+                                     .Build();
 
         // TODO: try to optimize this
         SelectListItemWithNature[] sequenceTypes = ((IEnumerable<SelectListItemWithNature>)viewData["sequenceTypes"]).ToArray();

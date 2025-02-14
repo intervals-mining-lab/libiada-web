@@ -5,7 +5,6 @@ using Libiada.Core.Extensions;
 using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Models.Calculators;
-using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
 
 using Newtonsoft.Json;
@@ -48,7 +47,18 @@ public class SubsequencesCalculationController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillSubsequencesViewData(1, int.MaxValue, "Calculate"));
+        var viewData = viewDataHelper.AddResearchObjectsWithSubsequences()
+                                     .AddMinMaxResearchObjects()
+                                     .AddSequenceGroups()
+                                     .AddCharacteristicsData(CharacteristicCategory.Full)
+                                     .AddSubmitName()
+                                     .SetNature(Nature.Genetic)
+                                     .AddNotations(onlyGenetic: true)
+                                     .AddSequenceTypes(onlyGenetic: true)
+                                     .AddGroups(onlyGenetic: true)
+                                     .AddFeatures()
+                                     .Build();
+        ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }
 

@@ -6,13 +6,13 @@ using Libiada.Core.Extensions;
 
 using Libiada.Database.Models.Calculators;
 using Libiada.Database.Models.Repositories.Catalogs;
+using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
 
 using Newtonsoft.Json;
 
 using Libiada.Web.Tasks;
 using Libiada.Web.Helpers;
-using Libiada.Database.Models.Repositories.Sequences;
 
 /// <summary>
 /// The alignment controller.
@@ -55,7 +55,17 @@ public class SequencesAlignmentController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillSubsequencesViewData(2, 2, "Align"));
+        var viewData = viewDataHelper.AddResearchObjectsWithSubsequences()
+                                     .AddMinMaxResearchObjects(2, 2)
+                                     .AddCharacteristicsData(CharacteristicCategory.Full)
+                                     .AddSubmitName("Align")
+                                     .SetNature(Nature.Genetic)
+                                     .AddNotations(onlyGenetic: true)
+                                     .AddSequenceTypes(onlyGenetic: true)
+                                     .AddGroups(onlyGenetic: true)
+                                     .AddFeatures()
+                                     .Build();
+        ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }
 

@@ -50,11 +50,9 @@ public class CustomSequenceOrderTransformationCalculationController : AbstractRe
     /// </returns>
     public ActionResult Index()
     {
-        var data = viewDataHelper.GetCharacteristicsData(CharacteristicCategory.Full);
-
-        var transformations = Extensions.EnumExtensions.GetSelectList<OrderTransformation>();
-        data.Add("transformations", transformations);
-
+        var data = viewDataHelper.AddCharacteristicsData(CharacteristicCategory.Full)
+                                 .AddOrderTransformations()
+                                 .Build();
         ViewBag.data = JsonConvert.SerializeObject(data);
         return View();
     }

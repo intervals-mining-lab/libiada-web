@@ -56,10 +56,16 @@ public class GenesImportController : AbstractResultController
                           .Where(c => !string.IsNullOrEmpty(c.RemoteId)
                                    && !genesSequenceIds.Contains(c.Id)
                                    && StaticCollections.SequenceTypesWithSubsequences.Contains(c.ResearchObject.SequenceType))
-                          .Select(c => c.ResearchObjectId).ToList();
+        .Select(c => c.ResearchObjectId).ToList();
 
-        var data = viewDataHelper.FillViewData(1, 1, m => researchObjectIds.Contains(m.Id), "Import");
-        data.Add("nature", (byte)Nature.Genetic);
+        var data = viewDataHelper.AddResearchObjects(m => researchObjectIds.Contains(m.Id), m => true)
+                                 .AddMinMaxResearchObjects(1, 1)
+                                 .SetNature(Nature.Genetic)
+                                 .AddNotations(onlyGenetic: true)
+                                 .AddSequenceTypes(onlyGenetic: true)
+                                 .AddGroups(onlyGenetic: true)
+                                 .AddSubmitName("Import")
+                                 .Build();
         ViewBag.data = JsonConvert.SerializeObject(data);
         return View();
     }

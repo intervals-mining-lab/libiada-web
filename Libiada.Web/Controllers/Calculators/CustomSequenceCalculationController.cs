@@ -56,7 +56,8 @@ public class CustomSequenceCalculationController : AbstractResultController
     {
         var imageTransformers = Extensions.EnumExtensions.GetSelectList<ImageTransformer>();
 
-        Dictionary<string, object> viewData = viewDataHelper.GetCharacteristicsData(CharacteristicCategory.Full);
+        var viewData = viewDataHelper.AddCharacteristicsData(CharacteristicCategory.Full)
+                                     .Build();
         viewData.Add("imageTransformers", imageTransformers);
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();

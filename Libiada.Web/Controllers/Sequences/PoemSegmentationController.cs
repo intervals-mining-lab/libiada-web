@@ -33,8 +33,16 @@ public class PoemSegmentationController : AbstractResultController
     // GET: PoemSequenceSegmentation
     public ActionResult Index()
     {
-        var data = viewDataHelper.FillViewData(1, 1, m => m.SequenceType == SequenceType.CompletePoem, "Segment");
-        data.Add("nature", (byte)Nature.Literature);
+        var data = viewDataHelper.AddResearchObjects(m => m.SequenceType == SequenceType.CompletePoem, m => false)
+                                 .AddMinMaxResearchObjects(1, 1)
+                                 .SetNature(Nature.Literature)
+                                 .AddNotations()
+                                 .AddLanguages()
+                                 .AddTranslators()
+                                 .AddSequenceTypes()
+                                 .AddGroups()
+                                 .AddSubmitName("Segment")
+                                 .Build();
         ViewBag.data = JsonConvert.SerializeObject(data);
         return View();
     }

@@ -67,7 +67,19 @@ public class RelationCalculationController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillViewData(CharacteristicCategory.Binary, 1, 1, "Calculate"));
+        var viewData = viewDataHelper.AddMinMaxResearchObjects(1, 1)
+                                     .AddNatures()
+                                     .AddNotations()
+                                     .AddLanguages()
+                                     .AddTranslators()
+                                     .AddPauseTreatments()
+                                     .AddTrajectories()
+                                     .AddSequenceTypes()
+                                     .AddGroups()
+                                     .AddSubmitName()
+                                     .AddCharacteristicsData(CharacteristicCategory.Binary)
+                                     .Build();
+        ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }
 

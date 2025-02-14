@@ -63,7 +63,19 @@ public class LocalCalculationController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        var viewData = viewDataHelper.FillViewData(CharacteristicCategory.Full, 1, int.MaxValue, "Calculate");
+        var viewData = viewDataHelper.AddMinMaxResearchObjects()
+                                     .AddSequenceGroups()
+                                     .AddNatures()
+                                     .AddNotations()
+                                     .AddLanguages()
+                                     .AddTranslators()
+                                     .AddPauseTreatments()
+                                     .AddTrajectories()
+                                     .AddSequenceTypes()
+                                     .AddGroups()
+                                     .AddSubmitName()
+                                     .AddCharacteristicsData(CharacteristicCategory.Full)
+                                     .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }

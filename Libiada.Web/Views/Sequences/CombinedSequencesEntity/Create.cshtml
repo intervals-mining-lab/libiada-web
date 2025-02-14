@@ -48,6 +48,7 @@
         <div class="row mb-1">
             @Html.LabelFor(model => model.ResearchObject, new { @class = "col-form-label col-md-2" })
             <div class="col-md-10">
+                @*TODO: replace this with api search call autocomplete field*@
                 <select class="form-select"
                         ng-options="m.Value as m.Text for m in researchObjects | filter:{ Nature: nature }"
                         ng-model="researchObjectId"></select>

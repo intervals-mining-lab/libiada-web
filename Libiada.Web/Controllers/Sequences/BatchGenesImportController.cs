@@ -2,13 +2,13 @@
 
 using Libiada.Database.Helpers;
 using Libiada.Database.Models.CalculatorsData;
+using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
 
 using Newtonsoft.Json;
 
 using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
-using Libiada.Database.Models.Repositories.Sequences;
 
 /// <summary>
 /// The batch genes import controller.
@@ -49,13 +49,19 @@ public class BatchGenesImportController : AbstractResultController
         var sequencesWithSubsequencesIds = db.Subsequences.Select(s => s.SequenceId).Distinct();
 
         long[] researchObjectIds = db.CombinedSequenceEntities.Include(c => c.ResearchObject)
-            .Where(c => !string.IsNullOrEmpty(c.RemoteId)
-                     && !sequencesWithSubsequencesIds.Contains(c.Id)
-                     && StaticCollections.SequenceTypesWithSubsequences.Contains(c.ResearchObject.SequenceType))
-            .Select(c => c.ResearchObjectId).ToArray();
+                                     .Where(c => !string.IsNullOrEmpty(c.RemoteId)
+                                              && !sequencesWithSubsequencesIds.Contains(c.Id)
+                                              && StaticCollections.SequenceTypesWithSubsequences.Contains(c.ResearchObject.SequenceType))
+                                     .Select(c => c.ResearchObjectId)
+                                     .ToArray();
 
-        var data = viewDataHelper.FillViewData(1, int.MaxValue, m => researchObjectIds.Contains(m.Id), "Import");
-        data.Add("nature", (byte)Nature.Genetic);
+        var data = viewDataHelper.AddResearchObjects(m => researchObjectIds.Contains(m.Id), m => false)
+                                 .AddMinMaxResearchObjects()
+                                 .SetNature(Nature.Genetic)
+                                 .AddSequenceTypes(onlyGenetic: true)
+                                 .AddGroups(onlyGenetic: true)
+                                 .AddSubmitName("Import")
+                                 .Build();
         ViewBag.data = JsonConvert.SerializeObject(data);
 
         return View();

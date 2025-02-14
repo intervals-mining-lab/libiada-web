@@ -51,7 +51,18 @@ public class SequencePredictionController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        var viewData = viewDataHelper.FillViewData(CharacteristicCategory.Full, 1, 1, "Predict");
+        var viewData = viewDataHelper.AddMinMaxResearchObjects(1, 1)
+                                     .AddNatures()
+                                     .AddNotations()
+                                     .AddLanguages()
+                                     .AddTranslators()
+                                     .AddPauseTreatments()
+                                     .AddTrajectories()
+                                     .AddSequenceTypes()
+                                     .AddGroups()
+                                     .AddSubmitName("Predict")
+                                     .AddCharacteristicsData(CharacteristicCategory.Full)
+                                     .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }

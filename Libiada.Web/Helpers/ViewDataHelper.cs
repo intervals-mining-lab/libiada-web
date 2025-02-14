@@ -9,12 +9,10 @@ using Libiada.Web.Extensions;
 using Libiada.Web.Models.CalculatorsData;
 
 using Libiada.Database.Models.Repositories.Catalogs;
+using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Attributes;
 
 using EnumExtensions = Core.Extensions.EnumExtensions;
-using Libiada.Database.Models.Repositories.Sequences;
-using Libiada.Database.Models;
-using Libiada.Segmenter.Base.Seekers.Converters;
 
 /// <summary>
 /// Class filling data for Views.
@@ -92,16 +90,59 @@ public class ViewDataHelper : IViewDataHelper
     }
 
     /// <summary>
+    /// Adds the list of only research objects with subsequences 
+    /// in form of table rows to the view data dictionary.
+    /// </summary>
+    /// <returns></returns>
+    public IViewDataHelper AddResearchObjectsWithSubsequences()
+    {
+        var sequenceIds = db.Subsequences
+                            .Select(s => s.SequenceId)
+                            .Distinct();
+        var researchObjectIds = db.CombinedSequenceEntities
+                                  .Where(c => sequenceIds.Contains(c.Id))
+                                  .Select(c => c.ResearchObjectId)
+                                  .ToList();
+
+        return AddResearchObjects(m => researchObjectIds.Contains(m.Id), m => false);
+    }
+
+    /// <summary>
+    /// Adds the sequence groups select list to the view data dictionary.
+    /// </summary>
+    /// <returns></returns>
+    public IViewDataHelper AddSequenceGroups()
+    {
+        ResearchObjectTableRow[] sequenceGoups = db.SequenceGroups
+                                                   .OrderBy(m => m.Created)
+                                                   .Select(sg => new ResearchObjectTableRow(sg, false))
+                                                   .ToArray();
+
+        viewData.Add("sequenceGroups", sequenceGoups);
+
+        return this;
+    }
+
+    /// <summary>
     /// Adds natures select list to the view data dictionary.
     /// </summary>
-    /// <param name="onlyGenetic">
-    /// If set to <c>true</c> [includes only genetic nature].
-    /// </param>
     /// <returns></returns>
-    public IViewDataHelper AddNatures(bool onlyGenetic = false)
+    public IViewDataHelper AddNatures()
     {
-        Nature[] natures = user.IsAdmin() || onlyGenetic ? EnumExtensions.ToArray<Nature>() : [Nature.Genetic];
+        Nature[] natures = user.IsAdmin() ? EnumExtensions.ToArray<Nature>() : [Nature.Genetic];
         viewData.Add("natures", natures.ToSelectList());
+        return this;
+    }
+
+    /// <summary>
+    /// Adds nature as currently selected in the view data dictionary.
+    /// </summary>
+    /// <param name="nature">Nature value as <see cref="Nature"/></param>
+    /// <returns></returns>
+    public IViewDataHelper SetNature(Nature nature)
+    {
+        //TODO: check if conversion to string is necessary
+        viewData.Add("nature", ((byte)nature).ToString());
         return this;
     }
 
@@ -179,6 +220,17 @@ public class ViewDataHelper : IViewDataHelper
     }
 
     /// <summary>
+    /// Adds sequences groups types select list to the view data dictionary.
+    /// </summary>
+    /// <returns></returns>
+    public IViewDataHelper AddSequenceGroupTypes()
+    {
+        IEnumerable<SequenceGroupType> sequenceGroupTypes = EnumExtensions.ToArray<SequenceGroupType>();
+        viewData.Add("sequenceGroupTypes", sequenceGroupTypes.ToSelectListWithNature());
+        return this;
+    }
+
+    /// <summary>
     ///  Adds features select list to the view data dictionary.
     /// </summary>
     /// <returns></returns>
@@ -241,12 +293,32 @@ public class ViewDataHelper : IViewDataHelper
     }
 
     /// <summary>
+    /// Adds image transformers select list to the view data dictionary.
+    /// </summary>
+    /// <returns></returns>
+    public IViewDataHelper AddImageTransformers()
+    {
+        viewData.Add("imageTransformers", Extensions.EnumExtensions.GetSelectList<ImageTransformer>());
+        return this;
+    }
+
+    /// <summary>
     /// Adds pause treatments select list to the view data dictionary.
     /// </summary>
     /// <returns></returns>
     public IViewDataHelper AddPauseTreatments()
     {
         viewData.Add("pauseTreatments", Extensions.EnumExtensions.GetSelectList<PauseTreatment>());
+        return this;
+    }
+
+    /// <summary>
+    /// Adds order transformations select list to the view data dictionary.
+    /// </summary>
+    /// <returns></returns>
+    public IViewDataHelper AddOrderTransformations()
+    {
+        viewData.Add("pauseTreatments", Extensions.EnumExtensions.GetSelectList<OrderTransformation>());
         return this;
     }
 
@@ -281,33 +353,17 @@ public class ViewDataHelper : IViewDataHelper
     }
 
     /// <summary>
-    /// Adds the sequence groups select list to the view data dictionary.
+    /// Adds to the view data dictionary flag 
+    /// indicating that characteristics should have a field 
+    /// with maximum difference between characteristic values (in percent)
+    /// for it to be considered similar.
     /// </summary>
     /// <returns></returns>
-    public IViewDataHelper AddSequenceGroups()
+    public IViewDataHelper AddMaxPercentageDifferenceRequiredFlag()
     {
-        return AddSequenceGroups(sg => true);
-    }
-
-    /// <summary>
-    /// Adds the sequence groups select list to the view data dictionary.
-    /// </summary>
-    /// <param name="filter">
-    /// Filter for sequence groups.
-    /// </param>
-    /// <returns></returns>
-    public IViewDataHelper AddSequenceGroups(Func<SequenceGroup, bool> filter)
-    {
-        ResearchObjectTableRow[] sequenceGoups = db.SequenceGroups
-                                                   .Where(filter)
-                                                   .OrderBy(m => m.Created)
-                                                   .Select(sg => new ResearchObjectTableRow(sg, false))
-                                                   .ToArray();
-
-        viewData.Add("sequenceGroups", sequenceGoups);
+        viewData.Add("percentageDifferenseNeeded", true);
         return this;
     }
-
     /// <summary>
     /// Adds the characteristics data to the view data dictionary.
     /// </summary>
@@ -389,235 +445,6 @@ public class ViewDataHelper : IViewDataHelper
     public Dictionary<string, object> Build()
     {
         return new Dictionary<string, object>(viewData);
-    }
-
-    /// <summary>
-    /// Fills research object creation data.
-    /// </summary>
-    /// <returns>
-    /// The <see cref="Dictionary{string, object}"/>.
-    /// </returns>
-    public Dictionary<string, object> FillResearchObjectCreationViewData()
-    {
-        viewData.Clear();
-
-        return this.AddResearchObjects()
-                   .AddNatures()
-                   .AddNotations()
-                   .AddRemoteDatabases()
-                   .AddSequenceTypes()
-                   .AddGroups()
-                   .AddMultisequences()
-                   .AddLanguages()
-                   .AddTranslators()
-                   .AddTrajectories()
-                   .Build();
-    }
-
-    /// <summary>
-    /// Fills view data.
-    /// </summary>
-    /// <param name="minSelectedResearchObjects">
-    /// The minimum selected number of research objects.
-    /// </param>
-    /// <param name="maxSelectedResearchObjects">
-    /// The maximum selected number of research objects.
-    /// </param>
-    /// <param name="submitName">
-    /// The submit button name.
-    /// </param>
-    /// <returns>
-    /// The <see cref="Dictionary{string, object}"/>.
-    /// </returns>
-    public Dictionary<string, object> FillViewData(int minSelectedResearchObjects, int maxSelectedResearchObjects, string submitName)
-    {
-        return FillViewData(minSelectedResearchObjects, maxSelectedResearchObjects, m => true, submitName);
-    }
-
-    /// <summary>
-    /// Fills view data.
-    /// </summary>
-    /// <param name="minSelectedResearchObjects">
-    /// The minimum selected number of research objects.
-    /// </param>
-    /// <param name="maxSelectedResearchObjects">
-    /// The maximum selected number of research objects.
-    /// </param>
-    /// <param name="filter">
-    /// The research objects filter.
-    /// </param>
-    /// <param name="submitName">
-    /// The submit button name.
-    /// </param>
-    /// <returns>
-    /// The <see cref="Dictionary{string, object}"/>.
-    /// </returns>
-    public Dictionary<string, object> FillViewData(int minSelectedResearchObjects,
-                                                   int maxSelectedResearchObjects,
-                                                   Func<ResearchObject, bool> filter,
-                                                   string submitName)
-    {
-        return FillViewData(minSelectedResearchObjects, maxSelectedResearchObjects, filter, m => false, submitName);
-    }
-
-    /// <summary>
-    /// Fills view data.
-    /// </summary>
-    /// <param name="minSelectedResearchObjects">
-    /// The minimum selected number of research objects.
-    /// </param>
-    /// <param name="maxSelectedResearchObjects">
-    /// The maximum selected number of research objects.
-    /// </param>
-    /// <param name="filter">
-    /// The research objects filter.
-    /// </param>
-    /// /// <param name="selectionFilter">
-    /// The research objects selection filter.
-    /// </param>
-    /// <param name="submitName">
-    /// The submit button name.
-    /// </param>
-    /// <returns>
-    /// The <see cref="Dictionary{string, object}"/>.
-    /// </returns>
-    public Dictionary<string, object> FillViewData(int minSelectedResearchObjects,
-                                                   int maxSelectedResearchObjects,
-                                                   Func<ResearchObject, bool> filter,
-                                                   Func<ResearchObject, bool> selectionFilter,
-                                                   string submitName)
-    {
-        viewData.Clear();
-
-        return this.AddResearchObjects(filter, selectionFilter)
-                   .AddMinMaxResearchObjects(minSelectedResearchObjects, maxSelectedResearchObjects)
-                   .AddSequenceGroups()
-                   .AddNatures()
-                   .AddNotations()
-                   .AddLanguages()
-                   .AddTranslators()
-                   .AddPauseTreatments()
-                   .AddTrajectories()
-                   .AddSequenceTypes()
-                   .AddGroups()
-                   .AddSubmitName(submitName)
-                   .Build();
-    }
-
-    /// <summary>
-    /// The fill calculation data.
-    /// </summary>
-    /// <param name="characteristicsCategory">
-    /// The characteristics category.
-    /// </param>
-    /// <param name="minSelectedResearchObjects">
-    /// The minimum selected number of research objects.
-    /// </param>
-    /// <param name="maxSelectedResearchObjects">
-    /// The maximum selected number of research objects.
-    /// </param>
-    /// <param name="submitName">
-    /// The submit button name.
-    /// </param>
-    /// <returns>
-    /// The <see cref="Dictionary{string, object}"/>.
-    /// </returns>
-    public Dictionary<string, object> FillViewData(CharacteristicCategory characteristicsCategory, int minSelectedResearchObjects, int maxSelectedResearchObjects, string submitName)
-    {
-        viewData.Clear();
-
-        return this.AddResearchObjects()
-                   .AddMinMaxResearchObjects(minSelectedResearchObjects, maxSelectedResearchObjects)
-                   .AddSequenceGroups()
-                   .AddNatures()
-                   .AddNotations()
-                   .AddLanguages()
-                   .AddTranslators()
-                   .AddPauseTreatments()
-                   .AddTrajectories()
-                   .AddSequenceTypes()
-                   .AddGroups()
-                   .AddSubmitName(submitName)
-                   .AddCharacteristicsData(characteristicsCategory)
-                   .Build();
-    }
-
-    /// <summary>
-    /// Fills subsequences calculation data dictionary.
-    /// </summary>
-    /// <param name="minSelectedResearchObjects">
-    /// The minimum selected number of research objects.
-    /// </param>
-    /// <param name="maxSelectedResearchObjects">
-    /// The maximum selected number of research objects.
-    /// </param>
-    /// <param name="submitName">
-    /// The submit button name.
-    /// </param>
-    /// <returns>
-    /// The <see cref="Dictionary{string, object}"/>.
-    /// </returns>
-    public Dictionary<string, object> FillSubsequencesViewData(int minSelectedResearchObjects, int maxSelectedResearchObjects, string submitName)
-    {
-        var sequenceIds = db.Subsequences.Select(s => s.SequenceId).Distinct();
-        var researchObjectIds = db.CombinedSequenceEntities.Where(c => sequenceIds.Contains(c.Id)).Select(c => c.ResearchObjectId).ToList();
-
-        viewData.Clear();
-
-        return this.AddResearchObjects(m => researchObjectIds.Contains(m.Id), m => false)
-                   .AddMinMaxResearchObjects(minSelectedResearchObjects, maxSelectedResearchObjects)
-                   .AddSequenceGroups()
-                   .AddCharacteristicsData(CharacteristicCategory.Full)
-                   .AddSubmitName(submitName)
-                   .AddNatures(onlyGenetic: true)
-                   .AddNotations(onlyGenetic: true)
-                   .AddSequenceTypes(onlyGenetic: true)
-                   .AddGroups(onlyGenetic: true)
-                   .AddFeatures()
-                   .Build();
-    }
-
-    /// <summary>
-    /// Fills research objects data dictionary.
-    /// </summary>
-    /// <param name="minSelectedResearchObjects">
-    /// The minimum selected number of research objects.
-    /// </param>
-    /// <param name="maxSelectedResearchObjects">
-    /// The maximum selected number of research objects.
-    /// </param>
-    /// <returns>
-    /// The <see cref="Dictionary{string, object}"/>.
-    /// </returns>
-    public Dictionary<string, object> GetResearchObjectsData(int minSelectedResearchObjects, int maxSelectedResearchObjects)
-    {
-        viewData.Clear();
-
-        return this.AddMinMaxResearchObjects(minSelectedResearchObjects, maxSelectedResearchObjects)
-                   .AddResearchObjects()
-                   .AddSequenceGroups()
-                   .AddNatures()
-                   .AddSequenceTypes()
-                   .AddGroups()
-                   .Build();
-    }
-
-    /// <summary>
-    /// Get characteristics data (characteristics select list and dictionary).
-    /// </summary>
-    /// <param name="characteristicsCategory">
-    /// The characteristics category.
-    /// </param>
-    /// <returns>
-    /// The <see cref="Dictionary{string, object}"/>.
-    /// </returns>
-    /// <exception cref="InvalidEnumArgumentException">
-    /// Thrown if <see cref="CharacteristicCategory"/> is unknown.
-    /// </exception>
-    public Dictionary<string, object> GetCharacteristicsData(CharacteristicCategory characteristicsCategory)
-    {
-        return this.AddCharacteristicsData(characteristicsCategory)
-                   .Build();
     }
 
     public void Dispose()

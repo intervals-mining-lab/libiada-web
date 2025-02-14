@@ -12,11 +12,12 @@ using Libiada.Database.Tasks;
 using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Models.Calculators;
+using Libiada.Database.Models.CalculatorsData;
 
 using Newtonsoft.Json;
 
 using EnumExtensions = Core.Extensions.EnumExtensions;
-using Libiada.Database.Models.CalculatorsData;
+
 
 /// <summary>
 /// The clusterization controller.
@@ -70,7 +71,19 @@ public class ClusterizationController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        Dictionary<string, object> viewData = viewDataHelper.FillViewData(CharacteristicCategory.Full, 3, int.MaxValue, "Calculate");
+        var viewData = viewDataHelper.AddMinMaxResearchObjects(3, int.MaxValue)
+                                     .AddSequenceGroups()
+                                     .AddNatures()
+                                     .AddNotations()
+                                     .AddLanguages()
+                                     .AddTranslators()
+                                     .AddPauseTreatments()
+                                     .AddTrajectories()
+                                     .AddSequenceTypes()
+                                     .AddGroups()
+                                     .AddSubmitName()
+                                     .AddCharacteristicsData(CharacteristicCategory.Full)
+                                     .Build();
         viewData.Add("ClusterizatorsTypes", EnumExtensions.ToArray<ClusterizationType>().ToSelectList());
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();

@@ -65,7 +65,19 @@ public class CongenericCalculationController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        var viewData = viewDataHelper.FillViewData(CharacteristicCategory.Congeneric, 1, int.MaxValue, "Calculate");
+        var viewData = viewDataHelper.AddMinMaxResearchObjects()
+                                     .AddSequenceGroups()
+                                     .AddNatures()
+                                     .AddNotations()
+                                     .AddLanguages()
+                                     .AddTranslators()
+                                     .AddPauseTreatments()
+                                     .AddTrajectories()
+                                     .AddSequenceTypes()
+                                     .AddGroups()
+                                     .AddSubmitName()
+                                     .AddCharacteristicsData(CharacteristicCategory.Congeneric)
+                                     .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }

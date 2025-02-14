@@ -1,7 +1,9 @@
 ﻿namespace Libiada.Web.Controllers.Sequences;
 
 using Bio.Extensions;
+
 using Libiada.Database.Models.Repositories.Sequences;
+
 using Libiada.Web.Helpers;
 
 using Newtonsoft.Json;
@@ -42,7 +44,18 @@ public class MultisequenceController : Controller
     /// </returns>
     public ActionResult Create()
     {
-        var data = viewDataHelper.FillViewData(2, int.MaxValue, m => SequenceTypesFilter.Contains(m.SequenceType) && m.MultisequenceId == null, "Create");
+        var data = viewDataHelper.AddResearchObjects(m => SequenceTypesFilter.Contains(m.SequenceType) && m.MultisequenceId == null, m => false)
+                                 .AddMinMaxResearchObjects(2, int.MaxValue)
+                                 .AddNatures()
+                                 .AddNotations()
+                                 .AddLanguages()
+                                 .AddTranslators()
+                                 .AddPauseTreatments()
+                                 .AddTrajectories()
+                                 .AddSequenceTypes()
+                                 .AddGroups()
+                                 .AddSubmitName("Create")
+                                 .Build();
         ViewBag.data = JsonConvert.SerializeObject(data);
 
         return View();
@@ -126,18 +139,25 @@ public class MultisequenceController : Controller
         }
 
         var selectedResearchObjectIds = multisequence.ResearchObjects.Select(m => m.Id);
-        var data = viewDataHelper.FillViewData(2,
-                                               int.MaxValue,
-                                               m => (SequenceTypesFilter.Contains(m.SequenceType)
-                                                    && m.MultisequenceId == null)
-                                                    || selectedResearchObjectIds.Contains(m.Id),
-                                               m => selectedResearchObjectIds.Contains(m.Id),
-                                               "Save");
+        var data = viewDataHelper.AddResearchObjects(m => (SequenceTypesFilter.Contains(m.SequenceType) && m.MultisequenceId == null)
+                                                       || selectedResearchObjectIds.Contains(m.Id),
+                                                     m => selectedResearchObjectIds.Contains(m.Id))
+                                 .AddMinMaxResearchObjects(2, int.MaxValue)
+                                 .AddNatures()
+                                 .AddNotations()
+                                 .AddLanguages()
+                                 .AddTranslators()
+                                 .AddPauseTreatments()
+                                 .AddTrajectories()
+                                 .AddSequenceTypes()
+                                 .AddGroups()
+                                 .AddSubmitName("Save")
+                                 .Build();
+        //TODO: refactor this
         data.Add("multisequenceNumbers", multisequence.ResearchObjects.Select(m => new { m.Id, m.MultisequenceNumber }));
         ViewBag.data = JsonConvert.SerializeObject(data);
 
         return View(multisequence);
-
     }
 
     [HttpPost]
@@ -173,14 +193,23 @@ public class MultisequenceController : Controller
         }
 
         var sellectedResearchObjectIds = multisequence.ResearchObjects.Select(m => m.Id);
-        var data = viewDataHelper.FillViewData(2,
-                                               int.MaxValue,
-                                               m => (SequenceTypesFilter.Contains(m.SequenceType)
-                                                    && m.MultisequenceId == null)
-                                                    || sellectedResearchObjectIds.Contains(m.Id),
-                                               m => sellectedResearchObjectIds.Contains(m.Id),
-                                               "Create");
-
+        var data = viewDataHelper.AddResearchObjects(m => (SequenceTypesFilter.Contains(m.SequenceType) && m.MultisequenceId == null)
+                                                       || sellectedResearchObjectIds.Contains(m.Id),
+                                                     m => sellectedResearchObjectIds.Contains(m.Id))
+                                 .AddMinMaxResearchObjects(2, int.MaxValue)
+                                 .AddSequenceGroups()
+                                 .AddNatures()
+                                 .AddNotations()
+                                 .AddLanguages()
+                                 .AddTranslators()
+                                 .AddPauseTreatments()
+                                 .AddTrajectories()
+                                 .AddSequenceTypes()
+                                 .AddGroups()
+                                 .AddSubmitName("Save")
+                                 .Build();
+        //TODO: refactor this
+        data.Add("multisequenceNumbers", multisequence.ResearchObjects.Select(m => new { m.Id, m.MultisequenceNumber }));
         ViewBag.data = JsonConvert.SerializeObject(data);
 
         return View(multisequence);

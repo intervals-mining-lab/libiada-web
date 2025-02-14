@@ -27,7 +27,6 @@ public class BatchImagesImportController : AbstractResultController
 
     public ActionResult Index()
     {
-        ViewBag.data = JsonConvert.SerializeObject("");
         return View();
     }
 

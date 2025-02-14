@@ -12,7 +12,6 @@ using Newtonsoft.Json;
 
 using Libiada.Web.Helpers;
 using Libiada.Web.Extensions;
-
 using Libiada.Web.Tasks;
 
 using FileHelper = Helpers.FileHelper;
