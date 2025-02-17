@@ -17,7 +17,7 @@ using Libiada.Web.Tasks;
 public class BatchGenesImportController : AbstractResultController
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
     private readonly INcbiHelper ncbiHelper;
     private readonly IResearchObjectsCache cache;
 
@@ -25,14 +25,14 @@ public class BatchGenesImportController : AbstractResultController
     /// Initializes a new instance of the <see cref="BatchGenesImportController"/> class.
     /// </summary>
     public BatchGenesImportController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                      IViewDataHelper viewDataHelper,
+                                      IViewDataBuilder viewDataBuilder,
                                       ITaskManager taskManager,
                                       INcbiHelper ncbiHelper,
                                       IResearchObjectsCache cache)
         : base(TaskType.BatchGenesImport, taskManager)
     {
         this.dbFactory = dbFactory;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         this.ncbiHelper = ncbiHelper;
         this.cache = cache;
     }
@@ -55,7 +55,7 @@ public class BatchGenesImportController : AbstractResultController
                                      .Select(c => c.ResearchObjectId)
                                      .ToArray();
 
-        var data = viewDataHelper.AddResearchObjects(m => researchObjectIds.Contains(m.Id), m => false)
+        var data = viewDataBuilder.AddResearchObjects(m => researchObjectIds.Contains(m.Id), m => false)
                                  .AddMinMaxResearchObjects()
                                  .SetNature(Nature.Genetic)
                                  .AddSequenceTypes(onlyGenetic: true)

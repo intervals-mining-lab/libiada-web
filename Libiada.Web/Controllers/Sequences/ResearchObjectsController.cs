@@ -24,11 +24,11 @@ public class ResearchObjectsController : SequencesResearchObjectsController
     /// Initializes a new instance of the <see cref="ResearchObjectsController"/> class.
     /// </summary>
     public ResearchObjectsController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                             IViewDataHelper viewDataHelper,
+                             IViewDataBuilder viewDataBuilder,
                              ITaskManager taskManager,
                              INcbiHelper ncbiHelper,
                              IResearchObjectsCache cache)
-        : base(TaskType.ResearchObjectImport, dbFactory, viewDataHelper, taskManager, ncbiHelper, cache)
+        : base(TaskType.ResearchObjectImport, dbFactory, viewDataBuilder, taskManager, ncbiHelper, cache)
     {
         this.cache = cache;
     }

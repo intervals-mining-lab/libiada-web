@@ -27,13 +27,13 @@ public class SequencesAlignmentController : AbstractResultController
     private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
     private readonly IResearchObjectsCache cache;
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SequencesAlignmentController"/> class.
     /// </summary>
     public SequencesAlignmentController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                        IViewDataHelper viewDataHelper,
+                                        IViewDataBuilder viewDataBuilder,
                                         ITaskManager taskManager,
                                         IFullCharacteristicRepository characteristicTypeLinkRepository,
                                         ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator,
@@ -44,7 +44,7 @@ public class SequencesAlignmentController : AbstractResultController
         this.subsequencesCharacteristicsCalculator = subsequencesCharacteristicsCalculator;
         this.cache = cache;
         this.dbFactory = dbFactory;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
     }
 
     /// <summary>
@@ -55,7 +55,7 @@ public class SequencesAlignmentController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        var viewData = viewDataHelper.AddResearchObjectsWithSubsequences()
+        var viewData = viewDataBuilder.AddResearchObjectsWithSubsequences()
                                      .AddMinMaxResearchObjects(2, 2)
                                      .AddCharacteristicsData(CharacteristicCategory.Full)
                                      .AddSubmitName("Align")

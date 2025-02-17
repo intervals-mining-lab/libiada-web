@@ -40,21 +40,21 @@ public class SequenceMixerController : Controller
     /// The random generator.
     /// </summary>
     private readonly Random randomGenerator = new();
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
     private readonly IResearchObjectsCache cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SequenceMixerController"/> class.
     /// </summary>
     public SequenceMixerController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                   IViewDataHelper viewDataHelper,
+                                   IViewDataBuilder viewDataBuilder,
                                    IResearchObjectsCache cache)
     {
         this.dbFactory = dbFactory;
         researchObjectRepository = new ResearchObjectRepository(dbFactory.CreateDbContext(), cache);
         sequenceRepository = new CombinedSequenceEntityRepository(dbFactory, cache);
         elementRepository = new ElementRepository(dbFactory.CreateDbContext());
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         this.cache = cache;
     }
 
@@ -66,7 +66,7 @@ public class SequenceMixerController : Controller
     /// </returns>
     public ActionResult Index()
     {
-        var viewData = viewDataHelper.AddMinMaxResearchObjects(1, 1)
+        var viewData = viewDataBuilder.AddMinMaxResearchObjects(1, 1)
                                      .AddNatures()
                                      .AddNotations()
                                      .AddLanguages()

@@ -32,18 +32,18 @@ public class CustomSequenceCalculationController : AbstractResultController
     /// The characteristic type link repository.
     /// </summary>
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CustomSequenceCalculationController"/> class.
     /// </summary>
-    public CustomSequenceCalculationController(IViewDataHelper viewDataHelper, 
+    public CustomSequenceCalculationController(IViewDataBuilder viewDataBuilder, 
                                                ITaskManager taskManager,
                                                IFullCharacteristicRepository characteristicTypeLinkRepository) 
         : base(TaskType.CustomSequenceCalculation, taskManager)
     {
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
     }
 
     /// <summary>
@@ -56,7 +56,7 @@ public class CustomSequenceCalculationController : AbstractResultController
     {
         var imageTransformers = Extensions.EnumExtensions.GetSelectList<ImageTransformer>();
 
-        var viewData = viewDataHelper.AddCharacteristicsData(CharacteristicCategory.Full)
+        var viewData = viewDataBuilder.AddCharacteristicsData(CharacteristicCategory.Full)
                                      .Build();
         viewData.Add("imageTransformers", imageTransformers);
         ViewBag.data = JsonConvert.SerializeObject(viewData);

@@ -38,13 +38,13 @@ public class RelationCalculationController : AbstractResultController
     /// </summary>
     private readonly IBinaryCharacteristicRepository characteristicTypeLinkRepository;
     private readonly IResearchObjectsCache cache;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RelationCalculationController"/> class.
     /// </summary>
     public RelationCalculationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                         IViewDataHelper viewDataHelper,
+                                         IViewDataBuilder viewDataBuilder,
                                          ITaskManager taskManager,
                                          ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
                                          IBinaryCharacteristicRepository characteristicTypeLinkRepository,
@@ -56,7 +56,7 @@ public class RelationCalculationController : AbstractResultController
         this.sequenceRepositoryFactory = sequenceRepositoryFactory;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         this.cache = cache;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
     }
 
     /// <summary>
@@ -67,7 +67,7 @@ public class RelationCalculationController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        var viewData = viewDataHelper.AddMinMaxResearchObjects(1, 1)
+        var viewData = viewDataBuilder.AddMinMaxResearchObjects(1, 1)
                                      .AddNatures()
                                      .AddNotations()
                                      .AddLanguages()

@@ -23,7 +23,7 @@ using Libiada.Web.Models.CalculatorsData;
 public class CalculationController : AbstractResultController
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
     private readonly IResearchObjectsCache cache;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
     private readonly ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator;
@@ -33,7 +33,7 @@ public class CalculationController : AbstractResultController
     /// Initializes a new instance of the <see cref="CalculationController"/> class.
     /// </summary>
     public CalculationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                 IViewDataHelper viewDataHelper,
+                                 IViewDataBuilder viewDataBuilder,
                                  ITaskManager taskManager,
                                  IResearchObjectsCache cache,
                                  IFullCharacteristicRepository characteristicTypeLinkRepository,
@@ -42,7 +42,7 @@ public class CalculationController : AbstractResultController
         : base(TaskType.Calculation, taskManager)
     {
         this.dbFactory = dbFactory;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         this.cache = cache;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         this.sequencesCharacteristicsCalculator = sequencesCharacteristicsCalculator;
@@ -57,7 +57,7 @@ public class CalculationController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        var viewData = viewDataHelper.AddMinMaxResearchObjects()
+        var viewData = viewDataBuilder.AddMinMaxResearchObjects()
                                      .AddSequenceGroups()
                                      .AddNatures()
                                      .AddNotations()

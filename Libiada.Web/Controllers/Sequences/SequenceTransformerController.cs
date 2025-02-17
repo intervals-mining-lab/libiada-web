@@ -18,7 +18,7 @@ using Newtonsoft.Json;
 public class SequenceTransformerController : Controller
 {
     private readonly LibiadaDatabaseEntities db;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
 
     /// <summary>
     /// The DNA sequence repository.
@@ -39,12 +39,12 @@ public class SequenceTransformerController : Controller
     /// Initializes a new instance of the <see cref="SequenceTransformerController"/> class.
     /// </summary>
     public SequenceTransformerController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                         IViewDataHelper viewDataHelper,
+                                         IViewDataBuilder viewDataBuilder,
                                          ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
                                          IResearchObjectsCache cache)
     {
         this.db = dbFactory.CreateDbContext();
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
         this.sequenceRepositoryFactory = sequenceRepositoryFactory;
         elementRepository = new ElementRepository(dbFactory.CreateDbContext());
@@ -60,7 +60,7 @@ public class SequenceTransformerController : Controller
     {
         long[] researchObjectIds = db.CombinedSequenceEntities.Where(d => d.Notation == Notation.Nucleotides).Select(d => d.ResearchObjectId).ToArray();
 
-        var data = viewDataHelper.AddResearchObjects(m => researchObjectIds.Contains(m.Id), m => false)
+        var data = viewDataBuilder.AddResearchObjects(m => researchObjectIds.Contains(m.Id), m => false)
                                  .AddMinMaxResearchObjects()
                                  .AddSequenceGroups()
                                  .SetNature(Nature.Genetic)

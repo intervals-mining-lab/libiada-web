@@ -24,7 +24,7 @@ public class AccordanceCalculationController : AbstractResultController
     /// </summary>
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
 
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
 
     /// <summary>
     /// The sequence repository factory.
@@ -41,7 +41,7 @@ public class AccordanceCalculationController : AbstractResultController
     /// Initializes a new instance of the <see cref="AccordanceCalculationController"/> class.
     /// </summary>
     public AccordanceCalculationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                           IViewDataHelper viewDataHelper,
+                                           IViewDataBuilder viewDataBuilder,
                                            ITaskManager taskManager,
                                            IAccordanceCharacteristicRepository characteristicTypeLinkRepository,
                                            ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
@@ -49,7 +49,7 @@ public class AccordanceCalculationController : AbstractResultController
         : base(TaskType.AccordanceCalculation, taskManager)
     {
         this.dbFactory = dbFactory;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         this.sequenceRepositoryFactory = sequenceRepositoryFactory;
         this.cache = cache;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
@@ -63,7 +63,7 @@ public class AccordanceCalculationController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        var viewData = viewDataHelper.AddMinMaxResearchObjects(2, 2)
+        var viewData = viewDataBuilder.AddMinMaxResearchObjects(2, 2)
                                      .AddNatures()
                                      .AddNotations()
                                      .AddLanguages()

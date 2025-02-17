@@ -18,12 +18,12 @@ public class SequenceGroupsController : Controller
     /// The database context.
     /// </summary>
     private readonly LibiadaDatabaseEntities db;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
 
-    public SequenceGroupsController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper)
+    public SequenceGroupsController(LibiadaDatabaseEntities db, IViewDataBuilder viewDataBuilder)
     {
         this.db = db;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
     }
 
     /// <summary>
@@ -76,8 +76,7 @@ public class SequenceGroupsController : Controller
     /// </returns>
     public ActionResult Create()
     {
-        var viewData = viewDataHelper.AddResearchObjects()
-                                     .AddMinMaxResearchObjects()
+        var viewData = viewDataBuilder.AddMinMaxResearchObjects()
                                      .AddSequenceGroups()
                                      .AddNatures()
                                      .AddSequenceTypes()
@@ -148,7 +147,7 @@ public class SequenceGroupsController : Controller
         }
 
         var selectedResearchObjectIds = sequenceGroup.ResearchObjects.Select(m => m.Id);
-        var viewData = viewDataHelper.AddResearchObjects(m => true, m => selectedResearchObjectIds.Contains(m.Id))
+        var viewData = viewDataBuilder.AddResearchObjects(m => true, m => selectedResearchObjectIds.Contains(m.Id))
                                      .AddMinMaxResearchObjects()
                                      .AddSequenceGroups()
                                      .AddNatures()

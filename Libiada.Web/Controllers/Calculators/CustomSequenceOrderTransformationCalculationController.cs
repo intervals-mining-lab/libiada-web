@@ -27,18 +27,18 @@ using EnumExtensions = Core.Extensions.EnumExtensions;
 [Authorize(Roles = "Admin")]
 public class CustomSequenceOrderTransformationCalculationController : AbstractResultController
 {
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CustomSequenceOrderTransformationCalculationController"/> class.
     /// </summary>
-    public CustomSequenceOrderTransformationCalculationController(IViewDataHelper viewDataHelper, 
+    public CustomSequenceOrderTransformationCalculationController(IViewDataBuilder viewDataBuilder, 
                                                                   ITaskManager taskManager,
                                                                   IFullCharacteristicRepository characteristicTypeLinkRepository)
         : base(TaskType.CustomSequenceOrderTransformationCalculation, taskManager)
     {
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
     }
 
@@ -50,7 +50,7 @@ public class CustomSequenceOrderTransformationCalculationController : AbstractRe
     /// </returns>
     public ActionResult Index()
     {
-        var data = viewDataHelper.AddCharacteristicsData(CharacteristicCategory.Full)
+        var data = viewDataBuilder.AddCharacteristicsData(CharacteristicCategory.Full)
                                  .AddOrderTransformations()
                                  .Build();
         ViewBag.data = JsonConvert.SerializeObject(data);

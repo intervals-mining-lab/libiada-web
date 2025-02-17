@@ -20,7 +20,7 @@ using Newtonsoft.Json;
 public class GenesImportController : AbstractResultController
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
     private readonly INcbiHelper ncbiHelper;
     private readonly IResearchObjectsCache cache;
 
@@ -28,14 +28,14 @@ public class GenesImportController : AbstractResultController
     /// Initializes a new instance of the <see cref="GenesImportController"/> class.
     /// </summary>
     public GenesImportController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                 IViewDataHelper viewDataHelper,
+                                 IViewDataBuilder viewDataBuilder,
                                  ITaskManager taskManager,
                                  INcbiHelper ncbiHelper,
                                  IResearchObjectsCache cache)
         : base(TaskType.GenesImport, taskManager)
     {
         this.dbFactory = dbFactory;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         this.ncbiHelper = ncbiHelper;
         this.cache = cache;
     }
@@ -58,7 +58,7 @@ public class GenesImportController : AbstractResultController
                                    && StaticCollections.SequenceTypesWithSubsequences.Contains(c.ResearchObject.SequenceType))
         .Select(c => c.ResearchObjectId).ToList();
 
-        var data = viewDataHelper.AddResearchObjects(m => researchObjectIds.Contains(m.Id), m => true)
+        var data = viewDataBuilder.AddResearchObjects(m => researchObjectIds.Contains(m.Id), m => true)
                                  .AddMinMaxResearchObjects(1, 1)
                                  .SetNature(Nature.Genetic)
                                  .AddNotations(onlyGenetic: true)

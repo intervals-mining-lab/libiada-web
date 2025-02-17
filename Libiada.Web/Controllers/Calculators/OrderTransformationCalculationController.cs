@@ -27,7 +27,7 @@ using EnumExtensions = Core.Extensions.EnumExtensions;
 public class OrderTransformationCalculationController : AbstractResultController
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
     private readonly IResearchObjectsCache cache;
 
@@ -35,14 +35,14 @@ public class OrderTransformationCalculationController : AbstractResultController
     /// Initializes a new instance of the <see cref="OrderTransformationCalculationController"/> class.
     /// </summary>
     public OrderTransformationCalculationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                                    IViewDataHelper viewDataHelper,
+                                                    IViewDataBuilder viewDataBuilder,
                                                     ITaskManager taskManager,
                                                     IFullCharacteristicRepository characteristicTypeLinkRepository,
                                                     IResearchObjectsCache cache)
         : base(TaskType.OrderTransformationCalculation, taskManager)
     {
         this.dbFactory = dbFactory;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         this.cache = cache;
     }
@@ -55,7 +55,7 @@ public class OrderTransformationCalculationController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        Dictionary<string, object> data = viewDataHelper.AddMinMaxResearchObjects()
+        Dictionary<string, object> data = viewDataBuilder.AddMinMaxResearchObjects()
                                                         .AddSequenceGroups()
                                                         .AddNatures()
                                                         .AddNotations()

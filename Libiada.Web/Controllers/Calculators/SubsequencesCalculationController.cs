@@ -19,7 +19,7 @@ using Libiada.Web.Tasks;
 public class SubsequencesCalculationController : AbstractResultController
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
     private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
 
@@ -27,14 +27,14 @@ public class SubsequencesCalculationController : AbstractResultController
     /// Initializes a new instance of the <see cref="SubsequencesCalculationController"/> class.
     /// </summary>
     public SubsequencesCalculationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                             IViewDataHelper viewDataHelper,
+                                             IViewDataBuilder viewDataBuilder,
                                              ITaskManager taskManager,
                                              IFullCharacteristicRepository characteristicTypeLinkRepository,
                                              ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator)
         : base(TaskType.SubsequencesCalculation, taskManager)
     {
         this.dbFactory = dbFactory;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         this.subsequencesCharacteristicsCalculator = subsequencesCharacteristicsCalculator;
     }
@@ -47,7 +47,7 @@ public class SubsequencesCalculationController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        var viewData = viewDataHelper.AddResearchObjectsWithSubsequences()
+        var viewData = viewDataBuilder.AddResearchObjectsWithSubsequences()
                                      .AddMinMaxResearchObjects()
                                      .AddSequenceGroups()
                                      .AddCharacteristicsData(CharacteristicCategory.Full)

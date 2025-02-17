@@ -15,55 +15,44 @@ using Libiada.Database.Attributes;
 using EnumExtensions = Core.Extensions.EnumExtensions;
 
 /// <summary>
-/// Class filling data for Views.
+/// Builds data dictionary for views.
 /// </summary>
-public class ViewDataHelper : IViewDataHelper
+/// <remarks>
+/// Initializes a new instance of the <see cref="ViewDataBuilder"/> class.
+/// </remarks>
+/// <param name="dbFactory">
+/// Database context factory.
+/// </param>
+public class ViewDataBuilder(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
+                      IResearchObjectsCache cache,
+                      ClaimsPrincipal user,
+                      IFullCharacteristicRepository fullCharacteristicRepository,
+                      ICongenericCharacteristicRepository congenericCharacteristicRepository,
+                      IAccordanceCharacteristicRepository accordanceCharacteristicRepository,
+                      IBinaryCharacteristicRepository binaryCharacteristicRepository) : IViewDataBuilder
 {
     /// <summary>
     /// The database model.
     /// </summary>
-    private readonly LibiadaDatabaseEntities db;
-    private readonly IResearchObjectsCache cache;
+    private readonly LibiadaDatabaseEntities db = dbFactory.CreateDbContext();
+    private readonly IResearchObjectsCache cache = cache;
 
     /// <summary>
     /// The current user.
     /// </summary>
-    private readonly ClaimsPrincipal user;
-    private readonly IFullCharacteristicRepository fullCharacteristicModelRepository;
-    private readonly ICongenericCharacteristicRepository congenericCharacteristicModelRepository;
-    private readonly IAccordanceCharacteristicRepository accordanceCharacteristicModelRepository;
-    private readonly IBinaryCharacteristicRepository binaryCharacteristicModelRepository;
+    private readonly ClaimsPrincipal user = user;
+    private readonly IFullCharacteristicRepository fullCharacteristicModelRepository = fullCharacteristicRepository;
+    private readonly ICongenericCharacteristicRepository congenericCharacteristicModelRepository = congenericCharacteristicRepository;
+    private readonly IAccordanceCharacteristicRepository accordanceCharacteristicModelRepository = accordanceCharacteristicRepository;
+    private readonly IBinaryCharacteristicRepository binaryCharacteristicModelRepository = binaryCharacteristicRepository;
 
     private readonly Dictionary<string, object> viewData = [];
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="ViewDataHelper"/> class.
-    /// </summary>
-    /// <param name="dbFactory">
-    /// Database context factory.
-    /// </param>
-    public ViewDataHelper(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                          IResearchObjectsCache cache,
-                          ClaimsPrincipal user,
-                          IFullCharacteristicRepository fullCharacteristicRepository,
-                          ICongenericCharacteristicRepository congenericCharacteristicRepository,
-                          IAccordanceCharacteristicRepository accordanceCharacteristicRepository,
-                          IBinaryCharacteristicRepository binaryCharacteristicRepository)
-    {
-        this.db = dbFactory.CreateDbContext();
-        this.cache = cache;
-        this.user = user;
-        this.fullCharacteristicModelRepository = fullCharacteristicRepository;
-        this.congenericCharacteristicModelRepository = congenericCharacteristicRepository;
-        this.accordanceCharacteristicModelRepository = accordanceCharacteristicRepository;
-        this.binaryCharacteristicModelRepository = binaryCharacteristicRepository;
-    }
 
     /// <summary>
     /// Adds the list of research objects table rows to the view data dictionary.
     /// </summary>
     /// <returns></returns>
-    public IViewDataHelper AddResearchObjects()
+    public IViewDataBuilder AddResearchObjects()
     {
         return AddResearchObjects(m => true, m => false);
     }
@@ -78,7 +67,7 @@ public class ViewDataHelper : IViewDataHelper
     /// Function for determining which research objects should be selected.
     /// </param>
     /// <returns></returns>
-    public IViewDataHelper AddResearchObjects(Func<ResearchObject, bool> filter, Func<ResearchObject, bool> selection)
+    public IViewDataBuilder AddResearchObjects(Func<ResearchObject, bool> filter, Func<ResearchObject, bool> selection)
     {
         IOrderedEnumerable<ResearchObject> researchObjects = cache.ResearchObjects
                                                                   .Where(filter)
@@ -94,7 +83,7 @@ public class ViewDataHelper : IViewDataHelper
     /// in form of table rows to the view data dictionary.
     /// </summary>
     /// <returns></returns>
-    public IViewDataHelper AddResearchObjectsWithSubsequences()
+    public IViewDataBuilder AddResearchObjectsWithSubsequences()
     {
         var sequenceIds = db.Subsequences
                             .Select(s => s.SequenceId)
@@ -111,7 +100,7 @@ public class ViewDataHelper : IViewDataHelper
     /// Adds the sequence groups select list to the view data dictionary.
     /// </summary>
     /// <returns></returns>
-    public IViewDataHelper AddSequenceGroups()
+    public IViewDataBuilder AddSequenceGroups()
     {
         ResearchObjectTableRow[] sequenceGoups = db.SequenceGroups
                                                    .OrderBy(m => m.Created)
@@ -127,7 +116,7 @@ public class ViewDataHelper : IViewDataHelper
     /// Adds natures select list to the view data dictionary.
     /// </summary>
     /// <returns></returns>
-    public IViewDataHelper AddNatures()
+    public IViewDataBuilder AddNatures()
     {
         Nature[] natures = user.IsAdmin() ? EnumExtensions.ToArray<Nature>() : [Nature.Genetic];
         viewData.Add("natures", natures.ToSelectList());
@@ -139,7 +128,7 @@ public class ViewDataHelper : IViewDataHelper
     /// </summary>
     /// <param name="nature">Nature value as <see cref="Nature"/></param>
     /// <returns></returns>
-    public IViewDataHelper SetNature(Nature nature)
+    public IViewDataBuilder SetNature(Nature nature)
     {
         //TODO: check if conversion to string is necessary
         viewData.Add("nature", ((byte)nature).ToString());
@@ -150,10 +139,10 @@ public class ViewDataHelper : IViewDataHelper
     /// Adds notations select list to the view data dictionary.
     /// </summary>
     /// <param name="onlyGenetic">
-    /// If set to <c>true</c> [includes only genetic notations].
+    /// If set to <c>true</c> includes only genetic notations.
     /// </param>
     /// <returns></returns>
-    public IViewDataHelper AddNotations(bool onlyGenetic = false)
+    public IViewDataBuilder AddNotations(bool onlyGenetic = false)
     {
         Notation[] notations = user.IsAdmin() ? EnumExtensions.ToArray<Notation>() : [Notation.Nucleotides];
         if (onlyGenetic)
@@ -169,7 +158,7 @@ public class ViewDataHelper : IViewDataHelper
     /// Adds remote databases select list to the view data dictionary.
     /// </summary>
     /// <returns></returns>
-    public IViewDataHelper AddRemoteDatabases()
+    public IViewDataBuilder AddRemoteDatabases()
     {
         IEnumerable<RemoteDb> remoteDbs = EnumExtensions.ToArray<RemoteDb>();
         if (!user.IsAdmin())
@@ -185,10 +174,10 @@ public class ViewDataHelper : IViewDataHelper
     /// Adds sequence types select list to the view data dictionary.
     /// </summary>
     /// <param name="onlyGenetic">
-    /// If set to <c>true</c> [includes only genetic sequence types].
+    /// If set to <c>true</c> includes only genetic sequence types.
     /// </param>
     /// <returns></returns>
-    public IViewDataHelper AddSequenceTypes(bool onlyGenetic = false)
+    public IViewDataBuilder AddSequenceTypes(bool onlyGenetic = false)
     {
         IEnumerable<SequenceType> sequenceTypes = EnumExtensions.ToArray<SequenceType>();
         if (!user.IsAdmin() || onlyGenetic)
@@ -204,10 +193,10 @@ public class ViewDataHelper : IViewDataHelper
     /// Adds groups select list to the view data dictionary.
     /// </summary>
     /// <param name="onlyGenetic">
-    /// If set to <c>true</c> [includes only genetic groups].
+    /// If set to <c>true</c> includes only genetic groups.
     /// </param>
     /// <returns></returns>
-    public IViewDataHelper AddGroups(bool onlyGenetic = false)
+    public IViewDataBuilder AddGroups(bool onlyGenetic = false)
     {
         IEnumerable<Group> groups = EnumExtensions.ToArray<Group>();
         if (!user.IsAdmin() || onlyGenetic)
@@ -223,9 +212,9 @@ public class ViewDataHelper : IViewDataHelper
     /// Adds sequences groups types select list to the view data dictionary.
     /// </summary>
     /// <returns></returns>
-    public IViewDataHelper AddSequenceGroupTypes()
+    public IViewDataBuilder AddSequenceGroupTypes()
     {
-        IEnumerable<SequenceGroupType> sequenceGroupTypes = EnumExtensions.ToArray<SequenceGroupType>();
+        SequenceGroupType[] sequenceGroupTypes = EnumExtensions.ToArray<SequenceGroupType>();
         viewData.Add("sequenceGroupTypes", sequenceGroupTypes.ToSelectListWithNature());
         return this;
     }
@@ -234,7 +223,7 @@ public class ViewDataHelper : IViewDataHelper
     ///  Adds features select list to the view data dictionary.
     /// </summary>
     /// <returns></returns>
-    public IViewDataHelper AddFeatures()
+    public IViewDataBuilder AddFeatures()
     {
         IEnumerable<Feature> features = EnumExtensions.ToArray<Feature>().Where(f => f.GetNature() == Nature.Genetic);
         IEnumerable<Feature> selectedFeatures = features.Where(f => f != Feature.NonCodingSequence);
@@ -246,7 +235,7 @@ public class ViewDataHelper : IViewDataHelper
     /// Adds multisequences select list to the view data dictionary.
     /// </summary>
     /// <returns></returns>
-    public IViewDataHelper AddMultisequences()
+    public IViewDataBuilder AddMultisequences()
     {
         SelectListItemWithNature[] multisequences = db.Multisequences
                                                       .Select(ms => new SelectListItemWithNature
@@ -265,7 +254,7 @@ public class ViewDataHelper : IViewDataHelper
     /// Adds languages select list to the view data dictionary.
     /// </summary>
     /// <returns></returns>
-    public IViewDataHelper AddLanguages()
+    public IViewDataBuilder AddLanguages()
     {
         viewData.Add("languages", Extensions.EnumExtensions.GetSelectList<Language>());
         return this;
@@ -275,7 +264,7 @@ public class ViewDataHelper : IViewDataHelper
     /// Adds translators select list to the view data dictionary.
     /// </summary>
     /// <returns></returns>
-    public IViewDataHelper AddTranslators()
+    public IViewDataBuilder AddTranslators()
     {
         viewData.Add("translators", Extensions.EnumExtensions.GetSelectList<Translator>());
         return this;
@@ -285,7 +274,7 @@ public class ViewDataHelper : IViewDataHelper
     /// Adds image reading trajectories select list to the view data dictionary.
     /// </summary>
     /// <returns></returns>
-    public IViewDataHelper AddTrajectories()
+    public IViewDataBuilder AddTrajectories()
     {
         var imageOrderExtractors = EnumExtensions.SelectAllWithAttribute<ImageOrderExtractor>(typeof(ImageOrderExtractorAttribute));
         viewData.Add("trajectories", imageOrderExtractors.ToSelectList());
@@ -296,7 +285,7 @@ public class ViewDataHelper : IViewDataHelper
     /// Adds image transformers select list to the view data dictionary.
     /// </summary>
     /// <returns></returns>
-    public IViewDataHelper AddImageTransformers()
+    public IViewDataBuilder AddImageTransformers()
     {
         viewData.Add("imageTransformers", Extensions.EnumExtensions.GetSelectList<ImageTransformer>());
         return this;
@@ -306,7 +295,7 @@ public class ViewDataHelper : IViewDataHelper
     /// Adds pause treatments select list to the view data dictionary.
     /// </summary>
     /// <returns></returns>
-    public IViewDataHelper AddPauseTreatments()
+    public IViewDataBuilder AddPauseTreatments()
     {
         viewData.Add("pauseTreatments", Extensions.EnumExtensions.GetSelectList<PauseTreatment>());
         return this;
@@ -316,7 +305,7 @@ public class ViewDataHelper : IViewDataHelper
     /// Adds order transformations select list to the view data dictionary.
     /// </summary>
     /// <returns></returns>
-    public IViewDataHelper AddOrderTransformations()
+    public IViewDataBuilder AddOrderTransformations()
     {
         viewData.Add("pauseTreatments", Extensions.EnumExtensions.GetSelectList<OrderTransformation>());
         return this;
@@ -329,7 +318,7 @@ public class ViewDataHelper : IViewDataHelper
     /// Name of the submit button.
     /// </param>
     /// <returns></returns>
-    public IViewDataHelper AddSubmitName(string submitName = "Calculate")
+    public IViewDataBuilder AddSubmitName(string submitName = "Calculate")
     {
         viewData.Add("submitName", submitName);
         return this;
@@ -345,7 +334,7 @@ public class ViewDataHelper : IViewDataHelper
     /// The maximum research objects selected.
     /// </param>
     /// <returns></returns>
-    public IViewDataHelper AddMinMaxResearchObjects(int min = 1, int max = int.MaxValue)
+    public IViewDataBuilder AddMinMaxResearchObjects(int min = 1, int max = int.MaxValue)
     {
         viewData.Add("minimumSelectedResearchObjects", min);
         viewData.Add("maximumSelectedResearchObjects", max);
@@ -359,7 +348,7 @@ public class ViewDataHelper : IViewDataHelper
     /// for it to be considered similar.
     /// </summary>
     /// <returns></returns>
-    public IViewDataHelper AddMaxPercentageDifferenceRequiredFlag()
+    public IViewDataBuilder AddMaxPercentageDifferenceRequiredFlag()
     {
         viewData.Add("percentageDifferenseNeeded", true);
         return this;
@@ -371,7 +360,7 @@ public class ViewDataHelper : IViewDataHelper
     /// The characteristics category.
     /// </param>
     /// <returns></returns>
-    public IViewDataHelper AddCharacteristicsData(CharacteristicCategory characteristicsCategory)
+    public IViewDataBuilder AddCharacteristicsData(CharacteristicCategory characteristicsCategory)
     {
 
         List<CharacteristicSelectListItem> characteristicTypes;

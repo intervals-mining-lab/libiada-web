@@ -29,7 +29,7 @@ using EnumExtensions = Core.Extensions.EnumExtensions;
 public class SubsequencesDistributionController : AbstractResultController
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
     private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
     private readonly ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator;
@@ -46,7 +46,7 @@ public class SubsequencesDistributionController : AbstractResultController
     /// Initializes a new instance of the <see cref="SubsequencesDistributionController"/> class.
     /// </summary>
     public SubsequencesDistributionController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                              IViewDataHelper viewDataHelper,
+                                              IViewDataBuilder viewDataBuilder,
                                               ITaskManager taskManager,
                                               IFullCharacteristicRepository characteristicTypeLinkRepository,
                                               ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator,
@@ -57,7 +57,7 @@ public class SubsequencesDistributionController : AbstractResultController
         : base(TaskType.SubsequencesDistribution, taskManager)
     {
         this.dbFactory = dbFactory;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         this.subsequencesCharacteristicsCalculator = subsequencesCharacteristicsCalculator;
         this.sequencesCharacteristicsCalculator = sequencesCharacteristicsCalculator;
@@ -74,7 +74,7 @@ public class SubsequencesDistributionController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        var viewData = viewDataHelper.AddResearchObjectsWithSubsequences()
+        var viewData = viewDataBuilder.AddResearchObjectsWithSubsequences()
                                      .AddMinMaxResearchObjects()
                                      .AddSequenceGroups()
                                      .AddCharacteristicsData(CharacteristicCategory.Full)

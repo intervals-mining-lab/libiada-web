@@ -22,14 +22,14 @@ using EnumExtensions = Core.Extensions.EnumExtensions;
 [Authorize(Roles = "Admin")]
 public class CustomSequenceOrderTransformerController : AbstractResultController
 {
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CustomSequenceOrderTransformerController"/> class.
     /// </summary>
-    public CustomSequenceOrderTransformerController(ITaskManager taskManager, IViewDataHelper viewDataHelper) : base(TaskType.CustomSequenceOrderTransformer, taskManager)
+    public CustomSequenceOrderTransformerController(ITaskManager taskManager, IViewDataBuilder viewDataBuilder) : base(TaskType.CustomSequenceOrderTransformer, taskManager)
     {
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
     }
 
     /// <summary>
@@ -40,7 +40,7 @@ public class CustomSequenceOrderTransformerController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        var viewData = viewDataHelper.AddOrderTransformations()
+        var viewData = viewDataBuilder.AddOrderTransformations()
                                      .AddImageTransformers()
                                      .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);

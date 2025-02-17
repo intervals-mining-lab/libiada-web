@@ -16,13 +16,13 @@ using static Database.Models.Repositories.Sequences.MultisequenceRepository;
 public class MultisequenceController : Controller
 {
     private readonly LibiadaDatabaseEntities db;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
     private readonly IResearchObjectsCache cache;
 
-    public MultisequenceController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper, IResearchObjectsCache cache)
+    public MultisequenceController(LibiadaDatabaseEntities db, IViewDataBuilder viewDataBuilder, IResearchObjectsCache cache)
     {
         this.db = db;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         this.cache = cache;
     }
 
@@ -44,7 +44,7 @@ public class MultisequenceController : Controller
     /// </returns>
     public ActionResult Create()
     {
-        var data = viewDataHelper.AddResearchObjects(m => SequenceTypesFilter.Contains(m.SequenceType) && m.MultisequenceId == null, m => false)
+        var data = viewDataBuilder.AddResearchObjects(m => SequenceTypesFilter.Contains(m.SequenceType) && m.MultisequenceId == null, m => false)
                                  .AddMinMaxResearchObjects(2, int.MaxValue)
                                  .AddNatures()
                                  .AddNotations()
@@ -139,7 +139,7 @@ public class MultisequenceController : Controller
         }
 
         var selectedResearchObjectIds = multisequence.ResearchObjects.Select(m => m.Id);
-        var data = viewDataHelper.AddResearchObjects(m => (SequenceTypesFilter.Contains(m.SequenceType) && m.MultisequenceId == null)
+        var data = viewDataBuilder.AddResearchObjects(m => (SequenceTypesFilter.Contains(m.SequenceType) && m.MultisequenceId == null)
                                                        || selectedResearchObjectIds.Contains(m.Id),
                                                      m => selectedResearchObjectIds.Contains(m.Id))
                                  .AddMinMaxResearchObjects(2, int.MaxValue)
@@ -193,7 +193,7 @@ public class MultisequenceController : Controller
         }
 
         var sellectedResearchObjectIds = multisequence.ResearchObjects.Select(m => m.Id);
-        var data = viewDataHelper.AddResearchObjects(m => (SequenceTypesFilter.Contains(m.SequenceType) && m.MultisequenceId == null)
+        var data = viewDataBuilder.AddResearchObjects(m => (SequenceTypesFilter.Contains(m.SequenceType) && m.MultisequenceId == null)
                                                        || sellectedResearchObjectIds.Contains(m.Id),
                                                      m => sellectedResearchObjectIds.Contains(m.Id))
                                  .AddMinMaxResearchObjects(2, int.MaxValue)

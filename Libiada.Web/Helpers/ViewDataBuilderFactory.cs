@@ -2,14 +2,15 @@
 
 using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Models.Repositories.Sequences;
+
 using System.Security.Claims;
 
-public class ViewDataHelperFactory(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
+public class ViewDataBuilderFactory(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                           IResearchObjectsCache cache,
                           IFullCharacteristicRepository fullCharacteristicRepository,
                           ICongenericCharacteristicRepository congenericCharacteristicRepository,
                           IAccordanceCharacteristicRepository accordanceCharacteristicRepository,
-                          IBinaryCharacteristicRepository binaryCharacteristicRepository) : IViewDataHelperFactory
+                          IBinaryCharacteristicRepository binaryCharacteristicRepository) : IViewDataBuilderFactory
 
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory = dbFactory;
@@ -19,8 +20,14 @@ public class ViewDataHelperFactory(IDbContextFactory<LibiadaDatabaseEntities> db
     private readonly IAccordanceCharacteristicRepository accordanceCharacteristicRepository = accordanceCharacteristicRepository;
     private readonly IBinaryCharacteristicRepository binaryCharacteristicRepository = binaryCharacteristicRepository;
 
-    public IViewDataHelper Create(ClaimsPrincipal user)
+    public IViewDataBuilder Create(ClaimsPrincipal user)
     {
-        return new ViewDataHelper(dbFactory, cache, user, fullCharacteristicRepository, congenericCharacteristicRepository, accordanceCharacteristicRepository, binaryCharacteristicRepository);
+        return new ViewDataBuilder(dbFactory,
+                                   cache,
+                                   user,
+                                   fullCharacteristicRepository,
+                                   congenericCharacteristicRepository,
+                                   accordanceCharacteristicRepository,
+                                   binaryCharacteristicRepository);
     }
 }

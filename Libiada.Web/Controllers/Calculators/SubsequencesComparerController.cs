@@ -35,7 +35,7 @@ public class SubsequencesComparerController : AbstractResultController
     private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
     private readonly ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator;
     private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
-    private readonly IViewDataHelperFactory viewDataHelperFactory;
+    private readonly IViewDataBuilderFactory viewDataBuilderFactory;
     private readonly GeneticSequenceRepository geneticSequenceRepository;
 
     /// <summary>
@@ -48,7 +48,7 @@ public class SubsequencesComparerController : AbstractResultController
                                           ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator,
                                           ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
                                           IResearchObjectsCache cache,
-                                          IViewDataHelperFactory viewDataHelperFactory)
+                                          IViewDataBuilderFactory viewDataBuilderFactory)
         : base(TaskType.SubsequencesComparer, taskManager)
     {
         this.dbFactory = dbFactory;
@@ -56,7 +56,7 @@ public class SubsequencesComparerController : AbstractResultController
         this.subsequencesCharacteristicsCalculator = subsequencesCharacteristicsCalculator;
         this.sequencesCharacteristicsCalculator = sequencesCharacteristicsCalculator;
         this.sequenceRepositoryFactory = sequenceRepositoryFactory;
-        this.viewDataHelperFactory = viewDataHelperFactory;
+        this.viewDataBuilderFactory = viewDataBuilderFactory;
         geneticSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
     }
 
@@ -66,9 +66,9 @@ public class SubsequencesComparerController : AbstractResultController
     /// <returns>
     /// The <see cref="ActionResult"/>.
     /// </returns>
-    public ActionResult Index([FromServices] IViewDataHelper viewDataHelper)
+    public ActionResult Index([FromServices] IViewDataBuilder viewDataBuilder)
     {
-        var viewData = viewDataHelper.AddResearchObjectsWithSubsequences()
+        var viewData = viewDataBuilder.AddResearchObjectsWithSubsequences()
                                      .AddMinMaxResearchObjects(2)
                                      .AddCharacteristicsData(CharacteristicCategory.Full)
                                      .AddMaxPercentageDifferenceRequiredFlag()
@@ -157,8 +157,8 @@ public class SubsequencesComparerController : AbstractResultController
             }
 
             // TODO: refactor this
-            using var viewDataHelper = viewDataHelperFactory.Create(user);
-            characteristicsTypesData = viewDataHelper.AddCharacteristicsData(CharacteristicCategory.Full)
+            using var viewDataBuilder = viewDataBuilderFactory.Create(user);
+            characteristicsTypesData = viewDataBuilder.AddCharacteristicsData(CharacteristicCategory.Full)
                                                      .Build();
 
 

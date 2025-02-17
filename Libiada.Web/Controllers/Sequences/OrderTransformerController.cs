@@ -23,7 +23,7 @@ public class OrderTransformerController : AbstractResultController
     /// Database context factory.
     /// </summary>
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
 
     /// <summary>
     /// The sequence repository.
@@ -34,13 +34,13 @@ public class OrderTransformerController : AbstractResultController
     /// Initializes a new instance of the <see cref="OrderTransformerController"/> class.
     /// </summary>
     public OrderTransformerController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                      IViewDataHelper viewDataHelper,
+                                      IViewDataBuilder viewDataBuilder,
                                       ITaskManager taskManager,
                                       ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory)
         : base(TaskType.OrderTransformer, taskManager)
     {
         this.dbFactory = dbFactory;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         this.sequenceRepositoryFactory = sequenceRepositoryFactory;
     }
 
@@ -52,7 +52,7 @@ public class OrderTransformerController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        var data = viewDataHelper.AddMinMaxResearchObjects(1, 1)
+        var data = viewDataBuilder.AddMinMaxResearchObjects(1, 1)
                                  .AddNatures()
                                  .AddNotations()
                                  .AddLanguages()

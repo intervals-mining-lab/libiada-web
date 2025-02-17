@@ -19,11 +19,11 @@ public class CombinedSequencesEntityController : SequencesResearchObjectsControl
     /// Initializes a new instance of the <see cref="CombinedSequencesEntityController"/> class.
     /// </summary>
     public CombinedSequencesEntityController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                     IViewDataHelper viewDataHelper,
+                                     IViewDataBuilder viewDataBuilder,
                                      ITaskManager taskManager,
                                      INcbiHelper ncbiHelper,
                                      IResearchObjectsCache cache)
-        : base(TaskType.SequencesUpload, dbFactory, viewDataHelper, taskManager, ncbiHelper, cache)
+        : base(TaskType.SequencesUpload, dbFactory, viewDataBuilder, taskManager, ncbiHelper, cache)
     {
         this.cache = cache;
     }

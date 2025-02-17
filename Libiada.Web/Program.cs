@@ -74,7 +74,7 @@ builder.Services.AddSingleton<IFullCharacteristicRepository, FullCharacteristicR
 
 builder.Services.AddSingleton<ICombinedSequenceEntityRepositoryFactory, CombinedSequenceEntityRepositoryFactory>();
 
-builder.Services.AddSingleton<IViewDataHelperFactory, ViewDataHelperFactory>();
+builder.Services.AddSingleton<IViewDataBuilderFactory, ViewDataBuilderFactory>();
 
 builder.Services.AddScoped<ISequencesCharacteristicsCalculator, SequencesCharacteristicsCalculator>();
 builder.Services.AddScoped<ICongenericSequencesCharacteristicsCalculator, CongenericSequencesCharacteristicsCalculator>();
@@ -85,7 +85,7 @@ builder.Services.AddTransient(provider => ((provider.GetService<IHttpContextAcce
                                                     .HttpContext ?? throw new Exception($"HttpContext is not found."))
                                                     .User);
 
-builder.Services.AddTransient<IViewDataHelper, ViewDataHelper>();
+builder.Services.AddTransient<IViewDataBuilder, ViewDataBuilder>();
 
 builder.Services.Configure<RazorViewEngineOptions>(options =>
 {
