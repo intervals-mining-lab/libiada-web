@@ -56,12 +56,11 @@ public class BatchGenesImportController : AbstractResultController
                                      .ToArray();
 
         var data = viewDataBuilder.AddResearchObjects(m => researchObjectIds.Contains(m.Id), m => false)
-                                 .AddMinMaxResearchObjects()
-                                 .SetNature(Nature.Genetic)
-                                 .AddSequenceTypes(onlyGenetic: true)
-                                 .AddGroups(onlyGenetic: true)
-                                 .AddSubmitName("Import")
-                                 .Build();
+                                  .AddMinMaxResearchObjects()
+                                  .SetNature(Nature.Genetic)
+                                  .AddSequenceTypes(onlyGenetic: true)
+                                  .AddGroups(onlyGenetic: true)
+                                  .Build();
         ViewBag.data = JsonConvert.SerializeObject(data);
 
         return View();

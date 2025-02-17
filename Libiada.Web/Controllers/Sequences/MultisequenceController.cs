@@ -44,18 +44,18 @@ public class MultisequenceController : Controller
     /// </returns>
     public ActionResult Create()
     {
-        var data = viewDataBuilder.AddResearchObjects(m => SequenceTypesFilter.Contains(m.SequenceType) && m.MultisequenceId == null, m => false)
-                                 .AddMinMaxResearchObjects(2, int.MaxValue)
-                                 .AddNatures()
-                                 .AddNotations()
-                                 .AddLanguages()
-                                 .AddTranslators()
-                                 .AddPauseTreatments()
-                                 .AddTrajectories()
-                                 .AddSequenceTypes()
-                                 .AddGroups()
-                                 .AddSubmitName("Create")
-                                 .Build();
+        Func<ResearchObject, bool> filter = new(m => SequenceTypesFilter.Contains(m.SequenceType) && m.MultisequenceId == null);
+        var data = viewDataBuilder.AddResearchObjects(filter, m => false)
+                                  .AddMinMaxResearchObjects(2, int.MaxValue)
+                                  .AddNatures()
+                                  .AddNotations()
+                                  .AddLanguages()
+                                  .AddTranslators()
+                                  .AddPauseTreatments()
+                                  .AddTrajectories()
+                                  .AddSequenceTypes()
+                                  .AddGroups()
+                                  .Build();
         ViewBag.data = JsonConvert.SerializeObject(data);
 
         return View();
@@ -139,20 +139,21 @@ public class MultisequenceController : Controller
         }
 
         var selectedResearchObjectIds = multisequence.ResearchObjects.Select(m => m.Id);
-        var data = viewDataBuilder.AddResearchObjects(m => (SequenceTypesFilter.Contains(m.SequenceType) && m.MultisequenceId == null)
-                                                       || selectedResearchObjectIds.Contains(m.Id),
-                                                     m => selectedResearchObjectIds.Contains(m.Id))
-                                 .AddMinMaxResearchObjects(2, int.MaxValue)
-                                 .AddNatures()
-                                 .AddNotations()
-                                 .AddLanguages()
-                                 .AddTranslators()
-                                 .AddPauseTreatments()
-                                 .AddTrajectories()
-                                 .AddSequenceTypes()
-                                 .AddGroups()
-                                 .AddSubmitName("Save")
-                                 .Build();
+
+        Func<ResearchObject, bool> filter = new(m => (SequenceTypesFilter.Contains(m.SequenceType) && m.MultisequenceId == null)
+                                                     || selectedResearchObjectIds.Contains(m.Id));
+
+        var data = viewDataBuilder.AddResearchObjects(filter, m => selectedResearchObjectIds.Contains(m.Id))
+                                  .AddMinMaxResearchObjects(2, int.MaxValue)
+                                  .AddNatures()
+                                  .AddNotations()
+                                  .AddLanguages()
+                                  .AddTranslators()
+                                  .AddPauseTreatments()
+                                  .AddTrajectories()
+                                  .AddSequenceTypes()
+                                  .AddGroups()
+                                  .Build();
         //TODO: refactor this
         data.Add("multisequenceNumbers", multisequence.ResearchObjects.Select(m => new { m.Id, m.MultisequenceNumber }));
         ViewBag.data = JsonConvert.SerializeObject(data);
@@ -193,21 +194,21 @@ public class MultisequenceController : Controller
         }
 
         var sellectedResearchObjectIds = multisequence.ResearchObjects.Select(m => m.Id);
-        var data = viewDataBuilder.AddResearchObjects(m => (SequenceTypesFilter.Contains(m.SequenceType) && m.MultisequenceId == null)
-                                                       || sellectedResearchObjectIds.Contains(m.Id),
-                                                     m => sellectedResearchObjectIds.Contains(m.Id))
-                                 .AddMinMaxResearchObjects(2, int.MaxValue)
-                                 .AddSequenceGroups()
-                                 .AddNatures()
-                                 .AddNotations()
-                                 .AddLanguages()
-                                 .AddTranslators()
-                                 .AddPauseTreatments()
-                                 .AddTrajectories()
-                                 .AddSequenceTypes()
-                                 .AddGroups()
-                                 .AddSubmitName("Save")
-                                 .Build();
+        Func<ResearchObject, bool> filter = new(m => (SequenceTypesFilter.Contains(m.SequenceType) && m.MultisequenceId == null)
+                                                     || sellectedResearchObjectIds.Contains(m.Id));
+
+        var data = viewDataBuilder.AddResearchObjects(filter, m => sellectedResearchObjectIds.Contains(m.Id))
+                                  .AddMinMaxResearchObjects(2, int.MaxValue)
+                                  .AddSequenceGroups()
+                                  .AddNatures()
+                                  .AddNotations()
+                                  .AddLanguages()
+                                  .AddTranslators()
+                                  .AddPauseTreatments()
+                                  .AddTrajectories()
+                                  .AddSequenceTypes()
+                                  .AddGroups()
+                                  .Build();
         //TODO: refactor this
         data.Add("multisequenceNumbers", multisequence.ResearchObjects.Select(m => new { m.Id, m.MultisequenceNumber }));
         ViewBag.data = JsonConvert.SerializeObject(data);

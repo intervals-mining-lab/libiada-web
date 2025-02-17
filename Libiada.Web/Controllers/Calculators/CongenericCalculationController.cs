@@ -66,18 +66,17 @@ public class CongenericCalculationController : AbstractResultController
     public ActionResult Index()
     {
         var viewData = viewDataBuilder.AddMinMaxResearchObjects()
-                                     .AddSequenceGroups()
-                                     .AddNatures()
-                                     .AddNotations()
-                                     .AddLanguages()
-                                     .AddTranslators()
-                                     .AddPauseTreatments()
-                                     .AddTrajectories()
-                                     .AddSequenceTypes()
-                                     .AddGroups()
-                                     .AddSubmitName()
-                                     .AddCharacteristicsData(CharacteristicCategory.Congeneric)
-                                     .Build();
+                                      .AddSequenceGroups()
+                                      .AddNatures()
+                                      .AddNotations()
+                                      .AddLanguages()
+                                      .AddTranslators()
+                                      .AddPauseTreatments()
+                                      .AddTrajectories()
+                                      .AddSequenceTypes()
+                                      .AddGroups()
+                                      .AddCharacteristicsData(CharacteristicCategory.Congeneric)
+                                      .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }

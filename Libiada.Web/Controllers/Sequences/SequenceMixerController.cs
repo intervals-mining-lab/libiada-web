@@ -67,16 +67,15 @@ public class SequenceMixerController : Controller
     public ActionResult Index()
     {
         var viewData = viewDataBuilder.AddMinMaxResearchObjects(1, 1)
-                                     .AddNatures()
-                                     .AddNotations()
-                                     .AddLanguages()
-                                     .AddTranslators()
-                                     .AddPauseTreatments()
-                                     .AddTrajectories()
-                                     .AddSequenceTypes()
-                                     .AddGroups()
-                                     .AddSubmitName("Mix")
-                                     .Build();
+                                      .AddNatures()
+                                      .AddNotations()
+                                      .AddLanguages()
+                                      .AddTranslators()
+                                      .AddPauseTreatments()
+                                      .AddTrajectories()
+                                      .AddSequenceTypes()
+                                      .AddGroups()
+                                      .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }

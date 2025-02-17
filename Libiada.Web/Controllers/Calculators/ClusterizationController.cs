@@ -72,18 +72,17 @@ public class ClusterizationController : AbstractResultController
     public ActionResult Index()
     {
         var viewData = viewDataBuilder.AddMinMaxResearchObjects(3, int.MaxValue)
-                                     .AddSequenceGroups()
-                                     .AddNatures()
-                                     .AddNotations()
-                                     .AddLanguages()
-                                     .AddTranslators()
-                                     .AddPauseTreatments()
-                                     .AddTrajectories()
-                                     .AddSequenceTypes()
-                                     .AddGroups()
-                                     .AddSubmitName()
-                                     .AddCharacteristicsData(CharacteristicCategory.Full)
-                                     .Build();
+                                      .AddSequenceGroups()
+                                      .AddNatures()
+                                      .AddNotations()
+                                      .AddLanguages()
+                                      .AddTranslators()
+                                      .AddPauseTreatments()
+                                      .AddTrajectories()
+                                      .AddSequenceTypes()
+                                      .AddGroups()
+                                      .AddCharacteristicsData(CharacteristicCategory.Full)
+                                      .Build();
         viewData.Add("ClusterizatorsTypes", EnumExtensions.ToArray<ClusterizationType>().ToSelectList());
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();

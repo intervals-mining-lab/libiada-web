@@ -68,17 +68,16 @@ public class RelationCalculationController : AbstractResultController
     public ActionResult Index()
     {
         var viewData = viewDataBuilder.AddMinMaxResearchObjects(1, 1)
-                                     .AddNatures()
-                                     .AddNotations()
-                                     .AddLanguages()
-                                     .AddTranslators()
-                                     .AddPauseTreatments()
-                                     .AddTrajectories()
-                                     .AddSequenceTypes()
-                                     .AddGroups()
-                                     .AddSubmitName()
-                                     .AddCharacteristicsData(CharacteristicCategory.Binary)
-                                     .Build();
+                                      .AddNatures()
+                                      .AddNotations()
+                                      .AddLanguages()
+                                      .AddTranslators()
+                                      .AddPauseTreatments()
+                                      .AddTrajectories()
+                                      .AddSequenceTypes()
+                                      .AddGroups()
+                                      .AddCharacteristicsData(CharacteristicCategory.Binary)
+                                      .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }

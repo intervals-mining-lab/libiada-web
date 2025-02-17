@@ -26,7 +26,6 @@ public interface IViewDataBuilder : IDisposable
     IViewDataBuilder AddSequenceGroups();
     IViewDataBuilder AddSequenceGroupTypes();
     IViewDataBuilder AddSequenceTypes(bool onlyGenetic = false);
-    IViewDataBuilder AddSubmitName(string submitName = "Calculate");
     IViewDataBuilder AddTrajectories();
     IViewDataBuilder AddTranslators();
     IViewDataBuilder SetNature(Nature nature);

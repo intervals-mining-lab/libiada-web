@@ -55,16 +55,14 @@ public class SequencesAlignmentController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        var viewData = viewDataBuilder.AddResearchObjectsWithSubsequences()
-                                     .AddMinMaxResearchObjects(2, 2)
-                                     .AddCharacteristicsData(CharacteristicCategory.Full)
-                                     .AddSubmitName("Align")
-                                     .SetNature(Nature.Genetic)
-                                     .AddNotations(onlyGenetic: true)
-                                     .AddSequenceTypes(onlyGenetic: true)
-                                     .AddGroups(onlyGenetic: true)
-                                     .AddFeatures()
-                                     .Build();
+        var viewData = viewDataBuilder.AddMinMaxResearchObjects(2, 2)
+                                      .AddCharacteristicsData(CharacteristicCategory.Full)
+                                      .SetNature(Nature.Genetic)
+                                      .AddNotations(onlyGenetic: true)
+                                      .AddSequenceTypes(onlyGenetic: true)
+                                      .AddGroups(onlyGenetic: true)
+                                      .AddFeatures()
+                                      .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }

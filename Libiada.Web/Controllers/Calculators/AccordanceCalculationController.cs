@@ -64,17 +64,16 @@ public class AccordanceCalculationController : AbstractResultController
     public ActionResult Index()
     {
         var viewData = viewDataBuilder.AddMinMaxResearchObjects(2, 2)
-                                     .AddNatures()
-                                     .AddNotations()
-                                     .AddLanguages()
-                                     .AddTranslators()
-                                     .AddPauseTreatments()
-                                     .AddTrajectories()
-                                     .AddSequenceTypes()
-                                     .AddGroups()
-                                     .AddSubmitName()
-                                     .AddCharacteristicsData(CharacteristicCategory.Accordance)
-                                     .Build();
+                                      .AddNatures()
+                                      .AddNotations()
+                                      .AddLanguages()
+                                      .AddTranslators()
+                                      .AddPauseTreatments()
+                                      .AddTrajectories()
+                                      .AddSequenceTypes()
+                                      .AddGroups()
+                                      .AddCharacteristicsData(CharacteristicCategory.Accordance)
+                                      .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }

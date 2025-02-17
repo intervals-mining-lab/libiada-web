@@ -59,13 +59,12 @@ public class GenesImportController : AbstractResultController
         .Select(c => c.ResearchObjectId).ToList();
 
         var data = viewDataBuilder.AddResearchObjects(m => researchObjectIds.Contains(m.Id), m => true)
-                                 .AddMinMaxResearchObjects(1, 1)
-                                 .SetNature(Nature.Genetic)
-                                 .AddNotations(onlyGenetic: true)
-                                 .AddSequenceTypes(onlyGenetic: true)
-                                 .AddGroups(onlyGenetic: true)
-                                 .AddSubmitName("Import")
-                                 .Build();
+                                  .AddMinMaxResearchObjects(1, 1)
+                                  .SetNature(Nature.Genetic)
+                                  .AddNotations(onlyGenetic: true)
+                                  .AddSequenceTypes(onlyGenetic: true)
+                                  .AddGroups(onlyGenetic: true)
+                                  .Build();
         ViewBag.data = JsonConvert.SerializeObject(data);
         return View();
     }

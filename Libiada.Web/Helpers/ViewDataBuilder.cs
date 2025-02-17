@@ -312,19 +312,6 @@ public class ViewDataBuilder(IDbContextFactory<LibiadaDatabaseEntities> dbFactor
     }
 
     /// <summary>
-    /// Adds the name of the submit button to the view data dictionary.
-    /// </summary>
-    /// <param name="submitName">
-    /// Name of the submit button.
-    /// </param>
-    /// <returns></returns>
-    public IViewDataBuilder AddSubmitName(string submitName = "Calculate")
-    {
-        viewData.Add("submitName", submitName);
-        return this;
-    }
-
-    /// <summary>
     /// Adds the minimum and maximum number of selected research objects to the view data dictionary.
     /// </summary>
     /// <param name="min">

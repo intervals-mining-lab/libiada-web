@@ -51,19 +51,18 @@ public class OrderTransformationCharacteristicsDynamicVisualizationController : 
     public ActionResult Index()
     {
         Dictionary<string, object> data = viewDataBuilder.AddMinMaxResearchObjects()
-                                                        .AddSequenceGroups()
-                                                        .AddNatures()
-                                                        .AddNotations()
-                                                        .AddLanguages()
-                                                        .AddTranslators()
-                                                        .AddPauseTreatments()
-                                                        .AddTrajectories()
-                                                        .AddOrderTransformations()
-                                                        .AddSequenceTypes()
-                                                        .AddGroups()
-                                                        .AddSubmitName()
-                                                        .AddCharacteristicsData(CharacteristicCategory.Full)
-                                                        .Build();
+                                                         .AddSequenceGroups()
+                                                         .AddNatures()
+                                                         .AddNotations()
+                                                         .AddLanguages()
+                                                         .AddTranslators()
+                                                         .AddPauseTreatments()
+                                                         .AddTrajectories()
+                                                         .AddOrderTransformations()
+                                                         .AddSequenceTypes()
+                                                         .AddGroups()
+                                                         .AddCharacteristicsData(CharacteristicCategory.Full)
+                                                         .Build();
         ViewBag.data = JsonConvert.SerializeObject(data);
         return View();
     }

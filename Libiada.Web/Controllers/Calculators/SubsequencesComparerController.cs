@@ -68,17 +68,15 @@ public class SubsequencesComparerController : AbstractResultController
     /// </returns>
     public ActionResult Index([FromServices] IViewDataBuilder viewDataBuilder)
     {
-        var viewData = viewDataBuilder.AddResearchObjectsWithSubsequences()
-                                     .AddMinMaxResearchObjects(2)
-                                     .AddCharacteristicsData(CharacteristicCategory.Full)
-                                     .AddMaxPercentageDifferenceRequiredFlag()
-                                     .AddSubmitName("Compare")
-                                     .SetNature(Nature.Genetic)
-                                     .AddNotations(onlyGenetic: true)
-                                     .AddSequenceTypes(onlyGenetic: true)
-                                     .AddGroups(onlyGenetic: true)
-                                     .AddFeatures()
-                                     .Build();
+        var viewData = viewDataBuilder.AddMinMaxResearchObjects(2)
+                                      .AddCharacteristicsData(CharacteristicCategory.Full)
+                                      .AddMaxPercentageDifferenceRequiredFlag()
+                                      .SetNature(Nature.Genetic)
+                                      .AddNotations(onlyGenetic: true)
+                                      .AddSequenceTypes(onlyGenetic: true)
+                                      .AddGroups(onlyGenetic: true)
+                                      .AddFeatures()
+                                      .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }

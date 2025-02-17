@@ -75,16 +75,15 @@ public class SubsequencesDistributionController : AbstractResultController
     public ActionResult Index()
     {
         var viewData = viewDataBuilder.AddResearchObjectsWithSubsequences()
-                                     .AddMinMaxResearchObjects()
-                                     .AddSequenceGroups()
-                                     .AddCharacteristicsData(CharacteristicCategory.Full)
-                                     .AddSubmitName()
-                                     .SetNature(Nature.Genetic)
-                                     .AddNotations(onlyGenetic: true)
-                                     .AddSequenceTypes(onlyGenetic: true)
-                                     .AddGroups(onlyGenetic: true)
-                                     .AddFeatures()
-                                     .Build();
+                                      .AddMinMaxResearchObjects()
+                                      .AddSequenceGroups()
+                                      .AddCharacteristicsData(CharacteristicCategory.Full)
+                                      .SetNature(Nature.Genetic)
+                                      .AddNotations(onlyGenetic: true)
+                                      .AddSequenceTypes(onlyGenetic: true)
+                                      .AddGroups(onlyGenetic: true)
+                                      .AddFeatures()
+                                      .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }

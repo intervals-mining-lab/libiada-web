@@ -51,17 +51,16 @@ public class OrderTransformationConvergenceController : AbstractResultController
     public ActionResult Index()
     {
         var data = viewDataBuilder.AddMinMaxResearchObjects(1, 1)
-                                 .AddNatures()
-                                 .AddNotations()
-                                 .AddLanguages()
-                                 .AddTranslators()
-                                 .AddPauseTreatments()
-                                 .AddTrajectories()
-                                 .AddSequenceTypes()
-                                 .AddGroups()
-                                 .AddOrderTransformations()
-                                 .AddSubmitName("Transform")
-                                 .Build();
+                                  .AddNatures()
+                                  .AddNotations()
+                                  .AddLanguages()
+                                  .AddTranslators()
+                                  .AddPauseTreatments()
+                                  .AddTrajectories()
+                                  .AddSequenceTypes()
+                                  .AddGroups()
+                                  .AddOrderTransformations()
+                                  .Build();
         ViewBag.data = JsonConvert.SerializeObject(data);
         return View();
     }

@@ -61,14 +61,13 @@ public class SequenceTransformerController : Controller
         long[] researchObjectIds = db.CombinedSequenceEntities.Where(d => d.Notation == Notation.Nucleotides).Select(d => d.ResearchObjectId).ToArray();
 
         var data = viewDataBuilder.AddResearchObjects(m => researchObjectIds.Contains(m.Id), m => false)
-                                 .AddMinMaxResearchObjects()
-                                 .AddSequenceGroups()
-                                 .SetNature(Nature.Genetic)
-                                 .AddNotations()
-                                 .AddSequenceTypes()
-                                 .AddGroups()
-                                 .AddSubmitName("Transform")
-                                 .Build();
+                                  .AddMinMaxResearchObjects()
+                                  .AddSequenceGroups()
+                                  .SetNature(Nature.Genetic)
+                                  .AddNotations()
+                                  .AddSequenceTypes()
+                                  .AddGroups()
+                                  .Build();
         ViewBag.data = JsonConvert.SerializeObject(data);
         return View();
     }
