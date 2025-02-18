@@ -79,24 +79,6 @@ public class ViewDataBuilder(IDbContextFactory<LibiadaDatabaseEntities> dbFactor
     }
 
     /// <summary>
-    /// Adds the list of only research objects with subsequences 
-    /// in form of table rows to the view data dictionary.
-    /// </summary>
-    /// <returns></returns>
-    public IViewDataBuilder AddResearchObjectsWithSubsequences()
-    {
-        var sequenceIds = db.Subsequences
-                            .Select(s => s.SequenceId)
-                            .Distinct();
-        var researchObjectIds = db.CombinedSequenceEntities
-                                  .Where(c => sequenceIds.Contains(c.Id))
-                                  .Select(c => c.ResearchObjectId)
-                                  .ToList();
-
-        return AddResearchObjects(m => researchObjectIds.Contains(m.Id), m => false);
-    }
-
-    /// <summary>
     /// Adds the sequence groups select list to the view data dictionary.
     /// </summary>
     /// <returns></returns>

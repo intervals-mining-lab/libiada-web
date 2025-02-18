@@ -6,8 +6,6 @@ using Libiada.Web.Models.CalculatorsData;
 
 using Newtonsoft.Json;
 
-using EnumExtensions = Core.Extensions.EnumExtensions;
-
 /// <summary>
 /// The sequence groups controller.
 /// </summary>

@@ -44,9 +44,8 @@ public class MultisequenceController : Controller
     /// </returns>
     public ActionResult Create()
     {
-        Func<ResearchObject, bool> filter = new(m => SequenceTypesFilter.Contains(m.SequenceType) && m.MultisequenceId == null);
-        var data = viewDataBuilder.AddResearchObjects(filter, m => false)
-                                  .AddMinMaxResearchObjects(2, int.MaxValue)
+        
+        var data = viewDataBuilder.AddMinMaxResearchObjects(2, int.MaxValue)
                                   .AddNatures()
                                   .AddNotations()
                                   .AddLanguages()
@@ -112,8 +111,9 @@ public class MultisequenceController : Controller
             return BadRequest();
         }
 
-        Multisequence? multisequence = db.Multisequences.Include(m => m.ResearchObjects)
-                                                      .SingleOrDefault(m => m.Id == id);
+        Multisequence? multisequence = db.Multisequences
+                                         .Include(m => m.ResearchObjects)
+                                         .SingleOrDefault(m => m.Id == id);
         if (multisequence == null)
         {
             return NotFound();

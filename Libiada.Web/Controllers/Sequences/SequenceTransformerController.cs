@@ -58,10 +58,8 @@ public class SequenceTransformerController : Controller
     /// </returns>
     public ActionResult Index()
     {
-        long[] researchObjectIds = db.CombinedSequenceEntities.Where(d => d.Notation == Notation.Nucleotides).Select(d => d.ResearchObjectId).ToArray();
-
-        var data = viewDataBuilder.AddResearchObjects(m => researchObjectIds.Contains(m.Id), m => false)
-                                  .AddMinMaxResearchObjects()
+        
+        var data = viewDataBuilder.AddMinMaxResearchObjects()
                                   .AddSequenceGroups()
                                   .SetNature(Nature.Genetic)
                                   .AddNotations()

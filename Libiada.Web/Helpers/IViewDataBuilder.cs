@@ -22,7 +22,6 @@ public interface IViewDataBuilder : IDisposable
     IViewDataBuilder AddRemoteDatabases();
     IViewDataBuilder AddResearchObjects();
     IViewDataBuilder AddResearchObjects(Func<ResearchObject, bool> filter, Func<ResearchObject, bool> selection);
-    IViewDataBuilder AddResearchObjectsWithSubsequences();
     IViewDataBuilder AddSequenceGroups();
     IViewDataBuilder AddSequenceGroupTypes();
     IViewDataBuilder AddSequenceTypes(bool onlyGenetic = false);

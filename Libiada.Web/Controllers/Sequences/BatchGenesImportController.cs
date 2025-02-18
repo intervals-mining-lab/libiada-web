@@ -55,8 +55,7 @@ public class BatchGenesImportController : AbstractResultController
                                      .Select(c => c.ResearchObjectId)
                                      .ToArray();
 
-        var data = viewDataBuilder.AddResearchObjects(m => researchObjectIds.Contains(m.Id), m => false)
-                                  .AddMinMaxResearchObjects()
+        var data = viewDataBuilder.AddMinMaxResearchObjects()
                                   .SetNature(Nature.Genetic)
                                   .AddSequenceTypes(onlyGenetic: true)
                                   .AddGroups(onlyGenetic: true)
@@ -79,63 +78,63 @@ public class BatchGenesImportController : AbstractResultController
     public ActionResult Index(long[] researchObjectIds)
     {
         return CreateTask(() =>
+        {
+            using var db = dbFactory.CreateDbContext();
+            string[] researchObjectNames;
+            List<ResearchObjectImportResult> importResults = new(researchObjectIds.Length);
+
+            researchObjectNames = cache.ResearchObjects
+                                .Where(m => researchObjectIds.Contains(m.Id))
+                                .OrderBy(m => m.Id)
+                                .Select(m => m.Name)
+                                .ToArray();
+            GeneticSequence[] parentSequences = db.CombinedSequenceEntities
+                                                .Where(s => researchObjectIds.Contains(s.ResearchObjectId))
+                                                .OrderBy(s => s.ResearchObjectId)
+                                                .Select(s => s.ToGeneticSequence())
+                                                .ToArray();
+
+            for (int i = 0; i < parentSequences.Length; i++)
             {
-                using var db = dbFactory.CreateDbContext();
-                string[] researchObjectNames;
-                List<ResearchObjectImportResult> importResults = new(researchObjectIds.Length);
-
-                researchObjectNames = cache.ResearchObjects
-                                   .Where(m => researchObjectIds.Contains(m.Id))
-                                   .OrderBy(m => m.Id)
-                                   .Select(m => m.Name)
-                                   .ToArray();
-                GeneticSequence[] parentSequences = db.CombinedSequenceEntities
-                                                  .Where(s => researchObjectIds.Contains(s.ResearchObjectId))
-                                                  .OrderBy(s => s.ResearchObjectId)
-                                                  .Select(s => s.ToGeneticSequence())
-                                                  .ToArray();
-
-                for (int i = 0; i < parentSequences.Length; i++)
+                var importResult = new ResearchObjectImportResult()
                 {
-                    var importResult = new ResearchObjectImportResult()
-                    {
-                        ResearchObjectName = researchObjectNames[i]
-                    };
+                    ResearchObjectName = researchObjectNames[i]
+                };
 
-                    try
-                    {
-                        GeneticSequence parentSequence = parentSequences[i];
-                        var subsequenceImporter = new SubsequenceImporter(db, parentSequence, ncbiHelper);
+                try
+                {
+                    GeneticSequence parentSequence = parentSequences[i];
+                    var subsequenceImporter = new SubsequenceImporter(db, parentSequence, ncbiHelper);
 
-                        subsequenceImporter.CreateSubsequences();
+                    subsequenceImporter.CreateSubsequences();
 
 
-                        int featuresCount = db.Subsequences.Count(s => s.SequenceId == parentSequence.Id
-                                                                    && s.Feature != Feature.NonCodingSequence);
-                        int nonCodingCount = db.Subsequences.Count(s => s.SequenceId == parentSequence.Id
-                                                                   && s.Feature == Feature.NonCodingSequence);
+                    int featuresCount = db.Subsequences.Count(s => s.SequenceId == parentSequence.Id
+                                                                && s.Feature != Feature.NonCodingSequence);
+                    int nonCodingCount = db.Subsequences.Count(s => s.SequenceId == parentSequence.Id
+                                                                && s.Feature == Feature.NonCodingSequence);
 
-                        importResult.Status = "Success";
-                        importResult.Result = $"Successfully imported {featuresCount} features and {nonCodingCount} non coding subsequences";
-                        importResults.Add(importResult);
-                    }
-                    catch (Exception exception)
-                    {
-                        importResult.Status = "Error";
-                        importResult.Result = exception.Message;
-                        while (exception.InnerException != null)
-                        {
-                            importResult.Result += $" {exception.InnerException.Message}";
-
-                            exception = exception.InnerException;
-                        }
-                        importResults.Add(importResult);
-                    }
+                    importResult.Status = "Success";
+                    importResult.Result = $"Successfully imported {featuresCount} features and {nonCodingCount} non coding subsequences";
+                    importResults.Add(importResult);
                 }
+                catch (Exception exception)
+                {
+                    importResult.Status = "Error";
+                    importResult.Result = exception.Message;
+                    while (exception.InnerException != null)
+                    {
+                        importResult.Result += $" {exception.InnerException.Message}";
 
-                var result = new Dictionary<string, object> { { "result", importResults } };
+                        exception = exception.InnerException;
+                    }
+                    importResults.Add(importResult);
+                }
+            }
 
-                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
-            });
+            var result = new Dictionary<string, object> { { "result", importResults } };
+
+            return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
+        });
     }
 }

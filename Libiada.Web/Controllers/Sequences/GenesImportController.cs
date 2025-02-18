@@ -58,8 +58,7 @@ public class GenesImportController : AbstractResultController
                                    && StaticCollections.SequenceTypesWithSubsequences.Contains(c.ResearchObject.SequenceType))
         .Select(c => c.ResearchObjectId).ToList();
 
-        var data = viewDataBuilder.AddResearchObjects(m => researchObjectIds.Contains(m.Id), m => true)
-                                  .AddMinMaxResearchObjects(1, 1)
+        var data = viewDataBuilder.AddMinMaxResearchObjects(1, 1)
                                   .SetNature(Nature.Genetic)
                                   .AddNotations(onlyGenetic: true)
                                   .AddSequenceTypes(onlyGenetic: true)

@@ -33,8 +33,7 @@ public class PoemSegmentationController : AbstractResultController
     // GET: PoemSequenceSegmentation
     public ActionResult Index()
     {
-        var data = viewDataBuilder.AddResearchObjects(m => m.SequenceType == SequenceType.CompletePoem, m => false)
-                                  .AddMinMaxResearchObjects(1, 1)
+        var data = viewDataBuilder.AddMinMaxResearchObjects(1, 1)
                                   .SetNature(Nature.Literature)
                                   .AddNotations()
                                   .AddLanguages()

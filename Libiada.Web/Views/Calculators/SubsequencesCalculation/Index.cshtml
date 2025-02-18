@@ -13,7 +13,7 @@
     <div ng-controller="SubsequencesCalculationCtrl">
         <h4>Sequences and parameters</h4>
         @Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
-        <research-objects-table research-objects="researchObjects"
+        <research-objects-table research-objects-endpoint="GetResearchObjectsWithSubsequences"
                                 nature="nature"
                                 groups="groups"
                                 sequence-types="sequenceTypes"

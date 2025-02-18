@@ -14,7 +14,7 @@
 {
     <div ng-controller="SequencesAlignmentCtrl">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <research-objects-table research-objects="researchObjects"
+        <research-objects-table research-objects-endpoint="GetResearchObjectsWithSubsequences"
                                 nature="nature"
                                 groups="groups"
                                 sequence-types="sequenceTypes"
@@ -31,19 +31,13 @@
         <characteristic characteristic-types="::characteristicTypes"
                         characteristics-dictionary="::characteristicsDictionary"
                         nature="nature"
-                        notations="::notations"
-                        pause-treatments="::pauseTreatments"
-                        trajectories="::trajectories">
+                        notations="::notations">
         </characteristic>
         <h4>Subsequences comparison characteristic:</h4>
         <characteristics characteristic-types="::characteristicTypes"
                          characteristics-dictionary="::characteristicsDictionary"
                          nature="nature"
                          notations="::notations"
-                         languages="::languages"
-                         translators="::translators"
-                         pause-treatments="::pauseTreatments"
-                         trajectories="::trajectories"
                          percentage-differense-needed="::percentageDifferenseNeeded">
         </characteristics>
         @if (User.IsAdmin())

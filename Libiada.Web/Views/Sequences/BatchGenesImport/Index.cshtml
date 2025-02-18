@@ -11,7 +11,7 @@
 @using (Html.BeginForm())
 {
     <div ng-controller="GenesImportCtrl">
-        <research-objects-table research-objects="researchObjects"
+        <research-objects-table research-objects-endpoint="GetResearchObjectsForGenesImport"
                                 nature="nature"
                                 groups="groups"
                                 sequence-types="sequenceTypes"

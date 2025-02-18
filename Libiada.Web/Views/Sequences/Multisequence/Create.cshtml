@@ -48,7 +48,7 @@
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
         </div>
-        <research-objects-table research-objects="researchObjects"
+        <research-objects-table research-objects-endpoint="GetResearchObjectsForMultisequence"
                                 nature="nature"
                                 groups="groups"
                                 sequence-types="sequenceTypes"

@@ -68,8 +68,7 @@ public class SubsequencesSimilarityController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        var viewData = viewDataBuilder.AddResearchObjectsWithSubsequences()
-                                      .AddMinMaxResearchObjects(2, 2)
+        var viewData = viewDataBuilder.AddMinMaxResearchObjects(2, 2)
                                       .AddCharacteristicsData(CharacteristicCategory.Full)
                                       .SetNature(Nature.Genetic)
                                       .AddNotations(onlyGenetic: true)

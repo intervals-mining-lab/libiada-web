@@ -5,6 +5,7 @@
         let ctrl = this;
 
         ctrl.$onInit = () => {
+            ctrl.researchObjectsEndpoint ??= "GetAllResearchObject";
             ctrl.showRefSeqOnly = true;
             ctrl.checkboxes = ctrl.maximumSelectedResearchObjects > 1;
             ctrl.searchResearchObjectText = "";
@@ -116,7 +117,7 @@
                 if (ignoreSearch || ctrl.searchResearchObjectText.length > 3) {
                     const requestParams = ctrl.FillResearchObjectsSearchParams();
 
-                    const result = await $http.get("/api/ResearchObjectApi/GetResearchObjects", { params: requestParams });
+                    const result = await $http.get(`/api/ResearchObjectApi/${ctrl.researchObjectsEndpoint}`, { params: requestParams });
 
                     ctrl.researchObjects = result.data;
                     ctrl.researchObjects.forEach(m => m.Visible = true);
@@ -242,7 +243,8 @@
             initialSequenceTypeIndex: "<?",
             initialGroupIndex: "<?",
             groupAndTypeRequired: "<",
-            setUnselectAllResearchObjectsFunction: "&"
+            setUnselectAllResearchObjectsFunction: "&",
+            researchObjectsEndpoint: "@"
         }
     });
 }
