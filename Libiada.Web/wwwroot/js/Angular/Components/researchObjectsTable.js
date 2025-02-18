@@ -125,13 +125,17 @@
                     ctrl.researchObjects = [];
                 }
                 
-                researchObjectsToHide = ctrl.visibleResearchObjects.filter(m => !m.Selected && !ctrl.researchObjects.some(m2 => m2.Value === m.Value));
+                researchObjectsToHide = ctrl.visibleResearchObjects
+                                            .filter(m => !m.Selected && !ctrl.researchObjects.some(m2 => m2.Value === m.Value));
                 
             }
 
-            const researchObjectsToShow = ctrl.researchObjects.filter(m => m.Visible && !ctrl.visibleResearchObjects.some(m2 => m2.Value === m.Value));
-            ctrl.visibleResearchObjects = ctrl.visibleResearchObjects.filter(m => !researchObjectsToHide.some(m2 => m2.Value === m.Value))
-                .concat(...researchObjectsToShow);
+            const researchObjectsToShow = ctrl.researchObjects
+                                              .filter(m => m.Visible && !ctrl.visibleResearchObjects.some(m2 => m2.Value === m.Value));
+
+            ctrl.visibleResearchObjects = ctrl.visibleResearchObjects
+                                              .filter(m => !researchObjectsToHide.some(m2 => m2.Value === m.Value))
+                                              .concat(researchObjectsToShow);
 
             // removing not visible research objects from table
             $(researchObjectsToHide.map(m => `#researchObjectRow${m.Value}`).join(",")).remove();
