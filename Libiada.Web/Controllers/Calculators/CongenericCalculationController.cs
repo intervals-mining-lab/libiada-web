@@ -27,7 +27,7 @@ public class CongenericCalculationController : AbstractResultController
     /// Database context factory.
     /// </summary>
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
     private readonly ICongenericCharacteristicRepository congenericCharacteristicRepository;
 
     /// <summary>
@@ -41,7 +41,7 @@ public class CongenericCalculationController : AbstractResultController
     /// Initializes a new instance of the <see cref="CongenericCalculationController"/> class.
     /// </summary>
     public CongenericCalculationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                           IViewDataHelper viewDataHelper,
+                                           IViewDataBuilder viewDataBuilder,
                                            ITaskManager taskManager,
                                            ICongenericCharacteristicRepository congenericCharacteristicRepository,
                                            ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
@@ -50,7 +50,7 @@ public class CongenericCalculationController : AbstractResultController
         : base(TaskType.CongenericCalculation, taskManager)
     {
         this.dbFactory = dbFactory;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         this.congenericCharacteristicRepository = congenericCharacteristicRepository;
         this.sequenceRepositoryFactory = sequenceRepositoryFactory;
         this.congenericSequencesCharacteristicsCalculator = congenericSequencesCharacteristicsCalculator;
@@ -65,7 +65,18 @@ public class CongenericCalculationController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        var viewData = viewDataHelper.FillViewData(CharacteristicCategory.Congeneric, 1, int.MaxValue, "Calculate");
+        var viewData = viewDataBuilder.AddMinMaxResearchObjects()
+                                      .AddSequenceGroups()
+                                      .AddNatures()
+                                      .AddNotations()
+                                      .AddLanguages()
+                                      .AddTranslators()
+                                      .AddPauseTreatments()
+                                      .AddTrajectories()
+                                      .AddSequenceTypes()
+                                      .AddGroups()
+                                      .AddCharacteristicsData(CharacteristicCategory.Congeneric)
+                                      .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }

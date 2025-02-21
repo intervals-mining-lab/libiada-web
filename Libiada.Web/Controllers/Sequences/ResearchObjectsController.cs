@@ -6,11 +6,11 @@ using Libiada.Web.Tasks;
 
 using Libiada.Database.Tasks;
 using Libiada.Database.Helpers;
+using Libiada.Database.Models.Repositories.Sequences;
 
 using Newtonsoft.Json;
 
 using EnumExtensions = Core.Extensions.EnumExtensions;
-using Libiada.Database.Models.Repositories.Sequences;
 
 /// <summary>
 /// The research objects controller.
@@ -24,11 +24,11 @@ public class ResearchObjectsController : SequencesResearchObjectsController
     /// Initializes a new instance of the <see cref="ResearchObjectsController"/> class.
     /// </summary>
     public ResearchObjectsController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                             IViewDataHelper viewDataHelper,
+                             IViewDataBuilder viewDataBuilder,
                              ITaskManager taskManager,
                              INcbiHelper ncbiHelper,
                              IResearchObjectsCache cache)
-        : base(TaskType.ResearchObjectImport, dbFactory, viewDataHelper, taskManager, ncbiHelper, cache)
+        : base(TaskType.ResearchObjectImport, dbFactory, viewDataBuilder, taskManager, ncbiHelper, cache)
     {
         this.cache = cache;
     }

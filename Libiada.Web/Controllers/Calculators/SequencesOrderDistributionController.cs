@@ -31,7 +31,6 @@ public class SequencesOrderDistributionController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        ViewBag.data = "{}";
         return View();
     }
 

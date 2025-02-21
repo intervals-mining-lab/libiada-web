@@ -26,20 +26,20 @@ public class OrderTransformationConvergenceController : AbstractResultController
     /// The sequence repository.
     /// </summary>
     private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OrderTransformationConvergenceController"/> class.
     /// </summary>
     public OrderTransformationConvergenceController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                                    IViewDataHelper viewDataHelper,
+                                                    IViewDataBuilder viewDataBuilder,
                                                     ITaskManager taskManager,
                                                     ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory)
         : base(TaskType.OrderTransformationConvergence, taskManager)
     {
         this.dbFactory = dbFactory;
         this.sequenceRepositoryFactory = sequenceRepositoryFactory;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
     }
 
     /// <summary>
@@ -50,11 +50,17 @@ public class OrderTransformationConvergenceController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        var data = viewDataHelper.FillViewData(1, 1, "Transform");
-
-        var transformations = Extensions.EnumExtensions.GetSelectList<OrderTransformation>();
-        data.Add("transformations", transformations);
-
+        var data = viewDataBuilder.AddMinMaxResearchObjects(1, 1)
+                                  .AddNatures()
+                                  .AddNotations()
+                                  .AddLanguages()
+                                  .AddTranslators()
+                                  .AddPauseTreatments()
+                                  .AddTrajectories()
+                                  .AddSequenceTypes()
+                                  .AddGroups()
+                                  .AddOrderTransformations()
+                                  .Build();
         ViewBag.data = JsonConvert.SerializeObject(data);
         return View();
     }

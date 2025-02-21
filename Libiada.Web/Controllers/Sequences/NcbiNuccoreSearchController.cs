@@ -32,7 +32,6 @@ public class NcbiNuccoreSearchController : AbstractResultController
 
     public ActionResult Index()
     {
-        ViewBag.data = JsonConvert.SerializeObject(string.Empty);
         return View();
     }
 

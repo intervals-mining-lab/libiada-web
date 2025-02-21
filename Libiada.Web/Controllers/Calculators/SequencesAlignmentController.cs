@@ -6,13 +6,13 @@ using Libiada.Core.Extensions;
 
 using Libiada.Database.Models.Calculators;
 using Libiada.Database.Models.Repositories.Catalogs;
+using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
 
 using Newtonsoft.Json;
 
 using Libiada.Web.Tasks;
 using Libiada.Web.Helpers;
-using Libiada.Database.Models.Repositories.Sequences;
 
 /// <summary>
 /// The alignment controller.
@@ -27,13 +27,13 @@ public class SequencesAlignmentController : AbstractResultController
     private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
     private readonly IResearchObjectsCache cache;
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SequencesAlignmentController"/> class.
     /// </summary>
     public SequencesAlignmentController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                        IViewDataHelper viewDataHelper,
+                                        IViewDataBuilder viewDataBuilder,
                                         ITaskManager taskManager,
                                         IFullCharacteristicRepository characteristicTypeLinkRepository,
                                         ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator,
@@ -44,7 +44,7 @@ public class SequencesAlignmentController : AbstractResultController
         this.subsequencesCharacteristicsCalculator = subsequencesCharacteristicsCalculator;
         this.cache = cache;
         this.dbFactory = dbFactory;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
     }
 
     /// <summary>
@@ -55,7 +55,15 @@ public class SequencesAlignmentController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillSubsequencesViewData(2, 2, "Align"));
+        var viewData = viewDataBuilder.AddMinMaxResearchObjects(2, 2)
+                                      .AddCharacteristicsData(CharacteristicCategory.Full)
+                                      .SetNature(Nature.Genetic)
+                                      .AddNotations(onlyGenetic: true)
+                                      .AddSequenceTypes(onlyGenetic: true)
+                                      .AddGroups(onlyGenetic: true)
+                                      .AddFeatures()
+                                      .Build();
+        ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }
 

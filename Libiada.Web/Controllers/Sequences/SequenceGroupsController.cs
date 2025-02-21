@@ -6,8 +6,6 @@ using Libiada.Web.Models.CalculatorsData;
 
 using Newtonsoft.Json;
 
-using EnumExtensions = Core.Extensions.EnumExtensions;
-
 /// <summary>
 /// The sequence groups controller.
 /// </summary>
@@ -18,12 +16,12 @@ public class SequenceGroupsController : Controller
     /// The database context.
     /// </summary>
     private readonly LibiadaDatabaseEntities db;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
 
-    public SequenceGroupsController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper)
+    public SequenceGroupsController(LibiadaDatabaseEntities db, IViewDataBuilder viewDataBuilder)
     {
         this.db = db;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
     }
 
     /// <summary>
@@ -76,8 +74,13 @@ public class SequenceGroupsController : Controller
     /// </returns>
     public ActionResult Create()
     {
-        var viewData = viewDataHelper.GetResearchObjectsData(1, int.MaxValue);
-        viewData["sequenceGroupTypes"] = EnumExtensions.ToArray<SequenceGroupType>().ToSelectListWithNature();
+        var viewData = viewDataBuilder.AddMinMaxResearchObjects()
+                                      .AddSequenceGroups()
+                                      .AddNatures()
+                                      .AddSequenceTypes()
+                                      .AddGroups()
+                                      .AddSequenceGroupTypes()
+                                      .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }
@@ -141,8 +144,14 @@ public class SequenceGroupsController : Controller
         }
 
         var selectedResearchObjectIds = sequenceGroup.ResearchObjects.Select(m => m.Id);
-        var viewData = viewDataHelper.FillViewData(1, int.MaxValue, m => true, m => selectedResearchObjectIds.Contains(m.Id), "Save");
-        viewData["sequenceGroupTypes"] = EnumExtensions.ToArray<SequenceGroupType>().ToSelectListWithNature();
+        var viewData = viewDataBuilder.AddResearchObjects(m => true, m => selectedResearchObjectIds.Contains(m.Id))
+                                      .AddMinMaxResearchObjects()
+                                      .AddSequenceGroups()
+                                      .AddNatures()
+                                      .AddSequenceTypes()
+                                      .AddGroups()
+                                      .AddSequenceGroupTypes()
+                                      .Build();
 
         // TODO: try to optimize this
         SelectListItemWithNature[] sequenceTypes = ((IEnumerable<SelectListItemWithNature>)viewData["sequenceTypes"]).ToArray();

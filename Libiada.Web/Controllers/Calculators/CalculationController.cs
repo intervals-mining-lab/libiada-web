@@ -12,7 +12,8 @@ using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Models.Calculators;
 using Libiada.Database.Tasks;
-using Libiada.Database.Models;
+
+using Libiada.Web.Models.CalculatorsData;
 
 
 /// <summary>
@@ -22,7 +23,7 @@ using Libiada.Database.Models;
 public class CalculationController : AbstractResultController
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
     private readonly IResearchObjectsCache cache;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
     private readonly ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator;
@@ -32,7 +33,7 @@ public class CalculationController : AbstractResultController
     /// Initializes a new instance of the <see cref="CalculationController"/> class.
     /// </summary>
     public CalculationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                 IViewDataHelper viewDataHelper,
+                                 IViewDataBuilder viewDataBuilder,
                                  ITaskManager taskManager,
                                  IResearchObjectsCache cache,
                                  IFullCharacteristicRepository characteristicTypeLinkRepository,
@@ -41,7 +42,7 @@ public class CalculationController : AbstractResultController
         : base(TaskType.Calculation, taskManager)
     {
         this.dbFactory = dbFactory;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         this.cache = cache;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         this.sequencesCharacteristicsCalculator = sequencesCharacteristicsCalculator;
@@ -56,19 +57,18 @@ public class CalculationController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        var viewData = viewDataHelper.AddMinMaxResearchObjects()
-                                     .AddSequenceGroups()
-                                     .AddNatures()
-                                     .AddNotations()
-                                     .AddLanguages()
-                                     .AddTranslators()
-                                     .AddPauseTreatments()
-                                     .AddTrajectories()
-                                     .AddSequenceTypes()
-                                     .AddGroups()
-                                     .AddSubmitName()
-                                     .AddCharacteristicsData(CharacteristicCategory.Full)
-                                     .Build();
+        var viewData = viewDataBuilder.AddMinMaxResearchObjects()
+                                      .AddSequenceGroups()
+                                      .AddNatures()
+                                      .AddNotations()
+                                      .AddLanguages()
+                                      .AddTranslators()
+                                      .AddPauseTreatments()
+                                      .AddTrajectories()
+                                      .AddSequenceTypes()
+                                      .AddGroups()
+                                      .AddCharacteristicsData(CharacteristicCategory.Full)
+                                      .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
 
@@ -147,7 +147,11 @@ public class CalculationController : AbstractResultController
                 researchObjectsIdsSequenceGroupIds = sequenceGroups.SelectMany(sg => sg.ResearchObjects.Select(m => new { id = sg.Id, researchObjectId = m.Id }))
                                                            .ToDictionary(sg => sg.researchObjectId, sg => sg.id);
 
-                sequenceGroupsSelectList = (IEnumerable<SelectListItem>)viewDataHelper.AddSequenceGroups(sg => sequenceGroupIds.Contains(sg.Id)).Build()["sequenceGroups"];
+                sequenceGroupsSelectList = db.SequenceGroups
+                                             .Where(sg => sequenceGroupIds.Contains(sg.Id))
+                                             .OrderBy(m => m.Created)
+                                             .Select(sg => new ResearchObjectTableRow(sg, false))
+                                             .ToArray();
             }
 
             using var sequenceRepository = sequenceRepositoryFactory.Create();

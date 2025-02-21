@@ -5,6 +5,7 @@
         let ctrl = this;
 
         ctrl.$onInit = () => {
+            ctrl.researchObjectsEndpoint ??= "GetAllResearchObject";
             ctrl.showRefSeqOnly = true;
             ctrl.checkboxes = ctrl.maximumSelectedResearchObjects > 1;
             ctrl.searchResearchObjectText = "";
@@ -116,7 +117,7 @@
                 if (ignoreSearch || ctrl.searchResearchObjectText.length > 3) {
                     const requestParams = ctrl.FillResearchObjectsSearchParams();
 
-                    const result = await $http.get("/api/ResearchObjectApi/GetResearchObjects", { params: requestParams });
+                    const result = await $http.get(`/api/ResearchObjectApi/${ctrl.researchObjectsEndpoint}`, { params: requestParams });
 
                     ctrl.researchObjects = result.data;
                     ctrl.researchObjects.forEach(m => m.Visible = true);
@@ -124,13 +125,17 @@
                     ctrl.researchObjects = [];
                 }
                 
-                researchObjectsToHide = ctrl.visibleResearchObjects.filter(m => !m.Selected && !ctrl.researchObjects.some(m2 => m2.Value === m.Value));
+                researchObjectsToHide = ctrl.visibleResearchObjects
+                                            .filter(m => !m.Selected && !ctrl.researchObjects.some(m2 => m2.Value === m.Value));
                 
             }
 
-            const researchObjectsToShow = ctrl.researchObjects.filter(m => m.Visible && !ctrl.visibleResearchObjects.some(m2 => m2.Value === m.Value));
-            ctrl.visibleResearchObjects = ctrl.visibleResearchObjects.filter(m => !researchObjectsToHide.some(m2 => m2.Value === m.Value))
-                .concat(...researchObjectsToShow);
+            const researchObjectsToShow = ctrl.researchObjects
+                                              .filter(m => m.Visible && !ctrl.visibleResearchObjects.some(m2 => m2.Value === m.Value));
+
+            ctrl.visibleResearchObjects = ctrl.visibleResearchObjects
+                                              .filter(m => !researchObjectsToHide.some(m2 => m2.Value === m.Value))
+                                              .concat(researchObjectsToShow);
 
             // removing not visible research objects from table
             $(researchObjectsToHide.map(m => `#researchObjectRow${m.Value}`).join(",")).remove();
@@ -242,7 +247,8 @@
             initialSequenceTypeIndex: "<?",
             initialGroupIndex: "<?",
             groupAndTypeRequired: "<",
-            setUnselectAllResearchObjectsFunction: "&"
+            setUnselectAllResearchObjectsFunction: "&",
+            researchObjectsEndpoint: "@"
         }
     });
 }

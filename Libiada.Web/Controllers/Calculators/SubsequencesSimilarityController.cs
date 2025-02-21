@@ -6,7 +6,7 @@ using Libiada.Core.Extensions;
 
 using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Models.Repositories.Catalogs;
-
+using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Models.Calculators;
 using Libiada.Database.Tasks;
 
@@ -14,7 +14,6 @@ using Newtonsoft.Json;
 
 using Libiada.Web.Tasks;
 using Libiada.Web.Helpers;
-using Libiada.Database.Models.Repositories.Sequences;
 
 /// <summary>
 /// The subsequences similarity controller.
@@ -27,7 +26,7 @@ public class SubsequencesSimilarityController : AbstractResultController
     /// </summary>
     private readonly LibiadaDatabaseEntities db;
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
 
     /// <summary>
     /// The sequence attribute repository.
@@ -45,7 +44,7 @@ public class SubsequencesSimilarityController : AbstractResultController
     /// Initializes a new instance of the <see cref="SubsequencesSimilarityController"/> class.
     /// </summary>
     public SubsequencesSimilarityController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                            IViewDataHelper viewDataHelper,
+                                            IViewDataBuilder viewDataBuilder,
                                             ITaskManager taskManager,
                                             IFullCharacteristicRepository characteristicTypeLinkRepository,
                                             ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator,
@@ -54,7 +53,7 @@ public class SubsequencesSimilarityController : AbstractResultController
     {
         this.dbFactory = dbFactory;
         this.db = dbFactory.CreateDbContext();
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         this.subsequencesCharacteristicsCalculator = subsequencesCharacteristicsCalculator;
         this.cache = cache;
@@ -69,7 +68,15 @@ public class SubsequencesSimilarityController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillSubsequencesViewData(2, 2, "Compare"));
+        var viewData = viewDataBuilder.AddMinMaxResearchObjects(2, 2)
+                                      .AddCharacteristicsData(CharacteristicCategory.Full)
+                                      .SetNature(Nature.Genetic)
+                                      .AddNotations(onlyGenetic: true)
+                                      .AddSequenceTypes(onlyGenetic: true)
+                                      .AddGroups(onlyGenetic: true)
+                                      .AddFeatures()
+                                      .Build();
+        ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }
 

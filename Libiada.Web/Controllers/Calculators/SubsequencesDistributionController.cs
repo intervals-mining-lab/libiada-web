@@ -29,7 +29,7 @@ using EnumExtensions = Core.Extensions.EnumExtensions;
 public class SubsequencesDistributionController : AbstractResultController
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
     private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
     private readonly ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator;
@@ -46,7 +46,7 @@ public class SubsequencesDistributionController : AbstractResultController
     /// Initializes a new instance of the <see cref="SubsequencesDistributionController"/> class.
     /// </summary>
     public SubsequencesDistributionController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                              IViewDataHelper viewDataHelper,
+                                              IViewDataBuilder viewDataBuilder,
                                               ITaskManager taskManager,
                                               IFullCharacteristicRepository characteristicTypeLinkRepository,
                                               ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator,
@@ -57,7 +57,7 @@ public class SubsequencesDistributionController : AbstractResultController
         : base(TaskType.SubsequencesDistribution, taskManager)
     {
         this.dbFactory = dbFactory;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         this.subsequencesCharacteristicsCalculator = subsequencesCharacteristicsCalculator;
         this.sequencesCharacteristicsCalculator = sequencesCharacteristicsCalculator;
@@ -74,7 +74,16 @@ public class SubsequencesDistributionController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillSubsequencesViewData(1, int.MaxValue, "Calculate"));
+        var viewData = viewDataBuilder.AddMinMaxResearchObjects()
+                                      .AddSequenceGroups()
+                                      .AddCharacteristicsData(CharacteristicCategory.Full)
+                                      .SetNature(Nature.Genetic)
+                                      .AddNotations(onlyGenetic: true)
+                                      .AddSequenceTypes(onlyGenetic: true)
+                                      .AddGroups(onlyGenetic: true)
+                                      .AddFeatures()
+                                      .Build();
+        ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }
 

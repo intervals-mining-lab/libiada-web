@@ -27,18 +27,18 @@ public class IntervalsCharacteristicsDistributionController : AbstractResultCont
     /// The characteristic type link repository.
     /// </summary>
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="IntervalsCharacteristicsDistributionController"/> class.
     /// </summary>
-    public IntervalsCharacteristicsDistributionController(IViewDataHelper viewDataHelper,
+    public IntervalsCharacteristicsDistributionController(IViewDataBuilder viewDataBuilder,
                                                           ITaskManager taskManager,
                                                           IFullCharacteristicRepository characteristicTypeLinkRepository)
         : base(TaskType.IntervalsCharacteristicsDistribution, taskManager)
     {
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
     }
 
     /// <summary>
@@ -51,7 +51,8 @@ public class IntervalsCharacteristicsDistributionController : AbstractResultCont
     {
         var imageTransformers = Extensions.EnumExtensions.GetSelectList<ImageTransformer>();
 
-        Dictionary<string, object> viewData = viewDataHelper.GetCharacteristicsData(CharacteristicCategory.Full);
+        Dictionary<string, object> viewData = viewDataBuilder.AddCharacteristicsData(CharacteristicCategory.Full)
+                                                            .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }

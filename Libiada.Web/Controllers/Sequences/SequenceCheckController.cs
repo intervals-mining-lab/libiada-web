@@ -12,9 +12,6 @@ using Newtonsoft.Json;
 
 using Libiada.Web.Tasks;
 
-
-
-
 /// <summary>
 /// The sequence check controller.
 /// </summary>

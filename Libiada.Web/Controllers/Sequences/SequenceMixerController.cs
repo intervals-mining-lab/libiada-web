@@ -7,13 +7,11 @@ using Libiada.Database.Models;
 using Libiada.Database.Models.Repositories.Sequences;
 
 using Libiada.Web.Helpers;
+using Libiada.Web.Extensions;
 
 using Newtonsoft.Json;
 
 using Microsoft.EntityFrameworkCore;
-using Libiada.Web.Extensions;
-
-
 
 /// <summary>
 /// The sequence mixer controller.
@@ -42,21 +40,21 @@ public class SequenceMixerController : Controller
     /// The random generator.
     /// </summary>
     private readonly Random randomGenerator = new();
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
     private readonly IResearchObjectsCache cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SequenceMixerController"/> class.
     /// </summary>
     public SequenceMixerController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                   IViewDataHelper viewDataHelper,
+                                   IViewDataBuilder viewDataBuilder,
                                    IResearchObjectsCache cache)
     {
         this.dbFactory = dbFactory;
         researchObjectRepository = new ResearchObjectRepository(dbFactory.CreateDbContext(), cache);
         sequenceRepository = new CombinedSequenceEntityRepository(dbFactory, cache);
         elementRepository = new ElementRepository(dbFactory.CreateDbContext());
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         this.cache = cache;
     }
 
@@ -68,7 +66,17 @@ public class SequenceMixerController : Controller
     /// </returns>
     public ActionResult Index()
     {
-        ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillViewData(1, 1, "Mix"));
+        var viewData = viewDataBuilder.AddMinMaxResearchObjects(1, 1)
+                                      .AddNatures()
+                                      .AddNotations()
+                                      .AddLanguages()
+                                      .AddTranslators()
+                                      .AddPauseTreatments()
+                                      .AddTrajectories()
+                                      .AddSequenceTypes()
+                                      .AddGroups()
+                                      .Build();
+        ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }
 
@@ -117,13 +125,13 @@ public class SequenceMixerController : Controller
         long sequenceId = researchObject.Nature switch
         {
             Nature.Literature => db.CombinedSequenceEntities.Single(l => l.ResearchObjectId == researchObjectId
-                                                                    && l.Notation == notation
-                                                                    && l.Language == language
-                                                                    && l.Translator == translator).Id,
+                                                                      && l.Notation == notation
+                                                                      && l.Language == language
+                                                                      && l.Translator == translator).Id,
             Nature.Music => db.CombinedSequenceEntities.Single(m => m.ResearchObjectId == researchObjectId
-                                                          && m.Notation == notation
-                                                          && m.PauseTreatment == pauseTreatment
-                                                          && m.SequentialTransfer == sequentialTransfer).Id,
+                                                                 && m.Notation == notation
+                                                                 && m.PauseTreatment == pauseTreatment
+                                                                 && m.SequentialTransfer == sequentialTransfer).Id,
             _ => db.CombinedSequenceEntities.Single(c => c.ResearchObjectId == researchObjectId && c.Notation == notation).Id,
         };
         Sequence sequence = sequenceRepository.GetLibiadaSequence(sequenceId);

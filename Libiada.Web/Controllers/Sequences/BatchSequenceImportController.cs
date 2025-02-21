@@ -48,7 +48,6 @@ public class BatchSequenceImportController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        ViewBag.data = JsonConvert.SerializeObject(string.Empty);
         return View();
     }
 

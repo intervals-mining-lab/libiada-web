@@ -12,11 +12,12 @@ using Libiada.Database.Tasks;
 using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Models.Calculators;
+using Libiada.Database.Models.CalculatorsData;
 
 using Newtonsoft.Json;
 
 using EnumExtensions = Core.Extensions.EnumExtensions;
-using Libiada.Database.Models.CalculatorsData;
+
 
 /// <summary>
 /// The clusterization controller.
@@ -28,7 +29,7 @@ public class ClusterizationController : AbstractResultController
     /// Database context factory.
     /// </summary>
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
 
     /// <summary>
     /// The sequence repository.
@@ -46,7 +47,7 @@ public class ClusterizationController : AbstractResultController
     /// Initializes a new instance of the <see cref="ClusterizationController"/> class.
     /// </summary>
     public ClusterizationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                    IViewDataHelper viewDataHelper,
+                                    IViewDataBuilder viewDataBuilder,
                                     ITaskManager taskManager,
                                     IFullCharacteristicRepository characteristicTypeLinkRepository,
                                     ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator,
@@ -55,7 +56,7 @@ public class ClusterizationController : AbstractResultController
         : base(TaskType.Clusterization, taskManager)
     {
         this.dbFactory = dbFactory;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         this.sequenceRepositoryFactory = sequenceRepositoryFactory;
         this.cache = cache;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
@@ -70,7 +71,18 @@ public class ClusterizationController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        Dictionary<string, object> viewData = viewDataHelper.FillViewData(CharacteristicCategory.Full, 3, int.MaxValue, "Calculate");
+        var viewData = viewDataBuilder.AddMinMaxResearchObjects(3, int.MaxValue)
+                                      .AddSequenceGroups()
+                                      .AddNatures()
+                                      .AddNotations()
+                                      .AddLanguages()
+                                      .AddTranslators()
+                                      .AddPauseTreatments()
+                                      .AddTrajectories()
+                                      .AddSequenceTypes()
+                                      .AddGroups()
+                                      .AddCharacteristicsData(CharacteristicCategory.Full)
+                                      .Build();
         viewData.Add("ClusterizatorsTypes", EnumExtensions.ToArray<ClusterizationType>().ToSelectList());
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();

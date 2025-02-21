@@ -4,11 +4,13 @@ using Libiada.Core.Core;
 using Libiada.Core.DataTransformers;
 
 using Libiada.Web.Helpers;
+using Libiada.Web.Extensions;
 
 using Libiada.Database.Models.Repositories.Sequences;
 
 using Newtonsoft.Json;
 using Libiada.Web.Extensions;
+
 
 /// <summary>
 /// The DNA transformation controller.
@@ -16,12 +18,8 @@ using Libiada.Web.Extensions;
 [Authorize(Roles = "Admin")]
 public class SequenceTransformerController : Controller
 {
-    /// <summary>
-    /// Database context factory.
-    /// </summary>
     private readonly LibiadaDatabaseEntities db;
-    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
 
     /// <summary>
     /// The DNA sequence repository.
@@ -42,13 +40,12 @@ public class SequenceTransformerController : Controller
     /// Initializes a new instance of the <see cref="SequenceTransformerController"/> class.
     /// </summary>
     public SequenceTransformerController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                         IViewDataHelper viewDataHelper,
+                                         IViewDataBuilder viewDataBuilder,
                                          ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
                                          IResearchObjectsCache cache)
     {
-        this.dbFactory = dbFactory;
         this.db = dbFactory.CreateDbContext();
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
         this.sequenceRepositoryFactory = sequenceRepositoryFactory;
         elementRepository = new ElementRepository(dbFactory.CreateDbContext());
@@ -62,10 +59,14 @@ public class SequenceTransformerController : Controller
     /// </returns>
     public ActionResult Index()
     {
-        long[] researchObjectIds = db.CombinedSequenceEntities.Where(d => d.Notation == Notation.Nucleotides).Select(d => d.ResearchObjectId).ToArray();
-
-        var data = viewDataHelper.FillViewData(1, int.MaxValue, m => researchObjectIds.Contains(m.Id), "Transform");
-        data.Add("nature", (byte)Nature.Genetic);
+        
+        var data = viewDataBuilder.AddMinMaxResearchObjects()
+                                  .AddSequenceGroups()
+                                  .SetNature(Nature.Genetic)
+                                  .AddNotations()
+                                  .AddSequenceTypes()
+                                  .AddGroups()
+                                  .Build();
         ViewBag.data = JsonConvert.SerializeObject(data);
         return View();
     }

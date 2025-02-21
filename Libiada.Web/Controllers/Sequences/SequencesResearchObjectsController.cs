@@ -12,7 +12,6 @@ using Newtonsoft.Json;
 
 using Libiada.Web.Helpers;
 using Libiada.Web.Extensions;
-
 using Libiada.Web.Tasks;
 
 using FileHelper = Helpers.FileHelper;
@@ -23,7 +22,7 @@ using FileHelper = Helpers.FileHelper;
 public abstract class SequencesResearchObjectsController : AbstractResultController
 {
     protected readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
     private readonly INcbiHelper ncbiHelper;
     private readonly IResearchObjectsCache cache;
 
@@ -35,14 +34,14 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
     /// </param>
     protected SequencesResearchObjectsController(TaskType taskType,
                                          IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                         IViewDataHelper viewDataHelper,
+                                         IViewDataBuilder viewDataBuilder,
                                          ITaskManager taskManager,
                                          INcbiHelper ncbiHelper,
                                          IResearchObjectsCache cache)
         : base(taskType, taskManager)
     {
         this.dbFactory = dbFactory;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         this.ncbiHelper = ncbiHelper;
         this.cache = cache;
     }
@@ -55,7 +54,7 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
     /// </returns>
     public ActionResult Create()
     {
-        var viewData = viewDataHelper.AddResearchObjects()
+        var viewData = viewDataBuilder.AddResearchObjects()
                                      .AddNatures()
                                      .AddNotations()
                                      .AddRemoteDatabases()

@@ -22,7 +22,7 @@ using Libiada.Web.Helpers;
 public class OrderTransformationCharacteristicsDynamicVisualizationController : AbstractResultController
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
     private readonly IResearchObjectsCache cache;
 
@@ -30,14 +30,14 @@ public class OrderTransformationCharacteristicsDynamicVisualizationController : 
     /// Initializes a new instance of the <see cref="OrderTransformationCharacteristicsDynamicVisualizationController"/> class.
     /// </summary>
     public OrderTransformationCharacteristicsDynamicVisualizationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                                                            IViewDataHelper viewDataHelper,
+                                                                            IViewDataBuilder viewDataBuilder,
                                                                             ITaskManager taskManager,
                                                                             IFullCharacteristicRepository characteristicTypeLinkRepository,
                                                                             IResearchObjectsCache cache)
         : base(TaskType.OrderTransformationCharacteristicsDynamicVisualization, taskManager)
     {
         this.dbFactory = dbFactory;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         this.cache = cache;
     }
@@ -50,11 +50,19 @@ public class OrderTransformationCharacteristicsDynamicVisualizationController : 
     /// </returns>
     public ActionResult Index()
     {
-        Dictionary<string, object> data = viewDataHelper.FillViewData(CharacteristicCategory.Full, 1, int.MaxValue, "Calculate");
-
-        var transformations = Extensions.EnumExtensions.GetSelectList<OrderTransformation>();
-        data.Add("transformations", transformations);
-
+        Dictionary<string, object> data = viewDataBuilder.AddMinMaxResearchObjects()
+                                                         .AddSequenceGroups()
+                                                         .AddNatures()
+                                                         .AddNotations()
+                                                         .AddLanguages()
+                                                         .AddTranslators()
+                                                         .AddPauseTreatments()
+                                                         .AddTrajectories()
+                                                         .AddOrderTransformations()
+                                                         .AddSequenceTypes()
+                                                         .AddGroups()
+                                                         .AddCharacteristicsData(CharacteristicCategory.Full)
+                                                         .Build();
         ViewBag.data = JsonConvert.SerializeObject(data);
         return View();
     }

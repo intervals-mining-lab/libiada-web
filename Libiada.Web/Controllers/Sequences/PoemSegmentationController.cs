@@ -13,19 +13,19 @@ using Segmenter.PoemsSegmenter;
 public class PoemSegmentationController : AbstractResultController
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
     private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
     private readonly IResearchObjectsCache cache;
 
     public PoemSegmentationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                      IViewDataHelper viewDataHelper,
+                                      IViewDataBuilder viewDataBuilder,
                                       ITaskManager taskManager,
                                       ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
                                       IResearchObjectsCache cache)
        : base(TaskType.PoemSegmentation, taskManager)
     {
         this.dbFactory = dbFactory;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         this.sequenceRepositoryFactory = sequenceRepositoryFactory;
         this.cache = cache;
     }
@@ -33,8 +33,14 @@ public class PoemSegmentationController : AbstractResultController
     // GET: PoemSequenceSegmentation
     public ActionResult Index()
     {
-        var data = viewDataHelper.FillViewData(1, 1, m => m.SequenceType == SequenceType.CompletePoem, "Segment");
-        data.Add("nature", (byte)Nature.Literature);
+        var data = viewDataBuilder.AddMinMaxResearchObjects(1, 1)
+                                  .SetNature(Nature.Literature)
+                                  .AddNotations()
+                                  .AddLanguages()
+                                  .AddTranslators()
+                                  .AddSequenceTypes()
+                                  .AddGroups()
+                                  .Build();
         ViewBag.data = JsonConvert.SerializeObject(data);
         return View();
     }

@@ -26,7 +26,7 @@ using Libiada.Web.Math;
 [Authorize(Roles = "Admin")]
 public class LocalCalculationController : AbstractResultController
 {
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
 
     /// <summary>
     /// The sequence repository.
@@ -42,14 +42,14 @@ public class LocalCalculationController : AbstractResultController
     /// <summary>
     /// Initializes a new instance of the <see cref="LocalCalculationController"/> class.
     /// </summary>
-    public LocalCalculationController(IViewDataHelper viewDataHelper,
+    public LocalCalculationController(IViewDataBuilder viewDataBuilder,
                                       ITaskManager taskManager,
                                       ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
                                       IFullCharacteristicRepository characteristicTypeLinkRepository,
                                       IResearchObjectsCache cache)
         : base(TaskType.LocalCalculation, taskManager)
     {
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         this.sequenceRepositoryFactory = sequenceRepositoryFactory;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         this.cache = cache;
@@ -63,7 +63,18 @@ public class LocalCalculationController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        var viewData = viewDataHelper.FillViewData(CharacteristicCategory.Full, 1, int.MaxValue, "Calculate");
+        var viewData = viewDataBuilder.AddMinMaxResearchObjects()
+                                      .AddSequenceGroups()
+                                      .AddNatures()
+                                      .AddNotations()
+                                      .AddLanguages()
+                                      .AddTranslators()
+                                      .AddPauseTreatments()
+                                      .AddTrajectories()
+                                      .AddSequenceTypes()
+                                      .AddGroups()
+                                      .AddCharacteristicsData(CharacteristicCategory.Full)
+                                      .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }

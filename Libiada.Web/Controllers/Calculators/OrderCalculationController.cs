@@ -24,18 +24,18 @@ public class OrderCalculationController : AbstractResultController
     /// The characteristic type link repository.
     /// </summary>
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OrderCalculationController"/> class.
     /// </summary>
-    public OrderCalculationController(IViewDataHelper viewDataHelper, 
+    public OrderCalculationController(IViewDataBuilder viewDataBuilder, 
                                       ITaskManager taskManager,
                                       IFullCharacteristicRepository characteristicTypeLinkRepository) 
         : base(TaskType.OrderCalculation, taskManager)
     {
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
     }
 
     /// <summary>
@@ -46,7 +46,8 @@ public class OrderCalculationController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        Dictionary<string, object> viewData = viewDataHelper.GetCharacteristicsData(CharacteristicCategory.Full);
+        Dictionary<string, object> viewData = viewDataBuilder.AddCharacteristicsData(CharacteristicCategory.Full)
+                                                            .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }

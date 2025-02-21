@@ -40,7 +40,7 @@ public class CustomSequenceSegmentationController : AbstractResultController
             { "thresholds", Extensions.EnumExtensions.GetSelectList<Threshold>() },
             { "segmentationCriteria", Extensions.EnumExtensions.GetSelectList<SegmentationCriterion>() },
             { "deviationCalculationMethods", Extensions.EnumExtensions.GetSelectList<DeviationCalculationMethod>() },
-            {"imageTransformers", Extensions.EnumExtensions.GetSelectList<ImageTransformer>() }
+            { "imageTransformers", Extensions.EnumExtensions.GetSelectList<ImageTransformer>() }
         });
         return View();
     }
