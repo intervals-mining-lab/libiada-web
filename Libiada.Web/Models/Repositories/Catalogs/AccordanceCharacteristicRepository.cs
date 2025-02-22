@@ -35,13 +35,13 @@ public class AccordanceCharacteristicRepository
         characteristicsLinks = db.AccordanceCharacteristicLinks.ToArray();
         this.currentUser = currentUser;
     }
-    
+
 
     /// <summary>
     /// The get accordance characteristic types.
     /// </summary>
     /// <returns>
-    /// The <see cref="List{CharacteristicData}"/>.
+    /// The <see cref="List{Libiada.Web.Models.CalculatorsData.CharacteristicSelectListItem}"/>.
     /// </returns>
     public List<CharacteristicSelectListItem> GetCharacteristicTypes()
     {

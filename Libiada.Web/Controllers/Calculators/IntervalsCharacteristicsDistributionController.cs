@@ -27,18 +27,18 @@ public class IntervalsCharacteristicsDistributionController : AbstractResultCont
     /// The characteristic type link repository.
     /// </summary>
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="IntervalsCharacteristicsDistributionController"/> class.
     /// </summary>
-    public IntervalsCharacteristicsDistributionController(IViewDataHelper viewDataHelper,
+    public IntervalsCharacteristicsDistributionController(IViewDataBuilder viewDataBuilder,
                                                           ITaskManager taskManager,
                                                           IFullCharacteristicRepository characteristicTypeLinkRepository)
         : base(TaskType.IntervalsCharacteristicsDistribution, taskManager)
     {
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
     }
 
     /// <summary>
@@ -51,7 +51,8 @@ public class IntervalsCharacteristicsDistributionController : AbstractResultCont
     {
         var imageTransformers = Extensions.EnumExtensions.GetSelectList<ImageTransformer>();
 
-        Dictionary<string, object> viewData = viewDataHelper.GetCharacteristicsData(CharacteristicCategory.Full);
+        Dictionary<string, object> viewData = viewDataBuilder.AddCharacteristicsData(CharacteristicCategory.Full)
+                                                            .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }
@@ -85,13 +86,13 @@ public class IntervalsCharacteristicsDistributionController : AbstractResultCont
                 _ => throw new ArgumentException($"Invalid type of order generator param: {generateStrict}"),
             };
             CustomSequencesCharacterisitcsCalculator calculator = new(characteristicTypeLinkRepository, characteristicLinkIds);
-            var characteristics = calculator.Calculate(orders.Select(order => new Chain(order))).ToList();
+            var characteristics = calculator.Calculate(orders.Select(order => new ComposedSequence(order))).ToList();
             List<SequenceCharacteristics> sequencesCharacteristics = [];
             for (int i = 0; i < orders.Count; i++)
             {
                 sequencesCharacteristics.Add(new SequenceCharacteristics
                 {
-                    MatterName = string.Join(",", orders[i].Select(n => n.ToString()).ToArray()),
+                    ResearchObjectName = string.Join(",", orders[i].Select(n => n.ToString()).ToArray()),
                     Characteristics = characteristics[i]
                 });
             }
@@ -133,7 +134,7 @@ public class IntervalsCharacteristicsDistributionController : AbstractResultCont
                     {
                         // TODO refactor this
                         SequenceCharacteristics characteristic = sequencesCharacteristics
-                                          .FirstOrDefault(el => el.MatterName.SequenceEqual(string.Join(",", order.Select(n => n.ToString()).ToArray())));
+                                          .FirstOrDefault(el => el.ResearchObjectName.SequenceEqual(string.Join(",", order.Select(n => n.ToString()).ToArray())));
                         resultAccordance[element.Key].Add(order, characteristic);
                     }
                 }

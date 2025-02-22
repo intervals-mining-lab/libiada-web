@@ -23,25 +23,25 @@ public class OrderTransformerController : AbstractResultController
     /// Database context factory.
     /// </summary>
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
 
     /// <summary>
     /// The sequence repository.
     /// </summary>
-    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
+    private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OrderTransformerController"/> class.
     /// </summary>
     public OrderTransformerController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                      IViewDataHelper viewDataHelper,
+                                      IViewDataBuilder viewDataBuilder,
                                       ITaskManager taskManager,
-                                      ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory)
+                                      ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory)
         : base(TaskType.OrderTransformer, taskManager)
     {
         this.dbFactory = dbFactory;
-        this.viewDataHelper = viewDataHelper;
-        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
+        this.viewDataBuilder = viewDataBuilder;
+        this.sequenceRepositoryFactory = sequenceRepositoryFactory;
     }
 
     /// <summary>
@@ -52,11 +52,17 @@ public class OrderTransformerController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        var data = viewDataHelper.FillViewData(1, 1, "Transform");
-
-        var transformations = Extensions.EnumExtensions.GetSelectList<OrderTransformation>();
-        data.Add("transformations", transformations);
-
+        var data = viewDataBuilder.AddMinMaxResearchObjects(1, 1)
+                                  .AddNatures()
+                                  .AddNotations()
+                                  .AddLanguages()
+                                  .AddTranslators()
+                                  .AddPauseTreatments()
+                                  .AddTrajectories()
+                                  .AddSequenceTypes()
+                                  .AddGroups()
+                                  .AddOrderTransformations()
+                                  .Build();
         ViewBag.data = JsonConvert.SerializeObject(data);
         return View();
     }
@@ -64,8 +70,8 @@ public class OrderTransformerController : AbstractResultController
     /// <summary>
     /// The index.
     /// </summary>
-    /// <param name="matterId">
-    /// The matter id.
+    /// <param name="researchObjectId">
+    /// The research object id.
     /// </param>
     /// <param name="transformationLinkIds">
     /// The transformation link ids.
@@ -80,21 +86,20 @@ public class OrderTransformerController : AbstractResultController
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    public ActionResult Index(long matterId, OrderTransformation[] transformationsSequence, int iterationsCount)
+    public ActionResult Index(long researchObjectId, OrderTransformation[] transformationsSequence, int iterationsCount)
     {
         return CreateTask(() =>
         {
             // TODO: add nature params
             using var db = dbFactory.CreateDbContext();
-            var sequenceId = db.CommonSequences.Single(c => c.MatterId == matterId).Id;
-            using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
-            var sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
+            var sequenceId = db.CombinedSequenceEntities.Single(c => c.ResearchObjectId == researchObjectId).Id;
+            using var sequenceRepository = sequenceRepositoryFactory.Create();
+            var sequence = sequenceRepository.GetLibiadaComposedSequence(sequenceId);
             for (int j = 0; j < iterationsCount; j++)
             {
                 for (int i = 0; i < transformationsSequence.Length; i++)
                 {
-                    sequence = transformationsSequence[i] == OrderTransformation.Dissimilar ? DissimilarChainFactory.Create(sequence)
+                    sequence = transformationsSequence[i] == OrderTransformation.Dissimilar ? DissimilarSequenceFactory.Create(sequence)
                                                          : HighOrderFactory.Create(sequence, EnumExtensions.GetLink(transformationsSequence[i]));
                 }
             }
@@ -103,7 +108,7 @@ public class OrderTransformerController : AbstractResultController
 
             var result = new Dictionary<string, object>
             {
-                { "chain", sequence.ToString(" ") },
+                { "sequence", sequence.ToString(" ") },
                 { "transformationsList", transformations },
                 { "iterationsCount", iterationsCount }
             };

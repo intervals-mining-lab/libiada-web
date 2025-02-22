@@ -6,7 +6,7 @@ using Libiada.Web.Controllers;
 /// Task class attribute.
 /// Used to link <see cref="Tasks.TaskType"/> enum to task class.
 /// </summary>
-[AttributeUsage(AttributeTargets.Field)]
+[AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
 public class TaskClassAttribute : Attribute
 {
     /// <summary>

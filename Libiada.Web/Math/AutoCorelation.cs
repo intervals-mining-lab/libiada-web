@@ -6,7 +6,7 @@
 public static class AutoCorrelation
 {
     /// <summary>
-    /// The calculate autocorrelation.
+    /// Autocorrelation calculation method.
     /// </summary>
     /// <param name="characteristics">
     /// The characteristics.

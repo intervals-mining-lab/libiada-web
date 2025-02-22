@@ -10,7 +10,6 @@
 
 @using (Html.BeginForm())
 {
-    @Html.AntiForgeryToken()
     <div ng-controller="OrderTransformerCtrl">
         <h4>Sequences and parameters</h4>
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -18,14 +17,13 @@
                        nature="nature"
                        filter-by-nature="filterByNature()">
         </nature-select>
-        <matters-table matters="matters"
-                       nature="nature"
-                       groups="groups"
-                       sequence-types="sequenceTypes"
-                       maximum-selected-matters="::maximumSelectedMatters"
-                       selected-matters-count="selectedMattersCount"
-                       group-and-type-optional="::true">
-        </matters-table>
+        <research-objects-table nature="nature"
+                                groups="groups"
+                                sequence-types="sequenceTypes"
+                                maximum-selected-research-objects="::maximumSelectedResearchObjects"
+                                selected-research-objects-count="selectedResearchObjectsCount"
+                                group-and-type-optional="::true">
+        </research-objects-table>
         <order-transformations transformations="::transformations">
         </order-transformations>
         <characteristic characteristic-types="::characteristicTypes"
@@ -37,17 +35,17 @@
                         pause-treatments="::pauseTreatments"
                         trajectories="::trajectories">
         </characteristic>
-        <matters-submit selected-matters-count="selectedMattersCount"
-                        minimum-selected-matters="{{::minimumSelectedMatters}}"
-                        selected-sequence-groups-count="selectedSequenceGroupsCount">
-        </matters-submit>
+        <research-objects-submit selected-research-objects-count="selectedResearchObjectsCount"
+                                 minimum-selected-research-objects="{{::minimumSelectedResearchObjects}}"
+                                 selected-sequence-groups-count="selectedSequenceGroupsCount">
+        </research-objects-submit>
     </div>
 }
 
 @section Scripts {
     <script src="~/js/Angular/Components/orderTransformations.js" asp-append-version="true"></script>
     <script src="~/js/Angular/Components/characteristic.js" asp-append-version="true"></script>
-    <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/researchObjectsTable.js" asp-append-version="true"></script>
     <script src="~/js/Angular/Components/natureSelect.js" asp-append-version="true"></script>
-    <script src="~/js/Angular/Components/mattersSubmit.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/researchObjectsSubmit.js" asp-append-version="true"></script>
 }

@@ -6,7 +6,7 @@ using Libiada.Core.Extensions;
 
 using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Models.Repositories.Catalogs;
-
+using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Models.Calculators;
 using Libiada.Database.Tasks;
 
@@ -26,7 +26,7 @@ public class SubsequencesSimilarityController : AbstractResultController
     /// </summary>
     private readonly LibiadaDatabaseEntities db;
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
 
     /// <summary>
     /// The sequence attribute repository.
@@ -38,22 +38,22 @@ public class SubsequencesSimilarityController : AbstractResultController
     /// </summary>
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
     private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
-    private readonly Cache cache;
+    private readonly IResearchObjectsCache cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SubsequencesSimilarityController"/> class.
     /// </summary>
     public SubsequencesSimilarityController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                            IViewDataHelper viewDataHelper,
+                                            IViewDataBuilder viewDataBuilder,
                                             ITaskManager taskManager,
                                             IFullCharacteristicRepository characteristicTypeLinkRepository,
                                             ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator,
-                                            Cache cache)
+                                            IResearchObjectsCache cache)
         : base(TaskType.SubsequencesSimilarity, taskManager)
     {
         this.dbFactory = dbFactory;
         this.db = dbFactory.CreateDbContext();
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         this.subsequencesCharacteristicsCalculator = subsequencesCharacteristicsCalculator;
         this.cache = cache;
@@ -68,15 +68,23 @@ public class SubsequencesSimilarityController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillSubsequencesViewData(2, 2, "Compare"));
+        var viewData = viewDataBuilder.AddMinMaxResearchObjects(2, 2)
+                                      .AddCharacteristicsData(CharacteristicCategory.Full)
+                                      .SetNature(Nature.Genetic)
+                                      .AddNotations(onlyGenetic: true)
+                                      .AddSequenceTypes(onlyGenetic: true)
+                                      .AddGroups(onlyGenetic: true)
+                                      .AddFeatures()
+                                      .Build();
+        ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }
 
     /// <summary>
     /// The index.
     /// </summary>
-    /// <param name="matterIds">
-    /// The matter ids.
+    /// <param name="researchObjectIds">
+    /// The research objects ids.
     /// </param>
     /// <param name="characteristicLinkId">
     /// The characteristic type and link id.
@@ -97,12 +105,11 @@ public class SubsequencesSimilarityController : AbstractResultController
     /// The <see cref="ActionResult"/>.
     /// </returns>
     /// <exception cref="ArgumentException">
-    /// Thrown if count of matters is not 2.
+    /// Thrown if count of research objects is not 2.
     /// </exception>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(
-        long[] matterIds,
+        long[] researchObjectIds,
         short characteristicLinkId,
         Notation notation,
         Feature[] features,
@@ -111,13 +118,13 @@ public class SubsequencesSimilarityController : AbstractResultController
     {
         return CreateTask(() =>
         {
-            if (matterIds.Length != 2)
+            if (researchObjectIds.Length != 2)
             {
-                throw new ArgumentException("Count of selected matters must be 2.", nameof(matterIds));
+                throw new ArgumentException("Number of selected research objects must be 2.", nameof(researchObjectIds));
             }
 
-            long firstMatterId = matterIds[0];
-            long firstParentSequenceId = db.CommonSequences.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
+            long firstResearchObjectId = researchObjectIds[0];
+            long firstParentSequenceId = db.CombinedSequenceEntities.Single(c => c.ResearchObjectId == firstResearchObjectId && c.Notation == notation).Id;
             SubsequenceData[] firstSequenceSubsequences = subsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
                                                                 [characteristicLinkId],
                                                                 features,
@@ -127,13 +134,13 @@ public class SubsequencesSimilarityController : AbstractResultController
             List<AttributeValue[]> firstSequenceAttributes = [];
             foreach (SubsequenceData subsequence in firstSequenceSubsequences)
             {
-                firstDbSubsequencesAttributes.TryGetValue(subsequence.Id, out AttributeValue[] attributes);
+                firstDbSubsequencesAttributes.TryGetValue(subsequence.Id, out AttributeValue[]? attributes);
                 attributes ??= [];
                 firstSequenceAttributes.Add(attributes);
             }
 
-            long secondMatterId = matterIds[1];
-            long secondParentSequenceId = db.CommonSequences.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
+            long secondResearchObjectId = researchObjectIds[1];
+            long secondParentSequenceId = db.CombinedSequenceEntities.Single(c => c.ResearchObjectId == secondResearchObjectId && c.Notation == notation).Id;
             SubsequenceData[] secondSequenceSubsequences = subsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
                                                                 [characteristicLinkId],
                                                                 features,
@@ -143,7 +150,7 @@ public class SubsequencesSimilarityController : AbstractResultController
             List<AttributeValue[]> secondSequenceAttributes = [];
             foreach (SubsequenceData subsequence in secondSequenceSubsequences)
             {
-                secondDbSubsequencesAttributes.TryGetValue(subsequence.Id, out AttributeValue[] attributes);
+                secondDbSubsequencesAttributes.TryGetValue(subsequence.Id, out AttributeValue[]? attributes);
                 attributes ??= [];
                 secondSequenceAttributes.Add(attributes);
             }
@@ -179,8 +186,8 @@ public class SubsequencesSimilarityController : AbstractResultController
 
             var result = new Dictionary<string, object>
             {
-                { "firstSequenceName", cache.Matters.Single(m => m.Id == firstMatterId).Name },
-                { "secondSequenceName", cache.Matters.Single(m => m.Id == secondMatterId).Name },
+                { "firstSequenceName", cache.ResearchObjects.Single(m => m.Id == firstResearchObjectId).Name },
+                { "secondSequenceName", cache.ResearchObjects.Single(m => m.Id == secondResearchObjectId).Name },
                 { "characteristicName", characteristicName },
                 { "similarSubsequences", similarSubsequences },
                 { "similarity", similarity },

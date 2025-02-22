@@ -1,5 +1,5 @@
 ﻿let hasSubscription = false;
-const WEB_API_URL = "api/TaskManagerWebApi/";
+const WEB_API_URL = "api/TaskManagerApi/";
 const SUBSCRIBE_URL = `${WEB_API_URL}Subscribe`;
 const UNSUBSCRIBE_URL = `${WEB_API_URL}Unsubscribe`;
 const APPLICATION_SERVER_KEY_URL = `${WEB_API_URL}GetApplicationServerKey`;

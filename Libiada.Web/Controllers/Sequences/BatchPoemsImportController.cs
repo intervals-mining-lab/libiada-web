@@ -17,9 +17,9 @@ using Microsoft.EntityFrameworkCore;
 public class BatchPoemsImportController : AbstractResultController
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly Cache cache;
+    private readonly IResearchObjectsCache cache;
 
-    public BatchPoemsImportController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, ITaskManager taskManager, Cache cache) 
+    public BatchPoemsImportController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, ITaskManager taskManager, IResearchObjectsCache cache)
         : base(TaskType.BatchPoemsImport, taskManager)
     {
         this.dbFactory = dbFactory;
@@ -37,46 +37,48 @@ public class BatchPoemsImportController : AbstractResultController
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(Notation notation, bool dropPunctuation, List<IFormFile> files)
     {
         var fileStreams = files.Select(Helpers.FileHelper.GetFileStream).ToList();
 
         return CreateTask(() =>
         {
-            List<MatterImportResult> importResults = [];
+            List<ResearchObjectImportResult> importResults = [];
 
-            Matter[] matters = cache.Matters.Where(m => m.Nature == Nature.Literature).ToArray();
+            ResearchObject[] researchObjects = cache.ResearchObjects.Where(m => m.Nature == Nature.Literature).ToArray();
 
             for (int i = 0; i < files.Count; i++)
             {
                 string sequenceName = files[i].FileName.Substring(0, files[i].FileName.LastIndexOf('.'));
 
-                var importResult = new MatterImportResult()
+                var importResult = new ResearchObjectImportResult()
                 {
-                    MatterName = sequenceName
+                    ResearchObjectName = sequenceName
                 };
 
                 try
                 {
-                    var sequence = new CommonSequence
+                    var sequence = new LiteratureSequence
                     {
-                        Notation = notation
+                        Notation = notation,
+                        Language = Language.Russian,
+                        Original = true,
+                        Translator = Translator.NoneOrManual
                     };
 
 
-                    if (matters.Any(m => m.Name == sequenceName))
+                    if (researchObjects.Any(m => m.Name == sequenceName))
                     {
-                        Matter matter = matters.Single(m => m.Name == sequenceName);
-                        sequence.MatterId = matter.Id;
-                        importResult.MatterName = matter.Name;
-                        importResult.SequenceType = matter.SequenceType.GetDisplayValue();
-                        importResult.Group = matter.Group.GetDisplayValue();
-                        importResult.Result = "Successfully imported poem for existing matter";
+                        ResearchObject researchObject = researchObjects.Single(m => m.Name == sequenceName);
+                        sequence.ResearchObjectId = researchObject.Id;
+                        importResult.ResearchObjectName = researchObject.Name;
+                        importResult.SequenceType = researchObject.SequenceType.GetDisplayValue();
+                        importResult.Group = researchObject.Group.GetDisplayValue();
+                        importResult.Result = "Successfully imported poem for existing research object";
                     }
                     else
                     {
-                        sequence.Matter = new Matter
+                        sequence.ResearchObject = new ResearchObject
                         {
                             Name = sequenceName,
                             Group = Group.ClassicalLiterature,
@@ -84,15 +86,15 @@ public class BatchPoemsImportController : AbstractResultController
                             SequenceType = SequenceType.CompleteText
                         };
 
-                        importResult.MatterName = sequence.Matter.Name;
-                        importResult.SequenceType = sequence.Matter.SequenceType.GetDisplayValue();
-                        importResult.Group = sequence.Matter.Group.GetDisplayValue();
-                        importResult.Result = "Successfully imported poem and created matter";
+                        importResult.ResearchObjectName = sequence.ResearchObject.Name;
+                        importResult.SequenceType = sequence.ResearchObject.SequenceType.GetDisplayValue();
+                        importResult.Group = sequence.ResearchObject.Group.GetDisplayValue();
+                        importResult.Result = "Successfully imported poem and created research object";
                     }
 
                     var repository = new LiteratureSequenceRepository(dbFactory, cache);
 
-                    repository.Create(sequence, fileStreams[i], Language.Russian, true, Translator.NoneOrManual, dropPunctuation);
+                    repository.Create(sequence, fileStreams[i], dropPunctuation);
                     importResult.Status = "Success";
 
                     importResults.Add(importResult);

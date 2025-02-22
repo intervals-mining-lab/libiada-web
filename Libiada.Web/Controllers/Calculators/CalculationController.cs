@@ -13,6 +13,8 @@ using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Models.Calculators;
 using Libiada.Database.Tasks;
 
+using Libiada.Web.Models.CalculatorsData;
+
 
 /// <summary>
 /// The calculation controller.
@@ -21,30 +23,30 @@ using Libiada.Database.Tasks;
 public class CalculationController : AbstractResultController
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly IViewDataHelper viewDataHelper;
-    private readonly Cache cache;
+    private readonly IViewDataBuilder viewDataBuilder;
+    private readonly IResearchObjectsCache cache;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
     private readonly ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator;
-    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
+    private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CalculationController"/> class.
     /// </summary>
     public CalculationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                 IViewDataHelper viewDataHelper,
+                                 IViewDataBuilder viewDataBuilder,
                                  ITaskManager taskManager,
-                                 Cache cache, 
+                                 IResearchObjectsCache cache,
                                  IFullCharacteristicRepository characteristicTypeLinkRepository,
                                  ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator,
-                                 ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory)
+                                 ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory)
         : base(TaskType.Calculation, taskManager)
     {
         this.dbFactory = dbFactory;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         this.cache = cache;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         this.sequencesCharacteristicsCalculator = sequencesCharacteristicsCalculator;
-        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
+        this.sequenceRepositoryFactory = sequenceRepositoryFactory;
     }
 
     /// <summary>
@@ -55,7 +57,18 @@ public class CalculationController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        var viewData = viewDataHelper.FillViewData(CharacteristicCategory.Full, 1, int.MaxValue, "Calculate");
+        var viewData = viewDataBuilder.AddMinMaxResearchObjects()
+                                      .AddSequenceGroups()
+                                      .AddNatures()
+                                      .AddNotations()
+                                      .AddLanguages()
+                                      .AddTranslators()
+                                      .AddPauseTreatments()
+                                      .AddTrajectories()
+                                      .AddSequenceTypes()
+                                      .AddGroups()
+                                      .AddCharacteristicsData(CharacteristicCategory.Full)
+                                      .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
 
@@ -64,8 +77,8 @@ public class CalculationController : AbstractResultController
     /// <summary>
     /// The index.
     /// </summary>
-    /// <param name="matterIds">
-    /// The matters ids.
+    /// <param name="researchObjectIds">
+    /// The research objects ids.
     /// </param>
     /// <param name="characteristicLinkIds">
     /// The characteristic type and link ids.
@@ -101,10 +114,9 @@ public class CalculationController : AbstractResultController
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(
         string tableType,
-        long[] matterIds,
+        long[] researchObjectIds,
         int[] sequenceGroupIds,
         short[] characteristicLinkIds,
         Notation[] notations,
@@ -120,31 +132,38 @@ public class CalculationController : AbstractResultController
         return CreateTask(() =>
         {
             IEnumerable<SelectListItem>? sequenceGroupsSelectList = null;
-            Dictionary<long, int>? mattersIdsSequenceGroupIds = null;
+            Dictionary<long, int>? researchObjectsIdsSequenceGroupIds = null;
             if (tableType.Equals("sequenceGroups"))
             {
                 using var db = dbFactory.CreateDbContext();
-                SequenceGroup[] sequenceGroups = db.SequenceGroups.Where(sg => sequenceGroupIds.Contains(sg.Id)).Include(sg => sg.Matters).ToArray();
-                matterIds = sequenceGroups.Select(sg => sg.Matters.Select(m => m.Id)).SelectMany(m => m).ToArray();
-                int distinctMattersCount = matterIds.Distinct().ToArray().Length;
-                if (matterIds.Length != distinctMattersCount) throw new ArgumentException("Sequence groups contain intesecting sets of sequences", nameof(sequenceGroupIds));
+                SequenceGroup[] sequenceGroups = db.SequenceGroups.Where(sg => sequenceGroupIds.Contains(sg.Id)).Include(sg => sg.ResearchObjects).ToArray();
+                researchObjectIds = sequenceGroups.Select(sg => sg.ResearchObjects.Select(m => m.Id)).SelectMany(m => m).ToArray();
+                int distinctResearchObjectsCount = researchObjectIds.Distinct().ToArray().Length;
+                if (researchObjectIds.Length != distinctResearchObjectsCount)
+                {
+                    throw new ArgumentException("Sequence groups contain intesecting sets of sequences", nameof(sequenceGroupIds));
+                }
 
-                mattersIdsSequenceGroupIds = sequenceGroups.SelectMany(sg => sg.Matters.Select(m => new { id = sg.Id, matterId = m.Id }))
-                                                           .ToDictionary(sg => sg.matterId, sg => sg.id);
+                researchObjectsIdsSequenceGroupIds = sequenceGroups.SelectMany(sg => sg.ResearchObjects.Select(m => new { id = sg.Id, researchObjectId = m.Id }))
+                                                           .ToDictionary(sg => sg.researchObjectId, sg => sg.id);
 
-                sequenceGroupsSelectList = SelectListHelper.GetSequenceGroupSelectList(sg => sequenceGroupIds.Contains(sg.Id), db);
+                sequenceGroupsSelectList = db.SequenceGroups
+                                             .Where(sg => sequenceGroupIds.Contains(sg.Id))
+                                             .OrderBy(m => m.Created)
+                                             .Select(sg => new ResearchObjectTableRow(sg, false))
+                                             .ToArray();
             }
 
-            using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
+            using var sequenceRepository = sequenceRepositoryFactory.Create();
             long[][] sequenceIds;
-            sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds,
-                                                                  notations,
-                                                                  languages,
-                                                                  translators,
-                                                                  pauseTreatments,
-                                                                  sequentialTransfers,
-                                                                  trajectories);
-            Dictionary<long, string> mattersNames = cache.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
+            sequenceIds = sequenceRepository.GetSequenceIds(researchObjectIds,
+                                                            notations,
+                                                            languages,
+                                                            translators,
+                                                            pauseTreatments,
+                                                            sequentialTransfers,
+                                                            trajectories);
+            Dictionary<long, string> researchObjectsNames = cache.ResearchObjects.Where(m => researchObjectIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
 
             double[][] characteristics;
             if (!rotate && !complementary)
@@ -156,13 +175,13 @@ public class CalculationController : AbstractResultController
                 characteristics = sequencesCharacteristicsCalculator.Calculate(sequenceIds, characteristicLinkIds, rotate, complementary, rotationLength);
             }
 
-            var sequencesCharacteristics = new SequenceCharacteristics[matterIds.Length];
-            for (int i = 0; i < matterIds.Length; i++)
+            var sequencesCharacteristics = new SequenceCharacteristics[researchObjectIds.Length];
+            for (int i = 0; i < researchObjectIds.Length; i++)
             {
                 sequencesCharacteristics[i] = new SequenceCharacteristics
                 {
-                    MatterName = mattersNames[matterIds[i]],
-                    SequenceGroupId = mattersIdsSequenceGroupIds?[matterIds[i]],
+                    ResearchObjectName = researchObjectsNames[researchObjectIds[i]],
+                    SequenceGroupId = researchObjectsIdsSequenceGroupIds?[researchObjectIds[i]],
                     Characteristics = characteristics[i]
                 };
             }
@@ -189,7 +208,7 @@ public class CalculationController : AbstractResultController
             };
 
             if (sequenceGroupsSelectList is not null) result.Add("sequenceGroups", sequenceGroupsSelectList);
-            
+
 
             return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
         });

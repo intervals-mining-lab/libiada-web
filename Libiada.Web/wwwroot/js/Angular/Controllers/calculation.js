@@ -15,8 +15,8 @@
             }
         }
 
-        function setUnselectAllMattersFunction(func) {
-            $scope.unselectAllMatters = func;
+        function setUnselectAllResearchObjectsFunction(func) {
+            $scope.unselectAllResearchObjects = func;
         }
 
         function setUnselectAllSequenceGroupsFunction(func) {
@@ -24,21 +24,21 @@
         }
 
         function clearSelection() {
-            if ($scope.unselectAllMatters) $scope.unselectAllMatters();
+            if ($scope.unselectAllResearchObjects) $scope.unselectAllResearchObjects();
             if ($scope.unselectAllSequenceGroups) $scope.unselectAllSequenceGroups();
         }
 
         $scope.filterByNature = filterByNature;
-        $scope.setUnselectAllMattersFunction = setUnselectAllMattersFunction;
+        $scope.setUnselectAllResearchObjectsFunction = setUnselectAllResearchObjectsFunction;
         $scope.setUnselectAllSequenceGroupsFunction = setUnselectAllSequenceGroupsFunction;
         $scope.clearSelection = clearSelection;
 
         // if notation is not linked to characteristic
         $scope.notation = filterFilter($scope.notations, { Nature: $scope.nature })[0];
-        $scope.language = $scope.languages[0];
-        $scope.translator = $scope.translators[0];
-        $scope.pauseTreatment ??= $scope.pauseTreatments[0];
-        $scope.calculaionFor = "matters";
+        $scope.language = $scope.languages?.[0];
+        $scope.translator = $scope.translators?.[0];
+        $scope.pauseTreatment ??= $scope.pauseTreatments?.[0];
+        $scope.calculaionFor = "researchObjects";
 
         // if we are in clusterization
         if ($scope.ClusterizatorsTypes) {

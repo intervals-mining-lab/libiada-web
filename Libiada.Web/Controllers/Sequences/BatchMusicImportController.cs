@@ -10,17 +10,18 @@ using Libiada.Core.Extensions;
 
 using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
+using Libiada.Web.Extensions;
 
 [Authorize(Roles = "Admin")]
 public class BatchMusicImportController : AbstractResultController
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly Cache cache;
+    private readonly IResearchObjectsCache cache;
 
     /// <summary>
     /// The batch music import controller.
     /// </summary>
-    public BatchMusicImportController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, ITaskManager taskManager, Cache cache) 
+    public BatchMusicImportController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, ITaskManager taskManager, IResearchObjectsCache cache)
         : base(TaskType.BatchMusicImport, taskManager)
     {
         this.dbFactory = dbFactory;
@@ -40,7 +41,6 @@ public class BatchMusicImportController : AbstractResultController
     /// Uploaded MusicXML files.</param>
     /// <returns></returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(List<IFormFile> files)
     {
         // TODO: use temp files instead of this
@@ -48,35 +48,39 @@ public class BatchMusicImportController : AbstractResultController
 
         return CreateTask(() =>
         {
-            List<MatterImportResult> importResults = [];
+            List<ResearchObjectImportResult> importResults = [];
 
-            Matter[] matters = cache.Matters.Where(m => m.Nature == Nature.Music).ToArray();
+            ResearchObject[] researchObjects = cache.ResearchObjects.Where(m => m.Nature == Nature.Music).ToArray();
 
             for (int i = 0; i < files.Count; i++)
             {
                 string sequenceName = files[i].FileName.Substring(0, files[i].FileName.LastIndexOf('.'));
 
-                var importResult = new MatterImportResult()
+                var importResult = new ResearchObjectImportResult()
                 {
-                    MatterName = sequenceName
+                    ResearchObjectName = sequenceName
                 };
 
                 try
                 {
-                    var sequence = new CommonSequence();
-
-                    if (matters.Any(m => m.Name == sequenceName))
+                    var sequence = new MusicSequence()
                     {
-                        Matter matter = matters.Single(m => m.Name == sequenceName);
-                        sequence.MatterId = matter.Id;
-                        importResult.MatterName = matter.Name;
-                        importResult.SequenceType = matter.SequenceType.GetDisplayValue();
-                        importResult.Group = matter.Group.GetDisplayValue();
-                        importResult.Result = "Successfully imported music for existing matter";
+                        CreatorId = User.GetUserId(),
+                        ModifierId = User.GetUserId()
+                    };
+
+                    if (researchObjects.Any(m => m.Name == sequenceName))
+                    {
+                        ResearchObject researchObject = researchObjects.Single(m => m.Name == sequenceName);
+                        sequence.ResearchObjectId = researchObject.Id;
+                        importResult.ResearchObjectName = researchObject.Name;
+                        importResult.SequenceType = researchObject.SequenceType.GetDisplayValue();
+                        importResult.Group = researchObject.Group.GetDisplayValue();
+                        importResult.Result = "Successfully imported music for existing research object";
                     }
                     else
                     {
-                        sequence.Matter = new Matter
+                        sequence.ResearchObject = new ResearchObject
                         {
                             Name = sequenceName,
                             Group = Group.ClassicalMusic,
@@ -84,10 +88,10 @@ public class BatchMusicImportController : AbstractResultController
                             SequenceType = SequenceType.CompleteMusicalComposition
                         };
 
-                        importResult.MatterName = sequence.Matter.Name;
-                        importResult.SequenceType = sequence.Matter.SequenceType.GetDisplayValue();
-                        importResult.Group = sequence.Matter.Group.GetDisplayValue();
-                        importResult.Result = "Successfully imported music and created matter";
+                        importResult.ResearchObjectName = sequence.ResearchObject.Name;
+                        importResult.SequenceType = sequence.ResearchObject.SequenceType.GetDisplayValue();
+                        importResult.Group = sequence.ResearchObject.Group.GetDisplayValue();
+                        importResult.Result = "Successfully imported music and created research object";
                     }
 
                     var repository = new MusicSequenceRepository(dbFactory, cache);

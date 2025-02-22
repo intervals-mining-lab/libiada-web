@@ -24,18 +24,18 @@ public class OrderCalculationController : AbstractResultController
     /// The characteristic type link repository.
     /// </summary>
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OrderCalculationController"/> class.
     /// </summary>
-    public OrderCalculationController(IViewDataHelper viewDataHelper, 
+    public OrderCalculationController(IViewDataBuilder viewDataBuilder, 
                                       ITaskManager taskManager,
                                       IFullCharacteristicRepository characteristicTypeLinkRepository) 
         : base(TaskType.OrderCalculation, taskManager)
     {
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
     }
 
     /// <summary>
@@ -46,7 +46,8 @@ public class OrderCalculationController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        Dictionary<string, object> viewData = viewDataHelper.GetCharacteristicsData(CharacteristicCategory.Full);
+        Dictionary<string, object> viewData = viewDataBuilder.AddCharacteristicsData(CharacteristicCategory.Full)
+                                                            .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }
@@ -87,7 +88,7 @@ public class OrderCalculationController : AbstractResultController
             }
             for (int j = 0; j < orders.Count; j++)
             {
-                var sequence = new Chain(orders[j].Select(Convert.ToInt16).ToArray());
+                var sequence = new ComposedSequence(orders[j].Select(Convert.ToInt16).ToArray());
                 characteristics[j] = new double[characteristicLinkIds.Length];
                 for (int k = 0; k < characteristicLinkIds.Length; k++)
                 {
@@ -101,7 +102,7 @@ public class OrderCalculationController : AbstractResultController
 
                 sequencesCharacteristics[j] = new SequenceCharacteristics
                 {
-                    MatterName = string.Join(",", orders[j].Select(n => n.ToString()).ToArray()),
+                    ResearchObjectName = string.Join(",", orders[j].Select(n => n.ToString()).ToArray()),
                     Characteristics = characteristics[j]
                 };
             }

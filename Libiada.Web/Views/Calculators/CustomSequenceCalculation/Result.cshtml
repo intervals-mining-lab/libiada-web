@@ -20,7 +20,7 @@
                 </thead>
                 <tbody>
                     <tr ng-repeat="characteristic in ::characteristics">
-                        <td ng-bind="::characteristic.MatterName" />
+                        <td ng-bind="::characteristic.ResearchObjectName" />
                         <td ng-repeat="value in ::characteristic.Characteristics track by $index" ng-bind="::value" />
                     </tr>
                 </tbody>

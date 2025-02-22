@@ -48,7 +48,7 @@ DbProviderFactories.RegisterFactory("Npgsql", NpgsqlFactory.Instance);
 
 // Add services to the container.
 
-//Adding db context factory and it automaticly adds db context 
+//Adding db context factory also automaticly adds db context 
 builder.Services.AddDbContextFactory<LibiadaDatabaseEntities>(options => options.UseNpgsql(connectionString));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -58,7 +58,7 @@ builder.Services.AddDefaultIdentity<AspNetUser>(options => options.SignIn.Requir
                 .AddEntityFrameworkStores<LibiadaDatabaseEntities>()
                 .AddDefaultTokenProviders();
 
-builder.Services.AddSingleton<Cache>();
+builder.Services.AddSingleton<IResearchObjectsCache, ResearchObjectsCache>();
 
 builder.Services.AddHttpClient();
 
@@ -72,9 +72,9 @@ builder.Services.AddSingleton<IBinaryCharacteristicRepository, BinaryCharacteris
 builder.Services.AddSingleton<ICongenericCharacteristicRepository, CongenericCharacteristicRepository>();
 builder.Services.AddSingleton<IFullCharacteristicRepository, FullCharacteristicRepository>();
 
-builder.Services.AddSingleton<ICommonSequenceRepositoryFactory, CommonSequenceRepositoryFactory>();
+builder.Services.AddSingleton<ICombinedSequenceEntityRepositoryFactory, CombinedSequenceEntityRepositoryFactory>();
 
-builder.Services.AddSingleton<IViewDataHelperFactory, ViewDataHelperFactory>();
+builder.Services.AddSingleton<IViewDataBuilderFactory, ViewDataBuilderFactory>();
 
 builder.Services.AddScoped<ISequencesCharacteristicsCalculator, SequencesCharacteristicsCalculator>();
 builder.Services.AddScoped<ICongenericSequencesCharacteristicsCalculator, CongenericSequencesCharacteristicsCalculator>();
@@ -85,7 +85,7 @@ builder.Services.AddTransient(provider => ((provider.GetService<IHttpContextAcce
                                                     .HttpContext ?? throw new Exception($"HttpContext is not found."))
                                                     .User);
 
-builder.Services.AddTransient<IViewDataHelper, ViewDataHelper>();
+builder.Services.AddTransient<IViewDataBuilder, ViewDataBuilder>();
 
 builder.Services.Configure<RazorViewEngineOptions>(options =>
 {
@@ -98,10 +98,19 @@ builder.Services.Configure<RazorViewEngineOptions>(options =>
     options.ViewLocationFormats.Add("/Views/Calculators/{1}/{0}.cshtml");
 });
 
-builder.Services.AddControllersWithViews();
+builder.Services
+       .AddControllersWithViews(options =>{ options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()); })
+       .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
 
 // TODO: fix json naming
 builder.Services.AddSignalR().AddJsonProtocol(options => { options.PayloadSerializerOptions.PropertyNamingPolicy = null; });
+
+builder.Services.AddHsts(options =>
+{
+    options.Preload = true;
+    options.IncludeSubDomains = true;
+    options.MaxAge = TimeSpan.FromDays(365);
+});
 
 var app = builder.Build();
 
@@ -118,7 +127,7 @@ else
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+app.MapStaticAssets();
 app.UseResponseCompression();
 
 app.UseRouting();
@@ -127,8 +136,8 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-app.MapRazorPages();
+    pattern: "{controller=Home}/{action=Index}/{id?}").WithStaticAssets();
+app.MapRazorPages().WithStaticAssets();
 
 app.MapHub<TaskManagerHub>("/TaskManagerHub");
 

@@ -27,22 +27,22 @@ using EnumExtensions = Core.Extensions.EnumExtensions;
 public class OrderTransformationCalculationController : AbstractResultController
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
-    private readonly Cache cache;
+    private readonly IResearchObjectsCache cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OrderTransformationCalculationController"/> class.
     /// </summary>
-    public OrderTransformationCalculationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
-                                                    IViewDataHelper viewDataHelper, 
+    public OrderTransformationCalculationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
+                                                    IViewDataBuilder viewDataBuilder,
                                                     ITaskManager taskManager,
                                                     IFullCharacteristicRepository characteristicTypeLinkRepository,
-                                                    Cache cache)
+                                                    IResearchObjectsCache cache)
         : base(TaskType.OrderTransformationCalculation, taskManager)
     {
         this.dbFactory = dbFactory;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         this.cache = cache;
     }
@@ -55,11 +55,19 @@ public class OrderTransformationCalculationController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        Dictionary<string, object> data = viewDataHelper.FillViewData(CharacteristicCategory.Full, 1, int.MaxValue, "Calculate");
-
-        var transformations = Extensions.EnumExtensions.GetSelectList<OrderTransformation>();
-        data.Add("transformations", transformations);
-
+        Dictionary<string, object> data = viewDataBuilder.AddMinMaxResearchObjects()
+                                                         .AddSequenceGroups()
+                                                         .AddNatures()
+                                                         .AddNotations()
+                                                         .AddLanguages()
+                                                         .AddTranslators()
+                                                         .AddPauseTreatments()
+                                                         .AddTrajectories()
+                                                         .AddOrderTransformations()
+                                                         .AddSequenceTypes()
+                                                         .AddGroups()
+                                                         .AddCharacteristicsData(CharacteristicCategory.Full)
+                                                         .Build();
         ViewBag.data = JsonConvert.SerializeObject(data);
         return View();
     }
@@ -67,8 +75,8 @@ public class OrderTransformationCalculationController : AbstractResultController
     /// <summary>
     /// The index.
     /// </summary>
-    /// <param name="matterIds">
-    /// The matter ids.
+    /// <param name="researchObjectIds">
+    /// The research objects ids.
     /// </param>
     /// <param name="transformationsSequence">
     /// The transformation ids.
@@ -101,9 +109,8 @@ public class OrderTransformationCalculationController : AbstractResultController
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(
-        long[] matterIds,
+        long[] researchObjectIds,
         OrderTransformation[] transformationsSequence,
         int iterationsCount,
         short[] characteristicLinkIds,
@@ -116,44 +123,44 @@ public class OrderTransformationCalculationController : AbstractResultController
     {
         return CreateTask(() =>
         {
-            Dictionary<long, string> mattersNames = cache.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
-            Chain[][] sequences = new Chain[matterIds.Length][];
+            Dictionary<long, string> researchObjectsNames = cache.ResearchObjects.Where(m => researchObjectIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
+            ComposedSequence[][] sequences = new ComposedSequence[researchObjectIds.Length][];
 
-            var commonSequenceRepository = new CommonSequenceRepository(dbFactory, cache);
-            long[][] sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds,
+            var sequenceRepository = new CombinedSequenceEntityRepository(dbFactory, cache);
+            long[][] sequenceIds = sequenceRepository.GetSequenceIds(researchObjectIds,
                                                                            notations,
                                                                            languages,
                                                                            translators,
                                                                            pauseTreatments,
                                                                            sequentialTransfers,
                                                                            trajectories);
-            for (int i = 0; i < matterIds.Length; i++)
+            for (int i = 0; i < researchObjectIds.Length; i++)
             {
-                sequences[i] = new Chain[characteristicLinkIds.Length];
+                sequences[i] = new ComposedSequence[characteristicLinkIds.Length];
                 for (int j = 0; j < characteristicLinkIds.Length; j++)
                 {
-                    sequences[i][j] = commonSequenceRepository.GetLibiadaChain(sequenceIds[i][j]);
+                    sequences[i][j] = sequenceRepository.GetLibiadaComposedSequence(sequenceIds[i][j]);
                 }
             }
 
-            var sequencesCharacteristics = new SequenceCharacteristics[matterIds.Length];
-            Array.Sort(matterIds);
+            var sequencesCharacteristics = new SequenceCharacteristics[researchObjectIds.Length];
+            Array.Sort(researchObjectIds);
 
-            for (int i = 0; i < matterIds.Length; i++)
+            for (int i = 0; i < researchObjectIds.Length; i++)
             {
-                long matterId = matterIds[i];
+                long researchObjectId = researchObjectIds[i];
                 double[] characteristics = new double[characteristicLinkIds.Length];
                 for (int j = 0; j < characteristicLinkIds.Length; j++)
                 {
                     Notation notation = notations[j];
 
 
-                    Chain sequence = sequences[i][j];
+                    ComposedSequence sequence = sequences[i][j];
                     for (int l = 0; l < iterationsCount; l++)
                     {
                         for (int k = 0; k < transformationsSequence.Length; k++)
                         {
-                            sequence = transformationsSequence[k] == OrderTransformation.Dissimilar ? DissimilarChainFactory.Create(sequence)
+                            sequence = transformationsSequence[k] == OrderTransformation.Dissimilar ? DissimilarSequenceFactory.Create(sequence)
                                                                  : HighOrderFactory.Create(sequence, EnumExtensions.GetLink(transformationsSequence[k]));
                         }
                     }
@@ -168,7 +175,7 @@ public class OrderTransformationCalculationController : AbstractResultController
 
                 sequencesCharacteristics[i] = new SequenceCharacteristics
                 {
-                    MatterName = mattersNames[matterId],
+                    ResearchObjectName = researchObjectsNames[researchObjectId],
                     Characteristics = characteristics
                 };
             }

@@ -23,22 +23,22 @@ using Libiada.Web.Tasks;
 public class SequencePredictionController : AbstractResultController
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
-    private readonly Cache cache;
+    private readonly IResearchObjectsCache cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SequencePredictionController"/> class.
     /// </summary>
-    public SequencePredictionController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
-                                        IViewDataHelper viewDataHelper, 
+    public SequencePredictionController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
+                                        IViewDataBuilder viewDataBuilder,
                                         ITaskManager taskManager,
                                         IFullCharacteristicRepository characteristicTypeLinkRepository,
-                                        Cache cache)
+                                        IResearchObjectsCache cache)
         : base(TaskType.SequencePrediction, taskManager)
     {
         this.dbFactory = dbFactory;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         this.cache = cache;
     }
@@ -51,7 +51,17 @@ public class SequencePredictionController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        var viewData = viewDataHelper.FillViewData(CharacteristicCategory.Full, 1, 1, "Predict");
+        var viewData = viewDataBuilder.AddMinMaxResearchObjects(1, 1)
+                                      .AddNatures()
+                                      .AddNotations()
+                                      .AddLanguages()
+                                      .AddTranslators()
+                                      .AddPauseTreatments()
+                                      .AddTrajectories()
+                                      .AddSequenceTypes()
+                                      .AddGroups()
+                                      .AddCharacteristicsData(CharacteristicCategory.Full)
+                                      .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }
@@ -59,8 +69,8 @@ public class SequencePredictionController : AbstractResultController
     /// <summary>
     /// The index.
     /// </summary>
-    /// <param name="matterId">
-    /// The matter id.
+    /// <param name="researchObjectId">
+    /// The research object id.
     /// </param>
     /// <param name="characteristicLinkId">
     /// The characteristic link id.
@@ -75,9 +85,8 @@ public class SequencePredictionController : AbstractResultController
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(
-        long matterId,
+        long researchObjectId,
         short characteristicLinkId,
         Notation notation,
         int step,
@@ -87,17 +96,17 @@ public class SequencePredictionController : AbstractResultController
         return CreateTask(() =>
         {
             string characteristicName;
-            string matterName;
+            string researchObjectName;
             double[] characteristics;
-            Chain sequence;
+            ComposedSequence sequence;
             IFullCalculator calculator;
             Link link;
 
-            var commonSequenceRepository = new CommonSequenceRepository(dbFactory, cache);
-            matterName = cache.Matters.Single(m => matterId == m.Id).Name;
+            var sequenceRepository = new CombinedSequenceEntityRepository(dbFactory, cache);
+            researchObjectName = cache.ResearchObjects.Single(m => researchObjectId == m.Id).Name;
             using var db = dbFactory.CreateDbContext();
-            var sequenceId = db.CommonSequences.Single(c => matterId == c.MatterId && c.Notation == notation).Id;
-            sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
+            var sequenceId = db.CombinedSequenceEntities.Single(c => researchObjectId == c.ResearchObjectId && c.Notation == notation).Id;
+            sequence = sequenceRepository.GetLibiadaComposedSequence(sequenceId);
 
             characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
 
@@ -113,16 +122,16 @@ public class SequencePredictionController : AbstractResultController
             double doubleAccuracy = double.Parse(accuracy, CultureInfo.InvariantCulture);
 
             List<SequencePredictionData> sequencePredictionResult;
-            Chain chain;
-            (sequencePredictionResult, chain) = Predict(averageRemotenessCalc, sequence, initialLength, alphabet, averageRemoteness, doubleAccuracy);
+            ComposedSequence predictedSequence;
+            (sequencePredictionResult, predictedSequence) = Predict(averageRemotenessCalc, sequence, initialLength, alphabet, averageRemoteness, doubleAccuracy);
 
-            double matching = FindPercentageOfMatching(sequence, chain, initialLength) * 100;
+            double matching = FindPercentageOfMatching(sequence, predictedSequence, initialLength) * 100;
 
 
             var result = new Dictionary<string, object>
             {
                 { "result", sequencePredictionResult },
-                { "matterName", matterName },
+                { "researchObjectName", researchObjectName },
                 { "matching", matching }
             };
 
@@ -134,7 +143,7 @@ public class SequencePredictionController : AbstractResultController
     }
 
     //[NonAction]
-    //private Chain IncrementNextCharacter(Chain target, int startElement, Alphabet alphabet)
+    //private ComposedSequence IncrementNextCharacter(ComposedSequence target, int startElement, Alphabet alphabet)
     //{
     //    if (startElement + 1 < target.Length)
     //    {
@@ -185,16 +194,16 @@ public class SequencePredictionController : AbstractResultController
     }
 
     [NonAction]
-    private Chain ExtendAndCopy(Chain source, int extensionLength)
+    private ComposedSequence ExtendAndCopy(ComposedSequence source, int extensionLength)
     {
-        return Copy(source, new Chain(source.Length + extensionLength));
+        return Copy(source, new ComposedSequence(source.Length + extensionLength));
     }
 
     [NonAction]
-    private Chain Copy(Chain source, Chain destanation)
+    private ComposedSequence Copy(ComposedSequence source, ComposedSequence destanation)
     {
-        int commonLenth = System.Math.Min(source.Length, destanation.Length);
-        for (int i = 0; i < commonLenth; i++)
+        int commonLength = System.Math.Min(source.Length, destanation.Length);
+        for (int i = 0; i < commonLength; i++)
         {
             destanation.Set(source.Get(i), i);
         }
@@ -202,18 +211,18 @@ public class SequencePredictionController : AbstractResultController
     }
 
     [NonAction]
-    private Chain Concat(Chain left, Chain right, int indexStart)
+    private ComposedSequence Concat(ComposedSequence left, ComposedSequence right, int indexStart)
     {
         List<IBaseObject> result = new(indexStart + right.Length);
         result.AddRange(left.ToArray().SubArray(0, indexStart));
         result.AddRange(right.ToArray());
-        return new Chain(result);
+        return new ComposedSequence(result);
     }
 
     [NonAction]
-    private (List<SequencePredictionData>, Chain) Predict(
+    private (List<SequencePredictionData>, ComposedSequence) Predict(
         AverageRemoteness averageRemotenessCalc,
-        Chain sequence,
+        ComposedSequence sequence,
         int initialLength,
         Alphabet alphabet,
         double averageRemoteness,
@@ -222,11 +231,11 @@ public class SequencePredictionController : AbstractResultController
         List<SequencePredictionData> sequencePredictionResult = [];
 
         int wordPositionStart = initialLength;
-        Chain currentPredicion = null;
-        Chain predicted = Copy(sequence, new Chain(initialLength));
+        ComposedSequence currentPredicion = null;
+        ComposedSequence predicted = Copy(sequence, new ComposedSequence(initialLength));
         for (int i = initialLength; i < sequence.Length; i++)
         {
-            currentPredicion = Copy(predicted, new Chain(i + 1));
+            currentPredicion = Copy(predicted, new ComposedSequence(i + 1));
             Dictionary<double, ContenderValue> contenderValues = [];
             bool isFound = false;
             foreach (IBaseObject element in alphabet)
@@ -240,7 +249,7 @@ public class SequencePredictionController : AbstractResultController
                     contenderValues.Add(delta, new ContenderValue
                     {
                         CurrentAverageRemoteness = currentAvgRemoteness,
-                        PredictedWord = SubChain(currentPredicion, wordPositionStart, i)
+                        PredictedWord = SubSequence(currentPredicion, wordPositionStart, i)
                     });
                     isFound = true;
                 }
@@ -251,10 +260,10 @@ public class SequencePredictionController : AbstractResultController
                 ContenderValue contenderValue = contenderValues[contenderValues.Keys.Min()];
                 sequencePredictionResult.Add(new SequencePredictionData
                 {
-                    Fragment = SubChain(sequence, wordPositionStart, i).ToString(),
+                    Fragment = SubSequence(sequence, wordPositionStart, i).ToString(),
                     Predicted = contenderValue.PredictedWord.ToString(),
                     ActualCharacteristic = contenderValue.CurrentAverageRemoteness,
-                    TheoreticalCharacteristic = averageRemotenessCalc.Calculate(SubChain(sequence, 0, i), Link.Start)
+                    TheoreticalCharacteristic = averageRemotenessCalc.Calculate(SubSequence(sequence, 0, i), Link.Start)
                     //PercentageOfMatched = FindPercentageOfMatching(sequence, currentPredicion)
                 });
 
@@ -274,18 +283,18 @@ public class SequencePredictionController : AbstractResultController
 
     // todo fix throwing exception
     [NonAction]
-    private Chain SubChain(Chain source, int start, int end)
+    private ComposedSequence SubSequence(ComposedSequence source, int start, int end)
     {
-        Chain chain = new Chain(end - start + 1);
-        for (int i = 0; i < chain.Length; i++)
+        ComposedSequence sequence = new ComposedSequence(end - start + 1);
+        for (int i = 0; i < sequence.Length; i++)
         {
-            chain.Set(source.Get(start + i), i);
+            sequence.Set(source.Get(start + i), i);
         }
-        return chain;
+        return sequence;
     }
 
     [NonAction]
-    private double FindPercentageOfMatching(Chain first, Chain second, int startIndex)
+    private double FindPercentageOfMatching(ComposedSequence first, ComposedSequence second, int startIndex)
     {
         int count = 0;
         for (int i = startIndex; i < second.Length; i++)
@@ -302,6 +311,6 @@ public class SequencePredictionController : AbstractResultController
     private struct ContenderValue
     {
         public double CurrentAverageRemoteness;
-        public Chain PredictedWord;
+        public ComposedSequence PredictedWord;
     }
 }

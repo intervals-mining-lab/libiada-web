@@ -3,26 +3,26 @@
 
     function multisequenceGrouping($scope, $http) {
 
-        function unbindMatter(multiSequence, matterId) {
-            multiSequence.matterIds.splice(multiSequence.matterIds.indexOf(matterId), 1);
-            $scope.ungroupedMatters.push({ Id: matterId, Name: $scope.matters[matterId] });
+        function unbindResearchObject(multiSequence, researchObjectId) {
+            multiSequence.researchObjectIds.splice(multiSequence.researchObjectIds.indexOf(researchObjectId), 1);
+            $scope.ungroupedResearchObjects.push({ Id: researchObjectId, Name: $scope.researchObjects[researchObjectId] });
         }
 
-        function bindMatter(multiSequence, index) {
-            let matter = $scope.ungroupedMatters[index];
-            $scope.matters[matter.Id] = matter.Name;
-            multiSequence.matterIds.push(matter.Id);
-            $scope.ungroupedMatters.splice(index, 1);
+        function bindResearchObject(multiSequence, index) {
+            let researchObject = $scope.ungroupedResearchObjects[index];
+            $scope.researchObjects[researchObject.Id] = researchObject.Name;
+            multiSequence.researchObjectIds.push(researchObject.Id);
+            $scope.ungroupedResearchObjects.splice(index, 1);
         }
 
-        $scope.bindMatter = bindMatter;
-        $scope.unbindMatter = unbindMatter;
+        $scope.bindResearchObject = bindResearchObject;
+        $scope.unbindResearchObject = unbindResearchObject;
 
         $scope.loadingScreenHeader = "Loading grouping results";
 
         $scope.loading = true;
 
-        $http.get(`/Multisequence/GroupMattersIntoMultisequences/`)
+        $http.get(`/Multisequence/GroupResearchObjectsIntoMultisequences/`)
             .then(function (data) {
                 MapModelFromJson($scope, data.data);
                 $scope.loading = false;

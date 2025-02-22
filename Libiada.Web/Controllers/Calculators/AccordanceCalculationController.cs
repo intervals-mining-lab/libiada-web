@@ -24,13 +24,13 @@ public class AccordanceCalculationController : AbstractResultController
     /// </summary>
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
 
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
 
     /// <summary>
-    /// The common sequence repository.
+    /// The sequence repository factory.
     /// </summary>
-    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
-    private readonly Cache cache;
+    private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
+    private readonly IResearchObjectsCache cache;
 
     /// <summary>
     /// The characteristic type link repository.
@@ -40,17 +40,17 @@ public class AccordanceCalculationController : AbstractResultController
     /// <summary>
     /// Initializes a new instance of the <see cref="AccordanceCalculationController"/> class.
     /// </summary>
-    public AccordanceCalculationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
-                                           IViewDataHelper viewDataHelper, 
+    public AccordanceCalculationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
+                                           IViewDataBuilder viewDataBuilder,
                                            ITaskManager taskManager,
                                            IAccordanceCharacteristicRepository characteristicTypeLinkRepository,
-                                           ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory,
-                                           Cache cache)
+                                           ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
+                                           IResearchObjectsCache cache)
         : base(TaskType.AccordanceCalculation, taskManager)
     {
         this.dbFactory = dbFactory;
-        this.viewDataHelper = viewDataHelper;
-        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
+        this.viewDataBuilder = viewDataBuilder;
+        this.sequenceRepositoryFactory = sequenceRepositoryFactory;
         this.cache = cache;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
     }
@@ -63,7 +63,17 @@ public class AccordanceCalculationController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        var viewData = viewDataHelper.FillViewData(CharacteristicCategory.Accordance, 2, 2, "Calculate");
+        var viewData = viewDataBuilder.AddMinMaxResearchObjects(2, 2)
+                                      .AddNatures()
+                                      .AddNotations()
+                                      .AddLanguages()
+                                      .AddTranslators()
+                                      .AddPauseTreatments()
+                                      .AddTrajectories()
+                                      .AddSequenceTypes()
+                                      .AddGroups()
+                                      .AddCharacteristicsData(CharacteristicCategory.Accordance)
+                                      .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }
@@ -71,8 +81,8 @@ public class AccordanceCalculationController : AbstractResultController
     /// <summary>
     /// The index.
     /// </summary>
-    /// <param name="matterIds">
-    /// The matter ids.
+    /// <param name="researchObjectIds">
+    /// The research objects ids.
     /// </param>
     /// <param name="characteristicLinkId">
     /// The characteristic type and link id.
@@ -102,15 +112,14 @@ public class AccordanceCalculationController : AbstractResultController
     /// The <see cref="ActionResult"/>.
     /// </returns>
     /// <exception cref="ArgumentException">
-    /// Thrown if count of matter ids is not 2.
+    /// Thrown if count of research object ids is not 2.
     /// </exception>
     /// <exception cref="Exception">
     /// Thrown alphabets of sequences are not equal.
     /// </exception>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(
-        long[] matterIds,
+        long[] researchObjectIds,
         int characteristicLinkId,
         Notation notation,
         Language? language,
@@ -122,9 +131,9 @@ public class AccordanceCalculationController : AbstractResultController
     {
         return CreateTask(() =>
         {
-            if (matterIds.Length != 2)
+            if (researchObjectIds.Length != 2)
             {
-                throw new ArgumentException("Number of selected matters must be 2.", nameof(matterIds));
+                throw new ArgumentException("Number of selected research objects must be 2.", nameof(researchObjectIds));
             }
 
             var characteristics = new Dictionary<int, Dictionary<int, double>>();
@@ -132,12 +141,12 @@ public class AccordanceCalculationController : AbstractResultController
             var result = new Dictionary<string, object>
                              {
                                  { "characteristics", characteristics },
-                                 { "matterNames", cache.Matters.Where(m => matterIds.Contains(m.Id)).Select(m => m.Name).ToList() },
+                                 { "researchObjectNames", cache.ResearchObjects.Where(m => researchObjectIds.Contains(m.Id)).Select(m => m.Name).ToList() },
                                  { "characteristicName", characteristicName },
                                  { "calculationType", calculationType }
                              };
-            using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
-            long[] sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds,
+            using var sequenceRepository = sequenceRepositoryFactory.Create();
+            long[] sequenceIds = sequenceRepository.GetSequenceIds(researchObjectIds,
                                                                       notation,
                                                                       language,
                                                                       translator,
@@ -145,19 +154,19 @@ public class AccordanceCalculationController : AbstractResultController
                                                                       sequentialTransfer,
                                                                       trajectory);
 
-            Chain firstChain = commonSequenceRepository.GetLibiadaChain(sequenceIds[0]);
-            Chain secondChain = commonSequenceRepository.GetLibiadaChain(sequenceIds[1]);
+            ComposedSequence firstSequence = sequenceRepository.GetLibiadaComposedSequence(sequenceIds[0]);
+            ComposedSequence secondSequence = sequenceRepository.GetLibiadaComposedSequence(sequenceIds[1]);
 
             AccordanceCharacteristic accordanceCharacteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
             IAccordanceCalculator calculator = AccordanceCalculatorsFactory.CreateCalculator(accordanceCharacteristic);
             Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
-            Alphabet firstChainAlphabet = firstChain.Alphabet;
-            Alphabet secondChainAlphabet = secondChain.Alphabet;
+            Alphabet firstSequenceAlphabet = firstSequence.Alphabet;
+            Alphabet secondSequenceAlphabet = secondSequence.Alphabet;
 
             switch (calculationType)
             {
                 case "Equality":
-                    if (!firstChainAlphabet.SetEquals(secondChainAlphabet))
+                    if (!firstSequenceAlphabet.SetEquals(secondSequenceAlphabet))
                     {
                         throw new Exception("Alphabets of sequences are not equal.");
                     }
@@ -166,18 +175,18 @@ public class AccordanceCalculationController : AbstractResultController
                     characteristics.Add(1, []);
                     List<string> alphabet = [];
 
-                    for (int i = 0; i < firstChainAlphabet.Cardinality; i++)
+                    for (int i = 0; i < firstSequenceAlphabet.Cardinality; i++)
                     {
-                        IBaseObject element = firstChainAlphabet[i];
+                        IBaseObject element = firstSequenceAlphabet[i];
                         alphabet.Add(element.ToString());
 
-                        CongenericChain firstCongenericChain = firstChain.CongenericChain(element);
-                        CongenericChain secondCongenericChain = secondChain.CongenericChain(element);
+                        CongenericSequence firstCongenericSequence = firstSequence.CongenericSequence(element);
+                        CongenericSequence secondCongenericSequence = secondSequence.CongenericSequence(element);
 
-                        double characteristicValue = calculator.Calculate(firstCongenericChain, secondCongenericChain, link);
+                        double characteristicValue = calculator.Calculate(firstCongenericSequence, secondCongenericSequence, link);
                         characteristics[0].Add(i, characteristicValue);
 
-                        characteristicValue = calculator.Calculate(secondCongenericChain, firstCongenericChain, link);
+                        characteristicValue = calculator.Calculate(secondCongenericSequence, firstCongenericSequence, link);
                         characteristics[1].Add(i, characteristicValue);
                     }
 
@@ -186,27 +195,27 @@ public class AccordanceCalculationController : AbstractResultController
 
                 case "All":
                     List<string> firstAlphabet = [];
-                    for (int i = 0; i < firstChain.Alphabet.Cardinality; i++)
+                    for (int i = 0; i < firstSequence.Alphabet.Cardinality; i++)
                     {
                         characteristics.Add(i, []);
-                        IBaseObject firstElement = firstChainAlphabet[i];
+                        IBaseObject firstElement = firstSequenceAlphabet[i];
                         firstAlphabet.Add(firstElement.ToString());
-                        for (int j = 0; j < secondChainAlphabet.Cardinality; j++)
+                        for (int j = 0; j < secondSequenceAlphabet.Cardinality; j++)
                         {
-                            IBaseObject secondElement = secondChainAlphabet[j];
+                            IBaseObject secondElement = secondSequenceAlphabet[j];
 
-                            CongenericChain firstCongenericChain = firstChain.CongenericChain(firstElement);
-                            CongenericChain secondCongenericChain = secondChain.CongenericChain(secondElement);
+                            CongenericSequence firstCongenericSequence = firstSequence.CongenericSequence(firstElement);
+                            CongenericSequence secondCongenericSequence = secondSequence.CongenericSequence(secondElement);
 
-                            double characteristicValue = calculator.Calculate(firstCongenericChain, secondCongenericChain, link);
+                            double characteristicValue = calculator.Calculate(firstCongenericSequence, secondCongenericSequence, link);
                             characteristics[i].Add(j, characteristicValue);
                         }
                     }
 
                     List<string> secondAlphabet = [];
-                    for (int j = 0; j < secondChainAlphabet.Cardinality; j++)
+                    for (int j = 0; j < secondSequenceAlphabet.Cardinality; j++)
                     {
-                        secondAlphabet.Add(secondChainAlphabet[j].ToString());
+                        secondAlphabet.Add(secondSequenceAlphabet[j].ToString());
                     }
 
                     result.Add("firstAlphabet", firstAlphabet);

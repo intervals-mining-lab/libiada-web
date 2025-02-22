@@ -11,8 +11,8 @@
     <div ng-controller="LocalCalculationResultCtrl">
         <div ng-disabled="loading">
             <input type="button" class="btn btn-secondary mb-2" ng-click="changeCharacteristicsTableVisibility()" value="Show characteristics table" />
-            <div ng-repeat="chainsCharacteristics in ::characteristics">
-                <h4>{{::$index+1}}. {{::chainsCharacteristics.MatterName}}</h4>
+            <div ng-repeat="sequencesCharacteristics in ::characteristics">
+                <h4>{{::$index+1}}. {{::sequencesCharacteristics.ResearchObjectName}}</h4>
                 <table ng-if="isCharacteristicsTableVisible" st-table="characteristics" class="table table-bordered table-hover" ng-cloak>
                     <thead>
                         <tr>
@@ -23,7 +23,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="fragmentsData in ::chainsCharacteristics.FragmentsData">
+                        <tr ng-repeat="fragmentsData in ::sequencesCharacteristics.FragmentsData">
                             <td ng-bind="::fragmentsData.Name" />
                             <td ng-bind="::fragmentsData.Start" />
                             <td ng-bind="::fragmentsData.Length" />
@@ -73,12 +73,12 @@
                 <tbody>
                     <tr>
                         <td>#</td>
-                        <td ng-repeat="comparisonRaw in comparisonMatrix" title="{{characteristics[$index].MatterName}}">{{$index + 1}}</td>
+                        <td ng-repeat="comparisonRaw in comparisonMatrix" title="{{characteristics[$index].ResearchObjectName}}">{{$index + 1}}</td>
                     </tr>
                     <tr ng-repeat="comparisonRaw in comparisonMatrix">
-                        <td title="{{characteristics[$index].MatterName}}" ng-bind="$index + 1" />
+                        <td title="{{characteristics[$index].ResearchObjectName}}" ng-bind="$index + 1" />
                         <td ng-repeat="comparisonValue in comparisonRaw track by $index"
-                            title="{{characteristics[$parent.$index].MatterName}} &#13{{characteristics[$index].MatterName}}"
+                            title="{{characteristics[$parent.$index].ResearchObjectName}} &#13{{characteristics[$index].ResearchObjectName}}"
                             ng-bind="comparisonValue.toFixed(5)" />
                     </tr>
                 </tbody>

@@ -72,12 +72,12 @@ public class OrdersIntervalsDistributionsAccordanceController : AbstractResultCo
                 var accordance = new Dictionary<Dictionary<int, int>, List<int[]>>();
                 foreach (int[] order in orders)
                 {
-                    var sequence = new Chain(order.Select(Convert.ToInt16).ToArray());
+                    var sequence = new ComposedSequence(order.Select(Convert.ToInt16).ToArray());
                     var fullIntervals = new Dictionary<int, int>();
                     var alphabet = sequence.Alphabet.ToList();
                     foreach (IBaseObject el in alphabet)
                     {
-                        int[] congIntervals = sequence.CongenericChain(el).GetArrangement(link);
+                        int[] congIntervals = sequence.CongenericSequence(el).GetArrangement(link);
                         foreach (int interval in congIntervals)
                         {
                             if (fullIntervals.Any(e => e.Key == interval))

@@ -40,13 +40,12 @@ public class CustomSequenceSegmentationController : AbstractResultController
             { "thresholds", Extensions.EnumExtensions.GetSelectList<Threshold>() },
             { "segmentationCriteria", Extensions.EnumExtensions.GetSelectList<SegmentationCriterion>() },
             { "deviationCalculationMethods", Extensions.EnumExtensions.GetSelectList<DeviationCalculationMethod>() },
-            {"imageTransformers", Extensions.EnumExtensions.GetSelectList<ImageTransformer>() }
+            { "imageTransformers", Extensions.EnumExtensions.GetSelectList<ImageTransformer>() }
         });
         return View();
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(
         string[] customSequences,
         bool localFile,
@@ -94,8 +93,8 @@ public class CustomSequenceSegmentationController : AbstractResultController
                     Seeker = deviationCalculationMethod,
                     Algorithm = 0,
                     Balance = balance,
-                    Chain = sequences[i],
-                    ChainName = sequencesNames[i],
+                    Sequence = sequences[i],
+                    SequenceName = sequencesNames[i],
                     LeftBound = double.Parse(leftBorder, CultureInfo.InvariantCulture),
                     RightBound = double.Parse(rightBorder, CultureInfo.InvariantCulture),
                     Precision = double.Parse(precision, CultureInfo.InvariantCulture),

@@ -26,31 +26,31 @@ using Libiada.Web.Math;
 [Authorize(Roles = "Admin")]
 public class LocalCalculationController : AbstractResultController
 {
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
 
     /// <summary>
     /// The sequence repository.
     /// </summary>
-    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
+    private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
 
     /// <summary>
     /// The characteristic type repository.
     /// </summary>
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
-    private readonly Cache cache;
+    private readonly IResearchObjectsCache cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="LocalCalculationController"/> class.
     /// </summary>
-    public LocalCalculationController(IViewDataHelper viewDataHelper, 
+    public LocalCalculationController(IViewDataBuilder viewDataBuilder,
                                       ITaskManager taskManager,
-                                      ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory,
+                                      ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
                                       IFullCharacteristicRepository characteristicTypeLinkRepository,
-                                      Cache cache)
+                                      IResearchObjectsCache cache)
         : base(TaskType.LocalCalculation, taskManager)
     {
-        this.viewDataHelper = viewDataHelper;
-        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
+        this.viewDataBuilder = viewDataBuilder;
+        this.sequenceRepositoryFactory = sequenceRepositoryFactory;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         this.cache = cache;
     }
@@ -63,7 +63,18 @@ public class LocalCalculationController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        var viewData = viewDataHelper.FillViewData(CharacteristicCategory.Full, 1, int.MaxValue, "Calculate");
+        var viewData = viewDataBuilder.AddMinMaxResearchObjects()
+                                      .AddSequenceGroups()
+                                      .AddNatures()
+                                      .AddNotations()
+                                      .AddLanguages()
+                                      .AddTranslators()
+                                      .AddPauseTreatments()
+                                      .AddTrajectories()
+                                      .AddSequenceTypes()
+                                      .AddGroups()
+                                      .AddCharacteristicsData(CharacteristicCategory.Full)
+                                      .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }
@@ -71,8 +82,8 @@ public class LocalCalculationController : AbstractResultController
     /// <summary>
     /// The index.
     /// </summary>
-    /// <param name="matterIds">
-    /// The matter ids.
+    /// <param name="researchObjectIds">
+    /// The research objects ids.
     /// </param>
     /// <param name="characteristicLinkIds">
     /// The characteristic type and link ids.
@@ -117,9 +128,8 @@ public class LocalCalculationController : AbstractResultController
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(
-        long[] matterIds,
+        long[] researchObjectIds,
         short[] characteristicLinkIds,
         int length,
         int step,
@@ -137,23 +147,23 @@ public class LocalCalculationController : AbstractResultController
         return CreateTask(() =>
         {
             string[] characteristicNames = new string[characteristicLinkIds.Length];
-            var partNames = new List<string>[matterIds.Length];
-            var starts = new List<int>[matterIds.Length];
-            var lengthes = new List<int>[matterIds.Length];
-            var chains = new Chain[matterIds.Length];
-            var mattersCharacteristics = new object[matterIds.Length];
+            var partNames = new List<string>[researchObjectIds.Length];
+            var starts = new List<int>[researchObjectIds.Length];
+            var lengthes = new List<int>[researchObjectIds.Length];
+            var sequences = new ComposedSequence[researchObjectIds.Length];
+            var researchObjectsCharacteristics = new object[researchObjectIds.Length];
 
             var calculators = new IFullCalculator[characteristicLinkIds.Length];
             var links = new Link[characteristicLinkIds.Length];
-            Array.Sort(matterIds);
-            Dictionary<long, Matter> matters = cache.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id);
-            using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
-            for (int k = 0; k < matterIds.Length; k++)
+            Array.Sort(researchObjectIds);
+            Dictionary<long, ResearchObject> researchObjects = cache.ResearchObjects.Where(m => researchObjectIds.Contains(m.Id)).ToDictionary(m => m.Id);
+            using var sequenceRepository = sequenceRepositoryFactory.Create();
+            for (int k = 0; k < researchObjectIds.Length; k++)
             {
-                long matterId = matterIds[k];
-                Nature nature = cache.Matters.Single(m => m.Id == matterId).Nature;
+                long researchObjectId = researchObjectIds[k];
+                Nature nature = cache.ResearchObjects.Single(m => m.Id == researchObjectId).Nature;
 
-                long sequenceId = commonSequenceRepository.GetSequenceIds([matterId],
+                long sequenceId = sequenceRepository.GetSequenceIds([researchObjectId],
                                                                        notation,
                                                                        language,
                                                                        translator,
@@ -161,7 +171,7 @@ public class LocalCalculationController : AbstractResultController
                                                                        sequentialTransfer,
                                                                        trajectory).Single();
 
-                chains[k] = commonSequenceRepository.GetLibiadaChain(sequenceId);
+                sequences[k] = sequenceRepository.GetLibiadaComposedSequence(sequenceId);
             }
 
             for (int i = 0; i < characteristicLinkIds.Length; i++)
@@ -172,15 +182,15 @@ public class LocalCalculationController : AbstractResultController
                 links[i] = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
             }
 
-            for (int i = 0; i < chains.Length; i++)
+            for (int i = 0; i < sequences.Length; i++)
             {
                 CutRule cutRule = growingWindow
-                        ? (CutRule)new CutRuleWithFixedStart(chains[i].Length, step)
-                        : new SimpleCutRule(chains[i].Length, step, length);
+                        ? (CutRule)new CutRuleWithFixedStart(sequences[i].Length, step)
+                        : new SimpleCutRule(sequences[i].Length, step, length);
 
                 CutRuleIterator iterator = cutRule.GetIterator();
 
-                List<Chain> fragments = [];
+                List<ComposedSequence> fragments = [];
                 partNames[i] = [];
                 starts[i] = [];
                 lengthes[i] = [];
@@ -193,10 +203,10 @@ public class LocalCalculationController : AbstractResultController
                     List<IBaseObject> fragment = [];
                     for (int k = 0; start + k < end; k++)
                     {
-                        fragment.Add(chains[i][start + k]);
+                        fragment.Add(sequences[i][start + k]);
                     }
 
-                    fragments.Add(new Chain(fragment));
+                    fragments.Add(new ComposedSequence(fragment));
 
                     partNames[i].Add(fragment.ToString());
                     starts[i].Add(iterator.GetStartPosition());
@@ -234,7 +244,7 @@ public class LocalCalculationController : AbstractResultController
                     autocorrelationData = AutoCorrelation.CalculateAutocorrelation(fragmentsData.Select(f => f.Characteristics).ToArray());
                 }
 
-                mattersCharacteristics[i] = new LocalCharacteristicsData(matters[matterIds[i]].Name,
+                researchObjectsCharacteristics[i] = new LocalCharacteristicsData(researchObjects[researchObjectIds[i]].Name,
                                                                          fragmentsData,
                                                                          differenceData,
                                                                          fourierData,
@@ -260,13 +270,13 @@ public class LocalCalculationController : AbstractResultController
 
             var result = new Dictionary<string, object>
             {
-                { "characteristics", mattersCharacteristics },
+                { "characteristics", researchObjectsCharacteristics },
                 { "notationName", notation.GetDisplayValue() },
                 { "starts", starts },
                 { "partNames", partNames },
                 { "lengthes", lengthes },
                 { "characteristicNames", characteristicNames },
-                { "matterIds", matterIds },
+                { "researchObjectIds", researchObjectIds },
                 { "characteristicsList", characteristicsList },
                 { "aligners", Extensions.EnumExtensions.GetSelectList<Aligner>() },
                 { "distanceCalculators", Extensions.EnumExtensions.GetSelectList<DistanceCalculator>() },

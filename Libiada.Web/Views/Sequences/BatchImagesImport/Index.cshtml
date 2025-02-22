@@ -10,7 +10,6 @@
 
 @using (Html.BeginForm("Index", "BatchImagesImport", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
-    @Html.AntiForgeryToken()
     <div ng-controller="BatchMusicImportCtrl">
         <div class="row mb-1">
             <label class="col-form-label col-md-2" for="files">Images files:</label>

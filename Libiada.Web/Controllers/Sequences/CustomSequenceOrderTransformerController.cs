@@ -9,6 +9,7 @@ using Libiada.Core.Extensions;
 using Libiada.Database.Helpers;
 using Libiada.Database.Tasks;
 
+using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
@@ -21,11 +22,14 @@ using EnumExtensions = Core.Extensions.EnumExtensions;
 [Authorize(Roles = "Admin")]
 public class CustomSequenceOrderTransformerController : AbstractResultController
 {
+    private readonly IViewDataBuilder viewDataBuilder;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="CustomSequenceOrderTransformerController"/> class.
     /// </summary>
-    public CustomSequenceOrderTransformerController(ITaskManager taskManager) : base(TaskType.CustomSequenceOrderTransformer, taskManager)
+    public CustomSequenceOrderTransformerController(ITaskManager taskManager, IViewDataBuilder viewDataBuilder) : base(TaskType.CustomSequenceOrderTransformer, taskManager)
     {
+        this.viewDataBuilder = viewDataBuilder;
     }
 
     /// <summary>
@@ -36,14 +40,10 @@ public class CustomSequenceOrderTransformerController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        var transformations = Extensions.EnumExtensions.GetSelectList<OrderTransformation>();
-        var imageTransformers = Extensions.EnumExtensions.GetSelectList<ImageTransformer>();
-        var data = new Dictionary<string, object>
-        {
-            { "transformations", transformations },
-            { "imageTransformers", imageTransformers }
-        };
-        ViewBag.data = JsonConvert.SerializeObject(data);
+        var viewData = viewDataBuilder.AddOrderTransformations()
+                                     .AddImageTransformers()
+                                     .Build();
+        ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }
 
@@ -69,7 +69,6 @@ public class CustomSequenceOrderTransformerController : AbstractResultController
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(
         OrderTransformation[] transformationsSequence,
         int iterationsCount,
@@ -83,7 +82,7 @@ public class CustomSequenceOrderTransformerController : AbstractResultController
         {
             int sequencesCount = localFile ? files.Count : customSequences.Length;
             string[] sourceSequences = new string[sequencesCount];
-            var sequences = new Chain[sequencesCount];
+            var sequences = new ComposedSequence[sequencesCount];
             string[] names = new string[sequencesCount];
 
             for (int i = 0; i < sequencesCount; i++)
@@ -104,13 +103,13 @@ public class CustomSequenceOrderTransformerController : AbstractResultController
 
             for (int k = 0; k < sequencesCount; k++)
             {
-                sequences[k] = new Chain(sourceSequences[k]);
+                sequences[k] = new ComposedSequence(sourceSequences[k]);
                 for (int j = 0; j < iterationsCount; j++)
                 {
                     for (int i = 0; i < transformationsSequence.Length; i++)
                     {
                         sequences[k] = transformationsSequence[i] == OrderTransformation.Dissimilar
-                                           ? DissimilarChainFactory.Create(sequences[k])
+                                           ? DissimilarSequenceFactory.Create(sequences[k])
                                            : HighOrderFactory.Create(sequences[k], EnumExtensions.GetLink(transformationsSequence[i]));
                     }
                 }

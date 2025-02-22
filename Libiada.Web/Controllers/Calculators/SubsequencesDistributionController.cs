@@ -1,6 +1,6 @@
 ﻿namespace Libiada.Web.Controllers.Calculators;
 
-using System.Net;
+using System.Net.Http;
 using System.Text;
 
 using Newtonsoft.Json;
@@ -18,11 +18,9 @@ using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
 
 using Bio.IO.FastA;
-using Bio;
 
 using EnumExtensions = Core.Extensions.EnumExtensions;
-using System.Net.Http;
-using System.Xml;
+
 
 /// <summary>
 /// The subsequences distribution controller.
@@ -31,12 +29,12 @@ using System.Xml;
 public class SubsequencesDistributionController : AbstractResultController
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
     private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
     private readonly ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator;
-    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
-    private readonly Cache cache;
+    private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
+    private readonly IResearchObjectsCache cache;
     private readonly IHttpClientFactory httpClientFactory;
 
     /// <summary>
@@ -48,22 +46,22 @@ public class SubsequencesDistributionController : AbstractResultController
     /// Initializes a new instance of the <see cref="SubsequencesDistributionController"/> class.
     /// </summary>
     public SubsequencesDistributionController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                              IViewDataHelper viewDataHelper,
+                                              IViewDataBuilder viewDataBuilder,
                                               ITaskManager taskManager,
                                               IFullCharacteristicRepository characteristicTypeLinkRepository,
                                               ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator,
                                               ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator,
-                                              ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory,
-                                              Cache cache,
+                                              ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
+                                              IResearchObjectsCache cache,
                                               IHttpClientFactory httpClientFactory)
         : base(TaskType.SubsequencesDistribution, taskManager)
     {
         this.dbFactory = dbFactory;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         this.subsequencesCharacteristicsCalculator = subsequencesCharacteristicsCalculator;
         this.sequencesCharacteristicsCalculator = sequencesCharacteristicsCalculator;
-        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
+        this.sequenceRepositoryFactory = sequenceRepositoryFactory;
         this.cache = cache;
         this.httpClientFactory = httpClientFactory;
     }
@@ -76,15 +74,24 @@ public class SubsequencesDistributionController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillSubsequencesViewData(1, int.MaxValue, "Calculate"));
+        var viewData = viewDataBuilder.AddMinMaxResearchObjects()
+                                      .AddSequenceGroups()
+                                      .AddCharacteristicsData(CharacteristicCategory.Full)
+                                      .SetNature(Nature.Genetic)
+                                      .AddNotations(onlyGenetic: true)
+                                      .AddSequenceTypes(onlyGenetic: true)
+                                      .AddGroups(onlyGenetic: true)
+                                      .AddFeatures()
+                                      .Build();
+        ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }
 
     /// <summary>
     /// The index.
     /// </summary>
-    /// <param name="matterIds">
-    /// The matter ids.
+    /// <param name="researchObjectIds">
+    /// The research object ids.
     /// </param>
     /// <param name="characteristicLinkId">
     /// Full sequence characteristic type and link id.
@@ -99,33 +106,32 @@ public class SubsequencesDistributionController : AbstractResultController
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    public ActionResult Index(long[] matterIds, short characteristicLinkId, short[] characteristicLinkIds, Feature[] features)
+    public ActionResult Index(long[] researchObjectIds, short characteristicLinkId, short[] characteristicLinkIds, Feature[] features)
     {
         return CreateTask(() =>
         {
-            Array.Sort(matterIds);
+            Array.Sort(researchObjectIds);
             using var db = dbFactory.CreateDbContext();
-            var matterNames = new string[matterIds.Length];
-            var remoteIds = new string?[matterIds.Length];
+            var researchObjectNames = new string[researchObjectIds.Length];
+            var remoteIds = new string?[researchObjectIds.Length];
             var subsequencesCharacteristicsNames = new string[characteristicLinkIds.Length];
             var subsequencesCharacteristicsList = new SelectListItem[characteristicLinkIds.Length];
             var attributeValuesCache = new AttributeValueCacheManager(db);
             long[] sequenceIds;
 
-            DnaSequence[] parentSequences = db.DnaSequences.Include(s => s.Matter)
-                                    .Where(s => s.Notation == Notation.Nucleotides && matterIds.Contains(s.MatterId))
-                                    .OrderBy(s => s.MatterId)
+            CombinedSequenceEntity[] parentSequences = db.CombinedSequenceEntities.Include(s => s.ResearchObject)
+                                    .Where(s => s.Notation == Notation.Nucleotides && researchObjectIds.Contains(s.ResearchObjectId))
+                                    .OrderBy(s => s.ResearchObjectId)
                                     .ToArray();
 
             for (int n = 0; n < parentSequences.Length; n++)
             {
-                matterNames[n] = parentSequences[n].Matter.Name;
+                researchObjectNames[n] = parentSequences[n].ResearchObject.Name;
                 remoteIds[n] = parentSequences[n].RemoteId;
             }
 
             var geneticSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
-            sequenceIds = geneticSequenceRepository.GetNucleotideSequenceIds(matterIds);
+            sequenceIds = geneticSequenceRepository.GetNucleotideSequenceIds(researchObjectIds);
 
             string sequenceCharacteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId);
 
@@ -142,8 +148,8 @@ public class SubsequencesDistributionController : AbstractResultController
 
             double[] characteristics = sequencesCharacteristicsCalculator.Calculate(sequenceIds, characteristicLinkId);
 
-            var sequencesData = new SequenceData[matterIds.Length];
-            for (int i = 0; i < matterIds.Length; i++)
+            var sequencesData = new SequenceData[researchObjectIds.Length];
+            for (int i = 0; i < researchObjectIds.Length; i++)
             {
                 // all subsequence calculations
                 SubsequenceData[] subsequencesData = subsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
@@ -153,7 +159,7 @@ public class SubsequencesDistributionController : AbstractResultController
 
                 attributeValuesCache.FillAttributeValues(subsequencesData);
 
-                sequencesData[i] = new SequenceData(matterIds[i], matterNames[i], remoteIds[i], characteristics[i], subsequencesData);
+                sequencesData[i] = new SequenceData(researchObjectIds[i], researchObjectNames[i], remoteIds[i], characteristics[i], subsequencesData);
             }
 
             // sorting organisms by their characteristic
@@ -190,18 +196,18 @@ public class SubsequencesDistributionController : AbstractResultController
     {
         try
         {
-            ISequence[] bioSequences;
+            Bio.ISequence[] bioSequences;
             using var db = dbFactory.CreateDbContext();
-            using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
-            var subsequenceExtractor = new SubsequenceExtractor(db, commonSequenceRepository);
-            
+            using var sequenceRepository = sequenceRepositoryFactory.Create();
+            var subsequenceExtractor = new SubsequenceExtractor(db, sequenceRepository);
+
             bioSequences = subsequenceExtractor.GetBioSequencesForFastaConverter(subsequencesIds);
-            
+
             FastAFormatter formatter = new FastAFormatter();
             using MemoryStream stream = new MemoryStream();
             formatter.Format(stream, bioSequences);
             string fasta = Encoding.ASCII.GetString(stream.ToArray());
-            
+
             // TODO: make email global parameter
             string data = $"email=info@foarlab.org&sequence={fasta}";
             const string urlClustalo = $"clustalo/run";

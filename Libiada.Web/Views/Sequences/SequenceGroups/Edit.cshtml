@@ -12,8 +12,6 @@
 
 @using (Html.BeginForm())
 {
-    @Html.AntiForgeryToken()
-
     <div ng-controller="sequenceGroupsCtrl">
         <h4>SequenceGroup</h4>
         <hr />
@@ -44,20 +42,20 @@
                 <input type="hidden" name="SequenceGroupType" ng-value="sequenceGroupType" />
             </div>
         </div>
-        <matters-table matters="matters"
-                       nature="nature"
-                       groups="groups"
-                       sequence-types="sequenceTypes"
-                       maximum-selected-matters="::maximumSelectedMatters"
-                       selected-matters-count="selectedMattersCount"
-                       group-and-type-required="::true"
-                       initial-sequence-type-index="sequenceTypeIndex"
-                       initial-group-index="groupIndex">
-        </matters-table>
-        <matters-submit selected-matters-count="selectedMattersCount"
-                        submit-name="Save"
-                        minimum-selected-matters="{{::minimumSelectedMatters}}">
-        </matters-submit>
+        <research-objects-table research-objects="researchObjects"
+                                nature="nature"
+                                groups="groups"
+                                sequence-types="sequenceTypes"
+                                maximum-selected-research-objects="::maximumSelectedResearchObjects"
+                                selected-research-objects-count="selectedResearchObjectsCount"
+                                group-and-type-required="::true"
+                                initial-sequence-type-index="sequenceTypeIndex"
+                                initial-group-index="groupIndex">
+        </research-objects-table>
+        <research-objects-submit selected-research-objects-count="selectedResearchObjectsCount"
+                                 submit-name="Save"
+                                 minimum-selected-research-objects="{{::minimumSelectedResearchObjects}}">
+        </research-objects-submit>
         <div class="row mb-2">
             <div class="col-md-2">
                 @Html.ActionLink("Back to List", "Index")
@@ -68,7 +66,7 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/researchObjectsTable.js" asp-append-version="true"></script>
     <script src="~/js/Angular/Components/natureSelect.js" asp-append-version="true"></script>
-    <script src="~/js/Angular/Components/mattersSubmit.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/researchObjectsSubmit.js" asp-append-version="true"></script>
 }

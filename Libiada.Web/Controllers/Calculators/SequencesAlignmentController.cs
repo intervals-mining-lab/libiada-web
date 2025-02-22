@@ -25,26 +25,26 @@ public class SequencesAlignmentController : AbstractResultController
     /// </summary>
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
     private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
-    private readonly Cache cache;
+    private readonly IResearchObjectsCache cache;
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SequencesAlignmentController"/> class.
     /// </summary>
-    public SequencesAlignmentController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
-                                        IViewDataHelper viewDataHelper, 
+    public SequencesAlignmentController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
+                                        IViewDataBuilder viewDataBuilder,
                                         ITaskManager taskManager,
                                         IFullCharacteristicRepository characteristicTypeLinkRepository,
                                         ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator,
-                                        Cache cache)
+                                        IResearchObjectsCache cache)
         : base(TaskType.SequencesAlignment, taskManager)
     {
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
         this.subsequencesCharacteristicsCalculator = subsequencesCharacteristicsCalculator;
         this.cache = cache;
         this.dbFactory = dbFactory;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
     }
 
     /// <summary>
@@ -55,15 +55,23 @@ public class SequencesAlignmentController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillSubsequencesViewData(2, 2, "Align"));
+        var viewData = viewDataBuilder.AddMinMaxResearchObjects(2, 2)
+                                      .AddCharacteristicsData(CharacteristicCategory.Full)
+                                      .SetNature(Nature.Genetic)
+                                      .AddNotations(onlyGenetic: true)
+                                      .AddSequenceTypes(onlyGenetic: true)
+                                      .AddGroups(onlyGenetic: true)
+                                      .AddFeatures()
+                                      .Build();
+        ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }
 
     /// <summary>
     /// The index.
     /// </summary>
-    /// <param name="matterIds">
-    /// The matter ids.
+    /// <param name="researchObjectIds">
+    /// The research objects ids.
     /// </param>
     /// <param name="characteristicLinkId">
     /// The characteristic id.
@@ -88,12 +96,11 @@ public class SequencesAlignmentController : AbstractResultController
     /// </returns>
     /// <exception cref="ArgumentException">
     /// Thrown if validationType is unknown.
-    /// Or if count of matters is not 2.
+    /// Or if count of research objects is not 2.
     /// </exception>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(
-        long[] matterIds,
+        long[] researchObjectIds,
         short characteristicLinkId,
         Notation notation,
         Feature[] features,
@@ -103,25 +110,25 @@ public class SequencesAlignmentController : AbstractResultController
     {
         return CreateTask(() =>
         {
-            if (matterIds.Length != 2)
+            if (researchObjectIds.Length != 2)
             {
-                throw new ArgumentException("Count of selected matters must be 2.", nameof(matterIds));
+                throw new ArgumentException("Nuber of selected research objects must be 2.", nameof(researchObjectIds));
             }
 
-            string firstMatterName;
-            string secondMatterName;
+            string firstResearchObjectName;
+            string secondResearchObjectName;
             long firstParentId;
             long secondParentId;
 
             using var db = dbFactory.CreateDbContext();
 
-            long firstMatterId = matterIds[0];
-            firstMatterName = cache.Matters.Single(m => m.Id == firstMatterId).Name;
-            firstParentId = db.CommonSequences.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
+            long firstResearchObjectId = researchObjectIds[0];
+            firstResearchObjectName = cache.ResearchObjects.Single(m => m.Id == firstResearchObjectId).Name;
+            firstParentId = db.CombinedSequenceEntities.Single(c => c.ResearchObjectId == firstResearchObjectId && c.Notation == notation).Id;
 
-            long secondMatterId = matterIds[1];
-            secondMatterName = cache.Matters.Single(m => m.Id == secondMatterId).Name;
-            secondParentId = db.CommonSequences.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
+            long secondResearchObjectId = researchObjectIds[1];
+            secondResearchObjectName = cache.ResearchObjects.Single(m => m.Id == secondResearchObjectId).Name;
+            secondParentId = db.CombinedSequenceEntities.Single(c => c.ResearchObjectId == secondResearchObjectId && c.Notation == notation).Id;
 
             double[] firstSequenceCharacteristics = subsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(firstParentId, characteristicLinkId, features);
             double[] secondSequenceCharacteristics = subsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(secondParentId, characteristicLinkId, features);
@@ -162,8 +169,8 @@ public class SequencesAlignmentController : AbstractResultController
 
             var result = new Dictionary<string, object>
             {
-                { "firstSequenceName", firstMatterName },
-                { "secondSequenceName", secondMatterName },
+                { "firstSequenceName", firstResearchObjectName },
+                { "secondSequenceName", secondResearchObjectName },
                 { "characteristicName", characteristicName },
                 { "features", features.ConvertAll(p => p.GetDisplayValue()) },
                 { "optimalRotation", optimalRotation },
@@ -184,7 +191,7 @@ public class SequencesAlignmentController : AbstractResultController
     /// The validation type.
     /// </param>
     /// <returns>
-    /// The <see cref="Func{Double, Double, Double}"/>.
+    /// The <see cref="Func{double, double, double}"/>.
     /// </returns>
     /// <exception cref="ArgumentException">
     /// Thrown if validation type is unknown.
@@ -203,7 +210,7 @@ public class SequencesAlignmentController : AbstractResultController
     }
 
     /// <summary>
-    /// The calculate measure for rotation.
+    /// Calculates measure for given rotation.
     /// </summary>
     /// <param name="first">
     /// The first.
@@ -248,7 +255,7 @@ public class SequencesAlignmentController : AbstractResultController
     /// The list.
     /// </param>
     /// <returns>
-    /// The <see cref="List{Double}"/>.
+    /// The <see cref="List{double}"/>.
     /// </returns>
 
     [NonAction]

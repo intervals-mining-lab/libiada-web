@@ -14,6 +14,7 @@ using Libiada.Database.Models.CalculatorsData;
 
 using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
+
 using System.Linq;
 
 /// <summary>
@@ -26,32 +27,32 @@ public class CongenericCalculationController : AbstractResultController
     /// Database context factory.
     /// </summary>
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
     private readonly ICongenericCharacteristicRepository congenericCharacteristicRepository;
 
     /// <summary>
     /// The sequence repository.
     /// </summary>
-    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
+    private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
     private readonly ICongenericSequencesCharacteristicsCalculator congenericSequencesCharacteristicsCalculator;
-    private readonly Cache cache;
+    private readonly IResearchObjectsCache cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CongenericCalculationController"/> class.
     /// </summary>
     public CongenericCalculationController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                           IViewDataHelper viewDataHelper,
+                                           IViewDataBuilder viewDataBuilder,
                                            ITaskManager taskManager,
                                            ICongenericCharacteristicRepository congenericCharacteristicRepository,
-                                           ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory,
+                                           ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
                                            ICongenericSequencesCharacteristicsCalculator congenericSequencesCharacteristicsCalculator,
-                                           Cache cache)
+                                           IResearchObjectsCache cache)
         : base(TaskType.CongenericCalculation, taskManager)
     {
         this.dbFactory = dbFactory;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         this.congenericCharacteristicRepository = congenericCharacteristicRepository;
-        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
+        this.sequenceRepositoryFactory = sequenceRepositoryFactory;
         this.congenericSequencesCharacteristicsCalculator = congenericSequencesCharacteristicsCalculator;
         this.cache = cache;
     }
@@ -64,7 +65,18 @@ public class CongenericCalculationController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        var viewData = viewDataHelper.FillViewData(CharacteristicCategory.Congeneric, 1, int.MaxValue, "Calculate");
+        var viewData = viewDataBuilder.AddMinMaxResearchObjects()
+                                      .AddSequenceGroups()
+                                      .AddNatures()
+                                      .AddNotations()
+                                      .AddLanguages()
+                                      .AddTranslators()
+                                      .AddPauseTreatments()
+                                      .AddTrajectories()
+                                      .AddSequenceTypes()
+                                      .AddGroups()
+                                      .AddCharacteristicsData(CharacteristicCategory.Congeneric)
+                                      .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }
@@ -72,8 +84,8 @@ public class CongenericCalculationController : AbstractResultController
     /// <summary>
     /// The index.
     /// </summary>
-    /// <param name="matterIds">
-    /// The matter ids.
+    /// <param name="researchObjectIds">
+    /// The research object ids.
     /// </param>
     /// <param name="characteristicLinkIds">
     /// The characteristic type and link ids.
@@ -106,9 +118,8 @@ public class CongenericCalculationController : AbstractResultController
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(
-        long[] matterIds,
+        long[] researchObjectIds,
         short[] characteristicLinkIds,
         Notation[] notations,
         Language[] languages,
@@ -120,13 +131,13 @@ public class CongenericCalculationController : AbstractResultController
     {
         return CreateTask(() =>
         {
-            var sequencesCharacteristics = new SequenceCharacteristics[matterIds.Length];
-            Dictionary<long, string> mattersNames;
+            var sequencesCharacteristics = new SequenceCharacteristics[researchObjectIds.Length];
+            Dictionary<long, string> researchObjectsNames;
             long[][] sequenceIds;
 
-            mattersNames = cache.Matters.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
-            using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
-            sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds, notations, languages, translators, pauseTreatments, sequentialTransfers, trajectories);
+            researchObjectsNames = cache.ResearchObjects.Where(m => researchObjectIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
+            using var sequenceRepository = sequenceRepositoryFactory.Create();
+            sequenceIds = sequenceRepository.GetSequenceIds(researchObjectIds, notations, languages, translators, pauseTreatments, sequentialTransfers, trajectories);
 
             //// characteristics names
             //for (int k = 0; k < characteristicLinkIds.Length; k++)
@@ -144,25 +155,28 @@ public class CongenericCalculationController : AbstractResultController
             //}
 
             var characteristics = congenericSequencesCharacteristicsCalculator.Calculate(sequenceIds, characteristicLinkIds);
-            
+
             using var db = dbFactory.CreateDbContext();
             var flatSequenceIds = sequenceIds.SelectMany(si => si);
-            var elementIds = db.CommonSequences
+            var elementIds = db.CombinedSequenceEntities
                                 .Where(cs => flatSequenceIds.Contains(cs.Id))
                                 .Select(cs => cs.Alphabet)
                                 .ToArray()
                                 .SelectMany(a => a)
-                                .Distinct();
+                                .Distinct()
+                                .ToArray();
 
-            var unitedAlphabet = db.Elements.Where(e => elementIds.Contains(e.Id)).Select(e => new { e.Id, Name = e.Name ?? e.Value }).ToArray();
+            Element[] elements = new ElementRepository(db).GetElements(elementIds);
+
+            var unitedAlphabet = elements.Select(e => new { e.Id, Name = e.Name ?? e.Value }).ToArray();
             int characteristicsCount = unitedAlphabet.Length * characteristicLinkIds.Length;
-            for (int i = 0; i < matterIds.Length; i++)
+            for (int i = 0; i < researchObjectIds.Length; i++)
             {
                 double[] characteristicsValues = new double[characteristicsCount];
 
-                for(int j = 0; j < unitedAlphabet.Length; j++)
+                for (int j = 0; j < unitedAlphabet.Length; j++)
                 {
-                    for(int k = 0; k < characteristicLinkIds.Length; k++)
+                    for (int k = 0; k < characteristicLinkIds.Length; k++)
                     {
                         bool hasValue = characteristics[sequenceIds[i][k]].TryGetValue((characteristicLinkIds[k], unitedAlphabet[j].Id), out double value);
                         characteristicsValues[j * characteristicLinkIds.Length + k] = hasValue ? value : double.NaN;
@@ -171,7 +185,7 @@ public class CongenericCalculationController : AbstractResultController
 
                 sequencesCharacteristics[i] = new SequenceCharacteristics
                 {
-                    MatterName = mattersNames[matterIds[i]],
+                    ResearchObjectName = researchObjectsNames[researchObjectIds[i]],
                     Characteristics = characteristicsValues
                 };
             }
@@ -197,10 +211,10 @@ public class CongenericCalculationController : AbstractResultController
 
             List<List<List<double>>> theoreticalRanks = [];
 
-            // cycle through matters; first level of characteristics array
-            for (int w = 0; w < matterIds.Length; w++)
+            // cycle through research objects; first level of characteristics array
+            for (int w = 0; w < researchObjectIds.Length; w++)
             {
-                long matterId = matterIds[w];
+                long researchObjectId = researchObjectIds[w];
                 theoreticalRanks.Add([]);
 
                 // cycle through characteristics and notations; second level of characteristics array
@@ -209,22 +223,22 @@ public class CongenericCalculationController : AbstractResultController
                     Notation notation = notations[i];
 
                     long sequenceId;
-                    if (cache.Matters.Single(m => m.Id == matterId).Nature == Nature.Literature)
+                    if (cache.ResearchObjects.Single(m => m.Id == researchObjectId).Nature == Nature.Literature)
                     {
                         Language language = languages[i];
                         Translator translator = translators[i];
 
-                        sequenceId = db.LiteratureSequences.Single(l => l.MatterId == matterId
+                        sequenceId = db.CombinedSequenceEntities.Single(l => l.ResearchObjectId == researchObjectId
                                                                   && l.Notation == notation
                                                                   && l.Language == language
                                                                   && translator == l.Translator).Id;
                     }
                     else
                     {
-                        sequenceId = db.CommonSequences.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
+                        sequenceId = db.CombinedSequenceEntities.Single(c => c.ResearchObjectId == researchObjectId && c.Notation == notation).Id;
                     }
 
-                    Chain chain = commonSequenceRepository.GetLibiadaChain(sequenceId);
+                    ComposedSequence sequence = sequenceRepository.GetLibiadaComposedSequence(sequenceId);
 
                     // theoretical frequencies of orlov criterion
                     if (theoretical)
@@ -232,23 +246,24 @@ public class CongenericCalculationController : AbstractResultController
                         theoreticalRanks[w].Add([]);
                         ICongenericCalculator countCalculator = CongenericCalculatorsFactory.CreateCalculator(CongenericCharacteristic.ElementsCount);
                         List<int> counts = [];
-                        for (int f = 0; f < chain.Alphabet.Cardinality; f++)
+                        for (int f = 0; f < sequence.Alphabet.Cardinality; f++)
                         {
-                            counts.Add((int)countCalculator.Calculate(chain.CongenericChain(f), Link.NotApplied));
+                            counts.Add((int)countCalculator.Calculate(sequence.CongenericSequence(f), Link.NotApplied));
                         }
 
                         ICongenericCalculator frequencyCalculator = CongenericCalculatorsFactory.CreateCalculator(CongenericCharacteristic.Probability);
                         List<double> frequency = [];
-                        for (int f = 0; f < chain.Alphabet.Cardinality; f++)
+                        for (int f = 0; f < sequence.Alphabet.Cardinality; f++)
                         {
-                            frequency.Add(frequencyCalculator.Calculate(chain.CongenericChain(f), Link.NotApplied));
+                            frequency.Add(frequencyCalculator.Calculate(sequence.CongenericSequence(f), Link.NotApplied));
                         }
 
                         double maxFrequency = frequency.Max();
+                        // TODO: check if this should be Log2
                         double k = 1 / System.Math.Log(counts.Max());
                         double b = (k / maxFrequency) - 1;
                         int n = 1;
-                        double plow = chain.Length;
+                        double plow = sequence.Length;
                         double p = k / (b + n);
                         while (p >= (1 / plow))
                         {
@@ -282,6 +297,7 @@ public class CongenericCalculationController : AbstractResultController
     [NonAction]
     private void SortKeyValuePairList(List<KeyValuePair<int, double>> arrayForSort)
     {
+        //TODO: refactor this to use tuples
         arrayForSort.Sort((firstPair, nextPair) => nextPair.Value.CompareTo(firstPair.Value));
     }
 }

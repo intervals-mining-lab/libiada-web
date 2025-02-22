@@ -10,17 +10,16 @@
 
 @using (Html.BeginForm())
 {
-    @Html.AntiForgeryToken()
     <div ng-controller="CalculationCtrl">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <matters-table matters="matters"
-                       nature="nature"
-                       groups="groups"
-                       sequence-types="sequenceTypes"
-                       maximum-selected-matters="maximumSelectedMatters"
-                       selected-matters-count="selectedMattersCount"
-                       group-and-type-required="::false">
-        </matters-table>
+        <research-objects-table research-objects-endpoint="GetPoemsResearchObjects"
+                                nature="nature"
+                                groups="groups"
+                                sequence-types="sequenceTypes"
+                                maximum-selected-research-objects="maximumSelectedResearchObjects"
+                                selected-research-objects-count="selectedResearchObjectsCount"
+                                group-and-type-required="::false">
+        </research-objects-table>
         <div class="row mb-1">
             <label class="col-form-label col-md-2" for="wordLength">Max word length:</label>
             <div class="col-md-10">
@@ -62,15 +61,15 @@
                        ng-init="balance=0.5" />
             </div>
         </div>
-        <matters-submit selected-matters-count="selectedMattersCount"
-                        submit-name="Segment"
-                        minimum-selected-matters="{{::minimumSelectedMatters}}">
-        </matters-submit>
+        <research-objects-submit selected-research-objects-count="selectedResearchObjectsCount"
+                                 submit-name="Segment"
+                                 minimum-selected-research-objects="{{::minimumSelectedResearchObjects}}">
+        </research-objects-submit>
     </div>
 }
 
 @section Scripts {
     <script src="~/js/Angular/Components/characteristic.js" asp-append-version="true"></script>
-    <script src="~/js/Angular/Components/mattersTable.js" asp-append-version="true"></script>
-    <script src="~/js/Angular/Components/mattersSubmit.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/researchObjectsTable.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Components/researchObjectsSubmit.js" asp-append-version="true"></script>
 }

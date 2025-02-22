@@ -53,7 +53,7 @@
                      aria-labelledby="charts-tab"
                      tabindex="0">
                     <div id="container" class="d-flex" ng-disabled="loading" ng-cloack>
-                        <div id="chart" ></div>
+                        <div id="chart"></div>
                         <div id="dragbar" class="bg-secondary" ng-mousedown="dragbarMouseDown()"></div>
                         <div id="sidebar">
                             <ul id='plotnav' class="nav nav-tabs justify-content-evenly pt-1" role="tablist">
@@ -112,14 +112,14 @@
                                                    class="form-check-input"
                                                    ng-click="legendClick(legendItem)"
                                                    ng-model="legendItem.visible"
-                                                   id="{{::'matter' + legendItem.id}}"
+                                                   id="{{::'researchObject' + legendItem.id}}"
                                                    name="check"
                                                    checked />
                                             <label class="me-1 check-color text-start"
-                                                   for="{{::'matter' + legendItem.id}}"
+                                                   for="{{::'researchObject' + legendItem.id}}"
                                                    ng-class="'legend' + legendItem.id"></label>
                                             <label class="form-check-label font-monospace"
-                                                   for="{{::'matter' + legendItem.id}}"
+                                                   for="{{::'researchObject' + legendItem.id}}"
                                                    ng-bind="::legendItem.name"></label>
                                         </div>
                                     </div>
@@ -250,6 +250,6 @@
     <script src="~/lib/exceljs/exceljs.min.js" asp-append-version="true"></script>
     @{
             await Html.RenderPartialAsync("_AngularControllerInitializer", "CalculationResult");
-}
+        }
     }
 }

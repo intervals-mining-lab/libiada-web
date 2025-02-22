@@ -25,7 +25,7 @@
                     const color = $scope.colorScale(k + 1);
                     $scope.legend.push({
                         id: k + 1,
-                        name: $scope.characteristics[k].MatterName,
+                        name: $scope.characteristics[k].ResearchObjectName,
                         visible: true,
                         color: color
                     });
@@ -54,7 +54,7 @@
                     id: i + 1,
                     legendIndex: legendIndex,
                     legendId: characteristic.SequenceGroupId ? characteristic.SequenceGroupId : i + 1,
-                    name: characteristic.MatterName,
+                    name: characteristic.ResearchObjectName,
                     characteristics: characteristic.Characteristics
                 });
             }
@@ -101,7 +101,7 @@
                     break;
                 default:
             }
-            
+
 
             Plotly.restyle($scope.chartElement, update);
 
@@ -300,7 +300,7 @@
 
             $scope.chartElement.on("plotly_click", data => {
                 $scope.selectedPointIndex = data.points[0].pointNumber;
-                $scope.selectedMatterIndex = data.points[0].curveNumber;
+                $scope.selectedResearchObjectIndex = data.points[0].curveNumber;
                 let selectedPoint = $scope.points[data.points[0].curveNumber];
                 $scope.showTooltip(selectedPoint);
             });
@@ -366,7 +366,7 @@
             worksheet.columns = columns;
 
             for (let i = 0; i < $scope.characteristics.length; i++) {
-                let row = { id: i + 1, name: $scope.characteristics[i].MatterName };
+                let row = { id: i + 1, name: $scope.characteristics[i].ResearchObjectName };
 
                 if ($scope.sequenceGroups) row.sequenceGroup = $scope.characteristics[i].SequenceGroupId;
 
@@ -400,7 +400,7 @@
                     $("#calculationResults").append($scope.characteristics.map((c, i) =>
                         `<tr id="resultRow${i}">
                         <td>${i + 1}</td>
-                        <td>${c.MatterName}</td>
+                        <td>${c.ResearchObjectName}</td>
                         ${$scope.sequenceGroups ? `<td>${c.SequenceGroupId}</td>` : ""}
                         ${c.Characteristics.map(c => `<td>${c}</td>`).join()}`
                     ).join());
@@ -438,7 +438,7 @@
 
         $scope.loading = true;
 
-        $http.get(`/api/TaskManagerWebApi/GetTaskData/${$scope.taskId}`)
+        $http.get(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
             .then(function (data) {
                 MapModelFromJson($scope, data.data);
 

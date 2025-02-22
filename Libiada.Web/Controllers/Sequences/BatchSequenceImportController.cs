@@ -1,6 +1,5 @@
 ﻿namespace Libiada.Web.Controllers.Sequences;
 
-using Bio;
 using Bio.Extensions;
 using Bio.IO.GenBank;
 
@@ -14,6 +13,7 @@ using Libiada.Database.Tasks;
 using Newtonsoft.Json;
 
 using Libiada.Web.Tasks;
+using Libiada.Web.Extensions;
 
 
 /// <summary>
@@ -24,7 +24,7 @@ public class BatchSequenceImportController : AbstractResultController
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly INcbiHelper ncbiHelper;
-    private readonly Cache cache;
+    private readonly IResearchObjectsCache cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BatchSequenceImportController"/> class.
@@ -32,7 +32,7 @@ public class BatchSequenceImportController : AbstractResultController
     public BatchSequenceImportController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                          ITaskManager taskManager,
                                          INcbiHelper ncbiHelper,
-                                         Cache cache)
+                                         IResearchObjectsCache cache)
         : base(TaskType.BatchSequenceImport, taskManager)
     {
         this.dbFactory = dbFactory;
@@ -48,7 +48,6 @@ public class BatchSequenceImportController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        ViewBag.data = JsonConvert.SerializeObject(string.Empty);
         return View();
     }
 
@@ -66,61 +65,65 @@ public class BatchSequenceImportController : AbstractResultController
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(string[] accessions, bool importGenes)
     {
         return CreateTask(() =>
         {
             accessions = accessions.Distinct().Select(a => a.Split('.')[0]).ToArray();
-            List<MatterImportResult> importResults = new(accessions.Length);
+            List<ResearchObjectImportResult> importResults = new(accessions.Length);
             string[] accessionsToImport;
 
-            var dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
+            var geneticSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
             string[] existingAccessions;
-            (existingAccessions, accessionsToImport) = dnaSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
+            (existingAccessions, accessionsToImport) = geneticSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
 
-            importResults.AddRange(existingAccessions.ConvertAll(existingAccession => new MatterImportResult
+            importResults.AddRange(existingAccessions.ConvertAll(existingAccession => new ResearchObjectImportResult
             {
-                MatterName = existingAccession,
+                ResearchObjectName = existingAccession,
                 Result = "Sequence already exists",
                 Status = "Exists"
             }));
 
-            
+
             importResults.AddRange(accessionsToImport.AsParallel().Select(accession =>
             {
                 using var db = dbFactory.CreateDbContext();
-                var importResult = new MatterImportResult() { MatterName = accession };
+                var importResult = new ResearchObjectImportResult() { ResearchObjectName = accession };
 
                 try
                 {
-                    ISequence bioSequence = ncbiHelper.DownloadGenBankSequence(accession);
+                    Bio.ISequence bioSequence = ncbiHelper.DownloadGenBankSequence(accession);
                     GenBankMetadata metadata = NcbiHelper.GetMetadata(bioSequence);
-                    importResult.MatterName = metadata.Version.CompoundAccession;
+                    importResult.ResearchObjectName = metadata.Version.CompoundAccession;
 
                     // TODO: refactor this to use DI (and probably factories) 
-                    var matterRepository = new MatterRepository(db, cache);
-                    var dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
-                    Matter matter = matterRepository.CreateMatterFromGenBankMetadata(metadata);
+                    var researchObjectRepository = new ResearchObjectRepository(db, cache);
+                    var geneticSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
+                    ResearchObject researchObject = researchObjectRepository.CreateResearchObjectFromGenBankMetadata(metadata);
 
-                    importResult.SequenceType = matter.SequenceType.GetDisplayValue();
-                    importResult.Group = matter.Group.GetDisplayValue();
-                    importResult.MatterName = matter.Name;
+                    importResult.SequenceType = researchObject.SequenceType.GetDisplayValue();
+                    importResult.Group = researchObject.Group.GetDisplayValue();
+                    importResult.ResearchObjectName = researchObject.Name;
                     importResult.AllNames = $"Common name = {metadata.Source.CommonName}, "
                                               + $"Species = {metadata.Source.Organism.Species}, "
                                               + $"Definition = {metadata.Definition}, "
-                                              + $"Saved matter name = {importResult.MatterName}";
-
-                    var sequence = new CommonSequence
-                    {
-                        Matter = matter,
-                        Notation = Notation.Nucleotides,
-                        RemoteDb = RemoteDb.GenBank,
-                        RemoteId = metadata.Version.CompoundAccession
-                    };
+                                              + $"Saved research object name = {importResult.ResearchObjectName}";
 
                     bool partial = metadata.Definition.ToLower().Contains("partial");
-                    dnaSequenceRepository.Create(sequence, bioSequence, partial);
+
+                    var sequence = new GeneticSequence
+                    {
+                        ResearchObject = researchObject,
+                        Notation = Notation.Nucleotides,
+                        RemoteDb = RemoteDb.GenBank,
+                        RemoteId = metadata.Version.CompoundAccession,
+                        Partial = partial,
+                        CreatorId = User.GetUserId(),
+                        ModifierId = User.GetUserId(),
+                    };
+
+
+                    geneticSequenceRepository.Create(sequence, bioSequence);
 
                     (importResult.Result, importResult.Status) = importGenes ?
                                                          ImportFeatures(metadata, sequence) :
@@ -150,18 +153,18 @@ public class BatchSequenceImportController : AbstractResultController
                 return importResult;
             }));
 
-            string[] names = importResults.Select(r => r.MatterName).ToArray();
-            
-            // removing matters for which adding of sequence failed
+            string[] names = importResults.Select(r => r.ResearchObjectName).ToArray();
+
+            // removing research objects for which adding of sequence failed
             using var db = dbFactory.CreateDbContext();
-            Matter[] orphanMatters = db.Matters
-                                       .Include(m => m.Sequence)
-                                       .Where(m => names.Contains(m.Name) && m.Sequence.Count == 0)
+            ResearchObject[] orphanResearchObjects = db.ResearchObjects
+                                       .Include(m => m.Sequences)
+                                       .Where(m => names.Contains(m.Name) && m.Sequences.Count == 0)
                                        .ToArray();
 
-            if (orphanMatters.Length > 0)
+            if (orphanResearchObjects.Length > 0)
             {
-                db.Matters.RemoveRange(orphanMatters);
+                db.ResearchObjects.RemoveRange(orphanResearchObjects);
                 db.SaveChanges();
             }
 
@@ -186,7 +189,7 @@ public class BatchSequenceImportController : AbstractResultController
     /// and second element is import status as  string.
     /// </returns>
     [NonAction]
-    private (string result, string status) ImportFeatures(GenBankMetadata metadata, CommonSequence sequence)
+    private (string result, string status) ImportFeatures(GenBankMetadata metadata, GeneticSequence sequence)
     {
         try
         {

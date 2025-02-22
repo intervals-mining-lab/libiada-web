@@ -6,8 +6,6 @@ using Libiada.Web.Models.CalculatorsData;
 
 using Newtonsoft.Json;
 
-using EnumExtensions = Core.Extensions.EnumExtensions;
-
 /// <summary>
 /// The sequence groups controller.
 /// </summary>
@@ -18,12 +16,12 @@ public class SequenceGroupsController : Controller
     /// The database context.
     /// </summary>
     private readonly LibiadaDatabaseEntities db;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
 
-    public SequenceGroupsController(LibiadaDatabaseEntities db, IViewDataHelper viewDataHelper)
+    public SequenceGroupsController(LibiadaDatabaseEntities db, IViewDataBuilder viewDataBuilder)
     {
         this.db = db;
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
     }
 
     /// <summary>
@@ -55,7 +53,7 @@ public class SequenceGroupsController : Controller
         }
 
         SequenceGroup? sequenceGroup = await db.SequenceGroups
-                                               .Include(sg => sg.Matters)
+                                               .Include(sg => sg.ResearchObjects)
                                                .Include(sg => sg.Creator)
                                                .Include(sg => sg.Modifier)
                                                .SingleOrDefaultAsync(sg => sg.Id == id);
@@ -76,8 +74,13 @@ public class SequenceGroupsController : Controller
     /// </returns>
     public ActionResult Create()
     {
-        var viewData = viewDataHelper.GetMattersData(1, int.MaxValue);
-        viewData["sequenceGroupTypes"] = EnumExtensions.ToArray<SequenceGroupType>().ToSelectListWithNature();
+        var viewData = viewDataBuilder.AddMinMaxResearchObjects()
+                                      .AddSequenceGroups()
+                                      .AddNatures()
+                                      .AddSequenceTypes()
+                                      .AddGroups()
+                                      .AddSequenceGroupTypes()
+                                      .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }
@@ -88,15 +91,14 @@ public class SequenceGroupsController : Controller
     /// <param name="sequenceGroup">
     /// The sequence group.
     /// </param>
-    /// <param name="matterIds">
-    /// The matters Ids.
+    /// <param name="researchObjectIds">
+    /// The research objects Ids.
     /// </param>
     /// <returns>
     /// The <see cref="Task"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Create(SequenceGroup sequenceGroup, long[] matterIds)
+    public async Task<ActionResult> Create(SequenceGroup sequenceGroup, long[] researchObjectIds)
     {
         sequenceGroup.CreatorId = User.GetUserId();
         sequenceGroup.ModifierId = User.GetUserId();
@@ -104,10 +106,10 @@ public class SequenceGroupsController : Controller
 
         if (ModelState.IsValid)
         {
-            Matter[] matters = db.Matters.Where(m => matterIds.Contains(m.Id)).ToArray();
-            foreach (Matter matter in matters)
+            ResearchObject[] researchObjects = db.ResearchObjects.Where(m => researchObjectIds.Contains(m.Id)).ToArray();
+            foreach (ResearchObject researchObject in researchObjects)
             {
-                sequenceGroup.Matters.Add(matter);
+                sequenceGroup.ResearchObjects.Add(researchObject);
             }
 
             db.SequenceGroups.Add(sequenceGroup);
@@ -134,16 +136,22 @@ public class SequenceGroupsController : Controller
             return BadRequest();
         }
 
-        SequenceGroup? sequenceGroup = await db.SequenceGroups.Include(m => m.Matters)
+        SequenceGroup? sequenceGroup = await db.SequenceGroups.Include(m => m.ResearchObjects)
                                                               .SingleOrDefaultAsync(sg => sg.Id == id);
         if (sequenceGroup == null)
         {
             return NotFound();
         }
 
-        var selectedMatterIds = sequenceGroup.Matters.Select(m => m.Id);
-        var viewData = viewDataHelper.FillViewData(1, int.MaxValue, m => true, m => selectedMatterIds.Contains(m.Id), "Save");
-        viewData["sequenceGroupTypes"] = EnumExtensions.ToArray<SequenceGroupType>().ToSelectListWithNature();
+        var selectedResearchObjectIds = sequenceGroup.ResearchObjects.Select(m => m.Id);
+        var viewData = viewDataBuilder.AddResearchObjects(m => true, m => selectedResearchObjectIds.Contains(m.Id))
+                                      .AddMinMaxResearchObjects()
+                                      .AddSequenceGroups()
+                                      .AddNatures()
+                                      .AddSequenceTypes()
+                                      .AddGroups()
+                                      .AddSequenceGroupTypes()
+                                      .Build();
 
         // TODO: try to optimize this
         SelectListItemWithNature[] sequenceTypes = ((IEnumerable<SelectListItemWithNature>)viewData["sequenceTypes"]).ToArray();
@@ -157,7 +165,7 @@ public class SequenceGroupsController : Controller
         viewData["groupIndex"] = Array.IndexOf(groups, groupSelectListItem);
 
         ViewBag.data = JsonConvert.SerializeObject(viewData);
-        
+
         return View(sequenceGroup);
     }
 
@@ -167,30 +175,29 @@ public class SequenceGroupsController : Controller
     /// <param name="sequenceGroup">
     /// The sequence group.
     /// </param>
-    /// <param name="matterIds">
-    /// The group matters ids.
+    /// <param name="researchObjectIds">
+    /// The group research objects ids.
     /// </param>
     /// <returns>
     /// The <see cref="Task"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Edit(SequenceGroup sequenceGroup, long[] matterIds)
+    public async Task<ActionResult> Edit(SequenceGroup sequenceGroup, long[] researchObjectIds)
     {
         if (ModelState.IsValid)
         {
-            SequenceGroup originalSequenceGroup = db.SequenceGroups.Include(sg => sg.Matters).Single(sg => sg.Id == sequenceGroup.Id);
+            SequenceGroup originalSequenceGroup = db.SequenceGroups.Include(sg => sg.ResearchObjects).Single(sg => sg.Id == sequenceGroup.Id);
             originalSequenceGroup.Name = sequenceGroup.Name;
             originalSequenceGroup.Nature = sequenceGroup.Nature;
             originalSequenceGroup.SequenceGroupType = sequenceGroup.SequenceGroupType;
             originalSequenceGroup.ModifierId = User.GetUserId();
             originalSequenceGroup.Group = sequenceGroup.Group;
             originalSequenceGroup.SequenceType = sequenceGroup.SequenceType;
-            Matter[] matters = db.Matters.Where(m => matterIds.Contains(m.Id)).ToArray();
-            originalSequenceGroup.Matters.Clear();
-            foreach (var matter in matters)
+            ResearchObject[] researchObjects = db.ResearchObjects.Where(m => researchObjectIds.Contains(m.Id)).ToArray();
+            originalSequenceGroup.ResearchObjects.Clear();
+            foreach (var researchObject in researchObjects)
             {
-                originalSequenceGroup.Matters.Add(matter);
+                originalSequenceGroup.ResearchObjects.Add(researchObject);
             }
 
             db.Entry(originalSequenceGroup).State = EntityState.Modified;
@@ -218,7 +225,7 @@ public class SequenceGroupsController : Controller
         }
 
         SequenceGroup? sequenceGroup = await db.SequenceGroups
-                                               .Include(sg => sg.Matters)
+                                               .Include(sg => sg.ResearchObjects)
                                                .Include(sg => sg.Creator)
                                                .Include(sg => sg.Modifier)
                                                .SingleOrDefaultAsync(sg => sg.Id == id);
@@ -240,7 +247,6 @@ public class SequenceGroupsController : Controller
     /// The <see cref="Task"/>.
     /// </returns>
     [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
     public async Task<ActionResult> DeleteConfirmed(int id)
     {
         SequenceGroup? sequenceGroup = await db.SequenceGroups.FindAsync(id);

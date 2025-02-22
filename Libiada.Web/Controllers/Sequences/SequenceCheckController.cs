@@ -12,9 +12,6 @@ using Newtonsoft.Json;
 
 using Libiada.Web.Tasks;
 
-
-
-
 /// <summary>
 /// The sequence check controller.
 /// </summary>
@@ -22,20 +19,20 @@ using Libiada.Web.Tasks;
 public class SequenceCheckController : AbstractResultController
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
-    private readonly Cache cache;
+    private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
+    private readonly IResearchObjectsCache cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SequenceCheckController"/> class.
     /// </summary>
-    public SequenceCheckController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
-                                   ITaskManager taskManager, 
-                                   ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory, 
-                                   Cache cache) 
+    public SequenceCheckController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
+                                   ITaskManager taskManager,
+                                   ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
+                                   IResearchObjectsCache cache)
         : base(TaskType.SequenceCheck, taskManager)
     {
         this.dbFactory = dbFactory;
-        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
+        this.sequenceRepositoryFactory = sequenceRepositoryFactory;
         this.cache = cache;
     }
 
@@ -47,15 +44,15 @@ public class SequenceCheckController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        ViewBag.matterId = new SelectList(cache.Matters.Where(m => m.Nature == Nature.Genetic).ToArray(), "id", "name");
+        ViewBag.researchObjectId = new SelectList(cache.ResearchObjects.Where(m => m.Nature == Nature.Genetic).ToArray(), "id", "name");
         return View();
     }
 
     /// <summary>
     /// The index.
     /// </summary>
-    /// <param name="matterId">
-    /// The matter id.
+    /// <param name="researchObjectId">
+    /// The research object id.
     /// </param>
     /// <param name="file">
     /// The file.
@@ -64,8 +61,7 @@ public class SequenceCheckController : AbstractResultController
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    public ActionResult Index(long matterId, IFormFile file)
+    public ActionResult Index(long researchObjectId, IFormFile file)
     {
         return CreateTask(() =>
         {
@@ -93,17 +89,17 @@ public class SequenceCheckController : AbstractResultController
 
             string resultStringSequence = DataTransformers.CleanFastaFile(sequenceStringBuilder.ToString());
 
-            var chain = new BaseChain(resultStringSequence);
+            var sequence = new Sequence(resultStringSequence);
             string message;
             string status;
-            BaseChain dbChain;
+            Sequence dbSequence;
             using var db = dbFactory.CreateDbContext();
-            long sequenceId = db.CommonSequences.Single(c => c.MatterId == matterId).Id;
-            using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
-            dbChain = commonSequenceRepository.GetLibiadaBaseChain(sequenceId);
+            long sequenceId = db.CombinedSequenceEntities.Single(c => c.ResearchObjectId == researchObjectId).Id;
+            using var sequenceRepository = sequenceRepositoryFactory.Create();
+            dbSequence = sequenceRepository.GetLibiadaSequence(sequenceId);
 
 
-            if (dbChain.Equals(chain))
+            if (dbSequence.Equals(sequence))
             {
                 message = "Sequence in db and in file are equal";
                 status = "Success";
@@ -111,31 +107,31 @@ public class SequenceCheckController : AbstractResultController
             else
             {
                 status = "Error";
-                if (chain.Alphabet.Cardinality != dbChain.Alphabet.Cardinality)
+                if (sequence.Alphabet.Cardinality != dbSequence.Alphabet.Cardinality)
                 {
-                    message = $"Alphabet sizes are not equal. In db - {dbChain.Alphabet.Cardinality}. In file - {chain.Alphabet.Cardinality}";
+                    message = $"Alphabet sizes are not equal. In db - {dbSequence.Alphabet.Cardinality}. In file - {sequence.Alphabet.Cardinality}";
                     return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(new { message }) } };
                 }
 
-                for (int i = 0; i < chain.Alphabet.Cardinality; i++)
+                for (int i = 0; i < sequence.Alphabet.Cardinality; i++)
                 {
-                    if (!chain.Alphabet[i].ToString().Equals(dbChain.Alphabet[i].ToString()))
+                    if (!sequence.Alphabet[i].ToString().Equals(dbSequence.Alphabet[i].ToString()))
                     {
-                        message = $"{i} elements in alphabet are not equal. In db - {dbChain.Alphabet[i]}. In file - {chain.Alphabet[i]}";
+                        message = $"{i} elements in alphabet are not equal. In db - {dbSequence.Alphabet[i]}. In file - {sequence.Alphabet[i]}";
                         return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(new { message }) } };
                     }
                 }
 
-                if (chain.Length != dbChain.Length)
+                if (sequence.Length != dbSequence.Length)
                 {
-                    message = $"Sequence length in db {dbChain.Length}, and sequence length from file{chain.Length}";
+                    message = $"Sequence length in db {dbSequence.Length}, and sequence length from file{sequence.Length}";
                     return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(new { message, status }) } };
                 }
 
-                int[] libiadaOrder = chain.Order;
-                int[] databaseOrder = dbChain.Order;
+                int[] libiadaOrder = sequence.Order;
+                int[] databaseOrder = dbSequence.Order;
 
-                for (int j = 0; j < chain.Length; j++)
+                for (int j = 0; j < sequence.Length; j++)
                 {
                     if (libiadaOrder[j] != databaseOrder[j])
                     {

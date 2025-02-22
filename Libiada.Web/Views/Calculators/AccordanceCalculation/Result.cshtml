@@ -9,8 +9,8 @@
     await Html.RenderPartialAsync("_AngularControllerInitializer", "ClusterizationResult");
 
     <div ng-controller="ClusterizationResultCtrl">
-        <h4 class="mb-2" ng-bind="::matterNames[0]"></h4>
-        <h4 ng-bind="::matterNames[1]"></h4>
+        <h4 class="mb-2" ng-bind="::researchObjectNames[0]"></h4>
+        <h4 ng-bind="::researchObjectNames[1]"></h4>
         <div ng-switch="calculationType">
             <div ng-switch-when="Equality">
                 <table class="table table-bordered table-hover">

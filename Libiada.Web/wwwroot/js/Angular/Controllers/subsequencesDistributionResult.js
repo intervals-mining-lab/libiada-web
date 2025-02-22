@@ -9,7 +9,7 @@
 
             $scope.points = [];
             $scope.visiblePoints = [];
-            $scope.matters = [];
+            $scope.researchObjects = [];
             $scope.legend = [];
             $scope.characteristicComparers = [];
             $scope.plotTypeX = "";
@@ -39,7 +39,7 @@
             let location = window.location.href.split("/");
             $scope.taskId = location[location.length - 1];
 
-            $http.get(`/api/TaskManagerWebApi/GetTaskData/${$scope.taskId}`)
+            $http.get(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
                 .then((data) => {
                     MapModelFromJson($scope, data.data);
                     $scope.plot = document.getElementById("chart");
@@ -67,9 +67,9 @@
         function fillPoints() {
             for (let i = 0; i < $scope.result.length; i++) {
                 let sequenceData = $scope.result[i];
-                $scope.matters.push({ id: sequenceData.MatterId, name: sequenceData.MatterName, visible: true, index: i, color: $scope.colorScale(i) });
+                $scope.researchObjects.push({ id: sequenceData.ResearchObjectId, name: sequenceData.ResearchObjectName, visible: true, index: i, color: $scope.colorScale(i) });
                 // hack for legend dot color
-                document.styleSheets[0].insertRule(`.legend${sequenceData.MatterId}:after { background:${$scope.colorScale(i)} }`);
+                document.styleSheets[0].insertRule(`.legend${sequenceData.ResearchObjectId}:after { background:${$scope.colorScale(i)} }`);
                 $scope.points.push([]);
                 $scope.visiblePoints.push([]);
                 for (let j = 0; j < sequenceData.SubsequencesData.length; j++) {
@@ -77,7 +77,7 @@
 
                     let point = {
                         id: subsequenceData.Id,
-                        matterId: sequenceData.MatterId,
+                        researchObjectId: sequenceData.ResearchObjectId,
                         sequenceRemoteId: sequenceData.RemoteId,
                         attributes: subsequenceData.Attributes,
                         partial: subsequenceData.Partial,
@@ -228,8 +228,8 @@
 
             $scope.tooltipVisible = true;
             $scope.tooltipElements.length = 0;
-            let matterName = $scope.matters.find(value => value.id === selectedPoint.matterId).name;
-            $scope.tooltipElements.push(fillPointTooltip(selectedPoint, matterName, $scope.pointsSimilarity.same));
+            let researchObjectName = $scope.researchObjects.find(value => value.id === selectedPoint.researchObjectId).name;
+            $scope.tooltipElements.push(fillPointTooltip(selectedPoint, researchObjectName, $scope.pointsSimilarity.same));
             let similarPoints = [];
 
             for (let i = 0; i < $scope.visiblePoints.length; i++) {
@@ -244,8 +244,8 @@
                         if (similar) {
                             let point = $scope.visiblePoints[i][j];
                             similarPoints.push(point);
-                            matterName = $scope.matters[i].name;
-                            $scope.tooltipElements.push(fillPointTooltip(point, matterName, $scope.dotsSimilar(point, selectedPoint)));
+                            researchObjectName = $scope.researchObjects[i].name;
+                            $scope.tooltipElements.push(fillPointTooltip(point, researchObjectName, $scope.dotsSimilar(point, selectedPoint)));
                         }
                     }
                 }
@@ -281,14 +281,14 @@
         }
 
         // constructs string representing tooltip text (inner html)
-        function fillPointTooltip(point, matterName, similarity) {
+        function fillPointTooltip(point, researchObjectName, similarity) {
             let color = similarity === $scope.pointsSimilarity.same ? "default"
                       : similarity === $scope.pointsSimilarity.similar ? "success"
                       : similarity === $scope.pointsSimilarity.different ? "danger" : "danger";
 
             let tooltipElement = {
                 id: point.id,
-                name: matterName,
+                name: researchObjectName,
                 sequenceRemoteId: point.sequenceRemoteId,
                 feature: $scope.features[point.featureId].Text,
                 attributes: $scope.getAttributesText(point.attributes),
@@ -324,13 +324,13 @@
         }
 
         function cText(points, index) {
-            return points.map(() => $scope.matters[index].name);
+            return points.map(() => $scope.researchObjects[index].name);
         }
 
         // selects nearest diffieret point of the same organism when "up" or "down" key pressed 
         function keyUpDownPress(key) {
             let nextPointIndex = -1;
-            let visibleMattersPoints = $scope.visiblePoints[$scope.selectedMatterIndex];
+            let visibleResearchObjectsPoints = $scope.visiblePoints[$scope.selectedResearchObjectIndex];
 
             if ($scope.selectedPointIndex >= 0) {
                 let characteristic;
@@ -338,10 +338,10 @@
                 let secondPointCharacteristic;
                 switch (keyCode) {
                     case "ArrowUp":
-                        for (let i = $scope.selectedPointIndex + 1; i < visibleMattersPoints.length; i++) {
+                        for (let i = $scope.selectedPointIndex + 1; i < visibleResearchObjectsPoints.length; i++) {
                             characteristic = $scope.subsequenceCharacteristic.Value;
-                            firstPointCharacteristic = visibleMattersPoints[$scope.selectedPointIndex].subsequenceCharacteristics[characteristic];
-                            secondPointCharacteristic = visibleMattersPoints[i].subsequenceCharacteristics[characteristic];
+                            firstPointCharacteristic = visibleResearchObjectsPoints[$scope.selectedPointIndex].subsequenceCharacteristics[characteristic];
+                            secondPointCharacteristic = visibleResearchObjectsPoints[i].subsequenceCharacteristics[characteristic];
 
                             if (firstPointCharacteristic !== secondPointCharacteristic) {
                                 nextPointIndex = i;
@@ -352,8 +352,8 @@
                     case "ArrowDown":
                         for (let j = $scope.selectedPointIndex - 1; j >= 0; j--) {
                             characteristic = $scope.subsequenceCharacteristic.Value;
-                            firstPointCharacteristic = visibleMattersPoints[$scope.selectedPointIndex].subsequenceCharacteristics[characteristic];
-                            secondPointCharacteristic = visibleMattersPoints[j].subsequenceCharacteristics[characteristic];
+                            firstPointCharacteristic = visibleResearchObjectsPoints[$scope.selectedPointIndex].subsequenceCharacteristics[characteristic];
+                            secondPointCharacteristic = visibleResearchObjectsPoints[j].subsequenceCharacteristics[characteristic];
 
                             if (firstPointCharacteristic !== secondPointCharacteristic) {
                                 nextPointIndex = j;
@@ -365,7 +365,7 @@
             }
 
             if (nextPointIndex >= 0) {
-                $scope.showTooltip(visibleMattersPoints[nextPointIndex]);
+                $scope.showTooltip(visibleResearchObjectsPoints[nextPointIndex]);
                 $scope.selectedPointIndex = nextPointIndex;
             }
         }
@@ -407,14 +407,14 @@
                 text: cText(points, index),
                 mode: "markers",
                 marker: { opacity: 0.5, symbol: "circle-open", color: $scope.colorScale(index) },
-                name: $scope.matters[index].name,
+                name: $scope.researchObjects[index].name,
             }));
 
             Plotly.newPlot($scope.plot, data, $scope.layout, { responsive: true });
 
             $scope.plot.on("plotly_click", data => {
                 $scope.selectedPointIndex = data.points[0].pointNumber;
-                $scope.selectedMatterIndex = data.points[0].curveNumber;
+                $scope.selectedResearchObjectIndex = data.points[0].curveNumber;
                 let selectedPoint = $scope.visiblePoints[data.points[0].curveNumber][data.points[0].pointNumber];
                 $scope.showTooltip(selectedPoint);
             });
@@ -431,15 +431,15 @@
         }
 
         function legendSetVisibilityForAll(visibility) {
-            for (let i = 0; i < $scope.matters.length; i++) {
-                let index = $scope.matters[i].index;
+            for (let i = 0; i < $scope.researchObjects.length; i++) {
+                let index = $scope.researchObjects[i].index;
                 for (let j = 0; j < $scope.points[index].length; j++) {
                     $scope.points[index][j].legendVisible = visibility;
                 }
             }
 
-            for (let k = 0; k < $scope.matters.length; k++) {
-                $scope.matters[k].visible = visibility;
+            for (let k = 0; k < $scope.researchObjects.length; k++) {
+                $scope.researchObjects[k].visible = visibility;
             }
 
             $scope.redrawGenesMap();
@@ -510,8 +510,8 @@
                 });
         }
 
-        // calculates color for given matter index 
-        // using d3.interpolate and matters count
+        // calculates color for given research object index
+        // using d3.interpolate and research objects count
         function colorScale(index) {
 
             // upper limit of color range

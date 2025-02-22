@@ -4,10 +4,12 @@ using Libiada.Core.Core;
 using Libiada.Core.DataTransformers;
 
 using Libiada.Web.Helpers;
+using Libiada.Web.Extensions;
 
 using Libiada.Database.Models.Repositories.Sequences;
 
 using Newtonsoft.Json;
+
 
 /// <summary>
 /// The DNA transformation controller.
@@ -15,12 +17,8 @@ using Newtonsoft.Json;
 [Authorize(Roles = "Admin")]
 public class SequenceTransformerController : Controller
 {
-    /// <summary>
-    /// Database context factory.
-    /// </summary>
     private readonly LibiadaDatabaseEntities db;
-    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
 
     /// <summary>
     /// The DNA sequence repository.
@@ -30,7 +28,7 @@ public class SequenceTransformerController : Controller
     /// <summary>
     /// The sequence repository.
     /// </summary>
-    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
+    private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
 
     /// <summary>
     /// The element repository.
@@ -40,16 +38,15 @@ public class SequenceTransformerController : Controller
     /// <summary>
     /// Initializes a new instance of the <see cref="SequenceTransformerController"/> class.
     /// </summary>
-    public SequenceTransformerController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
-                                         IViewDataHelper viewDataHelper,
-                                         ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory, 
-                                         Cache cache)
+    public SequenceTransformerController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
+                                         IViewDataBuilder viewDataBuilder,
+                                         ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
+                                         IResearchObjectsCache cache)
     {
-        this.dbFactory = dbFactory;
         this.db = dbFactory.CreateDbContext();
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
-        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
+        this.sequenceRepositoryFactory = sequenceRepositoryFactory;
         elementRepository = new ElementRepository(dbFactory.CreateDbContext());
     }
 
@@ -61,10 +58,14 @@ public class SequenceTransformerController : Controller
     /// </returns>
     public ActionResult Index()
     {
-        long[] matterIds = db.DnaSequences.Where(d => d.Notation == Notation.Nucleotides).Select(d => d.MatterId).ToArray();
-
-        var data = viewDataHelper.FillViewData(1, int.MaxValue, m => matterIds.Contains(m.Id), "Transform");
-        data.Add("nature", (byte)Nature.Genetic);
+        
+        var data = viewDataBuilder.AddMinMaxResearchObjects()
+                                  .AddSequenceGroups()
+                                  .SetNature(Nature.Genetic)
+                                  .AddNotations()
+                                  .AddSequenceTypes()
+                                  .AddGroups()
+                                  .Build();
         ViewBag.data = JsonConvert.SerializeObject(data);
         return View();
     }
@@ -72,7 +73,7 @@ public class SequenceTransformerController : Controller
     /// <summary>
     /// The index.
     /// </summary>
-    /// <param name="matterIds">
+    /// <param name="researchObjectIds">
     /// The sequence ids.
     /// </param>
     /// <param name="transformType">
@@ -82,34 +83,36 @@ public class SequenceTransformerController : Controller
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    public ActionResult Index(IEnumerable<long> matterIds, string transformType)
+    public ActionResult Index(IEnumerable<long> researchObjectIds, string transformType)
     {
         // TODO: make transformType into enum
         Notation notation = transformType.Equals("toAmino") ? Notation.AminoAcids : Notation.Triplets;
-        using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
-        foreach (var matterId in matterIds)
+        using var sequenceRepository = sequenceRepositoryFactory.Create();
+        foreach (var researchObjectId in researchObjectIds)
         {
-            long sequenceId = db.CommonSequences.Single(c => c.MatterId == matterId && c.Notation == Notation.Nucleotides).Id;
-            Chain sourceChain = commonSequenceRepository.GetLibiadaChain(sequenceId);
+            long sequenceId = db.CombinedSequenceEntities.Single(c => c.ResearchObjectId == researchObjectId && c.Notation == Notation.Nucleotides).Id;
+            ComposedSequence sourceSequence = sequenceRepository.GetLibiadaComposedSequence(sequenceId);
 
-            BaseChain transformedChain = transformType.Equals("toAmino")
-                                             ? DnaTransformer.EncodeAmino(sourceChain)
-                                             : DnaTransformer.EncodeTriplets(sourceChain);
+            Sequence transformedSequence = transformType.Equals("toAmino")
+                                             ? DnaTransformer.EncodeAmino(sourceSequence)
+                                             : DnaTransformer.EncodeTriplets(sourceSequence);
 
-            long[] alphabet = elementRepository.ToDbElements(transformedChain.Alphabet, notation, false);
+            long[] alphabet = elementRepository.ToDbElements(transformedSequence.Alphabet, notation, false);
 
-            var result = new CommonSequence
+            var result = new GeneticSequence
             {
-                MatterId = matterId,
+                ResearchObjectId = researchObjectId,
                 Notation = notation,
                 Alphabet = alphabet,
-                Order = transformedChain.Order
+                Order = transformedSequence.Order,
+                CreatorId = User.GetUserId(),
+                ModifierId = User.GetUserId(),
+                Partial = false
             };
 
-            dnaSequenceRepository.Create(result, false);
+            dnaSequenceRepository.Create(result);
         }
 
-        return RedirectToAction("Index", "CommonSequences");
+        return RedirectToAction("Index", "CombinedSequencesEntity");
     }
 }

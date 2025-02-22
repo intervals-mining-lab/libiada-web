@@ -40,7 +40,6 @@ public class MusicFilesController : AbstractResultController
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(List<IFormFile> files)
     {
         var fileStreams = files.Select(Helpers.FileHelper.GetFileStream).ToList();

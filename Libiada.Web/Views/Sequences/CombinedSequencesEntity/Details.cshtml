@@ -1,0 +1,73 @@
+﻿@using Libiada.Core.Extensions
+
+@model CombinedSequenceEntity
+
+@{
+    ViewBag.Title = "Sequence details";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div>
+    <dl>
+        <dt>
+            @Html.DisplayNameFor(model => model.Created)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Created)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Modified)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Modified)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RemoteDb)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RemoteDb)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RemoteId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RemoteId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ResearchObject.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ResearchObject.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Notation)
+        </dt>
+        <dd>
+            @Model.Notation.GetDisplayValue()
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ResearchObject.Group)
+        </dt>
+        <dd>
+            @Model.ResearchObject.Group.GetDisplayValue()
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ResearchObject.SequenceType)
+        </dt>
+        <dd>
+            @Model.ResearchObject.SequenceType.GetDisplayValue()
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

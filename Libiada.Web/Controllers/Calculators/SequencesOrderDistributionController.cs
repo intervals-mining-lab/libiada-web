@@ -31,7 +31,6 @@ public class SequencesOrderDistributionController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        ViewBag.data = "{}";
         return View();
     }
 
@@ -79,14 +78,14 @@ public class SequencesOrderDistributionController : AbstractResultController
                     break;
                 default: throw new ArgumentException("Invalid type of generate");
             }
-            List<BaseChain> sequences = sequenceGenerator.GenerateSequences(length, alphabetCardinality);
-            var SequecesOrdersDistribution = new Dictionary<int[], List<BaseChain>>(new OrderEqualityComparer());
+            List<Sequence> sequences = sequenceGenerator.GenerateSequences(length, alphabetCardinality);
+            var SequecesOrdersDistribution = new Dictionary<int[], List<Sequence>>(new OrderEqualityComparer());
             foreach (int[] order in orders)
             {
                 SequecesOrdersDistribution.Add(order, []);
             }
 
-            foreach (BaseChain sequence in sequences)
+            foreach (Sequence sequence in sequences)
             {
                 SequecesOrdersDistribution[sequence.Order].Add(sequence);
             }

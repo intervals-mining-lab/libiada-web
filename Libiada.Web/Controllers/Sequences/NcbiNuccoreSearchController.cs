@@ -17,12 +17,12 @@ public class NcbiNuccoreSearchController : AbstractResultController
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly INcbiHelper ncbiHelper;
-    private readonly Cache cache;
+    private readonly IResearchObjectsCache cache;
 
     public NcbiNuccoreSearchController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                        ITaskManager taskManager,
                                        INcbiHelper ncbiHelper,
-                                       Cache cache)
+                                       IResearchObjectsCache cache)
         : base(TaskType.NcbiNuccoreSearch, taskManager)
     {
         this.dbFactory = dbFactory;
@@ -32,12 +32,10 @@ public class NcbiNuccoreSearchController : AbstractResultController
 
     public ActionResult Index()
     {
-        ViewBag.data = JsonConvert.SerializeObject(string.Empty);
         return View();
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(
         string searchQuery,
         bool importPartial,
@@ -77,7 +75,7 @@ public class NcbiNuccoreSearchController : AbstractResultController
                 accessions = searchResults.Select(no => no.AccessionVersion.Split('.')[0]).Distinct().ToArray();
             }
 
-            List<MatterImportResult> results = new(accessions.Length);
+            List<ResearchObjectImportResult> results = new(accessions.Length);
 
             string[] existingAccessions;
 
@@ -90,17 +88,17 @@ public class NcbiNuccoreSearchController : AbstractResultController
                                 .ToList();
             foreach (NuccoreObject searchResult in searchResults)
             {
-                results.Add(new MatterImportResult()
+                results.Add(new ResearchObjectImportResult()
                 {
-                    MatterName = $"{searchResult.Title} | {searchResult.AccessionVersion}",
+                    ResearchObjectName = $"{searchResult.Title} | {searchResult.AccessionVersion}",
                     Result = "Found new sequence",
                     Status = "Success"
                 });
             }
 
-            results.AddRange(existingAccessions.ConvertAll(existingAccession => new MatterImportResult
+            results.AddRange(existingAccessions.ConvertAll(existingAccession => new ResearchObjectImportResult
             {
-                MatterName = existingAccession,
+                ResearchObjectName = existingAccession,
                 Result = "Sequence already exists",
                 Status = "Exists"
             }));
@@ -112,9 +110,9 @@ public class NcbiNuccoreSearchController : AbstractResultController
                                         .ToList();
                 foreach (NuccoreObject filteresOutSearchResult in filteresOutSearchResults)
                 {
-                    results.Add(new MatterImportResult()
+                    results.Add(new ResearchObjectImportResult()
                     {
-                        MatterName = $"{filteresOutSearchResult.Title} | {filteresOutSearchResult.AccessionVersion}",
+                        ResearchObjectName = $"{filteresOutSearchResult.Title} | {filteresOutSearchResult.AccessionVersion}",
                         Result = "Filtered out",
                         Status = "Error"
                     });

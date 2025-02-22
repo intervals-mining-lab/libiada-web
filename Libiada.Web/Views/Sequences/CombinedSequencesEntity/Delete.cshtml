@@ -1,0 +1,76 @@
+﻿@using Libiada.Core.Extensions
+@model CombinedSequenceEntity
+
+@{
+    ViewBag.Title = "Delete sequence";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <dl>
+        <dt>
+            @Html.DisplayNameFor(model => model.Created)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Created)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Modified)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Modified)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RemoteDb)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RemoteDb)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RemoteId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RemoteId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ResearchObject.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ResearchObject.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Notation)
+        </dt>
+        <dd>
+            @Model.Notation.GetDisplayValue()
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ResearchObject.Group)
+        </dt>
+        <dd>
+            @Model.ResearchObject.Group.GetDisplayValue()
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ResearchObject.SequenceType)
+        </dt>
+        <dd>
+            @Model.ResearchObject.SequenceType.GetDisplayValue()
+        </dd>
+    </dl>
+
+    @using (Html.BeginForm()) {
+        <div class="mb-2">
+            <input type="submit" value="Delete" class="btn btn-secondary" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

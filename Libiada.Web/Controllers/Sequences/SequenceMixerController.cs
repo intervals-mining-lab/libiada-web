@@ -1,13 +1,13 @@
 ﻿namespace Libiada.Web.Controllers.Sequences;
 
-using System.ComponentModel;
-
 using Libiada.Core.Core;
 using Libiada.Core.Music;
 
-using Libiada.Web.Helpers;
-
+using Libiada.Database.Models;
 using Libiada.Database.Models.Repositories.Sequences;
+
+using Libiada.Web.Helpers;
+using Libiada.Web.Extensions;
 
 using Newtonsoft.Json;
 
@@ -24,32 +24,12 @@ public class SequenceMixerController : Controller
     /// </summary>
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
 
-    private readonly MatterRepository matterRepository;
+    private readonly ResearchObjectRepository researchObjectRepository;
 
     /// <summary>
     /// The sequence repository.
     /// </summary>
-    private readonly CommonSequenceRepository sequenceRepository;
-
-    /// <summary>
-    /// The DNA sequence repository.
-    /// </summary>
-    private readonly GeneticSequenceRepository dnaSequenceRepository;
-
-    /// <summary>
-    /// The music sequence repository.
-    /// </summary>
-    private readonly MusicSequenceRepository musicSequenceRepository;
-
-    /// <summary>
-    /// The literature sequence repository.
-    /// </summary>
-    private readonly LiteratureSequenceRepository literatureSequenceRepository;
-
-    /// <summary>
-    /// The data sequence repository.
-    /// </summary>
-    private readonly DataSequenceRepository dataSequenceRepository;
+    private readonly CombinedSequenceEntityRepository sequenceRepository;
 
     /// <summary>
     /// The element repository.
@@ -60,25 +40,21 @@ public class SequenceMixerController : Controller
     /// The random generator.
     /// </summary>
     private readonly Random randomGenerator = new();
-    private readonly IViewDataHelper viewDataHelper;
-    private readonly Cache cache;
+    private readonly IViewDataBuilder viewDataBuilder;
+    private readonly IResearchObjectsCache cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SequenceMixerController"/> class.
     /// </summary>
-    public SequenceMixerController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
-                                   IViewDataHelper viewDataHelper,
-                                   Cache cache)
+    public SequenceMixerController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
+                                   IViewDataBuilder viewDataBuilder,
+                                   IResearchObjectsCache cache)
     {
         this.dbFactory = dbFactory;
-        matterRepository = new MatterRepository(dbFactory.CreateDbContext(), cache);
-        sequenceRepository = new CommonSequenceRepository(dbFactory, cache);
-        dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
-        musicSequenceRepository = new MusicSequenceRepository(dbFactory, cache);
-        literatureSequenceRepository = new LiteratureSequenceRepository(dbFactory, cache);
-        dataSequenceRepository = new DataSequenceRepository(dbFactory, cache);            
+        researchObjectRepository = new ResearchObjectRepository(dbFactory.CreateDbContext(), cache);
+        sequenceRepository = new CombinedSequenceEntityRepository(dbFactory, cache);
         elementRepository = new ElementRepository(dbFactory.CreateDbContext());
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         this.cache = cache;
     }
 
@@ -90,15 +66,25 @@ public class SequenceMixerController : Controller
     /// </returns>
     public ActionResult Index()
     {
-        ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillViewData(1, 1, "Mix"));
+        var viewData = viewDataBuilder.AddMinMaxResearchObjects(1, 1)
+                                      .AddNatures()
+                                      .AddNotations()
+                                      .AddLanguages()
+                                      .AddTranslators()
+                                      .AddPauseTreatments()
+                                      .AddTrajectories()
+                                      .AddSequenceTypes()
+                                      .AddGroups()
+                                      .Build();
+        ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }
 
     /// <summary>
     /// The index.
     /// </summary>
-    /// <param name="matterId">
-    /// The matter id.
+    /// <param name="researchObjectId">
+    /// The research object id.
     /// </param>
     /// <param name="notation">
     /// The notation id.
@@ -125,8 +111,7 @@ public class SequenceMixerController : Controller
     /// Thrown if sequence nature is unknown.
     /// </exception>
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    public ActionResult Index(long matterId,
+    public ActionResult Index(long researchObjectId,
                               Notation notation,
                               Language? language,
                               Translator? translator,
@@ -136,71 +121,61 @@ public class SequenceMixerController : Controller
     {
 
         using var db = dbFactory.CreateDbContext();
-        Matter matter = cache.Matters.Single(m => m.Id == matterId);
-        long sequenceId = matter.Nature switch
+        ResearchObject researchObject = cache.ResearchObjects.Single(m => m.Id == researchObjectId);
+        long sequenceId = researchObject.Nature switch
         {
-            Nature.Literature => db.LiteratureSequences.Single(l => l.MatterId == matterId
-                                                                        && l.Notation == notation
-                                                                        && l.Language == language
-                                                                       && l.Translator == translator).Id,
-            Nature.Music => db.MusicSequences.Single(m => m.MatterId == matterId
-                                                                   && m.Notation == notation
-                                                                   && m.PauseTreatment == pauseTreatment
-                                                                   && m.SequentialTransfer == sequentialTransfer).Id,
-            _ => db.CommonSequences.Single(c => c.MatterId == matterId && c.Notation == notation).Id,
+            Nature.Literature => db.CombinedSequenceEntities.Single(l => l.ResearchObjectId == researchObjectId
+                                                                      && l.Notation == notation
+                                                                      && l.Language == language
+                                                                      && l.Translator == translator).Id,
+            Nature.Music => db.CombinedSequenceEntities.Single(m => m.ResearchObjectId == researchObjectId
+                                                                 && m.Notation == notation
+                                                                 && m.PauseTreatment == pauseTreatment
+                                                                 && m.SequentialTransfer == sequentialTransfer).Id,
+            _ => db.CombinedSequenceEntities.Single(c => c.ResearchObjectId == researchObjectId && c.Notation == notation).Id,
         };
-        BaseChain chain = sequenceRepository.GetLibiadaBaseChain(sequenceId);
+        Sequence sequence = sequenceRepository.GetLibiadaSequence(sequenceId);
         for (int i = 0; i < scrambling; i++)
         {
-            int firstIndex = randomGenerator.Next(chain.Length);
-            int secondIndex = randomGenerator.Next(chain.Length);
+            int firstIndex = randomGenerator.Next(sequence.Length);
+            int secondIndex = randomGenerator.Next(sequence.Length);
 
-            IBaseObject firstElement = chain[firstIndex];
-            IBaseObject secondElement = chain[secondIndex];
-            chain[firstIndex] = secondElement;
-            chain[secondIndex] = firstElement;
+            IBaseObject firstElement = sequence[firstIndex];
+            IBaseObject secondElement = sequence[secondIndex];
+            sequence[firstIndex] = secondElement;
+            sequence[secondIndex] = firstElement;
         }
 
-        var resultMatter = new Matter
-            {
-                Nature = matter.Nature,
-                Name = $"{matter.Name} {scrambling} mixes"
-            };
-
-        matterRepository.SaveToDatabase(resultMatter);
-
-        long[] alphabet = elementRepository.ToDbElements(chain.Alphabet, notation, false);
-
-        var result = new CommonSequence
+        var resultResearchObject = new ResearchObject
         {
-            Notation = notation,
-            MatterId = resultMatter.Id,
-            Alphabet = alphabet,
-            Order = chain.Order
+            Nature = researchObject.Nature,
+            Name = $"{researchObject.Name} {scrambling} mixes"
         };
 
-        switch (matter.Nature)
+        researchObjectRepository.SaveToDatabase(resultResearchObject);
+
+        long[] alphabet = elementRepository.ToDbElements(sequence.Alphabet, notation, false);
+
+        CombinedSequenceEntity dbSequence = db.CombinedSequenceEntities.Single(c => c.Id == sequenceId);
+
+        var newSequence = new CombinedSequenceEntity
         {
-            case Nature.Genetic:
-                DnaSequence dnaSequence = db.DnaSequences.Single(c => c.Id == sequenceId);
+            Notation = notation,
+            ResearchObjectId = resultResearchObject.Id,
+            Alphabet = alphabet,
+            Order = sequence.Order,
+            PauseTreatment = dbSequence.PauseTreatment,
+            SequentialTransfer = dbSequence.SequentialTransfer,
+            Language = dbSequence.Language,
+            Original = dbSequence.Original,
+            Translator = dbSequence.Translator,
+            Partial = dbSequence.Partial,
+            Creator = dbSequence.Creator,
+            ModifierId = User.GetUserId()
+        };
 
-                dnaSequenceRepository.Create(result, dnaSequence.Partial);
-                break;
-            case Nature.Music:
-                musicSequenceRepository.Create(result);
-                break;
-            case Nature.Literature:
-                LiteratureSequence sequence = db.LiteratureSequences.Single(c => c.Id == sequenceId);
+        sequenceRepository.Create(newSequence);
 
-                literatureSequenceRepository.Create(result, sequence.Original, sequence.Language, sequence.Translator);
-                break;
-            case Nature.MeasurementData:
-                dataSequenceRepository.Create(result);
-                break;
-            default:
-                throw new InvalidEnumArgumentException(nameof(matter.Nature), (int)matter.Nature, typeof(Nature));
-        }
-
-        return RedirectToAction("Index", "Matters");
+        return RedirectToAction("Index", "ResearchObjects");
     }
 }

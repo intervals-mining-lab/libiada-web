@@ -3,29 +3,27 @@
 using Libiada.Core.Core.SimpleTypes;
 
 using Libiada.Database.Tasks;
-using Libiada.Database.Helpers;
 
 using Newtonsoft.Json;
 
-using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
 
 /// <summary>
 /// The Fmotifs dictionary controller.
 /// </summary>
 [Authorize(Roles = "Admin")]
-public class FmotifsDictionaryController : SequencesMattersController
+public class FmotifsDictionaryController : AbstractResultController
 {
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="FmotifsDictionaryController"/> class.
     /// </summary>
-    public FmotifsDictionaryController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
-                                       IViewDataHelper viewDataHelper, 
-                                       ITaskManager taskManager,
-                                       INcbiHelper ncbiHelper,
-                                       Cache cache) 
-        : base(TaskType.FmotifsDictionary, dbFactory, viewDataHelper, taskManager,ncbiHelper, cache)
+    public FmotifsDictionaryController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
+                                       ITaskManager taskManager)
+        : base(TaskType.FmotifsDictionary, taskManager)
     {
+        this.dbFactory = dbFactory;
     }
 
     /// <summary>
@@ -37,8 +35,11 @@ public class FmotifsDictionaryController : SequencesMattersController
     public async Task<ActionResult> Index()
     {
         using var db = dbFactory.CreateDbContext();
-        var musicSequence = db.MusicSequences.Where(m => m.Notation == Notation.FormalMotifs).Include(m => m.Matter);
-        return View(await musicSequence.ToListAsync());
+        var musicSequences = db.CombinedSequenceEntities
+                               .Where(m => m.Notation == Notation.FormalMotifs)
+                               .Include(m => m.ResearchObject)
+                               .Select(s => s.ToMusicSequence());
+        return View(await musicSequences.ToListAsync());
 
     }
 
@@ -59,22 +60,31 @@ public class FmotifsDictionaryController : SequencesMattersController
         }
 
         using var db = dbFactory.CreateDbContext();
-        MusicSequence musicSequence = await db.MusicSequences.Include(m => m.Matter).SingleAsync(m => m.Id == id);
-        if (musicSequence == null)
+        var dbSequence = await db.CombinedSequenceEntities
+                                 .Include(m => m.ResearchObject)
+                                 .SingleAsync(m => m.Id == id);
+
+        if (dbSequence == null)
         {
             return NotFound();
         }
 
-        var musicChainAlphabet = musicSequence.Alphabet.Select(el => db.Fmotifs.Single(f => f.Id == el)).ToList();
+        var musicSequence = dbSequence.ToMusicSequence();
+
+        var musicSequenceAlphabet = musicSequence.Alphabet
+                                                 .Select(el => db.Fmotifs.Single(f => f.Id == el))
+                                                 .ToList();
         var sortedFmotifs = new Dictionary<Database.Models.Fmotif, int>();
-        for (int i = 0; i < musicChainAlphabet.Count; i++)
+        for (int i = 0; i < musicSequenceAlphabet.Count; i++)
         {
-            sortedFmotifs.Add(musicChainAlphabet[i], musicSequence.Order.Count(el => el == i + 1));
+            sortedFmotifs.Add(musicSequenceAlphabet[i], musicSequence.Order.Count(el => el == i + 1));
         }
 
-        sortedFmotifs = sortedFmotifs.OrderByDescending(pair => pair.Value).ToDictionary(pair => pair.Key, pair => pair.Value);
+        //TODO: check if orderBY is necessary
+        sortedFmotifs = sortedFmotifs.OrderByDescending(pair => pair.Value)
+                                     .ToDictionary(pair => pair.Key, pair => pair.Value);
 
-        List<Fmotif> fmotifsChain = [];
+        List<Fmotif> fmotifsSequence = [];
         foreach (var fmotif in sortedFmotifs.Keys)
         {
             var newFmotif = new Fmotif(fmotif.FmotifType, musicSequence.PauseTreatment, fmotif.Id);
@@ -99,12 +109,12 @@ public class FmotifsDictionaryController : SequencesMattersController
                 newFmotif.NoteList.Add(newNote);
             }
 
-            fmotifsChain.Add(newFmotif);
+            fmotifsSequence.Add(newFmotif);
         }
 
         var result = new Dictionary<string, object>
         {
-            { "fmotifs", fmotifsChain },
+            { "fmotifs", fmotifsSequence },
             { "sequentialTransfer", musicSequence.SequentialTransfer }
         };
         ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object> { { "data", result } });

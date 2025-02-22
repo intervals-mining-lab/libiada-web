@@ -1,6 +1,5 @@
 ﻿namespace Libiada.Web.Controllers.Calculators;
 
-using Bio;
 using Bio.Extensions;
 
 using Libiada.Database.Models.CalculatorsData;
@@ -28,18 +27,18 @@ using EnumExtensions = Core.Extensions.EnumExtensions;
 [Authorize(Roles = "Admin")]
 public class CustomSequenceOrderTransformationCalculationController : AbstractResultController
 {
-    private readonly IViewDataHelper viewDataHelper;
+    private readonly IViewDataBuilder viewDataBuilder;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CustomSequenceOrderTransformationCalculationController"/> class.
     /// </summary>
-    public CustomSequenceOrderTransformationCalculationController(IViewDataHelper viewDataHelper, 
+    public CustomSequenceOrderTransformationCalculationController(IViewDataBuilder viewDataBuilder, 
                                                                   ITaskManager taskManager,
                                                                   IFullCharacteristicRepository characteristicTypeLinkRepository)
         : base(TaskType.CustomSequenceOrderTransformationCalculation, taskManager)
     {
-        this.viewDataHelper = viewDataHelper;
+        this.viewDataBuilder = viewDataBuilder;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
     }
 
@@ -51,11 +50,9 @@ public class CustomSequenceOrderTransformationCalculationController : AbstractRe
     /// </returns>
     public ActionResult Index()
     {
-        var data = viewDataHelper.GetCharacteristicsData(CharacteristicCategory.Full);
-
-        var transformations = Extensions.EnumExtensions.GetSelectList<OrderTransformation>();
-        data.Add("transformations", transformations);
-
+        var data = viewDataBuilder.AddCharacteristicsData(CharacteristicCategory.Full)
+                                 .AddOrderTransformations()
+                                 .Build();
         ViewBag.data = JsonConvert.SerializeObject(data);
         return View();
     }
@@ -85,7 +82,6 @@ public class CustomSequenceOrderTransformationCalculationController : AbstractRe
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public ActionResult Index(
         OrderTransformation[] transformationsSequence,
         int iterationsCount,
@@ -106,7 +102,7 @@ public class CustomSequenceOrderTransformationCalculationController : AbstractRe
             {
                 if (localFile)
                 {
-                    ISequence fastaSequence = NcbiHelper.GetFastaSequence(fileStreams[i]);
+                    Bio.ISequence fastaSequence = NcbiHelper.GetFastaSequence(fileStreams[i]);
                     sequences[i] = fastaSequence.ConvertToString();
                     sequencesNames[i] = fastaSequence.ID;
                 }
@@ -123,12 +119,12 @@ public class CustomSequenceOrderTransformationCalculationController : AbstractRe
                 double[] characteristics = new double[characteristicLinkIds.Length];
                 for (int k = 0; k < characteristicLinkIds.Length; k++)
                 {
-                    var sequence = new Chain(sequences[j]);
+                    var sequence = new ComposedSequence(sequences[j]);
                     for (int l = 0; l < iterationsCount; l++)
                     {
                         for (int w = 0; w < transformationsSequence.Length; w++)
                         {
-                            sequence = transformationsSequence[w] == OrderTransformation.Dissimilar ? DissimilarChainFactory.Create(sequence)
+                            sequence = transformationsSequence[w] == OrderTransformation.Dissimilar ? DissimilarSequenceFactory.Create(sequence)
                                                                  : HighOrderFactory.Create(sequence, EnumExtensions.GetLink(transformationsSequence[w]));
                         }
                     }
@@ -142,7 +138,7 @@ public class CustomSequenceOrderTransformationCalculationController : AbstractRe
 
                 sequencesCharacteristics[j] = new SequenceCharacteristics
                 {
-                    MatterName = sequencesNames[j],
+                    ResearchObjectName = sequencesNames[j],
                     Characteristics = characteristics
                 };
             }
