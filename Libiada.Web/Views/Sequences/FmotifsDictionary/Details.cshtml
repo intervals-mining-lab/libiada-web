@@ -46,12 +46,16 @@
                     <div id="visualization_{{::fmotif.Id}}"></div>
                 </td>
                 <td>
-                    <input type="button" class="btn btn-secondary" ng-click="play($index)" value="Play" />
+                    <input type="button" class="btn btn-secondary"
+                           ng-click="play($index)"
+                           value="Play"
+                           ng-disabled="isPlaying" />
                 </td>
             </tr>
         </tbody>
     </table>
 </div>
+
 
 @section Scripts {
     <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
