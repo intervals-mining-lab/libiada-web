@@ -25,6 +25,7 @@
             <td>@(item.SequentialTransfer ? "Yes" : "No")</td>
             <td>@Html.DisplayFor(modelItem => item.Created)</td>
             <td>@Html.ActionLink("Details", "Details", new { id = item.Id })</td>
+            <td>@Html.ActionLink("Music Score", "MusicScore", new { id = item.Id })</td>
         </tr>
     }
 </table>

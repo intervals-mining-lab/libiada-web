@@ -120,4 +120,72 @@ public class FmotifsDictionaryController : AbstractResultController
         ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object> { { "data", result } });
         return View(musicSequence);
     }
+
+    /// <summary>
+    /// Загружает нотную последовательность всего произведения.
+    /// </summary>
+    /// <param name="id">ID музыкального произведения.</param>
+    /// <returns>Представление нотного стана для всего произведения.</returns>
+    public async Task<ActionResult> MusicScore(long? id)
+    {
+        if (id == null)
+        {
+            return BadRequest();
+        }
+
+        using var db = dbFactory.CreateDbContext();
+        var dbSequence = await db.CombinedSequenceEntities
+                                 .Include(m => m.ResearchObject)
+                                 .SingleOrDefaultAsync(m => m.Id == id);
+
+        if (dbSequence == null)
+        {
+            return NotFound();
+        }
+
+        var musicSequence = dbSequence.ToMusicSequence();
+
+        // 🛑 Вместо того, чтобы напрямую брать Alphabet, загружаем мотивы
+        var musicSequenceAlphabet = musicSequence.Alphabet
+                                                 .Select(el => db.Fmotifs.Single(f => f.Id == el))
+                                                 .ToList();
+
+        List<ValueNote> notesSequence = new List<ValueNote>();
+
+        foreach (var fmotif in musicSequenceAlphabet)
+        {
+            long[] fmotifAlphabet = fmotif.Alphabet;
+            int[] fmotifOrder = fmotif.Order;
+
+            foreach (int position in fmotifOrder)
+            {
+                long dbNoteId = fmotifAlphabet[position - 1];
+                Note dbNote = await db.Notes.Include(n => n.Pitches).SingleAsync(n => n.Id == dbNoteId);
+
+                List<Pitch> newPitches = dbNote.Pitches.Select(pitch => new Pitch(pitch.Midinumber)).ToList();
+                var newNote = new ValueNote(newPitches,
+                                            new Duration(dbNote.Numerator, dbNote.Denominator),
+                                            dbNote.Triplet,
+                                            dbNote.Tie)
+                {
+                    Id = dbNote.Id
+                };
+
+                notesSequence.Add(newNote);
+            }
+        }
+
+        var result = new Dictionary<string, object>
+    {
+        { "musicNotes", notesSequence },
+        { "sequentialTransfer", musicSequence.SequentialTransfer }
+    };
+
+        ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object> { { "data", result } });
+        return View(musicSequence);
+    }
+
+
+
+
 }

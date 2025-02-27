@@ -1,0 +1,39 @@
+﻿@model MusicSequence
+
+@{
+    ViewBag.Title = "Music Score";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "MusicScore");
+}
+
+<div ng-controller="MusicScoreCtrl" ng-init="onLoad()">
+    <div>
+        <h4>Music Details</h4>
+        <dl>
+            <dt>@Html.DisplayNameFor(model => model.ResearchObject.Name)</dt>
+            <dd>@Html.DisplayFor(model => model.ResearchObject.Name)</dd>
+
+            <dt>@Html.DisplayNameFor(model => model.Created)</dt>
+            <dd>@Html.DisplayFor(model => model.Created)</dd>
+        </dl>
+    </div>
+
+    <h4>Music Notation</h4>
+    <div id="notation"></div>
+
+    <h4>Keyboard Visualization</h4>
+    <div id="visualization"></div>
+
+    <button class="btn btn-primary" ng-click="play()" ng-disabled="isPlaying">▶ Play</button>
+</div>
+
+@section Scripts {
+    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+    <script src="~/lib/midi.js/lib/midi.js" asp-append-version="true"></script>
+    <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
+    <script src="~/js/Angular/Controllers/musicScoreController.js" asp-append-version="true"></script>
+}
