@@ -145,7 +145,6 @@ public class FmotifsDictionaryController : AbstractResultController
 
         var musicSequence = dbSequence.ToMusicSequence();
 
-        // 🛑 Вместо того, чтобы напрямую брать Alphabet, загружаем мотивы
         var musicSequenceAlphabet = musicSequence.Alphabet
                                                  .Select(el => db.Fmotifs.Single(f => f.Id == el))
                                                  .ToList();
