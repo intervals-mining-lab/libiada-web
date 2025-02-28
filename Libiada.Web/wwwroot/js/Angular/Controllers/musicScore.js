@@ -47,7 +47,7 @@
                     let pitch = note.Pitches[i];
                     let step = pitch.MidiNumber % 12;
                     let currentOctave = pitch.Octave > min ? 1 : 0;
-                    let key = d3.select(`#visualization_${$scope.data.musicNotes[event].Id}`)
+                    let key = d3.select(`#visualization`)
                         .select(`.key_${step + currentOctave * 12}`)
                         .selectAll("rect");
                     key.style("fill", "blue")
@@ -56,7 +56,7 @@
             },
             keyOff: function (event) {
                 for (let i = 0; i < 24; i++) {
-                    let key = d3.select(`#visualization_${$scope.data.musicNotes[event].Id}`)
+                    let key = d3.select(`#visualization`)
                         .select(`.key_${i}`)
                         .selectAll("rect");
                     if (getLine(i % 12).alter === 0) {
@@ -67,7 +67,7 @@
                 }
             },
             noteOn: function (event) {
-                let chord = d3.select(`#notation_${$scope.data.musicNotes[event].Id}`)
+                let chord = d3.select(`#notation`)
                     .select(`.chord_${chordIndex}`);
                 chord.selectAll("ellipse")
                     .style("fill", "blue");
@@ -83,7 +83,7 @@
                     .style("stroke", "black");
             },
             noteOff: function (event) {
-                let chord = d3.select(`#notation_${$scope.data.musicNotes[event].Id}`)
+                let chord = d3.select(`#notation`)
                     .select(`.chord_${chordIndex}`);
                 chord.selectAll("ellipse")
                     .style("fill", "black");
