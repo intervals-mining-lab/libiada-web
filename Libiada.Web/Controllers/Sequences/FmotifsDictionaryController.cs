@@ -135,30 +135,33 @@ public class FmotifsDictionaryController : AbstractResultController
 
         using var db = dbFactory.CreateDbContext();
         var dbSequence = await db.CombinedSequenceEntities
+                                 .Where(m => m.Notation == Notation.Measures)
                                  .Include(m => m.ResearchObject)
-                                 .SingleOrDefaultAsync(m => m.Id == id);
+                                 .SingleOrDefaultAsync(m => m.ResearchObjectId == id);
 
         if (dbSequence == null)
         {
-            return NotFound();
+            return NotFound("Ошибка БД: не найдена подходящая запись.");
         }
 
         var musicSequence = dbSequence.ToMusicSequence();
 
         var musicSequenceAlphabet = musicSequence.Alphabet
-                                                 .Select(el => db.Fmotifs.Single(f => f.Id == el))
+                                                 .Select(el => db.Measures.Single(f => f.Id == el))
                                                  .ToList();
 
         List<ValueNote> notesSequence = new List<ValueNote>();
+        List<List<ValueNote>> measuresSequence = new List<List<ValueNote>>();
 
-        foreach (var fmotif in musicSequenceAlphabet)
+        foreach (var measure in musicSequenceAlphabet)
         {
-            long[] fmotifAlphabet = fmotif.Alphabet;
-            int[] fmotifOrder = fmotif.Order;
+            List<ValueNote> measureNotes = new List<ValueNote>();
+            long[] measureAlphabet = measure.Alphabet;
+            int[] measureOrder = measure.Order;
 
-            foreach (int position in fmotifOrder)
+            foreach (int position in measureOrder)
             {
-                long dbNoteId = fmotifAlphabet[position - 1];
+                long dbNoteId = measureAlphabet[position - 1];
                 Note dbNote = await db.Notes.Include(n => n.Pitches).SingleAsync(n => n.Id == dbNoteId);
 
                 List<Pitch> newPitches = dbNote.Pitches.Select(pitch => new Pitch(pitch.Midinumber)).ToList();
@@ -171,12 +174,15 @@ public class FmotifsDictionaryController : AbstractResultController
                 };
 
                 notesSequence.Add(newNote);
+                measureNotes.Add(newNote);
             }
+            measuresSequence.Add(measureNotes);
         }
 
         var result = new Dictionary<string, object>
     {
         { "musicNotes", notesSequence },
+        { "measures", measuresSequence },
         { "sequentialTransfer", musicSequence.SequentialTransfer }
     };
 

@@ -195,16 +195,16 @@
             }
             notation.append("line")
                 .attr("x1", 0)
-                .attr("y1", $scope.margin + 3 * $scope.verticalInterval)
+                .attr("y1", yOffset + $scope.margin + 3 * $scope.verticalInterval)
                 .attr("x2", 0)
-                .attr("y2", $scope.margin + 11 * $scope.verticalInterval)
+                .attr("y2", yOffset + $scope.margin + 11 * $scope.verticalInterval)
                 .style("stroke", "#000")
                 .style("stroke-width", 5);
             notation.append("line")
                 .attr("x1", 1800)
-                .attr("y1", $scope.margin + 3 * $scope.verticalInterval)
+                .attr("y1", yOffset + $scope.margin + 3 * $scope.verticalInterval)
                 .attr("x2", 1800)
-                .attr("y2", $scope.margin + 11 * $scope.verticalInterval)
+                .attr("y2", yOffset + $scope.margin + 11 * $scope.verticalInterval)
                 .style("stroke", "#000")
                 .style("stroke-width", 5);
         }
@@ -287,14 +287,14 @@
         }
 
         // draws pause
-        function drawPause(group, note, x) {
+        function drawPause(group, note, x, yOffset) {
             switch (note.Duration.Denominator) {
                 case 1:
                     group.append("rect")
                         .attr("width", 10)
                         .attr("height", 5)
                         .attr("x", x)
-                        .attr("y", $scope.margin + 6 * $scope.verticalInterval)
+                        .attr("y", yOffset + $scope.margin + 6 * $scope.verticalInterval)
                         .style("fill", "black");
                     break;
                 case 2:
@@ -302,48 +302,48 @@
                         .attr("width", 10)
                         .attr("height", 5)
                         .attr("x", x)
-                        .attr("y", $scope.margin + 5 * $scope.verticalInterval)
+                        .attr("y", yOffset + $scope.margin + 5 * $scope.verticalInterval)
                         .style("fill", "black");
                     break;
                 case 4:
                     group.append("text")
                         .attr("x", x)
-                        .attr("y", $scope.margin + 10 * $scope.verticalInterval)
+                        .attr("y", yOffset + $scope.margin + 10 * $scope.verticalInterval)
                         .attr("font-size", "35px")
                         .text(signFromCharCode(0x1D13D));
                     break;
                 case 8:
                     group.append("text")
                         .attr("x", x)
-                        .attr("y", $scope.margin + 11 * $scope.verticalInterval)
+                        .attr("y", yOffset + $scope.margin + 11 * $scope.verticalInterval)
                         .attr("font-size", "35px")
                         .text(signFromCharCode(0x1D13E));
                     break;
                 case 16:
                     group.append("text")
                         .attr("x", x)
-                        .attr("y", $scope.margin + 10 * $scope.verticalInterval)
+                        .attr("y", yOffset + $scope.margin + 10 * $scope.verticalInterval)
                         .attr("font-size", "35px")
                         .text(signFromCharCode(0x1D13F));
                     break;
                 case 32:
                     group.append("text")
                         .attr("x", x)
-                        .attr("y", $scope.margin + 10 * $scope.verticalInterval)
+                        .attr("y", yOffset + $scope.margin + 10 * $scope.verticalInterval)
                         .attr("font-size", "35px")
                         .text(signFromCharCode(0x1D140));
                     break;
                 case 64:
                     group.append("text")
                         .attr("x", x)
-                        .attr("y", $scope.margin + 9 * $scope.verticalInterval)
+                        .attr("y", yOffset + $scope.margin + 9 * $scope.verticalInterval)
                         .attr("font-size", "35px")
                         .text(signFromCharCode(0x1D141));
                     break;
                 case 128:
                     group.append("text")
                         .attr("x", x)
-                        .attr("y", $scope.margin + 9 * $scope.verticalInterval)
+                        .attr("y", yOffset + $scope.margin + 9 * $scope.verticalInterval)
                         .attr("font-size", "35px")
                         .text(signFromCharCode(0x1D142));
                     break;
@@ -352,7 +352,7 @@
                         .attr("width", 10)
                         .attr("height", 5)
                         .attr("x", x)
-                        .attr("y", $scope.margin + 6 * $scope.verticalInterval)
+                        .attr("y", yOffset + $scope.margin + 6 * $scope.verticalInterval)
                         .style("fill", "black");
                     break;
             }
@@ -377,6 +377,7 @@
 
         $(function () {
             let notes = $scope.data.musicNotes;
+            let measures = $scope.data.measures;
             if (!notes || notes.length === 0) {
                 console.error("No music notes found!");
                 return;
@@ -384,13 +385,14 @@
 
             let horizontalInterval = 1800 / (notes.length + 1); // Рассчитываем интервал между нотами
             let notesPerLine = 16; // Максимальное количество нот в одной строке
-            let staffWidth = 900; // Ширина нотного стана
+            let measuresPerLine = 4;
+            let staffWidth = 1800; // Ширина нотного стана
             let staffHeight = 140; // Высота одной строки
             let lineCount = Math.ceil(notes.length / notesPerLine); // Количество строк
 
             notation = d3.select("#notation")
                 .append("svg")
-                .attr("width", 900)
+                .attr("width", 1800)
                 .attr("height", 140 * lineCount)
                 .style("display", "block")
                 .style("margin", "auto");
@@ -419,98 +421,207 @@
 
                 drawStaff(yOffset); // Отрисовываем нотный стан для каждой строки
 
-                let notesInLine = notes.slice(line * notesPerLine, (line + 1) * notesPerLine);
-                let horizontalInterval = staffWidth / (notesInLine.length + 1);
+                //let notesInLine = notes.slice(line * notesPerLine, (line + 1) * notesPerLine);
+                let measuresInLine = measures.slice(line * measuresPerLine, (line + 1) * measuresPerLine);
+                let notesInLine = 0;
+                for (let measure of measuresInLine) {
+                    notesInLine += measure.length;
+                }
+                notesInLine += measuresPerLine - 1;
+                let horizontalInterval = staffWidth / (notesInLine + 1);
+                let x = horizontalInterval;
 
-                for (let j = 0; j < notesInLine.length; j++) {
-                    let note = notesInLine[j];
-                    let chord = notation.append("g")
-                        .attr("class", `chord_${j}`);
+                for (let i = 0; i < measuresInLine.length; i++) {
+                    let measure = measuresInLine[i];
 
-                    let x = (j + 1) * horizontalInterval;
+                    for (let j = 0; j < measure.length; j++) {
+                        let note = measure[j];
+                        let chord = notation.append("g")
+                            .attr("class", `chord_${j}`);
 
-                    if (note.Pitches.length === 0) {
-                        drawPause(chord, note, x);
-                    } else {
-                        let lineUp = false;
-                        let miny = 1000;
-                        let maxy = -1000;
+                        
 
-                        for (let k = 0; k < note.Pitches.length; k++) {
-                            let pitch = note.Pitches[k];
-                            let currentOctave = pitch.Octave > min ? 1 : 0;
-                            let step = getLine(pitch.Step);
-                            let y = $scope.margin + (13 - (step.line + 7 * currentOctave)) * $scope.verticalInterval + (line * staffHeight);
+                        if (note.Pitches.length === 0) {
+                            drawPause(chord, note, x, yOffset);
+                        } else {
+                            let lineUp = false;
+                            let miny = 1000;
+                            let maxy = -1000;
 
-                            if (currentOctave === 0 && pitch.Step < 10) {
-                                lineUp = true;
+                            for (let k = 0; k < note.Pitches.length; k++) {
+                                let pitch = note.Pitches[k];
+                                let currentOctave = pitch.Octave > min ? 1 : 0;
+                                let step = getLine(pitch.Step);
+                                let y = $scope.margin + (13 - (step.line + 7 * currentOctave)) * $scope.verticalInterval + (line * staffHeight);
+
+                                if (currentOctave === 0 && pitch.Step < 10) {
+                                    lineUp = true;
+                                }
+
+                                miny = y < miny ? y : miny;
+                                maxy = y < maxy ? maxy : y;
+                                if (k == 0) {
+                                    miny = y;
+                                    maxy = y;
+                                }
+
+                                drawNote(chord, note, currentOctave, k, x, y);
                             }
 
-                            miny = y < miny ? y : miny;
-                            maxy = y < maxy ? maxy : y;
-                            if (k == 0) {
-                                miny = y;
-                                maxy = y;
+                            let flagx, flagy;
+                            if (!lineUp && note.Duration.Denominator > 1) {
+                                flagx = x - 6;
+                                flagy = maxy + 48;
+                                chord.append("line")
+                                    .attr("x1", flagx)
+                                    .attr("y1", miny + 1)
+                                    .attr("x2", flagx)
+                                    .attr("y2", flagy)
+                                    .style("stroke", "black")
+                                    .style("stroke-width", 2);
+                            } else if (lineUp && note.Duration.Denominator > 1) {
+                                flagx = x + 6;
+                                flagy = miny - 48;
+                                chord.append("line")
+                                    .attr("x1", flagx)
+                                    .attr("y1", maxy - 1)
+                                    .attr("x2", flagx)
+                                    .attr("y2", flagy)
+                                    .style("stroke", "black")
+                                    .style("stroke-width", 2);
                             }
 
-                            drawNote(chord, note, currentOctave, k, x, y);
-                        }
+                            let flags = 0;
+                            switch (note.Duration.Denominator) {
+                                case 8: flags = 1; break;
+                                case 16: flags = 2; break;
+                                case 32: flags = 3; break;
+                                case 64: flags = 4; break;
+                                case 128: flags = 5; break;
+                            }
 
-                        let flagx, flagy;
-                        if (!lineUp && note.Duration.Denominator > 1) {
-                            flagx = x - 6;
-                            flagy = maxy + 48;
-                            chord.append("line")
-                                .attr("x1", flagx)
-                                .attr("y1", miny + 1)
-                                .attr("x2", flagx)
-                                .attr("y2", flagy)
-                                .style("stroke", "black")
-                                .style("stroke-width", 2);
-                        } else if (lineUp && note.Duration.Denominator > 1) {
-                            flagx = x + 6;
-                            flagy = miny - 48;
-                            chord.append("line")
-                                .attr("x1", flagx)
-                                .attr("y1", maxy - 1)
-                                .attr("x2", flagx)
-                                .attr("y2", flagy)
-                                .style("stroke", "black")
-                                .style("stroke-width", 2);
-                        }
-
-                        let flags = 0;
-                        switch (note.Duration.Denominator) {
-                            case 8: flags = 1; break;
-                            case 16: flags = 2; break;
-                            case 32: flags = 3; break;
-                            case 64: flags = 4; break;
-                            case 128: flags = 5; break;
-                        }
-
-                        if (flags > 0) {
-                            for (let k = 0; k < flags; k++) {
-                                if (lineUp) {
-                                    chord.append("line")
-                                        .attr("x1", flagx)
-                                        .attr("y1", flagy + k * 4 + 1)
-                                        .attr("x2", flagx + 16)
-                                        .attr("y2", flagy + k * 4 + 2)
-                                        .style("stroke", "black")
-                                        .style("stroke-width", 3);
-                                } else {
-                                    chord.append("line")
-                                        .attr("x1", flagx)
-                                        .attr("y1", flagy - k * 4 - 1)
-                                        .attr("x2", flagx - 16)
-                                        .attr("y2", flagy - k * 4 - 2)
-                                        .style("stroke", "black")
-                                        .style("stroke-width", 3);
+                            if (flags > 0) {
+                                for (let k = 0; k < flags; k++) {
+                                    if (lineUp) {
+                                        chord.append("line")
+                                            .attr("x1", flagx)
+                                            .attr("y1", flagy + k * 4 + 1)
+                                            .attr("x2", flagx + 16)
+                                            .attr("y2", flagy + k * 4 + 2)
+                                            .style("stroke", "black")
+                                            .style("stroke-width", 3);
+                                    } else {
+                                        chord.append("line")
+                                            .attr("x1", flagx)
+                                            .attr("y1", flagy - k * 4 - 1)
+                                            .attr("x2", flagx - 16)
+                                            .attr("y2", flagy - k * 4 - 2)
+                                            .style("stroke", "black")
+                                            .style("stroke-width", 3);
+                                    }
                                 }
                             }
                         }
+                        x = x + horizontalInterval;
                     }
-                }
+                    notation.append("line")
+                        .attr("x1", x)
+                        .attr("y1", $scope.margin + 3 * $scope.verticalInterval + (line * staffHeight))
+                        .attr("x2", x)
+                        .attr("y2", $scope.margin + 11 * $scope.verticalInterval + (line * staffHeight))
+                        .style("stroke", "#000")
+                        .style("stroke-width", 2);
+                    x = x + horizontalInterval;
+                };
+                //for (let j = 0; j < notesInLine.length; j++) {
+                //    let note = notesInLine[j];
+                //    let chord = notation.append("g")
+                //        .attr("class", `chord_${j}`);
+
+                //    let x = (j + 1) * horizontalInterval;
+
+                //    if (note.Pitches.length === 0) {
+                //        drawPause(chord, note, x);
+                //    } else {
+                //        let lineUp = false;
+                //        let miny = 1000;
+                //        let maxy = -1000;
+
+                //        for (let k = 0; k < note.Pitches.length; k++) {
+                //            let pitch = note.Pitches[k];
+                //            let currentOctave = pitch.Octave > min ? 1 : 0;
+                //            let step = getLine(pitch.Step);
+                //            let y = $scope.margin + (13 - (step.line + 7 * currentOctave)) * $scope.verticalInterval + (line * staffHeight);
+
+                //            if (currentOctave === 0 && pitch.Step < 10) {
+                //                lineUp = true;
+                //            }
+
+                //            miny = y < miny ? y : miny;
+                //            maxy = y < maxy ? maxy : y;
+                //            if (k == 0) {
+                //                miny = y;
+                //                maxy = y;
+                //            }
+
+                //            drawNote(chord, note, currentOctave, k, x, y);
+                //        }
+
+                //        let flagx, flagy;
+                //        if (!lineUp && note.Duration.Denominator > 1) {
+                //            flagx = x - 6;
+                //            flagy = maxy + 48;
+                //            chord.append("line")
+                //                .attr("x1", flagx)
+                //                .attr("y1", miny + 1)
+                //                .attr("x2", flagx)
+                //                .attr("y2", flagy)
+                //                .style("stroke", "black")
+                //                .style("stroke-width", 2);
+                //        } else if (lineUp && note.Duration.Denominator > 1) {
+                //            flagx = x + 6;
+                //            flagy = miny - 48;
+                //            chord.append("line")
+                //                .attr("x1", flagx)
+                //                .attr("y1", maxy - 1)
+                //                .attr("x2", flagx)
+                //                .attr("y2", flagy)
+                //                .style("stroke", "black")
+                //                .style("stroke-width", 2);
+                //        }
+
+                //        let flags = 0;
+                //        switch (note.Duration.Denominator) {
+                //            case 8: flags = 1; break;
+                //            case 16: flags = 2; break;
+                //            case 32: flags = 3; break;
+                //            case 64: flags = 4; break;
+                //            case 128: flags = 5; break;
+                //        }
+
+                //        if (flags > 0) {
+                //            for (let k = 0; k < flags; k++) {
+                //                if (lineUp) {
+                //                    chord.append("line")
+                //                        .attr("x1", flagx)
+                //                        .attr("y1", flagy + k * 4 + 1)
+                //                        .attr("x2", flagx + 16)
+                //                        .attr("y2", flagy + k * 4 + 2)
+                //                        .style("stroke", "black")
+                //                        .style("stroke-width", 3);
+                //                } else {
+                //                    chord.append("line")
+                //                        .attr("x1", flagx)
+                //                        .attr("y1", flagy - k * 4 - 1)
+                //                        .attr("x2", flagx - 16)
+                //                        .attr("y2", flagy - k * 4 - 2)
+                //                        .style("stroke", "black")
+                //                        .style("stroke-width", 3);
+                //                }
+                //            }
+                //        }
+                //    }
+                //}
             }
 
             

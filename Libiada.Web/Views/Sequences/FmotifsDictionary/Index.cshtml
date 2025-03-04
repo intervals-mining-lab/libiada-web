@@ -25,7 +25,9 @@
             <td>@(item.SequentialTransfer ? "Yes" : "No")</td>
             <td>@Html.DisplayFor(modelItem => item.Created)</td>
             <td>@Html.ActionLink("Details", "Details", new { id = item.Id })</td>
-            <td>@Html.ActionLink("Music Score", "MusicScore", new { id = item.Id })</td>
+            @if(item.PauseTreatment == Libiada.Core.Music.PauseTreatment.SilenceNote && !item.SequentialTransfer) {
+                <td>@Html.ActionLink("Music Score", "MusicScore", new { id = item.ResearchObjectId })</td>
+            }
         </tr>
     }
 </table>
