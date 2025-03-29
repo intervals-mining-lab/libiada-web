@@ -67,6 +67,7 @@ public class BatchSequenceImportController : AbstractResultController
     [HttpPost]
     public ActionResult Index(string[] accessions, bool importGenes)
     {
+        int userId = User.GetUserId();
         return CreateTask(() =>
         {
             accessions = accessions.Distinct().Select(a => a.Split('.')[0]).ToArray();
@@ -118,8 +119,8 @@ public class BatchSequenceImportController : AbstractResultController
                         RemoteDb = RemoteDb.GenBank,
                         RemoteId = metadata.Version.CompoundAccession,
                         Partial = partial,
-                        CreatorId = User.GetUserId(),
-                        ModifierId = User.GetUserId(),
+                        CreatorId = userId,
+                        ModifierId = userId,
                     };
 
 

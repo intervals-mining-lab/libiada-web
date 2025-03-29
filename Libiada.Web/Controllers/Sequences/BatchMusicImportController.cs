@@ -45,8 +45,7 @@ public class BatchMusicImportController : AbstractResultController
     {
         // TODO: use temp files instead of this
         var fileStreams = files.Select(FileHelper.GetFileStream).ToList();
-        var userID = User.GetUserId();
-
+        int userId = User.GetUserId();
         return CreateTask(() =>
         {
             List<ResearchObjectImportResult> importResults = [];
@@ -66,8 +65,8 @@ public class BatchMusicImportController : AbstractResultController
                 {
                     var sequence = new MusicSequence()
                     {
-                        CreatorId = userID,
-                        ModifierId = userID
+                        CreatorId = userId,
+                        ModifierId = userId
                     };
 
                     if (researchObjects.Any(m => m.Name == sequenceName))
