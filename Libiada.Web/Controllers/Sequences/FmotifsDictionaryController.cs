@@ -85,6 +85,7 @@ public class FmotifsDictionaryController : AbstractResultController
                                      .ToDictionary(pair => pair.Key, pair => pair.Value);
 
         List<Fmotif> fmotifsSequence = [];
+        List<int> fmotifsCounts = [];
         foreach (var fmotif in sortedFmotifs.Keys)
         {
             var newFmotif = new Fmotif(fmotif.FmotifType, musicSequence.PauseTreatment, fmotif.Id);
@@ -112,9 +113,15 @@ public class FmotifsDictionaryController : AbstractResultController
             fmotifsSequence.Add(newFmotif);
         }
 
+        foreach(var fmotifCount in sortedFmotifs.Values)
+        {
+            fmotifsCounts.Add(fmotifCount);
+        }
+
         var result = new Dictionary<string, object>
         {
             { "fmotifs", fmotifsSequence },
+            { "fmotifsCounts", fmotifsCounts },
             { "sequentialTransfer", musicSequence.SequentialTransfer }
         };
         ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object> { { "data", result } });
