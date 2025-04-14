@@ -102,6 +102,7 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
     [HttpPost]
     public ActionResult Create(CombinedSequenceEntity sequence, bool localFile, IFormFile? file, int? precision)
     {
+        int userId = User.GetUserId();
         return CreateTask(() =>
         {
             try
@@ -131,8 +132,8 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
                         var dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
                         var dnaSequence = new GeneticSequence
                         {
-                            CreatorId = User.GetUserId(),
-                            ModifierId = User.GetUserId(),
+                            CreatorId = userId,
+                            ModifierId = userId,
                             Notation = sequence.Notation,
                             RemoteDb = sequence.RemoteDb,
                             RemoteId = sequence.RemoteId,
@@ -146,8 +147,8 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
                         var musicSequenceRepository = new MusicSequenceRepository(dbFactory, cache);
                         var musicSequence = new MusicSequence
                         {
-                            CreatorId = User.GetUserId(),
-                            ModifierId = User.GetUserId(),
+                            CreatorId = userId,
+                            ModifierId = userId,
                             Notation = sequence.Notation,
                             RemoteDb = sequence.RemoteDb,
                             RemoteId = sequence.RemoteId,
@@ -162,8 +163,8 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
                         var literatureSequenceRepository = new LiteratureSequenceRepository(dbFactory, cache);
                         var literatureSequence = new LiteratureSequence
                         {
-                            CreatorId = User.GetUserId(),
-                            ModifierId = User.GetUserId(),
+                            CreatorId = userId,
+                            ModifierId = userId,
                             Notation = sequence.Notation,
                             RemoteDb = sequence.RemoteDb,
                             RemoteId = sequence.RemoteId,
@@ -178,8 +179,8 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
                         var dataSequenceRepository = new DataSequenceRepository(dbFactory, cache);
                         var dataSequence = new DataSequence
                         {
-                            CreatorId = User.GetUserId(),
-                            ModifierId = User.GetUserId(),
+                            CreatorId = userId,
+                            ModifierId = userId,
                             Notation = sequence.Notation,
                             RemoteDb = sequence.RemoteDb,
                             RemoteId = sequence.RemoteId,

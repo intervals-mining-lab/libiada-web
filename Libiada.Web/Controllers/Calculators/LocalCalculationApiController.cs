@@ -27,7 +27,7 @@ public class LocalCalculationApiController : ControllerBase
     private readonly IFullCharacteristicRepository fullCharacteristicRepository;
     private readonly ITaskManager taskManager;
 
-    public LocalCalculationApiController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
+    public LocalCalculationApiController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                             ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
                                             IFullCharacteristicRepository fullCharacteristicRepository,
                                             ITaskManager taskManager)
@@ -118,7 +118,15 @@ public class LocalCalculationApiController : ControllerBase
             calculatorsFactory.GetDistanceCalculator(distanceCalculator),
             aggregatorsFactory.GetAggregator(aggregator));
 
-        double[,] result = new double[series.Length, series.Length];
+        // Using array of arrays instead of 2d array 
+        // because json serializer does not support
+        // multidimentional arrays serialization
+        // TODO: try to fix this
+        double[][] result = new double[series.Length][];
+        for (int i = 0; i < series.Length; i++)
+        {
+            result[i] = new double[series.Length];
+        }
 
         for (int i = 0; i < series.Length - 1; i++)
         {
@@ -126,8 +134,8 @@ public class LocalCalculationApiController : ControllerBase
             for (int j = i + 1; j < series.Length; j++)
             {
                 double[] secondSeries = series[j];
-                result[i,j] = comparer.GetDistance(firstSeries, secondSeries);
-                result[j,i] = result[i,j];
+                result[i][j] = comparer.GetDistance(firstSeries, secondSeries);
+                result[j][i] = result[i][j];
             }
         }
 
