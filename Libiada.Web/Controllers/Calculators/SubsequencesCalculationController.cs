@@ -85,9 +85,7 @@ public class SubsequencesCalculationController : AbstractResultController
             long[] parentSequenceIds;
             string[] researchObjectNames = new string[researchObjectIds.Length];
             string[] remoteIds = new string[researchObjectIds.Length];
-            string[] subsequencesCharacteristicsNames = new string[characteristicLinkIds.Length];
-            var subsequencesCharacteristicsList = new SelectListItem[characteristicLinkIds.Length];
-
+                      
             var parentSequences = db.CombinedSequenceEntities.Include(s => s.ResearchObject)
                                     .Where(s => s.Notation == Notation.Nucleotides && researchObjectIds.Contains(s.ResearchObjectId))
                                     .Select(s => new { s.Id, ResearchObjectName = s.ResearchObject.Name, s.RemoteId })
@@ -100,6 +98,8 @@ public class SubsequencesCalculationController : AbstractResultController
                 remoteIds[n] = parentSequences[parentSequenceIds[n]].RemoteId;
             }
 
+            var subsequencesCharacteristicsList = new SelectListItem[characteristicLinkIds.Length];
+            string[] subsequencesCharacteristicsNames = new string[characteristicLinkIds.Length];
             for (int k = 0; k < characteristicLinkIds.Length; k++)
             {
                 subsequencesCharacteristicsNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[k]);
@@ -130,8 +130,8 @@ public class SubsequencesCalculationController : AbstractResultController
                 { "features", features.ToDictionary(f => (byte)f, f => f.GetDisplayValue()) },
                 { "attributes", EnumExtensions.ToArray<AnnotationAttribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
                 { "attributeValues", allAttributeValues.Select(sa => new { attribute = sa.AttributeId, value = sa.Value }) },
-                { "subsequencesCharacteristicsNames", subsequencesCharacteristicsNames },
-                { "subsequencesCharacteristicsList", subsequencesCharacteristicsList }
+                { "characteristicNames", subsequencesCharacteristicsNames },
+                { "characteristicsList", subsequencesCharacteristicsList }
             };
 
             return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
