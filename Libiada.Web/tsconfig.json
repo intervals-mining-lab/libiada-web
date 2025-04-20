@@ -1,0 +1,23 @@
+﻿{
+  "compilerOptions": {
+    "target": "ES2021",
+    "module": "none",
+    "sourceMap": true,
+    "outDir": "./wwwroot/js/",
+    "rootDir": "./wwwroot/js/",
+    "strict": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true,
+    "allowJs": true,
+    "checkJs": false
+  },
+  "include": [
+    "wwwroot/js/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "wwwroot/lib"
+  ]
+}

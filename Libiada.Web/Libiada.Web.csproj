@@ -16,6 +16,16 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UserSecretsId>aspnet-Libiada.Web-99e8e359-5341-4474-aa02-9f29895ae1f1</UserSecretsId>
 	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Remove="wwwroot\js\Angular\Новая папка1\**" />
+	  <Compile Remove="wwwroot\js\Angular\Новая папка\**" />
+	  <Content Remove="wwwroot\js\Angular\Новая папка1\**" />
+	  <Content Remove="wwwroot\js\Angular\Новая папка\**" />
+	  <EmbeddedResource Remove="wwwroot\js\Angular\Новая папка1\**" />
+	  <EmbeddedResource Remove="wwwroot\js\Angular\Новая папка\**" />
+	  <None Remove="wwwroot\js\Angular\Новая папка1\**" />
+	  <None Remove="wwwroot\js\Angular\Новая папка\**" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="9.0.0" />
@@ -40,6 +50,12 @@
 		<Using Include="Microsoft.AspNetCore.Mvc" />
 		<Using Include="Microsoft.AspNetCore.Mvc.Rendering" />
 		<Using Include="Microsoft.EntityFrameworkCore" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Update="tsconfig.json">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Content>
 	</ItemGroup>
 
 </Project>
