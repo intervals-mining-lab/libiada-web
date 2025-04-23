@@ -13,7 +13,9 @@
     "allowJs": true,
     "checkJs": false,
     "removeComments": false,
-    "declaration": false
+    "declaration": false,
+    "types": [ "angular" ],
+    "typeRoots": [ "node_modules/@types" ]
   },
   "include": [
     "wwwroot/js/Angular/Controllers/**/*.ts"

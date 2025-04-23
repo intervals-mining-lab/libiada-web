@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "@types/angular": "^1.8.9",
     "@types/jquery": "^3.5.32",
     "typescript": "^5.8.3"
   }
