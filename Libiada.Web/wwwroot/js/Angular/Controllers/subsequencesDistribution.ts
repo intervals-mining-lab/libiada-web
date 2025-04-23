@@ -1,11 +1,7 @@
 ﻿// Интерфейс для $scope в AngularJS
 interface IScope {
-    // Стандартные методы Angular $scope
-    $apply(exp?: string | Function): any;
-    $watch(watchExpression: string | Function,
-        listener?: string | Function,
-        objectEquality?: boolean): Function;
-
+   
+    
     // Свойство для доступа к другим свойствам по строковому ключу
     [key: string]: any;
 }
@@ -55,7 +51,9 @@ interface ISubsequencesDistributionScope extends IScope {
 }
 
 // Объявление глобальных переменных и функций
-declare const angular: any;
+/// <reference types="angular" />
+// Теперь angular будет типизированным как IAngularStatic
+
 declare function MapModelFromJson($scope: ISubsequencesDistributionScope, data: ISubsequencesDistributionData): void;
 
 // Основной класс контроллера

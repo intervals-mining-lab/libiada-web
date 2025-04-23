@@ -11,10 +11,12 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": true,
     "allowJs": true,
-    "checkJs": false
+    "checkJs": false,
+    
   },
   "include": [
-    "wwwroot/js/**/*.ts"
+    "wwwroot/js/**/*.ts",
+    
   ],
   "exclude": [
     "node_modules",
