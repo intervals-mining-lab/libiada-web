@@ -265,7 +265,7 @@
         }
     }
 }
-@if (ViewBag.Error == null)
+@* @if (ViewBag.Error == null)
 {
     <div ng-controller="SubsequencesCalculationResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
@@ -315,7 +315,7 @@
         <input type="button" class="btn btn-secondary mb-2" ng-click="draw()" value="Draw" />
         <div id="chart" class="font-monospace mb-2">
         </div>
-
+ *@
         @*  <filters add-filter="addFilter(newFilter)" delete-filter="deleteFilter(filter, filterIndex)"></filters>
     <div ng-repeat="sequenceData in sequencesData">
     <h3 ng-bind="sequenceData.ResearchObjectName"></h3>
@@ -340,6 +340,6 @@
     </tbody>
     </table>
     </div>*@
-    </div>
+ @*    </div>
 }
-
+ *@

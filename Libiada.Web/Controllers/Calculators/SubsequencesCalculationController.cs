@@ -116,7 +116,7 @@ public class SubsequencesCalculationController : AbstractResultController
             for (int i = 0; i < parentSequenceIds.Length; i++)
             {
                 SubsequenceData[] subsequencesData = subsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(characteristicLinkIds, features, parentSequenceIds[i]);
-
+                subsequencesData = subsequencesData.OrderBy(sd => sd.Starts[0]).ToArray();
                 attributeValuesCache.FillAttributeValues(subsequencesData);
 
                 sequencesData[i] = new SequenceData(researchObjectIds[i], researchObjectNames[i], remoteIds[i], default, subsequencesData);

@@ -19,7 +19,7 @@ function ChartsController(data) {
 
                     $scope.characteristics[i] = { Characteristics: [], ResearchObjectName: rawCharacteristics[i][0] };
                     for (let j = 1; j < rawCharacteristics[i].length; j++) {
-                        $scope.characteristics[i].Characteristics[j - 1] = +rawCharacteristics[i][j].replace(",",".");
+                        $scope.characteristics[i].Characteristics[j - 1] = +rawCharacteristics[i][j].replace(",", ".");
                     }
                 }
                 //$scope.characteristics = characteristics.map((c, i) => ({Characteristics: c }));
@@ -198,7 +198,7 @@ function ChartsController(data) {
             $("#dataPasteBox").bind("input propertychange", $scope.textChanged);
         });
 
-      
+
         // initializes data for chart
         function fillPoints() {
             $scope.points = [];
@@ -426,7 +426,7 @@ function ChartsController(data) {
         $scope.fillLegend = fillLegend;
         $scope.legendClick = legendClick;
         $scope.legendSetVisibilityForAll = legendSetVisibilityForAll;
-        
+
 
         $scope.chartsCharacterisrticsCount = 1;
         $scope.chartElement = document.getElementById("chart");
