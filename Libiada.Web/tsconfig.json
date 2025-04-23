@@ -1,0 +1,25 @@
+﻿{
+  "compilerOptions": {
+    "target": "ES2021",
+    "module": "none",
+    "sourceMap": true,
+    "outDir": "./wwwroot/js/Angular/Controllers/",
+    "rootDir": "./wwwroot/js/Angular/Controllers/",
+    "strict": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false,
+    "allowJs": true,
+    "checkJs": false,
+    "removeComments": false,
+    "declaration": false
+  },
+  "include": [
+    "wwwroot/js/Angular/Controllers/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "wwwroot/lib"
+  ]
+}
