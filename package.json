@@ -3,5 +3,23 @@
     "@types/angular": "^1.8.9",
     "@types/jquery": "^3.5.32",
     "typescript": "^5.8.3"
-  }
+  },
+  "name": "libiada-web",
+  "version": "1.0.0",
+  "description": "The purpose of LibiadaWeb web service is sequence analysis and analysis of ordered data arrays using mathematical tools of FOA - formal order analysis.  \r In particular, LibiadaWeb processes:  \r 1.  Genetic sequences (in the form of DNA / RNA triplets, amino acids).  \r 2.  Literary works (in the form of letters and normalized (using [phpMorphy](http://phpmorphy.sourceforge.net/dokuwiki/)) words).  \r 3.  Musical works (in the form of notes, measures and fmotifs).  \r 4.  The arrays of numerical measurements of custom nature.  \r 5.  Images (using [ImageSharp](https://sixlabors.com/products/imagesharp/)).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/intervals-mining-lab/libiada-web.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/intervals-mining-lab/libiada-web/issues"
+  },
+  "homepage": "https://github.com/intervals-mining-lab/libiada-web#readme"
 }

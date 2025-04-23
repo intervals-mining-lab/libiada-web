@@ -25,14 +25,23 @@
 	  <EmbeddedResource Remove="wwwroot\js\Angular\Новая папка\**" />
 	  <None Remove="wwwroot\js\Angular\Новая папка1\**" />
 	  <None Remove="wwwroot\js\Angular\Новая папка\**" />
+	  <TypeScriptCompile Remove="wwwroot\js\Angular\Controllers\calculation.ts" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Content Include="wwwroot\js\Angular\Controllers\calculation.ts" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="9.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="9.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="9.0.0" />
+		<PackageReference Include="Microsoft.TypeScript.MSBuild" Version="5.8.2">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
 		<PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
+		<PackageReference Include="TypeScript.MSBuildTask" Version="1.7.3" />
 		<PackageReference Include="WebPush" Version="1.0.12" />
 	</ItemGroup>
 

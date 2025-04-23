@@ -1,6 +1,7 @@
 ﻿{
   "compilerOptions": {
     "target": "ES2021",
+<<<<<<< HEAD
     "module": "none",
     "sourceMap": true,
     "outDir": ".",
@@ -17,6 +18,31 @@
   "include": [
     "wwwroot/js/**/*.ts",
     
+=======
+    "module": "commonjs", // изменено с "none" на "commonjs"
+    "sourceMap": true,
+    "outDir": "./wwwroot/js/Angular/Controllers/",
+    "rootDir": "./wwwroot/js/Angular/Controllers/",
+    "strict": false,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true, // добавлено
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false,
+    "allowJs": true,
+    "checkJs": false,
+    "removeComments": false,
+    "declaration": false,
+    "types": [ "angular" ],
+    "typeRoots": [
+      "node_modules/@types",
+      "wwwroot/js/Angular"
+    ],
+    "moduleResolution": "node" // добавлено
+  },
+  "include": [
+    "wwwroot/js/Angular/Controllers/**/*.ts"
+>>>>>>> 5386059598d4e5b0fc366bba7d7c3b7276253bbc
   ],
   "exclude": [
     "node_modules",
