@@ -85,3 +85,6 @@ ConnectionStrings.config
 
 # Secret data storage
 LibiadaWeb/secrets.file
+
+# Ignore all .js.map files
+*.js.map

@@ -1,24 +1,6 @@
 ﻿{
   "compilerOptions": {
     "target": "ES2021",
-<<<<<<< HEAD
-    "module": "none",
-    "sourceMap": true,
-    "outDir": ".",
-    "rootDir": ".",
-    "strict": false,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitAny": true,
-    "allowJs": true,
-    "checkJs": false,
-    
-  },
-  "include": [
-    "wwwroot/js/**/*.ts",
-    
-=======
     "module": "commonjs", // изменено с "none" на "commonjs"
     "sourceMap": true,
     "outDir": "./wwwroot/js/Angular/Controllers/",
@@ -42,7 +24,6 @@
   },
   "include": [
     "wwwroot/js/Angular/Controllers/**/*.ts"
->>>>>>> 5386059598d4e5b0fc366bba7d7c3b7276253bbc
   ],
   "exclude": [
     "node_modules",
