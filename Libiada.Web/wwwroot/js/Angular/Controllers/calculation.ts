@@ -1,9 +1,11 @@
-﻿declare var angular: any;
-//import * as angular from "../lib/angular.js/angular.js";
+﻿//declare var angular: any;
+//import angular from 'angular';
+/// <reference types="angular" />
+/// <reference path="../functions.d.ts" />
 
 
 // Объявляем существующую JavaScript функцию
-declare function MapModelFromJson($scope: any, data: any): void;
+//declare function MapModelFromJson($scope: any, data: any): void;
 
 class CalculationControllerClass {
     private data: any;
