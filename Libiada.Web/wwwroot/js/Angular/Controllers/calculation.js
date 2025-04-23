@@ -1,9 +1,6 @@
-//declare var angular: any;
-//import angular from 'angular';
 /// <reference types="angular" />
 /// <reference path="../functions.d.ts" />
-// Объявляем существующую JavaScript функцию
-//declare function MapModelFromJson($scope: any, data: any): void;
+// Обновленный класс контроллера
 class CalculationControllerClass {
     constructor(data) {
         this.data = data;
