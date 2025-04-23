@@ -16,6 +16,12 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UserSecretsId>aspnet-Libiada.Web-99e8e359-5341-4474-aa02-9f29895ae1f1</UserSecretsId>
 	</PropertyGroup>
+	<ItemGroup>
+	  <TypeScriptCompile Remove="wwwroot\js\Angular\Controllers\calculation.ts" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Content Include="wwwroot\js\Angular\Controllers\calculation.ts" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="9.0.0" />
@@ -37,10 +43,6 @@
 		<ProjectReference Include="..\..\libiada-core\Libiada.Segmenter\Libiada.Segmenter.csproj" />
 		<ProjectReference Include="..\..\libiada-core\Libiada.SequenceGenerator\Libiada.SequenceGenerator.csproj" />
 		<ProjectReference Include="..\..\libiada-database\Libiada.Database\Libiada.Database.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Content Include="wwwroot\js\Angular\Controllers\hello.ts" />
 	</ItemGroup>
 
 	<ItemGroup>
