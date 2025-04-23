@@ -1,5 +1,9 @@
+// Объявление глобальных переменных и функций
+/// <reference types="angular" />
+// Теперь angular будет типизированным как IAngularStatic
+/// <reference path="../functions.d.ts" />
 // Основной класс контроллера
-class SubsequencesDistributionController {
+class SubsequencesDistributionControllerClass {
     constructor(data) {
         this.data = data;
         this.initialize();
@@ -15,8 +19,8 @@ class SubsequencesDistributionController {
     }
 }
 // Экспорт конструктора для использования в _AngularControllerInitializer.cshtml
-window.SubsequencesDistributionController = function (data) {
-    "use strict";
-    new SubsequencesDistributionController(data);
-};
+function SubsequencesDistributionController(data) {
+    return new SubsequencesDistributionControllerClass(data);
+}
+;
 //# sourceMappingURL=subsequencesDistribution.js.map

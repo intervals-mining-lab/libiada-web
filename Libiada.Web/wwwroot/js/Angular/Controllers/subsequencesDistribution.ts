@@ -1,4 +1,10 @@
-﻿// Интерфейс для $scope в AngularJS
+﻿// Объявление глобальных переменных и функций
+/// <reference types="angular" />
+// Теперь angular будет типизированным как IAngularStatic
+
+/// <reference path="../functions.d.ts" />
+
+// Интерфейс для $scope в AngularJS
 interface IScope {
    
     
@@ -50,14 +56,10 @@ interface ISubsequencesDistributionScope extends IScope {
     selectedSequenceGroupsCount: number;
 }
 
-// Объявление глобальных переменных и функций
-/// <reference types="angular" />
-// Теперь angular будет типизированным как IAngularStatic
 
-declare function MapModelFromJson($scope: ISubsequencesDistributionScope, data: ISubsequencesDistributionData): void;
 
 // Основной класс контроллера
-class SubsequencesDistributionController {
+class SubsequencesDistributionControllerClass {
     constructor(private readonly data: ISubsequencesDistributionData) {
         this.initialize();
     }
@@ -74,8 +76,10 @@ class SubsequencesDistributionController {
     }
 }
 
+
+
 // Экспорт конструктора для использования в _AngularControllerInitializer.cshtml
-(window as any).SubsequencesDistributionController = function (data: ISubsequencesDistributionData): void {
-    "use strict";
-    new SubsequencesDistributionController(data);
+function SubsequencesDistributionController(data: ISubsequencesDistributionData): SubsequencesDistributionControllerClass {
+   
+    return new SubsequencesDistributionControllerClass(data);
 };
