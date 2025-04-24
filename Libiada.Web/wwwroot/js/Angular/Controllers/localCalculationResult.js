@@ -70,7 +70,7 @@
                     let fragmentData = characteristic.FragmentsData[j];
                     $scope.points[i].fragmentsData.push({
                         id: j,
-                        //characteristicId: i,
+                        legendIndex: i,
                         name: fragmentData.Name,
                         characteristics: fragmentData.Characteristics   
                     });
@@ -291,13 +291,13 @@
                 type: "parcoords",
                 //pad: [80, 80, 80, 80],
                 line: {
-                    color: $scope.points.map(p => p.legendIndex),
+                    color: $scope.points.map(p => p.fragmentsData.map(sd => sd.legendIndex)).flat(),
                     colorscale: "Turbo",
                 },
 
                 dimensions: characteristicsIndices.map(ci => ({
                     label: $scope.characteristicNames[ci],
-                    values: $scope.points.map(p => p.fragmentsData.map(fd => fd.characteristics[ci]))
+                    values: $scope.points.map(p => p.fragmentsData.map(sd => sd.characteristics[ci])).flat()
                 }))
             }];
 

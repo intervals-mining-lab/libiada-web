@@ -50,6 +50,7 @@
                     let subsequenceData = sequenceData.SubsequencesData[j];
                     let point = {
                         id: subsequenceData.Id,
+                        legendIndex: i,
                         name: sequenceData.ResearchObjectName,
                         attributes: subsequenceData.Attributes,
                         partial: subsequenceData.Partial,
@@ -233,13 +234,13 @@
                 type: "parcoords",
                 //pad: [80, 80, 80, 80],
                 line: {
-                    color: $scope.points.map(p => p.legendIndex),
+                    color: $scope.points.map(p => p.subsequencesData.map(sd => sd.legendIndex)).flat(),
                     colorscale: "Turbo"
                 },
 
                 dimensions: characteristicsIndices.map(ci => ({
                     label: $scope.characteristicNames[ci],
-                    values: $scope.points.map(p => p.characteristics[ci])
+                    values: $scope.points.map(p => p.subsequencesData.map(sd => sd.characteristics[ci])).flat()
                 }))
             }];
 
