@@ -15,7 +15,7 @@ interface IResearchObjectEditData {
 
 // Interface for scope in the controller
 interface IResearchObjectEditScope extends ng.IScope {
-    nature: number;
+    nature: string;
     natures: INature[];
     group: number;
     groups: IGroup[];
@@ -32,20 +32,30 @@ interface IResearchObjectEditScope extends ng.IScope {
 
 // Auxiliary interfaces
 interface INature {
-    Value: number;
+    Value: number;//? type string or num
     Text: string;
+    Nature: number;
+    Group: number;
+    Disabled: boolean;
+    Selected: boolean;
 }
 
 interface IGroup {
-    Value: number;
+    Value: number;//? type string or num
     Text: string;
     Nature: number;
+    Group: number;
+    Disabled: boolean;
+    Selected: boolean;
 }
 
 interface ISequenceType {
-    Value: number;
+    Value: number;//? type string or num
     Text: string;
     Nature: number;
+    Group: number;
+    Disabled: boolean;
+    Selected: boolean;
 }
 
 interface IMultisequence {
@@ -59,7 +69,7 @@ interface IResearchObject {
     Name?: string;
     Description?: string;
     MultisequenceId?: number;
-    MultisequenceNumber?: number;
+    MultisequenceNumber?: number;//скрыт
     CollectionCountry?: string;
     CollectionDate?: string;
     [key: string]: any; // For any additional properties
@@ -79,6 +89,7 @@ class ResearchObjectEditControllerClass {
 
         const researchObjectEdit = ($scope: IResearchObjectEditScope, filterFilter: ng.IFilterFilter): void => {
             MapModelFromJson($scope, this.data);
+           
 
             function filterByNature(): void {
                 const arraysForFiltration: string[] = ["groups", "sequenceTypes"];
@@ -86,11 +97,16 @@ class ResearchObjectEditControllerClass {
                 arraysForFiltration.forEach((arrayName: string) => {
                     if (angular.isDefined($scope[arrayName])) {
                         $scope[`${arrayName}Filtered`] = filterFilter($scope[arrayName], { Nature: $scope.nature });
+
+                       
                     }
                 });
 
                 $scope.group = $scope.groupsFiltered[0].Value;
                 $scope.sequenceType = $scope.sequenceTypesFiltered[0].Value;
+
+                
+
             }
 
             $scope.filterByNature = filterByNature;
