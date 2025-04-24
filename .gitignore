@@ -88,3 +88,6 @@ LibiadaWeb/secrets.file
 
 # Ignore all .js.map files
 *.js.map
+
+# Ignore all node_modules directories
+node_modules/
