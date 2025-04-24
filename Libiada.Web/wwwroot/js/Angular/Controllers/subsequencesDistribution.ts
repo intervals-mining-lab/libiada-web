@@ -1,20 +1,10 @@
-﻿// Объявление глобальных переменных и функций
+﻿// Declaring global variables and functions
 /// <reference types="angular" />
-// Теперь angular будет типизированным как IAngularStatic
-
 /// <reference path="../functions.d.ts" />
 
-// Интерфейс для $scope в AngularJS
-interface IScope {
-   
-    
-    // Свойство для доступа к другим свойствам по строковому ключу
-    [key: string]: any;
-}
-
-// Интерфейс для данных, передаваемых в контроллер
+// Interface for data passed to the controller
 interface ISubsequencesDistributionData {
-    // Основные параметры
+    // Main parameters
     maximumSelectedResearchObjects: number;
     minimumSelectedResearchObjects: number;
     nature: string;
@@ -22,7 +12,7 @@ interface ISubsequencesDistributionData {
     sequenceTypes: Array<{ id: number; name: string }>;
     features: Array<{ id: number; name: string }>;
 
-    // Характеристики
+    // Characteristics
     characteristicTypes: Array<{ value: string; text: string }>;
     characteristicsDictionary: { [key: string]: any };
     notations: Array<{ value: number; text: string }>;
@@ -32,9 +22,9 @@ interface ISubsequencesDistributionData {
     trajectories?: Array<{ value: number; text: string }>;
 }
 
-// Интерфейс для $scope в контроллере
-interface ISubsequencesDistributionScope extends IScope {
-    // Базовые параметры из модели данных
+// Interface for $scope in controller
+interface ISubsequencesDistributionScope extends ng.IScope {
+    // Basic parameters from the data model 
     maximumSelectedResearchObjects: number;
     minimumSelectedResearchObjects: number;
     nature: string;
@@ -42,7 +32,7 @@ interface ISubsequencesDistributionScope extends IScope {
     sequenceTypes: Array<{ id: number; name: string }>;
     features: Array<{ id: number; name: string }>;
 
-    // Характеристики
+    // Characteristics 
     characteristicTypes: Array<{ value: string; text: string }>;
     characteristicsDictionary: { [key: string]: any };
     notations: Array<{ value: number; text: string }>;
@@ -51,35 +41,33 @@ interface ISubsequencesDistributionScope extends IScope {
     pauseTreatments: Array<{ value: number; text: string }>;
     trajectories?: Array<{ value: number; text: string }>;
 
-    // Динамические данные
+    // Dynamic data 
     selectedResearchObjectsCount: number;
     selectedSequenceGroupsCount: number;
 }
 
 
 
-// Основной класс контроллера
+// Main controller class
 class SubsequencesDistributionControllerClass {
     constructor(private readonly data: ISubsequencesDistributionData) {
         this.initialize();
     }
 
     private initialize(): void {
-        // Определение функции контроллера
+        // Define the controller function
         const subsequencesDistribution = ($scope: ISubsequencesDistributionScope): void => {
             MapModelFromJson($scope, this.data);
         };
 
-        // Регистрация контроллера в Angular модуле
+        // Register the controller in the Angular module
         angular.module("libiada")
             .controller("SubsequencesDistributionCtrl", ["$scope", subsequencesDistribution]);
     }
 }
 
-
-
-// Экспорт конструктора для использования в _AngularControllerInitializer.cshtml
+// Export the constructor for use in _AngularControllerInitializer.cshtml
 function SubsequencesDistributionController(data: ISubsequencesDistributionData): SubsequencesDistributionControllerClass {
-   
+
     return new SubsequencesDistributionControllerClass(data);
 };

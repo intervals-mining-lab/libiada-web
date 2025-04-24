@@ -1,66 +1,66 @@
 ﻿/// <reference types="angular" />
 /// <reference path="../functions.d.ts" />
 
-// Интерфейс для объекта data, который передается в контроллер
+// Interface for the data object that is passed to the controller
 interface ICalculationData {
-    // Базовые настройки
+    // Basic settings
     natures: INature[];
     nature?: number;
 
-    // Нотации
+    // Notations
     notations: INotation[];
     hideNotation?: boolean;
 
-    // Характеристики
+    // Characteristics
     characteristicTypes: ICharacteristicType[];
     characteristicsDictionary: { [key: string]: string };
     characteristics?: ICharacteristic[];
 
-    // Группы и типы последовательностей
+    // Groups and sequence types
     groups: IGroup[];
     sequenceTypes: ISequenceType[];
 
-    // Дополнительные настройки
+    // Additional settings
     languages?: string[];
     translators?: string[];
     pauseTreatments?: IPauseTreatment[];
     trajectories?: ITrajectory[];
 
-    // Лимиты для выбора объектов исследования
+    // Limits for selecting research objects
     minimumSelectedResearchObjects?: number;
     maximumSelectedResearchObjects?: number;
 
-    // Опции для кластеризации (если есть)
+    // Options for clustering (if any)
     ClusterizatorsTypes?: IClusterizatorType[];
 
-    // Другие возможные свойства
+    // Other possible properties
     [key: string]: any;
 }
 
-// Интерфейс для $scope контроллера
+// Interface for the $scope controller
 interface ICalculationScope extends ng.IScope {
-    // Свойства, связанные с обработкой природы и нотации
+    // Properties related to nature and notation processing
     nature: number;
     natures: INature[];
     notation: INotation;
     notations: INotation[];
     hideNotation: boolean;
 
-    // Характеристики
+    // Characteristics
     characteristics: ICharacteristic[];
     characteristicTypes: ICharacteristicType[];
     characteristicsDictionary: { [key: string]: string };
 
-    // Выбор объектов исследования
-    calculaionFor: string; // "researchObjects" или "sequenceGroups"
+    // Selecting research objects
+    calculaionFor: string; // "researchObjects" or "sequenceGroups"
     selectedResearchObjectsCount?: number;
     selectedSequenceGroupsCount?: number;
 
-    // Группы и типы последовательностей
+    // Sequence groups and types
     groups: IGroup[];
     sequenceTypes: ISequenceType[];
 
-    // Дополнительные настройки
+    // Additional settings
     language: string;
     languages: string[];
     translator: string;
@@ -69,16 +69,16 @@ interface ICalculationScope extends ng.IScope {
     pauseTreatments: IPauseTreatment[];
     trajectories?: ITrajectory[];
 
-    // Свойства для управления вращением и комплементарностью последовательностей
+    // Properties for controlling rotation and complementarity of sequences
     complementary?: boolean;
     rotate?: boolean;
     rotationLength?: number;
 
-    // Кластеризация (если есть)
+    // Clustering (if any)
     ClusterizatorsTypes?: IClusterizatorType[];
     ClusterizationType?: IClusterizatorType;
 
-    // Методы
+    // Methods 
     filterByNature: () => void;
     clearSelection: () => void;
     setUnselectAllResearchObjectsFunction: (func: Function) => void;
@@ -87,7 +87,7 @@ interface ICalculationScope extends ng.IScope {
     unselectAllSequenceGroups?: Function;
 }
 
-// Вспомогательные интерфейсы
+// Auxiliary interfaces
 
 interface INature {
     id: number;
@@ -154,7 +154,7 @@ interface IClusterizatorType {
     name: string;
 }
 
-// Обновленный класс контроллера
+// Updated controller class
 class CalculationControllerClass {
     private data: ICalculationData;
 
@@ -173,7 +173,7 @@ class CalculationControllerClass {
                 if (!$scope.hideNotation) {
                     $scope.notation = filterFilter($scope.notations, { Nature: $scope.nature })[0];
 
-                    // if notation is not linked to characteristic
+                    // if notation is not linked to characteristic 
                     angular.forEach($scope.characteristics, (characteristic: ICharacteristic) => {
                         characteristic.notation = $scope.notation;
                     });
@@ -190,6 +190,7 @@ class CalculationControllerClass {
 
             function clearSelection(): void {
                 if ($scope.unselectAllResearchObjects) $scope.unselectAllResearchObjects();
+
                 if ($scope.unselectAllSequenceGroups) $scope.unselectAllSequenceGroups();
             }
 
@@ -198,14 +199,14 @@ class CalculationControllerClass {
             $scope.setUnselectAllSequenceGroupsFunction = setUnselectAllSequenceGroupsFunction;
             $scope.clearSelection = clearSelection;
 
-            // if notation is not linked to characteristic
+            // if notation is not linked to characteristic 
             $scope.notation = filterFilter($scope.notations, { Nature: $scope.nature })[0];
             $scope.language = $scope.languages?.[0];
             $scope.translator = $scope.translators?.[0];
             $scope.pauseTreatment = $scope.pauseTreatment ?? $scope.pauseTreatments?.[0];
             $scope.calculaionFor = "researchObjects";
 
-            // if we are in clusterization
+            // if we are in clusterization 
             if ($scope.ClusterizatorsTypes) {
                 $scope.ClusterizationType = $scope.ClusterizatorsTypes[0];
             }
@@ -215,8 +216,7 @@ class CalculationControllerClass {
     }
 }
 
-// Функция-обертка для обратной совместимости
+// Wrapper function for backwards compatibility
 function CalculationController(data: ICalculationData): CalculationControllerClass {
     return new CalculationControllerClass(data);
 }
-
