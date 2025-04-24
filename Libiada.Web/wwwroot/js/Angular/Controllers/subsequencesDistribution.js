@@ -1,24 +1,23 @@
-// Объявление глобальных переменных и функций
+// Declaring global variables and functions
 /// <reference types="angular" />
-// Теперь angular будет типизированным как IAngularStatic
 /// <reference path="../functions.d.ts" />
-// Основной класс контроллера
+// Main controller class
 class SubsequencesDistributionControllerClass {
     constructor(data) {
         this.data = data;
         this.initialize();
     }
     initialize() {
-        // Определение функции контроллера
+        // Define the controller function
         const subsequencesDistribution = ($scope) => {
             MapModelFromJson($scope, this.data);
         };
-        // Регистрация контроллера в Angular модуле
+        // Register the controller in the Angular module
         angular.module("libiada")
             .controller("SubsequencesDistributionCtrl", ["$scope", subsequencesDistribution]);
     }
 }
-// Экспорт конструктора для использования в _AngularControllerInitializer.cshtml
+// Export the constructor for use in _AngularControllerInitializer.cshtml
 function SubsequencesDistributionController(data) {
     return new SubsequencesDistributionControllerClass(data);
 }

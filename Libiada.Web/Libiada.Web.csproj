@@ -26,9 +26,11 @@
 	  <None Remove="wwwroot\js\Angular\Новая папка1\**" />
 	  <None Remove="wwwroot\js\Angular\Новая папка\**" />
 	  <TypeScriptCompile Remove="wwwroot\js\Angular\Controllers\calculation.ts" />
+	  <TypeScriptCompile Remove="wwwroot\js\Angular\Controllers\researchObjectEdit.ts" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Content Include="wwwroot\js\Angular\Controllers\calculation.ts" />
+	  <Content Include="wwwroot\js\Angular\Controllers\researchObjectEdit.ts" />
 	</ItemGroup>
 
 	<ItemGroup>
