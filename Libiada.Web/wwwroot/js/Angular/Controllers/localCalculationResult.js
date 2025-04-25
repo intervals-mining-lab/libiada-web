@@ -69,7 +69,7 @@
                 for (let j = 0; j < characteristic.FragmentsData.length; j++) {
                     let fragmentData = characteristic.FragmentsData[j];
                     $scope.points[i].fragmentsData.push({
-                        id: j,
+                        rank: j,
                         legendIndex: i,
                         name: fragmentData.Name,
                         characteristics: fragmentData.Characteristics   
@@ -83,7 +83,7 @@
             let tooltipContent = [];
             tooltipContent.push(`Name: ${d.name}`);
 
-            let pointData = $scope.characteristics[d.id - 1].Characteristics;
+            let pointData = $scope.characteristics[d.rank - 1].Characteristics;
             let pointsCharacteristics = [];
             for (let i = 0; i < pointData.length; i++) {
                 pointsCharacteristics.push(`${$scope.characteristicsList[i].Text}: ${pointData[i]}`);
@@ -100,7 +100,7 @@
 
             $scope.tooltipVisible = true;
             $scope.tooltip = {
-                id: selectedPoint.id,
+                id: selectedPoint.rank,
                 name: selectedPoint.name,
                 characteristics: selectedPoint.characteristics
             };
@@ -137,6 +137,27 @@
             min -= Math.abs(range * 0.05);
             max += Math.abs(range * 0.05);
 
+            let ranks = [];
+            if ($scope.lineChart) {
+                for (let i = 0; i < $scope.points.length; i++) {
+                    let y = $scope.points[i].fragmentsData.map(sd => sd.characteristics[characteristicIndex]);
+                    y.sort((first, second) => second - first);
+                    ranks.push({
+                        //x is range from 1 to fragmentsData length
+                        x: Array.from({ length: y.length }, (x, i) => i + 1),
+                        y: y
+                    });
+                }
+            } else {
+                for (let i = 0; i < $scope.points.length; i++) {
+                    ranks.push({
+                        //$scope.points[i].fragmentsData.map(sd => { return { x: sd.rank, y: sd.characteristics[characteristicIndex] } }) 
+                        x: $scope.points[i].fragmentsData.map(sd => sd.rank),
+                        y: $scope.points[i].fragmentsData.map(sd => sd.characteristics[characteristicIndex])
+                    });
+                }
+            }
+
             $scope.layout = {
                 margin: {
                     l: 50,
@@ -154,10 +175,10 @@
                 }
             };
 
-            $scope.chartData = $scope.points.map(p => ({
+            $scope.chartData = $scope.points.map((p, i) => ({
                 hoverinfo: "text+x+y",
-                x: p.fragmentsData.map(fd => fd.id),
-                y: p.fragmentsData.map(fd => fd.characteristics[characteristicIndex]),
+                x: ranks[i].x,
+                y: ranks[i].y,
                 marker: {
                     color: $scope.legend[p.legendIndex].color,
                     size: 2,

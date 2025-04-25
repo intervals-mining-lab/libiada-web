@@ -162,6 +162,17 @@
                                             <input type="button" class="btn btn-secondary" ng-click="draw()" value="Draw" />
                                         </div>
                                     </div>
+                                    <div class="form-check" ng-show="chartCharacteristics.length == 1">
+                                        <input type="checkbox"
+                                               class="form-check-input"
+                                               name="lineChart"
+                                               id="lineChart"
+                                               ng-model="lineChart"
+                                               value="false" />
+                                        <label class="form-check-label" for="lineChart">
+                                            Draw rank distribution
+                                        </label>
+                                    </div>
                                 </div>
                                 <div id="tooltip-tab-pane" class="tab-pane fade" role="tabpanel" aria-labelledby="tooltip-tab" tabindex="0">
                                     <div class="font-monospace text-break">

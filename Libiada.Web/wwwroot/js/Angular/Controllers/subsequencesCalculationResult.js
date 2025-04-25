@@ -36,7 +36,7 @@
                 //let characteristic = $scope.characteristics[i];
                 const legendIndex = i;
                 //$scope.legend.push({ id: sequenceData.ResearchObjectId, name: sequenceData.ResearchObjectName, visible: true, colorId: i });
-               
+
                 $scope.points.push({
                     legendIndex: i,
                     legendId: i + 1,
@@ -67,7 +67,7 @@
                     };
                     $scope.points[i].subsequencesData.push(point);
                 }
-            }          
+            }
         }
 
         function fillLinePlotData() {
@@ -79,6 +79,26 @@
             // adding margins
             min -= Math.abs(range * 0.05);
             max += Math.abs(range * 0.05);
+
+            let ranks = [];
+            if ($scope.lineChart) {
+                for (let i = 0; i < $scope.points.length; i++) {
+                    let y = $scope.points[i].subsequencesData.map(sd => sd.characteristics[characteristicIndex]);
+                    y.sort((first, second) => second - first);
+                    ranks.push({
+                        //x is range from 1 to subsequencesData length
+                        x: Array.from({ length: y.length }, (x, i) => i + 1),
+                        y: y
+                    });
+                }
+            } else {
+                for (let i = 0; i < $scope.points.length; i++) {
+                    ranks.push({
+                        x: $scope.points[i].subsequencesData.map(sd => sd.rank),
+                        y: $scope.points[i].subsequencesData.map(sd => sd.characteristics[characteristicIndex])
+                    });
+                }
+            }
 
             $scope.layout = {
                 margin: {
@@ -97,10 +117,10 @@
                 }
             };
 
-            $scope.chartData = $scope.points.map(p => ({
+            $scope.chartData = $scope.points.map((p , i) => ({
                 hoverinfo: "text+x+y",
-                x: p.subsequencesData.map(sd => sd.rank),
-                y: p.subsequencesData.map(sd => sd.characteristics[characteristicIndex]),
+                x: ranks[i].x,
+                y: ranks[i].y,
                 marker: {
                     color: $scope.legend[p.legendIndex].color,
                     size: 2,
@@ -296,7 +316,7 @@
             }
 
         }
-        
+
         function legendSetVisibilityForAll(visibility) {
             if ($scope.chartData && $scope.chartData[0].customdata) {
                 let update = { visible: visibility ? true : "legendonly" };
@@ -379,9 +399,9 @@
         }
 
         // initializes data for genes map
-    
 
-       
+
+
 
         // determines if dots are similar by product
         function dotsSimilar(d, dot) {
@@ -406,7 +426,7 @@
             return true;
         }
 
-       
+
 
 
         $scope.fillLinePlotData = fillLinePlotData;
@@ -419,7 +439,7 @@
         $scope.legendClick = legendClick;
         $scope.legendSetVisibilityForAll = legendSetVisibilityForAll;
         $scope.dragbarMouseDown = dragbarMouseDown;
-      //$scope.renderResultsTable = renderResultsTable;
+        //$scope.renderResultsTable = renderResultsTable;
 
         $scope.chartElement = document.getElementById("chart");
         $scope.characteristicsTableRendering = { rendered: false };
@@ -429,7 +449,7 @@
 
 
 
-       // $scope.dotVisible = dotVisible;
+        // $scope.dotVisible = dotVisible;
         $scope.dotsSimilar = dotsSimilar;
         //$scope.fillVisiblePoints = fillVisiblePoints;
         //$scope.filterByFeature = filterByFeature;
