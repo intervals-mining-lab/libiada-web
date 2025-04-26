@@ -10,7 +10,6 @@ class ResearchObjectEditControllerClass {
         "use strict";
         const researchObjectEdit = ($scope, filterFilter) => {
             MapModelFromJson($scope, this.data);
-            console.log("До scope", $scope);
             function filterByNature() {
                 const arraysForFiltration = ["groups", "sequenceTypes"];
                 arraysForFiltration.forEach((arrayName) => {
@@ -22,7 +21,6 @@ class ResearchObjectEditControllerClass {
                 $scope.sequenceType = $scope.sequenceTypesFiltered[0].Value;
             }
             $scope.filterByNature = filterByNature;
-            console.log("После scope", $scope);
         };
         angular.module("libiada").controller("ResearchObjectEditCtrl", ["$scope", "filterFilter", researchObjectEdit]);
     }
