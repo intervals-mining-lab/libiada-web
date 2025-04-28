@@ -15,7 +15,7 @@ class TaskManagerControllerClass {
             function onHubStart(tasks) {
                 for (let i = 0; i < tasks.length; i++) {
                     let task = tasks[i];
-                    task.resultLink = `${window.location.origin}/${task.TaskType}/Result/${task.Id}`;
+                    task.resultLink = new URL(`${window.location.origin}/${task.TaskType}/Result/${task.Id}`);
                     $scope.tasks.push(task);
                     $scope.tryRedirectToResult(task);
                 }
@@ -110,7 +110,7 @@ class TaskManagerControllerClass {
             function tryRedirectToResult(task) {
                 if ($scope.autoRedirect && (task.Id === $scope.RedirectTaskId)
                     && (task.TaskState === "Completed" || task.TaskState === "Error")) {
-                    document.location.href = `${window.location.origin}/${task.TaskType}/Result/${task.Id}`;
+                    document.location.href = task.resultLink.href || `${window.location.origin}/${task.TaskType}/Result/${task.Id}`;
                 }
             }
             // Assigning methods to $scope 
