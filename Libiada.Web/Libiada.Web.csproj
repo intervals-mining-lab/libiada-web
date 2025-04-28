@@ -17,9 +17,11 @@
 		<UserSecretsId>aspnet-Libiada.Web-99e8e359-5341-4474-aa02-9f29895ae1f1</UserSecretsId>
 	</PropertyGroup>
 	
+	
 	<ItemGroup>
 	  <Content Include="wwwroot\js\Angular\Controllers\calculation.ts" />
 	  <Content Include="wwwroot\js\Angular\Controllers\researchObjectEdit.ts" />
+	  <Content Include="wwwroot\js\Angular\Controllers\researchObjectSequenceCreate.ts" />
 	</ItemGroup>
 
 	<ItemGroup>
