@@ -29,12 +29,34 @@ interface ILinkResult {
 }
 
 // Interface for point data to display on chart
+
 interface IPoint {
+    // Общие свойства
     id: number;
-    distributionIntervals: IDistributionInterval[];
-    x: number;
-    y: number;
-    order: string;
+    colorId: number;
+
+    // Свойства для intervalsCharacteristicsDistributionResult
+    distributionIntervals?: IDistributionInterval[];
+    order?: string;
+    x?: number;
+    y?: number;
+
+    // Свойства для subsequencesCalculationResult
+    researchObjectId?: number;
+    researchObjectName?: string;
+    sequenceRemoteId?: string;
+    attributes?: number[];
+    partial?: boolean;
+    featureId?: number;
+    positions?: number[];
+    lengths?: number[];
+    subsequenceRemoteId?: string;
+    rank?: number;
+    characteristicsValues?: number[];
+    featureVisible?: boolean;
+    legendVisible?: boolean;
+    filtersVisible?: boolean[];
+    remoteId?: string;
 }
 
 // Interface for characteristic data
@@ -109,9 +131,27 @@ class IntervalsCharacteristicsDistributionResultHandler {
                                 $scope.points.push({
                                     id: index++,
                                     distributionIntervals: distributionIntervals,
+                                    order: orders[k].order,
                                     x: j + 1,
                                     y: orders[k].characteristics.Characteristics[ch],
-                                    order: orders[k].order
+                                    colorId: i,
+
+                                    // Дополнительные свойства для совместимости с интерфейсом
+                                    researchObjectId: 0, // Если не используется, можно установить значение по умолчанию
+                                    researchObjectName: "",
+                                    sequenceRemoteId: "",
+                                    attributes: [],
+                                    partial: false,
+                                    featureId: 0,
+                                    positions: [],
+                                    lengths: [],
+                                    subsequenceRemoteId: "",
+                                    rank: 0,
+                                    characteristicsValues: [],
+                                    featureVisible: true,
+                                    legendVisible: true,
+                                    filtersVisible: [],
+                                    remoteId: null
                                 });
                             }
                         }

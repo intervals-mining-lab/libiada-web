@@ -89,8 +89,8 @@ LibiadaWeb/secrets.file
 # Ignore all .js.map files
 *.js.map
 
-# Ignore all node_modules directories
-node_modules/
+# Ignore node_modules directory
+node_modules/*
 
-#Don't ignore dir @microsoft in node_modules
+# But keep the @microsoft folder
 !node_modules/@microsoft
