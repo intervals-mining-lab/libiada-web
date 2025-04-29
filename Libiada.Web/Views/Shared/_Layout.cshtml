@@ -89,7 +89,7 @@
         <div class="container">
             @if (User.IsAdmin())
             {
-                <h3 class='@(Db.IsConnectionSuccessful() ? "text-success" : "text-danger") mb-0 fs-5'>
+                <h3 class='@(await Db.IsConnectionSuccessful() ? "text-success" : "text-danger") mb-0 fs-5'>
                     Current database: @Db.TryGetDbName()
                 </h3>
             }

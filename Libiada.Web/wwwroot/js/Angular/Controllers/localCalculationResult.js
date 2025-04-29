@@ -78,40 +78,24 @@
             }
         }
 
-        // constructs string representing tooltip text (inner html)
-        function fillPointTooltip(d) {
-            let tooltipContent = [];
-            tooltipContent.push(`Name: ${d.name}`);
-
-            let pointData = $scope.characteristics[d.rank - 1].Characteristics;
-            let pointsCharacteristics = [];
-            for (let i = 0; i < pointData.length; i++) {
-                pointsCharacteristics.push(`${$scope.characteristicsList[i].Text}: ${pointData[i]}`);
-            }
-
-            tooltipContent.push(pointsCharacteristics.join("<br/>"));
-
-            return tooltipContent.join("</br>");
-        }
-
         // shows tooltip for dot or group of dots
-        function showTooltip(selectedPoint) {
+        function showTooltip(selectedTrace) {
             $("button[data-bs-target='#tooltip-tab-pane']").tab("show");
-
+            let selectetPoint = selectedTrace.fragmentsData[$scope.selectedPointIndex];
             $scope.tooltipVisible = true;
             $scope.tooltip = {
-                id: selectedPoint.rank,
-                name: selectedPoint.name,
-                characteristics: selectedPoint.characteristics
+                id: selectedTrace.rank,
+                name: selectedTrace.researchObjectName,
+                fragmentName: selectetPoint.name,
+                characteristics: selectetPoint.characteristics
             };
             let update = {};
             switch ($scope.chartCharacteristics.length) {
                 case 1:
-                    break;
                 case 2:
                     update = {
-                        "marker.symbol": $scope.points.map(point => point === selectedPoint ? "diamond-wide" : "circle"),
-                        "marker.size": $scope.points.map(point => point === selectedPoint ? 15 : 6)
+                        "marker.symbol": $scope.points.map(t => t.fragmentsData.map(p => p === selectetPoint ? "diamond-wide" : "circle")),
+                        "marker.size": $scope.points.map(t => t.fragmentsData.map(p => p === selectetPoint ? 10 : $scope.pointSize * 1.5))
                     };
                     break;
                 case 3:
@@ -124,7 +108,6 @@
 
             $scope.$apply();
         }
-
 
         function fillLinePlotData() {
             let characteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
@@ -174,14 +157,14 @@
                     }
                 }
             };
-
+            $scope.pointSize = 2;
             $scope.chartData = $scope.points.map((p, i) => ({
                 hoverinfo: "text+x+y",
                 x: ranks[i].x,
                 y: ranks[i].y,
                 marker: {
                     color: $scope.legend[p.legendIndex].color,
-                    size: 2,
+                    size: $scope.pointSize,
                     opacity: 0.8
                 },
                 type: "scatter",
@@ -223,6 +206,7 @@
                 }
             };
 
+            $scope.pointSize = 3;
             $scope.chartData = $scope.points.map(p => ({
                 hoverinfo: "text+x+y",
                 type: "scattergl",
@@ -233,7 +217,7 @@
                 marker: {
                     opacity: 0.8,
                     color: $scope.legend[p.legendIndex].color,
-                    size: 3
+                    size: $scope.pointSize
                 },
                 name: p.researchObjectName,
                 customdata: { legendId: p.legendId },
@@ -247,6 +231,7 @@
             let secondCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1].value);
             let thirdCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[2].value);
 
+            $scope.pointSize = 3;
             $scope.chartData = $scope.points.map(p => ({
                 hoverinfo: "text+x+y+z",
                 x: p.fragmentsData.map(fd => fd.characteristics[firstCharacteristicIndex]),
@@ -257,7 +242,7 @@
                 marker: {
                     opacity: 0.8,
                     color: $scope.legend[p.legendIndex].color,
-                    size: 3
+                    size: $scope.pointSize
                 },
                 name: p.researchObjectName,
                 type: "scatter3d",
@@ -412,7 +397,6 @@
         $scope.fillParallelCoordinatesPlotData = fillParallelCoordinatesPlotData;
         $scope.draw = draw;
         $scope.fillPoints = fillPoints;
-        $scope.fillPointTooltip = fillPointTooltip;
         $scope.showTooltip = showTooltip;
         $scope.fillLegend = fillLegend;
         $scope.legendClick = legendClick;
