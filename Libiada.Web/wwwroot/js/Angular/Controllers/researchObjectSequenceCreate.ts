@@ -69,7 +69,7 @@ interface ISelectOption {
 }
 
 // Controller class
-class ResearchObjectSequenceCreateControllerClass {
+class ResearchObjectSequenceCreator {
     private data: IResearchObjectSequenceCreateData;
 
     constructor(data: IResearchObjectSequenceCreateData) {
@@ -130,6 +130,6 @@ class ResearchObjectSequenceCreateControllerClass {
 }
 
 // Wrapper function for backwards compatibility
-function ResearchObjectSequenceCreateController(data: IResearchObjectSequenceCreateData): ResearchObjectSequenceCreateControllerClass {
-    return new ResearchObjectSequenceCreateControllerClass(data);
+function ResearchObjectSequenceCreateController(data: IResearchObjectSequenceCreateData): ResearchObjectSequenceCreator {
+    return new ResearchObjectSequenceCreator(data);
 }

@@ -1,7 +1,7 @@
 /// <reference types="angular" />
 /// <reference path="../functions.d.ts" />
 // Updated controller class
-class CalculationControllerClass {
+class CalculationOperator {
     constructor(data) {
         this.data = data;
         this.initializeController();
@@ -51,6 +51,6 @@ class CalculationControllerClass {
 }
 // Wrapper function for backwards compatibility
 function CalculationController(data) {
-    return new CalculationControllerClass(data);
+    return new CalculationOperator(data);
 }
 //# sourceMappingURL=calculation.js.map

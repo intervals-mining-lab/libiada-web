@@ -49,7 +49,7 @@ interface ISubsequencesDistributionScope extends ng.IScope {
 
 
 // Main controller class
-class SubsequencesDistributionControllerClass {
+class SubsequencesDistributionManager {
     constructor(private readonly data: ISubsequencesDistributionData) {
         this.initialize();
     }
@@ -67,7 +67,7 @@ class SubsequencesDistributionControllerClass {
 }
 
 // Export the constructor for use in _AngularControllerInitializer.cshtml
-function SubsequencesDistributionController(data: ISubsequencesDistributionData): SubsequencesDistributionControllerClass {
+function SubsequencesDistributionController(data: ISubsequencesDistributionData): SubsequencesDistributionManager {
 
-    return new SubsequencesDistributionControllerClass(data);
+    return new SubsequencesDistributionManager(data);
 };

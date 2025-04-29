@@ -55,6 +55,12 @@
     {
       "library": "exceljs@4.3.0",
       "destination": "wwwroot/lib/exceljs/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "typescript@5.3.3",
+      "destination": "./node_modules/typescript/"
     }
+    
   ]
 }

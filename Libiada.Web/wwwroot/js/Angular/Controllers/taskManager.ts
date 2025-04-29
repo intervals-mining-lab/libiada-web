@@ -178,10 +178,11 @@ class TaskManagerControllerClass {
                     () => { /* Cancel action */ });
             }
 
+            //TODO Check List
             function tryRedirectToResult(task: ITask): void {
                 if ($scope.autoRedirect && (task.Id === $scope.RedirectTaskId)
                     && (task.TaskState === "Completed" || task.TaskState === "Error")) {
-                    document.location.href = task.resultLink.href || `${window.location.origin}/${task.TaskType}/Result/${task.Id}`;
+                    document.location.href = task.resultLink.href; //`${window.location.origin}/${task.TaskType}/Result/${task.Id}`;
                 }
             }
 

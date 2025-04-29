@@ -107,10 +107,11 @@ class TaskManagerControllerClass {
                     }
                 }, () => { });
             }
+            //TODO Check List
             function tryRedirectToResult(task) {
                 if ($scope.autoRedirect && (task.Id === $scope.RedirectTaskId)
                     && (task.TaskState === "Completed" || task.TaskState === "Error")) {
-                    document.location.href = task.resultLink.href || `${window.location.origin}/${task.TaskType}/Result/${task.Id}`;
+                    document.location.href = task.resultLink.href; //`${window.location.origin}/${task.TaskType}/Result/${task.Id}`;
                 }
             }
             // Assigning methods to $scope 

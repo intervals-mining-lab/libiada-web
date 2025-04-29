@@ -1,7 +1,7 @@
 /// <reference types="angular" />
 /// <reference path="../functions.d.ts" />
 // Controller class
-class ResearchObjectSequenceCreateControllerClass {
+class ResearchObjectSequenceCreator {
     constructor(data) {
         this.data = data;
         this.initializeController();
@@ -48,6 +48,6 @@ class ResearchObjectSequenceCreateControllerClass {
 }
 // Wrapper function for backwards compatibility
 function ResearchObjectSequenceCreateController(data) {
-    return new ResearchObjectSequenceCreateControllerClass(data);
+    return new ResearchObjectSequenceCreator(data);
 }
 //# sourceMappingURL=researchObjectSequenceCreate.js.map

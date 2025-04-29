@@ -112,7 +112,7 @@ interface IResearchObject {
 
 
 // Updated controller class
-class ResearchObjectEditControllerClass {
+class ResearchObjectEditor {
     private data: IResearchObjectEditData;
 
     constructor(data: IResearchObjectEditData) {
@@ -152,6 +152,6 @@ class ResearchObjectEditControllerClass {
 }
 
 // Wrapper function for backwards compatibility
-function ResearchObjectEditController(data: IResearchObjectEditData): ResearchObjectEditControllerClass {
-    return new ResearchObjectEditControllerClass(data);
+function ResearchObjectEditController(data: IResearchObjectEditData): ResearchObjectEditor   {
+    return new ResearchObjectEditor  (data);
 }

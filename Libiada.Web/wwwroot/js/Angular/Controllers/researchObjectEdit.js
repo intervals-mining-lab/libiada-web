@@ -1,7 +1,7 @@
 /// <reference types="angular" />
 /// <reference path="../functions.d.ts" />
 // Updated controller class
-class ResearchObjectEditControllerClass {
+class ResearchObjectEditor {
     constructor(data) {
         this.data = data;
         this.initializeController();
@@ -27,6 +27,6 @@ class ResearchObjectEditControllerClass {
 }
 // Wrapper function for backwards compatibility
 function ResearchObjectEditController(data) {
-    return new ResearchObjectEditControllerClass(data);
+    return new ResearchObjectEditor(data);
 }
 //# sourceMappingURL=researchObjectEdit.js.map

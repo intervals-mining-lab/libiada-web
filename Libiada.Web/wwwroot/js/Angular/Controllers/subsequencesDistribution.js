@@ -2,7 +2,7 @@
 /// <reference types="angular" />
 /// <reference path="../functions.d.ts" />
 // Main controller class
-class SubsequencesDistributionControllerClass {
+class SubsequencesDistributionManager {
     constructor(data) {
         this.data = data;
         this.initialize();
@@ -19,7 +19,7 @@ class SubsequencesDistributionControllerClass {
 }
 // Export the constructor for use in _AngularControllerInitializer.cshtml
 function SubsequencesDistributionController(data) {
-    return new SubsequencesDistributionControllerClass(data);
+    return new SubsequencesDistributionManager(data);
 }
 ;
 //# sourceMappingURL=subsequencesDistribution.js.map

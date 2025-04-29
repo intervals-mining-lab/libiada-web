@@ -155,7 +155,7 @@ interface IClusterizatorType {
 }
 
 // Updated controller class
-class CalculationControllerClass {
+class CalculationOperator {
     private data: ICalculationData;
 
     constructor(data: ICalculationData) {
@@ -217,6 +217,6 @@ class CalculationControllerClass {
 }
 
 // Wrapper function for backwards compatibility
-function CalculationController(data: ICalculationData): CalculationControllerClass {
-    return new CalculationControllerClass(data);
+function CalculationController(data: ICalculationData): CalculationOperator {
+    return new CalculationOperator(data);
 }
