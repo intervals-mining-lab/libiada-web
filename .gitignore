@@ -91,3 +91,6 @@ LibiadaWeb/secrets.file
 
 # Ignore all node_modules directories
 node_modules/
+
+#Don't ignore dir @microsoft in node_modules
+!node_modules/@microsoft
