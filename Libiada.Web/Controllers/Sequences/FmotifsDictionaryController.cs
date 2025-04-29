@@ -85,6 +85,7 @@ public class FmotifsDictionaryController : AbstractResultController
                                      .ToDictionary(pair => pair.Key, pair => pair.Value);
 
         List<Fmotif> fmotifsSequence = [];
+        List<int> fmotifsCounts = [];
         foreach (var fmotif in sortedFmotifs.Keys)
         {
             var newFmotif = new Fmotif(fmotif.FmotifType, musicSequence.PauseTreatment, fmotif.Id);
@@ -112,12 +113,91 @@ public class FmotifsDictionaryController : AbstractResultController
             fmotifsSequence.Add(newFmotif);
         }
 
+        foreach(var fmotifCount in sortedFmotifs.Values)
+        {
+            fmotifsCounts.Add(fmotifCount);
+        }
+
         var result = new Dictionary<string, object>
         {
             { "fmotifs", fmotifsSequence },
+            { "fmotifsCounts", fmotifsCounts },
             { "sequentialTransfer", musicSequence.SequentialTransfer }
         };
         ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object> { { "data", result } });
         return View(musicSequence);
     }
+
+    /// <summary>
+    /// Загружает нотную последовательность всего произведения.
+    /// </summary>
+    /// <param name="id">ID музыкального произведения.</param>
+    /// <returns>Представление нотного стана для всего произведения.</returns>
+    public async Task<ActionResult> MusicScore(long? id)
+    {
+        if (id == null)
+        {
+            return BadRequest();
+        }
+
+        using var db = dbFactory.CreateDbContext();
+        var dbSequence = await db.CombinedSequenceEntities
+                                 .Where(m => m.Notation == Notation.Measures)
+                                 .Include(m => m.ResearchObject)
+                                 .SingleOrDefaultAsync(m => m.ResearchObjectId == id);
+
+        if (dbSequence == null)
+        {
+            return NotFound("Ошибка БД: не найдена подходящая запись.");
+        }
+
+        var musicSequence = dbSequence.ToMusicSequence();
+
+        var musicSequenceAlphabet = musicSequence.Alphabet
+                                                 .Select(el => db.Measures.Single(f => f.Id == el))
+                                                 .ToList();
+
+        List<ValueNote> notesSequence = new List<ValueNote>();
+        List<List<ValueNote>> measuresSequence = new List<List<ValueNote>>();
+
+        foreach (var measure in musicSequenceAlphabet)
+        {
+            List<ValueNote> measureNotes = new List<ValueNote>();
+            long[] measureAlphabet = measure.Alphabet;
+            int[] measureOrder = measure.Order;
+
+            foreach (int position in measureOrder)
+            {
+                long dbNoteId = measureAlphabet[position - 1];
+                Note dbNote = await db.Notes.Include(n => n.Pitches).SingleAsync(n => n.Id == dbNoteId);
+
+                List<Pitch> newPitches = dbNote.Pitches.Select(pitch => new Pitch(pitch.Midinumber)).ToList();
+                var newNote = new ValueNote(newPitches,
+                                            new Duration(dbNote.Numerator, dbNote.Denominator),
+                                            dbNote.Triplet,
+                                            dbNote.Tie)
+                {
+                    Id = dbNote.Id
+                };
+
+                notesSequence.Add(newNote);
+                measureNotes.Add(newNote);
+            }
+            measuresSequence.Add(measureNotes);
+        }
+
+        var result = new Dictionary<string, object>
+    {
+        { "musicNotes", notesSequence },
+        { "measures", measuresSequence },
+        { "sequentialTransfer", musicSequence.SequentialTransfer }
+    };
+
+        ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object> { { "data", result } });
+        return View(musicSequence);
+    }
+
+
+
+
 }
