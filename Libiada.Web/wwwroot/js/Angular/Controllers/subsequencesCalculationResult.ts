@@ -2,8 +2,8 @@
 /// <reference types="d3" />
 /// <reference path="../functions.d.ts" />
 
-// Interface for a data point on a chart
-// Unified interface for a data point on a chart
+// Interface for data points on the chart
+// Unified interface for data points on the chart
 interface IPoint {
     // Common properties
     id: number;
@@ -27,14 +27,13 @@ interface IPoint {
     subsequenceRemoteId?: string;
     rank?: number;
     characteristicsValues?: number[];
-    featureVisible?: boolean;
+    FeatureVisible?: boolean;
     legendVisible?: boolean;
     filtersVisible?: boolean[];
     remoteId?: string;
 }
 
-
-// Interface for the research object
+// Interface for research object
 interface IResearchObjectResult {
     id: number;
     name: string;
@@ -100,15 +99,16 @@ interface ID3Tooltip extends d3.Selection<HTMLDivElement, unknown, HTMLElement, 
     selectedDots?: any;
 }
 
-// Interface for the controller scope
+// Interface for controller scope
 interface ISubsequencesCalculationResultScope extends ng.IScope {
-    // Data for the chart
+    // Chart data
     visiblePoints: IPoint[][];
     points: IPoint[][];
     researchObjects: IResearchObjectResult[];
     attributes: string[];
     attributeValues: IAttributeValue[];
-    features: { [key: number]: IFeature };
+    //features: { [key: number]: IFeature };
+    features: any;
     lineChart: boolean;
     firstCharacteristic: ICharacteristic;
     secondCharacteristic: ICharacteristic;
@@ -121,7 +121,7 @@ interface ISubsequencesCalculationResultScope extends ng.IScope {
     xMap: (d: IPoint) => number;
     yMap: (d: IPoint) => number;
 
-    // Properties for loading data 
+    // Data loading properties
     taskId: string;
     loadingScreenHeader: string;
     loading: boolean;
@@ -129,7 +129,7 @@ interface ISubsequencesCalculationResultScope extends ng.IScope {
     productFilter: string;
     subsequencesCharacteristicsList: ICharacteristic[];
 
-    // Methods for working with a chart 
+    // Chart operation methods
     dotVisible: (dot: IPoint) => boolean;
     dotsSimilar: (d: IPoint, dot: IPoint) => boolean;
     fillVisiblePoints: () => void;
@@ -149,23 +149,23 @@ interface ISubsequencesCalculationResultScope extends ng.IScope {
 }
 
 /**
-* Handler for displaying subsequence calculation results
-*/
+ * Handler for displaying subsequence calculation results
+ */
 class SubsequencesCalculationResultHandler {
     constructor() {
         this.initializeController();
     }
 
     /**
-    * Initializes the Angular controller
-    */
+     * Initializes the Angular controller
+     */
     private initializeController(): void {
         const subsequencesCalculationResult = ($scope: ISubsequencesCalculationResultScope, $http: ng.IHttpService, $sce: ng.ISCEService): void => {
             "use strict";
 
-            /** 
-            * Fills an array of visible points 
-            */
+            /**
+             * Fills the array of visible points
+             */
             function fillVisiblePoints(): void {
                 $scope.visiblePoints = [];
                 for (let i = 0; i < $scope.points.length; i++) {
@@ -179,9 +179,9 @@ class SubsequencesCalculationResultHandler {
             }
 
             /**
-            * Gets the attribute text for the given subsequence
-            //* @param attributes Array of attribute IDs
-            */
+             * Gets the attribute text for a given subsequence
+             * @param attributes Array of attribute IDs
+             */
             function getAttributesText(attributes: number[]): string {
                 const attributesText: string[] = [];
                 for (let i = 0; i < attributes.length; i++) {
@@ -193,20 +193,20 @@ class SubsequencesCalculationResultHandler {
             }
 
             /**
-            * Returns the index of an attribute by its name, if any
-            * @param dot Data point
-            * @param attributeName Attribute name
-            */
+             * Returns the attribute index by its name, if exists
+             * @param dot Data point
+             * @param attributeName Attribute name
+             */
             function getAttributeIdByName(dot: IPoint, attributeName: string): number | undefined {
                 return dot.attributes.find(a => $scope.attributes[$scope.attributeValues[a].attribute] === attributeName);
             }
 
             /**
-            * Returns true if the dot has the given attribute and its value is equal to the given value
-            * @param dot The data point
-            * @param attributeName The name of the attribute
-            * @param expectedValue The expected value
-            */
+             * Returns true if the point has the given attribute and its value equals the expected value
+             * @param dot Data point
+             * @param attributeName Attribute name
+             * @param expectedValue Expected value
+             */
             function isAttributeEqual(dot: IPoint, attributeName: string, expectedValue: string): boolean {
                 const attributeId = $scope.getAttributeIdByName(dot, attributeName);
                 if (attributeId !== undefined) {
@@ -217,10 +217,10 @@ class SubsequencesCalculationResultHandler {
                 return false;
             }
 
-            /** 
-            *Applies new filter 
-            * @param newFilter Filter string 
-            */
+            /**
+             * Applies a new filter
+             * @param newFilter Filter string
+             */
             function addFilter(newFilter: string): void {
                 d3.selectAll(".dot")
                     .attr("visibility", (d: IPoint) => {
@@ -235,10 +235,10 @@ class SubsequencesCalculationResultHandler {
             }
 
             /**
-            * Deletes the specified filter
-            * @param filter Filter string
-            * @param filterIndex Filter index
-            */
+             * Removes the specified filter
+             * @param filter Filter string
+             * @param filterIndex Filter index
+             */
             function deleteFilter(filter: string, filterIndex: number): void {
                 d3.selectAll(".dot")
                     .attr("visibility", (d: IPoint) => {
@@ -250,8 +250,8 @@ class SubsequencesCalculationResultHandler {
             }
 
             /**
-            * Initializes data for the gene map
-            */
+             * Initializes data for the gene map
+             */
             function fillPoints(): void {
                 $scope.researchObjects = [];
                 $scope.points = [];
@@ -262,8 +262,8 @@ class SubsequencesCalculationResultHandler {
                         name: sequenceData.ResearchObjectName,
                         visible: true,
                         colorId: i,
-                        Nature: "", // Fill with suitable values 
-                        Group: 0, // or get it from sequenceData 
+                        Nature: "",
+                        Group: 0,
                         SequenceType: 0,
                         Multisequence: false,
                         Matter: 0,
@@ -282,7 +282,8 @@ class SubsequencesCalculationResultHandler {
                     for (let j = 0; j < sequenceData.SubsequencesData.length; j++) {
                         const subsequenceData = sequenceData.SubsequencesData[j];
                         const point: IPoint = {
-                            id: subsequenceData.Id, researchObjectId: sequenceData.ResearchObjectId,
+                            id: subsequenceData.Id,
+                            researchObjectId: sequenceData.ResearchObjectId,
                             researchObjectName: sequenceData.ResearchObjectName,
                             sequenceRemoteId: sequenceData.RemoteId,
                             attributes: subsequenceData.Attributes,
@@ -297,7 +298,7 @@ class SubsequencesCalculationResultHandler {
                             featureVisible: true,
                             legendVisible: true,
                             filtersVisible: [],
-
+                            remoteId: subsequenceData.RemoteId // Added for compatibility with JS version
                         };
                         $scope.points[i].push(point);
                     }
@@ -305,9 +306,9 @@ class SubsequencesCalculationResultHandler {
             }
 
             /**
-            * Filters points by subsequence feature
-            * @param feature Feature to filter
-            */
+             * Filters points by subsequence feature
+             * @param feature Feature for filtering
+             */
             function filterByFeature(feature: IFeature): void {
                 const featureValue = parseInt(feature.Value);
                 d3.selectAll(".dot")
@@ -330,28 +331,28 @@ class SubsequencesCalculationResultHandler {
             }
 
             /**
-            * Checks if a point is visible
-            * @param dot The point to check
-            */
+             * Checks if a point is visible
+             * @param dot Point to check
+             */
             function dotVisible(dot: IPoint): boolean {
                 const filterVisible = dot.filtersVisible.length === 0 || dot.filtersVisible.some(element => element);
                 return dot.featureVisible && dot.legendVisible && filterVisible;
             }
 
-            /** 
-            * Determines whether points are similar by product 
-            * @param d First point 
-            * @param dot Second dot 
-            */
+            /**
+             * Determines if points are similar by product
+             * @param d First point
+             * @param dot Second point
+             */
             function dotsSimilar(d: IPoint, dot: IPoint): boolean {
                 if (d.featureId !== dot.featureId) {
                     return false;
                 }
 
                 switch (d.featureId) {
-                    case 1: //CDS 
-                    case 2: // RRNA 
-                    case 3: // TRNA 
+                    case 1: // CDS
+                    case 2: // RRNA
+                    case 3: // TRNA
                         const firstProductId = $scope.getAttributeIdByName(d, "product");
                         const secondProductId = $scope.getAttributeIdByName(dot, "product");
 
@@ -371,12 +372,12 @@ class SubsequencesCalculationResultHandler {
             }
 
             /**
-            * Shows a tooltip for a point or group of points
-            * @param event Mouse event
-            * @param d Data point
-            * @param tooltip Tooltip element
-            * @param svg SVG element
-            */
+             * Shows tooltip for a point or group of points
+             * @param event Mouse event
+             * @param d Data point
+             * @param tooltip Tooltip element
+             * @param svg SVG element
+             */
             function showTooltip(event: MouseEvent, d: IPoint, tooltip: ID3Tooltip, svg: any): void {
                 $scope.clearTooltip(tooltip);
                 const tooltipHtml: string[] = [];
@@ -404,23 +405,23 @@ class SubsequencesCalculationResultHandler {
             }
 
             /**
-            * Creates a string representing the tooltip text
-            * @param d Data point
-            */
+             * Creates a string representing tooltip text
+             * @param d Data point
+             */
             function fillPointTooltip(d: IPoint): string {
                 const tooltipContent: string[] = [];
                 const genBankLink = "<a target='_blank' rel='noopener' href='https://www.ncbi.nlm.nih.gov/nuccore/";
 
-                const header = d.sequenceRemoteId ? `${genBankLink}${d.sequenceRemoteId}'>${d.researchObjectName}</a>` : d.researchObjectName;
+                // Using remoteId instead of sequenceRemoteId for compatibility with JS version
+                const header = d.remoteId ? `${genBankLink}${d.remoteId}'>${d.researchObjectName}</a>` : d.researchObjectName;
                 tooltipContent.push(header);
 
-                if (d.sequenceRemoteId) {
-                    const peptideGenbankLink = `${genBankLink}${d.sequenceRemoteId}'>Peptide ncbi page</a>`;
+                if (d.remoteId) {
+                    const peptideGenbankLink = `${genBankLink}${d.remoteId}'>Peptide ncbi page</a>`;
                     tooltipContent.push(peptideGenbankLink);
                 }
 
-                //tooltipContent.push($scope.features[d.featureId]); 
-                tooltipContent.push($scope.features[d.featureId]?.Text || $scope.features[d.featureId]?.Value || "Unknown feature");
+                tooltipContent.push($scope.features[d.featureId]);
                 tooltipContent.push($scope.getAttributesText(d.attributes));
 
                 if (d.partial) {
@@ -429,21 +430,21 @@ class SubsequencesCalculationResultHandler {
 
                 const start = d.positions[0] + 1;
                 const end = d.positions[0] + d.lengths[0];
-                const positionGenbankLink = d.sequenceRemoteId ?
-                    `${genBankLink}${d.sequenceRemoteId}?from=${start}&to=${end}'>${d.positions.join(", ")}</a>` :
+                const positionGenbankLink = d.remoteId ?
+                    `${genBankLink}${d.remoteId}?from=${start}&to=${end}'>${d.positions.join(", ")}</a>` :
                     d.positions.join(", ");
                 tooltipContent.push(`Position: ${positionGenbankLink}`);
                 tooltipContent.push(`Length: ${d.lengths.join(", ")}`);
-                // TODO: show all features
+                // TODO: show all characteristics
                 tooltipContent.push(`(${$scope.xValue(d)}, ${$scope.yValue(d)})`);
 
                 return tooltipContent.join("</br>");
             }
 
             /**
-            * Clears the tooltip and deselects the dots
-            * @param tooltip Tooltip element
-            */
+             * Clears tooltip and deselects points
+             * @param tooltip Tooltip element
+             */
             function clearTooltip(tooltip: ID3Tooltip): void {
                 if (tooltip) {
                     if (tooltip.hideTooltip) {
@@ -460,33 +461,33 @@ class SubsequencesCalculationResultHandler {
             }
 
             /**
-            * Returns the X value of the data point
-            * @param d Data point
-            */
+             * Returns X value for a data point
+             * @param d Data point
+             */
             function xValue(d: IPoint): number {
                 return $scope.lineChart ? d.rank : d.characteristicsValues[+$scope.firstCharacteristic.Value];
             }
 
             /**
-            * Returns the Y value of the data point
-            * @param d Data point
-            */
+             * Returns Y value for a data point
+             * @param d Data point
+             */
             function yValue(d: IPoint): number {
                 return $scope.lineChart ? d.characteristicsValues[+$scope.firstCharacteristic.Value] : d.characteristicsValues[+$scope.secondCharacteristic.Value];
             }
 
             /**
-            * Main method for drawing the chart
-            */
+             * Main chart drawing method
+             */
             function draw(): void {
                 $scope.loading = true;
                 $scope.loadingScreenHeader = "Drawing...";
                 $scope.fillPoints();
-                // Remove the previous chart and tooltip, if any
+                // Removing previous chart and tooltip if any
                 d3.select(".chart-tooltip").remove();
                 d3.select(".chart-svg").remove();
 
-                // Sort points by selected characteristic
+                // Sorting points by selected characteristic
                 if ($scope.lineChart) {
                     for (let i = 0; i < $scope.points.length; i++) {
                         $scope.points[i].sort((first, second) => $scope.yValue(second) - $scope.yValue(first));
@@ -503,16 +504,16 @@ class SubsequencesCalculationResultHandler {
                 $scope.points.forEach(points => {
                     points.forEach(point => {
                         point.legendVisible = true;
-                        point.featureVisible = $scope.features[point.featureId].Selected;
+                        point.FeatureVisible = $scope.features[point.featureId].Selected;
                     });
                 });
 
-                // Settings for chart size and indentation 
+                // Chart size and margin settings
                 const margin = { top: 30 + $scope.legendHeight, right: 30, bottom: 30, left: 60 };
                 const width = $scope.width - margin.left - margin.right;
                 const height = $scope.height - margin.top - margin.bottom;
 
-                // Calculate boundaries for points 
+                // Calculating bounds for points
                 const xMinArray: number[] = [];
                 const xMaxArray: number[] = [];
                 const yMaxArray: number[] = [];
@@ -525,8 +526,8 @@ class SubsequencesCalculationResultHandler {
                     yMaxArray.push(d3.max(points, $scope.yValue) as number);
                 });
 
-                // Setting up the X axis
-                // Calculating the bounds for the points
+                // X-axis setup
+                // Calculating bounds for points
                 const xMin = d3.min(xMinArray) as number;
                 const xMax = d3.max(xMaxArray) as number;
                 const xMargin = (xMax - xMin) * 0.05;
@@ -541,7 +542,7 @@ class SubsequencesCalculationResultHandler {
 
                 $scope.xMap = (d: IPoint) => xScale($scope.xValue(d));
 
-                // Setting up the Y axis 
+                // Y-axis setup
                 const yMin = d3.min(yMinArray) as number;
                 const yMax = d3.max(yMaxArray) as number;
                 const yMargin = (yMax - yMin) * 0.05;
@@ -556,10 +557,10 @@ class SubsequencesCalculationResultHandler {
 
                 $scope.yMap = (d: IPoint) => yScale($scope.yValue(d));
 
-                // Set the fill color
+                // Fill color setup
                 const color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.researchObjects.length]);
 
-                // Add the chart canvas to the web page body
+                // Adding chart canvas to the webpage
                 const svg = d3.select("#chart").append("svg")
                     .attr("width", $scope.width)
                     .attr("height", $scope.height)
@@ -567,18 +568,18 @@ class SubsequencesCalculationResultHandler {
                     .append("g")
                     .attr("transform", `translate(${margin.left},${margin.top})`);
 
-                // Add tooltip area to web page
+                // Adding tooltip area to the webpage
                 const tooltip = d3.select("#chart").append("div")
                     .attr("class", "chart-tooltip position-absolute bg-light font-monospace small lh-sm p-1 rounded")
                     .style("opacity", 0) as ID3Tooltip;
 
-                // Prevent tooltip from hiding when clicked on
+                // Preventing tooltip hiding when clicked
                 tooltip.on("click", () => { tooltip.hideTooltip = false; });
 
-                // Hide tooltip when clicked outside of it
+                // Hiding tooltip when clicking outside
                 d3.select("#chart").on("click", () => { $scope.clearTooltip(tooltip); });
 
-                // X Axis 
+                // X-axis
                 svg.append("g")
                     .attr("class", "x axis")
                     .attr("transform", `translate(0,${height})`)
@@ -591,7 +592,7 @@ class SubsequencesCalculationResultHandler {
                     .text($scope.lineChart ? "Rank" : $scope.firstCharacteristic.Text)
                     .style("font-size", "12pt");
 
-                // Y axis 
+                // Y-axis
                 svg.append("g")
                     .attr("class", "y axis")
                     .call(yAxis);
@@ -612,7 +613,7 @@ class SubsequencesCalculationResultHandler {
                     .append("g")
                     .attr("class", "researchObject");
 
-                // Draw points 
+                // Drawing points
                 researchObjectsGroups.selectAll(".dot")
                     .data((d: IPoint[]) => d)
                     .enter()
@@ -628,7 +629,7 @@ class SubsequencesCalculationResultHandler {
                     .attr("visibility", (d: IPoint) => $scope.dotVisible(d) ? "visible" : "hidden")
                     .on("click", (event: MouseEvent, d: IPoint) => $scope.showTooltip(event, d, tooltip, svg));
 
-                // Draw a legend 
+                // Drawing legend
                 const legend = svg.selectAll(".legend")
                     .data($scope.researchObjects)
                     .enter()
@@ -651,7 +652,7 @@ class SubsequencesCalculationResultHandler {
                             });
                     });
 
-                // Draw colored rectangles of the legend
+                // Drawing colored legend rectangles
                 legend.append("rect")
                     .attr("width", 15)
                     .attr("height", 15)
@@ -660,7 +661,7 @@ class SubsequencesCalculationResultHandler {
                     .style("stroke-width", 4)
                     .attr("transform", `translate(0, -${$scope.legendHeight})`);
 
-                // Draw legend text 
+                // Drawing legend text
                 legend.append("text")
                     .attr("x", 24)
                     .attr("y", 9)
@@ -672,7 +673,7 @@ class SubsequencesCalculationResultHandler {
                 $scope.loading = false;
             }
 
-            // Register functions in $scope 
+            // Registering functions in $scope
             $scope.draw = draw;
             $scope.dotVisible = dotVisible;
             $scope.dotsSimilar = dotsSimilar;
@@ -690,7 +691,7 @@ class SubsequencesCalculationResultHandler {
             $scope.getAttributeIdByName = getAttributeIdByName;
             $scope.isAttributeEqual = isAttributeEqual;
 
-            // Initialize $scope properties 
+            // Initializing $scope properties
             $scope.dotRadius = 3;
             $scope.selectedDotRadius = $scope.dotRadius * 3;
             $scope.visiblePoints = [];
@@ -700,11 +701,11 @@ class SubsequencesCalculationResultHandler {
             $scope.loadingScreenHeader = "Loading subsequences characteristics";
             $scope.loading = true;
 
-            // Get task ID from URL 
+            // Getting task ID from URL
             const location = window.location.href.split("/");
             $scope.taskId = location[location.length - 1];
 
-            // Loading data from the server 
+            // Loading data from server
             $http.get<any>(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
                 .then(function (data) {
                     MapModelFromJson($scope, data.data);
@@ -724,14 +725,14 @@ class SubsequencesCalculationResultHandler {
                 });
         };
 
-        // Registering a controller in an Angular module
+        // Registering controller in Angular module
         angular.module("libiada").controller("SubsequencesCalculationResultCtrl", ["$scope", "$http", "$sce", subsequencesCalculationResult]);
     }
 }
 
 /**
-* Funcwrapper for backward compatibility
-*/
+ * Wrapper function for backward compatibility
+ */
 function SubsequencesCalculationResultController(): SubsequencesCalculationResultHandler {
     return new SubsequencesCalculationResultHandler();
 }
