@@ -176,30 +176,72 @@
                                 </div>
                                 <div id="tooltip-tab-pane" class="tab-pane fade" role="tabpanel" aria-labelledby="tooltip-tab" tabindex="0">
                                     <div class="font-monospace text-break">
-                                        <h6 ng-bind="tooltip.name"></h6>
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <button type="button"
-                                                        class="btn btn-outline-secondary btn-sm"
-                                                        data-bs-toggle="collapse"
-                                                        data-bs-target="#tooltipCharacteristics"
-                                                        aria-expanded="false"
-                                                        aria-controls="tooltipCharacteristics">
-                                                    Numeric characteristics
-                                                </button>
+                                        <div ng-repeat="tooltipElement in tooltipElements"
+                                             ng-class="::'text-' + tooltipElement.color"
+                                             class="font-monospace text-break">
+                                            <a target="_blank"
+                                               rel="noopener"
+                                               ng-if="::tooltipElement.sequenceRemoteId"
+                                               ng-href="https://www.ncbi.nlm.nih.gov/nuccore/{{::tooltipElement.sequenceRemoteId}}"
+                                               ng-bind="::tooltipElement.name">
+                                            </a>
+                                            <p ng-if="::!tooltipElement.sequenceRemoteId" ng-bind="::tooltipElement.name"></p>
+                                            <a target="_blank"
+                                               rel="noopener"
+                                               ng-if="::tooltipElement.remoteId"
+                                               ng-href="https://www.ncbi.nlm.nih.gov/nuccore/{{::tooltipElement.remoteId}}">
+                                                Peptide ncbi page
+                                            </a>
+                                            <div ng-bind="::tooltipElement.feature"></div>
+                                            <div ng-repeat="attribute in ::tooltipElement.attributes" ng-bind="::attribute"></div>
+                                            <div ng-if="::tooltipElement.partial">Partial</div>
+                                            <div>
+                                                Position:
+                                                <a target="_blank"
+                                                   rel="noopener"
+                                                   ng-if="::tooltipElement.sequenceRemoteId"
+                                                   ng-href="https://www.ncbi.nlm.nih.gov/nuccore/{{::tooltipElement.sequenceRemoteId}}?from={{::tooltipElement.positions[0]+1}}&to={{::tooltipElement.positions[0]+tooltipElement.lengths[0]}}"
+                                                   ng-bind="::tooltipElement.position">
+                                                </a>
+                                                <span ng-if="::!tooltipElement.sequenceRemoteId" ng-bind="::tooltipElement.position"></span>
                                             </div>
-                                            <div class="card-collapse collapse" id="tooltipCharacteristics">
-                                                <table class="table table-bordered table-sm fs-6 small">
-                                                    <tbody ng-repeat="value in tooltip.characteristics">
-                                                        <tr>
-                                                            <td align=center scope="col" ng-bind="characteristicNames[$index]" />
-                                                            <td scope="col" ng-bind="value" />
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
+                                            <div>
+                                                Length:{{::tooltipElement.length}}
                                             </div>
+                                            <div class="form-check" ng-show="tooltipElements.length > 1">
+                                                <input type="checkbox"
+                                                       class="form-check-input"
+                                                       name="selectSubsequenceForAlignment"
+                                                       id="selectSubsequenceForAlignment{{$index}}"
+                                                       ng-model="tooltipElement.selectedForAlignment" />
+                                                <label class="form-check-label" for="selectSubsequenceForAlignment{{$index}}">
+                                                    Select sequence for alignment
+                                                </label>
+                                            </div>
+                                            <div ng-class="['card', 'card-' + tooltipElement.color]">
+                                                <div class="card-header">
+                                                    <button type="button"
+                                                            class="btn btn-outline-secondary btn-sm"
+                                                            data-bs-toggle="collapse"
+                                                            data-bs-target="#subsequenceCharacteristics{{$index + 1}}"
+                                                            aria-expanded="false"
+                                                            aria-controls="subsequenceCharacteristics{{$index + 1}}">
+                                                        Numeric characteristics
+                                                    </button>
+                                                </div>
+                                                <div class="card-collapse collapse" id="subsequenceCharacteristics{{$index + 1}}">
+                                                    <table class="table table-bordered table-sm fs-6 small" ng-class="::'table-'+tooltipElement.color">
+                                                        <thead ng-repeat="value in ::tooltipElement.characteristics">
+                                                            <tr>
+                                                                <td align=center scope="col" ng-bind="::characteristicNames[$index]" />
+                                                                <td scope="col" ng-bind="::value" />
+                                                            </tr>
+                                                        </thead>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <hr />
                                         </div>
-                                        <hr />
                                     </div>
                                 </div>
                             </div>

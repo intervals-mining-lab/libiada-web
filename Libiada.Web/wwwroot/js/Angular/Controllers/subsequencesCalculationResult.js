@@ -70,6 +70,108 @@
             }
         }
 
+        // shows tooltip for dot or group of dots
+        function showTooltip(selectedTrace) {
+            $("button[data-bs-target='#tooltip-tab-pane']").tab("show");
+            let selectedPoint = selectedTrace.subsequencesData[$scope.selectedPointIndex];
+            $scope.tooltipElements.length = 0;
+            let researchObjectName = selectedTrace.researchObjectName;
+            $scope.tooltipElements.push(fillPointTooltip(selectedPoint, researchObjectName, $scope.pointsSimilarity.same));
+            let similarPoints = [];
+
+            for (let i = 0; i < $scope.points.length; i++) {
+                for (let j = 0; j < $scope.points[i].subsequencesData.length; j++) {
+                    if (selectedPoint !== $scope.points[i].subsequencesData[j]) {
+                        let similar = $scope.chartCharacteristics.every(filter => {
+                            let characteristicIndex = $scope.characteristicsList.indexOf(filter.value);
+                            let selectedPointValue = selectedPoint.characteristics[characteristicIndex];
+                            let anotherPointValue = $scope.points[i].subsequencesData[j].characteristics[characteristicIndex];
+                            return selectedPointValue == anotherPointValue;
+                        });
+
+                        if (similar) {
+                            let point = $scope.points[i].subsequencesData[j];
+                            similarPoints.push(point);
+                            researchObjectName = $scope.points[i].researchObjectName;
+                            $scope.tooltipElements.push(fillPointTooltip(point, researchObjectName, true));
+                        }
+                    }
+                }
+            }
+
+            let update = {};
+            switch ($scope.chartCharacteristics.length) {
+                case 1:
+                case 2:
+                    update = {
+                        "marker.symbol": $scope.points.map(t => t.subsequencesData.map(p => p === selectedPoint || similarPoints.includes(p) ? "diamond-wide" : "circle")),
+                        "marker.size": $scope.points.map(t => t.subsequencesData.map(p => p === selectedPoint || similarPoints.includes(p) ? 10 : $scope.pointSize * 1.5))
+                    };
+                    break;
+                case 3:
+                    break;
+                default:
+            }
+
+            Plotly.restyle($scope.chartElement, update);
+
+            $scope.$apply();
+        }
+
+        // constructs string representing tooltip text (inner html)
+        function fillPointTooltip(point, researchObjectName, similarity) {
+            let color = similarity === $scope.pointsSimilarity.same ? "default"
+                : similarity === $scope.pointsSimilarity.similar ? "success"
+                    : similarity === $scope.pointsSimilarity.different ? "danger" : "danger";
+
+            let tooltipElement = {
+                id: point.id,
+                name: researchObjectName,
+                sequenceRemoteId: point.sequenceRemoteId,
+                feature: $scope.features[point.featureId].Text,
+                attributes: $scope.getAttributesText(point.attributes),
+                partial: point.partial,
+                color: color,
+                characteristics: point.characteristics,
+                similarity: similarity,
+                selectedForAlignment: false
+            };
+
+            if (point.subsequenceRemoteId) {
+                tooltipElement.remoteId = point.subsequenceRemoteId;
+            }
+
+            tooltipElement.position = "(";
+            tooltipElement.length = 0;
+            tooltipElement.positions = point.positions;
+            tooltipElement.lengths = point.lengths;
+
+            for (let i = 0; i < point.positions.length; i++) {
+                tooltipElement.position += point.positions[i] + 1;
+                tooltipElement.position += "..";
+                tooltipElement.position += point.positions[i] + point.lengths[i];
+                tooltipElement.length += point.lengths[i];
+                if (i !== point.positions.length - 1) {
+                    tooltipElement.position += ", ";
+                }
+            }
+
+            tooltipElement.position += ")";
+
+            return tooltipElement;
+        }
+
+        // gets attributes text for given subsequence
+        function getAttributesText(attributes) {
+            let attributesText = [];
+            for (let i = 0; i < attributes.length; i++) {
+                let attributeValue = $scope.attributeValues[attributes[i]];
+                attributesText.push($scope.attributes[attributeValue.attribute] + (attributeValue.value === "" ? "" : ` = ${attributeValue.value}`));
+            }
+
+            return attributesText;
+        }
+
         function fillLinePlotData() {
             let characteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
             let characteristicsValues = $scope.points.map((p => p.subsequencesData.map(fd => fd.characteristics[characteristicIndex]))).flat();
@@ -117,13 +219,14 @@
                 }
             };
 
+            $scope.pointSize = 2;
             $scope.chartData = $scope.points.map((p , i) => ({
                 hoverinfo: "text+x+y",
                 x: ranks[i].x,
                 y: ranks[i].y,
                 marker: {
                     color: $scope.legend[p.legendIndex].color,
-                    size: 2,
+                    size: $scope.pointSize,
                     opacity: 0.8
                 },
                 type: "scatter",
@@ -165,6 +268,7 @@
                 }
             };
 
+            $scope.pointSize = 3;
             $scope.chartData = $scope.points.map(p => ({
                 hoverinfo: "text+x+y",
                 type: "scattergl",
@@ -175,7 +279,7 @@
                 marker: {
                     opacity: 0.8,
                     color: $scope.legend[p.legendIndex].color,
-                    size: 3
+                    size: $scope.pointSize
                 },
                 name: p.name,
                 customdata: { legendId: p.legendId },
@@ -189,6 +293,7 @@
             let secondCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1].value);
             let thirdCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[2].value);
 
+            $scope.pointSize = 3;
             $scope.chartData = $scope.points.map(p => ({
                 hoverinfo: "text+x+y+z",
                 x: p.subsequencesData.map(sd => sd.characteristics[firstCharacteristicIndex]),
@@ -199,7 +304,7 @@
                 marker: {
                     opacity: 0.8,
                     color: $scope.legend[p.legendIndex].color,
-                    size: 3
+                    size: $scope.pointSize
                 },
                 name: p.name,
                 type: "scatter3d",
@@ -297,8 +402,8 @@
             $scope.chartElement.on("plotly_click", data => {
                 $scope.selectedPointIndex = data.points[0].pointNumber;
                 $scope.selectedResearchObjectIndex = data.points[0].curveNumber;
-                let selectedPoint = $scope.points[data.points[0].curveNumber];
-                $scope.showTooltip(selectedPoint);
+                let selectedTrace = $scope.points[data.points[0].curveNumber];
+                $scope.showTooltip(selectedTrace);
             });
         }
 
@@ -439,6 +544,7 @@
         $scope.legendClick = legendClick;
         $scope.legendSetVisibilityForAll = legendSetVisibilityForAll;
         $scope.dragbarMouseDown = dragbarMouseDown;
+        $scope.showTooltip = showTooltip;
         //$scope.renderResultsTable = renderResultsTable;
 
         $scope.chartElement = document.getElementById("chart");
@@ -461,10 +567,14 @@
         $scope.deleteFilter = deleteFilter;
         $scope.getAttributeIdByName = getAttributeIdByName;
         $scope.isAttributeEqual = isAttributeEqual;
+        $scope.getAttributesText = getAttributesText;
+        $scope.fillPointTooltip = fillPointTooltip;
 
+        $scope.tooltipElements = [];
         $scope.visiblePoints = [];
         $scope.characteristicComparers = [];
         $scope.productFilter = "";
+        $scope.pointsSimilarity = Object.freeze({ "same": 0, "similar": 1, "different": 2 });
 
         $scope.loadingScreenHeader = "Loading subsequences characteristics";
         $scope.loading = true;
