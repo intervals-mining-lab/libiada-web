@@ -1,6 +1,6 @@
 ﻿@{
     Layout = "_EmptyLayout";
-    ViewBag.Title = "Libiada - Integral characterisitics calculation result";
+    ViewBag.Title = "Libiada - Subsequences characterisitics calculation result";
 }
 
 @if (ViewBag.Error == null)
@@ -294,7 +294,9 @@
                             <tbody>
                                 <tr ng-repeat="subsequenceData in ::sequenceData.SubsequencesData">
                                     <td ng-bind="::features[subsequenceData.FeatureId]" />
-                                    <td ng-bind-html="getAttributesText(subsequenceData.Attributes)" />
+                                    <td>
+                                        <div ng-repeat="attribute in getAttributesText(subsequenceData.Attributes)" ng-bind="::attribute"></div>
+                                    </td>
                                     <td>
                                         <div ng-repeat="start in ::subsequenceData.Starts">Start: {{::start}} Length:{{::subsequenceData.Lengths[$index]}}</div>
                                     </td>

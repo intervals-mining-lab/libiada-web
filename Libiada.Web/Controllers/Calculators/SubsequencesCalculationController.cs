@@ -11,6 +11,9 @@ using Newtonsoft.Json;
 
 using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
+using Libiada.Web.Extensions;
+
+using EnumExtensions = Core.Extensions.EnumExtensions;
 
 /// <summary>
 /// The subsequences calculation controller.
@@ -127,7 +130,7 @@ public class SubsequencesCalculationController : AbstractResultController
             var result = new Dictionary<string, object>
             {
                 { "sequencesData", sequencesData },
-                { "features", features.ToDictionary(f => (byte)f, f => f.GetDisplayValue()) },
+                { "features", features.ToSelectList(features).ToDictionary(f => f.Value) },
                 { "attributes", EnumExtensions.ToArray<AnnotationAttribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
                 { "attributeValues", allAttributeValues.Select(sa => new { attribute = sa.AttributeId, value = sa.Value }) },
                 { "characteristicNames", subsequencesCharacteristicsNames },

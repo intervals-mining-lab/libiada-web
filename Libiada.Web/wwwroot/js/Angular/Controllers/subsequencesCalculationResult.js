@@ -55,7 +55,6 @@
                         attributes: subsequenceData.Attributes,
                         partial: subsequenceData.Partial,
                         featureId: subsequenceData.FeatureId,
-                        attributes: subsequenceData.Attributes,
                         positions: subsequenceData.Starts,
                         lengths: subsequenceData.Lengths,
                         subsequenceRemoteId: subsequenceData.RemoteId,
@@ -159,17 +158,6 @@
             tooltipElement.position += ")";
 
             return tooltipElement;
-        }
-
-        // gets attributes text for given subsequence
-        function getAttributesText(attributes) {
-            let attributesText = [];
-            for (let i = 0; i < attributes.length; i++) {
-                let attributeValue = $scope.attributeValues[attributes[i]];
-                attributesText.push($scope.attributes[attributeValue.attribute] + (attributeValue.value === "" ? "" : ` = ${attributeValue.value}`));
-            }
-
-            return attributesText;
         }
 
         function fillLinePlotData() {
@@ -459,7 +447,7 @@
                 attributesText.push($scope.attributes[attributeValue.attribute] + (attributeValue.value === "" ? "" : ` = ${attributeValue.value}`));
             }
 
-            return $sce.trustAsHtml(attributesText.join("<br/>"));
+            return attributesText;//$sce.trustAsHtml(attributesText.join("<br/>"));
         }
 
         // returns attribute index by its name if any
@@ -567,7 +555,6 @@
         $scope.deleteFilter = deleteFilter;
         $scope.getAttributeIdByName = getAttributeIdByName;
         $scope.isAttributeEqual = isAttributeEqual;
-        $scope.getAttributesText = getAttributesText;
         $scope.fillPointTooltip = fillPointTooltip;
 
         $scope.tooltipElements = [];
