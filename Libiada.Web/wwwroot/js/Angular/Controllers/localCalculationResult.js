@@ -388,7 +388,6 @@
             });
         }
 
-
         $scope.calculateLocalCharacteristicsSimilarityMatrix = calculateLocalCharacteristicsSimilarityMatrix;
         $scope.changeCharacteristicsTableVisibility = changeCharacteristicsTableVisibility;
         $scope.fillLinePlotData = fillLinePlotData;

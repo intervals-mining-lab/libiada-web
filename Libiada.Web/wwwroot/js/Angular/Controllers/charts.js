@@ -22,14 +22,11 @@ function ChartsController(data) {
                         $scope.characteristics[i].Characteristics[j - 1] = +rawCharacteristics[i][j].replace(",", ".");
                     }
                 }
-                //$scope.characteristics = characteristics.map((c, i) => ({Characteristics: c }));
                 $scope.characteristicsList = characteristics.map((c, i) => ({ Value: i + 1, Text: c }));
                 $scope.characteristicNames = characteristics.map(c => c);
                 $scope.chartCharacteristics = [{ id: $scope.chartsCharacterisrticsCount++, value: $scope.characteristicsList[0] }];
                 $scope.fillLegend();
-                //$scope.firstCharacteristic = $scope.chartCharacteristics[0];
-                //$scope.secondCharacteristic = $scope.chartCharacteristics.length > 1 ? $scope.chartCharacteristics[1] : $scope.chartCharacteristics[0];
-
+  
                 rows.forEach(thisRow => {
                     let row = thisRow.trim();
                     if (row) {
@@ -363,7 +360,6 @@ function ChartsController(data) {
 
             $scope.chartData = [{
                 type: "parcoords",
-                //pad: [80, 80, 80, 80],
                 line: {
                     color: $scope.points.map(p => p.legendIndex),
                     colorscale: "Turbo"

@@ -21,18 +21,6 @@
                         Charts
                     </button>
                 </li>
-               @*  <li class="nav-item" role="presentation" title="Data export">
-                    <button class="nav-link"
-                            id="export-tab"
-                            data-bs-toggle="tab"
-                            data-bs-target="#export-tab-pane"
-                            type="button"
-                            role="tab"
-                            aria-controls="export-tab-pane"
-                            aria-selected="false">
-                        Data export
-                    </button>
-                </li> *@
                 <li class="nav-item" role="presentation" title="Data table" ng-click="renderResultsTable()">
                     <button class="nav-link"
                             id="data-table-tab"
@@ -248,32 +236,6 @@
                         </div>
                     </div>
                 </div>
-            @*     <div id="export-tab-pane"
-                     class="tab-pane fade"
-                     role="tabpanel"
-                     aria-labelledby="export-tab"
-                     tabindex="0">
-                    <div class="row my-2">
-                        <label class="col-form-label col-md-2" for="searchQuery">Excel file name:</label>
-                        <div class="col-md-10">
-                            <input type="text"
-                                   class="form-control"
-                                   name="excelFileName"
-                                   id="excelFileName"
-                                   placeholder="results"
-                                   ng-model="excelFileName" />
-
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="offset-md-2 col-md-10">
-                            <input type="button"
-                                   class="btn btn-secondary"
-                                   ng-click="exportToExcel()"
-                                   value="Download results as excel file" />
-                        </div>
-                    </div>
-                </div> *@
                 <div id="data-table-tab-pane"
                      class="tab-pane fade"
                      role="tabpanel"
@@ -320,81 +282,3 @@
         }
     }
 }
-@* @if (ViewBag.Error == null)
-{
-    <div ng-controller="SubsequencesCalculationResultCtrl">
-        <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
-        <div class="form-check">
-            <input type="checkbox"
-                   class="form-check-input"
-                   name="lineChart"
-                   id="lineChart"
-                   ng-model="lineChart"
-                   value="false" />
-            <label class="form-check-label" for="lineChart">
-                Draw rank distribution
-            </label>
-        </div>
-        <div class="row mb-1">
-            <label class="col-form-label col-md-2" for="firstCharacteristic">First characteristic:</label>
-            <div class="col-md-10">
-                <select class="form-select"
-                        title="First characteristic"
-                        ng-model="firstCharacteristic"
-                        ng-options="c.Text for c in ::subsequencesCharacteristicsList"
-                        id="firstCharacteristic"></select>
-            </div>
-        </div>
-        <div class="row mb-1" ng-hide="lineChart">
-            <label class="col-form-label col-md-2" for="secondCharacteristic">Second characteristic:</label>
-            <div class="col-md-10">
-                <select class="form-select"
-                        title="Second characteristic"
-                        ng-model="secondCharacteristic"
-                        ng-options="c.Text for c in ::subsequencesCharacteristicsList"
-                        id="secondCharacteristic"></select>
-            </div>
-        </div>
-        <div class="row mb-1">
-            <label class="col-form-label col-md-2" for="height">Height:</label>
-            <div class="col-md-10">
-                <input class="form-control" name="height" id="height" type="number" min="{{::500 + legendHeight}}" step="20" ng-model="height" />
-            </div>
-        </div>
-        <div class="row mb-1">
-            <label class="col-form-label col-md-2" for="width">Width:</label>
-            <div class="col-md-10">
-                <input class="form-control" name="width" id="width" type="number" min="400" step="20" ng-model="width" />
-            </div>
-        </div>
-        <input type="button" class="btn btn-secondary mb-2" ng-click="draw()" value="Draw" />
-        <div id="chart" class="font-monospace mb-2">
-        </div>
- *@
-        @*  <filters add-filter="addFilter(newFilter)" delete-filter="deleteFilter(filter, filterIndex)"></filters>
-    <div ng-repeat="sequenceData in sequencesData">
-    <h3 ng-bind="sequenceData.ResearchObjectName"></h3>
-    <table class="table table-bordered table-striped">
-    <thead>
-    <tr>
-    <th>Feature</th>
-    <th>Subsequence attributes</th>
-    <th>Subsequence position</th>
-    <th ng-repeat="characteristicName in ::subsequencesCharacteristicsNames" ng-bind="::characteristicName" />
-    </tr>
-    </thead>
-    <tbody>
-    <tr ng-repeat="subsequenceData in ::sequenceData.SubsequencesData">
-    <td ng-bind="::features[subsequenceData.FeatureId]" />
-    <td ng-bind-html="getAttributesText(subsequenceData.Attributes)" />
-    <td>
-    <div ng-repeat="start in ::subsequenceData.Starts">Start: {{::start}} Length:{{::subsequenceData.Lengths[$index]}}</div>
-    </td>
-    <td ng-repeat="characteristicValue in ::subsequenceData.CharacteristicsValues" ng-bind="::characteristicValue" />
-    </tr>
-    </tbody>
-    </table>
-    </div>*@
- @*    </div>
-}
- *@
