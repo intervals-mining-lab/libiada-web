@@ -28,7 +28,7 @@ public static class AutoCorrelation
         double[][] result = new double[transposedResult[0].Length][];
         for (int i = 0; i < transposedResult.Length; i++)
         {
-            result[i] = transposedResult.Select(r => r[i]).ToArray();
+                result[i] = transposedResult.Select(r => r[i]).ToArray();
         }
 
         return result;
