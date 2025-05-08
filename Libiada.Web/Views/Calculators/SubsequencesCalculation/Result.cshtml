@@ -250,12 +250,12 @@
                                     <th>Feature</th>
                                     <th>Subsequence attributes</th>
                                     <th>Subsequence position</th>
-                                    <th ng-repeat="characteristicName in ::subsequencesCharacteristicsNames" ng-bind="::characteristicName" />
+                                    <th ng-repeat="characteristicName in ::characteristicNames" ng-bind="::characteristicName" />
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr ng-repeat="subsequenceData in ::sequenceData.SubsequencesData">
-                                    <td ng-bind="::features[subsequenceData.FeatureId]" />
+                                    <td ng-bind="::features[subsequenceData.FeatureId].Text" />
                                     <td>
                                         <div ng-repeat="attribute in getAttributesText(subsequenceData.Attributes)" ng-bind="::attribute"></div>
                                     </td>

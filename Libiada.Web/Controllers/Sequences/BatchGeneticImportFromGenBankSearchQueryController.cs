@@ -70,7 +70,7 @@ public class BatchGeneticImportFromGenBankSearchQueryController : AbstractResult
             List<ResearchObjectImportResult> importResults = new(accessions.Length);
             using var db = dbFactory.CreateDbContext();
             var researchObjectRepository = new ResearchObjectRepository(db, cache);
-            var geneticSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
+            using var geneticSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
 
             (string[] existingAccessions, string[] accessionsToImport) = geneticSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
 
