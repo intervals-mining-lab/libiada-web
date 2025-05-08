@@ -34,6 +34,7 @@
             <tr>
                 <th>Notation</th>
                 <th>Visualization</th>
+                <th>Count</th>
                 <th>Acoustic</th>
             </tr>
         </thead>
@@ -46,12 +47,19 @@
                     <div id="visualization_{{::fmotif.Id}}"></div>
                 </td>
                 <td>
-                    <input type="button" class="btn btn-secondary" ng-click="play($index)" value="Play" />
+                    <div id="count_{{$index}}">{{ data.fmotifsCounts[$index] }}</div>
+                </td>
+                <td>
+                    <input type="button" class="btn btn-secondary"
+                           ng-click="play($index)"
+                           value="Play"
+                           ng-disabled="isPlaying" />
                 </td>
             </tr>
         </tbody>
     </table>
 </div>
+
 
 @section Scripts {
     <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>

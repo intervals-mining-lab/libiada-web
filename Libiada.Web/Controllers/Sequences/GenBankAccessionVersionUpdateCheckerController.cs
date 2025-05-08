@@ -43,7 +43,7 @@ public class GenBankAccessionVersionUpdateCheckerController : AbstractResultCont
 
             Dictionary<string, AccessionUpdateSearchResult> sequencesData;
 
-            var dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
+            using var geneticSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
             using var db = dbFactory.CreateDbContext();
             var sequencesWithAccessions = db.CombinedSequenceEntities
                                             .Include(ds => ds.ResearchObject)

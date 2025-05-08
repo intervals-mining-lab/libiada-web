@@ -79,9 +79,9 @@ public class NcbiNuccoreSearchController : AbstractResultController
 
             string[] existingAccessions;
 
-            var dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
+            var geneticSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
 
-            (existingAccessions, _) = dnaSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
+            (existingAccessions, _) = geneticSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
 
             searchResults = searchResults
                                 .Where(sr => !existingAccessions.Contains(sr.AccessionVersion.Split('.')[0]))

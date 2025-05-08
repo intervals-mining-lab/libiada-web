@@ -74,7 +74,7 @@ public class BatchSequenceImportController : AbstractResultController
             List<ResearchObjectImportResult> importResults = new(accessions.Length);
             string[] accessionsToImport;
 
-            var geneticSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
+            using var geneticSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
             string[] existingAccessions;
             (existingAccessions, accessionsToImport) = geneticSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
 
@@ -99,7 +99,7 @@ public class BatchSequenceImportController : AbstractResultController
 
                     // TODO: refactor this to use DI (and probably factories) 
                     var researchObjectRepository = new ResearchObjectRepository(db, cache);
-                    var geneticSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
+                    
                     ResearchObject researchObject = researchObjectRepository.CreateResearchObjectFromGenBankMetadata(metadata);
 
                     importResult.SequenceType = researchObject.SequenceType.GetDisplayValue();
@@ -110,7 +110,7 @@ public class BatchSequenceImportController : AbstractResultController
                                               + $"Definition = {metadata.Definition}, "
                                               + $"Saved research object name = {importResult.ResearchObjectName}";
 
-                    bool partial = metadata.Definition.ToLower().Contains("partial");
+                    bool partial = metadata.Definition.Contains("partial", StringComparison.CurrentCultureIgnoreCase);
 
                     var sequence = new GeneticSequence
                     {
@@ -123,7 +123,7 @@ public class BatchSequenceImportController : AbstractResultController
                         ModifierId = userId,
                     };
 
-
+                    using var geneticSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
                     geneticSequenceRepository.Create(sequence, bioSequence);
 
                     (importResult.Result, importResult.Status) = importGenes ?
