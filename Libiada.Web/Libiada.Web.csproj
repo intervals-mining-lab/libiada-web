@@ -19,7 +19,6 @@
 	<ItemGroup>
 	  <TypeScriptCompile Remove="wwwroot\js\Angular\Controllers\intervalsCharacteristicsDistributionResult.ts" />
 	  <TypeScriptCompile Remove="wwwroot\js\Angular\Controllers\OrderTransformationVisualizationResult.ts" />
-	  <TypeScriptCompile Remove="wwwroot\js\Angular\Controllers\subsequencesCalculationResult.ts" />
 	</ItemGroup>
 	
 	
@@ -29,7 +28,6 @@
 	  <Content Include="wwwroot\js\Angular\Controllers\OrderTransformationVisualizationResult.ts" />
 	  <Content Include="wwwroot\js\Angular\Controllers\researchObjectEdit.ts" />
 	  <Content Include="wwwroot\js\Angular\Controllers\researchObjectSequenceCreate.ts" />
-	  <Content Include="wwwroot\js\Angular\Controllers\subsequencesCalculationResult.ts" />
 	</ItemGroup>
 
 	<ItemGroup>
