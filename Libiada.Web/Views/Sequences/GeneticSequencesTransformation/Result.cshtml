@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "Genetic sequences transformation result";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Error == null)
+{
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchSequenceImportResult");
+
+    <div ng-controller="BatchSequenceImportResultCtrl">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Sequence</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="researchObject in ::result" ng-class="::calculateStatusClass(researchObject.Status)">
+                    <td ng-bind="::$index + 1" />
+                    <td ng-bind="::researchObject.ResearchObjectName" />
+                    <td ng-bind="::researchObject.Result" />
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    @section Scripts {
+    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+    }
+}

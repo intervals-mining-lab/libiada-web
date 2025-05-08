@@ -130,7 +130,7 @@ public class SubsequencesDistributionController : AbstractResultController
                 remoteIds[n] = parentSequences[n].RemoteId;
             }
 
-            var geneticSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
+            using var geneticSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
             sequenceIds = geneticSequenceRepository.GetNucleotideSequenceIds(researchObjectIds);
 
             string sequenceCharacteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId);

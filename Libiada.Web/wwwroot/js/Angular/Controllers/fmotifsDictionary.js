@@ -107,6 +107,7 @@
 
         // plays Fmotifs with animation
         $scope.play = event => {
+            $scope.isPlaying = true;
             MIDI.setVolume(0, 80);
             player.timeline = 0;
             let notes = $scope.data.fmotifs[event].NoteList;
@@ -119,9 +120,15 @@
                     }
                 }
             }
+            let totalDuration = 0;
             for (let i = 0; i < notes.length; i++) {
                 player.play(notes[i], min, true, event);
+                totalDuration += notes[i].Duration.Value;
             }
+            setTimeout(() => {
+                $scope.isPlaying = false;
+                $scope.$apply();
+            }, (totalDuration * player.barDuration) * 900, event);
         };
 
         // gets note's line and alter

@@ -35,8 +35,8 @@ public class SubsequencesComparerController : AbstractResultController
     private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
     private readonly ISequencesCharacteristicsCalculator sequencesCharacteristicsCalculator;
     private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
+    private readonly IResearchObjectsCache cache;
     private readonly IViewDataBuilderFactory viewDataBuilderFactory;
-    private readonly GeneticSequenceRepository geneticSequenceRepository;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SubsequencesComparerController"/> class.
@@ -56,8 +56,8 @@ public class SubsequencesComparerController : AbstractResultController
         this.subsequencesCharacteristicsCalculator = subsequencesCharacteristicsCalculator;
         this.sequencesCharacteristicsCalculator = sequencesCharacteristicsCalculator;
         this.sequenceRepositoryFactory = sequenceRepositoryFactory;
+        this.cache = cache;
         this.viewDataBuilderFactory = viewDataBuilderFactory;
-        geneticSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
     }
 
     /// <summary>
@@ -131,7 +131,7 @@ public class SubsequencesComparerController : AbstractResultController
             int researchObjectsCount = researchObjectIds.Length;
             Dictionary<string, object> characteristicsTypesData;
 
-
+            using var geneticSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
             // Sequences characteristic
             long[] sequences = geneticSequenceRepository.GetNucleotideSequenceIds(researchObjectIds);
 
