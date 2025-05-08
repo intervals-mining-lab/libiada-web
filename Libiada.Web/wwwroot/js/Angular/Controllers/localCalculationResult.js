@@ -2,106 +2,6 @@
     "use strict";
 
     function localCalculationResult($scope, $http) {
-
-        function fillLegend() {
-            $scope.legend = [];
-
-            for (let k = 0; k < $scope.characteristics.length; k++) {
-                $scope.legend.push({ id: k, name: $scope.characteristics[k].ResearchObjectName, visible: true });
-            }
-        }
-
-        // initializes data for chart
-        function fillPoints() {
-            $scope.points = [];
-            let first = +$scope.firstCharacteristic.Value;
-            let second = +$scope.secondCharacteristic.Value;
-
-            for (let i = 0; i < $scope.characteristics.length; i++) {
-                let characteristic = $scope.characteristics[i];
-                for (let j = 0; j < characteristic.FragmentsData.length; j++) {
-                    let fragmentData = characteristic.FragmentsData[j];
-                    $scope.points.push({
-                        id: j,
-                        characteristicId: i,
-                        name: fragmentData.Name,
-                        x: fragmentData.Characteristics[first],
-                        y: fragmentData.Characteristics[second],
-                        researchObjectName: characteristic.ResearchObjectName
-                    });
-                }
-            }
-        }
-
-        // constructs string representing tooltip text (inner html)
-        function fillPointTooltip(d) {
-            let tooltipContent = [];
-            tooltipContent.push(d.researchObjectName);
-            tooltipContent.push(`Name: ${d.name}`);
-            tooltipContent.push(`Fragment №: ${d.id}`);
-            let pointSharacteristics = [];
-            let characteristics = $scope.characteristics[d.characteristicId].FragmentsData[d.id].Characteristics;
-            for (let i = 0; i < characteristics.length; i++) {
-                pointSharacteristics.push(`${$scope.characteristicsList[i].Text}: ${characteristics[i]}`);
-            }
-
-            tooltipContent.push(pointSharacteristics.join("<br/>"));
-
-            return tooltipContent.join("</br>");
-        }
-
-        // shows tooltip for dot or group of dots
-        function showTooltip(event, d, tooltip, svg) {
-            $scope.clearTooltip(tooltip);
-
-            tooltip.style("opacity", 0.9);
-
-            let tooltipHtml = [];
-
-            tooltip.selectedDots = svg.selectAll(".dot")
-                .filter(dot => {
-                    if (dot.x === d.x && dot.y === d.y) {
-                        tooltipHtml.push($scope.fillPointTooltip(dot));
-                        return true;
-                    } else {
-                        return false;
-                    }
-                })
-                .attr("rx", $scope.selectedDotRadius)
-                .attr("ry", $scope.selectedDotRadius);
-
-            tooltip.html(tooltipHtml.join("</br></br>"));
-
-            tooltip.style("left", `${event.pageX + 10}px`)
-                .style("top", `${event.pageY - 8}px`);
-
-            tooltip.hideTooltip = false;
-        }
-
-        // clears tooltip and unselects dots
-        function clearTooltip(tooltip) {
-            if (tooltip) {
-                if (tooltip.hideTooltip) {
-                    tooltip.html("").style("opacity", 0);
-
-                    if (tooltip.selectedDots) {
-                        tooltip.selectedDots.attr("rx", $scope.dotRadius)
-                            .attr("ry", $scope.dotRadius);
-                    }
-                }
-
-                tooltip.hideTooltip = true;
-            }
-        }
-
-        function xValue(d) {
-            return $scope.lineChart ? d.id : d.x;
-        }
-
-        function yValue(d) {
-            return $scope.lineChart ? d.x : d.y;
-        }
-
         function calculateLocalCharacteristicsSimilarityMatrix() {
             $http.get("/api/LocalCalculationApi/CalculateLocalCharacteristicsSimilarityMatrix", {
                 params: {
@@ -129,193 +29,381 @@
             $scope.isCharacteristicsTableVisible = true;
         }
 
+        function fillLegend() {
+            $scope.legend = [];
+
+            $scope.colorScale = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.characteristics.length]);
+            for (let k = 0; k < $scope.characteristics.length; k++) {
+                const color = $scope.colorScale(k + 1);
+                $scope.legend.push({
+                    id: k + 1,
+                    name: $scope.characteristics[k].ResearchObjectName,
+                    visible: true,
+                    color: color
+                });
+
+                // hack for the legend's dot color
+                document.styleSheets[0].insertRule(`.legend${k + 1}:after { background:${color} }`);
+            }
+        }
+
+        $scope.addCharacteristic = () => $scope.chartCharacteristics.push({
+            id: $scope.chartsCharacterisrticsCount++,
+            value: $scope.characteristicsList.find(cl => $scope.chartCharacteristics.every(cc => cc.value !== cl))
+        });
+
+        $scope.deleteCharacteristic = characteristic => $scope.chartCharacteristics.splice($scope.chartCharacteristics.indexOf(characteristic), 1);
+
+        // initializes data for chart
+        function fillPoints() {
+            $scope.points = [];
+
+            for (let i = 0; i < $scope.characteristics.length; i++) {
+                let characteristic = $scope.characteristics[i];
+                $scope.points.push({
+                    legendIndex: i,
+                    legendId: i + 1,
+                    researchObjectName: characteristic.ResearchObjectName,
+                    fragmentsData: []
+                });
+                for (let j = 0; j < characteristic.FragmentsData.length; j++) {
+                    let fragmentData = characteristic.FragmentsData[j];
+                    $scope.points[i].fragmentsData.push({
+                        rank: j,
+                        legendIndex: i,
+                        name: fragmentData.Name,
+                        characteristics: fragmentData.Characteristics   
+                    });
+                }
+            }
+        }
+
+        // shows tooltip for dot or group of dots
+        function showTooltip(selectedTrace) {
+            $("button[data-bs-target='#tooltip-tab-pane']").tab("show");
+            let selectetPoint = selectedTrace.fragmentsData[$scope.selectedPointIndex];
+            $scope.tooltipVisible = true;
+            $scope.tooltip = {
+                id: selectedTrace.rank,
+                name: selectedTrace.researchObjectName,
+                fragmentName: selectetPoint.name,
+                characteristics: selectetPoint.characteristics
+            };
+            let update = {};
+            switch ($scope.chartCharacteristics.length) {
+                case 1:
+                case 2:
+                    update = {
+                        "marker.symbol": $scope.points.map(t => t.fragmentsData.map(p => p === selectetPoint ? "diamond-wide" : "circle")),
+                        "marker.size": $scope.points.map(t => t.fragmentsData.map(p => p === selectetPoint ? 10 : $scope.pointSize * 1.5))
+                    };
+                    break;
+                case 3:
+                    break;
+                default:
+            }
+
+
+            Plotly.restyle($scope.chartElement, update);
+
+            $scope.$apply();
+        }
+
+        function fillLinePlotData() {
+            let characteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
+            let characteristicsValues = $scope.points.map((p => p.fragmentsData.map(fd => fd.characteristics[characteristicIndex]))).flat();
+            let min = Math.min(...characteristicsValues);
+            let max = Math.max(...characteristicsValues);
+            let range = Math.abs(max - min);
+           
+            // adding margins
+            min -= Math.abs(range * 0.05);
+            max += Math.abs(range * 0.05);
+
+            let ranks = [];
+            if ($scope.lineChart) {
+                for (let i = 0; i < $scope.points.length; i++) {
+                    let y = $scope.points[i].fragmentsData.map(sd => sd.characteristics[characteristicIndex]);
+                    y.sort((first, second) => second - first);
+                    ranks.push({
+                        //x is range from 1 to fragmentsData length
+                        x: Array.from({ length: y.length }, (x, i) => i + 1),
+                        y: y
+                    });
+                }
+            } else {
+                for (let i = 0; i < $scope.points.length; i++) {
+                    ranks.push({
+                        //$scope.points[i].fragmentsData.map(sd => { return { x: sd.rank, y: sd.characteristics[characteristicIndex] } }) 
+                        x: $scope.points[i].fragmentsData.map(sd => sd.rank),
+                        y: $scope.points[i].fragmentsData.map(sd => sd.characteristics[characteristicIndex])
+                    });
+                }
+            }
+
+            $scope.layout = {
+                margin: {
+                    l: 50,
+                    r: 20,
+                    t: 10,
+                    b: 20
+
+                },
+                showlegend: false,
+                yaxis: {
+                    range: [min, max],
+                    title: {
+                        text: $scope.characteristicNames[characteristicIndex],
+                    }
+                }
+            };
+            $scope.pointSize = 2;
+            $scope.chartData = $scope.points.map((p, i) => ({
+                hoverinfo: "text+x+y",
+                x: ranks[i].x,
+                y: ranks[i].y,
+                marker: {
+                    color: $scope.legend[p.legendIndex].color,
+                    size: $scope.pointSize,
+                    opacity: 0.8
+                },
+                type: "scatter",
+                line: {
+                    color: $scope.legend[p.legendIndex].color,
+                    width: 0.75
+                },
+                mode: "lines+markers",
+                customdata: { legendId: p.legendId },
+                name: p.researchObjectName,
+                visible: $scope.legend[p.legendIndex].visible ? "true" : "legendonly"
+            }));
+        }
+
+        function fillScatterPlotData() {
+            let firstCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
+            let secondCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1].value);
+
+            $scope.layout = {
+                margin: {
+                    l: 50,
+                    r: 20,
+                    t: 30,
+                    b: 40
+                },
+                showlegend: false,
+                hovermode: "closest",
+                xaxis: {
+                    //type: $scope.plotTypeX ? "log" : "",
+                    title: {
+                        text: $scope.characteristicNames[firstCharacteristicIndex]
+                    }
+                },
+                yaxis: {
+                    //type: $scope.plotTypeY ? "log" : "",
+                    title: {
+                        text: $scope.characteristicNames[secondCharacteristicIndex]
+                    }
+                }
+            };
+
+            $scope.pointSize = 3;
+            $scope.chartData = $scope.points.map(p => ({
+                hoverinfo: "text+x+y",
+                type: "scattergl",
+                x: p.fragmentsData.map(fd => fd.characteristics[firstCharacteristicIndex]),     
+                y: p.fragmentsData.map(fd => fd.characteristics[secondCharacteristicIndex]),
+                text: p.researchObjectName,
+                mode: "markers",
+                marker: {
+                    opacity: 0.8,
+                    color: $scope.legend[p.legendIndex].color,
+                    size: $scope.pointSize
+                },
+                name: p.researchObjectName,
+                customdata: { legendId: p.legendId },
+                visible: $scope.legend[p.legendIndex].visible
+            }));
+        }
+
+        function fill3dScatterPlotData() {
+
+            let firstCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
+            let secondCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1].value);
+            let thirdCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[2].value);
+
+            $scope.pointSize = 3;
+            $scope.chartData = $scope.points.map(p => ({
+                hoverinfo: "text+x+y+z",
+                x: p.fragmentsData.map(fd => fd.characteristics[firstCharacteristicIndex]),
+                y: p.fragmentsData.map(fd => fd.characteristics[secondCharacteristicIndex]),
+                z: p.fragmentsData.map(fd => fd.characteristics[thirdCharacteristicIndex]),
+                text: p.name,
+                mode: "markers",
+                marker: {
+                    opacity: 0.8,
+                    color: $scope.legend[p.legendIndex].color,
+                    size: $scope.pointSize
+                },
+                name: p.researchObjectName,
+                type: "scatter3d",
+                customdata: { legendId: p.legendId },
+                visible: $scope.legend[p.legendIndex].visible
+            }));
+
+            $scope.layout = {
+                margin: {
+                    l: 0,
+                    r: 0,
+                    b: 0,
+                    t: 0
+                },
+                showlegend: false,
+                scene: {
+                    xaxis: {
+                        //type: $scope.plotTypeX ? "log" : "",
+                        title: {
+                            text: $scope.characteristicNames[firstCharacteristicIndex],
+                            font: {
+                                size: 10
+                            }
+                        },
+                    },
+                    yaxis: {
+                        //type: $scope.plotTypeY ? "log" : "",
+                        title: {
+                            text: $scope.characteristicNames[secondCharacteristicIndex],
+                            font: {
+                                size: 10
+                            }
+                        }
+                    },
+                    zaxis: {
+                        //type: $scope.plotTypeY ? "log" : "",
+                        title: {
+                            text: $scope.characteristicNames[thirdCharacteristicIndex],
+                            font: {
+                                size: 10
+                            }
+                        }
+                    }
+                }
+            };
+        }
+
+        function fillParallelCoordinatesPlotData() {
+            let characteristicsIndices = $scope.chartCharacteristics.map(c => $scope.characteristicsList.indexOf(c.value));
+
+            $scope.chartData = [{
+                type: "parcoords",
+                //pad: [80, 80, 80, 80],
+                line: {
+                    color: $scope.points.map(p => p.fragmentsData.map(sd => sd.legendIndex)).flat(),
+                    colorscale: "Turbo",
+                },
+
+                dimensions: characteristicsIndices.map(ci => ({
+                    label: $scope.characteristicNames[ci],
+                    values: $scope.points.map(p => p.fragmentsData.map(sd => sd.characteristics[ci])).flat()
+                }))
+            }];
+
+            $scope.layout = {
+                margin: {
+                    l: 50,
+                    r: 50,
+                    b: 20,
+                    t: 70
+                },
+                showlegend: false
+            };
+        }
+
         function draw() {
             $scope.fillPoints();
 
-            // removing previous chart and tooltip if any
-            d3.select(".chart-tooltip").remove();
-            d3.select(".chart-svg").remove();
-
-            // chart size and margin settings
-            let margin = { top: 30 + $scope.legendHeight, right: 30, bottom: 30, left: 60 };
-            let width = $scope.width - margin.left - margin.right;
-            let height = $scope.height - margin.top - margin.bottom;
-
-            // setup x
-            // calculating margins for dots
-            let xMin = d3.min($scope.points, $scope.xValue);
-            let xMax = d3.max($scope.points, $scope.xValue);
-            let xMargin = (xMax - xMin) * 0.05;
-
-            let xScale = d3.scaleLinear()
-                .domain([xMin - xMargin, xMax + xMargin])
-                .range([0, width]);
-            let xAxis = d3.axisBottom(xScale)
-                .tickSizeInner(-height)
-                .tickSizeOuter(0)
-                .tickPadding(10);
-
-            $scope.xMap = d => xScale($scope.xValue(d));
-
-            // setup y
-            // calculating margins for dots
-            let yMax = d3.max($scope.points, $scope.yValue);
-            let yMin = d3.min($scope.points, $scope.yValue);
-            let yMargin = (yMax - yMin) * 0.05;
-
-            let yScale = d3.scaleLinear()
-                .domain([yMin - yMargin, yMax + yMargin])
-                .range([height, 0]);
-            let yAxis = d3.axisLeft(yScale)
-                .tickSizeInner(-width)
-                .tickSizeOuter(0)
-                .tickPadding(10);
-
-            $scope.yMap = d => yScale($scope.yValue(d));
-
-            // setup fill color
-            let color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.legend.length]);
-
-            // add the graph canvas to the body of the webpage
-            let svg = d3.select("#chart").append("svg")
-                .attr("width", $scope.width)
-                .attr("height", $scope.height)
-                .attr("class", "chart-svg")
-                .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-            // add the tooltip area to the webpage
-            let tooltip = d3.select("#chart").append("div")
-                .attr("class", "chart-tooltip position-absolute bg-light font-monospace small lh-sm p-1 rounded")
-                .style("opacity", 0);
-
-            // preventing tooltip hiding if dot clicked
-            tooltip.on("click", () => { tooltip.hideTooltip = false; });
-
-            // hiding tooltip
-            d3.select("#chart").on("click", () => { $scope.clearTooltip(tooltip); });
-
-            // x-axis
-            svg.append("g")
-                .attr("class", "x axis")
-                .attr("transform", `translate(0,${height})`)
-                .call(xAxis);
-
-            svg.append("text")
-                .attr("class", "label")
-                .attr("transform", `translate(${width / 2} ,${height + margin.top - $scope.legendHeight})`)
-                .style("text-anchor", "middle")
-                .text($scope.lineChart ? "Fragment №" : $scope.firstCharacteristic.Text)
-                .style("font-size", "12pt");
-
-            // y-axis
-            svg.append("g")
-                .attr("class", "y axis")
-                .call(yAxis);
-
-            svg.append("text")
-                .attr("class", "label")
-                .attr("transform", "rotate(-90)")
-                .attr("y", 0 - margin.left)
-                .attr("x", 0 - (height / 2))
-                .attr("dy", ".71em")
-                .style("text-anchor", "middle")
-                .text($scope.lineChart ? $scope.firstCharacteristic.Text : $scope.secondCharacteristic.Text)
-                .style("font-size", "12pt");
-
-            if ($scope.lineChart) {
-                let line = d3.line()
-                    .x($scope.xMap)
-                    .y($scope.yMap);
-
-                // Group the entries by symbol
-                let dataGroups = d3.group($scope.points, d => d.researchObjectName);
-
-                // Loop through each symbol / key
-                dataGroups.forEach(value => {
-                    svg.append("path")
-                        .datum(value)
-                        .attr("class", "line")
-                        .attr("d", line)
-                        .attr("stroke", d => color(d[0].characteristicId))
-                        .attr("stroke-width", 1)
-                        .attr("fill", "none");
-                });
+            switch ($scope.chartCharacteristics.length) {
+                case 1:
+                    $scope.fillLinePlotData();
+                    break;
+                case 2:
+                    $scope.fillScatterPlotData();
+                    break;
+                case 3:
+                    $scope.fill3dScatterPlotData();
+                    break;
+                default:
+                    $scope.fillParallelCoordinatesPlotData();
             }
 
-            // draw dots
-            svg.selectAll(".dot")
-                .data($scope.points)
-                .enter()
-                .append("ellipse")
-                .attr("class", "dot")
-                .attr("rx", $scope.dotRadius)
-                .attr("ry", $scope.dotRadius)
-                .attr("cx", $scope.xMap)
-                .attr("cy", $scope.yMap)
-                .style("fill-opacity", 0.6)
-                .style("opacity", $scope.lineChart ? 0 : 1)
-                .style("fill", d => color(d.characteristicId))
-                .style("stroke", d => color(d.characteristicId))
-                .on("click", (event, d) => $scope.showTooltip(event, d, tooltip, svg));
+            Plotly.newPlot($scope.chartElement, $scope.chartData, $scope.layout, { responsive: true });
 
-            // draw legend
-            let legend = svg.selectAll(".legend")
-                .data($scope.legend)
-                .enter()
-                .append("g")
-                .attr("class", "legend")
-                .attr("transform", (_d, i) => `translate(0,${i * 20})`)
-                .on("click", function (event, d) {
-                    d.visible = !d.visible;
-                    let legendEntry = d3.select(event.currentTarget);
-                    legendEntry.select("text")
-                        .style("opacity", () => d.visible ? 1 : 0.5);
-                    legendEntry.select("rect")
-                        .style("fill-opacity", () => d.visible ? 1 : 0);
+            $scope.chartElement.on("plotly_click", data => {
+                $scope.selectedPointIndex = data.points[0].pointNumber;
+                $scope.selectedResearchObjectIndex = data.points[0].curveNumber;
+                let selectedPoint = $scope.points[data.points[0].curveNumber];
+                $scope.showTooltip(selectedPoint);
+            });
+        }
 
-                    svg.selectAll(".dot")
-                        .filter(dot => dot.researchObjectName === d.name)
-                        .attr("visibility", () => d.visible ? "visible" : "hidden");
+        function legendClick(legendItem) {
+            if ($scope.chartData && $scope.chartData[0].customdata) {
+                let index = [];
+                let update = { visible: legendItem.visible ? "legendonly" : true };
+                for (let i = 0; i < $scope.chartData.length; i++) {
+                    if ($scope.chartData[i].customdata.legendId === legendItem.id) {
+                        index.push(i);
+                    }
+                }
 
-                    svg.selectAll(".line")
-                        .filter(line => line[0].researchObjectName === d.name)
-                        .attr("visibility", () => d.visible ? "visible" : "hidden");
-                });
+                Plotly.restyle($scope.chartElement, update, index);
+            }
 
-            // draw legend colored rectangles
-            legend.append("rect")
-                .attr("width", 15)
-                .attr("height", 15)
-                .style("fill", d => color(d.id))
-                .style("stroke", d => color(d.id))
-                .style("stroke-width", 4)
-                .attr("transform", `translate(0, -${$scope.legendHeight})`);
+        }
 
-            // draw legend text
-            legend.append("text")
-                .attr("x", 24)
-                .attr("y", 9)
-                .attr("dy", ".35em")
-                .attr("transform", `translate(0, -${$scope.legendHeight})`)
-                .text(d => d.name)
-                .style("font-size", "9pt");
+        function legendSetVisibilityForAll(visibility) {
+            if ($scope.chartData && $scope.chartData[0].customdata) {
+                let update = { visible: visibility ? true : "legendonly" };
+                $scope.legend.forEach(l => l.visible = visibility);
+                Plotly.restyle($scope.chartElement, update);
+            }
+        }
+
+        function dragbarMouseDown() {
+            let right = document.getElementById("sidebar");
+            let bar = document.getElementById("dragbar");
+
+            const drag = (e) => {
+                document.selection ? document.selection.empty() : window.getSelection().removeAllRanges();
+                $scope.chartElement.style.width = `${e.pageX - bar.offsetWidth / 2}px`;
+
+                Plotly.relayout($scope.chartElement, { autosize: true });
+            };
+
+            bar.addEventListener("mousedown", () => {
+                document.addEventListener("mousemove", drag);
+            });
+
+            bar.addEventListener("mouseup", () => {
+                document.removeEventListener("mousemove", drag);
+            });
         }
 
         $scope.calculateLocalCharacteristicsSimilarityMatrix = calculateLocalCharacteristicsSimilarityMatrix;
         $scope.changeCharacteristicsTableVisibility = changeCharacteristicsTableVisibility;
+        $scope.fillLinePlotData = fillLinePlotData;
+        $scope.fillScatterPlotData = fillScatterPlotData;
+        $scope.fill3dScatterPlotData = fill3dScatterPlotData;
+        $scope.fillParallelCoordinatesPlotData = fillParallelCoordinatesPlotData;
         $scope.draw = draw;
         $scope.fillPoints = fillPoints;
-        $scope.fillPointTooltip = fillPointTooltip;
         $scope.showTooltip = showTooltip;
-        $scope.clearTooltip = clearTooltip;
         $scope.fillLegend = fillLegend;
-        $scope.yValue = yValue;
-        $scope.xValue = xValue;
+        $scope.legendClick = legendClick;
+        $scope.legendSetVisibilityForAll = legendSetVisibilityForAll;
+        $scope.dragbarMouseDown = dragbarMouseDown;
 
-        $scope.width = 800;
-        $scope.dotRadius = 4;
-        $scope.selectedDotRadius = $scope.dotRadius * 2;
+        $scope.chartsCharacterisrticsCount = 1;
+        $scope.chartElement = document.getElementById("chart");
 
         $scope.loadingScreenHeader = "Loading data";
 
@@ -328,8 +416,7 @@
 
                 $scope.fillLegend();
 
-                $scope.firstCharacteristic = $scope.characteristicsList[0];
-                $scope.secondCharacteristic = $scope.characteristicsList.length > 1 ? $scope.characteristicsList[1] : $scope.characteristicsList[0];
+                $scope.chartCharacteristics = [{ id: $scope.chartsCharacterisrticsCount++, value: $scope.characteristicsList[0] }];
                 $scope.aligner = $scope.aligners[0];
                 $scope.distanceCalculator = $scope.distanceCalculators[0];
                 $scope.aggregator = $scope.aggregators[0];
