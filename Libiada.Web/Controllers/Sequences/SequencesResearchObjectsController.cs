@@ -129,19 +129,22 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
                 {
                     case Nature.Genetic:
                         Bio.ISequence bioSequence = NcbiHelper.GetFastaSequence(sequenceStream);
-                        var dnaSequenceRepository = new GeneticSequenceRepository(dbFactory, cache);
-                        var dnaSequence = new GeneticSequence
+                        using (var geneticSequenceRepository = new GeneticSequenceRepository(dbFactory, cache))
                         {
-                            CreatorId = userId,
-                            ModifierId = userId,
-                            Notation = sequence.Notation,
-                            RemoteDb = sequence.RemoteDb,
-                            RemoteId = sequence.RemoteId,
-                            Partial = sequence.Partial ?? throw new Exception("Genetic sequence partial flag is not present in form data"),
-                            ResearchObject = sequence.ResearchObject
-                        };
+                            var geneticSequence = new GeneticSequence
+                            {
+                                CreatorId = userId,
+                                ModifierId = userId,
+                                Notation = sequence.Notation,
+                                RemoteDb = sequence.RemoteDb,
+                                RemoteId = sequence.RemoteId,
+                                Partial = sequence.Partial ?? throw new Exception("Genetic sequence partial flag is not present in form data"),
+                                ResearchObject = sequence.ResearchObject
+                            };
 
-                        dnaSequenceRepository.Create(dnaSequence, bioSequence);
+                            geneticSequenceRepository.Create(geneticSequence, bioSequence);
+                        }
+
                         break;
                     case Nature.Music:
                         var musicSequenceRepository = new MusicSequenceRepository(dbFactory, cache);

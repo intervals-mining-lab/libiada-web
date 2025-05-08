@@ -1,5 +1,5 @@
 ﻿/// <reference types="angular" />
-/// <reference path="../functions.d.ts" />
+/// <reference types="functions" />
 
 // Interface for the data object passed to the controller
 interface IResearchObjectSequenceCreateData {
@@ -86,7 +86,8 @@ class ResearchObjectSequenceCreator {
          
 
             function filterByNature(): void {
-                const arraysForFiltration: string[] = ["notations", "remoteDbs", "researchObjects", "groups", "sequenceTypes"];
+                const arraysForFiltration: string[] = ["notations", "remoteDbs",
+                    "researchObjects", "groups", "sequenceTypes"];
 
                 arraysForFiltration.forEach(arrayName => {
                     if (angular.isDefined($scope[arrayName])) {
@@ -97,7 +98,8 @@ class ResearchObjectSequenceCreator {
                 $scope.notationId = $scope.notationsFiltered[0].Value
                 $scope.group = $scope.groupsFiltered[0].Value;
                 $scope.sequenceType = $scope.sequenceTypesFiltered[0].Value;
-                if (angular.isDefined($scope.researchObjectsFiltered) && angular.isDefined($scope.researchObjectsFiltered[0])) {
+                if (angular.isDefined($scope.researchObjectsFiltered) && angular.isDefined(
+                    $scope.researchObjectsFiltered[0])) {
                     $scope.researchObjectId = $scope.researchObjectsFiltered[0].Value;
                 }
             }

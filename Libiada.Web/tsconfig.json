@@ -1,13 +1,13 @@
 ﻿{
   "compilerOptions": {
     "target": "ES2021",
-    "module": "commonjs", 
+    "module": "none",
     "sourceMap": true,
     "outDir": "./wwwroot/js/Angular/Controllers/",
     "rootDir": "./wwwroot/js/Angular/Controllers/",
     "strict": false,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true, 
+    "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
@@ -17,16 +17,17 @@
     "declaration": false,
     "types": [ "angular" ],
     "typeRoots": [
-      "node_modules/@types",
-      "wwwroot/js/Angular"
+      
+      "wwwroot/lib/@types"
     ],
-    "moduleResolution": "node" 
+    "moduleResolution": "node"
   },
   "include": [
     "wwwroot/js/Angular/Controllers/**/*.ts"
   ],
   "exclude": [
-    "node_modules",
-    "wwwroot/lib"
+    //"node_modules",
+    //"wwwroot/lib"
+    //"wwwroot/lib/!([@types]/**)"
   ]
 }

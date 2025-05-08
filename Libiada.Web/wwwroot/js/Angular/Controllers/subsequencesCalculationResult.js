@@ -1,21 +1,22 @@
 /// <reference types="angular" />
 /// <reference types="d3" />
-/// <reference path="../functions.d.ts" />
+/// <reference types="functions" />
+/// <reference path="./Interfaces/commonInterfaces.d.ts" />
 /**
- * Обработчик для отображения результатов расчета подпоследовательностей
+ * Handler for displaying subsequence calculation results
  */
 class SubsequencesCalculationResultHandler {
     constructor() {
         this.initializeController();
     }
     /**
-     * Инициализирует контроллер Angular
+     * Initializes the Angular controller
      */
     initializeController() {
         const subsequencesCalculationResult = ($scope, $http, $sce) => {
             "use strict";
             /**
-             * Заполняет массив видимых точек
+             * Fills the array of visible points
              */
             function fillVisiblePoints() {
                 $scope.visiblePoints = [];
@@ -29,8 +30,8 @@ class SubsequencesCalculationResultHandler {
                 }
             }
             /**
-             * Получает текст атрибутов для заданной подпоследовательности
-             * @param attributes Массив идентификаторов атрибутов
+             * Gets the attribute text for a given subsequence
+             * @param attributes Array of attribute IDs
              */
             function getAttributesText(attributes) {
                 const attributesText = [];
@@ -41,18 +42,18 @@ class SubsequencesCalculationResultHandler {
                 return $sce.trustAsHtml(attributesText.join("<br/>"));
             }
             /**
-             * Возвращает индекс атрибута по его имени, если таковой имеется
-             * @param dot Точка данных
-             * @param attributeName Имя атрибута
+             * Returns the attribute index by its name, if exists
+             * @param dot Data point
+             * @param attributeName Attribute name
              */
             function getAttributeIdByName(dot, attributeName) {
                 return dot.attributes.find(a => $scope.attributes[$scope.attributeValues[a].attribute] === attributeName);
             }
             /**
-             * Возвращает true, если точка имеет заданный атрибут и его значение равно заданному значению
-             * @param dot Точка данных
-             * @param attributeName Имя атрибута
-             * @param expectedValue Ожидаемое значение
+             * Returns true if the point has the given attribute and its value equals the expected value
+             * @param dot Data point
+             * @param attributeName Attribute name
+             * @param expectedValue Expected value
              */
             function isAttributeEqual(dot, attributeName, expectedValue) {
                 const attributeId = $scope.getAttributeIdByName(dot, attributeName);
@@ -63,8 +64,8 @@ class SubsequencesCalculationResultHandler {
                 return false;
             }
             /**
-             * Применяет новый фильтр
-             * @param newFilter Строка фильтра
+             * Applies a new filter
+             * @param newFilter Filter string
              */
             function addFilter(newFilter) {
                 d3.selectAll(".dot")
@@ -78,9 +79,9 @@ class SubsequencesCalculationResultHandler {
                 $scope.fillVisiblePoints();
             }
             /**
-             * Удаляет заданный фильтр
-             * @param filter Строка фильтра
-             * @param filterIndex Индекс фильтра
+             * Removes the specified filter
+             * @param filter Filter string
+             * @param filterIndex Filter index
              */
             function deleteFilter(filter, filterIndex) {
                 d3.selectAll(".dot")
@@ -91,7 +92,7 @@ class SubsequencesCalculationResultHandler {
                 $scope.fillVisiblePoints();
             }
             /**
-             * Инициализирует данные для карты генов
+             * Initializes data for the gene map
              */
             function fillPoints() {
                 $scope.researchObjects = [];
@@ -125,7 +126,7 @@ class SubsequencesCalculationResultHandler {
                             researchObjectId: sequenceData.ResearchObjectId,
                             researchObjectName: sequenceData.ResearchObjectName,
                             sequenceRemoteId: sequenceData.RemoteId,
-                            //attributes: subsequenceData.Attributes,
+                            attributes: subsequenceData.Attributes,
                             partial: subsequenceData.Partial,
                             featureId: subsequenceData.FeatureId,
                             positions: subsequenceData.Starts,
@@ -137,15 +138,15 @@ class SubsequencesCalculationResultHandler {
                             featureVisible: true,
                             legendVisible: true,
                             filtersVisible: [],
-                            remoteId: subsequenceData.RemoteId // Добавляем для совместимости с JS-версией
+                            remoteId: subsequenceData.RemoteId // Added for compatibility with JS version
                         };
                         $scope.points[i].push(point);
                     }
                 }
             }
             /**
-             * Фильтрует точки по признаку подпоследовательностей
-             * @param feature Признак для фильтрации
+             * Filters points by subsequence feature
+             * @param feature Feature for filtering
              */
             function filterByFeature(feature) {
                 const featureValue = parseInt(feature.Value);
@@ -162,21 +163,21 @@ class SubsequencesCalculationResultHandler {
                         }
                     }
                 }
-                // TODO: оптимизировать вызовы этого метода
+                // TODO: optimize calls to this method
                 $scope.fillVisiblePoints();
             }
             /**
-             * Проверяет, видима ли точка
-             * @param dot Точка для проверки
+             * Checks if a point is visible
+             * @param dot Point to check
              */
             function dotVisible(dot) {
                 const filterVisible = dot.filtersVisible.length === 0 || dot.filtersVisible.some(element => element);
                 return dot.featureVisible && dot.legendVisible && filterVisible;
             }
             /**
-             * Определяет, похожи ли точки по продукту
-             * @param d Первая точка
-             * @param dot Вторая точка
+             * Determines if points are similar by product
+             * @param d First point
+             * @param dot Second point
              */
             function dotsSimilar(d, dot) {
                 if (d.featureId !== dot.featureId) {
@@ -201,11 +202,11 @@ class SubsequencesCalculationResultHandler {
                 return true;
             }
             /**
-             * Показывает подсказку для точки или группы точек
-             * @param event Событие мыши
-             * @param d Точка данных
-             * @param tooltip Элемент подсказки
-             * @param svg Элемент SVG
+             * Shows tooltip for a point or group of points
+             * @param event Mouse event
+             * @param d Data point
+             * @param tooltip Tooltip element
+             * @param svg SVG element
              */
             function showTooltip(event, d, tooltip, svg) {
                 $scope.clearTooltip(tooltip);
@@ -230,13 +231,13 @@ class SubsequencesCalculationResultHandler {
                 tooltip.hideTooltip = false;
             }
             /**
-             * Создает строку, представляющую текст всплывающей подсказки
-             * @param d Точка данных
+             * Creates a string representing tooltip text
+             * @param d Data point
              */
             function fillPointTooltip(d) {
                 const tooltipContent = [];
                 const genBankLink = "<a target='_blank' rel='noopener' href='https://www.ncbi.nlm.nih.gov/nuccore/";
-                // Используем remoteId вместо sequenceRemoteId для соответствия JS-версии
+                // Using remoteId instead of sequenceRemoteId for compatibility with JS version
                 const header = d.remoteId ? `${genBankLink}${d.remoteId}'>${d.researchObjectName}</a>` : d.researchObjectName;
                 tooltipContent.push(header);
                 if (d.remoteId) {
@@ -255,13 +256,13 @@ class SubsequencesCalculationResultHandler {
                     d.positions.join(", ");
                 tooltipContent.push(`Position: ${positionGenbankLink}`);
                 tooltipContent.push(`Length: ${d.lengths.join(", ")}`);
-                // TODO: показать все характеристики
+                // TODO: show all characteristics
                 tooltipContent.push(`(${$scope.xValue(d)}, ${$scope.yValue(d)})`);
                 return tooltipContent.join("</br>");
             }
             /**
-             * Очищает подсказку и снимает выделение с точек
-             * @param tooltip Элемент подсказки
+             * Clears tooltip and deselects points
+             * @param tooltip Tooltip element
              */
             function clearTooltip(tooltip) {
                 if (tooltip) {
@@ -276,30 +277,30 @@ class SubsequencesCalculationResultHandler {
                 }
             }
             /**
-             * Возвращает значение X для точки данных
-             * @param d Точка данных
+             * Returns X value for a data point
+             * @param d Data point
              */
             function xValue(d) {
                 return $scope.lineChart ? d.rank : d.characteristicsValues[+$scope.firstCharacteristic.Value];
             }
             /**
-             * Возвращает значение Y для точки данных
-             * @param d Точка данных
+             * Returns Y value for a data point
+             * @param d Data point
              */
             function yValue(d) {
                 return $scope.lineChart ? d.characteristicsValues[+$scope.firstCharacteristic.Value] : d.characteristicsValues[+$scope.secondCharacteristic.Value];
             }
             /**
-             * Основной метод отрисовки графика
+             * Main chart drawing method
              */
             function draw() {
                 $scope.loading = true;
                 $scope.loadingScreenHeader = "Drawing...";
                 $scope.fillPoints();
-                // Удаление предыдущего графика и подсказки, если таковые имеются
+                // Removing previous chart and tooltip if any
                 d3.select(".chart-tooltip").remove();
                 d3.select(".chart-svg").remove();
-                // Сортировка точек по выбранной характеристике
+                // Sorting points by selected characteristic
                 if ($scope.lineChart) {
                     for (let i = 0; i < $scope.points.length; i++) {
                         $scope.points[i].sort((first, second) => $scope.yValue(second) - $scope.yValue(first));
@@ -308,7 +309,7 @@ class SubsequencesCalculationResultHandler {
                         }
                     }
                 }
-                // Все организмы видимы после перерисовки
+                // All organisms are visible after redrawing
                 $scope.researchObjects.forEach(researchObject => { researchObject.visible = true; });
                 $scope.points.forEach(points => {
                     points.forEach(point => {
@@ -316,11 +317,11 @@ class SubsequencesCalculationResultHandler {
                         point.FeatureVisible = $scope.features[point.featureId].Selected;
                     });
                 });
-                // Настройки размера и отступов графика
+                // Chart size and margin settings
                 const margin = { top: 30 + $scope.legendHeight, right: 30, bottom: 30, left: 60 };
                 const width = $scope.width - margin.left - margin.right;
                 const height = $scope.height - margin.top - margin.bottom;
-                // Расчет границ для точек
+                // Calculating bounds for points
                 const xMinArray = [];
                 const xMaxArray = [];
                 const yMaxArray = [];
@@ -331,8 +332,8 @@ class SubsequencesCalculationResultHandler {
                     yMinArray.push(d3.min(points, $scope.yValue));
                     yMaxArray.push(d3.max(points, $scope.yValue));
                 });
-                // Настройка оси X
-                // Расчет границ для точек
+                // X-axis setup
+                // Calculating bounds for points
                 const xMin = d3.min(xMinArray);
                 const xMax = d3.max(xMaxArray);
                 const xMargin = (xMax - xMin) * 0.05;
@@ -344,7 +345,7 @@ class SubsequencesCalculationResultHandler {
                     .tickSizeOuter(0)
                     .tickPadding(10);
                 $scope.xMap = (d) => xScale($scope.xValue(d));
-                // Настройка оси Y
+                // Y-axis setup
                 const yMin = d3.min(yMinArray);
                 const yMax = d3.max(yMaxArray);
                 const yMargin = (yMax - yMin) * 0.05;
@@ -356,24 +357,24 @@ class SubsequencesCalculationResultHandler {
                     .tickSizeOuter(0)
                     .tickPadding(10);
                 $scope.yMap = (d) => yScale($scope.yValue(d));
-                // Настройка цвета заливки
+                // Fill color setup
                 const color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.researchObjects.length]);
-                // Добавление холста графика в тело веб-страницы
+                // Adding chart canvas to the webpage
                 const svg = d3.select("#chart").append("svg")
                     .attr("width", $scope.width)
                     .attr("height", $scope.height)
                     .attr("class", "chart-svg")
                     .append("g")
                     .attr("transform", `translate(${margin.left},${margin.top})`);
-                // Добавление области подсказки на веб-страницу
+                // Adding tooltip area to the webpage
                 const tooltip = d3.select("#chart").append("div")
                     .attr("class", "chart-tooltip position-absolute bg-light font-monospace small lh-sm p-1 rounded")
                     .style("opacity", 0);
-                // Предотвращение скрытия подсказки при клике на нее
+                // Preventing tooltip hiding when clicked
                 tooltip.on("click", () => { tooltip.hideTooltip = false; });
-                // Скрытие подсказки при клике вне нее
+                // Hiding tooltip when clicking outside
                 d3.select("#chart").on("click", () => { $scope.clearTooltip(tooltip); });
-                // Ось X
+                // X-axis
                 svg.append("g")
                     .attr("class", "x axis")
                     .attr("transform", `translate(0,${height})`)
@@ -384,7 +385,7 @@ class SubsequencesCalculationResultHandler {
                     .style("text-anchor", "middle")
                     .text($scope.lineChart ? "Rank" : $scope.firstCharacteristic.Text)
                     .style("font-size", "12pt");
-                // Ось Y
+                // Y-axis
                 svg.append("g")
                     .attr("class", "y axis")
                     .call(yAxis);
@@ -402,7 +403,7 @@ class SubsequencesCalculationResultHandler {
                     .enter()
                     .append("g")
                     .attr("class", "researchObject");
-                // Рисование точек
+                // Drawing points
                 researchObjectsGroups.selectAll(".dot")
                     .data((d) => d)
                     .enter()
@@ -417,7 +418,7 @@ class SubsequencesCalculationResultHandler {
                     .style("stroke", (d) => color(d.colorId))
                     .attr("visibility", (d) => $scope.dotVisible(d) ? "visible" : "hidden")
                     .on("click", (event, d) => $scope.showTooltip(event, d, tooltip, svg));
-                // Рисование легенды
+                // Drawing legend
                 const legend = svg.selectAll(".legend")
                     .data($scope.researchObjects)
                     .enter()
@@ -438,7 +439,7 @@ class SubsequencesCalculationResultHandler {
                         return $scope.dotVisible(dot) ? "visible" : "hidden";
                     });
                 });
-                // Рисование цветных прямоугольников легенды
+                // Drawing colored legend rectangles
                 legend.append("rect")
                     .attr("width", 15)
                     .attr("height", 15)
@@ -446,7 +447,7 @@ class SubsequencesCalculationResultHandler {
                     .style("stroke", (d) => color(d.colorId))
                     .style("stroke-width", 4)
                     .attr("transform", `translate(0, -${$scope.legendHeight})`);
-                // Рисование текста легенды
+                // Drawing legend text
                 legend.append("text")
                     .attr("x", 24)
                     .attr("y", 9)
@@ -456,7 +457,7 @@ class SubsequencesCalculationResultHandler {
                     .style("font-size", "9pt");
                 $scope.loading = false;
             }
-            // Регистрация функций в $scope
+            // Registering functions in $scope
             $scope.draw = draw;
             $scope.dotVisible = dotVisible;
             $scope.dotsSimilar = dotsSimilar;
@@ -473,7 +474,7 @@ class SubsequencesCalculationResultHandler {
             $scope.deleteFilter = deleteFilter;
             $scope.getAttributeIdByName = getAttributeIdByName;
             $scope.isAttributeEqual = isAttributeEqual;
-            // Инициализация свойств $scope
+            // Initializing $scope properties
             $scope.dotRadius = 3;
             $scope.selectedDotRadius = $scope.dotRadius * 3;
             $scope.visiblePoints = [];
@@ -481,10 +482,10 @@ class SubsequencesCalculationResultHandler {
             $scope.productFilter = "";
             $scope.loadingScreenHeader = "Loading subsequences characteristics";
             $scope.loading = true;
-            // Получение идентификатора задачи из URL
+            // Getting task ID from URL
             const location = window.location.href.split("/");
             $scope.taskId = location[location.length - 1];
-            // Загрузка данных с сервера
+            // Loading data from server
             $http.get(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
                 .then(function (data) {
                 MapModelFromJson($scope, data.data);
@@ -500,12 +501,12 @@ class SubsequencesCalculationResultHandler {
                 $scope.loading = false;
             });
         };
-        // Регистрация контроллера в модуле Angular
+        // Registering controller in Angular module
         angular.module("libiada").controller("SubsequencesCalculationResultCtrl", ["$scope", "$http", "$sce", subsequencesCalculationResult]);
     }
 }
 /**
- * Функция-обертка для обратной совместимости
+ * Wrapper function for backward compatibility
  */
 function SubsequencesCalculationResultController() {
     return new SubsequencesCalculationResultHandler();

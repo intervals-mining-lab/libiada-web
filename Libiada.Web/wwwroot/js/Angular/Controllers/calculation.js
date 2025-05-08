@@ -1,5 +1,5 @@
 /// <reference types="angular" />
-/// <reference path="../functions.d.ts" />
+/// <reference types="functions" />
 // Updated controller class
 class CalculationOperator {
     constructor(data) {

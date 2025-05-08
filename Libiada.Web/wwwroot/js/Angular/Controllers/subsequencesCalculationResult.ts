@@ -1,21 +1,14 @@
 ﻿/// <reference types="angular" />
 /// <reference types="d3" />
-/// <reference path="../functions.d.ts" />
+/// <reference types="functions" />
+/// <reference path="./Interfaces/commonInterfaces.d.ts" />
 
 // Interface for data points on the chart
 // Unified interface for data points on the chart
-interface IPoint {
-    // Common properties
-    id: number;
-    colorId: number;
+interface ISubsequencesCalculationResultPoint extends IBasePoint {
 
-    // Properties for intervalsCharacteristicsDistributionResult
     distributionIntervals?: IDistributionInterval[];
     order?: string;
-    x?: number;
-    y?: number;
-
-    // Properties for subsequencesCalculationResult
     researchObjectId?: number;
     researchObjectName?: string;
     sequenceRemoteId?: string;
@@ -102,8 +95,8 @@ interface ID3Tooltip extends d3.Selection<HTMLDivElement, unknown, HTMLElement, 
 // Interface for controller scope
 interface ISubsequencesCalculationResultScope extends ng.IScope {
     // Chart data
-    visiblePoints: IPoint[][];
-    points: IPoint[][];
+    visiblePoints: ISubsequencesCalculationResultPoint[][];
+    points: ISubsequencesCalculationResultPoint[][];
     researchObjects: IResearchObjectResult[];
     attributes: string[];
     attributeValues: IAttributeValue[];
@@ -118,8 +111,8 @@ interface ISubsequencesCalculationResultScope extends ng.IScope {
     legendHeight: number;
     dotRadius: number;
     selectedDotRadius: number;
-    xMap: (d: IPoint) => number;
-    yMap: (d: IPoint) => number;
+    xMap: (d: ISubsequencesCalculationResultPoint) => number;
+    yMap: (d: ISubsequencesCalculationResultPoint) => number;
 
     // Data loading properties
     taskId: string;
@@ -130,21 +123,21 @@ interface ISubsequencesCalculationResultScope extends ng.IScope {
     subsequencesCharacteristicsList: ICharacteristic[];
 
     // Chart operation methods
-    dotVisible: (dot: IPoint) => boolean;
-    dotsSimilar: (d: IPoint, dot: IPoint) => boolean;
+    dotVisible: (dot: ISubsequencesCalculationResultPoint) => boolean;
+    dotsSimilar: (d: ISubsequencesCalculationResultPoint, dot: ISubsequencesCalculationResultPoint) => boolean;
     fillVisiblePoints: () => void;
     filterByFeature: (feature: IFeature) => void;
     getAttributesText: (attributes: number[]) => string;
     fillPoints: () => void;
-    fillPointTooltip: (d: IPoint) => string;
-    showTooltip: (event: MouseEvent, d: IPoint, tooltip: ID3Tooltip, svg: any) => void;
+    fillPointTooltip: (d: ISubsequencesCalculationResultPoint) => string;
+    showTooltip: (event: MouseEvent, d: ISubsequencesCalculationResultPoint, tooltip: ID3Tooltip, svg: any) => void;
     clearTooltip: (tooltip: ID3Tooltip) => void;
-    yValue: (d: IPoint) => number;
-    xValue: (d: IPoint) => number;
+    yValue: (d: ISubsequencesCalculationResultPoint) => number;
+    xValue: (d: ISubsequencesCalculationResultPoint) => number;
     addFilter: (newFilter: string) => void;
     deleteFilter: (filter: string, filterIndex: number) => void;
-    getAttributeIdByName: (dot: IPoint, attributeName: string) => number | undefined;
-    isAttributeEqual: (dot: IPoint, attributeName: string, expectedValue: string) => boolean;
+    getAttributeIdByName: (dot: ISubsequencesCalculationResultPoint, attributeName: string) => number | undefined;
+    isAttributeEqual: (dot: ISubsequencesCalculationResultPoint, attributeName: string, expectedValue: string) => boolean;
     draw: () => void;
 }
 
@@ -197,7 +190,7 @@ class SubsequencesCalculationResultHandler {
              * @param dot Data point
              * @param attributeName Attribute name
              */
-            function getAttributeIdByName(dot: IPoint, attributeName: string): number | undefined {
+            function getAttributeIdByName(dot: ISubsequencesCalculationResultPoint, attributeName: string): number | undefined {
                 return dot.attributes.find(a => $scope.attributes[$scope.attributeValues[a].attribute] === attributeName);
             }
 
@@ -207,7 +200,7 @@ class SubsequencesCalculationResultHandler {
              * @param attributeName Attribute name
              * @param expectedValue Expected value
              */
-            function isAttributeEqual(dot: IPoint, attributeName: string, expectedValue: string): boolean {
+            function isAttributeEqual(dot: ISubsequencesCalculationResultPoint, attributeName: string, expectedValue: string): boolean {
                 const attributeId = $scope.getAttributeIdByName(dot, attributeName);
                 if (attributeId !== undefined) {
                     const product = $scope.attributeValues[attributeId].value.toUpperCase();
@@ -223,7 +216,7 @@ class SubsequencesCalculationResultHandler {
              */
             function addFilter(newFilter: string): void {
                 d3.selectAll(".dot")
-                    .attr("visibility", (d: IPoint) => {
+                    .attr("visibility", (d: ISubsequencesCalculationResultPoint) => {
                         const filterValue = newFilter.toUpperCase();
                         let visible = $scope.isAttributeEqual(d, "product", filterValue);
                         visible = visible || $scope.isAttributeEqual(d, "locus_tag", filterValue);
@@ -241,7 +234,7 @@ class SubsequencesCalculationResultHandler {
              */
             function deleteFilter(filter: string, filterIndex: number): void {
                 d3.selectAll(".dot")
-                    .attr("visibility", (d: IPoint) => {
+                    .attr("visibility", (d: ISubsequencesCalculationResultPoint) => {
                         d.filtersVisible.splice(filterIndex, 1);
                         return $scope.dotVisible(d) ? "visible" : "hidden";
                     });
@@ -281,7 +274,7 @@ class SubsequencesCalculationResultHandler {
 
                     for (let j = 0; j < sequenceData.SubsequencesData.length; j++) {
                         const subsequenceData = sequenceData.SubsequencesData[j];
-                        const point: IPoint = {
+                        const point: ISubsequencesCalculationResultPoint = {
                             id: subsequenceData.Id,
                             researchObjectId: sequenceData.ResearchObjectId,
                             researchObjectName: sequenceData.ResearchObjectName,
@@ -299,6 +292,7 @@ class SubsequencesCalculationResultHandler {
                             legendVisible: true,
                             filtersVisible: [],
                             remoteId: subsequenceData.RemoteId // Added for compatibility with JS version
+                            
                         };
                         $scope.points[i].push(point);
                     }
@@ -312,8 +306,8 @@ class SubsequencesCalculationResultHandler {
             function filterByFeature(feature: IFeature): void {
                 const featureValue = parseInt(feature.Value);
                 d3.selectAll(".dot")
-                    .filter((dot: IPoint) => dot.featureId === featureValue)
-                    .attr("visibility", (d: IPoint) => {
+                    .filter((dot: ISubsequencesCalculationResultPoint) => dot.featureId === featureValue)
+                    .attr("visibility", (d: ISubsequencesCalculationResultPoint) => {
                         d.featureVisible = feature.Selected;
                         return $scope.dotVisible(d) ? "visible" : "hidden";
                     });
@@ -334,7 +328,7 @@ class SubsequencesCalculationResultHandler {
              * Checks if a point is visible
              * @param dot Point to check
              */
-            function dotVisible(dot: IPoint): boolean {
+            function dotVisible(dot: ISubsequencesCalculationResultPoint): boolean {
                 const filterVisible = dot.filtersVisible.length === 0 || dot.filtersVisible.some(element => element);
                 return dot.featureVisible && dot.legendVisible && filterVisible;
             }
@@ -344,7 +338,7 @@ class SubsequencesCalculationResultHandler {
              * @param d First point
              * @param dot Second point
              */
-            function dotsSimilar(d: IPoint, dot: IPoint): boolean {
+            function dotsSimilar(d: ISubsequencesCalculationResultPoint, dot: ISubsequencesCalculationResultPoint): boolean {
                 if (d.featureId !== dot.featureId) {
                     return false;
                 }
@@ -378,13 +372,13 @@ class SubsequencesCalculationResultHandler {
              * @param tooltip Tooltip element
              * @param svg SVG element
              */
-            function showTooltip(event: MouseEvent, d: IPoint, tooltip: ID3Tooltip, svg: any): void {
+            function showTooltip(event: MouseEvent, d: ISubsequencesCalculationResultPoint, tooltip: ID3Tooltip, svg: any): void {
                 $scope.clearTooltip(tooltip);
                 const tooltipHtml: string[] = [];
                 tooltip.style("opacity", 0.9);
 
                 tooltip.selectedDots = svg.selectAll(".dot")
-                    .filter((dot: IPoint) => {
+                    .filter((dot: ISubsequencesCalculationResultPoint) => {
                         if ($scope.xValue(dot) === $scope.xValue(d)
                             && $scope.yValue(dot) === $scope.yValue(d)) {
                             tooltipHtml.push($scope.fillPointTooltip(dot));
@@ -408,7 +402,7 @@ class SubsequencesCalculationResultHandler {
              * Creates a string representing tooltip text
              * @param d Data point
              */
-            function fillPointTooltip(d: IPoint): string {
+            function fillPointTooltip(d: ISubsequencesCalculationResultPoint): string {
                 const tooltipContent: string[] = [];
                 const genBankLink = "<a target='_blank' rel='noopener' href='https://www.ncbi.nlm.nih.gov/nuccore/";
 
@@ -464,7 +458,7 @@ class SubsequencesCalculationResultHandler {
              * Returns X value for a data point
              * @param d Data point
              */
-            function xValue(d: IPoint): number {
+            function xValue(d: ISubsequencesCalculationResultPoint): number {
                 return $scope.lineChart ? d.rank : d.characteristicsValues[+$scope.firstCharacteristic.Value];
             }
 
@@ -472,7 +466,7 @@ class SubsequencesCalculationResultHandler {
              * Returns Y value for a data point
              * @param d Data point
              */
-            function yValue(d: IPoint): number {
+            function yValue(d: ISubsequencesCalculationResultPoint): number {
                 return $scope.lineChart ? d.characteristicsValues[+$scope.firstCharacteristic.Value] : d.characteristicsValues[+$scope.secondCharacteristic.Value];
             }
 
@@ -540,7 +534,7 @@ class SubsequencesCalculationResultHandler {
                     .tickSizeOuter(0)
                     .tickPadding(10);
 
-                $scope.xMap = (d: IPoint) => xScale($scope.xValue(d));
+                $scope.xMap = (d: ISubsequencesCalculationResultPoint) => xScale($scope.xValue(d));
 
                 // Y-axis setup
                 const yMin = d3.min(yMinArray) as number;
@@ -555,7 +549,7 @@ class SubsequencesCalculationResultHandler {
                     .tickSizeOuter(0)
                     .tickPadding(10);
 
-                $scope.yMap = (d: IPoint) => yScale($scope.yValue(d));
+                $scope.yMap = (d: ISubsequencesCalculationResultPoint) => yScale($scope.yValue(d));
 
                 // Fill color setup
                 const color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.researchObjects.length]);
@@ -615,7 +609,7 @@ class SubsequencesCalculationResultHandler {
 
                 // Drawing points
                 researchObjectsGroups.selectAll(".dot")
-                    .data((d: IPoint[]) => d)
+                    .data((d: ISubsequencesCalculationResultPoint[]) => d)
                     .enter()
                     .append("ellipse")
                     .attr("class", "dot")
@@ -624,10 +618,10 @@ class SubsequencesCalculationResultHandler {
                     .attr("cx", $scope.xMap)
                     .attr("cy", $scope.yMap)
                     .style("fill-opacity", 0.6)
-                    .style("fill", (d: IPoint) => color(d.colorId))
-                    .style("stroke", (d: IPoint) => color(d.colorId))
-                    .attr("visibility", (d: IPoint) => $scope.dotVisible(d) ? "visible" : "hidden")
-                    .on("click", (event: MouseEvent, d: IPoint) => $scope.showTooltip(event, d, tooltip, svg));
+                    .style("fill", (d: ISubsequencesCalculationResultPoint) => color(d.colorId))
+                    .style("stroke", (d: ISubsequencesCalculationResultPoint) => color(d.colorId))
+                    .attr("visibility", (d: ISubsequencesCalculationResultPoint) => $scope.dotVisible(d) ? "visible" : "hidden")
+                    .on("click", (event: MouseEvent, d: ISubsequencesCalculationResultPoint) => $scope.showTooltip(event, d, tooltip, svg));
 
                 // Drawing legend
                 const legend = svg.selectAll(".legend")
@@ -645,8 +639,8 @@ class SubsequencesCalculationResultHandler {
                             .style("fill-opacity", () => d.visible ? 1 : 0);
 
                         svg.selectAll(".dot")
-                            .filter((dot: IPoint) => dot.researchObjectId === d.id)
-                            .attr("visibility", (dot: IPoint) => {
+                            .filter((dot: ISubsequencesCalculationResultPoint) => dot.researchObjectId === d.id)
+                            .attr("visibility", (dot: ISubsequencesCalculationResultPoint) => {
                                 dot.legendVisible = d.visible;
                                 return $scope.dotVisible(dot) ? "visible" : "hidden";
                             });

@@ -1,6 +1,7 @@
 /// <reference types="angular" />
 /// <reference types="d3" />
-/// <reference path="../functions.d.ts" />
+/// <reference types="functions" />
+/// <reference path="./Interfaces/commonInterfaces.d.ts" />
 /**
  * Controller for displaying interval characteristics distribution results
  */
@@ -32,22 +33,7 @@ class IntervalsCharacteristicsDistributionResultHandler {
                                     x: j + 1,
                                     y: orders[k].characteristics.Characteristics[ch],
                                     colorId: i,
-                                    // Дополнительные свойства для совместимости с интерфейсом
-                                    researchObjectId: 0, // Если не используется, можно установить значение по умолчанию
-                                    researchObjectName: "",
-                                    sequenceRemoteId: "",
-                                    attributes: [],
-                                    partial: false,
-                                    featureId: 0,
-                                    positions: [],
-                                    lengths: [],
-                                    subsequenceRemoteId: "",
-                                    rank: 0,
-                                    characteristicsValues: [],
                                     featureVisible: true,
-                                    legendVisible: true,
-                                    filtersVisible: [],
-                                    remoteId: null
                                 });
                             }
                         }

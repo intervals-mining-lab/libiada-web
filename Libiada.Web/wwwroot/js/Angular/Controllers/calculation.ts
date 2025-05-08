@@ -1,5 +1,5 @@
 ﻿/// <reference types="angular" />
-/// <reference path="../functions.d.ts" />
+/// <reference types="functions" />
 
 // Interface for the data object that is passed to the controller
 interface ICalculationData {
@@ -27,7 +27,7 @@ interface ICalculationData {
     trajectories?: ITrajectory[];
 
     // Limits for selecting research objects
-    minimumSelectedResearchObjects?: number;
+    minimumSelectedResearchObjects: number;
     maximumSelectedResearchObjects?: number;
 
     // Options for clustering (if any)

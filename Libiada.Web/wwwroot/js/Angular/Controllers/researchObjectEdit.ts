@@ -1,5 +1,5 @@
 ﻿/// <reference types="angular" />
-/// <reference path="../functions.d.ts" />
+/// <reference types="functions" />
 
 // Interface for the data object that is passed to the controller
 interface IResearchObjectEditData {

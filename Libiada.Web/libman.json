@@ -60,68 +60,68 @@
     {
       "provider": "jsdelivr",
       "library": "typescript@5.3.3",
-      "destination": "./node_modules/typescript/"
+      "destination": "wwwroot/lib/typescript/"
     },
     {
       "provider": "jsdelivr",
       "library": "@types/d3@7.4.3",
-      "destination": "./node_modules/@types/d3/"
+      "destination": "wwwroot/lib/@types/d3/"
     },
     {
       "provider": "jsdelivr",
       "library": "@types/d3-selection@3.0.7",
-      "destination": "./node_modules/@types/d3-selection/"
+      "destination": "wwwroot/lib/@types/d3-selection/"
     },
     {
       "provider": "jsdelivr",
       "library": "@types/d3-scale@4.0.8",
-      "destination": "./node_modules/@types/d3-scale/"
+      "destination": "wwwroot/lib/@types/d3-scale/"
     },
     {
       "provider": "jsdelivr",
       "library": "@types/d3-axis@3.0.5",
-      "destination": "./node_modules/@types/d3-axis/"
+      "destination": "wwwroot/lib/@types/d3-axis/"
     },
     {
       "provider": "jsdelivr",
       "library": "@types/d3-array@3.2.1",
-      "destination": "./node_modules/@types/d3-array/"
+      "destination": "wwwroot/lib/@types/d3-array/"
     },
     {
       "provider": "jsdelivr",
       "library": "@types/d3-format@3.0.4",
-      "destination": "./node_modules/@types/d3-format/"
+      "destination": "wwwroot/lib/@types/d3-format/"
     },
     {
       "provider": "jsdelivr",
       "library": "@types/d3-scale-chromatic@3.0.3",
-      "destination": "./node_modules/@types/d3-scale-chromatic/"
+      "destination": "wwwroot/lib/@types/d3-scale-chromatic/"
     },
     {
       "provider": "jsdelivr",
       "library": "@types/d3-interpolate@3.0.4",
-      "destination": "./node_modules/@types/d3-interpolate/"
+      "destination": "wwwroot/lib/@types/d3-interpolate/"
     },
     {
       "provider": "jsdelivr",
       "library": "@types/d3-color@3.1.3",
-      "destination": "./node_modules/@types/d3-color/"
+      "destination": "wwwroot/lib/@types/d3-color/"
     },
     {
       "provider": "jsdelivr",
       "library": "@types/d3-transition@3.0.8",
-      "destination": "./node_modules/@types/d3-transition/"
+      "destination": "wwwroot/lib/@types/d3-transition/"
     },
     {
       "provider": "jsdelivr",
       "library": "@types/angular@1.8.7",
-      "destination": "./node_modules/@types/angular/"
+      "destination": "wwwroot/lib/@types/angular/"
     },
  
     {
       "provider": "jsdelivr",
       "library": "@types/jquery@3.5.29",
-      "destination": "./node_modules/@types/jquery/"
+      "destination": "wwwroot/lib/@types/jquery/"
     },
     {
       "library": "sizzle@2.3.10",
@@ -130,7 +130,7 @@
     {
       "provider": "jsdelivr",
       "library": "@types/sizzle@2.3.8",
-      "destination": "./node_modules/@types/sizzle/"
+      "destination": "wwwroot/lib/@types/sizzle/"
     }
 
 

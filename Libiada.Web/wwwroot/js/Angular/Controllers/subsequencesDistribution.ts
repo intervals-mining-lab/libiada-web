@@ -1,6 +1,7 @@
 ﻿// Declaring global variables and functions
 /// <reference types="angular" />
-/// <reference path="../functions.d.ts" />
+/// <reference types="functions" />
+
 
 // Interface for data passed to the controller
 interface ISubsequencesDistributionData {
@@ -23,7 +24,7 @@ interface ISubsequencesDistributionData {
 }
 
 // Interface for $scope in controller
-interface ISubsequencesDistributionScope extends ng.IScope {
+interface ISubsequencesDistributionScope extends ng.IScope, ISubsequencesDistributionData {
     // Basic parameters from the data model 
     maximumSelectedResearchObjects: number;
     minimumSelectedResearchObjects: number;

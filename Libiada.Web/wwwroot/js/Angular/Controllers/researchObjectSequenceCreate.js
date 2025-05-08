@@ -1,5 +1,5 @@
 /// <reference types="angular" />
-/// <reference path="../functions.d.ts" />
+/// <reference types="functions" />
 // Controller class
 class ResearchObjectSequenceCreator {
     constructor(data) {
@@ -11,7 +11,8 @@ class ResearchObjectSequenceCreator {
         const researchObjectSequenceCreate = ($scope, filterFilter) => {
             MapModelFromJson($scope, this.data);
             function filterByNature() {
-                const arraysForFiltration = ["notations", "remoteDbs", "researchObjects", "groups", "sequenceTypes"];
+                const arraysForFiltration = ["notations", "remoteDbs",
+                    "researchObjects", "groups", "sequenceTypes"];
                 arraysForFiltration.forEach(arrayName => {
                     if (angular.isDefined($scope[arrayName])) {
                         $scope[`${arrayName}Filtered`] = filterFilter($scope[arrayName], { Nature: $scope.nature });

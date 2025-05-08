@@ -1,6 +1,6 @@
 // Declaring global variables and functions
 /// <reference types="angular" />
-/// <reference path="../functions.d.ts" />
+/// <reference types="functions" />
 // Main controller class
 class SubsequencesDistributionManager {
     constructor(data) {
