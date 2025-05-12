@@ -21,9 +21,15 @@ public class FastFourierTransformTests
 
         double[][] result = FastFourierTransform.CalculateFastFourierTransform(input);
 
-        Assert.That(result, Is.Not.Null);
-        Assert.That(result.Length, Is.EqualTo(2));
-        Assert.That(result[0].Length, Is.EqualTo(2));
+        // First row sum: [1.0, 2.0] + [3.0, 4.0] = [4.0, 6.0]
+        // First row difference: [1.0, 2.0] - [3.0, 4.0] = [-2.0, -2.0]
+        Assert.Multiple(() =>
+        {
+            Assert.That(result[0][0], Is.EqualTo(4.0).Within(0.0001));
+            Assert.That(result[0][1], Is.EqualTo(6.0).Within(0.0001));
+            Assert.That(result[1][0], Is.EqualTo(-2.0).Within(0.0001));
+            Assert.That(result[1][1], Is.EqualTo(-2.0).Within(0.0001));
+        });
     }
 
     /// <summary>
@@ -40,10 +46,15 @@ public class FastFourierTransformTests
 
         Complex[] result = FastFourierTransform.CalculateFastFourierTransform(input);
 
-        Assert.That(result, Is.Not.Null);
-        Assert.That(result.Length, Is.EqualTo(2));
-        Assert.That(result[0].Real, Is.EqualTo(3.0).Within(0.0001));
-        Assert.That(result[1].Real, Is.EqualTo(-1.0).Within(0.0001));
+        // Sum: 1 + 2 = 3
+        // Difference: 1 - 2 = -1
+        Assert.Multiple(() =>
+        {
+            Assert.That(result[0].Real, Is.EqualTo(3.0).Within(0.0001));
+            Assert.That(result[0].Imaginary, Is.EqualTo(0.0).Within(0.0001));
+            Assert.That(result[1].Real, Is.EqualTo(-1.0).Within(0.0001));
+            Assert.That(result[1].Imaginary, Is.EqualTo(0.0).Within(0.0001));
+        });
     }
 
     /// <summary>
@@ -62,9 +73,21 @@ public class FastFourierTransformTests
 
         Complex[] result = FastFourierTransform.CalculateFastFourierTransform(input);
 
-        Assert.That(result, Is.Not.Null);
-        Assert.That(result.Length, Is.EqualTo(4));
-        Assert.That(result[0].Real, Is.EqualTo(10.0).Within(0.0001));
+        // Sum: 1 + 2 + 3 + 4 = 10
+        // First harmonic: (1 - 3) + i(2 - 4) = -2 + 2i
+        // Second harmonic: 1 - 2 + 3 - 4 = -2
+        // Third harmonic: (1 - 3) - i(2 - 4) = -2 - 2i
+        Assert.Multiple(() =>
+        {
+            Assert.That(result[0].Real, Is.EqualTo(10.0).Within(0.0001));
+            Assert.That(result[0].Imaginary, Is.EqualTo(0.0).Within(0.0001));
+            Assert.That(result[1].Real, Is.EqualTo(-2.0).Within(0.0001));
+            Assert.That(result[1].Imaginary, Is.EqualTo(2.0).Within(0.0001));
+            Assert.That(result[2].Real, Is.EqualTo(-2.0).Within(0.0001));
+            Assert.That(result[2].Imaginary, Is.EqualTo(0.0).Within(0.0001));
+            Assert.That(result[3].Real, Is.EqualTo(-2.0).Within(0.0001));
+            Assert.That(result[3].Imaginary, Is.EqualTo(-2.0).Within(0.0001));
+        });
     }
 
     /// <summary>
@@ -77,13 +100,32 @@ public class FastFourierTransformTests
         {
             new[] { 1.0, 2.0 },
             new[] { 3.0, 4.0 },
-            new[] { 5.0, 6.0 }
+            new[] { 5.0, 6.0 },
+            new[] { 7.0, 8.0 },
+            new[] { 9.0, 10.0 },
+            new[] { 11.0, 12.0 },
+            new[] { 13.0, 14.0 },
+            new[] { 15.0, 16.0 },
+            new[] { 17.0, 18.0 },
+            new[] { 19.0, 20.0 },
+            new[] { 21.0, 22.0 },
+            new[] { 23.0, 24.0 },
+            new[] { 25.0, 26.0 }
         };
 
         double[][] result = FastFourierTransform.CalculateFastFourierTransform(input);
 
-        Assert.That(result, Is.Not.Null);
-        Assert.That(result.Length, Is.EqualTo(4));
-        Assert.That(result[0].Length, Is.EqualTo(2));
+        // Testing first few harmonics as example
+        Assert.Multiple(() =>
+        {
+            Assert.That(result[0][0], Is.EqualTo(169.0).Within(0.0001)); 
+            Assert.That(result[0][1], Is.EqualTo(182.0).Within(0.0001)); 
+            Assert.That(result[1][0], Is.EqualTo(-75.4788).Within(0.0001));
+            Assert.That(result[1][1], Is.EqualTo(-77.4925).Within(0.0001));
+            Assert.That(result[2][0], Is.EqualTo(-18.8284).Within(0.0001));
+            Assert.That(result[2][1], Is.EqualTo(-18.8284).Within(0.0001));
+            Assert.That(result[3][0], Is.EqualTo(17.5876).Within(0.0001));
+            Assert.That(result[3][1], Is.EqualTo(18.8359).Within(0.0001));
+        });
     }
 }
