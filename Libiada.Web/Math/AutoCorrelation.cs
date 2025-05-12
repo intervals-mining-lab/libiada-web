@@ -17,18 +17,33 @@ public static class AutoCorrelation
     public static double[][] CalculateAutocorrelation(double[][] characteristics)
     {
         double[][] transposedResult = new double[characteristics[0].Length][];
+        double[][] transposedCharacteristics = Transpose(characteristics);
 
         // cycle through all characteristics
-        for (int i = 0; i < characteristics[0].Length; i++)
+        for (int i = 0; i < transposedCharacteristics.Length; i++)
         {
-            double[] currentCharacteristic = characteristics.Select(c => c[i]).ToArray();
-            transposedResult[i] = CalculateAutocorrelation(currentCharacteristic);
+            transposedResult[i] = CalculateAutocorrelation(transposedCharacteristics[i]);
         }
 
-        double[][] result = new double[transposedResult[0].Length][];
-        for (int i = 0; i < transposedResult.Length; i++)
+        return Transpose(transposedResult);
+    }
+
+
+    /// <summary>
+    /// Transposes the specified array of arrays.
+    /// </summary>
+    /// <param name="source">
+    /// The source matrix.
+    /// </param>
+    /// <returns>
+    /// Transposed matrix as <see cref="T:double[][]"/>
+    /// </returns>
+    private static double[][] Transpose(double[][] source)
+    {
+        double[][] result = new double[source[0].Length][];
+        for (int i = 0; i < source[0].Length; i++)
         {
-            result[i] = transposedResult.Select(r => r[i]).ToArray();
+            result[i] = source.Select(r => r[i]).ToArray();
         }
 
         return result;

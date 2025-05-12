@@ -1,90 +1,284 @@
 ﻿@{
-    ViewBag.Title = "Subsequences characteristics";
+    Layout = "_EmptyLayout";
+    ViewBag.Title = "Libiada - Subsequences characterisitics calculation result";
 }
-
-<h2>@ViewBag.Title</h2>
 
 @if (ViewBag.Error == null)
 {
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "SubsequencesCalculationResult");
-    <div ng-controller="SubsequencesCalculationResultCtrl">
+    <div class="no-margin" ng-controller="SubsequencesCalculationResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
-        <div class="form-check">
-            <input type="checkbox"
-                   class="form-check-input"
-                   name="lineChart"
-                   id="lineChart"
-                   ng-model="lineChart"
-                   value="false" />
-            <label class="form-check-label" for="lineChart">
-                Draw rank distribution
-            </label>
-        </div>
-        <div class="row mb-1">
-            <label class="col-form-label col-md-2" for="firstCharacteristic">First characteristic:</label>
-            <div class="col-md-10">
-                <select class="form-select"
-                        title="First characteristic"
-                        ng-model="firstCharacteristic"
-                        ng-options="c.Text for c in ::subsequencesCharacteristicsList"
-                        id="firstCharacteristic"></select>
+        <div ng-disabled="loading">
+            <ul id='nav' class="nav nav-tabs d-flex justify-content-evenly pt-1" role="tablist">
+                <li class="nav-item" role="presentation" title="Charts">
+                    <button class="nav-link active"
+                            id="charts-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#charts-tab-pane"
+                            type="button"
+                            role="tab"
+                            aria-controls="charts-tab-pane"
+                            aria-selected="true">
+                        Charts
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation" title="Data table" ng-click="renderResultsTable()">
+                    <button class="nav-link"
+                            id="data-table-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#data-table-tab-pane"
+                            type="button"
+                            role="tab"
+                            aria-controls="data-table-tab-pane"
+                            aria-selected="false">
+                        Results
+                    </button>
+                </li>
+            </ul>
+            <div class="tab-content tab-content-full-height">
+                <div id="charts-tab-pane"
+                     class="tab-pane fade show active"
+                     role="tabpanel"
+                     aria-labelledby="charts-tab"
+                     tabindex="0">
+                    <div id="container" class="d-flex" ng-disabled="loading" ng-cloack>
+                        <div id="chart"></div>
+                        <div id="dragbar" class="bg-secondary" ng-mousedown="dragbarMouseDown()"></div>
+                        <div id="sidebar">
+                            <ul id='plotnav' class="nav nav-tabs justify-content-evenly pt-1" role="tablist">
+                                <li class="nav-item" role="presentation" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Legend">
+                                    <button class="nav-link p-1"
+                                            id="legend-tab" data-bs-toggle="tab"
+                                            data-bs-target="#legend-tab-pane"
+                                            type="button"
+                                            role="tab"
+                                            aria-controls="legend-tab-pane"
+                                            aria-selected="false">
+                                        <i class="bi-list-ul fs-3" aria-label="Legend" role="img"></i>
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Display settings">
+                                    <button class="nav-link active p-1"
+                                            id="characteristic-tab"
+                                            data-bs-toggle="tab"
+                                            data-bs-target="#characteristic-tab-pane"
+                                            type="button"
+                                            role="tab"
+                                            aria-controls="characteristic-tab-pane"
+                                            aria-selected="true">
+                                        <i class="bi-display fs-3" aria-label="Display settings" role="img"></i>
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Tooltip">
+                                    <button class="nav-link p-1"
+                                            id="tooltip-tab"
+                                            data-bs-toggle="tab"
+                                            data-bs-target="#tooltip-tab-pane"
+                                            type="button"
+                                            role="tab"
+                                            aria-controls="tooltip-tab-pane"
+                                            aria-selected="false">
+                                        <i class="bi-info-circle fs-3" aria-label="Tooltip" role="img"></i>
+                                    </button>
+                                </li>
+                            </ul>
+                            <div class="tab-content subtab-content-full-height px-2 pt-2">
+                                <div id="legend-tab-pane" class="tab-pane fade" role="tabpanel" aria-labelledby="legend-tab" tabindex="0">
+                                    <div class="row">
+                                        <div class="col-md-12 mb-2 btn-group" role="group" aria-label="Legend control buttons">
+                                            <button type="button" class="btn btn-outline-secondary btn-sm" ng-click="legendSetVisibilityForAll(true)">
+                                                Show all
+                                            </button>
+                                            <button type="button" class="btn btn-outline-secondary btn-sm" ng-click="legendSetVisibilityForAll(false)">
+                                                Hide all
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <!-- .roundedOne -->
+                                    <div ng-repeat="legendItem in legend">
+                                        <div class="rounded-check form-check d-flex mb-2 lh-sm w-100">
+                                            <input type="checkbox"
+                                                   class="form-check-input"
+                                                   ng-click="legendClick(legendItem)"
+                                                   ng-model="legendItem.visible"
+                                                   id="{{::'researchObject' + legendItem.id}}"
+                                                   name="check"
+                                                   checked />
+                                            <label class="me-1 check-color text-start"
+                                                   for="{{::'researchObject' + legendItem.id}}"
+                                                   ng-class="'legend' + legendItem.id"></label>
+                                            <label class="form-check-label font-monospace"
+                                                   for="{{::'researchObject' + legendItem.id}}"
+                                                   ng-bind="::legendItem.name"></label>
+                                        </div>
+                                    </div>
+                                    <!-- end .roundedOne -->
+                                </div>
+                                <div id="characteristic-tab-pane" class="tab-pane fade show active" role="tabpanel" aria-labelledby="characteristic-tab" tabindex="0">
+                                    <div ng-repeat="characteristic in chartCharacteristics">
+                                        <div class="row mb-1 mt-2">
+                                            <div class="col-md-12">
+                                                <select class="form-select"
+                                                        title="Characteristic"
+                                                        ng-model="characteristic.value"
+                                                        ng-options="c.Text for c in ::characteristicsList"
+                                                        id="characteristic{{$index}}"></select>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="offset-md-2 col-md-10">
+                                                <button type="button"
+                                                        class="btn btn-danger"
+                                                        ng-click="deleteCharacteristic(characteristic)"
+                                                        ng-disabled="chartCharacteristics.length <= 1">
+                                                    Delete characteristic
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-4">
+                                        <div class="offset-md-2 col-md-10">
+                                            <button type="button"
+                                                    class="btn btn-success"
+                                                    ng-click="addCharacteristic()"
+                                                    ng-disabled="chartCharacteristics.length == characteristicsList.length">
+                                                Add characteristic
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1">
+                                        <div class="offset-md-2 col-md-2">
+                                            <input type="button" class="btn btn-secondary" ng-click="draw()" value="Draw" />
+                                        </div>
+                                    </div>
+                                    <div class="form-check" ng-show="chartCharacteristics.length == 1">
+                                        <input type="checkbox"
+                                               class="form-check-input"
+                                               name="lineChart"
+                                               id="lineChart"
+                                               ng-model="lineChart"
+                                               value="false" />
+                                        <label class="form-check-label" for="lineChart">
+                                            Draw rank distribution
+                                        </label>
+                                    </div>
+                                </div>
+                                <div id="tooltip-tab-pane" class="tab-pane fade" role="tabpanel" aria-labelledby="tooltip-tab" tabindex="0">
+                                    <div class="font-monospace text-break">
+                                        <div ng-repeat="tooltipElement in tooltipElements"
+                                             ng-class="::'text-' + tooltipElement.color"
+                                             class="font-monospace text-break">
+                                            <a target="_blank"
+                                               rel="noopener"
+                                               ng-if="::tooltipElement.sequenceRemoteId"
+                                               ng-href="https://www.ncbi.nlm.nih.gov/nuccore/{{::tooltipElement.sequenceRemoteId}}"
+                                               ng-bind="::tooltipElement.name">
+                                            </a>
+                                            <p ng-if="::!tooltipElement.sequenceRemoteId" ng-bind="::tooltipElement.name"></p>
+                                            <a target="_blank"
+                                               rel="noopener"
+                                               ng-if="::tooltipElement.remoteId"
+                                               ng-href="https://www.ncbi.nlm.nih.gov/nuccore/{{::tooltipElement.remoteId}}">
+                                                Peptide ncbi page
+                                            </a>
+                                            <div ng-bind="::tooltipElement.feature"></div>
+                                            <div ng-repeat="attribute in ::tooltipElement.attributes" ng-bind="::attribute"></div>
+                                            <div ng-if="::tooltipElement.partial">Partial</div>
+                                            <div>
+                                                Position:
+                                                <a target="_blank"
+                                                   rel="noopener"
+                                                   ng-if="::tooltipElement.sequenceRemoteId"
+                                                   ng-href="https://www.ncbi.nlm.nih.gov/nuccore/{{::tooltipElement.sequenceRemoteId}}?from={{::tooltipElement.positions[0]+1}}&to={{::tooltipElement.positions[0]+tooltipElement.lengths[0]}}"
+                                                   ng-bind="::tooltipElement.position">
+                                                </a>
+                                                <span ng-if="::!tooltipElement.sequenceRemoteId" ng-bind="::tooltipElement.position"></span>
+                                            </div>
+                                            <div>
+                                                Length:{{::tooltipElement.length}}
+                                            </div>
+                                            <div class="form-check" ng-show="tooltipElements.length > 1">
+                                                <input type="checkbox"
+                                                       class="form-check-input"
+                                                       name="selectSubsequenceForAlignment"
+                                                       id="selectSubsequenceForAlignment{{$index}}"
+                                                       ng-model="tooltipElement.selectedForAlignment" />
+                                                <label class="form-check-label" for="selectSubsequenceForAlignment{{$index}}">
+                                                    Select sequence for alignment
+                                                </label>
+                                            </div>
+                                            <div ng-class="['card', 'card-' + tooltipElement.color]">
+                                                <div class="card-header">
+                                                    <button type="button"
+                                                            class="btn btn-outline-secondary btn-sm"
+                                                            data-bs-toggle="collapse"
+                                                            data-bs-target="#subsequenceCharacteristics{{$index + 1}}"
+                                                            aria-expanded="false"
+                                                            aria-controls="subsequenceCharacteristics{{$index + 1}}">
+                                                        Numeric characteristics
+                                                    </button>
+                                                </div>
+                                                <div class="card-collapse collapse" id="subsequenceCharacteristics{{$index + 1}}">
+                                                    <table class="table table-bordered table-sm fs-6 small" ng-class="::'table-'+tooltipElement.color">
+                                                        <thead ng-repeat="value in ::tooltipElement.characteristics">
+                                                            <tr>
+                                                                <td align=center scope="col" ng-bind="::characteristicNames[$index]" />
+                                                                <td scope="col" ng-bind="::value" />
+                                                            </tr>
+                                                        </thead>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <hr />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="data-table-tab-pane"
+                     class="tab-pane fade"
+                     role="tabpanel"
+                     aria-labelledby="data-table-tab"
+                     tabindex="0">
+                    <filters add-filter="addFilter(newFilter)" delete-filter="deleteFilter(filter, filterIndex)"></filters>
+                    <div ng-repeat="sequenceData in sequencesData">
+                        <h3 ng-bind="sequenceData.ResearchObjectName"></h3>
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Feature</th>
+                                    <th>Subsequence attributes</th>
+                                    <th>Subsequence position</th>
+                                    <th ng-repeat="characteristicName in ::characteristicNames" ng-bind="::characteristicName" />
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="subsequenceData in ::sequenceData.SubsequencesData">
+                                    <td ng-bind="::features[subsequenceData.FeatureId].Text" />
+                                    <td>
+                                        <div ng-repeat="attribute in getAttributesText(subsequenceData.Attributes)" ng-bind="::attribute"></div>
+                                    </td>
+                                    <td>
+                                        <div ng-repeat="start in ::subsequenceData.Starts">Start: {{::start}} Length:{{::subsequenceData.Lengths[$index]}}</div>
+                                    </td>
+                                    <td ng-repeat="characteristicValue in ::subsequenceData.CharacteristicsValues" ng-bind="::characteristicValue" />
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row mb-1" ng-hide="lineChart">
-            <label class="col-form-label col-md-2" for="secondCharacteristic">Second characteristic:</label>
-            <div class="col-md-10">
-                <select class="form-select"
-                        title="Second characteristic"
-                        ng-model="secondCharacteristic"
-                        ng-options="c.Text for c in ::subsequencesCharacteristicsList"
-                        id="secondCharacteristic"></select>
-            </div>
-        </div>
-        <div class="row mb-1">
-            <label class="col-form-label col-md-2" for="height">Height:</label>
-            <div class="col-md-10">
-                <input class="form-control" name="height" id="height" type="number" min="{{::500 + legendHeight}}" step="20" ng-model="height" />
-            </div>
-        </div>
-        <div class="row mb-1">
-            <label class="col-form-label col-md-2" for="width">Width:</label>
-            <div class="col-md-10">
-                <input class="form-control" name="width" id="width" type="number" min="400" step="20" ng-model="width" />
-            </div>
-        </div>
-        <input type="button" class="btn btn-secondary mb-2" ng-click="draw()" value="Draw" />
-        <div id="chart" class="font-monospace mb-2">
-        </div>
-
-        @*  <filters add-filter="addFilter(newFilter)" delete-filter="deleteFilter(filter, filterIndex)"></filters>
-    <div ng-repeat="sequenceData in sequencesData">
-    <h3 ng-bind="sequenceData.ResearchObjectName"></h3>
-    <table class="table table-bordered table-striped">
-    <thead>
-    <tr>
-    <th>Feature</th>
-    <th>Subsequence attributes</th>
-    <th>Subsequence position</th>
-    <th ng-repeat="characteristicName in ::subsequencesCharacteristicsNames" ng-bind="::characteristicName" />
-    </tr>
-    </thead>
-    <tbody>
-    <tr ng-repeat="subsequenceData in ::sequenceData.SubsequencesData">
-    <td ng-bind="::features[subsequenceData.FeatureId]" />
-    <td ng-bind-html="getAttributesText(subsequenceData.Attributes)" />
-    <td>
-    <div ng-repeat="start in ::subsequenceData.Starts">Start: {{::start}} Length:{{::subsequenceData.Lengths[$index]}}</div>
-    </td>
-    <td ng-repeat="characteristicValue in ::subsequenceData.CharacteristicsValues" ng-bind="::characteristicValue" />
-    </tr>
-    </tbody>
-    </table>
-    </div>*@
     </div>
-}
 
-@section Scripts {
-    <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
+    @section Scripts {
+    <script src="~/lib/d3/d3.min.js" asp-append-version="true"></script>
+    <script src="~/lib/plotly.js/plotly.min.js" asp-append-version="true"></script>
     <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
     <script src="~/js/Angular/Components/filters.js" asp-append-version="true"></script>
+    @{
+            await Html.RenderPartialAsync("_AngularControllerInitializer", "SubsequencesCalculationResult");
+        }
+    }
 }
