@@ -1,10 +1,12 @@
-﻿{
+﻿
+
+{
   "compilerOptions": {
     "target": "ES2021",
     "module": "none",
     "sourceMap": true,
-    "outDir": "./wwwroot/js/Angular/Controllers/",
-    "rootDir": "./wwwroot/js/Angular/Controllers/",
+    "outDir": "./wwwroot/js/Angular/", 
+    "rootDir": "./wwwroot/js/Angular/", 
     "strict": false,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -17,13 +19,12 @@
     "declaration": false,
     "types": [ "angular" ],
     "typeRoots": [
-      
       "wwwroot/lib/@types"
     ],
     "moduleResolution": "node"
   },
   "include": [
-    "wwwroot/js/Angular/Controllers/**/*.ts"
+    "wwwroot/js/Angular/**/*.ts" 
   ],
   "exclude": [
     //"node_modules",

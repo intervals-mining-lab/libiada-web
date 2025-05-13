@@ -66,7 +66,6 @@ interface IMultisequence {
 }
 
 
-
 interface IResearchObject {
     // Basic identifiers
     Id?: number;
@@ -107,7 +106,7 @@ interface IResearchObject {
     Text?: string; // Text representation for form components
 
     // Additional properties for backward compatibility
-    [key: string]: any;
+    
 }
 
 
