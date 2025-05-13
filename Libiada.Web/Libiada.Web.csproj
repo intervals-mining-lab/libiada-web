@@ -19,7 +19,6 @@
 	
 	
 	
-	
 	<ItemGroup>
 	  <Content Include="wwwroot\js\Angular\Controllers\calculation.ts" />
 	  <Content Include="wwwroot\js\Angular\Controllers\orderTransformationResult.ts" />
