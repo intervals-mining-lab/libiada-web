@@ -5,13 +5,11 @@
 
 type IScope = ng.IScope;
 interface IPoint extends IBasePoint {
-    value: number;      // Значение (идентификатор порядка)
+    value: number; // Value (order identifier)
     transformationVisibility: ITransformationVisibility[];
 }
 
-
-
-// Интерфейс для линии между точками
+// Interface for the line between points
 interface ILine {
     id: number;
     value: string;
@@ -25,85 +23,85 @@ interface ILine {
     colorId: number;
 }
 
-// Интерфейс для элемента легенды
+// Interface for the legend item
 interface ILegendItem {
     id: number;
     name: string;
     visible: boolean;
 }
 
- //Интерфейс для видимости трансформации
+//Interface for the visibility of the transformation
 interface ITransformationVisibility {
     id: number;
     name: string;
     visible: boolean;
 }
 
-// Интерфейс для ID порядка
+// Interface for the order ID
 interface IOrderId {
     id: number;
 }
 
-// Интерфейс для типа трансформации
+// Interface for the transformation type
 interface ITransformationType {
     Text: string;
     Value?: number;
 }
 
-// Интерфейс для данных трансформации
+// Interface for the transformation data
 interface ITransformationData {
     ResultTransformation: IResultTransformation[];
 }
 
-// Интерфейс для результата трансформации
+// Interface for the transformation result
 interface IResultTransformation {
     Transformation: string;
     OrderId: number;
 }
 
-// Интерфейс для данных контроллера
+// Interface for controller data
 interface IOrderTransformationVisualizationData {
     orders: string[];
     transformationsData: { [key: number]: ITransformationData };
     transformationsList: ITransformationType[];
-    [key: string]: any;
+    //[key: string]: any;
 }
 
-// Интерфейс для области видимости контроллера
+// Interface for controller scope
 interface IOrderTransformationVisualizationScope extends ng.IScope {
-    // Данные от сервера
+    // Data from server
     orders: string[];
     transformationsData: { [key: number]: ITransformationData };
     transformationsList: ITransformationType[];
 
-    // Настройки графика
+    // Chart settings
     width: number;
     height: number;
     dotRadius: number;
     selectedDotRadius: number;
     legendHeight: number;
 
-    // Элементы графика
+    // Chart elements
     points: IPoint[];
     lines: ILine[];
     legend: ILegendItem[];
     ordersIds: IOrderId[];
 
-    // Текущие настройки
+    // Current settings
     initialOrder: IOrderId;
     transformationType: ITransformationType;
     counterIteration: number;
 
-    // Свойства для загрузки данных
+    // Properties for loading data
     taskId: string;
     loadingScreenHeader: string;
     loading: boolean;
 
-    // Функции графика
+    // Chart functions
     xMap: (d: IPoint) => number;
     yMap: (d: IPoint) => number;
 
-    // Методы
+    // Methods
     draw: () => void;
     fillPointsAndLines: () => void;
     fillLegend: () => void;
@@ -114,20 +112,17 @@ interface IOrderTransformationVisualizationScope extends ng.IScope {
     yValue: (d: IPoint) => number;
 }
 
-// Определение интерфейса для tooltip с дополнительными свойствами
+// Interface definition for tooltip with additional properties
 interface ID3Tooltip extends d3.Selection<HTMLDivElement, unknown, HTMLElement, any> {
     hideTooltip?: boolean;
     selectedDots?: any;
 }
 
-// Методы в интерфейсе IOrderTransformationVisualizationScope
-
-
-
+// Methods in IOrderTransformationVisualizationScope interface
 
 /**
- * Контроллер для визуализации результатов трансформации порядков
- */
+* Controller for visualizing order transformation results
+*/
 class OrderTransformationVisualizationResultHandler {
     constructor() {
         this.initializeController();
@@ -139,8 +134,8 @@ class OrderTransformationVisualizationResultHandler {
         const orderTransformationVisualizationResult = ($scope: IOrderTransformationVisualizationScope, $http: ng.IHttpService): void => {
 
             /**
-             * Инициализирует данные для легенды
-             */
+            * Initializes the data for the legend
+            */
             function fillLegend(): void {
                 $scope.legend = [];
                 for (let i = 1; i < $scope.transformationsList.length; i++) {
@@ -149,8 +144,8 @@ class OrderTransformationVisualizationResultHandler {
             }
 
             /**
-             * Инициализирует данные для точек графика
-             */
+            * Initializes the data for the chart points
+            */
             function fillPoints(): void {
                 let initialOrder = $scope.initialOrder.id;
                 let checkedOrders = [initialOrder];
@@ -222,9 +217,9 @@ class OrderTransformationVisualizationResultHandler {
                 }
             }
 
-            /**
-             * Инициализирует данные для линий графика
-             */
+            /** 
+            * Initializes data for graph lines 
+            */
             function fillLines(): void {
                 let counterIdLines = 0;
 
@@ -326,8 +321,8 @@ class OrderTransformationVisualizationResultHandler {
             }
 
             /**
-             * Инициализирует данные для точек и линий графика
-             */
+            * Initializes data for graph points and lines
+            */
             function fillPointsAndLines(): void {
                 $scope.points = [];
                 $scope.lines = [];
@@ -336,9 +331,9 @@ class OrderTransformationVisualizationResultHandler {
             }
 
             /**
-             * Формирует текст всплывающей подсказки
-             * @param d Точка, для которой формируется подсказка
-             */
+            * Generates tooltip text
+            * @param d Point for which tooltip is generated
+            */
             function fillPointTooltip(d: IPoint): string {
                 let tooltipContent: string[] = [];
                 tooltipContent.push(`Order ID: ${d.value}`);
@@ -347,12 +342,12 @@ class OrderTransformationVisualizationResultHandler {
             }
 
             /**
-             * Показывает всплывающую подсказку при клике на точку
-             * @param event Событие мыши
-             * @param d Точка данных
-             * @param tooltip Элемент подсказки
-             * @param svg Элемент SVG
-             */
+            * Shows a tooltip when a point is clicked
+            * @param event Mouse event
+            * @param d Data point
+            * @param tooltip Tooltip element
+            * @param svg SVG element
+            */
             function showTooltip(event: MouseEvent, d: IPoint, tooltip: ID3Tooltip, svg: any): void {
                 $scope.clearTooltip(tooltip);
                 let color = d3.scaleOrdinal(d3.schemeCategory10);
@@ -408,9 +403,9 @@ class OrderTransformationVisualizationResultHandler {
             }
 
             /**
-             * Очищает всплывающую подсказку
-             * @param tooltip Элемент подсказки
-             */
+            * Clears the tooltip
+            * @param tooltip Tooltip element
+            */
             function clearTooltip(tooltip: ID3Tooltip): void {
                 if (tooltip) {
                     if (tooltip.hideTooltip) {
@@ -427,38 +422,38 @@ class OrderTransformationVisualizationResultHandler {
             }
 
             /**
-             * Возвращает значение X для точки
-             * @param d Точка данных
-             */
+            * Returns the X value of the point
+            * @param d Data point
+            */
             function xValue(d: IPoint): number {
                 return d.x;
             }
 
             /**
-             * Возвращает значение Y для точки
-             * @param d Точка данных
-             */
+            * Returns the Y value of the point
+            * @param d Data point
+            */
             function yValue(d: IPoint): number {
                 return d.y;
             }
 
             /**
-             * Отрисовывает график
-             */
+            * Draws the chart
+            */
             function draw(): void {
                 $scope.fillPointsAndLines();
 
-                // Удаление предыдущего графика и подсказки, если они есть
+                // Remove the previous chart and tooltip, if any
                 d3.select(".chart-tooltip").remove();
                 d3.select(".chart-svg").remove();
 
-                // Настройки размеров и отступов графика
+                // Chart size and margin settings
                 let margin = { top: 30 + $scope.legendHeight, right: 30, bottom: 30, left: 60 };
                 let width = $scope.width - margin.left - margin.right;
                 let height = $scope.height - margin.top - margin.bottom;
 
-                // Настройка оси X
-                // Расчет отступов для точек
+                // Set up the X axis 
+                // Calculate indents for points 
                 let xMin = d3.min($scope.points, $scope.xValue) || 0;
                 let xMax = d3.max($scope.points, $scope.xValue) || 0;
                 let xMargin = (xMax - xMin) * 0.05;
@@ -475,8 +470,8 @@ class OrderTransformationVisualizationResultHandler {
 
                 $scope.xMap = (d: IPoint) => xScale($scope.xValue(d));
 
-                // Настройка оси Y
-                // Расчет отступов для точек
+                // Setting up the Y axis 
+                // Calculate indents for points 
                 let yMax = d3.max($scope.points, $scope.yValue) || 0;
                 let yMin = d3.min($scope.points, $scope.yValue) || 0;
                 let yMargin = (yMax - yMin) * 0.05;
@@ -495,10 +490,10 @@ class OrderTransformationVisualizationResultHandler {
 
                 $scope.yMap = (d: IPoint) => yScale($scope.yValue(d));
 
-                // Настройка цвета заливки
+                // Set the fill color
                 let color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.legend.length]);
 
-                // Добавление холста графика на страницу
+                // Add the chart canvas to the page
                 let svg = d3.select("#chart").append("svg")
                     .attr("width", $scope.width)
                     .attr("height", $scope.height)
@@ -507,13 +502,12 @@ class OrderTransformationVisualizationResultHandler {
                 let g = svg.append("g")
                     .attr("transform", `translate(${margin.left},${margin.top})`);
 
-                // Добавление определений для концов линий
+                // Add definitions for line ends
                 let defs = svg.append("defs");
                 for (let i = 0; i < $scope.legend.length; i++) {
                     defs.append("marker")
                         .attr("id", `arrow${i}`)
-                        .attr("viewBox", "0 -5 10 10")
-                        .attr("refX", 6)
+                        .attr("viewBox", "0 -5 10 10").attr("refX", 6)
                         .attr("refY", 0)
                         .attr("markerWidth", 6)
                         .attr("markerHeight", 6)
@@ -524,18 +518,18 @@ class OrderTransformationVisualizationResultHandler {
                         .attr("fill", color($scope.legend[i].id));
                 }
 
-                // Добавление области подсказки на страницу
+                // Add a tooltip area to the page 
                 let tooltip = d3.select("#chart").append("div")
                     .attr("class", "chart-tooltip position-absolute bg-light font-monospace small lh-sm p-1 rounded")
                     .style("opacity", 0);
 
-                // Предотвращение скрытия подсказки при клике на нее
+                // Prevent tooltip from hiding when clicked
                 tooltip.on("click", () => { (tooltip as any).hideTooltip = false; });
 
-                // Скрытие подсказки при клике вне элементов
+                // Hide tooltip when clicked outside elements
                 d3.select("#chart").on("click", () => { $scope.clearTooltip(tooltip); });
 
-                // Ось X
+                // X-axis
                 g.append("g")
                     .attr("class", "x axis")
                     .attr("transform", `translate(0,${height})`)
@@ -548,7 +542,7 @@ class OrderTransformationVisualizationResultHandler {
                     .text("Iteration")
                     .style("font-size", "12pt");
 
-                // Ось Y
+                // Y axis 
                 g.append("g")
                     .attr("class", "y axis")
                     .call(yAxis);
@@ -563,7 +557,7 @@ class OrderTransformationVisualizationResultHandler {
                     .text("Order Id")
                     .style("font-size", "12pt");
 
-                // Отрисовка линий
+                // Draw lines 
                 g.selectAll(".transform-line")
                     .data($scope.lines)
                     .enter()
@@ -578,7 +572,7 @@ class OrderTransformationVisualizationResultHandler {
                     .style("stroke-width", "2")
                     .attr("visibility", "visible");
 
-                // Отрисовка легенды
+                // Draw the legend 
                 let legend = g.selectAll(".legend")
                     .data($scope.legend)
                     .enter()
@@ -608,7 +602,7 @@ class OrderTransformationVisualizationResultHandler {
                         }
                     });
 
-                // Отрисовка точек
+                // Drawing points 
                 g.selectAll(".dot")
                     .data($scope.points)
                     .enter()
@@ -623,7 +617,7 @@ class OrderTransformationVisualizationResultHandler {
                     .style("stroke", "black")
                     .on("click", (event: MouseEvent, d: IPoint) => $scope.showTooltip(event, d, tooltip, g));
 
-                // Отрисовка цветных прямоугольников легенды
+                // Drawing colored rectangles of the legend
                 legend.append("rect")
                     .attr("width", 15)
                     .attr("height", 15)
@@ -632,7 +626,7 @@ class OrderTransformationVisualizationResultHandler {
                     .style("stroke-width", 4)
                     .attr("transform", `translate(0, -${$scope.legendHeight})`);
 
-                // Отрисовка текста легенды
+                // Drawing the legend text
                 legend.append("text")
                     .attr("x", 24)
                     .attr("y", 9)
@@ -642,7 +636,7 @@ class OrderTransformationVisualizationResultHandler {
                     .style("font-size", "9pt");
             }
 
-            // Назначение методов в $scope
+            // Assigning methods in $scope
             $scope.draw = draw;
             $scope.fillPointsAndLines = fillPointsAndLines;
             $scope.fillPointTooltip = fillPointTooltip;
@@ -651,7 +645,7 @@ class OrderTransformationVisualizationResultHandler {
             $scope.yValue = yValue;
             $scope.xValue = xValue;
 
-            // Инициализация свойств $scope
+            // Initialize $scope properties 
             $scope.width = 800;
             $scope.dotRadius = 4;
             $scope.selectedDotRadius = $scope.dotRadius * 2;
@@ -660,14 +654,14 @@ class OrderTransformationVisualizationResultHandler {
 
             $scope.loadingScreenHeader = "Loading data";
 
-            // Получение ID задачи из URL
+            // Get task ID from URL 
             let location = window.location.href.split("/");
             $scope.taskId = location[location.length - 1];
 
             $scope.loading = true;
 
-            // Загрузка данных с сервера
-            $http.get < any > (`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
+            // Loading data from the server 
+            $http.get<any>(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
                 .then(function (data) {
                     MapModelFromJson($scope, data.data);
 
@@ -690,14 +684,14 @@ class OrderTransformationVisualizationResultHandler {
                 });
         };
 
-        // Регистрация контроллера в модуле Angular
+        // Register the controller in the Angular module
         angular.module("libiada").controller("OrderTransformationVisualizationResultCtrl", ["$scope", "$http", orderTransformationVisualizationResult]);
     }
 }
 
 /**
- * Обертка для обратной совместимости
- */
+* Wrapper for backward compatibility
+*/
 function OrderTransformationVisualizationResultController(): OrderTransformationVisualizationResultHandler {
     return new OrderTransformationVisualizationResultHandler();
 }
