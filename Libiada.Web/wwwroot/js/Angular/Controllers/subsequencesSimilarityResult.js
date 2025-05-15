@@ -1,5 +1,4 @@
 /// <reference types="angular" />
-/// <reference types="functions" />
 /**
  * Controller for subsequences similarity result visualization
  */

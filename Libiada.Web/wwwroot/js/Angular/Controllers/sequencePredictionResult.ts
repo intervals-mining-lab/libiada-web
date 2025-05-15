@@ -1,5 +1,4 @@
 ﻿/// <reference types="angular" />
-/// <reference types="functions" />
 
 /**
 * Interface for the sequence prediction results scope controller

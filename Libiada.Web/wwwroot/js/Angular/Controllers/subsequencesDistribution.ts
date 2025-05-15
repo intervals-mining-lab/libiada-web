@@ -1,6 +1,5 @@
 ﻿// Declaring global variables and functions
 /// <reference types="angular" />
-/// <reference types="functions" />
 
 
 // Interface for data passed to the controller

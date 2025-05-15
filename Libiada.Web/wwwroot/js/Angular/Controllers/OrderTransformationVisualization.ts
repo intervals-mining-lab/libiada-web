@@ -1,5 +1,4 @@
 ﻿/// <reference types="angular" />
-/// <reference types="functions" />
 
 /**
 * Interface for the object being researched
@@ -11,7 +10,7 @@ interface IResearchObject {
     group?: number;
     sequenceType?: number;
     selected?: boolean;
-    [key: string]: any;
+    //[key: string]: any;
 }
 
 /**

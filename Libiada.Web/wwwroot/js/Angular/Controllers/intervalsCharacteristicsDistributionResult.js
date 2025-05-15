@@ -1,6 +1,5 @@
 /// <reference types="angular" />
 /// <reference types="d3" />
-/// <reference types="functions" />
 /// <reference path="./Interfaces/commonInterfaces.d.ts" />
 /**
  * Controller for displaying interval characteristics distribution results

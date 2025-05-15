@@ -1,5 +1,5 @@
 ﻿/// <reference types="angular" />
-/// <reference types="functions" />
+
 
 /**
  * Interface for the order transformation result scope

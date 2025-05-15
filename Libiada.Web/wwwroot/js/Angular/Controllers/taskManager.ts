@@ -1,5 +1,5 @@
 ﻿/// <reference types="angular" />
-/// <reference types="functions" />
+
 /// <reference types="@microsoft/signalr" />
 
 // Interface for task data

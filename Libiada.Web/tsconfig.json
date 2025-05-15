@@ -19,7 +19,8 @@
     "declaration": false,
     "types": [ "angular" ],
     "typeRoots": [
-      "wwwroot/lib/@types"
+      "wwwroot/lib/@types",
+      //"./wwwroot/js/Angular"
     ],
     "moduleResolution": "node"
   },
@@ -30,5 +31,6 @@
     //"node_modules",
     //"wwwroot/lib"
     //"wwwroot/lib/!([@types]/**)"
+    
   ]
 }

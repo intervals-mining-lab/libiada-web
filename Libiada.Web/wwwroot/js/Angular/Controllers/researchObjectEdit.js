@@ -1,5 +1,4 @@
 /// <reference types="angular" />
-/// <reference types="functions" />
 // Updated controller class
 class ResearchObjectEditor {
     constructor(data) {

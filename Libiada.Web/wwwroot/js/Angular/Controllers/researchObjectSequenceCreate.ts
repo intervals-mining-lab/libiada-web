@@ -1,5 +1,4 @@
 ﻿/// <reference types="angular" />
-/// <reference types="functions" />
 
 // Interface for the data object passed to the controller
 interface IResearchObjectSequenceCreateData {

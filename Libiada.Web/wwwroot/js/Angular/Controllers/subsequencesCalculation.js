@@ -1,5 +1,4 @@
 /// <reference types="angular" />
-/// <reference types="functions" />
 /**
 * Controller for calculating subsequences
 */
