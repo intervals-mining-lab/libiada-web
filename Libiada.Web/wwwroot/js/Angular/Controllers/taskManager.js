@@ -1,7 +1,7 @@
 /// <reference types="angular" />
 /// <reference types="@microsoft/signalr" />
 // Controller class for task manager
-class TaskManagerControllerClass {
+class TaskManagerControllerHandler {
     constructor() {
         this.initializeController();
     }
@@ -150,6 +150,6 @@ class TaskManagerControllerClass {
 }
 // Wrapper function for backward compatibility
 function TaskManagerController() {
-    return new TaskManagerControllerClass();
+    return new TaskManagerControllerHandler();
 }
 //# sourceMappingURL=taskManager.js.map

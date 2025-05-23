@@ -60,7 +60,7 @@ declare const alertify: {
 };
 
 // Controller class for task manager
-class TaskManagerControllerClass {
+class TaskManagerControllerHandler {
     constructor() {
         this.initializeController();
     }
@@ -228,6 +228,6 @@ class TaskManagerControllerClass {
 }
 
 // Wrapper function for backward compatibility
-function TaskManagerController(): TaskManagerControllerClass {
-    return new TaskManagerControllerClass();
+function TaskManagerController(): TaskManagerControllerHandler {
+    return new TaskManagerControllerHandler();
 }
