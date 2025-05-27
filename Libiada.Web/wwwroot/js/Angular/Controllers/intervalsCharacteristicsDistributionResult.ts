@@ -29,8 +29,8 @@ interface ILinkResult {
 }
 
 // Interface for point data to display on chart
-
-interface IDistributionPoint extends IBasePoint  {
+//IDistributionIntervalsCharacteristicsPoint
+interface IDistributionIntervalsCharacteristicsPoint extends IBasePoint  {
  
     distributionIntervals?: IDistributionInterval[];
     order?: string;
@@ -53,7 +53,7 @@ interface ID3Tooltip extends d3.Selection<HTMLDivElement, unknown, HTMLElement, 
 interface IIntervalsCharacteristicsDistributionResultScope extends ng.IScope {
     // Chart data and settings
     result: ILinkResult[];
-    points: IDistributionPoint[];
+    points: IDistributionIntervalsCharacteristicsPoint[];
     characteristic: ICharacteristic;
     characteristicsList: ICharacteristic[];
     width: number;
@@ -69,13 +69,13 @@ interface IIntervalsCharacteristicsDistributionResultScope extends ng.IScope {
     // Chart functions
     draw: () => void;
     fillPoints: () => void;
-    fillPointTooltip: (d: IDistributionPoint) => string;
-    showTooltip: (event: MouseEvent, d: IDistributionPoint, tooltip: ID3Tooltip, svg: any) => void;
+    fillPointTooltip: (d: IDistributionIntervalsCharacteristicsPoint) => string;
+    showTooltip: (event: MouseEvent, d: IDistributionIntervalsCharacteristicsPoint, tooltip: ID3Tooltip, svg: any) => void;
     clearTooltip: (tooltip: ID3Tooltip) => void;
-    xValue: (d: IDistributionPoint) => number;
-    yValue: (d: IDistributionPoint) => number;
-    xMap?: (d: IDistributionPoint) => number;
-    yMap?: (d: IDistributionPoint) => number;
+    xValue: (d: IDistributionIntervalsCharacteristicsPoint) => number;
+    yValue: (d: IDistributionIntervalsCharacteristicsPoint) => number;
+    xMap?: (d: IDistributionIntervalsCharacteristicsPoint) => number;
+    yMap?: (d: IDistributionIntervalsCharacteristicsPoint) => number;
 }
 
 /**
@@ -126,7 +126,7 @@ class IntervalsCharacteristicsDistributionResultHandler {
              * Constructs tooltip content text as HTML
              * @param d The point data to display in tooltip
              */
-            function fillPointTooltip(d: IDistributionPoint): string {
+            function fillPointTooltip(d: IDistributionIntervalsCharacteristicsPoint): string {
                 const tooltipContent: string[] = [];
 
                 const pointsOrder: string[] = [];
@@ -144,7 +144,7 @@ class IntervalsCharacteristicsDistributionResultHandler {
              * @param tooltip The tooltip element
              * @param svg The SVG container element
              */
-            function showTooltip(event: MouseEvent, d: IDistributionPoint, tooltip: ID3Tooltip, svg: any): void {
+            function showTooltip(event: MouseEvent, d: IDistributionIntervalsCharacteristicsPoint, tooltip: ID3Tooltip, svg: any): void {
                 $scope.clearTooltip(tooltip);
 
                 tooltip.style("opacity", 0.9);
@@ -162,7 +162,7 @@ class IntervalsCharacteristicsDistributionResultHandler {
                 tooltipHtml.push("Orders: ");
 
                 tooltip.selectedDots = svg.selectAll(".dot")
-                    .filter((dot: IDistributionPoint) => {
+                    .filter((dot: IDistributionIntervalsCharacteristicsPoint) => {
                         if (dot.x === d.x && dot.y === d.y) {
                             tooltipHtml.push($scope.fillPointTooltip(dot));
                             return true;
@@ -203,14 +203,14 @@ class IntervalsCharacteristicsDistributionResultHandler {
             /**
              * Returns x value for a data point
              */
-            function xValue(d: IDistributionPoint): number {
+            function xValue(d: IDistributionIntervalsCharacteristicsPoint): number {
                 return d.x;
             }
 
             /**
              * Returns y value for a data point
              */
-            function yValue(d: IDistributionPoint): number {
+            function yValue(d: IDistributionIntervalsCharacteristicsPoint): number {
                 return d.y;
             }
 
@@ -250,7 +250,7 @@ class IntervalsCharacteristicsDistributionResultHandler {
                         .tickSizeOuter(0)
                         .tickPadding(10);
 
-                $scope.xMap = (d: IDistributionPoint) => xScale($scope.xValue(d));
+                $scope.xMap = (d: IDistributionIntervalsCharacteristicsPoint) => xScale($scope.xValue(d));
 
                 // Setup y-axis
                 // Calculate margins for points
@@ -278,7 +278,7 @@ class IntervalsCharacteristicsDistributionResultHandler {
                         .tickSizeOuter(0)
                         .tickPadding(10);
 
-                $scope.yMap = (d: IDistributionPoint) => yScale($scope.yValue(d));
+                $scope.yMap = (d: IDistributionIntervalsCharacteristicsPoint) => yScale($scope.yValue(d));
 
                 // Setup fill color
                 const color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.points.length]);
@@ -343,9 +343,9 @@ class IntervalsCharacteristicsDistributionResultHandler {
                     .attr("cx", $scope.xMap)
                     .attr("cy", $scope.yMap)
                     .style("fill-opacity", 0.6)
-                    .style("fill", (d: IDistributionPoint) => color(d.id))
-                    .style("stroke", (d: IDistributionPoint) => color(d.id))
-                    .on("click", (event: MouseEvent, d: IDistributionPoint) => $scope.showTooltip(event, d, tooltip, svg));
+                    .style("fill", (d: IDistributionIntervalsCharacteristicsPoint) => color(d.id))
+                    .style("stroke", (d: IDistributionIntervalsCharacteristicsPoint) => color(d.id))
+                    .on("click", (event: MouseEvent, d: IDistributionIntervalsCharacteristicsPoint) => $scope.showTooltip(event, d, tooltip, svg));
             }
 
             // Register functions in $scope

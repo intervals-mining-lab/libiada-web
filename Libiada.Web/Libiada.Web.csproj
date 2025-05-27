@@ -17,7 +17,7 @@
 		<UserSecretsId>aspnet-Libiada.Web-99e8e359-5341-4474-aa02-9f29895ae1f1</UserSecretsId>
 	</PropertyGroup>
 	<ItemGroup>
-	  <TypeScriptCompile Remove="wwwroot\js\Angular\Controllers\sequencesOrderDistributionResult.ts" />
+	  <TypeScriptCompile Remove="wwwroot\js\Angular\Controllers\subsequencesCalculationResult.ts" />
 	</ItemGroup>
 	
 	
@@ -35,6 +35,7 @@
 	  <Content Include="wwwroot\js\Angular\Controllers\sequencesAlignment.ts" />
 	  <Content Include="wwwroot\js\Angular\Controllers\sequencesOrderDistribution.ts" />
 	  <Content Include="wwwroot\js\Angular\Controllers\subsequencesCalculation.ts" />
+	  <Content Include="wwwroot\js\Angular\Controllers\subsequencesCalculationResult.ts" />
 	  <Content Include="wwwroot\js\Angular\Controllers\subsequencesSimilarityResult.ts" />
 	</ItemGroup>
 

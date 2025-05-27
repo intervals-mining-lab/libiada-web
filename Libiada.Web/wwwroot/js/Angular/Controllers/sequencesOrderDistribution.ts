@@ -34,7 +34,7 @@ interface ISequencesOrderDistributionData {
     orderTransformerType?: IOrderTransformerType;
 
     // Additional properties
-    [key: string]: any;
+    //[key: string]: any;
 }
 
 /**

@@ -147,8 +147,8 @@ class SequencesOrderDistributionResultHandler {
                 const height = $scope.height - margin.top - margin.bottom;
                 // setup x
                 // calculating margins for dots
-                const xMin = d3.min($scope.points, $scope.xValue);
-                const xMax = d3.max($scope.points, $scope.xValue);
+                const xMin = d3.min($scope.points, $scope.xValue) || 0;
+                const xMax = d3.max($scope.points, $scope.xValue) || 0;
                 const xMargin = (xMax - xMin) * 0.05;
                 const xScale = d3.scaleLinear()
                     .domain([xMin - xMargin, xMax + xMargin])
@@ -166,8 +166,8 @@ class SequencesOrderDistributionResultHandler {
                 $scope.xMap = (d) => xScale($scope.xValue(d));
                 // setup y
                 // calculating margins for dots
-                const yMax = d3.max($scope.points, $scope.yValue);
-                const yMin = d3.min($scope.points, $scope.yValue);
+                const yMax = d3.max($scope.points, $scope.yValue) || 0;
+                const yMin = d3.min($scope.points, $scope.yValue) || 0;
                 const yMargin = (yMax - yMin) * 0.05;
                 const yScale = yMax - yMin < 100 ?
                     d3.scaleLinear()
@@ -252,16 +252,16 @@ class SequencesOrderDistributionResultHandler {
             $scope.clearTooltip = clearTooltip;
             $scope.yValue = yValue;
             $scope.xValue = xValue;
-            // Chart settings
+            $scope.fillAccordanceLevels = fillAccordanceLevels;
+            // Initialize chart settings
             $scope.width = 800;
             $scope.height = 600;
             $scope.dotRadius = 4;
             $scope.selectedDotRadius = $scope.dotRadius * 2;
-            // Accordance levels
-            $scope.fillAccordanceLevels = fillAccordanceLevels;
+            // Initialize accordance levels
             $scope.accordanceLevels = [];
             $scope.maxLevel = 1;
-            // Loading data
+            // Initialize loading screen
             $scope.loadingScreenHeader = "Loading Data";
             $scope.loading = true;
             // Get task ID from URL
@@ -272,7 +272,8 @@ class SequencesOrderDistributionResultHandler {
                 .then(function (data) {
                 MapModelFromJson($scope, data.data);
                 $scope.loading = false;
-            }, function () {
+            })
+                .catch(function () {
                 alert("Failed loading sequences order distribution data");
                 $scope.loading = false;
             });

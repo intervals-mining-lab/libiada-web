@@ -23,7 +23,7 @@ interface ILine {
 }
 
 // Interface for the legend item
-interface ILegendItem {
+interface IOrderTransformationLegendItem {
     id: number;
     name: string;
     visible: boolean;
@@ -83,7 +83,7 @@ interface IOrderTransformationVisualizationScope extends ng.IScope {
     // Chart elements
     points: IPoint[];
     lines: ILine[];
-    legend: ILegendItem[];
+    legend: IOrderTransformationLegendItem[];
     ordersIds: IOrderId[];
 
     // Current settings
@@ -577,8 +577,8 @@ class OrderTransformationVisualizationResultHandler {
                     .enter()
                     .append("g")
                     .attr("class", "legend")
-                    .attr("transform", (d: ILegendItem, i: number) => `translate(0,${i * 20})`)
-                    .on("click", function (event: MouseEvent, d: ILegendItem) {
+                    .attr("transform", (d: IOrderTransformationLegendItem, i: number) => `translate(0,${i * 20})`)
+                    .on("click", function (event: MouseEvent, d: IOrderTransformationLegendItem) {
                         d.visible = !d.visible;
                         let legendEntry = d3.select(event.currentTarget as Element);
 
@@ -620,8 +620,8 @@ class OrderTransformationVisualizationResultHandler {
                 legend.append("rect")
                     .attr("width", 15)
                     .attr("height", 15)
-                    .style("fill", (d: ILegendItem) => color(d.id))
-                    .style("stroke", (d: ILegendItem) => color(d.id))
+                    .style("fill", (d: IOrderTransformationLegendItem) => color(d.id))
+                    .style("stroke", (d: IOrderTransformationLegendItem) => color(d.id))
                     .style("stroke-width", 4)
                     .attr("transform", `translate(0, -${$scope.legendHeight})`);
 
@@ -631,7 +631,7 @@ class OrderTransformationVisualizationResultHandler {
                     .attr("y", 9)
                     .attr("dy", ".35em")
                     .attr("transform", `translate(0, -${$scope.legendHeight})`)
-                    .text((d: ILegendItem) => d.name)
+                    .text((d: IOrderTransformationLegendItem) => d.name)
                     .style("font-size", "9pt");
             }
 

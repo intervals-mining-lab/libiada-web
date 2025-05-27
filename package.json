@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/intervals-mining-lab/libiada-web#readme",
   "dependencies": {
-    "@microsoft/signalr": "^8.0.7"
+    "@microsoft/signalr": "^8.0.7",
+    "@types/plotly.js": "^3.0.0"
   }
 }
