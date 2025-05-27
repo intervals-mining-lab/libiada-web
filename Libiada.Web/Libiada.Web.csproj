@@ -16,14 +16,21 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UserSecretsId>aspnet-Libiada.Web-99e8e359-5341-4474-aa02-9f29895ae1f1</UserSecretsId>
 	</PropertyGroup>
-	<ItemGroup>
-	  <TypeScriptCompile Remove="wwwroot\js\Angular\Controllers\subsequencesCalculationResult.ts" />
-	</ItemGroup>
-	
+		
 	
 	
 	<ItemGroup>
+	  <Content Include="wwwroot\js\Angular\Controllers\accordance.ts" />
+	  <Content Include="wwwroot\js\Angular\Controllers\batchGeneticImportFromGenBankSearchFile.ts" />
+	  <Content Include="wwwroot\js\Angular\Controllers\batchMusicImport.ts" />
+	  <Content Include="wwwroot\js\Angular\Controllers\batchPoemsImport.ts" />
+	  <Content Include="wwwroot\js\Angular\Controllers\batchSequenceImport.ts" />
+	  <Content Include="wwwroot\js\Angular\Controllers\batchSequenceImportResult.ts" />
 	  <Content Include="wwwroot\js\Angular\Controllers\calculation.ts" />
+	  <Content Include="wwwroot\js\Angular\Controllers\customCalculation.ts" />
+	  <Content Include="wwwroot\js\Angular\Controllers\genesImport.ts" />
+	  <Content Include="wwwroot\js\Angular\Controllers\multisequenceCreate.ts" />
+	  <Content Include="wwwroot\js\Angular\Controllers\multisequenceGrouping.ts" />
 	  <Content Include="wwwroot\js\Angular\Controllers\orderTransformationResult.ts" />
 	  <Content Include="wwwroot\js\Angular\Controllers\OrderTransformationVisualization.ts" />
 	  <Content Include="wwwroot\js\Angular\Controllers\OrderTransformationVisualizationResult.ts" />
