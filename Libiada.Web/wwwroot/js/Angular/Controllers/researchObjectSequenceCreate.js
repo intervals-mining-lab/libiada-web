@@ -41,7 +41,6 @@ class ResearchObjectSequenceCreator {
             $scope.translatorId = $scope.translators[0].Value;
             $scope.nature = $scope.natures[0].Value;
             $scope.name = "";
-            console.log("Scope - ", $scope, "\n");
         };
         angular.module("libiada").controller("ResearchObjectSequenceCreateCtrl", ["$scope", "filterFilter", researchObjectSequenceCreate]);
     }

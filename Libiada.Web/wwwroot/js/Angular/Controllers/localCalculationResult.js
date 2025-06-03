@@ -1,6 +1,12 @@
-﻿function LocalCalculationResultController() {
+/// <reference types="angular" />
+/// <reference types="d3" />
+/// <reference types="plotly.js" />
+/// <reference types="jquery" />
+/**
+ * Controller for displaying local calculation results
+ */
+function LocalCalculationResultController() {
     "use strict";
-
     function localCalculationResult($scope, $http) {
         function calculateLocalCharacteristicsSimilarityMatrix() {
             $http.get("/api/LocalCalculationApi/CalculateLocalCharacteristicsSimilarityMatrix", {
@@ -22,16 +28,12 @@
                 $scope.loading = false;
             });
         }
-
         $scope.isCharacteristicsTableVisible = false;
-
         function changeCharacteristicsTableVisibility() {
             $scope.isCharacteristicsTableVisible = true;
         }
-
         function fillLegend() {
             $scope.legend = [];
-
             $scope.colorScale = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.characteristics.length]);
             for (let k = 0; k < $scope.characteristics.length; k++) {
                 const color = $scope.colorScale(k + 1);
@@ -41,23 +43,18 @@
                     visible: true,
                     color: color
                 });
-
                 // hack for the legend's dot color
                 document.styleSheets[0].insertRule(`.legend${k + 1}:after { background:${color} }`);
             }
         }
-
         $scope.addCharacteristic = () => $scope.chartCharacteristics.push({
             id: $scope.chartsCharacterisrticsCount++,
             value: $scope.characteristicsList.find(cl => $scope.chartCharacteristics.every(cc => cc.value !== cl))
         });
-
-        $scope.deleteCharacteristic = characteristic => $scope.chartCharacteristics.splice($scope.chartCharacteristics.indexOf(characteristic), 1);
-
+        $scope.deleteCharacteristic = (characteristic) => $scope.chartCharacteristics.splice($scope.chartCharacteristics.indexOf(characteristic), 1);
         // initializes data for chart
         function fillPoints() {
             $scope.points = [];
-
             for (let i = 0; i < $scope.characteristics.length; i++) {
                 let characteristic = $scope.characteristics[i];
                 $scope.points.push({
@@ -72,12 +69,11 @@
                         rank: j,
                         legendIndex: i,
                         name: fragmentData.Name,
-                        characteristics: fragmentData.Characteristics   
+                        characteristics: fragmentData.Characteristics
                     });
                 }
             }
         }
-
         // shows tooltip for dot or group of dots
         function showTooltip(selectedTrace) {
             $("button[data-bs-target='#tooltip-tab-pane']").tab("show");
@@ -102,24 +98,24 @@
                     break;
                 default:
             }
-
-
             Plotly.restyle($scope.chartElement, update);
-
             $scope.$apply();
         }
-
+        function xValue(d) {
+            return d.rank;
+        }
+        function yValue(d) {
+            return d.y; // in some contexts this will be a property on the object
+        }
         function fillLinePlotData() {
             let characteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
             let characteristicsValues = $scope.points.map((p => p.fragmentsData.map(fd => fd.characteristics[characteristicIndex]))).flat();
             let min = Math.min(...characteristicsValues);
             let max = Math.max(...characteristicsValues);
             let range = Math.abs(max - min);
-           
             // adding margins
             min -= Math.abs(range * 0.05);
             max += Math.abs(range * 0.05);
-
             let ranks = [];
             if ($scope.lineChart) {
                 for (let i = 0; i < $scope.points.length; i++) {
@@ -131,7 +127,8 @@
                         y: y
                     });
                 }
-            } else {
+            }
+            else {
                 for (let i = 0; i < $scope.points.length; i++) {
                     ranks.push({
                         //$scope.points[i].fragmentsData.map(sd => { return { x: sd.rank, y: sd.characteristics[characteristicIndex] } }) 
@@ -140,14 +137,12 @@
                     });
                 }
             }
-
             $scope.layout = {
                 margin: {
                     l: 50,
                     r: 20,
                     t: 10,
                     b: 20
-
                 },
                 showlegend: false,
                 yaxis: {
@@ -178,11 +173,9 @@
                 visible: $scope.legend[p.legendIndex].visible ? "true" : "legendonly"
             }));
         }
-
         function fillScatterPlotData() {
             let firstCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
             let secondCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1].value);
-
             $scope.layout = {
                 margin: {
                     l: 50,
@@ -205,14 +198,13 @@
                     }
                 }
             };
-
             $scope.pointSize = 3;
             $scope.chartData = $scope.points.map(p => ({
                 hoverinfo: "text+x+y",
                 type: "scattergl",
-                x: p.fragmentsData.map(fd => fd.characteristics[firstCharacteristicIndex]),     
+                x: p.fragmentsData.map(fd => fd.characteristics[firstCharacteristicIndex]),
                 y: p.fragmentsData.map(fd => fd.characteristics[secondCharacteristicIndex]),
-                text: p.researchObjectName,
+                text: p.name,
                 mode: "markers",
                 marker: {
                     opacity: 0.8,
@@ -224,20 +216,17 @@
                 visible: $scope.legend[p.legendIndex].visible
             }));
         }
-
         function fill3dScatterPlotData() {
-
             let firstCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
             let secondCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1].value);
             let thirdCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[2].value);
-
             $scope.pointSize = 3;
             $scope.chartData = $scope.points.map(p => ({
                 hoverinfo: "text+x+y+z",
                 x: p.fragmentsData.map(fd => fd.characteristics[firstCharacteristicIndex]),
                 y: p.fragmentsData.map(fd => fd.characteristics[secondCharacteristicIndex]),
                 z: p.fragmentsData.map(fd => fd.characteristics[thirdCharacteristicIndex]),
-                text: p.name,
+                text: p.researchObjectName,
                 mode: "markers",
                 marker: {
                     opacity: 0.8,
@@ -249,7 +238,6 @@
                 customdata: { legendId: p.legendId },
                 visible: $scope.legend[p.legendIndex].visible
             }));
-
             $scope.layout = {
                 margin: {
                     l: 0,
@@ -289,24 +277,20 @@
                 }
             };
         }
-
         function fillParallelCoordinatesPlotData() {
             let characteristicsIndices = $scope.chartCharacteristics.map(c => $scope.characteristicsList.indexOf(c.value));
-
             $scope.chartData = [{
-                type: "parcoords",
-                //pad: [80, 80, 80, 80],
-                line: {
-                    color: $scope.points.map(p => p.fragmentsData.map(sd => sd.legendIndex)).flat(),
-                    colorscale: "Turbo",
-                },
-
-                dimensions: characteristicsIndices.map(ci => ({
-                    label: $scope.characteristicNames[ci],
-                    values: $scope.points.map(p => p.fragmentsData.map(sd => sd.characteristics[ci])).flat()
-                }))
-            }];
-
+                    type: "parcoords",
+                    //pad: [80, 80, 80, 80],
+                    line: {
+                        color: $scope.points.map(p => p.fragmentsData.map(sd => sd.legendIndex)).flat(),
+                        colorscale: "Turbo",
+                    },
+                    dimensions: characteristicsIndices.map(ci => ({
+                        label: $scope.characteristicNames[ci],
+                        values: $scope.points.map(p => p.fragmentsData.map(sd => sd.characteristics[ci])).flat()
+                    }))
+                }];
             $scope.layout = {
                 margin: {
                     l: 50,
@@ -317,10 +301,8 @@
                 showlegend: false
             };
         }
-
         function draw() {
             $scope.fillPoints();
-
             switch ($scope.chartCharacteristics.length) {
                 case 1:
                     $scope.fillLinePlotData();
@@ -334,17 +316,14 @@
                 default:
                     $scope.fillParallelCoordinatesPlotData();
             }
-
             Plotly.newPlot($scope.chartElement, $scope.chartData, $scope.layout, { responsive: true });
-
-            $scope.chartElement.on("plotly_click", data => {
+            $scope.chartElement.on("plotly_click", (data) => {
                 $scope.selectedPointIndex = data.points[0].pointNumber;
                 $scope.selectedResearchObjectIndex = data.points[0].curveNumber;
                 let selectedPoint = $scope.points[data.points[0].curveNumber];
                 $scope.showTooltip(selectedPoint);
             });
         }
-
         function legendClick(legendItem) {
             if ($scope.chartData && $scope.chartData[0].customdata) {
                 let index = [];
@@ -354,12 +333,9 @@
                         index.push(i);
                     }
                 }
-
                 Plotly.restyle($scope.chartElement, update, index);
             }
-
         }
-
         function legendSetVisibilityForAll(visibility) {
             if ($scope.chartData && $scope.chartData[0].customdata) {
                 let update = { visible: visibility ? true : "legendonly" };
@@ -367,27 +343,23 @@
                 Plotly.restyle($scope.chartElement, update);
             }
         }
-
         function dragbarMouseDown() {
             let right = document.getElementById("sidebar");
             let bar = document.getElementById("dragbar");
-
             const drag = (e) => {
-                document.selection ? document.selection.empty() : window.getSelection().removeAllRanges();
-                $scope.chartElement.style.width = `${e.pageX - bar.offsetWidth / 2}px`;
-
+                document.selection ? document.selection.empty() : window.getSelection()?.removeAllRanges();
+                $scope.chartElement.style.width = `${e.pageX - (bar?.offsetWidth || 0) / 2}px`;
                 Plotly.relayout($scope.chartElement, { autosize: true });
             };
-
-            bar.addEventListener("mousedown", () => {
-                document.addEventListener("mousemove", drag);
-            });
-
-            bar.addEventListener("mouseup", () => {
-                document.removeEventListener("mousemove", drag);
-            });
+            if (bar) {
+                bar.addEventListener("mousedown", () => {
+                    document.addEventListener("mousemove", drag);
+                });
+                bar.addEventListener("mouseup", () => {
+                    document.removeEventListener("mousemove", drag);
+                });
+            }
         }
-
         $scope.calculateLocalCharacteristicsSimilarityMatrix = calculateLocalCharacteristicsSimilarityMatrix;
         $scope.changeCharacteristicsTableVisibility = changeCharacteristicsTableVisibility;
         $scope.fillLinePlotData = fillLinePlotData;
@@ -401,35 +373,29 @@
         $scope.legendClick = legendClick;
         $scope.legendSetVisibilityForAll = legendSetVisibilityForAll;
         $scope.dragbarMouseDown = dragbarMouseDown;
-
+        $scope.xValue = xValue;
+        $scope.yValue = yValue;
         $scope.chartsCharacterisrticsCount = 1;
         $scope.chartElement = document.getElementById("chart");
-
         $scope.loadingScreenHeader = "Loading data";
-
         let location = window.location.href.split("/");
         $scope.taskId = location[location.length - 1];
-
         $http.get(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
             .then(function (data) {
-                MapModelFromJson($scope, data.data);
-
-                $scope.fillLegend();
-
-                $scope.chartCharacteristics = [{ id: $scope.chartsCharacterisrticsCount++, value: $scope.characteristicsList[0] }];
-                $scope.aligner = $scope.aligners[0];
-                $scope.distanceCalculator = $scope.distanceCalculators[0];
-                $scope.aggregator = $scope.aggregators[0];
-
-                $scope.legendHeight = $scope.legend.length * 20;
-                $scope.height = 800 + $scope.legendHeight;
-
-                $scope.loading = false;
-            }, function () {
-                alert("Failed loading local characteristics data");
-                $scope.loading = false;
-            });
+            MapModelFromJson($scope, data.data);
+            $scope.fillLegend();
+            $scope.chartCharacteristics = [{ id: $scope.chartsCharacterisrticsCount++, value: $scope.characteristicsList[0] }];
+            $scope.aligner = $scope.aligners[0];
+            $scope.distanceCalculator = $scope.distanceCalculators[0];
+            $scope.aggregator = $scope.aggregators[0];
+            $scope.legendHeight = $scope.legend.length * 20;
+            $scope.height = 800 + $scope.legendHeight;
+            $scope.loading = false;
+        }, function () {
+            alert("Failed loading local characteristics data");
+            $scope.loading = false;
+        });
     }
-
     angular.module("libiada").controller("LocalCalculationResultCtrl", ["$scope", "$http", localCalculationResult]);
 }
+//# sourceMappingURL=localCalculationResult.js.map

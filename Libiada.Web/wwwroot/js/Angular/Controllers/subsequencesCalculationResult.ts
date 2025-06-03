@@ -442,10 +442,10 @@ class SubsequencesCalculationResultHandler {
 
                 const drag = (e: MouseEvent): void => {
                     document.selection ? document.selection.empty() : window.getSelection()?.removeAllRanges();
-                   
-                        $scope.chartElement.style.width = `${e.pageX - bar.offsetWidth / 2}px`;
-                        Plotly.relayout($scope.chartElement, { autosize: true });
-                    
+
+                    $scope.chartElement.style.width = `${e.pageX - bar.offsetWidth / 2}px`;
+                    Plotly.relayout($scope.chartElement, { autosize: true });
+
                 };
 
                 bar?.addEventListener("mousedown", () => {
@@ -584,7 +584,7 @@ class SubsequencesCalculationResultHandler {
             let location = window.location.href.split("/");
             $scope.taskId = location[location.length - 1];
 
-            $http.get < ISubsequencesCalculationResultData > (`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
+            $http.get<ISubsequencesCalculationResultData>(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
                 .then(function (data) {
                     MapModelFromJson($scope, data.data);
 

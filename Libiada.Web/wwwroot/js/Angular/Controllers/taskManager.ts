@@ -120,7 +120,7 @@ class TaskManagerControllerHandler {
                 }
                 try {
                     $scope.$apply();
-                } catch (e) { console.error(e instanceof Error ? e.message : String(e)); }
+                } catch (e) { console.error(e.toString()); }
             }
 
             function getStatusClass(status: TaskState): string {
@@ -206,7 +206,7 @@ class TaskManagerControllerHandler {
 
             $scope.tasksHub.start()
                 .then(() => $scope.tasksHub.invoke("getAllTasks").then($scope.onHubStart))
-                .catch((err) => console.error(err instanceof Error ? err.message : String(err)));
+                .catch((err) => console.error(err.toString()));
 
             // Initialize scope properties 
             let location = window.location.href.split("/");

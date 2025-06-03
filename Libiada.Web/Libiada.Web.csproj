@@ -16,7 +16,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UserSecretsId>aspnet-Libiada.Web-99e8e359-5341-4474-aa02-9f29895ae1f1</UserSecretsId>
 	</PropertyGroup>
-		
+			
 	
 	
 	<ItemGroup>
@@ -27,10 +27,19 @@
 	  <Content Include="wwwroot\js\Angular\Controllers\batchSequenceImport.ts" />
 	  <Content Include="wwwroot\js\Angular\Controllers\batchSequenceImportResult.ts" />
 	  <Content Include="wwwroot\js\Angular\Controllers\calculation.ts" />
+	  <Content Include="wwwroot\js\Angular\Controllers\charts.ts" />
 	  <Content Include="wwwroot\js\Angular\Controllers\customCalculation.ts" />
+	  <Content Include="wwwroot\js\Angular\Controllers\fmotifsDictionary.ts" />
 	  <Content Include="wwwroot\js\Angular\Controllers\genesImport.ts" />
+	  <Content Include="wwwroot\js\Angular\Controllers\intervalsCharacteristicsDistribution.ts" />
+	  <Content Include="wwwroot\js\Angular\Controllers\localCalculationResult.ts" />
 	  <Content Include="wwwroot\js\Angular\Controllers\multisequenceCreate.ts" />
 	  <Content Include="wwwroot\js\Angular\Controllers\multisequenceGrouping.ts" />
+	  <Content Include="wwwroot\js\Angular\Controllers\musicFilesResult.ts" />
+	  <Content Include="wwwroot\js\Angular\Controllers\orderCalculation.ts" />
+	  <Content Include="wwwroot\js\Angular\Controllers\ordersIntervalsDistributionsAccordance.ts" />
+	  <Content Include="wwwroot\js\Angular\Controllers\ordersIntervalsDistributionsAccordanceResult.ts" />
+	  <Content Include="wwwroot\js\Angular\Controllers\ordersSimilarity.ts" />
 	  <Content Include="wwwroot\js\Angular\Controllers\orderTransformationResult.ts" />
 	  <Content Include="wwwroot\js\Angular\Controllers\OrderTransformationVisualization.ts" />
 	  <Content Include="wwwroot\js\Angular\Controllers\OrderTransformationVisualizationResult.ts" />

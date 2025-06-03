@@ -97,6 +97,7 @@ class ResearchObjectSequenceCreator {
                 $scope.notationId = $scope.notationsFiltered[0].Value
                 $scope.group = $scope.groupsFiltered[0].Value;
                 $scope.sequenceType = $scope.sequenceTypesFiltered[0].Value;
+
                 if (angular.isDefined($scope.researchObjectsFiltered) && angular.isDefined(
                     $scope.researchObjectsFiltered[0])) {
                     $scope.researchObjectId = $scope.researchObjectsFiltered[0].Value;
@@ -123,7 +124,7 @@ class ResearchObjectSequenceCreator {
             $scope.translatorId = $scope.translators[0].Value;
             $scope.nature = $scope.natures[0].Value as number;
             $scope.name = "";
-            console.log("Scope - ", $scope, "\n");
+            
         };
 
         angular.module("libiada").controller("ResearchObjectSequenceCreateCtrl", ["$scope", "filterFilter", researchObjectSequenceCreate]);

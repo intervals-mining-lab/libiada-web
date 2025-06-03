@@ -2,6 +2,7 @@
   "devDependencies": {
     "@types/angular": "^1.8.9",
     "@types/d3": "^7.4.3",
+    "@types/exceljs": "^0.5.3",
     "@types/jquery": "^3.5.32",
     "typescript": "^5.8.3"
   },
