@@ -79,7 +79,7 @@ public class SubsequencesCalculationController : AbstractResultController
     /// The <see cref="ActionResult"/>.
     /// </returns>
     [HttpPost]
-    public ActionResult Index(long[] researchObjectIds, short[] characteristicLinkIds, Feature[] features)
+    public ActionResult Index(long[] researchObjectIds, short[] characteristicLinkIds, Feature[] features, string[] filters)
     {
         return CreateTask(() =>
         {
@@ -88,7 +88,7 @@ public class SubsequencesCalculationController : AbstractResultController
             long[] parentSequenceIds;
             string[] researchObjectNames = new string[researchObjectIds.Length];
             string[] remoteIds = new string[researchObjectIds.Length];
-                      
+
             var parentSequences = db.CombinedSequenceEntities.Include(s => s.ResearchObject)
                                     .Where(s => s.Notation == Notation.Nucleotides && researchObjectIds.Contains(s.ResearchObjectId))
                                     .Select(s => new { s.Id, ResearchObjectName = s.ResearchObject.Name, s.RemoteId })
@@ -118,7 +118,11 @@ public class SubsequencesCalculationController : AbstractResultController
             var attributeValuesCache = new AttributeValueCacheManager(db);
             for (int i = 0; i < parentSequenceIds.Length; i++)
             {
-                SubsequenceData[] subsequencesData = subsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(characteristicLinkIds, features, parentSequenceIds[i]);
+                SubsequenceData[] subsequencesData = subsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
+                    characteristicLinkIds,
+                    features,
+                    parentSequenceIds[i],
+                    filters);
                 subsequencesData = subsequencesData.OrderBy(sd => sd.Starts[0]).ToArray();
                 attributeValuesCache.FillAttributeValues(subsequencesData);
 
