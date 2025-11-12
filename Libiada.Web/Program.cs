@@ -1,22 +1,21 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Razor;
-using Microsoft.AspNetCore.ResponseCompression;
-
-using System.Data.Common;
-using System.IO.Compression;
-
 using Libiada.Database.Helpers;
 using Libiada.Database.Models.Calculators;
 using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Models.Repositories.Sequences;
-
 using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
 
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.ResponseCompression;
+
 using Npgsql;
 
-var builder = WebApplication.CreateBuilder(args);
+using System.Data.Common;
+using System.IO.Compression;
 
+var builder = WebApplication.CreateBuilder(args);
+builder.Logging.AddConsole();
 //  reading connection sting from environment variables
 builder.Configuration.AddEnvironmentVariables(prefix: "Libiada_");
 string environment = builder.Configuration["ASPNETCORE_ENVIRONMENT"] ?? "Production";
@@ -65,6 +64,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddSingleton<IPushNotificationHelper, PushNotificationHelper>();
 builder.Services.AddSingleton<ITaskManager, TaskManager>();
 
+builder.Services.AddSingleton<ILogger<NcbiHelper>>(provider => LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger<NcbiHelper>());
 builder.Services.AddSingleton<INcbiHelper, NcbiHelper>();
 
 builder.Services.AddSingleton<IAccordanceCharacteristicRepository, AccordanceCharacteristicRepository>();
