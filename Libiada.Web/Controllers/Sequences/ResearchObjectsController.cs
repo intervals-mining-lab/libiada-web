@@ -28,7 +28,7 @@ public class ResearchObjectsController : SequencesResearchObjectsController
                              ITaskManager taskManager,
                              INcbiHelper ncbiHelper,
                              IResearchObjectsCache cache)
-        : base(TaskType.ResearchObjectImport, dbFactory, viewDataBuilder, taskManager, ncbiHelper, cache)
+        : base(TaskType.ResearchObjects, dbFactory, viewDataBuilder, taskManager, ncbiHelper, cache)
     {
         this.cache = cache;
     }
@@ -187,7 +187,6 @@ public class ResearchObjectsController : SequencesResearchObjectsController
 
         ViewBag.SequencesCount = db.CombinedSequenceEntities.Count(c => c.ResearchObjectId == researchObject.Id);
         return View(researchObject);
-
     }
 
     /// <summary>

@@ -11,10 +11,12 @@
     <div class="row mb-3">
         <div class="col-md-4">
             <h2>Data</h2>
-            @Html.ActionLink(User.IsAdmin() ? "Research objects" : "Sequences", "Index", "ResearchObjects")
+            @Html.ActionLink("Research objects", "Index", "ResearchObjects")
             <br />
             @if (User.IsAdmin())
             {
+                @Html.ActionLink("Create research object", "Create", "ResearchObjects")
+                <br />
                 @Html.ActionLink("Multisequences", "Index", "Multisequence")
                 <br />
                 @Html.ActionLink("Sequences", "Index", "CombinedSequencesEntity")
