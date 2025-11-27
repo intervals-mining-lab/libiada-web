@@ -5,7 +5,7 @@
         let ctrl = this;
 
         ctrl.$onInit = () => {
-            ctrl.researchObjectsEndpoint ??= "GetAllResearchObject";
+            ctrl.researchObjectsEndpoint ??= "GetAllResearchObjects";
             ctrl.showRefSeqOnly = true;
             ctrl.checkboxes = ctrl.maximumSelectedResearchObjects > 1;
             ctrl.searchResearchObjectText = "";

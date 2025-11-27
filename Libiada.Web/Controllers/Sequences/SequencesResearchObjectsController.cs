@@ -55,16 +55,16 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
     public ActionResult Create()
     {
         var viewData = viewDataBuilder.AddResearchObjects()
-                                     .AddNatures()
-                                     .AddNotations()
-                                     .AddRemoteDatabases()
-                                     .AddSequenceTypes()
-                                     .AddGroups()
-                                     .AddMultisequences()
-                                     .AddLanguages()
-                                     .AddTranslators()
-                                     .AddTrajectories()
-                                     .Build();
+                                      .AddNatures()
+                                      .AddNotations()
+                                      .AddRemoteDatabases()
+                                      .AddSequenceTypes()
+                                      .AddGroups()
+                                      .AddMultisequences()
+                                      .AddLanguages()
+                                      .AddTranslators()
+                                      .AddTrajectories()
+                                      .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }

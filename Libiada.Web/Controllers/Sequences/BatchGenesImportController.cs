@@ -45,16 +45,6 @@ public class BatchGenesImportController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        using var db = dbFactory.CreateDbContext();
-        var sequencesWithSubsequencesIds = db.Subsequences.Select(s => s.SequenceId).Distinct();
-
-        long[] researchObjectIds = db.CombinedSequenceEntities.Include(c => c.ResearchObject)
-                                     .Where(c => !string.IsNullOrEmpty(c.RemoteId)
-                                              && !sequencesWithSubsequencesIds.Contains(c.Id)
-                                              && StaticCollections.SequenceTypesWithSubsequences.Contains(c.ResearchObject.SequenceType))
-                                     .Select(c => c.ResearchObjectId)
-                                     .ToArray();
-
         var data = viewDataBuilder.AddMinMaxResearchObjects()
                                   .SetNature(Nature.Genetic)
                                   .AddSequenceTypes(onlyGenetic: true)
@@ -89,7 +79,7 @@ public class BatchGenesImportController : AbstractResultController
                                 .Select(m => m.Name)
                                 .ToArray();
             GeneticSequence[] parentSequences = db.CombinedSequenceEntities
-                                                .Where(s => researchObjectIds.Contains(s.ResearchObjectId))
+                                                .Where(s => researchObjectIds.Contains(s.ResearchObjectId) && s.Notation == Notation.Nucleotides)
                                                 .OrderBy(s => s.ResearchObjectId)
                                                 .Select(s => s.ToGeneticSequence())
                                                 .ToArray();
@@ -104,7 +94,7 @@ public class BatchGenesImportController : AbstractResultController
                 try
                 {
                     GeneticSequence parentSequence = parentSequences[i];
-                    var subsequenceImporter = new SubsequenceImporter(db, parentSequence, ncbiHelper);
+                    var subsequenceImporter = new SubsequenceImporter(db, ncbiHelper, cache, parentSequence);
 
                     subsequenceImporter.CreateSubsequences();
 

@@ -49,14 +49,6 @@ public class GenesImportController : AbstractResultController
     public ActionResult Index()
     {
         using var db = dbFactory.CreateDbContext();
-        var genesSequenceIds = db.Subsequences.Select(s => s.SequenceId).Distinct();
-
-        var researchObjectIds = db.CombinedSequenceEntities
-                          .Include(c => c.ResearchObject)
-                          .Where(c => !string.IsNullOrEmpty(c.RemoteId)
-                                   && !genesSequenceIds.Contains(c.Id)
-                                   && StaticCollections.SequenceTypesWithSubsequences.Contains(c.ResearchObject.SequenceType))
-        .Select(c => c.ResearchObjectId).ToList();
 
         var data = viewDataBuilder.AddMinMaxResearchObjects(1, 1)
                                   .SetNature(Nature.Genetic)
@@ -85,7 +77,7 @@ public class GenesImportController : AbstractResultController
             Dictionary<string, object> result;
             using var db = dbFactory.CreateDbContext();
             GeneticSequence parentSequence = db.CombinedSequenceEntities.Single(d => d.ResearchObjectId == researchObjectId).ToGeneticSequence();
-            var subsequenceImporter = new SubsequenceImporter(db, parentSequence, ncbiHelper);
+            var subsequenceImporter = new SubsequenceImporter(db, ncbiHelper, cache, parentSequence);
             subsequenceImporter.CreateSubsequences();
 
 
