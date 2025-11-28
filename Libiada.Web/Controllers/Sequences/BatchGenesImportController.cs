@@ -5,10 +5,12 @@ using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
 
-using Newtonsoft.Json;
-
 using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
+
+using Newtonsoft.Json;
+
+using SystemTask = Task;
 
 /// <summary>
 /// The batch genes import controller.
@@ -45,6 +47,9 @@ public class BatchGenesImportController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
+        //preload cache
+        SystemTask.Factory.StartNew(() => _ = cache.ResearchObjectsWithSubsequencesIds);
+
         var data = viewDataBuilder.AddMinMaxResearchObjects()
                                   .SetNature(Nature.Genetic)
                                   .AddSequenceTypes(onlyGenetic: true)

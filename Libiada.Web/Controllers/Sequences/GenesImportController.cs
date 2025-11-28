@@ -12,6 +12,8 @@ using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
 
+using SystemTask = Task;
+
 
 /// <summary>
 /// The genes import controller.
@@ -48,7 +50,8 @@ public class GenesImportController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        using var db = dbFactory.CreateDbContext();
+        //preload cache
+        SystemTask.Factory.StartNew(() => _ = cache.ResearchObjectsWithSubsequencesIds);
 
         var data = viewDataBuilder.AddMinMaxResearchObjects(1, 1)
                                   .SetNature(Nature.Genetic)

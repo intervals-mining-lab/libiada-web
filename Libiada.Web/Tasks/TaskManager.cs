@@ -1,21 +1,22 @@
 ﻿namespace Libiada.Web.Tasks;
 
-using Microsoft.AspNetCore.SignalR;
-
-using System.Security.Claims;
-using System.Runtime.CompilerServices;
+using Libiada.Core.Extensions;
 
 using Libiada.Database.Tasks;
-
-using Libiada.Core.Extensions;
 
 using Libiada.Web.Helpers;
 using Libiada.Web.Extensions;
 
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
+
 using Newtonsoft.Json;
 
+using System.Security.Claims;
+using System.Runtime.CompilerServices;
+
 using SystemTask = System.Threading.Tasks.Task;
-using Microsoft.AspNetCore.Identity;
+
 
 /// <summary>
 /// The task manager.
