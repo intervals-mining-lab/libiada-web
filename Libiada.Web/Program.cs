@@ -2,6 +2,7 @@ using Libiada.Database.Helpers;
 using Libiada.Database.Models.Calculators;
 using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Models.Repositories.Sequences;
+
 using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
 
@@ -19,7 +20,7 @@ builder.Logging.AddConsole();
 //  reading connection sting from environment variables
 builder.Configuration.AddEnvironmentVariables(prefix: "Libiada_");
 string environment = builder.Configuration["ASPNETCORE_ENVIRONMENT"] ?? "Production";
-string connectionString = builder.Configuration.GetConnectionString($"LibiadaDatabaseEntities_{environment}") ?? throw new Exception($"Connection string 'LibiadaDatabaseEntities_{environment}' is not found.");
+string connectionString = builder.Configuration.GetConnectionString($"LibiadaDatabaseEntities_{environment}") ?? throw new InvalidOperationException($"Connection string 'LibiadaDatabaseEntities_{environment}' is not found.");
 builder.Configuration["ConnectionStrings:LibiadaDatabaseEntities"] = connectionString;
 
 builder.WebHost.UseKestrel(options =>
@@ -64,7 +65,6 @@ builder.Services.AddHttpClient();
 builder.Services.AddSingleton<IPushNotificationHelper, PushNotificationHelper>();
 builder.Services.AddSingleton<ITaskManager, TaskManager>();
 
-builder.Services.AddSingleton<ILogger<NcbiHelper>>(provider => LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger<NcbiHelper>());
 builder.Services.AddSingleton<INcbiHelper, NcbiHelper>();
 
 builder.Services.AddSingleton<IAccordanceCharacteristicRepository, AccordanceCharacteristicRepository>();

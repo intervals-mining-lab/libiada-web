@@ -55,8 +55,8 @@ const subscribeDevice = async () => {
             })
         });
         hasSubscription = true;
-        PUSH_UNSUBSCRIBE_BUTTON.removeClass('invisible');
-        PUSH_SUBSCRIBE_BUTTON.addClass('invisible');
+        //PUSH_UNSUBSCRIBE_BUTTON.removeClass("invisible");
+        PUSH_SUBSCRIBE_BUTTON.addClass("invisible");
         alertify.success("You have been subscribed to push notifications");
         return response;
     }
@@ -81,8 +81,8 @@ const unsubscribeDevice = async () => {
             });
             const result = await subscription.unsubscribe();
             hasSubscription = false;
-            PUSH_UNSUBSCRIBE_BUTTON.addClass('invisible');
-            PUSH_SUBSCRIBE_BUTTON.removeClass('invisible');
+            PUSH_UNSUBSCRIBE_BUTTON.addClass("invisible");
+            //PUSH_SUBSCRIBE_BUTTON.removeClass("invisible");
             return response;
         }
         catch {
@@ -98,11 +98,11 @@ const initPush = async () => {
     hasSubscription = !(subscription === null);
     
     if (hasSubscription) {
-        PUSH_UNSUBSCRIBE_BUTTON.removeClass('invisible');
-        PUSH_SUBSCRIBE_BUTTON.addClass('invisible');
+        //PUSH_UNSUBSCRIBE_BUTTON.removeClass("invisible");
+        PUSH_SUBSCRIBE_BUTTON.addClass("invisible");
     } else{
-        PUSH_UNSUBSCRIBE_BUTTON.addClass('invisible');
-        PUSH_SUBSCRIBE_BUTTON.removeClass('invisible');
+        PUSH_UNSUBSCRIBE_BUTTON.addClass("invisible");
+       // PUSH_SUBSCRIBE_BUTTON.removeClass("invisible");
     }
 }
 

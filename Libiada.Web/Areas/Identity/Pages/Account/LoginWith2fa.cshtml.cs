@@ -6,7 +6,6 @@ namespace Libiada.Web.Areas.Identity.Pages.Account;
 
 using System.ComponentModel.DataAnnotations;
 
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Identity;
 

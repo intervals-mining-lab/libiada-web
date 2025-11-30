@@ -6,7 +6,6 @@ namespace Libiada.Web.Areas.Identity.Pages;
 
 using System.Diagnostics;
 
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 /// <summary>
