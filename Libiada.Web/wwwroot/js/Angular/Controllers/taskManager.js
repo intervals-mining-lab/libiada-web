@@ -1,5 +1,5 @@
 /// <reference types="angular" />
-/// <reference types="@microsoft/signalr" />
+/// <reference types="@signalr/src" />
 // Controller class for task manager
 class TaskManagerControllerHandler {
     constructor() {

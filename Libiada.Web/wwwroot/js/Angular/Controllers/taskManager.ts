@@ -1,6 +1,6 @@
 ﻿/// <reference types="angular" />
 
-/// <reference types="@microsoft/signalr" />
+/// <reference types="@signalr/src" />
 
 // Interface for task data
 interface ITask {

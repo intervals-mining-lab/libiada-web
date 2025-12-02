@@ -131,6 +131,11 @@
       "provider": "jsdelivr",
       "library": "@types/sizzle@2.3.8",
       "destination": "wwwroot/lib/@types/sizzle/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "@types/plotly.js@1.36.0",
+      "destination": "wwwroot/lib/@types/plotly.js/"
     }
   ]
 }

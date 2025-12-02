@@ -20,7 +20,7 @@
     "types": [ "angular" ],
     "typeRoots": [
       "wwwroot/lib/@types",
-      //"./wwwroot/js/Angular"
+      "./wwwroot/lib/microsoft"
     ],
     "moduleResolution": "node"
   },
