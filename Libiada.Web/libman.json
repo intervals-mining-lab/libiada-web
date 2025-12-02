@@ -22,7 +22,7 @@
       "library": "AlertifyJS@1.13.1",
       "destination": "wwwroot/lib/AlertifyJS/"
     },
-    
+
     {
       "provider": "unpkg",
       "library": "midi.js@0.3.1",
@@ -117,7 +117,7 @@
       "library": "@types/angular@1.8.7",
       "destination": "wwwroot/lib/@types/angular/"
     },
- 
+
     {
       "provider": "jsdelivr",
       "library": "@types/jquery@3.5.29",
@@ -132,7 +132,5 @@
       "library": "@types/sizzle@2.3.8",
       "destination": "wwwroot/lib/@types/sizzle/"
     }
-
-
   ]
 }

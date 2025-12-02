@@ -89,7 +89,6 @@ LibiadaWeb/secrets.file
 # Ignore all .js.map files
 *.js.map
 
-
-
-# But keep the @microsoft folder
-!node_modules/@microsoft
+# Node.js Tools for Visual Studio
+.ntvs_analysis.dat
+node_modules/

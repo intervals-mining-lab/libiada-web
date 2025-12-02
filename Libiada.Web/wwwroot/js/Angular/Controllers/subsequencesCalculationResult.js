@@ -203,7 +203,7 @@ class SubsequencesCalculationResultHandler {
                         }
                     }
                 };
-            $scope.pointSize = 3;
+                $scope.pointSize = 3;
                 $scope.chartData = $scope.points.map((p, i) => ({
                     hoverinfo: "text+x+y",
                     x: ranks[i].x,
@@ -245,7 +245,7 @@ class SubsequencesCalculationResultHandler {
                         }
                     }
                 };
-            $scope.pointSize = 5;
+                $scope.pointSize = 5;
                 $scope.chartData = $scope.points.map(p => ({
                     hoverinfo: "text+x+y",
                     type: "scattergl",
@@ -267,7 +267,7 @@ class SubsequencesCalculationResultHandler {
                 let firstCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
                 let secondCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1].value);
                 let thirdCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[2].value);
-            $scope.pointSize = 5;
+                $scope.pointSize = 5;
                 $scope.chartData = $scope.points.map(p => ({
                     hoverinfo: "text+x+y+z",
                     x: p.subsequencesData.map(sd => sd.characteristics[firstCharacteristicIndex]),
