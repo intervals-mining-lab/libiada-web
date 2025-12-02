@@ -23,7 +23,7 @@ public class CombinedSequencesEntityController : SequencesResearchObjectsControl
                                      ITaskManager taskManager,
                                      INcbiHelper ncbiHelper,
                                      IResearchObjectsCache cache)
-        : base(TaskType.SequencesUpload, dbFactory, viewDataBuilder, taskManager, ncbiHelper, cache)
+        : base(TaskType.CombinedSequencesEntity, dbFactory, viewDataBuilder, taskManager, ncbiHelper, cache)
     {
         this.cache = cache;
     }

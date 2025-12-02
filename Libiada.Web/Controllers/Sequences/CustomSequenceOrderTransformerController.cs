@@ -41,8 +41,8 @@ public class CustomSequenceOrderTransformerController : AbstractResultController
     public ActionResult Index()
     {
         var viewData = viewDataBuilder.AddOrderTransformations()
-                                     .AddImageTransformers()
-                                     .Build();
+                                      .AddImageTransformers()
+                                      .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }
@@ -124,7 +124,7 @@ public class CustomSequenceOrderTransformerController : AbstractResultController
                 { "transformationsList", transformations },
                 { "iterationsCount", iterationsCount }
             };
-            
+
             return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
         });
     }

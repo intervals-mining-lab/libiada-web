@@ -1,10 +1,3 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Razor;
-using Microsoft.AspNetCore.ResponseCompression;
-
-using System.Data.Common;
-using System.IO.Compression;
-
 using Libiada.Database.Helpers;
 using Libiada.Database.Models.Calculators;
 using Libiada.Database.Models.Repositories.Catalogs;
@@ -13,14 +6,21 @@ using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
 
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.ResponseCompression;
+
 using Npgsql;
 
-var builder = WebApplication.CreateBuilder(args);
+using System.Data.Common;
+using System.IO.Compression;
 
+var builder = WebApplication.CreateBuilder(args);
+builder.Logging.AddConsole();
 //  reading connection sting from environment variables
 builder.Configuration.AddEnvironmentVariables(prefix: "Libiada_");
 string environment = builder.Configuration["ASPNETCORE_ENVIRONMENT"] ?? "Production";
-string connectionString = builder.Configuration.GetConnectionString($"LibiadaDatabaseEntities_{environment}") ?? throw new Exception($"Connection string 'LibiadaDatabaseEntities_{environment}' is not found.");
+string connectionString = builder.Configuration.GetConnectionString($"LibiadaDatabaseEntities_{environment}") ?? throw new InvalidOperationException($"Connection string 'LibiadaDatabaseEntities_{environment}' is not found.");
 builder.Configuration["ConnectionStrings:LibiadaDatabaseEntities"] = connectionString;
 
 builder.WebHost.UseKestrel(options =>

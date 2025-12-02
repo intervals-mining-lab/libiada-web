@@ -55,16 +55,16 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
     public ActionResult Create()
     {
         var viewData = viewDataBuilder.AddResearchObjects()
-                                     .AddNatures()
-                                     .AddNotations()
-                                     .AddRemoteDatabases()
-                                     .AddSequenceTypes()
-                                     .AddGroups()
-                                     .AddMultisequences()
-                                     .AddLanguages()
-                                     .AddTranslators()
-                                     .AddTrajectories()
-                                     .Build();
+                                      .AddNatures()
+                                      .AddNotations()
+                                      .AddRemoteDatabases()
+                                      .AddSequenceTypes()
+                                      .AddGroups()
+                                      .AddMultisequences()
+                                      .AddLanguages()
+                                      .AddTranslators()
+                                      .AddTrajectories()
+                                      .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }
@@ -103,24 +103,35 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
     public ActionResult Create(CombinedSequenceEntity sequence, bool localFile, IFormFile? file, int? precision)
     {
         int userId = User.GetUserId();
+        sequence.CreatorId = userId;
+        sequence.ModifierId = userId;
+
         return CreateTask(() =>
         {
+            Stream? sequenceStream = null;
             try
             {
+                // Remove alphabet and order from validation 
+                // if they are going to be filled from file or external source 
+                if ((localFile && file != null) || sequence.RemoteId != null)
+                {
+                    ModelState.Remove("Alphabet");
+                    ModelState.Remove("Order");
+                }
+
                 if (!ModelState.IsValid)
                 {
                     throw new Exception("Model state is invalid");
                 }
 
-                Stream sequenceStream;
                 Nature nature = sequence.Notation.GetNature();
                 if (nature == Nature.Genetic && !localFile)
                 {
-                    sequenceStream = ncbiHelper.GetFastaFileStream(sequence.RemoteId);
+                    sequenceStream = ncbiHelper.GetFastaFileStream(sequence.RemoteId ?? throw new Exception("No remote id is provided for genetic sequence to import"));
                 }
                 else
                 {
-                    sequenceStream = FileHelper.GetFileStream(file!);
+                    sequenceStream = FileHelper.GetFileStream(file ?? throw new Exception("No file with sequence is provided for import"));
                 }
 
                 using var db = dbFactory.CreateDbContext();
@@ -131,16 +142,7 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
                         Bio.ISequence bioSequence = NcbiHelper.GetFastaSequence(sequenceStream);
                         using (var geneticSequenceRepository = new GeneticSequenceRepository(dbFactory, cache))
                         {
-                            var geneticSequence = new GeneticSequence
-                            {
-                                CreatorId = userId,
-                                ModifierId = userId,
-                                Notation = sequence.Notation,
-                                RemoteDb = sequence.RemoteDb,
-                                RemoteId = sequence.RemoteId,
-                                Partial = sequence.Partial ?? throw new Exception("Genetic sequence partial flag is not present in form data"),
-                                ResearchObject = sequence.ResearchObject
-                            };
+                            var geneticSequence = sequence.ToGeneticSequence();
 
                             geneticSequenceRepository.Create(geneticSequence, bioSequence);
                         }
@@ -148,34 +150,15 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
                         break;
                     case Nature.Music:
                         var musicSequenceRepository = new MusicSequenceRepository(dbFactory, cache);
-                        var musicSequence = new MusicSequence
-                        {
-                            CreatorId = userId,
-                            ModifierId = userId,
-                            Notation = sequence.Notation,
-                            RemoteDb = sequence.RemoteDb,
-                            RemoteId = sequence.RemoteId,
-                            PauseTreatment = sequence.PauseTreatment ?? throw new Exception("Music sequence pause treatment is not present in form data"),
-                            SequentialTransfer = sequence.SequentialTransfer ?? throw new Exception("Music sequence sequential transfer is not present in form data"),
-                            ResearchObject = sequence.ResearchObject
-                        };
+                        var musicSequence = sequence.ToMusicSequence();
+
                         // TODO: deside if this method should create only one music sequence type or all of them 
                         musicSequenceRepository.Create(musicSequence, sequenceStream);
                         break;
                     case Nature.Literature:
                         var literatureSequenceRepository = new LiteratureSequenceRepository(dbFactory, cache);
-                        var literatureSequence = new LiteratureSequence
-                        {
-                            CreatorId = userId,
-                            ModifierId = userId,
-                            Notation = sequence.Notation,
-                            RemoteDb = sequence.RemoteDb,
-                            RemoteId = sequence.RemoteId,
-                            Language = sequence.Language ?? throw new Exception("Literature sequence language is not present in form data"),
-                            Original = sequence.Original ?? throw new Exception("Literature sequence original flag is not present in form data"),
-                            Translator = sequence.Translator ?? throw new Exception("Literature sequence translator is not present in form data"),
-                            ResearchObject = sequence.ResearchObject
-                        };
+                        var literatureSequence = sequence.ToLiteratureSequence(); 
+
                         literatureSequenceRepository.Create(literatureSequence, sequenceStream);
                         break;
                     case Nature.MeasurementData:
@@ -195,11 +178,9 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
                         var researchObjectRepository = new ResearchObjectRepository(db, cache);
 
                         byte[] fileBytes;
-                        using (Stream fileStream = FileHelper.GetFileStream(file))
-                        {
-                            fileBytes = new byte[fileStream.Length];
-                            fileStream.Read(fileBytes, 0, (int)fileStream.Length);
-                        }
+                        
+                        fileBytes = new byte[sequenceStream.Length];
+                        sequenceStream.Read(fileBytes, 0, (int)sequenceStream.Length);
 
                         var researchObject = new ResearchObject
                         {
@@ -242,6 +223,7 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
             }
             finally
             {
+                sequenceStream?.Dispose();
                 Dispose(true);
             }
         });

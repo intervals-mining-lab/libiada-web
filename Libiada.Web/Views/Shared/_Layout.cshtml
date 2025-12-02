@@ -90,11 +90,14 @@
             @if (User.IsAdmin())
             {
                 <h3 class='@(await Db.IsConnectionSuccessful() ? "text-success" : "text-danger") mb-0 fs-5'>
-                    Current database: @Db.TryGetDbName()
+                    Current environment: 
+                    <environment include="Development">Development</environment>
+                    <environment exclude="Development">Production</environment>
+                    | Current database: @Db.TryGetDbName()
                 </h3>
             }
             <p class="mb-0">All nucleotide sequences are downloaded from <a href="https://www.ncbi.nlm.nih.gov" target="_blank" rel="noopener">GenBank</a></p>
-            <p class="mb-1">&copy; @DateTime.UtcNow.Year - foarLab.org</p>
+            <p class="mb-1">&copy; @DateTime.UtcNow.Year - foarLab.org @*<a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>*@</p>
         </div>
     </footer>
 </body>

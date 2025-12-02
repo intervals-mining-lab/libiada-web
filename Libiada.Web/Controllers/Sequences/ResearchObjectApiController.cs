@@ -7,6 +7,8 @@ using Libiada.Web.Models.CalculatorsData;
 
 using System.Linq;
 
+using Regex = System.Text.RegularExpressions.Regex;
+
 /// <summary>
 /// Web api controller for reaserch object search and filtration.
 /// </summary>
@@ -14,12 +16,14 @@ using System.Linq;
 [Authorize]
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class ResearchObjectApiController(IResearchObjectsCache cache, LibiadaDatabaseEntities db) : ControllerBase
+public partial class ResearchObjectApiController(
+    IResearchObjectsCache cache,
+    LibiadaDatabaseEntities db) : ControllerBase
 {
     private readonly IResearchObjectsCache cache = cache;
     private readonly LibiadaDatabaseEntities db = db;
 
-    // GET: api/ResearchObjectApi/GetAllResearchObject   
+    // GET: api/ResearchObjectApi/GetAllResearchObjects
     /// <summary>
     /// Gets the list of all research object 
     /// fitting search query and filters.
@@ -41,14 +45,13 @@ public class ResearchObjectApiController(IResearchObjectsCache cache, LibiadaDat
     /// </param>
     /// <returns></returns>
     [HttpGet]
-    public ActionResult<IEnumerable<ResearchObjectTableRow>> GetAllResearchObject(Nature nature,
+    public ActionResult<IEnumerable<ResearchObjectTableRow>> GetAllResearchObjects(Nature nature,
                                                                                   bool refSeqOnly,
                                                                                   string? searchQuery,
                                                                                   Group? group,
                                                                                   SequenceType? sequenceType)
     {
         var result = GetResearchObjects(r => true, nature, refSeqOnly, searchQuery, group, sequenceType);
-
         return Ok(result);
     }
 
@@ -81,16 +84,8 @@ public class ResearchObjectApiController(IResearchObjectsCache cache, LibiadaDat
                                                                                                 Group? group,
                                                                                                 SequenceType? sequenceType)
     {
-        var sequenceIds = db.Subsequences
-                            .Select(s => s.SequenceId)
-                            .Distinct();
-        var researchObjectIds = db.CombinedSequenceEntities
-                                  .Where(c => sequenceIds.Contains(c.Id))
-                                  .Select(c => c.ResearchObjectId)
-                                  .ToList();
-        Func<ResearchObject, bool> filter = new(r => researchObjectIds.Contains(r.Id));
+        Func<ResearchObject, bool> filter = new(r => cache.ResearchObjectsWithSubsequencesIds.Contains(r.Id));
         var result = GetResearchObjects(filter, nature, refSeqOnly, searchQuery, group, sequenceType);
-
         return Ok(result);
     }
 
@@ -124,14 +119,10 @@ public class ResearchObjectApiController(IResearchObjectsCache cache, LibiadaDat
                                                                                               Group? group,
                                                                                               SequenceType? sequenceType)
     {
-        var sequencesWithSubsequencesIds = db.Subsequences
-                                             .Select(s => s.SequenceId)
-                                             .Distinct();
-
         long[] researchObjectIds = db.CombinedSequenceEntities
                                      .Include(c => c.ResearchObject)
                                      .Where(c => !string.IsNullOrEmpty(c.RemoteId)
-                                              && !sequencesWithSubsequencesIds.Contains(c.Id)
+                                              && !cache.ResearchObjectsWithSubsequencesIds.Contains(c.ResearchObject.Id)
                                               && StaticCollections.SequenceTypesWithSubsequences.Contains(c.ResearchObject.SequenceType))
                                      .Select(c => c.ResearchObjectId)
                                      .ToArray();
@@ -172,8 +163,7 @@ public class ResearchObjectApiController(IResearchObjectsCache cache, LibiadaDat
                                                                                                 Group? group,
                                                                                                 SequenceType? sequenceType)
     {
-        var filter = MultisequenceRepository.ResearchObjectsFilter;
-
+        Func<ResearchObject, bool> filter = MultisequenceRepository.ResearchObjectsFilter;
         var result = GetResearchObjects(filter, nature, refSeqOnly, searchQuery, group, sequenceType);
 
         return Ok(result);
@@ -209,7 +199,6 @@ public class ResearchObjectApiController(IResearchObjectsCache cache, LibiadaDat
                                                                                      SequenceType? sequenceType)
     {
         Func<ResearchObject, bool> filter = new(m => m.SequenceType == SequenceType.CompletePoem);
-
         var result = GetResearchObjects(filter, nature, refSeqOnly, searchQuery, group, sequenceType);
 
         return Ok(result);
@@ -245,14 +234,12 @@ public class ResearchObjectApiController(IResearchObjectsCache cache, LibiadaDat
                                                                                                  Group? group,
                                                                                                  SequenceType? sequenceType)
     {
-
         long[] researchObjectIds = db.CombinedSequenceEntities
                                      .Where(d => d.Notation == Notation.Nucleotides)
                                      .Select(d => d.ResearchObjectId)
                                      .ToArray();
 
-        Func<ResearchObject, bool> filter = new (m => researchObjectIds.Contains(m.Id));
-
+        Func<ResearchObject, bool> filter = new(m => researchObjectIds.Contains(m.Id));
         var result = GetResearchObjects(filter, nature, refSeqOnly, searchQuery, group, sequenceType);
 
         return Ok(result);
@@ -281,11 +268,11 @@ public class ResearchObjectApiController(IResearchObjectsCache cache, LibiadaDat
     /// </param>
     /// <returns></returns>
     private IEnumerable<ResearchObjectTableRow> GetResearchObjects(Func<ResearchObject, bool> filter,
-                                                                                 Nature nature,
-                                                                                 bool refSeqOnly,
-                                                                                 string? searchQuery,
-                                                                                 Group? group,
-                                                                                 SequenceType? sequenceType)
+                                                                   Nature nature,
+                                                                   bool refSeqOnly,
+                                                                   string? searchQuery,
+                                                                   Group? group,
+                                                                   SequenceType? sequenceType)
     {
         bool hasGroup = group.HasValue;
         bool hasSequenceType = sequenceType.HasValue;
@@ -298,15 +285,18 @@ public class ResearchObjectApiController(IResearchObjectsCache cache, LibiadaDat
 
         if (searchQuery.Length < 4) return [];
 
-        return cache.ResearchObjects
-                    .Where(r => filter(r)
-                             && r.Nature == nature
-                             && r.Name.Contains(searchQuery, StringComparison.InvariantCultureIgnoreCase)
-                             && (!hasGroup || r.Group == group)
-                             && (!hasSequenceType || r.SequenceType == sequenceType)
-                             && (r.Nature != Nature.Genetic || !refSeqOnly || IsRefSeq(r)))
-                    .OrderBy(m => m.Created)
-                    .Select(m => new ResearchObjectTableRow(m, false));
+        return db.ResearchObjects
+                 .Where(r => r.Nature == nature
+                          && EF.Functions.ILike(r.Name, $"%{searchQuery}%")
+                          && (!hasGroup || r.Group == group)
+                          && (!hasSequenceType || r.SequenceType == sequenceType)
+                          // reference sequences filter
+                          && (r.Nature != Nature.Genetic || !refSeqOnly || Regex.IsMatch(r.Name, "(?<=\\|)(?!.*\\|)[^|]*_")))
+                 .OrderBy(m => m.Created)
+                 // custom filters cannot be converted into sql
+                 .AsEnumerable()
+                 .Where(r => filter(r))
+                 .Select(m => new ResearchObjectTableRow(m, false)).ToArray();
     }
 
     /// <summary>
@@ -332,30 +322,22 @@ public class ResearchObjectApiController(IResearchObjectsCache cache, LibiadaDat
     /// </param>
     /// <returns></returns>
     private IEnumerable<ResearchObjectTableRow> GetResearchObjects(Func<ResearchObject, bool> filter,
-                                                                                 Nature nature,
-                                                                                 bool refSeqOnly,
-                                                                                 Group group,
-                                                                                 SequenceType sequenceType)
+                                                                   Nature nature,
+                                                                   bool refSeqOnly,
+                                                                   Group group,
+                                                                   SequenceType sequenceType)
     {
-        return cache.ResearchObjects
-                    .Where(r => filter(r)
-                        && r.Nature == nature
-                        && r.Group == group
-                        && r.SequenceType == sequenceType
-                        && (r.Nature != Nature.Genetic || !refSeqOnly || IsRefSeq(r)))
-                    .OrderBy(m => m.Created)
-                    .Select(m => new ResearchObjectTableRow(m, false));
+        return db.ResearchObjects
+                 .Where(r => r.Nature == nature
+                          && r.Group == group
+                          && r.SequenceType == sequenceType
+                          // reference sequences filter
+                          && (r.Nature != Nature.Genetic || !refSeqOnly || Regex.IsMatch(r.Name, "(?<=\\|)(?!.*\\|)[^|]*_")))
+                 .OrderBy(m => m.Created)
+                 // custom filters cannot be converted into sql
+                 .AsEnumerable()
+                 .Where(r => filter(r))
+                 .Select(m => new ResearchObjectTableRow(m, false))
+                 .ToArray();
     }
-
-    /// <summary>
-    /// Determines whether specified research object is a reference sequense.
-    /// Using its remote db id.
-    /// </summary>
-    /// <param name="researchObject">
-    /// The research object.
-    /// </param>
-    /// <returns>
-    /// <c>true</c> if specified research object is a reference sequence; otherwise, <c>false</c>.
-    /// </returns>
-    private static bool IsRefSeq(ResearchObject researchObject) => researchObject.Name.Split("|").Last().Contains('_');
 }

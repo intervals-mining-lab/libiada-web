@@ -1,16 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-	<PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<TypeScriptTarget>ES2021</TypeScriptTarget>
-		<TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
-	</PropertyGroup>
-
-	<PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<TypeScriptTarget>ES2021</TypeScriptTarget>
-		<TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
-	</PropertyGroup>
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<Version>$(VersionPrefix)2.0.0</Version>
 		<ImplicitUsings>enable</ImplicitUsings>
@@ -64,6 +55,8 @@
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="10.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="10.0.0" />
 		<PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
 		<PackageReference Include="TypeScript.MSBuildTask" Version="1.7.3" />
 		<PackageReference Include="WebPush" Version="1.0.12" />

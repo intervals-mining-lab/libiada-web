@@ -1,0 +1,21 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+  </Folder>
+  <Project Path="../libiada-core/Libiada.Clusterizator.Tests/Libiada.Clusterizator.Tests.csproj" />
+  <Project Path="../libiada-core/Libiada.Clusterizator/Libiada.Clusterizator.csproj" />
+  <Project Path="../libiada-core/Libiada.Core.Tests/Libiada.Core.Tests.csproj" />
+  <Project Path="../libiada-core/Libiada.Core/Libiada.Core.csproj" />
+  <Project Path="../libiada-core/Libiada.MarkovChains.Tests/Libiada.MarkovChains.Tests.csproj" />
+  <Project Path="../libiada-core/Libiada.MarkovChains/Libiada.MarkovChains.csproj" />
+  <Project Path="../libiada-core/Libiada.PhantomChains.Tests/Libiada.PhantomChains.Tests.csproj" />
+  <Project Path="../libiada-core/Libiada.PhantomChains/Libiada.PhantomChains.csproj" />
+  <Project Path="../libiada-core/Libiada.Segmenter.Tests/Libiada.Segmenter.Tests.csproj" />
+  <Project Path="../libiada-core/Libiada.Segmenter/Libiada.Segmenter.csproj" />
+  <Project Path="../libiada-core/Libiada.SequenceGenerator.Tests/Libiada.SequenceGenerator.Tests.csproj" />
+  <Project Path="../libiada-core/Libiada.SequenceGenerator/Libiada.SequenceGenerator.csproj" />
+  <Project Path="../libiada-database/Libiada.Database.Tests/Libiada.Database.Tests.csproj" />
+  <Project Path="../libiada-database/Libiada.Database/Libiada.Database.csproj" />
+  <Project Path="Libiada.Web.Tests/Libiada.Web.Tests.csproj" />
+  <Project Path="Libiada.Web/Libiada.Web.csproj" />
+</Solution>

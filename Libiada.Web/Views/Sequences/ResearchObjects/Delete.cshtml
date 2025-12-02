@@ -36,7 +36,7 @@
         @if (Model.Multisequence != null)
         {
             <dt>@Html.DisplayNameFor(model => model.Multisequence)</dt>
-            <dd>@Html.DisplayFor(model => model.Multisequence.Name)</dd>
+            <dd>@Html.DisplayFor(model => model.Multisequence!.Name)</dd>
 
             <dt>@Html.DisplayNameFor(model => model.MultisequenceNumber)</dt>
             <dd>@Html.DisplayFor(model => model.MultisequenceNumber)</dd>
