@@ -3,7 +3,6 @@
 */
 interface IOrdersIntervalsDistributionsAccordanceData {
 
-    [key: string]: any;
 }
 
 /**
@@ -11,7 +10,6 @@ interface IOrdersIntervalsDistributionsAccordanceData {
 */
 interface IOrdersIntervalsDistributionsAccordanceScope extends ng.IScope {
 
-    [key: string]: any;
 }
 
 /**
@@ -22,7 +20,7 @@ class OrdersIntervalsDistributionsAccordanceHandler {
     * Creates a new controller instance
     * @param data Data for initializing the controller
     */
-    constructor(private data: IOrdersIntervalsDistributionsAccordanceData) {
+    constructor(data: IOrdersIntervalsDistributionsAccordanceData) {
         this.ngOnInit(data);
     }
 
@@ -30,10 +28,8 @@ class OrdersIntervalsDistributionsAccordanceHandler {
     * Initializes the Angular controller 
     */
     private ngOnInit(data: IOrdersIntervalsDistributionsAccordanceData): void {
-        "use strict";
-
         const ordersIntervalsDistributionsAccordance = ($scope: IOrdersIntervalsDistributionsAccordanceScope): void => {
-            MapModelFromJson($scope, this.data);
+            MapModelFromJson($scope, data);
         };
 
         angular.module("libiada").controller("OrdersIntervalsDistributionsAccordanceCtrl", ["$scope", ordersIntervalsDistributionsAccordance]);

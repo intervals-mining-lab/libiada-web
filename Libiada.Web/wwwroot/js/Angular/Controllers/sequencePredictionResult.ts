@@ -19,9 +19,6 @@ interface ISequencePredictionResultScope extends ng.IScope {
     legend?: { id: number, name: string, visible: boolean }[];
     legendHeight?: number;
     height?: number;
-
-    // Additional properties
-    [key: string]: any;
 }
 
 /**
@@ -39,8 +36,6 @@ class SequencePredictionResultHandler {
     * Initializes the Angular controller
     */
     private ngOnInit(): void {
-        "use strict";
-
         const sequencePredictionResult = ($scope: ISequencePredictionResultScope, $http: ng.IHttpService): void => {
             // Initialize the loading screen header
             $scope.loadingScreenHeader = "Loading data";

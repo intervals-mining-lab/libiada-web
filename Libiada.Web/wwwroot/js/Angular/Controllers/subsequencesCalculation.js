@@ -9,17 +9,15 @@ class SubsequencesCalculationHandler {
     * @param data Data for initializing the controller
     */
     constructor(data) {
-        this.data = data;
-        this.ngOnInit();
+        this.ngOnInit(data);
     }
     /**
     * Initializes the Angular controller
     */
-    ngOnInit() {
-        "use strict";
+    ngOnInit(data) {
         const subsequencesCalculation = ($scope) => {
             // Initialize scope with data from parameter
-            MapModelFromJson($scope, this.data);
+            MapModelFromJson($scope, data);
             /**
             * Apply filter to data
             * @param filter Filter to apply

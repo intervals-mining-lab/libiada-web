@@ -16,7 +16,6 @@ class MultisequenceCreateHandler {
      * @param data Data for controller initialization
      */
     ngOnInit(data) {
-        "use strict";
         const multisequenceCreate = ($scope, filterFilter) => {
             MapModelFromJson($scope, data);
             function filterByNature() {

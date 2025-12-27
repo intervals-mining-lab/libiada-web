@@ -88,7 +88,6 @@ class IntervalsCharacteristicsDistributionResultHandler {
 
     private ngOnInit(): void {
         const intervalsCharacteristicsDistributionResult = ($scope: IIntervalsCharacteristicsDistributionResultScope, $http: ng.IHttpService): void => {
-            "use strict";
 
             /**
              * Initializes data for chart visualization

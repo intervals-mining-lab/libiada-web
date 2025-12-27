@@ -11,7 +11,6 @@ class OrderTransformationVisualizationResultHandler {
         this.ngOnInit();
     }
     ngOnInit() {
-        "use strict";
         const orderTransformationVisualizationResult = ($scope, $http) => {
             /**
             * Initializes the data for the legend

@@ -29,7 +29,6 @@ interface ID3Tooltip extends d3.Selection<HTMLDivElement, unknown, HTMLElement, 
 // Interface for data received from API
 interface ISequencesOrderDistributionData {
     result: ISequence[];
-    [key: string]: any;
 }
 
 // Interface for the controller scope
@@ -81,8 +80,6 @@ class SequencesOrderDistributionResultHandler {
      * Initializes the Angular controller
      */
     private ngOnInit(): void {
-        "use strict";
-
         const sequencesOrderDistributionResult = ($scope: ISequencesOrderDistributionScope, $http: ng.IHttpService): void => {
             /**
              * Initializes data for chart

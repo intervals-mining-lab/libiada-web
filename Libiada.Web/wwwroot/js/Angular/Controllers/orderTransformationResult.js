@@ -11,7 +11,6 @@ class OrderTransformationResultHandler {
      * Initializes the Angular controller
      */
     ngOnInit() {
-        "use strict";
         const orderTransformationResult = ($scope, $http) => {
             // Set loading message
             $scope.loadingScreenHeader = "Loading order transformation results";

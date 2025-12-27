@@ -11,9 +11,6 @@ interface IBooleanValue {
  * Interface for initial controller data
  */
 interface IBatchGeneticImportFromGenBankSearchFileData {
-    // Define properties that would be passed to the controller
-    // Add specific properties as needed based on actual data
-    [key: string]: any;
 }
 
 /**
@@ -44,8 +41,6 @@ class BatchGeneticImportFromGenBankSearchFileHandler {
      * @param data Data for controller initialization
      */
     private ngOnInit(data: IBatchGeneticImportFromGenBankSearchFileData): void {
-        "use strict";
-
         const batchGeneticImportFromGenBankSearchFile = ($scope: IBatchGeneticImportFromGenBankSearchFileScope): void => {
             MapModelFromJson($scope, data);
 

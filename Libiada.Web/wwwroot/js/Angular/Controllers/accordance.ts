@@ -4,17 +4,11 @@
  * Interface for accordion data
  */
 interface IAccordanceData {
-    // Define properties that would be passed to the controller
-    // Add specific properties as needed based on actual data
-    [key: string]: any;
 }
-
 /**
  * Interface for controller scope
  */
 interface IAccordanceScope extends ng.IScope {
-    // Add specific properties as needed based on actual scope usage
-    [key: string]: any;
 }
 
 /**
@@ -34,8 +28,6 @@ class AccordanceHandler {
      * @param data Data for controller initialization
      */
     private ngOnInit(data: IAccordanceData): void {
-        "use strict";
-
         const accordance = ($scope: IAccordanceScope, filterFilter: ng.IFilterFilter): void => {
             MapModelFromJson($scope, data);
         };

@@ -27,8 +27,6 @@ class SubsequencesCalculationResultHandler {
      * Initializes the Angular controller
      */
     private ngOnInit(): void {
-        "use strict";
-
         const subsequencesCalculationResult = ($scope: ISubsequencesCalculationResultScope, $http: ng.IHttpService, $sce: ng.ISCEService): void => {
             function fillLegend(): void {
                 $scope.legend = [];

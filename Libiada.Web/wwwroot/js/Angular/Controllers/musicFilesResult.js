@@ -14,7 +14,6 @@ class MusicFilesResultHandler {
      * Initializes the Angular controller
      */
     ngOnInit() {
-        "use strict";
         const musicFilesResult = ($scope, $http) => {
             // Extract task ID from the URL
             const location = window.location.href.split("/");

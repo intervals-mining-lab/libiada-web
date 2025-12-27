@@ -10,7 +10,6 @@ interface IResearchObjectSequenceCreateData {
     researchObjects?: ISelectOption[];
     groups?: ISelectOption[];
     sequenceTypes?: ISelectOption[];
-    [key: string]: any; // For any additional properties
 }
 
 // Interface for the controller scope
@@ -69,18 +68,14 @@ interface ISelectOption {
 
 // Controller class
 class ResearchObjectSequenceCreator {
-    private data: IResearchObjectSequenceCreateData;
 
     constructor(data: IResearchObjectSequenceCreateData) {
-        this.data = data;
-        this.ngOnInit();
+        this.ngOnInit(data);
     }
 
-    private ngOnInit(): void {
-        "use strict";
-
+    private ngOnInit(data: IResearchObjectSequenceCreateData): void {
         const researchObjectSequenceCreate = ($scope: IResearchObjectSequenceCreateScope, filterFilter: ng.IFilterFilter): void => {
-            MapModelFromJson($scope, this.data);
+            MapModelFromJson($scope, data);
 
          
 

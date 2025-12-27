@@ -63,7 +63,6 @@ interface IOrderTransformationVisualizationData {
     orders: string[];
     transformationsData: { [key: number]: ITransformationData };
     transformationsList: ITransformationType[];
-    //[key: string]: any;
 }
 
 // Interface for controller scope
@@ -128,8 +127,6 @@ class OrderTransformationVisualizationResultHandler {
     }
 
     private ngOnInit(): void {
-        "use strict";
-
         const orderTransformationVisualizationResult = ($scope: IOrderTransformationVisualizationScope, $http: ng.IHttpService): void => {
 
             /**

@@ -16,7 +16,6 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
      * Initializes the Angular controller
      */
     ngOnInit() {
-        "use strict";
         const orderTransformationCharacteristicsDynamicVisualizationResult = ($scope, $http) => {
             /**
              * Initializes legend data

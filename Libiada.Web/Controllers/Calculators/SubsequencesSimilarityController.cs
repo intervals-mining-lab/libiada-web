@@ -1,19 +1,17 @@
 ﻿namespace Libiada.Web.Controllers.Calculators;
 
-using System.Globalization;
-
 using Libiada.Core.Extensions;
-
+using Libiada.Database.Models.Calculators;
 using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Models.Repositories.Sequences;
-using Libiada.Database.Models.Calculators;
 using Libiada.Database.Tasks;
+using Libiada.Web.Helpers;
+using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
 
-using Libiada.Web.Tasks;
-using Libiada.Web.Helpers;
+using System.Globalization;
 
 /// <summary>
 /// The subsequences similarity controller.
@@ -192,6 +190,7 @@ public class SubsequencesSimilarityController : AbstractResultController
                 { "similarSubsequences", similarSubsequences },
                 { "similarity", similarity },
                 { "features", features.ToDictionary(f => (byte)f, f => f.GetDisplayValue()) },
+                { "attributes", EnumExtensions.ToArray<AnnotationAttribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
                 { "firstSequenceSimilarity", firstSequenceSimilarity },
                 { "secondSequenceSimilarity", secondSequenceSimilarity },
                 { "firstSequenceSubsequences", firstSequenceSubsequences },

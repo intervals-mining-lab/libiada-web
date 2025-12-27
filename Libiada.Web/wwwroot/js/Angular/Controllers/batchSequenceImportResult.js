@@ -14,7 +14,6 @@ class BatchSequenceImportResultHandler {
      * Инициализирует Angular контроллер
      */
     ngOnInit() {
-        "use strict";
         const batchSequenceImportResult = ($scope, $http) => {
             // returns css class for given status
             function calculateStatusClass(status) {

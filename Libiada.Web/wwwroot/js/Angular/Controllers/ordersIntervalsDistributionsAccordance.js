@@ -8,16 +8,14 @@ class OrdersIntervalsDistributionsAccordanceHandler {
     * @param data Data for initializing the controller
     */
     constructor(data) {
-        this.data = data;
         this.ngOnInit(data);
     }
     /**
     * Initializes the Angular controller
     */
     ngOnInit(data) {
-        "use strict";
         const ordersIntervalsDistributionsAccordance = ($scope) => {
-            MapModelFromJson($scope, this.data);
+            MapModelFromJson($scope, data);
         };
         angular.module("libiada").controller("OrdersIntervalsDistributionsAccordanceCtrl", ["$scope", ordersIntervalsDistributionsAccordance]);
     }

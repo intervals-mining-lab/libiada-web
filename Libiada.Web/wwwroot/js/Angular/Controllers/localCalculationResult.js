@@ -7,7 +7,6 @@
  * Controller for displaying local calculation results
  */
 function LocalCalculationResultController() {
-    "use strict";
     function localCalculationResult($scope, $http) {
         function calculateLocalCharacteristicsSimilarityMatrix() {
             $http.get("/api/LocalCalculationApi/CalculateLocalCharacteristicsSimilarityMatrix", {

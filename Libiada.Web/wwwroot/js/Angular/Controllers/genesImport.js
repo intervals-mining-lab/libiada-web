@@ -16,7 +16,6 @@ class GenesImportHandler {
      * @param data Data for controller initialization
      */
     ngOnInit(data) {
-        "use strict";
         const genesImport = ($scope) => {
             MapModelFromJson($scope, data);
         };

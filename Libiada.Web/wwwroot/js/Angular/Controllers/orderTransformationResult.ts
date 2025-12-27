@@ -12,8 +12,6 @@ interface IOrderTransformationResultScope extends ng.IScope {
     // Task data
     taskId: string;
     
-    // Result data (this can be expanded based on the actual data structure)
-    [key: string]: any;
 }
 
 /**
@@ -28,8 +26,6 @@ class OrderTransformationResultHandler {
      * Initializes the Angular controller
      */
     private ngOnInit(): void {
-        "use strict";
-
         const orderTransformationResult = ($scope: IOrderTransformationResultScope, $http: ng.IHttpService): void => {
             // Set loading message
             $scope.loadingScreenHeader = "Loading order transformation results";

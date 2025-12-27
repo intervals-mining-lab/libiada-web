@@ -31,9 +31,6 @@ interface ICalculationData {
 
     // Options for clustering (if any)
     ClusterizatorsTypes?: IClusterizatorType[];
-
-    // Other possible properties
-    [key: string]: any;
 }
 
 // Interface for the $scope controller
@@ -155,18 +152,13 @@ interface IClusterizatorType {
 
 // Updated controller class
 class CalculationOperator {
-    private data: ICalculationData;
-
     constructor(data: ICalculationData) {
-        this.data = data;
-        this.ngOnInit();
+        this.ngOnInit(data);
     }
 
-    private ngOnInit(): void {
-        "use strict";
-
+    private ngOnInit(data: ICalculationData): void {
         const calculation = ($scope: ICalculationScope, filterFilter: ng.IFilterFilter): void => {
-            MapModelFromJson($scope, this.data);
+            MapModelFromJson($scope, data);
 
             function filterByNature(): void {
                 if (!$scope.hideNotation) {

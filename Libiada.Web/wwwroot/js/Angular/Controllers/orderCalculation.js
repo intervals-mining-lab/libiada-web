@@ -9,16 +9,14 @@ class OrderCalculationHandler {
      * @param data Data for controller initialization
      */
     constructor(data) {
-        this.data = data;
-        this.ngOnInit();
+        this.ngOnInit(data);
     }
     /**
      * Initializes the Angular controller
      */
-    ngOnInit() {
-        "use strict";
+    ngOnInit(data) {
         const orderCalculation = ($scope) => {
-            MapModelFromJson($scope, this.data);
+            MapModelFromJson($scope, data);
         };
         angular.module("libiada").controller("OrderCalculationCtrl", ["$scope", orderCalculation]);
     }

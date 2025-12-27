@@ -13,7 +13,6 @@ interface IOrderTransformationCharacteristicsDynamicData {
     characteristics: ICharacteristicData[];
     characteristicName: string;
     transformationsList: string[];
-    [key: string]: any; // For any additional properties
 }
 
 // Interface for legend item
@@ -83,8 +82,6 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
      * Initializes the Angular controller
      */
     private ngOnInit(): void {
-        "use strict";
-
         const orderTransformationCharacteristicsDynamicVisualizationResult = ($scope: IOrderTransformationCharacteristicsDynamicScope, $http: ng.IHttpService): void => {
             /**
              * Initializes legend data

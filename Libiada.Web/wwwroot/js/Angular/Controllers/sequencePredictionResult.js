@@ -14,7 +14,6 @@ class SequencePredictionResultHandler {
     * Initializes the Angular controller
     */
     ngOnInit() {
-        "use strict";
         const sequencePredictionResult = ($scope, $http) => {
             // Initialize the loading screen header
             $scope.loadingScreenHeader = "Loading data";

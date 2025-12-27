@@ -14,7 +14,6 @@ class MultisequenceGroupingHandler {
      * Initializes Angular controller
      */
     ngOnInit() {
-        "use strict";
         const multisequenceGrouping = ($scope, $http) => {
             /**
              * Removes a research object from a multisequence and adds it to ungrouped list

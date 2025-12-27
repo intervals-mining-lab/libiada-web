@@ -11,9 +11,6 @@ interface IBooleanValue {
  * Interface for initial controller data
  */
 interface IBatchMusicImportData {
-    // Define properties that would be passed to the controller
-    // Add specific properties as needed based on actual data
-    [key: string]: any;
 }
 
 /**
@@ -44,8 +41,6 @@ class BatchMusicImportHandler {
      * @param data Data for controller initialization
      */
     private ngOnInit(data: IBatchMusicImportData): void {
-        "use strict";
-
         const batchMusicImport = ($scope: IBatchMusicImportScope): void => {
             MapModelFromJson($scope, data);
 

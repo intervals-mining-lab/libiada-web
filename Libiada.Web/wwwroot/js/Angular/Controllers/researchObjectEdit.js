@@ -3,13 +3,11 @@
 // Updated controller class
 class ResearchObjectEditor {
     constructor(data) {
-        this.data = data;
-        this.ngOnInit();
+        this.ngOnInit(data);
     }
-    ngOnInit() {
-        "use strict";
+    ngOnInit(data) {
         const researchObjectEdit = ($scope, filterFilter) => {
-            MapModelFromJson($scope, this.data);
+            MapModelFromJson($scope, data);
             function filterByNature() {
                 const arraysForFiltration = ["groups", "sequenceTypes"];
                 arraysForFiltration.forEach((arrayName) => {

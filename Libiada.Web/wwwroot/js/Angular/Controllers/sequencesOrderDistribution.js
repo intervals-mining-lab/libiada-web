@@ -9,17 +9,15 @@ class SequencesOrderDistributionHandler {
     * @param data Data to initialize the controller
     */
     constructor(data) {
-        this.data = data;
-        this.ngOnInit();
+        this.ngOnInit(data);
     }
     /**
     * Initializes the Angular controller
     */
-    ngOnInit() {
-        "use strict";
+    ngOnInit(data) {
         const sequencesOrderDistribution = ($scope) => {
             // Initialize scope with data from the parameter
-            MapModelFromJson($scope, this.data);
+            MapModelFromJson($scope, data);
         };
         // Register the controller in Angular
         angular.module("libiada").controller("SequencesOrderDistributionCtrl", ["$scope", sequencesOrderDistribution]);

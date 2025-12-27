@@ -116,7 +116,7 @@ class ChartsControllerHandler {
      * Creates a new instance of the controller
      * @param data Initial data for the controller
      */
-    constructor(private data: any) {
+    constructor() {
         this.ngOnInit();
     }
 
@@ -125,7 +125,6 @@ class ChartsControllerHandler {
      */
     private ngOnInit(): void {
         const charts = ($scope: IChartsScope, $document: ng.IDocumentService): void => {
-            "use strict";
 
             /**
              * Parses tabular data from text
@@ -649,6 +648,5 @@ class ChartsControllerHandler {
  * @returns New instance of ChartsControllerHandler
  */
 function ChartsController(data: any): ChartsControllerHandler {
-    "use strict";
     return new ChartsControllerHandler(data);
 }

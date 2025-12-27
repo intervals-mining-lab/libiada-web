@@ -10,7 +10,6 @@ interface IResearchObject {
     group?: number;
     sequenceType?: number;
     selected?: boolean;
-    //[key: string]: any;
 }
 
 /**
@@ -53,9 +52,6 @@ interface ISequenceGroupsData {
     selectedNature?: INature;
     selectedGroup?: IGroup;
     selectedSequenceType?: ISequenceType;
-
-    // Additional properties
-    [key: string]: any;
 }
 
 /**
@@ -79,35 +75,27 @@ interface ISequenceGroupsScope extends ng.IScope {
     toggleResearchObjectSelection?: (researchObject: IResearchObject) => void;
     selectAll?: () => void;
     deselectAll?: () => void;
-
-    // Additional properties
-    [key: string]: any;
 }
 
 /**
 * Controller for sequence groups
 */
 class SequenceGroupsHandler {
-    private data: ISequenceGroupsData;
-
     /**
     * Creates an instance of the sequence groups controller
     * @param data Data to initialize the controller
     */
     constructor(data: ISequenceGroupsData) {
-        this.data = data;
-        this.ngOnInit();
+        this.ngOnInit(data);
     }
 
     /**
     * Initializes the Angular controller
     */
-    private ngOnInit(): void {
-        "use strict";
-
+    private ngOnInit(data: ISequenceGroupsData): void {
         const sequenceGroups = ($scope: ISequenceGroupsScope): void => {
             // Initialize scope with data from the parameter
-            MapModelFromJson($scope, this.data);
+            MapModelFromJson($scope, data);
         };
 
         // Register the controller in Angular

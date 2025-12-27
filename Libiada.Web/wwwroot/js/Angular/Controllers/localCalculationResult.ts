@@ -14,8 +14,7 @@ interface ILocalCalculationResultData {
     aligners: ISelectItem[];
     distanceCalculators: ISelectItem[];
     aggregators: ISelectItem[];
-    // Any additional properties
-    [key: string]: any;
+
 }
 
 /**
@@ -24,8 +23,7 @@ interface ILocalCalculationResultData {
 interface ICharacteristicLocalCalculationResult {
     ResearchObjectName: string;
     FragmentsData: IFragmentData[];
-    // Any additional properties
-    [key: string]: any;
+
 }
 
 /**
@@ -34,8 +32,6 @@ interface ICharacteristicLocalCalculationResult {
 interface IFragmentData {
     Name: string;
     Characteristics: number[];
-    // Any additional properties
-    [key: string]: any;
 }
 
 /**
@@ -44,8 +40,6 @@ interface IFragmentData {
 interface ISelectItem {
     Text: string;
     Value: number;
-    // Any additional properties
-    [key: string]: any;
 }
 
 /**
@@ -172,8 +166,6 @@ interface ILocalCalculationResultScope extends ng.IScope {
  * Controller for displaying local calculation results
  */
 function LocalCalculationResultController(): void {
-    "use strict";
-
     function localCalculationResult($scope: ILocalCalculationResultScope, $http: ng.IHttpService): void {
         function calculateLocalCharacteristicsSimilarityMatrix(): void {
             $http.get<ILocalCharacteristicsSimilarityMatrixResponse>("/api/LocalCalculationApi/CalculateLocalCharacteristicsSimilarityMatrix", {

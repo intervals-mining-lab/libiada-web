@@ -9,16 +9,14 @@ class IntervalsCharacteristicsDistributionHandler {
      * @param data Data for controller initialization
      */
     constructor(data) {
-        this.data = data;
-        this.ngOnInit();
+        this.ngOnInit(data);
     }
     /**
      * Initializes the Angular controller
      */
-    ngOnInit() {
-        "use strict";
+    ngOnInit(data) {
         const intervalsCharacteristicsDistribution = ($scope) => {
-            MapModelFromJson($scope, this.data);
+            MapModelFromJson($scope, data);
         };
         angular.module("libiada").controller("IntervalsCharacteristicsDistributionCtrl", ["$scope", intervalsCharacteristicsDistribution]);
     }

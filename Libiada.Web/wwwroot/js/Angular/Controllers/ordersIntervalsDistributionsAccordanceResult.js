@@ -15,7 +15,6 @@ class OrdersIntervalsDistributionsAccordanceResultHandler {
      * Initializes the Angular controller
      */
     ngOnInit() {
-        "use strict";
         const ordersIntervalsDistributionsAccordanceResult = ($scope, $http) => {
             // initializes data for chart
             function fillPoints() {

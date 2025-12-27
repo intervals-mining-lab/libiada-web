@@ -9,7 +9,6 @@ interface IResearchObjectEditData {
     multisequences?: IMultisequence[];
     researchObject?: IResearchObject;
     sequencesCount?: number;
-    [key: string]: any; // For any additional properties
 }
 
 // Interface for scope in the controller
@@ -102,27 +101,19 @@ interface IResearchObject {
     Selected?: boolean; // Flag of selection in the list of objects
     Visible?: boolean; // Flag of visibility in the list of objects
     Value?: number; // Value for use in form components
-    Text?: string; // Text representation for form components
-
-    // Additional properties for backward compatibility
-    
+    Text?: string; // Text representation for form components    
 }
 
 
 // Updated controller class
 class ResearchObjectEditor {
-    private data: IResearchObjectEditData;
-
     constructor(data: IResearchObjectEditData) {
-        this.data = data;
-        this.ngOnInit();
+        this.ngOnInit(data);
     }
 
-    private ngOnInit(): void {
-        "use strict";
-
+    private ngOnInit(data: IResearchObjectEditData): void {
         const researchObjectEdit = ($scope: IResearchObjectEditScope, filterFilter: ng.IFilterFilter): void => {
-            MapModelFromJson($scope, this.data);
+            MapModelFromJson($scope, data);
            
             function filterByNature(): void {
                 const arraysForFiltration: string[] = ["groups", "sequenceTypes"];

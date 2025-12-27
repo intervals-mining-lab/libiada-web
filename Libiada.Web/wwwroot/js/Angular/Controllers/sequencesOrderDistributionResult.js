@@ -16,7 +16,6 @@ class SequencesOrderDistributionResultHandler {
      * Initializes the Angular controller
      */
     ngOnInit() {
-        "use strict";
         const sequencesOrderDistributionResult = ($scope, $http) => {
             /**
              * Initializes data for chart

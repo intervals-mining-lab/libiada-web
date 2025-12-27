@@ -2,18 +2,15 @@
 
 using Libiada.Core.Core;
 using Libiada.Core.Extensions;
-
+using Libiada.Database.Models.Calculators;
+using Libiada.Database.Models.CalculatorsData;
+using Libiada.Database.Models.Repositories.Catalogs;
+using Libiada.Database.Tasks;
+using Libiada.SequenceGenerator;
 using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
 
-using Libiada.Database.Models.CalculatorsData;
-using Libiada.Database.Models.Calculators;
-using Libiada.Database.Models.Repositories.Catalogs;
-using Libiada.Database.Tasks;
-
 using Newtonsoft.Json;
-
-using Libiada.SequenceGenerator;
 
 using EnumExtensions = Core.Extensions.EnumExtensions;
 
@@ -52,7 +49,7 @@ public class IntervalsCharacteristicsDistributionController : AbstractResultCont
         var imageTransformers = Extensions.EnumExtensions.GetSelectList<ImageTransformer>();
 
         Dictionary<string, object> viewData = viewDataBuilder.AddCharacteristicsData(CharacteristicCategory.Full)
-                                                            .Build();
+                                                             .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }

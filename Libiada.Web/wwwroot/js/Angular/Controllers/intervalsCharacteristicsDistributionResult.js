@@ -11,7 +11,6 @@ class IntervalsCharacteristicsDistributionResultHandler {
     }
     ngOnInit() {
         const intervalsCharacteristicsDistributionResult = ($scope, $http) => {
-            "use strict";
             /**
              * Initializes data for chart visualization
              */

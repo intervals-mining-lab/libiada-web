@@ -32,9 +32,6 @@ interface ISequencesOrderDistributionData {
     // Selected values
     selectedResearchObjects?: number[];
     orderTransformerType?: IOrderTransformerType;
-
-    // Additional properties
-    //[key: string]: any;
 }
 
 /**
@@ -48,35 +45,27 @@ interface ISequencesOrderDistributionScope extends ng.IScope {
     // Selected values
     selectedResearchObjects?: number[];
     orderTransformerType?: IOrderTransformerType;
-
-    // Additional properties
-    [key: string]: any;
 }
 
 /**
 * Controller for sequence order distribution
 */
 class SequencesOrderDistributionHandler {
-    private data: ISequencesOrderDistributionData;
-
     /**
     * Creates an instance of the order distribution controller
     * @param data Data to initialize the controller
     */
     constructor(data: ISequencesOrderDistributionData) {
-        this.data = data;
-        this.ngOnInit();
+        this.ngOnInit(data);
     }
 
     /**
     * Initializes the Angular controller
     */
-    private ngOnInit(): void {
-        "use strict";
-
+    private ngOnInit(data: ISequencesOrderDistributionData): void {
         const sequencesOrderDistribution = ($scope: ISequencesOrderDistributionScope): void => {
             // Initialize scope with data from the parameter
-            MapModelFromJson($scope, this.data);
+            MapModelFromJson($scope, data);
         };
 
         // Register the controller in Angular

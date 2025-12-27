@@ -52,8 +52,6 @@ class BatchSequenceImportHandler {
      * @param data Данные для инициализации контроллера
      */
     private ngOnInit(data: IBatchSequenceImportData): void {
-        "use strict";
-
         const batchSequenceImport = ($scope: IBatchSequenceImportScope): void => {
             MapModelFromJson($scope, data);
 

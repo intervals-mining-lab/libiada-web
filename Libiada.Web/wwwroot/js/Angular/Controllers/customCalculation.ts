@@ -4,17 +4,13 @@
  * Interface for custom calculation data
  */
 interface ICustomCalculationData {
-    // Define properties that would be passed to the controller
-    // Add specific properties as needed based on actual data
-    [key: string]: any;
 }
 
 /**
  * Interface for controller scope
  */
 interface ICustomCalculationScope extends ng.IScope {
-    // Add specific properties as needed based on actual scope usage
-    [key: string]: any;
+
 }
 
 /**
@@ -34,8 +30,6 @@ class CustomCalculationHandler {
      * @param data Data for controller initialization
      */
     private ngOnInit(data: ICustomCalculationData): void {
-        "use strict";
-
         const customCalculation = ($scope: ICustomCalculationScope): void => {
             MapModelFromJson($scope, data);
         };

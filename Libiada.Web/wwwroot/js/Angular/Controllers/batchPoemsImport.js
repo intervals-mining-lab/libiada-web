@@ -16,7 +16,6 @@ class BatchPoemsImportHandler {
      * @param data Data for controller initialization
      */
     ngOnInit(data) {
-        "use strict";
         const batchPoemsImport = ($scope) => {
             MapModelFromJson($scope, data);
             function fileChanged(filePath) {

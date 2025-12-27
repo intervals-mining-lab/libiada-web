@@ -10,7 +10,6 @@ interface IResearchObject {
     group?: number;
     sequenceType?: number;
     selected?: boolean;
-    [key: string]: any;
 }
 
 /**
@@ -42,9 +41,6 @@ interface ISequencesAlignmentData {
     selectedResearchObjects?: number[];
     alignerType?: IAlignerType;
     similarityType?: ISimilarityType;
-
-    // Additional properties
-    [key: string]: any;
 }
 
 /**
@@ -60,35 +56,27 @@ interface ISequencesAlignmentScope extends ng.IScope {
     selectedResearchObjects?: number[];
     alignerType?: IAlignerType;
     similarityType?: ISimilarityType;
-
-    // Additional properties
-    [key: string]: any;
 }
 
 /**
 * Sequence alignment controller
 */
 class SequencesAlignmentHandler {
-    private data: ISequencesAlignmentData;
-
     /**
     * Creates an instance of the sequence alignment controller
     * @param data Data for initializing the controller
     */
     constructor(data: ISequencesAlignmentData) {
-        this.data = data;
-        this.ngOnInit();
+        this.ngOnInit(data);
     }
 
     /**
     * Initializes the Angular controller
     */
-    private ngOnInit(): void {
-        "use strict";
-
+    private ngOnInit(data: ISequencesAlignmentData): void {
         const sequencesAlignment = ($scope: ISequencesAlignmentScope): void => {
             // Initialize the scope with data from the parameter
-            MapModelFromJson($scope, this.data);
+            MapModelFromJson($scope, data);
         };
 
         // Register the controller in Angular

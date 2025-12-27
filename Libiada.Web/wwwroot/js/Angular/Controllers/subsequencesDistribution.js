@@ -4,10 +4,15 @@
 // Main controller class
 class SubsequencesDistributionManager {
     constructor(data) {
-        this.data = data;
+        this.ngOnInit(data);
+    }
+    /**
+     * Initializes the Angular controller
+     */
+    ngOnInit(data) {
         // Define the controller function
         const subsequencesDistribution = ($scope) => {
-            MapModelFromJson($scope, this.data);
+            MapModelFromJson($scope, data);
         };
         // Register the controller in the Angular module
         angular.module("libiada").controller("SubsequencesDistributionCtrl", ["$scope", subsequencesDistribution]);

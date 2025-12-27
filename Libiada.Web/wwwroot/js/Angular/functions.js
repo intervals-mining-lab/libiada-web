@@ -10,7 +10,6 @@ class LibiadaWebUtils {
      * @param data - The source data object to map from
      */
     static MapModelFromJson(scope, data) {
-        "use strict";
         let param;
         for (param in data) {
             if (Object.prototype.hasOwnProperty.call(data, param)) {
@@ -23,7 +22,6 @@ class LibiadaWebUtils {
      * @param characteristic - The characteristic object to modify
      */
     static SelectLink(characteristic) {
-        "use strict";
         characteristic.link = characteristic.characteristicType.Links[0];
         characteristic.arrangementType = characteristic.characteristicType.ArrangementTypes[0];
     }

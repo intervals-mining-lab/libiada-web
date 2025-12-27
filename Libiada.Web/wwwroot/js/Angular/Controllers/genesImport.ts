@@ -4,17 +4,14 @@
  * Interface for genes import data
  */
 interface IGenesImportData {
-    // Define properties that would be passed to the controller
-    // Add specific properties as needed based on actual data
-    [key: string]: any;
+
 }
 
 /**
  * Interface for controller scope
  */
 interface IGenesImportScope extends ng.IScope {
-    // Add specific properties as needed based on actual scope usage
-    [key: string]: any;
+
 }
 
 /**
@@ -34,8 +31,6 @@ class GenesImportHandler {
      * @param data Data for controller initialization
      */
     private ngOnInit(data: IGenesImportData): void {
-        "use strict";
-
         const genesImport = ($scope: IGenesImportScope): void => {
             MapModelFromJson($scope, data);
         };

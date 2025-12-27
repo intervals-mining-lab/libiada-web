@@ -10,7 +10,6 @@ interface IResearchObject {
     group?: number;
     sequenceType?: number;
     selected?: boolean;
-    //[key: string]: any;
 }
 
 /**
@@ -43,9 +42,6 @@ interface IOrderTransformationVisualizationData {
     selectedResearchObjects?: number[];
     orderTransformerType?: IOrderTransformerType;
     transformationsSelected?: ITransformation[];
-
-    // Additional properties
-    [key: string]: any;
 }
 
 /**
@@ -61,35 +57,27 @@ interface IOrderTransformationVisualizationScope extends ng.IScope {
     selectedResearchObjects?: number[];
     orderTransformerType?: IOrderTransformerType;
     transformationsSelected?: ITransformation[];
-
-    // Additional properties
-    [key: string]: any;
 }
 
 /**
 * Controller for visualizing order transformation
 */
 class OrderTransformationVisualizationHandler {
-    private data: IOrderTransformationVisualizationData;
-
     /**
     * Creates an instance of the order transformation visualization controller
     * @param data Data for initializing the controller
     */
     constructor(data: IOrderTransformationVisualizationData) {
-        this.data = data;
-        this.ngOnInit();
+        this.ngOnInit(data);
     }
 
     /**
     * Initializes the Angular controller
     */
-    private ngOnInit(): void {
-        "use strict";
-
+    private ngOnInit(data: IOrderTransformationVisualizationData): void {
         const orderTransformationVisualization = ($scope: IOrderTransformationVisualizationScope): void => {
             // Initialize scope with data from the parameter
-            MapModelFromJson($scope, this.data);
+            MapModelFromJson($scope, data);
         };
 
         // Register the controller in Angular

@@ -4,18 +4,13 @@
  * Interface for order calculation data
  */
 interface IOrderCalculationData {
-    // Add properties that are passed in from the server
-    // This is a generic structure that should be updated based on the actual data
-    [key: string]: any;
 }
 
 /**
  * Interface for the order calculation scope
  */
 interface IOrderCalculationScope extends ng.IScope {
-    // Add properties and methods that are used on the scope
-    // These properties get populated from the data parameter through MapModelFromJson
-    [key: string]: any;
+
 }
 
 /**
@@ -26,18 +21,16 @@ class OrderCalculationHandler {
      * Creates a new instance of the controller
      * @param data Data for controller initialization
      */
-    constructor(private data: IOrderCalculationData) {
-        this.ngOnInit();
+    constructor(data: IOrderCalculationData) {
+        this.ngOnInit(data);
     }
 
     /**
      * Initializes the Angular controller
      */
-    private ngOnInit(): void {
-        "use strict";
-
+    private ngOnInit(data: IOrderCalculationData): void {
         const orderCalculation = ($scope: IOrderCalculationScope): void => {
-            MapModelFromJson($scope, this.data);
+            MapModelFromJson($scope, data);
         };
 
         angular.module("libiada").controller("OrderCalculationCtrl", ["$scope", orderCalculation]);

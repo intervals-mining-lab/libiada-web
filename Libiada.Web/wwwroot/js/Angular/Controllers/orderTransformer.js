@@ -9,17 +9,15 @@ class OrderTransformerHandler {
     * @param data Data for initializing the controller
     */
     constructor(data) {
-        this.data = data;
-        this.ngOnInit();
+        this.ngOnInit(data);
     }
     /**
     * Initializes the Angular controller
     */
-    ngOnInit() {
-        "use strict";
+    ngOnInit(data) {
         const orderTransformer = ($scope, filterFilter) => {
             // Initialize scope with data from the parameter
-            MapModelFromJson($scope, this.data);
+            MapModelFromJson($scope, data);
             /**
             * Filters notations by the selected nature
             */

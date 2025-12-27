@@ -14,9 +14,6 @@ interface ISubsequencesCalculationData {
     selectedResearchObjects?: number[];
     selectedCharacteristics?: ICharacteristic[];
     featureId?: number;
-
-    // Additional properties
-    [key: string]: any;
 }
 
 interface IFeature {
@@ -56,26 +53,22 @@ interface ISubsequencesCalculationScope extends ng.IScope {
 * Controller for calculating subsequences
 */
 class SubsequencesCalculationHandler {
-    private data: ISubsequencesCalculationData;
 
     /**
     * Creates an instance of the subsequence calculation controller
     * @param data Data for initializing the controller
     */
     constructor(data: ISubsequencesCalculationData) {
-        this.data = data;
-        this.ngOnInit();
+        this.ngOnInit(data);
     }
 
     /**
     * Initializes the Angular controller
     */
-    private ngOnInit(): void {
-        "use strict";
-
+    private ngOnInit(data: ISubsequencesCalculationData): void {
         const subsequencesCalculation = ($scope: ISubsequencesCalculationScope): void => {
             // Initialize scope with data from parameter
-            MapModelFromJson($scope, this.data);
+            MapModelFromJson($scope, data);
 
             /**
             * Apply filter to data

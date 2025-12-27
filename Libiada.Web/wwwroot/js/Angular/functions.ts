@@ -25,7 +25,6 @@ interface ICharacteristicType {
     description?: string;
     Links: ILink[];
     ArrangementTypes: IArrangementType[];
-    //[key: string]: any;
 }
 
 /**
@@ -35,7 +34,6 @@ interface ICharacteristic {
     characteristicType: ICharacteristicType;
     link?: ILink;
     arrangementType?: IArrangementType;
-//    [key: string]: any;
 }
 
 /**
@@ -62,8 +60,6 @@ class LibiadaWebUtils {
      * @param data - The source data object to map from
      */
     public static MapModelFromJson(scope: IAngularScope, data: IDataObject): void {
-        "use strict";
-
         let param: string;
         for (param in data) {
             if (Object.prototype.hasOwnProperty.call(data, param)) {
@@ -77,8 +73,6 @@ class LibiadaWebUtils {
      * @param characteristic - The characteristic object to modify
      */
     public static SelectLink(characteristic: ICharacteristic): void {
-        "use strict";
-
         characteristic.link = characteristic.characteristicType.Links[0];
         characteristic.arrangementType = characteristic.characteristicType.ArrangementTypes[0];
     }

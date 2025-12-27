@@ -25,7 +25,6 @@ interface ICharacteristicType {
     description?: string;
     Links: ILink[];
     ArrangementTypes: IArrangementType[];
-    //[key: string]: any;
 }
 
 /**
@@ -45,7 +44,6 @@ interface ICharacteristic {
     link?: ILink;
     arrangementType?: IArrangementType;
     notation: INotation;
-    //[key: string]: any;
 }
 
 /**
@@ -67,9 +65,6 @@ interface IOrderTransformerData {
 
     // Characteristics
     characteristics?: ICharacteristic[];
-
-    // Additional properties
-    [key: string]: any;
 }
 
 /**
@@ -98,34 +93,26 @@ interface IOrderTransformerScope extends ng.IScope {
 
     // Methods
     filterByNature: () => void;
-
-    // Additional properties
-    [key: string]: any;
 }
 /**
 * Controller for order transformation
 */
 class OrderTransformerHandler {
-    private data: IOrderTransformerData;
-
     /**
     * Creates an instance of the order transformation controller
     * @param data Data for initializing the controller
     */
     constructor(data: IOrderTransformerData) {
-        this.data = data;
-        this.ngOnInit();
+        this.ngOnInit(data);
     }
 
     /**
     * Initializes the Angular controller
     */
-    private ngOnInit(): void {
-        "use strict";
-
+    private ngOnInit(data: IOrderTransformerData): void {
         const orderTransformer = ($scope: IOrderTransformerScope, filterFilter: ng.IFilterFilter): void => {
             // Initialize scope with data from the parameter
-            MapModelFromJson($scope, this.data);
+            MapModelFromJson($scope, data);
 
             /**
             * Filters notations by the selected nature

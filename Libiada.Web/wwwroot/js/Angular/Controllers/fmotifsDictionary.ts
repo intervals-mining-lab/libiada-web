@@ -96,8 +96,6 @@ interface ILineResult {
  * Controller for FmotifsDictionary
  */
 function FmotifsDictionaryController(data: IFmotifsDictionaryData): void {
-    "use strict";
-
     function fmotifsDictionary($scope: IFmotifsDictionaryScope): void {
         MapModelFromJson($scope, data);
 

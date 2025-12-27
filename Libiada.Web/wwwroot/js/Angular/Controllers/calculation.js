@@ -3,13 +3,11 @@
 // Updated controller class
 class CalculationOperator {
     constructor(data) {
-        this.data = data;
-        this.ngOnInit();
+        this.ngOnInit(data);
     }
-    ngOnInit() {
-        "use strict";
+    ngOnInit(data) {
         const calculation = ($scope, filterFilter) => {
-            MapModelFromJson($scope, this.data);
+            MapModelFromJson($scope, data);
             function filterByNature() {
                 if (!$scope.hideNotation) {
                     $scope.notation = filterFilter($scope.notations, { Nature: $scope.nature })[0];

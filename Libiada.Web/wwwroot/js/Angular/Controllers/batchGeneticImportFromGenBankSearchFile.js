@@ -16,7 +16,6 @@ class BatchGeneticImportFromGenBankSearchFileHandler {
      * @param data Data for controller initialization
      */
     ngOnInit(data) {
-        "use strict";
         const batchGeneticImportFromGenBankSearchFile = ($scope) => {
             MapModelFromJson($scope, data);
             function fileChanged(filePath) {

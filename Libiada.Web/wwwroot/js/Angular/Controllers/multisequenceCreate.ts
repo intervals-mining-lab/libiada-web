@@ -23,7 +23,7 @@ interface IMultisequenceCreateData {
     maximumSelectedResearchObjects?: number;
     groups?: any[];
     sequenceTypes?: any[];
-    [key: string]: any;
+
 }
 
 /**
@@ -62,8 +62,6 @@ class MultisequenceCreateHandler {
      * @param data Data for controller initialization
      */
     private ngOnInit(data: IMultisequenceCreateData): void {
-        "use strict";
-
         const multisequenceCreate = ($scope: IMultisequenceCreateScope, filterFilter: ng.IFilterFilter): void => {
             MapModelFromJson($scope, data);
 

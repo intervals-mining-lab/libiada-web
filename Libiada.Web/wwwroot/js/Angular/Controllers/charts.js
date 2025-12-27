@@ -11,8 +11,7 @@ class ChartsControllerHandler {
      * Creates a new instance of the controller
      * @param data Initial data for the controller
      */
-    constructor(data) {
-        this.data = data;
+    constructor() {
         this.ngOnInit();
     }
     /**
@@ -20,7 +19,6 @@ class ChartsControllerHandler {
      */
     ngOnInit() {
         const charts = ($scope, $document) => {
-            "use strict";
             /**
              * Parses tabular data from text
              * @param text Text with tab-delimited data
@@ -490,7 +488,6 @@ class ChartsControllerHandler {
  * @returns New instance of ChartsControllerHandler
  */
 function ChartsController(data) {
-    "use strict";
     return new ChartsControllerHandler(data);
 }
 //# sourceMappingURL=charts.js.map

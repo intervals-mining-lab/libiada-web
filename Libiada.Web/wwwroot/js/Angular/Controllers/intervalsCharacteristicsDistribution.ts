@@ -4,16 +4,12 @@
  * Interface for intervals characteristics distribution data
  */
 interface IIntervalsCharacteristicsDistributionData {
-    // Данные могут содержать любые свойства из сервера
-    [key: string]: any;
 }
 
 /**
  * Interface for controller scope
  */
 interface IIntervalsCharacteristicsDistributionScope extends ng.IScope {
-    // Свойства будут заполнены через MapModelFromJson
-    [key: string]: any;
 }
 
 /**
@@ -24,18 +20,16 @@ class IntervalsCharacteristicsDistributionHandler {
      * Creates a new instance of the controller
      * @param data Data for controller initialization
      */
-    constructor(private data: IIntervalsCharacteristicsDistributionData) {
-        this.ngOnInit();
+    constructor(data: IIntervalsCharacteristicsDistributionData) {
+        this.ngOnInit(data);
     }
 
     /**
      * Initializes the Angular controller
      */
-    private ngOnInit(): void {
-        "use strict";
-
+    private ngOnInit(data: IIntervalsCharacteristicsDistributionData): void {
         const intervalsCharacteristicsDistribution = ($scope: IIntervalsCharacteristicsDistributionScope): void => {
-            MapModelFromJson($scope, this.data);
+            MapModelFromJson($scope, data);
         };
 
         angular.module("libiada").controller("IntervalsCharacteristicsDistributionCtrl", ["$scope", intervalsCharacteristicsDistribution]);

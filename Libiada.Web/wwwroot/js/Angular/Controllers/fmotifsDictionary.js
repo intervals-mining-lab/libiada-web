@@ -6,7 +6,6 @@
  * Controller for FmotifsDictionary
  */
 function FmotifsDictionaryController(data) {
-    "use strict";
     function fmotifsDictionary($scope) {
         MapModelFromJson($scope, data);
         // MIDI player variables

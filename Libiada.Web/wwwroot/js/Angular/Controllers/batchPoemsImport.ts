@@ -56,8 +56,6 @@ class BatchPoemsImportHandler {
      * @param data Data for controller initialization
      */
     private ngOnInit(data: IBatchPoemsImportData): void {
-        "use strict";
-
         const batchPoemsImport = ($scope: IBatchPoemsImportScope): void => {
             MapModelFromJson($scope, data);
 

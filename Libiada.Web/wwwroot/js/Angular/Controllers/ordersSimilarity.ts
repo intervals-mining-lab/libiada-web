@@ -6,8 +6,6 @@ interface IOrdersSimilarityData {
     notations?: { Nature: number; Value: string; Text: string }[];
     // List of available nature types (genetic, literary, etc.)
     natures?: { Value: number; Text: string }[];
-    // Other possible properties...
-    [key: string]: any;
 }
 
 /**

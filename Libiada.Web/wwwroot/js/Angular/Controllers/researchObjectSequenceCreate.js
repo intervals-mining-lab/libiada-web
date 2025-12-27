@@ -3,13 +3,11 @@
 // Controller class
 class ResearchObjectSequenceCreator {
     constructor(data) {
-        this.data = data;
-        this.ngOnInit();
+        this.ngOnInit(data);
     }
-    ngOnInit() {
-        "use strict";
+    ngOnInit(data) {
         const researchObjectSequenceCreate = ($scope, filterFilter) => {
-            MapModelFromJson($scope, this.data);
+            MapModelFromJson($scope, data);
             function filterByNature() {
                 const arraysForFiltration = ["notations", "remoteDbs",
                     "researchObjects", "groups", "sequenceTypes"];

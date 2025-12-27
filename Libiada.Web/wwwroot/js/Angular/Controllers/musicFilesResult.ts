@@ -4,9 +4,7 @@
  * Interface for music files result data
  */
 interface IMusicFilesResultData {
-    // Add properties based on the actual data structure from the API
-    // These will be populated from data.data in the HTTP response
-    [key: string]: any;
+
 }
 
 /**
@@ -16,9 +14,7 @@ interface IMusicFilesResultScope extends ng.IScope {
     // Task identifier for loading data
     taskId: string;
 
-    // Properties mapped from the API response
-    // Will be populated from data.data via MapModelFromJson
-    [key: string]: any;
+
 }
 
 /**
@@ -36,8 +32,6 @@ class MusicFilesResultHandler {
      * Initializes the Angular controller
      */
     private ngOnInit(): void {
-        "use strict";
-
         const musicFilesResult = ($scope: IMusicFilesResultScope, $http: ng.IHttpService): void => {
             // Extract task ID from the URL
             const location = window.location.href.split("/");

@@ -14,7 +14,6 @@ interface IDistributionInterval {
  */
 interface IOrder {
     order: string;
-    //[key: string]: any; // Generic order data structure
 }
 
 /**
@@ -117,8 +116,6 @@ class OrdersIntervalsDistributionsAccordanceResultHandler {
      * Initializes the Angular controller
      */
     private ngOnInit(): void {
-        "use strict";
-
         const ordersIntervalsDistributionsAccordanceResult = ($scope: IOrdersIntervalsDistributionsAccordanceResultScope, $http: ng.IHttpService): void => {
             // initializes data for chart
             function fillPoints(): void {
