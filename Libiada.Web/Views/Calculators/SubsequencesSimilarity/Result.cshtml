@@ -33,37 +33,37 @@
                     <td ng-bind="::features[first.FeatureId]" />
                     <td>
                         <ul class="list-unstyled">
-                            <li ng-repeat="attribute in ::firstSequenceAttributes[similarSubsequence.Item1]" ng-bind="::attribute.Value"></li>
+                            <li ng-repeat="attribute in ::firstSequenceAttributes[similarSubsequence.Item1]">
+                                {{::attributes[attribute.AttributeId]}}: {{::attribute.Value}}
+                            </li>
                         </ul>
                     </td>
                     <td>
-                        <span>{{::first.Starts.join(", ")}}</span>
                         <ul class="list-unstyled">
-                            <li ng-repeat="position in ::first.Position" ng-bind="::position.Start"></li>
+                            <li ng-repeat="start in ::first.Starts" ng-bind="::start"></li>
                         </ul>
                     </td>
                     <td>
-                        <span>{{::first.Lengths.join(", ")}}</span>
                         <ul class="list-unstyled">
-                            <li ng-repeat="position in ::first.Position" ng-bind="::position.Length"></li>
+                            <li ng-repeat="length in ::first.Lengths" ng-bind="::length"></li>
                         </ul>
                     </td>
                     <td ng-bind="::features[second.FeatureId]"></td>
                     <td>
                         <ul class="list-unstyled">
-                            <li ng-repeat="attribute in ::secondSequenceAttributes[similarSubsequence.Item2]" ng-bind="::attribute.Value"></li>
+                            <li ng-repeat="attribute in ::secondSequenceAttributes[similarSubsequence.Item2]">
+                                {{::attributes[attribute.AttributeId]}}: {{::attribute.Value}}
+                            </li>
                         </ul>
                     </td>
                     <td>
-                        <span>{{::second.Starts.join(", ")}}</span>
                         <ul class="list-unstyled">
-                            <li ng-repeat="position in ::second.Position" ng-bind="::position.Start"></li>
+                            <li ng-repeat="start in ::second.Starts" ng-bind="::start"></li>
                         </ul>
                     </td>
                     <td>
-                        <span>{{::second.Lengths.join(", ")}}</span>
                         <ul class="list-unstyled">
-                            <li ng-repeat="position in ::second.Position" ng-bind="::position.Length"></li>
+                            <li ng-repeat="length in ::second.Lengths" ng-bind="::length"></li>
                         </ul>
                     </td>
                 </tr>
@@ -72,7 +72,7 @@
     </div>
 
     @section Scripts {
-    <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
-    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
+        <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
+        <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
     }
 }
