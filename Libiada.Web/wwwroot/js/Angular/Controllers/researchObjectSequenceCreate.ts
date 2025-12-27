@@ -73,10 +73,10 @@ class ResearchObjectSequenceCreator {
 
     constructor(data: IResearchObjectSequenceCreateData) {
         this.data = data;
-        this.initializeController();
+        this.ngOnInit();
     }
 
-    private initializeController(): void {
+    private ngOnInit(): void {
         "use strict";
 
         const researchObjectSequenceCreate = ($scope: IResearchObjectSequenceCreateScope, filterFilter: ng.IFilterFilter): void => {

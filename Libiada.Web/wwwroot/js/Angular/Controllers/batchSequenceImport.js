@@ -1,3 +1,4 @@
+"use strict";
 /// <reference types="angular" />
 /**
  * Контроллер для пакетного импорта последовательностей
@@ -8,13 +9,13 @@ class BatchSequenceImportHandler {
      * @param data Данные для инициализации контроллера
      */
     constructor(data) {
-        this.initializeController(data);
+        this.ngOnInit(data);
     }
     /**
      * Инициализирует Angular контроллер
      * @param data Данные для инициализации контроллера
      */
-    initializeController(data) {
+    ngOnInit(data) {
         "use strict";
         const batchSequenceImport = ($scope) => {
             MapModelFromJson($scope, data);

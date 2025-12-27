@@ -1,3 +1,4 @@
+"use strict";
 /// <reference types="angular" />
 /// <reference types="d3" />
 /// <reference types="plotly.js" />

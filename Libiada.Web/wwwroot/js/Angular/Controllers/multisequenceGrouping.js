@@ -1,3 +1,4 @@
+"use strict";
 /// <reference types="angular" />
 /**
  * Controller for multisequence grouping
@@ -7,12 +8,12 @@ class MultisequenceGroupingHandler {
      * Creates a new controller instance
      */
     constructor() {
-        this.initializeController();
+        this.ngOnInit();
     }
     /**
      * Initializes Angular controller
      */
-    initializeController() {
+    ngOnInit() {
         "use strict";
         const multisequenceGrouping = ($scope, $http) => {
             /**

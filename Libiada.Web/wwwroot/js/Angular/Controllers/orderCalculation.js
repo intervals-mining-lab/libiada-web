@@ -1,3 +1,4 @@
+"use strict";
 /// <reference types="angular" />
 /**
  * Controller for order calculations
@@ -9,12 +10,12 @@ class OrderCalculationHandler {
      */
     constructor(data) {
         this.data = data;
-        this.initializeController();
+        this.ngOnInit();
     }
     /**
      * Initializes the Angular controller
      */
-    initializeController() {
+    ngOnInit() {
         "use strict";
         const orderCalculation = ($scope) => {
             MapModelFromJson($scope, this.data);

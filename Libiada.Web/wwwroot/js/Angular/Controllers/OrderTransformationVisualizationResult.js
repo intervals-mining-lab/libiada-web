@@ -1,3 +1,4 @@
+"use strict";
 /// <reference types="angular" />
 /// <reference types="d3" />
 /// <reference path="./Interfaces/commonInterfaces.d.ts" />
@@ -7,9 +8,9 @@
 */
 class OrderTransformationVisualizationResultHandler {
     constructor() {
-        this.initializeController();
+        this.ngOnInit();
     }
-    initializeController() {
+    ngOnInit() {
         "use strict";
         const orderTransformationVisualizationResult = ($scope, $http) => {
             /**

@@ -110,13 +110,13 @@ class OrdersIntervalsDistributionsAccordanceResultHandler {
      * Creates a new instance of the controller
      */
     constructor() {
-        this.initializeController();
+        this.ngOnInit();
     }
 
     /**
      * Initializes the Angular controller
      */
-    private initializeController(): void {
+    private ngOnInit(): void {
         "use strict";
 
         const ordersIntervalsDistributionsAccordanceResult = ($scope: IOrdersIntervalsDistributionsAccordanceResultScope, $http: ng.IHttpService): void => {

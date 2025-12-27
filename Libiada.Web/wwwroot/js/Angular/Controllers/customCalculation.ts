@@ -26,14 +26,14 @@ class CustomCalculationHandler {
      * @param data Data for controller initialization
      */
     constructor(data: ICustomCalculationData) {
-        this.initializeController(data);
+        this.ngOnInit(data);
     }
 
     /**
      * Initializes Angular controller
      * @param data Data for controller initialization
      */
-    private initializeController(data: ICustomCalculationData): void {
+    private ngOnInit(data: ICustomCalculationData): void {
         "use strict";
 
         const customCalculation = ($scope: ICustomCalculationScope): void => {
@@ -53,4 +53,3 @@ class CustomCalculationHandler {
 function CustomCalculationController(data: ICustomCalculationData): CustomCalculationHandler {
     return new CustomCalculationHandler(data);
 }
-

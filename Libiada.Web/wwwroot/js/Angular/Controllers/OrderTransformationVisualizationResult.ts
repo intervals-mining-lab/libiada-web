@@ -124,10 +124,10 @@ interface ID3Tooltip extends d3.Selection<HTMLDivElement, unknown, HTMLElement, 
 */
 class OrderTransformationVisualizationResultHandler {
     constructor() {
-        this.initializeController();
+        this.ngOnInit();
     }
 
-    private initializeController(): void {
+    private ngOnInit(): void {
         "use strict";
 
         const orderTransformationVisualizationResult = ($scope: IOrderTransformationVisualizationScope, $http: ng.IHttpService): void => {

@@ -1,11 +1,12 @@
+"use strict";
 /// <reference types="angular" />
 // Updated controller class
 class CalculationOperator {
     constructor(data) {
         this.data = data;
-        this.initializeController();
+        this.ngOnInit();
     }
-    initializeController() {
+    ngOnInit() {
         "use strict";
         const calculation = ($scope, filterFilter) => {
             MapModelFromJson($scope, this.data);

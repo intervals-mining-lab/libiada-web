@@ -1,3 +1,4 @@
+"use strict";
 /// <reference types="angular" />
 /**
  * Utility functions for LibiadaWeb Angular application

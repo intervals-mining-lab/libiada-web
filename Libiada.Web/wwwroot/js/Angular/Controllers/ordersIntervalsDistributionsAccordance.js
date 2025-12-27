@@ -1,3 +1,4 @@
+"use strict";
 /**
 * Controller for displaying order interval distribution correspondence
 */
@@ -8,12 +9,12 @@ class OrdersIntervalsDistributionsAccordanceHandler {
     */
     constructor(data) {
         this.data = data;
-        this.initializeController(data);
+        this.ngOnInit(data);
     }
     /**
     * Initializes the Angular controller
     */
-    initializeController(data) {
+    ngOnInit(data) {
         "use strict";
         const ordersIntervalsDistributionsAccordance = ($scope) => {
             MapModelFromJson($scope, this.data);

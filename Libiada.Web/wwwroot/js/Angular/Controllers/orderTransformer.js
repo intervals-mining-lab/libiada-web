@@ -1,3 +1,4 @@
+"use strict";
 /// <reference types="angular" />
 /**
 * Controller for order transformation
@@ -9,12 +10,12 @@ class OrderTransformerHandler {
     */
     constructor(data) {
         this.data = data;
-        this.initializeController();
+        this.ngOnInit();
     }
     /**
     * Initializes the Angular controller
     */
-    initializeController() {
+    ngOnInit() {
         "use strict";
         const orderTransformer = ($scope, filterFilter) => {
             // Initialize scope with data from the parameter

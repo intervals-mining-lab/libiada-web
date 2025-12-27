@@ -1,3 +1,4 @@
+"use strict";
 /// <reference types="angular" />
 /**
  * Контроллер для отображения результатов пакетного импорта последовательностей
@@ -7,12 +8,12 @@ class BatchSequenceImportResultHandler {
      * Создает новый экземпляр контроллера
      */
     constructor() {
-        this.initializeController();
+        this.ngOnInit();
     }
     /**
      * Инициализирует Angular контроллер
      */
-    initializeController() {
+    ngOnInit() {
         "use strict";
         const batchSequenceImportResult = ($scope, $http) => {
             // returns css class for given status

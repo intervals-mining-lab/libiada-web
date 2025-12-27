@@ -117,7 +117,6 @@
       "library": "@types/angular@1.8.7",
       "destination": "wwwroot/lib/@types/angular/"
     },
-
     {
       "provider": "jsdelivr",
       "library": "@types/jquery@3.5.29",

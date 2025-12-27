@@ -1,3 +1,4 @@
+"use strict";
 /// <reference types="angular" />
 /// <reference types="d3" />
 /**
@@ -8,12 +9,12 @@ class OrdersIntervalsDistributionsAccordanceResultHandler {
      * Creates a new instance of the controller
      */
     constructor() {
-        this.initializeController();
+        this.ngOnInit();
     }
     /**
      * Initializes the Angular controller
      */
-    initializeController() {
+    ngOnInit() {
         "use strict";
         const ordersIntervalsDistributionsAccordanceResult = ($scope, $http) => {
             // initializes data for chart

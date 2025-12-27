@@ -115,10 +115,10 @@ class ResearchObjectEditor {
 
     constructor(data: IResearchObjectEditData) {
         this.data = data;
-        this.initializeController();
+        this.ngOnInit();
     }
 
-    private initializeController(): void {
+    private ngOnInit(): void {
         "use strict";
 
         const researchObjectEdit = ($scope: IResearchObjectEditScope, filterFilter: ng.IFilterFilter): void => {

@@ -1,12 +1,12 @@
+"use strict";
 /// <reference types="angular" />
-/// <reference types="@signalr/src" />
+/// <reference types="signalr" />
 // Controller class for task manager
 class TaskManagerControllerHandler {
     constructor() {
-        this.initializeController();
+        this.ngOnInit();
     }
-    initializeController() {
-        "use strict";
+    ngOnInit() {
         const taskManager = ($scope) => {
             function onCloseConnection() {
                 alertify.error("Connection lost", 5);
@@ -60,9 +60,10 @@ class TaskManagerControllerHandler {
                     $scope.$apply();
                 }
                 catch (e) {
-                    console.error(e.toString());
+                    console.error(e instanceof Error ? e.message : String(e));
                 }
             }
+            // TODO: convert to switches
             function getStatusClass(status) {
                 return status === "InProgress" ? "table-info"
                     : status === "Completed" ? "table-success"
@@ -70,8 +71,9 @@ class TaskManagerControllerHandler {
             }
             function getStatusIcon(status) {
                 return status === "InProgress" ? "bi-play-circle-fill text-info"
-                    : status === "Completed" ? "bi-check-circle-fill text-success" : status === "Error" ? "bi-x-circle-fill text-danger"
-                        : status === "InQueue" ? "bi-pause-circle-fill text-muted" : "";
+                    : status === "Completed" ? "bi-check-circle-fill text-success"
+                        : status === "Error" ? "bi-x-circle-fill text-danger"
+                            : status === "InQueue" ? "bi-pause-circle-fill text-muted" : "";
             }
             function getTaskCountWithStatus(state) {
                 return $scope.tasks.filter(task => task.TaskState === state).length;
@@ -82,7 +84,7 @@ class TaskManagerControllerHandler {
                     $scope.$apply();
                     $scope.tasksHub.invoke("deleteAllTasks")
                         .then(() => alertify.success("All tasks have been deleted."))
-                        .catch(err => console.error(err));
+                        .catch(e => console.error(e instanceof Error ? e.message : String(e)));
                 }, () => { });
             }
             function deleteTasksWithStatus(taskStatus) {
@@ -91,7 +93,7 @@ class TaskManagerControllerHandler {
                     $scope.$apply();
                     $scope.tasksHub.invoke("deleteTasksWithState", taskStatus)
                         .then(() => alertify.success(`All tasks with "${taskStatus}" status have been deleted.`))
-                        .catch(err => console.error(err));
+                        .catch(e => console.error(e instanceof Error ? e.message : String(e)));
                 }, () => { });
             }
             function deleteTask(id) {
@@ -102,7 +104,7 @@ class TaskManagerControllerHandler {
                         $scope.$apply();
                         $scope.tasksHub.invoke("deleteTask", id)
                             .then(() => alertify.success("The task has been deleted."))
-                            .catch(err => console.error(err));
+                            .catch(e => console.error(e instanceof Error ? e.message : String(e)));
                     }
                 }, () => { });
             }
@@ -110,10 +112,16 @@ class TaskManagerControllerHandler {
             function tryRedirectToResult(task) {
                 if ($scope.autoRedirect && (task.Id === $scope.RedirectTaskId)
                     && (task.TaskState === "Completed" || task.TaskState === "Error")) {
-                    document.location.href = task.resultLink.href; //`${window.location.origin}/${task.TaskType}/Result/${task.Id}`;
+                    if (!task.resultLink) {
+                        // TODO: try to concat url from task params
+                        alertify.error("There is no result address to redirect to.");
+                    }
+                    else {
+                        document.location.href = task.resultLink.href; //`${window.location.origin}/${task.TaskType}/Result/${task.Id}`;
+                    }
                 }
             }
-            // Assigning methods to $scope 
+            // Assigning methods to $scope
             $scope.onCloseConnection = onCloseConnection;
             $scope.onHubStart = onHubStart;
             $scope.taskEvent = taskEvent;
@@ -124,14 +132,14 @@ class TaskManagerControllerHandler {
             $scope.deleteTasksWithStatus = deleteTasksWithStatus;
             $scope.deleteTask = deleteTask;
             $scope.tryRedirectToResult = tryRedirectToResult;
-            // Initialize SignalR connection 
+            // Initializing SignalR connection
             $scope.tasksHub = new signalR.HubConnectionBuilder().withUrl("/TaskManagerHub").build();
             $scope.tasksHub.on("taskEvent", $scope.taskEvent);
             $scope.tasksHub.onclose($scope.onCloseConnection);
             $scope.tasksHub.start()
                 .then(() => $scope.tasksHub.invoke("getAllTasks").then($scope.onHubStart))
-                .catch((err) => console.error(err.toString()));
-            // Initialize scope properties 
+                .catch(e => console.error(e instanceof Error ? e.message : String(e)));
+            // Initializing scope properties
             let location = window.location.href.split("/");
             if (location[location.length - 1] !== "TaskManager") {
                 $scope.RedirectTaskId = parseInt(location[location.length - 1]);

@@ -74,13 +74,13 @@ class SequencesOrderDistributionResultHandler {
      * Creates a new instance of the controller
      */
     constructor() {
-        this.initializeController();
+        this.ngOnInit();
     }
 
     /**
      * Initializes the Angular controller
      */
-    private initializeController(): void {
+    private ngOnInit(): void {
         "use strict";
 
         const sequencesOrderDistributionResult = ($scope: ISequencesOrderDistributionScope, $http: ng.IHttpService): void => {

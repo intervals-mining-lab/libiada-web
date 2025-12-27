@@ -26,14 +26,14 @@ class AccordanceHandler {
      * @param data Data for controller initialization
      */
     constructor(data: IAccordanceData) {
-        this.initializeController(data);
+        this.ngOnInit(data);
     }
 
     /**
      * Initializes Angular controller
      * @param data Data for controller initialization
      */
-    private initializeController(data: IAccordanceData): void {
+    private ngOnInit(data: IAccordanceData): void {
         "use strict";
 
         const accordance = ($scope: IAccordanceScope, filterFilter: ng.IFilterFilter): void => {

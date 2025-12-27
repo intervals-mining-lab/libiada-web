@@ -1,3 +1,4 @@
+"use strict";
 /**
 * Controller class for comparing orders
 */
@@ -7,12 +8,12 @@ class OrdersSimilarityHandler {
     * @param data Data to create the controller
     */
     constructor(data) {
-        this.initializeController(data);
+        this.ngOnInit(data);
     }
     /**
     * Initializes the Angular controller.
     */
-    initializeController(data) {
+    ngOnInit(data) {
         const ordersSimilarity = ($scope, filterFilter) => {
             MapModelFromJson($scope, data);
             function filterByNature() {

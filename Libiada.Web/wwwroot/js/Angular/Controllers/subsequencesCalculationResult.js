@@ -1,3 +1,4 @@
+"use strict";
 /// <reference types="angular" />
 /// <reference types="d3" />
 /// <reference types="plotly.js" />
@@ -14,12 +15,12 @@ class SubsequencesCalculationResultHandler {
      * Creates a new instance of the controller
      */
     constructor() {
-        this.initializeController();
+        this.ngOnInit();
     }
     /**
      * Initializes the Angular controller
      */
-    initializeController() {
+    ngOnInit() {
         "use strict";
         const subsequencesCalculationResult = ($scope, $http, $sce) => {
             function fillLegend() {

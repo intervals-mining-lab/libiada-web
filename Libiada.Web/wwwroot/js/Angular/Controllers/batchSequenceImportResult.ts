@@ -42,13 +42,13 @@ class BatchSequenceImportResultHandler {
      * Создает новый экземпляр контроллера
      */
     constructor() {
-        this.initializeController();
+        this.ngOnInit();
     }
 
     /**
      * Инициализирует Angular контроллер
      */
-    private initializeController(): void {
+    private ngOnInit(): void {
         "use strict";
 
         const batchSequenceImportResult = ($scope: IBatchSequenceImportResultScope, $http: ng.IHttpService): void => {

@@ -21,13 +21,13 @@ interface IOrderTransformationResultScope extends ng.IScope {
  */
 class OrderTransformationResultHandler {
     constructor() {
-        this.initializeController();
+        this.ngOnInit();
     }
 
     /**
      * Initializes the Angular controller
      */
-    private initializeController(): void {
+    private ngOnInit(): void {
         "use strict";
 
         const orderTransformationResult = ($scope: IOrderTransformationResultScope, $http: ng.IHttpService): void => {

@@ -1,3 +1,4 @@
+"use strict";
 /// <reference types="angular" />
 /**
  * Controller for intervals characteristics distribution
@@ -9,12 +10,12 @@ class IntervalsCharacteristicsDistributionHandler {
      */
     constructor(data) {
         this.data = data;
-        this.initializeController();
+        this.ngOnInit();
     }
     /**
      * Initializes the Angular controller
      */
-    initializeController() {
+    ngOnInit() {
         "use strict";
         const intervalsCharacteristicsDistribution = ($scope) => {
             MapModelFromJson($scope, this.data);

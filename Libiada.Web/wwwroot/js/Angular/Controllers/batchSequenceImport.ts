@@ -44,14 +44,14 @@ class BatchSequenceImportHandler {
      * @param data Данные для инициализации контроллера
      */
     constructor(data: IBatchSequenceImportData) {
-        this.initializeController(data);
+        this.ngOnInit(data);
     }
 
     /**
      * Инициализирует Angular контроллер
      * @param data Данные для инициализации контроллера
      */
-    private initializeController(data: IBatchSequenceImportData): void {
+    private ngOnInit(data: IBatchSequenceImportData): void {
         "use strict";
 
         const batchSequenceImport = ($scope: IBatchSequenceImportScope): void => {

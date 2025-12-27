@@ -1,3 +1,4 @@
+"use strict";
 /// <reference types="angular" />
 /// <reference types="d3" />
 /// <reference path="./Interfaces/commonInterfaces.d.ts" />
@@ -6,9 +7,9 @@
  */
 class IntervalsCharacteristicsDistributionResultHandler {
     constructor() {
-        this.initializeController();
+        this.ngOnInit();
     }
-    initializeController() {
+    ngOnInit() {
         const intervalsCharacteristicsDistributionResult = ($scope, $http) => {
             "use strict";
             /**

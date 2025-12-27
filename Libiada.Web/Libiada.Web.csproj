@@ -16,7 +16,6 @@
 		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="10.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="10.0.0" />
 		<PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
-		<PackageReference Include="TypeScript.MSBuildTask" Version="1.7.3" />
 		<PackageReference Include="WebPush" Version="1.0.12" />
 	</ItemGroup>
 

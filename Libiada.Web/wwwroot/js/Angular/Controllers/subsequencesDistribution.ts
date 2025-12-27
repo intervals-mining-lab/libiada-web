@@ -51,23 +51,17 @@ interface ISubsequencesDistributionScope extends ng.IScope, ISubsequencesDistrib
 // Main controller class
 class SubsequencesDistributionManager {
     constructor(private readonly data: ISubsequencesDistributionData) {
-        this.initialize();
-    }
-
-    private initialize(): void {
         // Define the controller function
         const subsequencesDistribution = ($scope: ISubsequencesDistributionScope): void => {
             MapModelFromJson($scope, this.data);
         };
 
         // Register the controller in the Angular module
-        angular.module("libiada")
-            .controller("SubsequencesDistributionCtrl", ["$scope", subsequencesDistribution]);
+        angular.module("libiada").controller("SubsequencesDistributionCtrl", ["$scope", subsequencesDistribution]);
     }
 }
 
 // Export the constructor for use in _AngularControllerInitializer.cshtml
 function SubsequencesDistributionController(data: ISubsequencesDistributionData): SubsequencesDistributionManager {
-
     return new SubsequencesDistributionManager(data);
 };

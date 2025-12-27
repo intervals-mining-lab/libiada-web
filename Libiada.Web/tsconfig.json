@@ -1,36 +1,38 @@
-﻿
-
 {
+  "compileOnSave": true,
   "compilerOptions": {
-    "target": "ES2021",
-    "module": "none",
-    "sourceMap": true,
-    "outDir": "./wwwroot/js/Angular/", 
-    "rootDir": "./wwwroot/js/Angular/", 
-    "strict": false,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true,
+    "target": "es2024",
+    "module": "es2022",
+    "strict": true,
+    "alwaysStrict": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    //"noUncheckedIndexedAccess": true,
     "forceConsistentCasingInFileNames": true,
-    "noImplicitAny": false,
-    "allowJs": true,
-    "checkJs": false,
-    "removeComments": false,
-    "declaration": false,
-    "types": [ "angular" ],
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "rootDir": "./wwwroot/js/Angular/",
+    "outDir": "./wwwroot/js/Angular/",
+    "skipLibCheck": true,
+    //"allowJs": true,
+    //"checkJs": true,
+    //"declaration": true,
+    //"types": [ "angular" ],
     "typeRoots": [
-      "wwwroot/lib/@types",
-      "./wwwroot/lib/microsoft"
-    ],
-    "moduleResolution": "node"
+      "wwwroot/lib/microsoft",
+      "wwwroot/lib/@types"
+    ]
+    // "noEmitOnError": true
+
   },
   "include": [
-    "wwwroot/js/Angular/**/*.ts" 
- ],
+    "wwwroot/js/Angular/**/*.ts"
+  ],
   "exclude": [
     //"node_modules",
-    //"wwwroot/lib"
+    //"wwwroot/lib",
     //"wwwroot/lib/!([@types]/**)"
-    
+
   ]
+
 }

@@ -36,14 +36,14 @@ class BatchGeneticImportFromGenBankSearchFileHandler {
      * @param data Data for controller initialization
      */
     constructor(data: IBatchGeneticImportFromGenBankSearchFileData) {
-        this.initializeController(data);
+        this.ngOnInit(data);
     }
 
     /**
      * Initializes Angular controller
      * @param data Data for controller initialization
      */
-    private initializeController(data: IBatchGeneticImportFromGenBankSearchFileData): void {
+    private ngOnInit(data: IBatchGeneticImportFromGenBankSearchFileData): void {
         "use strict";
 
         const batchGeneticImportFromGenBankSearchFile = ($scope: IBatchGeneticImportFromGenBankSearchFileScope): void => {

@@ -1,3 +1,4 @@
+"use strict";
 /// <reference types="angular" />
 /**
  * Controller for displaying music files processing results
@@ -7,12 +8,12 @@ class MusicFilesResultHandler {
      * Creates a new instance of the controller
      */
     constructor() {
-        this.initializeController();
+        this.ngOnInit();
     }
     /**
      * Initializes the Angular controller
      */
-    initializeController() {
+    ngOnInit() {
         "use strict";
         const musicFilesResult = ($scope, $http) => {
             // Extract task ID from the URL

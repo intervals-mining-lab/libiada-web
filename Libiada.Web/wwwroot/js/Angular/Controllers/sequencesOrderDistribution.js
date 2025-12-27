@@ -1,3 +1,4 @@
+"use strict";
 /// <reference types="angular" />
 /**
 * Controller for sequence order distribution
@@ -9,12 +10,12 @@ class SequencesOrderDistributionHandler {
     */
     constructor(data) {
         this.data = data;
-        this.initializeController();
+        this.ngOnInit();
     }
     /**
     * Initializes the Angular controller
     */
-    initializeController() {
+    ngOnInit() {
         "use strict";
         const sequencesOrderDistribution = ($scope) => {
             // Initialize scope with data from the parameter

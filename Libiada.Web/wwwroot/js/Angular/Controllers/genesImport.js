@@ -1,3 +1,4 @@
+"use strict";
 /// <reference types="angular" />
 /**
  * Controller for genes import functionality
@@ -8,13 +9,13 @@ class GenesImportHandler {
      * @param data Data for controller initialization
      */
     constructor(data) {
-        this.initializeController(data);
+        this.ngOnInit(data);
     }
     /**
      * Initializes Angular controller
      * @param data Data for controller initialization
      */
-    initializeController(data) {
+    ngOnInit(data) {
         "use strict";
         const genesImport = ($scope) => {
             MapModelFromJson($scope, data);

@@ -1,3 +1,4 @@
+"use strict";
 /// <reference types="angular" />
 /**
 * Sequence alignment controller
@@ -9,12 +10,12 @@ class SequencesAlignmentHandler {
     */
     constructor(data) {
         this.data = data;
-        this.initializeController();
+        this.ngOnInit();
     }
     /**
     * Initializes the Angular controller
     */
-    initializeController() {
+    ngOnInit() {
         "use strict";
         const sequencesAlignment = ($scope) => {
             // Initialize the scope with data from the parameter

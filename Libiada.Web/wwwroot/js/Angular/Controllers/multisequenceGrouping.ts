@@ -42,13 +42,13 @@ class MultisequenceGroupingHandler {
      * Creates a new controller instance
      */
     constructor() {
-        this.initializeController();
+        this.ngOnInit();
     }
 
     /**
      * Initializes Angular controller
      */
-    private initializeController(): void {
+    private ngOnInit(): void {
         "use strict";
 
         const multisequenceGrouping = ($scope: IMultisequenceGroupingScope, $http: ng.IHttpService): void => {

@@ -1,3 +1,4 @@
+"use strict";
 /// <reference types="angular" />
 /**
 * Controller for calculating subsequences
@@ -9,12 +10,12 @@ class SubsequencesCalculationHandler {
     */
     constructor(data) {
         this.data = data;
-        this.initializeController();
+        this.ngOnInit();
     }
     /**
     * Initializes the Angular controller
     */
-    initializeController() {
+    ngOnInit() {
         "use strict";
         const subsequencesCalculation = ($scope) => {
             // Initialize scope with data from parameter

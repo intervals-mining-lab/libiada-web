@@ -1,3 +1,4 @@
+"use strict";
 /// <reference types="angular" />
 /**
 * Controller for sequence groups
@@ -9,12 +10,12 @@ class SequenceGroupsHandler {
     */
     constructor(data) {
         this.data = data;
-        this.initializeController();
+        this.ngOnInit();
     }
     /**
     * Initializes the Angular controller
     */
-    initializeController() {
+    ngOnInit() {
         "use strict";
         const sequenceGroups = ($scope) => {
             // Initialize scope with data from the parameter

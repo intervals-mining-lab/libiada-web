@@ -29,13 +29,13 @@ class MusicFilesResultHandler {
      * Creates a new instance of the controller
      */
     constructor() {
-        this.initializeController();
+        this.ngOnInit();
     }
 
     /**
      * Initializes the Angular controller
      */
-    private initializeController(): void {
+    private ngOnInit(): void {
         "use strict";
 
         const musicFilesResult = ($scope: IMusicFilesResultScope, $http: ng.IHttpService): void => {

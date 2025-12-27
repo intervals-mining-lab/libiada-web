@@ -48,14 +48,14 @@ class BatchPoemsImportHandler {
      * @param data Data for controller initialization
      */
     constructor(data: IBatchPoemsImportData) {
-        this.initializeController(data);
+        this.ngOnInit(data);
     }
 
     /**
      * Initializes Angular controller
      * @param data Data for controller initialization
      */
-    private initializeController(data: IBatchPoemsImportData): void {
+    private ngOnInit(data: IBatchPoemsImportData): void {
         "use strict";
 
         const batchPoemsImport = ($scope: IBatchPoemsImportScope): void => {

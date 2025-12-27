@@ -54,14 +54,14 @@ class MultisequenceCreateHandler {
      * @param data Data for controller initialization
      */
     constructor(data: IMultisequenceCreateData) {
-        this.initializeController(data);
+        this.ngOnInit(data);
     }
 
     /**
      * Initializes Angular controller
      * @param data Data for controller initialization
      */
-    private initializeController(data: IMultisequenceCreateData): void {
+    private ngOnInit(data: IMultisequenceCreateData): void {
         "use strict";
 
         const multisequenceCreate = ($scope: IMultisequenceCreateScope, filterFilter: ng.IFilterFilter): void => {
@@ -92,4 +92,3 @@ class MultisequenceCreateHandler {
 function MultisequenceCreateController(data: IMultisequenceCreateData): MultisequenceCreateHandler {
     return new MultisequenceCreateHandler(data);
 }
-

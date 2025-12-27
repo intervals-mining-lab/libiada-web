@@ -23,13 +23,13 @@ class OrdersIntervalsDistributionsAccordanceHandler {
     * @param data Data for initializing the controller
     */
     constructor(private data: IOrdersIntervalsDistributionsAccordanceData) {
-        this.initializeController(data);
+        this.ngOnInit(data);
     }
 
     /** 
     * Initializes the Angular controller 
     */
-    private initializeController(data: IOrdersIntervalsDistributionsAccordanceData): void {
+    private ngOnInit(data: IOrdersIntervalsDistributionsAccordanceData): void {
         "use strict";
 
         const ordersIntervalsDistributionsAccordance = ($scope: IOrdersIntervalsDistributionsAccordanceScope): void => {

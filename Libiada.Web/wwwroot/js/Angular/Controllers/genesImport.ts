@@ -26,14 +26,14 @@ class GenesImportHandler {
      * @param data Data for controller initialization
      */
     constructor(data: IGenesImportData) {
-        this.initializeController(data);
+        this.ngOnInit(data);
     }
 
     /**
      * Initializes Angular controller
      * @param data Data for controller initialization
      */
-    private initializeController(data: IGenesImportData): void {
+    private ngOnInit(data: IGenesImportData): void {
         "use strict";
 
         const genesImport = ($scope: IGenesImportScope): void => {

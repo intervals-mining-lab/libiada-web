@@ -77,13 +77,13 @@ class SequencesAlignmentHandler {
     */
     constructor(data: ISequencesAlignmentData) {
         this.data = data;
-        this.initializeController();
+        this.ngOnInit();
     }
 
     /**
     * Initializes the Angular controller
     */
-    private initializeController(): void {
+    private ngOnInit(): void {
         "use strict";
 
         const sequencesAlignment = ($scope: ISequencesAlignmentScope): void => {

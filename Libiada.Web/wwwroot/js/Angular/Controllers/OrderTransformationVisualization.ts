@@ -78,13 +78,13 @@ class OrderTransformationVisualizationHandler {
     */
     constructor(data: IOrderTransformationVisualizationData) {
         this.data = data;
-        this.initializeController();
+        this.ngOnInit();
     }
 
     /**
     * Initializes the Angular controller
     */
-    private initializeController(): void {
+    private ngOnInit(): void {
         "use strict";
 
         const orderTransformationVisualization = ($scope: IOrderTransformationVisualizationScope): void => {

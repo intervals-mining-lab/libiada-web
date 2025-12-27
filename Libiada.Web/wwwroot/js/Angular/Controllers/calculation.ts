@@ -159,10 +159,10 @@ class CalculationOperator {
 
     constructor(data: ICalculationData) {
         this.data = data;
-        this.initializeController();
+        this.ngOnInit();
     }
 
-    private initializeController(): void {
+    private ngOnInit(): void {
         "use strict";
 
         const calculation = ($scope: ICalculationScope, filterFilter: ng.IFilterFilter): void => {

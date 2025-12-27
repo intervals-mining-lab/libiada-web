@@ -1,3 +1,4 @@
+"use strict";
 /// <reference types="angular" />
 /// <reference types="d3" />
 /// <reference path="./Interfaces/commonInterfaces.d.ts" />
@@ -9,12 +10,12 @@ class SequencesOrderDistributionResultHandler {
      * Creates a new instance of the controller
      */
     constructor() {
-        this.initializeController();
+        this.ngOnInit();
     }
     /**
      * Initializes the Angular controller
      */
-    initializeController() {
+    ngOnInit() {
         "use strict";
         const sequencesOrderDistributionResult = ($scope, $http) => {
             /**

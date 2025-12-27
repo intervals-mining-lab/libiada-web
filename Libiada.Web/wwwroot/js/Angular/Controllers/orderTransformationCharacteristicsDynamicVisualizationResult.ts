@@ -76,13 +76,13 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
      * Creates a new instance of the controller
      */
     constructor() {
-        this.initializeController();
+        this.ngOnInit();
     }
 
     /**
      * Initializes the Angular controller
      */
-    private initializeController(): void {
+    private ngOnInit(): void {
         "use strict";
 
         const orderTransformationCharacteristicsDynamicVisualizationResult = ($scope: IOrderTransformationCharacteristicsDynamicScope, $http: ng.IHttpService): void => {

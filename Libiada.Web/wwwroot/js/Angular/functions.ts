@@ -42,7 +42,7 @@ interface ICharacteristic {
  * Interface for the scope in Angular controllers
  */
 interface IAngularScope extends ng.IScope {
-
+    [key: string]: any;
 }
 /**
  * Interface for data object

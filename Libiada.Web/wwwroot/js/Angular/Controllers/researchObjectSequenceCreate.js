@@ -1,11 +1,12 @@
+"use strict";
 /// <reference types="angular" />
 // Controller class
 class ResearchObjectSequenceCreator {
     constructor(data) {
         this.data = data;
-        this.initializeController();
+        this.ngOnInit();
     }
-    initializeController() {
+    ngOnInit() {
         "use strict";
         const researchObjectSequenceCreate = ($scope, filterFilter) => {
             MapModelFromJson($scope, this.data);

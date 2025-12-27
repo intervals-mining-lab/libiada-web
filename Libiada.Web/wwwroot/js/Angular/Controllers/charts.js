@@ -1,3 +1,4 @@
+"use strict";
 /// <reference types="angular" />
 /// <reference types="d3" />
 /// <reference types="plotly.js" />
@@ -12,12 +13,12 @@ class ChartsControllerHandler {
      */
     constructor(data) {
         this.data = data;
-        this.initializeController();
+        this.ngOnInit();
     }
     /**
      * Initializes the Angular controller
      */
-    initializeController() {
+    ngOnInit() {
         const charts = ($scope, $document) => {
             "use strict";
             /**

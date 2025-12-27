@@ -25,13 +25,13 @@ class IntervalsCharacteristicsDistributionHandler {
      * @param data Data for controller initialization
      */
     constructor(private data: IIntervalsCharacteristicsDistributionData) {
-        this.initializeController();
+        this.ngOnInit();
     }
 
     /**
      * Initializes the Angular controller
      */
-    private initializeController(): void {
+    private ngOnInit(): void {
         "use strict";
 
         const intervalsCharacteristicsDistribution = ($scope: IIntervalsCharacteristicsDistributionScope): void => {

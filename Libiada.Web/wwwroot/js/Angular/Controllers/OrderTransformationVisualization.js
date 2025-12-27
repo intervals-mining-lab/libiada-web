@@ -1,3 +1,4 @@
+"use strict";
 /// <reference types="angular" />
 /**
 * Controller for visualizing order transformation
@@ -9,12 +10,12 @@ class OrderTransformationVisualizationHandler {
     */
     constructor(data) {
         this.data = data;
-        this.initializeController();
+        this.ngOnInit();
     }
     /**
     * Initializes the Angular controller
     */
-    initializeController() {
+    ngOnInit() {
         "use strict";
         const orderTransformationVisualization = ($scope) => {
             // Initialize scope with data from the parameter

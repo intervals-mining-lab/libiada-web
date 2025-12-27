@@ -117,13 +117,13 @@ class ChartsControllerHandler {
      * @param data Initial data for the controller
      */
     constructor(private data: any) {
-        this.initializeController();
+        this.ngOnInit();
     }
 
     /**
      * Initializes the Angular controller
      */
-    private initializeController(): void {
+    private ngOnInit(): void {
         const charts = ($scope: IChartsScope, $document: ng.IDocumentService): void => {
             "use strict";
 

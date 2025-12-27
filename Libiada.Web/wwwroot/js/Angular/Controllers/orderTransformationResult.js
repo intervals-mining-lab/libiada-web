@@ -1,15 +1,16 @@
+"use strict";
 /// <reference types="angular" />
 /**
  * Controller for order transformation result visualization
  */
 class OrderTransformationResultHandler {
     constructor() {
-        this.initializeController();
+        this.ngOnInit();
     }
     /**
      * Initializes the Angular controller
      */
-    initializeController() {
+    ngOnInit() {
         "use strict";
         const orderTransformationResult = ($scope, $http) => {
             // Set loading message

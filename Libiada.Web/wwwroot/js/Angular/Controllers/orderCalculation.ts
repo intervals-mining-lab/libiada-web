@@ -27,13 +27,13 @@ class OrderCalculationHandler {
      * @param data Data for controller initialization
      */
     constructor(private data: IOrderCalculationData) {
-        this.initializeController();
+        this.ngOnInit();
     }
 
     /**
      * Initializes the Angular controller
      */
-    private initializeController(): void {
+    private ngOnInit(): void {
         "use strict";
 
         const orderCalculation = ($scope: IOrderCalculationScope): void => {

@@ -32,13 +32,13 @@ class SequencePredictionResultHandler {
     * Creates an instance of the sequence prediction results controller
     */
     constructor() {
-        this.initializeController();
+        this.ngOnInit();
     }
 
     /**
     * Initializes the Angular controller
     */
-    private initializeController(): void {
+    private ngOnInit(): void {
         "use strict";
 
         const sequencePredictionResult = ($scope: ISequencePredictionResultScope, $http: ng.IHttpService): void => {

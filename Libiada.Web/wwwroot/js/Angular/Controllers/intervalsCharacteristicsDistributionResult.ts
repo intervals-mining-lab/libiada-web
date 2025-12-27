@@ -83,10 +83,10 @@ interface IIntervalsCharacteristicsDistributionResultScope extends ng.IScope {
  */
 class IntervalsCharacteristicsDistributionResultHandler {
     constructor() {
-        this.initializeController();
+        this.ngOnInit();
     }
 
-    private initializeController(): void {
+    private ngOnInit(): void {
         const intervalsCharacteristicsDistributionResult = ($scope: IIntervalsCharacteristicsDistributionResultScope, $http: ng.IHttpService): void => {
             "use strict";
 

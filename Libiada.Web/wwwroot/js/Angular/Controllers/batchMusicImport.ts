@@ -36,14 +36,14 @@ class BatchMusicImportHandler {
      * @param data Data for controller initialization
      */
     constructor(data: IBatchMusicImportData) {
-        this.initializeController(data);
+        this.ngOnInit(data);
     }
 
     /**
      * Initializes Angular controller
      * @param data Data for controller initialization
      */
-    private initializeController(data: IBatchMusicImportData): void {
+    private ngOnInit(data: IBatchMusicImportData): void {
         "use strict";
 
         const batchMusicImport = ($scope: IBatchMusicImportScope): void => {

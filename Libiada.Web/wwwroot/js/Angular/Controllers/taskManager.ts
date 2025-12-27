@@ -1,6 +1,5 @@
 ﻿/// <reference types="angular" />
-
-/// <reference types="@signalr/src" />
+/// <reference types="signalr" />
 
 // Interface for task data
 interface ITask {
@@ -52,6 +51,7 @@ interface ITaskManagerScope extends ng.IScope {
     tryRedirectToResult: (task: ITask) => void;
 }
 
+//TODO: try to figure out why DefenitlyTyped has wrong types for this library
 // Definition for alertify
 declare const alertify: {
     success(message: string, timeout?: number): void;
@@ -62,12 +62,10 @@ declare const alertify: {
 // Controller class for task manager
 class TaskManagerControllerHandler {
     constructor() {
-        this.initializeController();
+        this.ngOnInit();
     }
 
-    private initializeController(): void {
-        "use strict";
-
+    private ngOnInit(): void {
         const taskManager = ($scope: ITaskManagerScope): void => {
             function onCloseConnection(): void {
                 alertify.error("Connection lost", 5);
@@ -120,9 +118,10 @@ class TaskManagerControllerHandler {
                 }
                 try {
                     $scope.$apply();
-                } catch (e) { console.error(e.toString()); }
+                } catch (e) { console.error(e instanceof Error ? e.message : String(e)); }
             }
 
+            // TODO: convert to switches
             function getStatusClass(status: TaskState): string {
                 return status === "InProgress" ? "table-info"
                     : status === "Completed" ? "table-success"
@@ -131,8 +130,9 @@ class TaskManagerControllerHandler {
 
             function getStatusIcon(status: TaskState): string {
                 return status === "InProgress" ? "bi-play-circle-fill text-info"
-                    : status === "Completed" ? "bi-check-circle-fill text-success" : status === "Error" ? "bi-x-circle-fill text-danger"
-                        : status === "InQueue" ? "bi-pause-circle-fill text-muted" : "";
+                    : status === "Completed" ? "bi-check-circle-fill text-success"
+                        : status === "Error" ? "bi-x-circle-fill text-danger"
+                            : status === "InQueue" ? "bi-pause-circle-fill text-muted" : "";
             }
 
             function getTaskCountWithStatus(state: TaskState): number {
@@ -146,7 +146,7 @@ class TaskManagerControllerHandler {
                         $scope.$apply();
                         $scope.tasksHub.invoke("deleteAllTasks")
                             .then(() => alertify.success("All tasks have been deleted."))
-                            .catch(err => console.error(err));
+                            .catch(e => console.error(e instanceof Error ? e.message : String(e)));
                     },
                     () => { /* Cancel action */ });
             }
@@ -158,7 +158,7 @@ class TaskManagerControllerHandler {
                         $scope.$apply();
                         $scope.tasksHub.invoke("deleteTasksWithState", taskStatus)
                             .then(() => alertify.success(`All tasks with "${taskStatus}" status have been deleted.`))
-                            .catch(err => console.error(err));
+                            .catch(e => console.error(e instanceof Error ? e.message : String(e)));
                     },
                     () => { /* Cancel action */ });
             }
@@ -172,7 +172,7 @@ class TaskManagerControllerHandler {
                             $scope.$apply();
                             $scope.tasksHub.invoke("deleteTask", id)
                                 .then(() => alertify.success("The task has been deleted."))
-                                .catch(err => console.error(err));
+                                .catch(e => console.error(e instanceof Error ? e.message : String(e)));
                         }
                     },
                     () => { /* Cancel action */ });
@@ -182,11 +182,17 @@ class TaskManagerControllerHandler {
             function tryRedirectToResult(task: ITask): void {
                 if ($scope.autoRedirect && (task.Id === $scope.RedirectTaskId)
                     && (task.TaskState === "Completed" || task.TaskState === "Error")) {
-                    document.location.href = task.resultLink.href; //`${window.location.origin}/${task.TaskType}/Result/${task.Id}`;
+                    if (!task.resultLink) {
+                        // TODO: try to concat url from task params
+                        alertify.error("There is no result address to redirect to.");
+                    }
+                    else {
+                        document.location.href = task.resultLink.href; //`${window.location.origin}/${task.TaskType}/Result/${task.Id}`;
+                    }
                 }
             }
 
-            // Assigning methods to $scope 
+            // Assigning methods to $scope
             $scope.onCloseConnection = onCloseConnection;
             $scope.onHubStart = onHubStart;
             $scope.taskEvent = taskEvent;
@@ -198,7 +204,7 @@ class TaskManagerControllerHandler {
             $scope.deleteTask = deleteTask;
             $scope.tryRedirectToResult = tryRedirectToResult;
 
-            // Initialize SignalR connection 
+            // Initializing SignalR connection
             $scope.tasksHub = new signalR.HubConnectionBuilder().withUrl("/TaskManagerHub").build();
 
             $scope.tasksHub.on("taskEvent", $scope.taskEvent);
@@ -206,9 +212,9 @@ class TaskManagerControllerHandler {
 
             $scope.tasksHub.start()
                 .then(() => $scope.tasksHub.invoke("getAllTasks").then($scope.onHubStart))
-                .catch((err) => console.error(err.toString()));
+                .catch(e => console.error(e instanceof Error ? e.message : String(e)));
 
-            // Initialize scope properties 
+            // Initializing scope properties
             let location = window.location.href.split("/");
             if (location[location.length - 1] !== "TaskManager") {
                 $scope.RedirectTaskId = parseInt(location[location.length - 1]);

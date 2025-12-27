@@ -36,13 +36,13 @@ class OrdersSimilarityHandler  {
     * @param data Data to create the controller
     */
     constructor(data: IOrdersSimilarityData) {
-        this.initializeController(data);
+        this.ngOnInit(data);
     }
 
     /**
     * Initializes the Angular controller.
     */
-    private initializeController(data: IOrdersSimilarityData): void {
+    private ngOnInit(data: IOrdersSimilarityData): void {
 
         const ordersSimilarity = ($scope: IOrdersSimilarityScope, filterFilter: ng.IFilterFilter): void => {
             MapModelFromJson($scope, data);
