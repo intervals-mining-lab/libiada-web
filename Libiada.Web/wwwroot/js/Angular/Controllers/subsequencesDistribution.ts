@@ -1,52 +1,95 @@
-﻿// Declaring global variables and functions
-/// <reference types="angular" />
+﻿/// <reference types="angular" />
 
+interface SequenceType {
+    Value: string;
+    Text: string;
+    Selected: boolean;
+    Disabled: boolean;
+    Nature: number;
+    Group: null; // TODO: check what type it could be
+}
 
-// Interface for data passed to the controller
+interface SequenceGroup {
+    Value: string;
+    Text: string;
+    Selected: boolean;
+    Disabled: boolean;
+    Nature: number;
+    Group: string;
+}
+
+interface Notation {
+    Value: string;
+    Text: string;
+    Selected: boolean;
+    Disabled: boolean;
+    Nature: number;
+    Group: null; // TODO: check what type it could be
+}
+
+interface Group {
+    Value: string;
+    Text: string;
+    Selected: boolean;
+    Disabled: boolean;
+    Nature: number;
+    Group: null; // TODO: check what type it could be
+}
+
+interface Feature {
+    Value: string;
+    Text: string;
+    Selected: boolean;
+    Disabled: boolean;
+    Nature: number;
+    Group: null; // TODO: check what type it could be
+}
+
+interface Link {
+    Value: string;
+    Text: string;
+    Selected: boolean;
+    Disabled: boolean;
+    Group: null; // TODO: check what type it could be
+}
+
+interface ArrangementType {
+    Value: string;
+    Text: string;
+    Selected: boolean;
+    Disabled: boolean;
+    Group: null; // TODO: check what type it could be
+}
+
+interface CharacterisrticType {
+    ArrangementTypes: ArrangementType[];
+    Links: Link[];
+    Value: string;
+    Text: string;
+    Selected: boolean;
+    Disabled: boolean;
+    Group: null; // TODO: check what type it could be
+}
+
+// Interface for data passed to the controller from server on page load
 interface ISubsequencesDistributionData {
-    // Main parameters
+
     maximumSelectedResearchObjects: number;
     minimumSelectedResearchObjects: number;
+    characteristicTypes: CharacterisrticType[];
+    characteristicsDictionary: { [key: string]: number };
+    features: Feature[];
+    groups: Group[];
     nature: string;
-    groups: Array<{ id: number; name: string }>;
-    sequenceTypes: Array<{ id: number; name: string }>;
-    features: Array<{ id: number; name: string }>;
-
-    // Characteristics
-    characteristicTypes: Array<{ value: string; text: string }>;
-    characteristicsDictionary: { [key: string]: any };
-    notations: Array<{ value: number; text: string }>;
-    languages: Array<{ value: number; text: string }>;
-    translators: Array<{ value: number; text: string }>;
-    pauseTreatments: Array<{ value: number; text: string }>;
-    trajectories?: Array<{ value: number; text: string }>;
+    notations: Notation[];
+    sequenceGroups: SequenceGroup[];
+    sequenceTypes: SequenceType[];
 }
 
 // Interface for $scope in controller
 interface ISubsequencesDistributionScope extends ng.IScope, ISubsequencesDistributionData {
-    // Basic parameters from the data model 
-    maximumSelectedResearchObjects: number;
-    minimumSelectedResearchObjects: number;
-    nature: string;
-    groups: Array<{ id: number; name: string }>;
-    sequenceTypes: Array<{ id: number; name: string }>;
-    features: Array<{ id: number; name: string }>;
-
-    // Characteristics 
-    characteristicTypes: Array<{ value: string; text: string }>;
-    characteristicsDictionary: { [key: string]: any };
-    notations: Array<{ value: number; text: string }>;
-    languages: Array<{ value: number; text: string }>;
-    translators: Array<{ value: number; text: string }>;
-    pauseTreatments: Array<{ value: number; text: string }>;
-    trajectories?: Array<{ value: number; text: string }>;
-
-    // Dynamic data 
     selectedResearchObjectsCount: number;
-    selectedSequenceGroupsCount: number;
 }
-
-
 
 // Main controller class
 class SubsequencesDistributionManager {

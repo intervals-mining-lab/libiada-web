@@ -1,15 +1,11 @@
 "use strict";
 /// <reference types="angular" />
-/**
- * Controller for subsequences similarity result visualization
- */
+// Controller for subsequences similarity result visualization
 class SubsequencesSimilarityResultHandler {
     constructor() {
         this.ngOnInit();
     }
-    /**
-     * Initializes the Angular controller
-     */
+    // Initializes the Angular controller
     ngOnInit() {
         const subsequencesSimilarityResult = ($scope, $http) => {
             // Get task ID from URL
@@ -33,9 +29,7 @@ class SubsequencesSimilarityResultHandler {
         angular.module("libiada").controller("SubsequencesSimilarityResultCtrl", ["$scope", "$http", subsequencesSimilarityResult]);
     }
 }
-/**
- * Wrapper function for backward compatibility
- */
+// Wrapper function for backward compatibility
 function SubsequencesSimilarityResultController() {
     return new SubsequencesSimilarityResultHandler();
 }

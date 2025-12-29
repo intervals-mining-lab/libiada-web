@@ -2,7 +2,7 @@
 /// <reference types="signalr" />
 
 // Interface for task data
-interface ITask {
+interface Task {
     Id: number;
     TaskType: string;
     UserId: string;
@@ -22,7 +22,7 @@ type TaskState = "InQueue" | "InProgress" | "Completed" | "Error";
 // Interface for the task manager scope
 interface ITaskManagerScope extends ng.IScope {
     // Tasks and loading state
-    tasks: ITask[];
+    tasks: Task[];
     loading: boolean;
     loadingScreenHeader: string;
 
@@ -36,8 +36,8 @@ interface ITaskManagerScope extends ng.IScope {
 
     // Methods for hub events
     onCloseConnection: () => void;
-    onHubStart: (tasks: ITask[]) => void;
-    taskEvent: (event: string, taskData: ITask) => void;
+    onHubStart: (tasks: Task[]) => void;
+    taskEvent: (event: string, taskData: Task) => void;
 
     // Helper methods for the UI
     getStatusClass: (status: TaskState) => string;
@@ -48,7 +48,7 @@ interface ITaskManagerScope extends ng.IScope {
     deleteAllTasks: () => void;
     deleteTasksWithStatus: (taskStatus: TaskState) => void;
     deleteTask: (id: number) => void;
-    tryRedirectToResult: (task: ITask) => void;
+    tryRedirectToResult: (task: Task) => void;
 }
 
 //TODO: try to figure out why DefenitlyTyped has wrong types for this library
@@ -71,9 +71,9 @@ class TaskManagerControllerHandler {
                 alertify.error("Connection lost", 5);
             }
 
-            function onHubStart(tasks: ITask[]): void {
+            function onHubStart(tasks: Task[]): void {
                 for (let i = 0; i < tasks.length; i++) {
-                    let task = tasks[i];
+                    let task: Task = tasks[i];
                     task.resultLink = new URL(`${window.location.origin}/${task.TaskType}/Result/${task.Id}`);
                     $scope.tasks.push(task);
                     $scope.tryRedirectToResult(task);
@@ -85,19 +85,19 @@ class TaskManagerControllerHandler {
                 } catch (e) { console.error(e instanceof Error ? e.message : String(e)); }
             }
 
-            function taskEvent(event: string, taskData: ITask): void {
+            function taskEvent(event: string, taskData: Task): void {
                 switch (event) {
                     case "AddTask":
                         $scope.tasks.push(taskData);
                         break;
                     case "DeleteTask":
-                        let taskToDelete = $scope.tasks.find(t => t.Id === taskData.Id);
+                        let taskToDelete: Task | undefined = $scope.tasks.find(t => t.Id === taskData.Id);
                         if (taskToDelete) {
                             $scope.tasks.splice($scope.tasks.indexOf(taskToDelete), 1);
                         }
                         break;
                     case "ChangeStatus":
-                        let taskToChange = $scope.tasks.find(t => t.Id === taskData.Id);
+                        let taskToChange: Task | undefined = $scope.tasks.find(t => t.Id === taskData.Id);
                         if (taskToChange) {
                             taskToChange.Created = taskData.Created;
                             taskToChange.Started = taskData.Started;
@@ -124,15 +124,15 @@ class TaskManagerControllerHandler {
             // TODO: convert to switches
             function getStatusClass(status: TaskState): string {
                 return status === "InProgress" ? "table-info"
-                    : status === "Completed" ? "table-success"
-                        : status === "Error" ? "table-danger" : "";
+                     : status === "Completed" ? "table-success"
+                     : status === "Error" ? "table-danger" : "";
             }
 
             function getStatusIcon(status: TaskState): string {
                 return status === "InProgress" ? "bi-play-circle-fill text-info"
-                    : status === "Completed" ? "bi-check-circle-fill text-success"
-                        : status === "Error" ? "bi-x-circle-fill text-danger"
-                            : status === "InQueue" ? "bi-pause-circle-fill text-muted" : "";
+                     : status === "Completed" ? "bi-check-circle-fill text-success"
+                     : status === "Error" ? "bi-x-circle-fill text-danger"
+                     : status === "InQueue" ? "bi-pause-circle-fill text-muted" : "";
             }
 
             function getTaskCountWithStatus(state: TaskState): number {
@@ -166,7 +166,7 @@ class TaskManagerControllerHandler {
             function deleteTask(id: number): void {
                 alertify.confirm("Confirm action", "Are you sure you want to delete this task?",
                     () => {
-                        let taskToDelete = $scope.tasks.find(t => t.Id === id);
+                        let taskToDelete: Task | undefined = $scope.tasks.find(t => t.Id === id);
                         if (taskToDelete) {
                             taskToDelete.Deleting = true;
                             $scope.$apply();
@@ -179,7 +179,7 @@ class TaskManagerControllerHandler {
             }
 
             //TODO Check List
-            function tryRedirectToResult(task: ITask): void {
+            function tryRedirectToResult(task: Task): void {
                 if ($scope.autoRedirect && (task.Id === $scope.RedirectTaskId)
                     && (task.TaskState === "Completed" || task.TaskState === "Error")) {
                     if (!task.resultLink) {
@@ -215,7 +215,7 @@ class TaskManagerControllerHandler {
                 .catch(e => console.error(e instanceof Error ? e.message : String(e)));
 
             // Initializing scope properties
-            let location = window.location.href.split("/");
+            let location: string[] = window.location.href.split("/");
             if (location[location.length - 1] !== "TaskManager") {
                 $scope.RedirectTaskId = parseInt(location[location.length - 1]);
             } else {

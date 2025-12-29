@@ -1,5 +1,4 @@
 "use strict";
-// Declaring global variables and functions
 /// <reference types="angular" />
 // Main controller class
 class SubsequencesDistributionManager {

@@ -57,13 +57,13 @@
             characteristicTypes: "<",
             nature: "<",
             notations: "<",
+            characteristicsDictionary: "<",
+            percentageDifferenseNeeded: "<",
+            hideNotation: "@",
             languages: "<?",
             translators: "<?",
             pauseTreatments: "<?",
-            trajectories: "<?",
-            characteristicsDictionary: "<",
-            percentageDifferenseNeeded: "<",
-            hideNotation: "@"
+            trajectories: "<?"
         }
     });
 }

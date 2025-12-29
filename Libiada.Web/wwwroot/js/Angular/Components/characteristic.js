@@ -38,15 +38,15 @@
         templateUrl: `${window.location.origin}/AngularTemplates/_Characteristic`,
         controller: ["filterFilter", CharacteristicController],
         bindings: {
-            characteristic: "=?",
             characteristicTypes: "<",
+            characteristicsDictionary: "<",
             nature: "<",
             notations: "<",
+            characteristic: "=?",
             languages: "<?",
             translators: "<?",
             pauseTreatments: "<?",
             trajectories: "<?",
-            characteristicsDictionary: "<",
             characteristicName: "@?",
             title: "@?"
         }
