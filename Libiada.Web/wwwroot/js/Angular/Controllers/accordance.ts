@@ -1,14 +1,40 @@
-﻿/// <reference types="angular" />
+﻿import { MapModelFromJson } from "functions";
+import type {
+    SequenceType,
+    Nature,
+    Notation,
+    Language,
+    PauseTreatment,
+    Trajectory,
+    Translator,
+    Group,
+    Feature,
+    CharacterisrticType
+} from "viewDataTypes";
 
 /**
  * Interface for accordion data
  */
-interface IAccordanceData {
+interface AccordanceData {
+    maximumSelectedResearchObjects: number;
+    minimumSelectedResearchObjects: number;
+    characteristicTypes: CharacterisrticType[];
+    characteristicsDictionary: { [key: string]: number };
+    features: Feature[];
+    groups: Group[];    natures: Nature[];
+    notations: Notation[];
+    languages: Language[];
+    pauseTreatments: PauseTreatment[];
+    trajectories: Trajectory[];
+    translators: Translator[];
+    sequenceTypes: SequenceType[];
 }
 /**
  * Interface for controller scope
  */
-interface IAccordanceScope extends ng.IScope {
+interface AccordanceScope extends angular.IScope, AccordanceData {
+    nature: string;
+    selectedResearchObjectsCount: number;
 }
 
 /**
@@ -19,7 +45,7 @@ class AccordanceHandler {
      * Creates a new controller instance
      * @param data Data for controller initialization
      */
-    constructor(data: IAccordanceData) {
+    constructor(data: AccordanceData) {
         this.ngOnInit(data);
     }
 
@@ -27,8 +53,8 @@ class AccordanceHandler {
      * Initializes Angular controller
      * @param data Data for controller initialization
      */
-    private ngOnInit(data: IAccordanceData): void {
-        const accordance = ($scope: IAccordanceScope, filterFilter: ng.IFilterFilter): void => {
+    private ngOnInit(data: AccordanceData): void {
+        const accordance = ($scope: AccordanceScope, filterFilter: ng.IFilterFilter): void => {
             MapModelFromJson($scope, data);
         };
 
@@ -42,6 +68,6 @@ class AccordanceHandler {
  * @param data Data for controller initialization
  * @returns Instance of accordance handler
  */
-function AccordanceController(data: IAccordanceData): AccordanceHandler {
+export default function AccordanceController(data: AccordanceData): AccordanceHandler {
     return new AccordanceHandler(data);
 }

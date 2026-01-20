@@ -1,5 +1,4 @@
-"use strict";
-/// <reference types="angular" />
+import { MapModelFromJson } from "functions";
 /**
  * Controller for custom calculation functionality
  */
@@ -28,7 +27,7 @@ class CustomCalculationHandler {
  * @param data Data for controller initialization
  * @returns Instance of custom calculation handler
  */
-function CustomCalculationController(data) {
+export default function CustomCalculationController(data) {
     return new CustomCalculationHandler(data);
 }
 //# sourceMappingURL=customCalculation.js.map

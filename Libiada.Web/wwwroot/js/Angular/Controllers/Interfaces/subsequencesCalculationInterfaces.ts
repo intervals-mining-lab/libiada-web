@@ -1,13 +1,13 @@
-﻿/// <reference path="./commonInterfaces.d.ts" />
+﻿import { IBasePoint } from "commonInterfaces";
 
 // Интерфейс для характеристики
-interface IChartCharacteristic {
+export interface IChartCharacteristic {
     id: number;
     value: string;
 }
 
 // Интерфейс для легенды
-interface ILegendItem {
+export interface ILegendItem {
     id: number;
     name: string;
     visible: boolean;
@@ -15,7 +15,7 @@ interface ILegendItem {
 }
 
 // Интерфейс для элемента подсказки
-interface ITooltipElement {
+export interface ITooltipElement {
     id: number;
     name: string;
     sequenceRemoteId?: string;
@@ -34,7 +34,7 @@ interface ITooltipElement {
 }
 
 // Интерфейс для точки подпоследовательности
-interface ISubsequencePoint {
+export interface ISubsequencePoint {
     id: number;
     legendIndex: number;
     name: string;
@@ -53,7 +53,7 @@ interface ISubsequencePoint {
 }
 
 // Интерфейс для данных точки на графике, наследующийся от IBasePoint
-interface ISubsequencesCalculationPoint extends IBasePoint {
+export interface ISubsequencesCalculationPoint extends IBasePoint {
     legendIndex?: number;
     legendId?: number;
     researchObjectName?: string;
@@ -64,7 +64,7 @@ interface ISubsequencesCalculationPoint extends IBasePoint {
 }
 
 // Интерфейс для данных последовательности
-interface ISequenceData {
+export interface ISequenceData {
     ResearchObjectName: string;
     ResearchObjectId: number;
     RemoteId?: string;
@@ -81,13 +81,13 @@ interface ISequenceData {
 }
 
 // Интерфейс для значения атрибута
-interface IAttributeValue {
+export interface IAttributeValue {
     attribute: number;
     value: string;
 }
 
 // Интерфейс для данных всего контроллера
-interface ISubsequencesCalculationResultData {
+export interface ISubsequencesCalculationResultData {
     sequencesData: ISequenceData[];
     characteristicsList: string[];
     characteristicNames: string[];
@@ -97,7 +97,7 @@ interface ISubsequencesCalculationResultData {
 }
 
 // Интерфейс для объекта области видимости контроллера
-interface ISubsequencesCalculationResultScope extends ng.IScope {
+export interface ISubsequencesCalculationResultScope extends ng.IScope {
     // Данные графика
     sequencesData: ISequenceData[];
     points: ISubsequencesCalculationPoint[];

@@ -1,11 +1,7 @@
 ﻿@model string
 
-<script src="~/js/Angular/Controllers/@(Model).js"></script>
-
-<script type="text/javascript">
-    "use strict";
-
-     const controllerConstructor = @(Model + "Controller");
+<script type="module">
+    import controllerConstructor from "/js/Angular/Controllers/@(Model).js";
 
     @if(ViewBag.data != null)
     {

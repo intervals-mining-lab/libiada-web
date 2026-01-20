@@ -1,78 +1,8 @@
-﻿/// <reference types="angular" />
-
-interface SequenceType {
-    Value: string;
-    Text: string;
-    Selected: boolean;
-    Disabled: boolean;
-    Nature: number;
-    Group: null; // TODO: check what type it could be
-}
-
-interface SequenceGroup {
-    Value: string;
-    Text: string;
-    Selected: boolean;
-    Disabled: boolean;
-    Nature: number;
-    Group: string;
-}
-
-interface Notation {
-    Value: string;
-    Text: string;
-    Selected: boolean;
-    Disabled: boolean;
-    Nature: number;
-    Group: null; // TODO: check what type it could be
-}
-
-interface Group {
-    Value: string;
-    Text: string;
-    Selected: boolean;
-    Disabled: boolean;
-    Nature: number;
-    Group: null; // TODO: check what type it could be
-}
-
-interface Feature {
-    Value: string;
-    Text: string;
-    Selected: boolean;
-    Disabled: boolean;
-    Nature: number;
-    Group: null; // TODO: check what type it could be
-}
-
-interface Link {
-    Value: string;
-    Text: string;
-    Selected: boolean;
-    Disabled: boolean;
-    Group: null; // TODO: check what type it could be
-}
-
-interface ArrangementType {
-    Value: string;
-    Text: string;
-    Selected: boolean;
-    Disabled: boolean;
-    Group: null; // TODO: check what type it could be
-}
-
-interface CharacterisrticType {
-    ArrangementTypes: ArrangementType[];
-    Links: Link[];
-    Value: string;
-    Text: string;
-    Selected: boolean;
-    Disabled: boolean;
-    Group: null; // TODO: check what type it could be
-}
+﻿import type { SequenceType, SequenceGroup, Notation, Group, Feature, CharacterisrticType } from "viewDataTypes";
+import { MapModelFromJson } from "functions";
 
 // Interface for data passed to the controller from server on page load
-interface ISubsequencesDistributionData {
+interface SubsequencesDistributionData {
 
     maximumSelectedResearchObjects: number;
     minimumSelectedResearchObjects: number;
@@ -87,22 +17,22 @@ interface ISubsequencesDistributionData {
 }
 
 // Interface for $scope in controller
-interface ISubsequencesDistributionScope extends ng.IScope, ISubsequencesDistributionData {
+interface SubsequencesDistributionScope extends ng.IScope, SubsequencesDistributionData {
     selectedResearchObjectsCount: number;
 }
 
 // Main controller class
 class SubsequencesDistributionManager {
-    constructor(data: ISubsequencesDistributionData) {
+    constructor(data: SubsequencesDistributionData) {
         this.ngOnInit(data);
     }
 
     /**
      * Initializes the Angular controller
      */
-    private ngOnInit(data: ISubsequencesDistributionData): void {
+    private ngOnInit(data: SubsequencesDistributionData): void {
         // Define the controller function
-        const subsequencesDistribution = ($scope: ISubsequencesDistributionScope): void => {
+        const subsequencesDistribution = ($scope: SubsequencesDistributionScope): void => {
             MapModelFromJson($scope, data);
         };
 
@@ -112,6 +42,6 @@ class SubsequencesDistributionManager {
 }
 
 // Export the constructor for use in _AngularControllerInitializer.cshtml
-function SubsequencesDistributionController(data: ISubsequencesDistributionData): SubsequencesDistributionManager {
+export default function SubsequencesDistributionController(data: SubsequencesDistributionData): SubsequencesDistributionManager {
     return new SubsequencesDistributionManager(data);
 };

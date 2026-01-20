@@ -1,7 +1,7 @@
-﻿/// <reference types="angular" />
+﻿import { MapModelFromJson } from "functions";
 
 // Interface for SubsequenceData
-interface ISubsequenceData {
+interface SubsequenceData {
     Attributes: number[],
     CharacteristicsValues: number[],
     FeatureId: number,
@@ -21,8 +21,8 @@ interface SubsequencesSimilarityResultData {
     firstSequenceSimilarity: number;
     secondSequenceSimilarity: number;
     similarSubsequences: { Item1: number, Item2: number }[];
-    firstSequenceSubsequences: ISubsequenceData[];
-    secondSequenceSubsequences: ISubsequenceData[];
+    firstSequenceSubsequences: SubsequenceData[];
+    secondSequenceSubsequences: SubsequenceData[];
     features: { [name: number]: string };
     attributes: { [name: number]: string };
     firstSequenceAttributes: { AttributeId: number, Value: string }[][];
@@ -72,6 +72,6 @@ class SubsequencesSimilarityResultHandler {
 }
 
 // Wrapper function for backward compatibility
-function SubsequencesSimilarityResultController(): SubsequencesSimilarityResultHandler {
+export default function SubsequencesSimilarityResultController(): SubsequencesSimilarityResultHandler {
     return new SubsequencesSimilarityResultHandler();
 }

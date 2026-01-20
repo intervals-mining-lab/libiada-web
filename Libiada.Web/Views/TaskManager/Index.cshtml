@@ -7,14 +7,13 @@
 }
 
 @section Scripts {
-    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
     <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
 
     @{
         await Html.RenderPartialAsync("_AngularControllerInitializer", "TaskManager");
     }
 
-    <script src="~/js/push-notification.js" async></script>
+    <script type="module" src="~/js/push-notification.js" asp-append-version="true"></script>
 }
 
 <h2>@ViewBag.Title</h2>

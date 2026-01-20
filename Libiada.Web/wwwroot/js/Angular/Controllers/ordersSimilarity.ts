@@ -1,4 +1,6 @@
-﻿/**
+﻿import { MapModelFromJson } from "functions";
+
+/**
 * Interface for OrdersSimilarity controller input data
 */
 interface IOrdersSimilarityData {
@@ -61,6 +63,6 @@ class OrdersSimilarityHandler  {
 * @param data Data to create controller
 * @returns OrdersSimilarityHandler instance
 */
-function OrdersSimilarityController(data: IOrdersSimilarityData): OrdersSimilarityHandler {
+export default function OrdersSimilarityController(data: IOrdersSimilarityData): OrdersSimilarityHandler {
     return new OrdersSimilarityHandler(data);
 }

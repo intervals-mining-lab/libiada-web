@@ -1,9 +1,17 @@
-﻿/// <reference types="angular" />
-/// <reference types="d3" />
-/// <reference types="plotly.js" />
-/// <reference types="jquery" />
+﻿//import d3 from "d3";
+//import Plotly from "plotly.js";
+import { MapModelFromJson, getArrayMinMax } from "functions";
+import {
+    ISubsequencesCalculationResultScope,
+    IChartCharacteristic,
+    ISubsequencesCalculationPoint,
+    ISubsequencePoint,
+    ITooltipElement,
+    ILegendItem,
+    ISubsequencesCalculationResultData
+} from "./Interfaces/subsequencesCalculationInterfaces";
 /// <reference path="./Interfaces/commonInterfaces.d.ts" />
-/// <reference path="./Interfaces/subsequencesCalculationInterfaces.d.ts" />
+
 /// <reference path="../../typings/bootstrap-jquery-extensions.d.ts" />
 /// <reference path="../../typings/plotly-extensions.d.ts" />
 
@@ -186,8 +194,7 @@ class SubsequencesCalculationResultHandler {
             function fillLinePlotData(): void {
                 let characteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
                 let characteristicsValues = $scope.points.map((p => p.subsequencesData.map(fd => fd.characteristics[characteristicIndex]))).flat();
-                let min = Math.min(...characteristicsValues);
-                let max = Math.max(...characteristicsValues);
+                let { min, max } = getArrayMinMax(characteristicsValues);
                 let range = Math.abs(max - min);
                 // adding margins
                 min -= Math.abs(range * 0.05);
@@ -446,11 +453,11 @@ class SubsequencesCalculationResultHandler {
 
                 };
 
-                bar?.addEventListener("mousedown", () => {
+                bar.addEventListener("mousedown", () => {
                     document.addEventListener("mousemove", drag);
                 });
 
-                bar?.addEventListener("mouseup", () => {
+                bar.addEventListener("mouseup", () => {
                     document.removeEventListener("mousemove", drag);
                 });
             }
@@ -608,6 +615,6 @@ class SubsequencesCalculationResultHandler {
  * Wrapper function for backward compatibility
  * @returns Instance of subsequence calculation result handler
  */
-function SubsequencesCalculationResultController(): SubsequencesCalculationResultHandler {
+export default function SubsequencesCalculationResultController(): SubsequencesCalculationResultHandler {
     return new SubsequencesCalculationResultHandler();
 }

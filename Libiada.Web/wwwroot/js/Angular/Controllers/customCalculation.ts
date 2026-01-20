@@ -1,4 +1,4 @@
-﻿/// <reference types="angular" />
+﻿import { MapModelFromJson } from "functions";
 
 /**
  * Interface for custom calculation data
@@ -44,6 +44,6 @@ class CustomCalculationHandler {
  * @param data Data for controller initialization
  * @returns Instance of custom calculation handler
  */
-function CustomCalculationController(data: ICustomCalculationData): CustomCalculationHandler {
+export default function CustomCalculationController(data: ICustomCalculationData): CustomCalculationHandler {
     return new CustomCalculationHandler(data);
 }

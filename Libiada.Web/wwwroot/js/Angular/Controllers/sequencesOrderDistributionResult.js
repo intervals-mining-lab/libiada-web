@@ -1,7 +1,5 @@
-"use strict";
-/// <reference types="angular" />
-/// <reference types="d3" />
-/// <reference path="./Interfaces/commonInterfaces.d.ts" />
+//import d3 from "d3";
+import { MapModelFromJson } from "functions";
 /**
  * Controller for sequences order distribution results
  */
@@ -286,7 +284,7 @@ class SequencesOrderDistributionResultHandler {
  * Wrapper function for backward compatibility
  * @returns SequencesOrderDistributionResultHandler instance
  */
-function SequencesOrderDistributionResultController() {
+export default function SequencesOrderDistributionResultController() {
     return new SequencesOrderDistributionResultHandler();
 }
 //# sourceMappingURL=sequencesOrderDistributionResult.js.map

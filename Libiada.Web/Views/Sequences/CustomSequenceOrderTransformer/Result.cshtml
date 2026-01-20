@@ -18,7 +18,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="transformation in ::transformationsList">
+                    <tr ng-repeat="transformation in ::transformationsList track by $index">
                         <td ng-bind="::$index + 1" />
                         <td ng-bind="::transformation" />
                     </tr>
@@ -44,6 +44,5 @@
     </div>
 
     @section Scripts {
-    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
     }
 }

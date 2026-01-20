@@ -1,5 +1,4 @@
-﻿/// <reference types="angular" />
-
+﻿import { MapModelFromJson } from "functions";
 /**
  * Interface for object with boolean value
  */
@@ -69,7 +68,7 @@ class BatchGeneticImportFromGenBankSearchFileHandler {
  * @param data Data for controller initialization
  * @returns Instance of batch genetic import from GenBank search file handler
  */
-function BatchGeneticImportFromGenBankSearchFileController(
+export default function BatchGeneticImportFromGenBankSearchFileController(
     data: IBatchGeneticImportFromGenBankSearchFileData
 ): BatchGeneticImportFromGenBankSearchFileHandler {
     return new BatchGeneticImportFromGenBankSearchFileHandler(data);

@@ -1,5 +1,4 @@
-"use strict";
-/// <reference types="angular" />
+import { MapModelFromJson } from "functions";
 /**
  * Controller for displaying music files processing results
  */
@@ -35,7 +34,7 @@ class MusicFilesResultHandler {
  * Wrapper function for backward compatibility
  * @returns Instance of MusicFilesResultHandler
  */
-function MusicFilesResultController() {
+export default function MusicFilesResultController() {
     return new MusicFilesResultHandler();
 }
 //# sourceMappingURL=musicFilesResult.js.map

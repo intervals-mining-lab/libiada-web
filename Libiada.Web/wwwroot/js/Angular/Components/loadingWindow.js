@@ -1,33 +1,27 @@
-﻿function loadingWindow() {
-    "use strict";
+﻿function LoadingWindowController() {
+    let ctrl = this;
 
-    function LoadingWindowController() {
-        let ctrl = this;
+    ctrl.loadingWindow = new bootstrap.Modal("#loadingDialog");
 
-        ctrl.loadingWindow = new bootstrap.Modal("#loadingDialog");
+    ctrl.$onInit = () => { };
 
-        ctrl.$onInit = () => { };
-
-        ctrl.$onChanges = async changes => {
-            if (changes.loading) {
-                if (ctrl.loading) {
-                    ctrl.loadingWindow.show();
-                }
-                else {
-                    ctrl.loadingWindow.hide();
-                }
+    ctrl.$onChanges = async changes => {
+        if (changes.loading) {
+            if (ctrl.loading) {
+                ctrl.loadingWindow.show();
             }
-        };
-    }
-
-    angular.module("libiada").component("loadingWindow", {
-        templateUrl: `${window.location.origin}/AngularTemplates/_LoadingWindow`,
-        controller: LoadingWindowController,
-        bindings: {
-            loading: "<",
-            loadingScreenHeader: "<"
+            else {
+                ctrl.loadingWindow.hide();
+            }
         }
-    });
+    };
 }
 
-loadingWindow();
+angular.module("libiada").component("loadingWindow", {
+    templateUrl: `${window.location.origin}/AngularTemplates/_LoadingWindow`,
+    controller: LoadingWindowController,
+    bindings: {
+        loading: "<",
+        loadingScreenHeader: "<"
+    }
+});

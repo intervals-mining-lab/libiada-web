@@ -1,5 +1,4 @@
-"use strict";
-/// <reference types="angular" />
+import { MapModelFromJson } from "functions";
 /**
  * Controller for multisequence grouping
  */
@@ -60,7 +59,7 @@ class MultisequenceGroupingHandler {
  * Wrapper function for backward compatibility
  * @returns Instance of multisequence grouping handler
  */
-function MultisequenceGroupingController() {
+export default function MultisequenceGroupingController() {
     return new MultisequenceGroupingHandler();
 }
 //# sourceMappingURL=multisequenceGrouping.js.map

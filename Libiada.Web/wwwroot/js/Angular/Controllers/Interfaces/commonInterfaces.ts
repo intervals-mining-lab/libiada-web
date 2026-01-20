@@ -1,4 +1,4 @@
-﻿declare interface IBasePoint {
+﻿export interface IBasePoint {
     id: number;         // Уникальный идентификатор точки
     x?: number;         // Позиция по оси X
     y?: number;         // Позиция по оси Y
@@ -6,7 +6,7 @@
     featureVisible?: boolean; // Видимость на графике
 }
 
-declare interface ITransformationVisibility {
+export interface ITransformationVisibility {
     id: number;
     name: string;
     visible: boolean;

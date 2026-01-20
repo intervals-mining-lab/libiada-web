@@ -1,4 +1,4 @@
-﻿/// <reference types="angular" />
+﻿import { MapModelFromJson } from "functions";
 
 /**
  * Interface for groupable research object in multisequence grouping
@@ -101,6 +101,6 @@ class MultisequenceGroupingHandler {
  * Wrapper function for backward compatibility
  * @returns Instance of multisequence grouping handler
  */
-function MultisequenceGroupingController(): MultisequenceGroupingHandler {
+export default function MultisequenceGroupingController(): MultisequenceGroupingHandler {
     return new MultisequenceGroupingHandler();
 }

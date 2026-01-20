@@ -1,5 +1,4 @@
-"use strict";
-/// <reference types="angular" />
+import { MapModelFromJson } from "functions";
 // Updated controller class
 class CalculationOperator {
     constructor(data) {
@@ -48,7 +47,7 @@ class CalculationOperator {
     }
 }
 // Wrapper function for backwards compatibility
-function CalculationController(data) {
+export default function CalculationController(data) {
     return new CalculationOperator(data);
 }
 //# sourceMappingURL=calculation.js.map

@@ -1,5 +1,4 @@
-"use strict";
-/// <reference types="angular" />
+import { MapModelFromJson } from "functions";
 /**
 * Controller for sequence order distribution
 */
@@ -28,7 +27,7 @@ class SequencesOrderDistributionHandler {
 * @param data Data to initialize the controller
 * @returns Order distribution controller instance
 */
-function SequencesOrderDistributionController(data) {
+export default function SequencesOrderDistributionController(data) {
     return new SequencesOrderDistributionHandler(data);
 }
 //# sourceMappingURL=sequencesOrderDistribution.js.map

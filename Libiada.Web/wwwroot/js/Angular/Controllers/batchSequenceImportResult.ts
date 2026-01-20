@@ -1,4 +1,4 @@
-﻿/// <reference types="angular" />
+﻿import { MapModelFromJson } from "functions";
 
 /**
  * Интерфейс для результата импорта последовательности
@@ -86,6 +86,6 @@ class BatchSequenceImportResultHandler {
  * Wrapper function for backward compatibility
  * @returns Instance of batch sequence import result handler
  */
-function BatchSequenceImportResultController(): BatchSequenceImportResultHandler {
+export default function BatchSequenceImportResultController(): BatchSequenceImportResultHandler {
     return new BatchSequenceImportResultHandler();
 }

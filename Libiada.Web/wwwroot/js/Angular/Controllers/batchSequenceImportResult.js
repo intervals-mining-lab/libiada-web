@@ -1,5 +1,4 @@
-"use strict";
-/// <reference types="angular" />
+import { MapModelFromJson } from "functions";
 /**
  * Контроллер для отображения результатов пакетного импорта последовательностей
  */
@@ -44,7 +43,7 @@ class BatchSequenceImportResultHandler {
  * Wrapper function for backward compatibility
  * @returns Instance of batch sequence import result handler
  */
-function BatchSequenceImportResultController() {
+export default function BatchSequenceImportResultController() {
     return new BatchSequenceImportResultHandler();
 }
 //# sourceMappingURL=batchSequenceImportResult.js.map

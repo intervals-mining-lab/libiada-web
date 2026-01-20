@@ -1,11 +1,8 @@
-"use strict";
-/// <reference types="angular" />
-/// <reference types="d3" />
-/// <reference types="jquery" />
+import { MapModelFromJson } from "functions";
 /**
  * Controller for FmotifsDictionary
  */
-function FmotifsDictionaryController(data) {
+export default function FmotifsDictionaryController(data) {
     function fmotifsDictionary($scope) {
         MapModelFromJson($scope, data);
         // MIDI player variables

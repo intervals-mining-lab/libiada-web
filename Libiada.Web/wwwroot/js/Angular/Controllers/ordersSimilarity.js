@@ -1,4 +1,4 @@
-"use strict";
+import { MapModelFromJson } from "functions";
 /**
 * Controller class for comparing orders
 */
@@ -29,7 +29,7 @@ class OrdersSimilarityHandler {
 * @param data Data to create controller
 * @returns OrdersSimilarityHandler instance
 */
-function OrdersSimilarityController(data) {
+export default function OrdersSimilarityController(data) {
     return new OrdersSimilarityHandler(data);
 }
 //# sourceMappingURL=ordersSimilarity.js.map

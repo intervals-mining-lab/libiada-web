@@ -1,5 +1,4 @@
-"use strict";
-/// <reference types="angular" />
+import { MapModelFromJson } from "functions";
 /**
  * Controller for batch poems import
  */
@@ -40,7 +39,7 @@ class BatchPoemsImportHandler {
  * @param data Data for controller initialization
  * @returns Instance of batch poems import handler
  */
-function BatchPoemsImportController(data) {
+export default function BatchPoemsImportController(data) {
     return new BatchPoemsImportHandler(data);
 }
 //# sourceMappingURL=batchPoemsImport.js.map

@@ -1,5 +1,4 @@
-"use strict";
-/// <reference types="angular" />
+import { MapModelFromJson } from "functions";
 /**
  * Controller for batch genetic import from GenBank search file
  */
@@ -39,7 +38,7 @@ class BatchGeneticImportFromGenBankSearchFileHandler {
  * @param data Data for controller initialization
  * @returns Instance of batch genetic import from GenBank search file handler
  */
-function BatchGeneticImportFromGenBankSearchFileController(data) {
+export default function BatchGeneticImportFromGenBankSearchFileController(data) {
     return new BatchGeneticImportFromGenBankSearchFileHandler(data);
 }
 //# sourceMappingURL=batchGeneticImportFromGenBankSearchFile.js.map

@@ -1,8 +1,7 @@
-﻿/// <reference types="angular" />
-/// <reference types="d3" />
-/// <reference path="./Interfaces/commonInterfaces.d.ts" />
+﻿//import d3 from "d3";
+import { MapModelFromJson } from "functions";
+import { IBasePoint } from "./Interfaces/commonInterfaces";
 
-type IScope = ng.IScope;
 interface IPoint extends IBasePoint {
     value: number; // Value (order identifier)
     transformationVisibility: ITransformationVisibility[];
@@ -688,6 +687,6 @@ class OrderTransformationVisualizationResultHandler {
 /**
 * Wrapper for backward compatibility
 */
-function OrderTransformationVisualizationResultController(): OrderTransformationVisualizationResultHandler {
+export default function OrderTransformationVisualizationResultController(): OrderTransformationVisualizationResultHandler {
     return new OrderTransformationVisualizationResultHandler();
 }

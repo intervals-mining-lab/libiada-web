@@ -1,14 +1,14 @@
 ﻿@{
-    ViewBag.Title = "Relation characteristic calculation results";
+    ViewBag.Title = "Libiada - Relation characteristic calculation results";
 }
 
 <h2>@ViewBag.Title</h2>
 
 @if (ViewBag.Error == null)
 {
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "ClusterizationResult");
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "RelationCalculationResult");
 
-    <div ng-controller="ClusterizationResultCtrl">
+    <div ng-controller="RelationCalculationResultCtrl">
         <h3 ng-bind="::researchObjectName"></h3>
         <h4 ng-bind="::characteristicName"></h4>
         <h4 ng-bind="::notationName"></h4>
@@ -51,7 +51,5 @@
     </div>
 
     @section Scripts {
-    <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
-    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
     }
 }

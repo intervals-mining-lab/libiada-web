@@ -1,4 +1,4 @@
-﻿/// <reference types="angular" />
+﻿import { MapModelFromJson } from "functions";
 
 /**
  * Interface for object with boolean value
@@ -68,6 +68,6 @@ class BatchMusicImportHandler {
  * @param data Data for controller initialization
  * @returns Instance of batch music import handler
  */
-function BatchMusicImportController(data: IBatchMusicImportData): BatchMusicImportHandler {
+export default function BatchMusicImportController(data: IBatchMusicImportData): BatchMusicImportHandler {
     return new BatchMusicImportHandler(data);
 }

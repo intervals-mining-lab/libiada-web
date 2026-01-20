@@ -1,16 +1,10 @@
-﻿/// <reference types="angular" />
+﻿import { MapModelFromJson } from "functions";
+import { ResearchObject } from "viewDataTypes";
 
 /**
 * Interface for the object being researched
 */
-interface IResearchObject {
-    id: number;
-    name: string;
-    nature?: number;
-    group?: number;
-    sequenceType?: number;
-    selected?: boolean;
-}
+
 
 /**
 * Interface for the transformation type
@@ -34,7 +28,7 @@ interface IOrderTransformerType {
 */
 interface IOrderTransformationVisualizationData {
     // Basic data
-    researchObjects?: IResearchObject[];
+    researchObjects?: ResearchObject[];
     orderTransformerTypes?: IOrderTransformerType[];
     transformationsPossible?: ITransformation[];
 
@@ -49,7 +43,7 @@ interface IOrderTransformationVisualizationData {
 */
 interface IOrderTransformationVisualizationScope extends ng.IScope {
     // Basic data
-    researchObjects?: IResearchObject[];
+    researchObjects?: ResearchObject[];
     orderTransformerTypes?: IOrderTransformerType[];
     transformationsPossible?: ITransformation[];
 
@@ -90,6 +84,6 @@ class OrderTransformationVisualizationHandler {
 * @param data Data for controller initialization
 * @returns Order transformation visualization controller instance
 */
-function OrderTransformationVisualizationController(data: IOrderTransformationVisualizationData): OrderTransformationVisualizationHandler {
+export default function OrderTransformationVisualizationController(data: IOrderTransformationVisualizationData): OrderTransformationVisualizationHandler {
     return new OrderTransformationVisualizationHandler(data);
 }

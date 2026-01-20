@@ -1,4 +1,4 @@
-﻿/// <reference types="angular" />
+﻿import { MapModelFromJson } from "functions";
 
 /**
  * Interface for music files result data
@@ -56,6 +56,6 @@ class MusicFilesResultHandler {
  * Wrapper function for backward compatibility
  * @returns Instance of MusicFilesResultHandler
  */
-function MusicFilesResultController(): MusicFilesResultHandler {
+export default function MusicFilesResultController(): MusicFilesResultHandler {
     return new MusicFilesResultHandler();
 }

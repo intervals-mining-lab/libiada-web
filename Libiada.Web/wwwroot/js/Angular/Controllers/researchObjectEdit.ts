@@ -1,4 +1,4 @@
-﻿/// <reference types="angular" />
+﻿import { MapModelFromJson } from "functions";
 
 // Interface for the data object that is passed to the controller
 interface IResearchObjectEditData {
@@ -141,6 +141,6 @@ class ResearchObjectEditor {
 }
 
 // Wrapper function for backwards compatibility
-function ResearchObjectEditController(data: IResearchObjectEditData): ResearchObjectEditor   {
+export default function ResearchObjectEditController(data: IResearchObjectEditData): ResearchObjectEditor   {
     return new ResearchObjectEditor  (data);
 }

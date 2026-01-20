@@ -1,5 +1,5 @@
-﻿/// <reference types="angular" />
-/// <reference types="signalr" />
+﻿//import { HubConnection, HubConnectionBuilder } from "signalr";
+
 
 // Interface for task data
 interface Task {
@@ -20,7 +20,7 @@ interface Task {
 type TaskState = "InQueue" | "InProgress" | "Completed" | "Error";
 
 // Interface for the task manager scope
-interface ITaskManagerScope extends ng.IScope {
+interface TaskManagerScope extends angular.IScope {
     // Tasks and loading state
     tasks: Task[];
     loading: boolean;
@@ -66,7 +66,7 @@ class TaskManagerControllerHandler {
     }
 
     private ngOnInit(): void {
-        const taskManager = ($scope: ITaskManagerScope): void => {
+        const taskManager = ($scope: TaskManagerScope): void => {
             function onCloseConnection(): void {
                 alertify.error("Connection lost", 5);
             }
@@ -234,6 +234,6 @@ class TaskManagerControllerHandler {
 }
 
 // Wrapper function for backward compatibility
-function TaskManagerController(): TaskManagerControllerHandler {
+export default function TaskManagerController(): TaskManagerControllerHandler {
     return new TaskManagerControllerHandler();
 }

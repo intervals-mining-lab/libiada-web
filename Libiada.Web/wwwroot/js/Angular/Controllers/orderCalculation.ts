@@ -1,4 +1,4 @@
-﻿/// <reference types="angular" />
+﻿import { MapModelFromJson } from "functions";
 
 /**
  * Interface for order calculation data
@@ -42,6 +42,6 @@ class OrderCalculationHandler {
  * @param data Data for controller initialization
  * @returns Instance of OrderCalculationHandler
  */
-function OrderCalculationController(data: IOrderCalculationData): OrderCalculationHandler {
+export default function OrderCalculationController(data: IOrderCalculationData): OrderCalculationHandler {
     return new OrderCalculationHandler(data);
 }

@@ -1,5 +1,4 @@
-"use strict";
-/// <reference types="angular" />
+import { MapModelFromJson } from "functions";
 // Controller for subsequences similarity result visualization
 class SubsequencesSimilarityResultHandler {
     constructor() {
@@ -30,7 +29,7 @@ class SubsequencesSimilarityResultHandler {
     }
 }
 // Wrapper function for backward compatibility
-function SubsequencesSimilarityResultController() {
+export default function SubsequencesSimilarityResultController() {
     return new SubsequencesSimilarityResultHandler();
 }
 //# sourceMappingURL=subsequencesSimilarityResult.js.map

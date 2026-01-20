@@ -15,7 +15,7 @@
         </h4>
         <table class="table table-bordered table-hover" ng-cloak>
             <tbody>
-                <tr ng-repeat="transformation in ::transformationsList">
+                <tr ng-repeat="transformation in ::transformationsList track by $index">
                     <td ng-bind="::transformation" />
                 </tr>
             </tbody>
@@ -39,7 +39,5 @@
     </div>
 
     @section Scripts {
-    <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
-    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
     }
 }

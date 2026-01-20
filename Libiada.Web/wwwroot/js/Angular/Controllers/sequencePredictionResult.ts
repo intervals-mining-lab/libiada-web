@@ -1,4 +1,4 @@
-﻿/// <reference types="angular" />
+﻿import { MapModelFromJson } from "functions";
 
 /**
 * Interface for the sequence prediction results scope controller
@@ -78,6 +78,6 @@ class SequencePredictionResultHandler {
 * Wrapper function for backward compatibility
 * @returns Sequence prediction result controller instance
 */
-function SequencePredictionResultController(): SequencePredictionResultHandler {
+export default function SequencePredictionResultController(): SequencePredictionResultHandler {
     return new SequencePredictionResultHandler();
 }

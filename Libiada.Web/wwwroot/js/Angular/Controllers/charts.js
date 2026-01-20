@@ -1,8 +1,6 @@
-"use strict";
-/// <reference types="angular" />
-/// <reference types="d3" />
-/// <reference types="plotly.js" />
-/// <reference types="jquery" />
+/*import * as d3 from "d3";*/
+//import Plotly from "plotly.js";
+import { getArrayMinMax, arrayMax } from "functions";
 /**
  * Controller for charts visualization
  */
@@ -31,9 +29,9 @@ class ChartsControllerHandler {
                     //Pasted data split into rows
                     let rows = text.split(/[\n\f\r]/);
                     // extracting first row that contains characteristics names
-                    let characteristics = rows.shift()?.split("\t") || [];
+                    let characteristics = rows.shift().split("\t");
                     // extracting sequence name column
-                    $scope.sequencesName = characteristics.shift() || "";
+                    $scope.sequencesName = characteristics.shift();
                     let rawCharacteristics = rows.map(r => r.split("\t"));
                     $scope.characteristics = [];
                     for (let i = 0; i < rawCharacteristics.length; i++) {
@@ -45,7 +43,7 @@ class ChartsControllerHandler {
                             $scope.characteristics[i].Characteristics[j - 1] = +rawCharacteristics[i][j].replace(",", ".");
                         }
                     }
-                    $scope.characteristicsList = characteristics.map((c, i) => ({ Value: i, Text: c }));
+                    $scope.characteristicsList = characteristics.map((c, i) => ({ Value: i + 1, Text: c }));
                     $scope.characteristicNames = characteristics.map(c => c);
                     $scope.chartCharacteristics = [{
                             id: $scope.chartsCharacterisrticsCount++,
@@ -216,18 +214,6 @@ class ChartsControllerHandler {
                     $("#dataPasteBox").focus();
                 }
             }
-            $document.ready(() => {
-                //Handles the Ctrl + V keys for pasting
-                //If this is true, we wont respond to Ctrl + V
-                $("body").on("focus", "input, textarea", () => { $scope.inFocus = true; });
-                //We are not on a text element so we will respond
-                //to Ctrl + V
-                $("body").on("blur", "input, textarea", () => { $scope.inFocus = false; });
-                //Handle the key down event
-                $(document).keydown($scope.handleKeyDown);
-                //We will respond to when the textbox value changes
-                $("#dataPasteBox").bind("input propertychange", $scope.textChanged);
-            });
             /**
              * Initialize data for chart visualization
              */
@@ -252,10 +238,9 @@ class ChartsControllerHandler {
              */
             function fillBarPlotData() {
                 let characteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
-                let min = Math.min(...$scope.points.map(p => p.characteristics[characteristicIndex]));
-                let max = Math.max(...$scope.points.map(p => p.characteristics[characteristicIndex]));
+                let { min, max } = getArrayMinMax($scope.points.map(p => p.characteristics[characteristicIndex]));
                 let range = Math.abs(max - min);
-                let maxNameLength = Math.max(...$scope.points.map(p => p.name.length));
+                let maxNameLength = arrayMax($scope.points.map(p => p.name.length));
                 // adding margins
                 min -= Math.abs(range * 0.05);
                 max += Math.abs(range * 0.05);
@@ -463,18 +448,16 @@ class ChartsControllerHandler {
             $scope.inFocus = false;
             $scope.rawData = "";
             $scope.parsedData = [];
-            // Initialize with any provided data
-            if (this.data) {
-                MapModelFromJson($scope, this.data);
-            }
-            // Set up document events
             $document.ready(() => {
-                // Handle focus events for input elements
+                //Handles the Ctrl + V keys for pasting
+                //If this is true, we wont respond to Ctrl + V
                 $("body").on("focus", "input, textarea", () => { $scope.inFocus = true; });
+                //We are not on a text element so we will respond
+                //to Ctrl + V
                 $("body").on("blur", "input, textarea", () => { $scope.inFocus = false; });
-                // Handle key down for copy-paste
+                //Handle the key down event
                 $(document).keydown($scope.handleKeyDown);
-                // Handle paste box input changes
+                //We will respond to when the textbox value changes
                 $("#dataPasteBox").bind("input propertychange", $scope.textChanged);
             });
         };
@@ -487,7 +470,7 @@ class ChartsControllerHandler {
  * @param data Initial data for controller
  * @returns New instance of ChartsControllerHandler
  */
-function ChartsController(data) {
-    return new ChartsControllerHandler(data);
+export default function ChartsController() {
+    return new ChartsControllerHandler();
 }
 //# sourceMappingURL=charts.js.map

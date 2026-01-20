@@ -1,7 +1,5 @@
-"use strict";
-/// <reference types="angular" />
-/// <reference types="d3" />
-/// <reference path="./Interfaces/commonInterfaces.d.ts" />
+/*import d3 from "d3";*/
+import { MapModelFromJson } from "functions";
 /**
  * Controller for displaying interval characteristics distribution results
  */
@@ -264,7 +262,7 @@ class IntervalsCharacteristicsDistributionResultHandler {
 /**
  * Wrapper function for backward compatibility
  */
-function IntervalsCharacteristicsDistributionResultController() {
+export default function IntervalsCharacteristicsDistributionResultController() {
     return new IntervalsCharacteristicsDistributionResultHandler();
 }
 //# sourceMappingURL=intervalsCharacteristicsDistributionResult.js.map

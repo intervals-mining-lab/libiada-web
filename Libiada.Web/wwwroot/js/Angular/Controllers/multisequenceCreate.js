@@ -1,5 +1,4 @@
-"use strict";
-/// <reference types="angular" />
+import { MapModelFromJson } from "functions";
 /**
  * Controller for multisequence creation
  */
@@ -36,7 +35,7 @@ class MultisequenceCreateHandler {
  * @param data Data for controller initialization
  * @returns Instance of multisequence create handler
  */
-function MultisequenceCreateController(data) {
+export default function MultisequenceCreateController(data) {
     return new MultisequenceCreateHandler(data);
 }
 //# sourceMappingURL=multisequenceCreate.js.map

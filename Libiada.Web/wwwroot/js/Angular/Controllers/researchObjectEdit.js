@@ -1,5 +1,4 @@
-"use strict";
-/// <reference types="angular" />
+import { MapModelFromJson } from "functions";
 // Updated controller class
 class ResearchObjectEditor {
     constructor(data) {
@@ -24,7 +23,7 @@ class ResearchObjectEditor {
     }
 }
 // Wrapper function for backwards compatibility
-function ResearchObjectEditController(data) {
+export default function ResearchObjectEditController(data) {
     return new ResearchObjectEditor(data);
 }
 //# sourceMappingURL=researchObjectEdit.js.map

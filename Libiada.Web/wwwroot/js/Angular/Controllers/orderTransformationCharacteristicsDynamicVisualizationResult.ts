@@ -1,5 +1,5 @@
-﻿/// <reference types="angular" />
-/// <reference types="d3" />
+﻿//import d3 from "d3";
+import { MapModelFromJson } from "functions";
 /// <reference path="./Interfaces/commonInterfaces.d.ts" />
 
 // Interface for characteristic data
@@ -393,6 +393,6 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
  * Wrapper function for backward compatibility
  * @returns OrderTransformationCharacteristicsDynamicVisualizationResultHandler instance
  */
-function OrderTransformationCharacteristicsDynamicVisualizationResultController(): OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
+export default function OrderTransformationCharacteristicsDynamicVisualizationResultController(): OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
     return new OrderTransformationCharacteristicsDynamicVisualizationResultHandler();
 }

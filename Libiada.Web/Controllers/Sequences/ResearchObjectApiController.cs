@@ -119,6 +119,7 @@ public partial class ResearchObjectApiController(
                                                                                               Group? group,
                                                                                               SequenceType? sequenceType)
     {
+        // getting only research objects that do not have subseqeunces, but can have them
         long[] researchObjectIds = db.CombinedSequenceEntities
                                      .Include(c => c.ResearchObject)
                                      .Where(c => !string.IsNullOrEmpty(c.RemoteId)
@@ -172,15 +173,8 @@ public partial class ResearchObjectApiController(
     // GET: api/ResearchObjectApi/GetPoemsResearchObjects    
     /// <summary>
     /// Gets the list of poems research objects 
-    /// fitting search query and filters
+    /// fitting search query
     /// in form of table rows.
-    /// </summary>
-    /// <param name="nature">
-    /// The nature.
-    /// </param>
-    /// <param name="refSeqOnly">
-    /// If set to <c>true</c> returns only reference sequences.
-    /// </param>
     /// <param name="searchQuery">
     /// The search query.
     /// </param>
@@ -192,14 +186,12 @@ public partial class ResearchObjectApiController(
     /// </param>
     /// <returns></returns>
     [HttpGet]
-    public ActionResult<IEnumerable<ResearchObjectTableRow>> GetPoemsResearchObjects(Nature nature,
-                                                                                     bool refSeqOnly,
-                                                                                     string? searchQuery,
+    public ActionResult<IEnumerable<ResearchObjectTableRow>> GetPoemsResearchObjects(string? searchQuery,
                                                                                      Group? group,
                                                                                      SequenceType? sequenceType)
     {
         Func<ResearchObject, bool> filter = new(m => m.SequenceType == SequenceType.CompletePoem);
-        var result = GetResearchObjects(filter, nature, refSeqOnly, searchQuery, group, sequenceType);
+        var result = GetResearchObjects(filter, Nature.Literature, false, searchQuery, group, sequenceType);
 
         return Ok(result);
     }

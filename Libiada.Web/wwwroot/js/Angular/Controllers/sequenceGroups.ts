@@ -1,4 +1,4 @@
-﻿/// <reference types="angular" />
+﻿import { MapModelFromJson } from "functions";
 
 /**
 * Interface for the object being researched
@@ -108,6 +108,6 @@ class SequenceGroupsHandler {
 * @param data Data to initialize the controller
 * @returns Sequence Groups Controller instance
 */
-function SequenceGroupsController(data: ISequenceGroupsData): SequenceGroupsHandler {
+export default function SequenceGroupsController(data: ISequenceGroupsData): SequenceGroupsHandler {
     return new SequenceGroupsHandler(data);
 }

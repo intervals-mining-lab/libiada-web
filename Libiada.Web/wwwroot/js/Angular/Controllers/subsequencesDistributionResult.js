@@ -1,6 +1,6 @@
-﻿function SubsequencesDistributionResultController() {
-    "use strict";
+﻿import { MapModelFromJson } from "functions";
 
+export default function SubsequencesDistributionResultController() {
     function subsequencesDistributionResult($scope, $http) {
 
         function onInit() {

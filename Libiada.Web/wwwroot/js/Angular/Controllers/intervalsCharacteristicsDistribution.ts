@@ -1,4 +1,4 @@
-﻿/// <reference types="angular" />
+﻿import { MapModelFromJson } from "functions";
 
 /**
  * Interface for intervals characteristics distribution data
@@ -41,6 +41,6 @@ class IntervalsCharacteristicsDistributionHandler {
  * @param data Data for controller initialization
  * @returns Instance of IntervalsCharacteristicsDistributionHandler
  */
-function IntervalsCharacteristicsDistributionController(data: IIntervalsCharacteristicsDistributionData): IntervalsCharacteristicsDistributionHandler {
+export default function IntervalsCharacteristicsDistributionController(data: IIntervalsCharacteristicsDistributionData): IntervalsCharacteristicsDistributionHandler {
     return new IntervalsCharacteristicsDistributionHandler(data);
 }

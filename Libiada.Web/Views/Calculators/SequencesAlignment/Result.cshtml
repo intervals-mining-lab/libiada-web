@@ -6,9 +6,9 @@
 
 @if (ViewBag.Error == null)
 {
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "ClusterizationResult");
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "SequencesAlignmentResult");
 
-    <div ng-controller="ClusterizationResultCtrl">
+    <div ng-controller="SequencesAlignmentResultCtrl">
         <h4>Alignment type: {{::validationType}} using {{characteristicName}}</h4>
         <h4>Optimal shift: {{::optimalRotation}}</h4>
         <h4 ng-if="sort">Characteristics sorted descending</h4>
@@ -30,7 +30,5 @@
     </div>
 
     @section Scripts {
-    <script src="~/lib/d3/d3.js" asp-append-version="true"></script>
-    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
     }
 }

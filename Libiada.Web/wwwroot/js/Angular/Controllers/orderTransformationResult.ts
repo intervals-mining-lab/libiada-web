@@ -1,5 +1,4 @@
-﻿/// <reference types="angular" />
-
+﻿import { MapModelFromJson } from "functions";
 
 /**
  * Interface for the order transformation result scope
@@ -58,6 +57,6 @@ class OrderTransformationResultHandler {
 /**
  * Wrapper function for backward compatibility
  */
-function OrderTransformationResultController(): OrderTransformationResultHandler {
+export default function OrderTransformationResultController(): OrderTransformationResultHandler {
     return new OrderTransformationResultHandler();
 }

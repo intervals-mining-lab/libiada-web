@@ -1,5 +1,4 @@
-"use strict";
-/// <reference types="angular" />
+import { MapModelFromJson } from "functions";
 /**
  * Controller for batch music import
  */
@@ -39,7 +38,7 @@ class BatchMusicImportHandler {
  * @param data Data for controller initialization
  * @returns Instance of batch music import handler
  */
-function BatchMusicImportController(data) {
+export default function BatchMusicImportController(data) {
     return new BatchMusicImportHandler(data);
 }
 //# sourceMappingURL=batchMusicImport.js.map

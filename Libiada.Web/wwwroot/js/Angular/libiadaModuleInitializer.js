@@ -1,5 +1,1 @@
-﻿(function () {
-    "use strict";
-
-    angular.module("libiada", []);
-})();
+﻿angular.module("libiada", []);

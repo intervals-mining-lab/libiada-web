@@ -262,7 +262,7 @@
                                     <td>
                                         <div ng-repeat="start in ::subsequenceData.Starts">Start: {{::start}} Length:{{::subsequenceData.Lengths[$index]}}</div>
                                     </td>
-                                    <td ng-repeat="characteristicValue in ::subsequenceData.CharacteristicsValues" ng-bind="::characteristicValue" />
+                                    <td ng-repeat="characteristicValue in ::subsequenceData.CharacteristicsValues track by $index" ng-bind="::characteristicValue" />
                                 </tr>
                             </tbody>
                         </table>
@@ -273,10 +273,7 @@
     </div>
 
     @section Scripts {
-    <script src="~/lib/d3/d3.min.js" asp-append-version="true"></script>
-    <script src="~/lib/plotly.js/plotly.min.js" asp-append-version="true"></script>
-    <script src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>
-    <script src="~/js/Angular/Components/filters.js" asp-append-version="true"></script>
+    <script type="module" src="~/js/Angular/Components/filters.js" asp-append-version="true"></script>
     @{
             await Html.RenderPartialAsync("_AngularControllerInitializer", "SubsequencesCalculationResult");
         }

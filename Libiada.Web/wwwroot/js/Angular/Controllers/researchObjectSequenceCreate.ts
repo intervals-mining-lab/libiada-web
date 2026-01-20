@@ -1,4 +1,4 @@
-﻿/// <reference types="angular" />
+﻿import { MapModelFromJson } from "functions";
 
 // Interface for the data object passed to the controller
 interface IResearchObjectSequenceCreateData {
@@ -127,6 +127,6 @@ class ResearchObjectSequenceCreator {
 }
 
 // Wrapper function for backwards compatibility
-function ResearchObjectSequenceCreateController(data: IResearchObjectSequenceCreateData): ResearchObjectSequenceCreator {
+export default function ResearchObjectSequenceCreateController(data: IResearchObjectSequenceCreateData): ResearchObjectSequenceCreator {
     return new ResearchObjectSequenceCreator(data);
 }

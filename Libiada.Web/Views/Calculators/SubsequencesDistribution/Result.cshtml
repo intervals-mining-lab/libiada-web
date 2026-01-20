@@ -326,11 +326,8 @@
         </div>
     </div>
     @section Scripts {
-        <script src="~/lib/d3/d3.min.js"></script>
-        <script src="~/lib/plotly.js/plotly.min.js"></script>
-        <script src="~/js/Angular/Components/loadingWindow.js"></script>
-        <script src="~/js/Angular/Components/featuresSelect.js" asp-append-version="true"></script>
-        <script src="~/js/Angular/Components/filters.js" asp-append-version="true"></script>
+        <script type="module" src="~/js/Angular/Components/featuresSelect.js" asp-append-version="true"></script>
+        <script type="module" src="~/js/Angular/Components/filters.js" asp-append-version="true"></script>
         @{
             await Html.RenderPartialAsync("_AngularControllerInitializer", "SubsequencesDistributionResult");
         }

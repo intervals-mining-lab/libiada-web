@@ -1,5 +1,4 @@
-"use strict";
-/// <reference types="angular" />
+import { MapModelFromJson } from "functions";
 /**
 * Controller for order transformation
 */
@@ -49,7 +48,7 @@ class OrderTransformerHandler {
 * @param data Data for controller initialization
 * @returns Order transformation controller instance
 */
-function OrderTransformerController(data) {
+export default function OrderTransformerController(data) {
     return new OrderTransformerHandler(data);
 }
 //# sourceMappingURL=orderTransformer.js.map

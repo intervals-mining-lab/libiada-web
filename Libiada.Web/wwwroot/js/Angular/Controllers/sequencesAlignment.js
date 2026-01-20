@@ -1,5 +1,4 @@
-"use strict";
-/// <reference types="angular" />
+import { MapModelFromJson } from "functions";
 /**
 * Sequence alignment controller
 */
@@ -28,7 +27,7 @@ class SequencesAlignmentHandler {
 * @param data Data for initializing the controller
 * @returns An instance of the sequence alignment controller
 */
-function SequencesAlignmentController(data) {
+export default function SequencesAlignmentController(data) {
     return new SequencesAlignmentHandler(data);
 }
 //# sourceMappingURL=sequencesAlignment.js.map

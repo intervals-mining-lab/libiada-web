@@ -1,5 +1,5 @@
-﻿/// <reference types="angular" />
-/// <reference types="d3" />
+﻿/*import d3 from "d3";*/
+import { MapModelFromJson } from "functions";
 
 /**
  * Interface for distribution interval data
@@ -405,6 +405,6 @@ class OrdersIntervalsDistributionsAccordanceResultHandler {
  * Wrapper function for backward compatibility
  * @returns Instance of OrdersIntervalsDistributionsAccordanceResultHandler
  */
-function OrdersIntervalsDistributionsAccordanceResultController(): OrdersIntervalsDistributionsAccordanceResultHandler {
+export default function OrdersIntervalsDistributionsAccordanceResultController(): OrdersIntervalsDistributionsAccordanceResultHandler {
     return new OrdersIntervalsDistributionsAccordanceResultHandler();
 }

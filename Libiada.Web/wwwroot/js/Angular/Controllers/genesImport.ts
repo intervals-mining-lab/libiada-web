@@ -1,4 +1,4 @@
-﻿/// <reference types="angular" />
+﻿import { MapModelFromJson } from "functions";
 
 /**
  * Interface for genes import data
@@ -45,6 +45,6 @@ class GenesImportHandler {
  * @param data Data for controller initialization
  * @returns Instance of genes import handler
  */
-function GenesImportController(data: IGenesImportData): GenesImportHandler {
+export default function GenesImportController(data: IGenesImportData): GenesImportHandler {
     return new GenesImportHandler(data);
 }

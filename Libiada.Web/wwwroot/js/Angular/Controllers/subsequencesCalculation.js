@@ -1,5 +1,4 @@
-"use strict";
-/// <reference types="angular" />
+import { MapModelFromJson } from "functions";
 /**
 * Controller for calculating subsequences
 */
@@ -41,7 +40,7 @@ class SubsequencesCalculationHandler {
 * @param data Data for controller initialization
 * @returns Subsequence calculation controller instance
 */
-function SubsequencesCalculationController(data) {
+export default function SubsequencesCalculationController(data) {
     return new SubsequencesCalculationHandler(data);
 }
 //# sourceMappingURL=subsequencesCalculation.js.map

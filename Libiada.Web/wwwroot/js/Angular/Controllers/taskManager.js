@@ -1,6 +1,4 @@
-"use strict";
-/// <reference types="angular" />
-/// <reference types="signalr" />
+//import { HubConnection, HubConnectionBuilder } from "signalr";
 // Controller class for task manager
 class TaskManagerControllerHandler {
     constructor() {
@@ -157,7 +155,7 @@ class TaskManagerControllerHandler {
     }
 }
 // Wrapper function for backward compatibility
-function TaskManagerController() {
+export default function TaskManagerController() {
     return new TaskManagerControllerHandler();
 }
 //# sourceMappingURL=taskManager.js.map

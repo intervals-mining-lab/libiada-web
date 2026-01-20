@@ -1,6 +1,5 @@
-"use strict";
-/// <reference types="angular" />
-/// <reference types="d3" />
+/*import d3 from "d3";*/
+import { MapModelFromJson } from "functions";
 /**
  * Controller for displaying orders intervals distributions accordance results
  */
@@ -260,7 +259,7 @@ class OrdersIntervalsDistributionsAccordanceResultHandler {
  * Wrapper function for backward compatibility
  * @returns Instance of OrdersIntervalsDistributionsAccordanceResultHandler
  */
-function OrdersIntervalsDistributionsAccordanceResultController() {
+export default function OrdersIntervalsDistributionsAccordanceResultController() {
     return new OrdersIntervalsDistributionsAccordanceResultHandler();
 }
 //# sourceMappingURL=ordersIntervalsDistributionsAccordanceResult.js.map

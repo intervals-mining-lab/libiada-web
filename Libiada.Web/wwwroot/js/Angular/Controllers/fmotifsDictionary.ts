@@ -1,5 +1,5 @@
-﻿/// <reference types="angular" />
-/// <reference types="d3" />
+﻿import { MapModelFromJson } from "functions";
+/*import * as d3 from "d3";*/
 /// <reference types="jquery" />
 
 /**
@@ -95,7 +95,7 @@ interface ILineResult {
 /**
  * Controller for FmotifsDictionary
  */
-function FmotifsDictionaryController(data: IFmotifsDictionaryData): void {
+export default function FmotifsDictionaryController(data: IFmotifsDictionaryData): void {
     function fmotifsDictionary($scope: IFmotifsDictionaryScope): void {
         MapModelFromJson($scope, data);
 

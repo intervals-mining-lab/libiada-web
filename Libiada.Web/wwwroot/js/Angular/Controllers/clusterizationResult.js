@@ -1,6 +1,6 @@
-﻿function ClusterizationResultController() {
-    "use strict";
+﻿import { MapModelFromJson } from "functions";
 
+export default function ClusterizationResultController() {
     function clusterizationResult($scope, $http) {
 
         function fillLegend() {

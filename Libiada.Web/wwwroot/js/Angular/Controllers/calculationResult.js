@@ -1,6 +1,6 @@
-﻿function CalculationResultController() {
-    "use strict";
+﻿import { MapModelFromJson, getArrayMinMax, arrayMax } from "functions";
 
+export default function CalculationResultController() {
     function calculationResult($scope, $http) {
 
         function fillLegend() {
@@ -111,10 +111,9 @@
 
         function fillBarPlotData() {
             let characteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
-            let min = Math.min(...$scope.points.map(p => p.characteristics[characteristicIndex]));
-            let max = Math.max(...$scope.points.map(p => p.characteristics[characteristicIndex]));
+            let { min, max } = getArrayMinMax($scope.points.map(p => p.characteristics[characteristicIndex]));
             let range = Math.abs(max - min);
-            let maxNameLength = Math.max(...$scope.points.map(p => p.name.length));
+            let maxNameLength = arrayMax($scope.points.map(p => p.name.length));
 
             // adding margins
             min -= Math.abs(range * 0.05);

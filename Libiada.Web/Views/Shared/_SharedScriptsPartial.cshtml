@@ -1,0 +1,27 @@
+﻿<link rel="stylesheet" href="~/lib/twitter-bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.css" />
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/lib/AlertifyJS/css/alertify.css" />
+<link rel="stylesheet" href="~/lib/AlertifyJS/css/themes/bootstrap.css" />
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="~/lib/AlertifyJS/alertify.min.js"></script>
+<script src="~/lib/angular.js/angular.js"></script>
+<script src="~/lib/d3/d3.min.js"></script>
+<script src="~/lib/plotly.js/plotly.min.js"></script>
+
+ <!script type="importmap">
+    {
+        "imports": {
+            "functions": "/js/Angular/functions.js"
+            @*  "d3": "https://esm.sh/d3@@7.8.5?target=es2024", 
+             "plotly.js": "https://esm.sh/plotly.js@@2.29.0?target=es2024", 
+            "signalr": "https://esm.sh/@@microsoft/signalr@@10.0.0?target=es2024" *@
+
+        }
+    }
+</!script>
+
+<script type="module" src="~/js/Angular/libiadaModuleInitializer.js" asp-append-version="true"></script>
+<script type="module" src="~/js/Angular/Components/loadingWindow.js" asp-append-version="true"></script>

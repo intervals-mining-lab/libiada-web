@@ -1,16 +1,5 @@
-﻿/// <reference types="angular" />
-
-/**
-* Interface for the research object
-*/
-interface IResearchObject {
-    id: number;
-    name: string;
-    nature?: number;
-    group?: number;
-    sequenceType?: number;
-    selected?: boolean;
-}
+﻿import { MapModelFromJson } from "functions";
+import { ResearchObject } from "viewDataTypes";
 
 /**
 * Interface for the alignment type
@@ -33,7 +22,7 @@ interface ISimilarityType {
 */
 interface ISequencesAlignmentData {
     // Basic data properties
-    researchObjects?: IResearchObject[];
+    researchObjects?: ResearchObject[];
     alignerTypes?: IAlignerType[];
     similarityTypes?: ISimilarityType[];
 
@@ -48,7 +37,7 @@ interface ISequencesAlignmentData {
 */
 interface ISequencesAlignmentScope extends ng.IScope {
     // Basic data
-    researchObjects?: IResearchObject[];
+    researchObjects?: ResearchObject[];
     alignerTypes?: IAlignerType[];
     similarityTypes?: ISimilarityType[];
 
@@ -89,6 +78,6 @@ class SequencesAlignmentHandler {
 * @param data Data for initializing the controller
 * @returns An instance of the sequence alignment controller
 */
-function SequencesAlignmentController(data: ISequencesAlignmentData): SequencesAlignmentHandler {
+export default function SequencesAlignmentController(data: ISequencesAlignmentData): SequencesAlignmentHandler {
     return new SequencesAlignmentHandler(data);
 }

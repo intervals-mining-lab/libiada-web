@@ -1,4 +1,4 @@
-﻿/// <reference types="angular" />
+﻿import { MapModelFromJson } from "functions";
 
 /**
  * Interface for object with boolean value
@@ -84,6 +84,6 @@ class BatchPoemsImportHandler {
  * @param data Data for controller initialization
  * @returns Instance of batch poems import handler
  */
-function BatchPoemsImportController(data: IBatchPoemsImportData): BatchPoemsImportHandler {
+export default function BatchPoemsImportController(data: IBatchPoemsImportData): BatchPoemsImportHandler {
     return new BatchPoemsImportHandler(data);
 }

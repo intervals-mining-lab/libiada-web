@@ -1,6 +1,4 @@
-﻿/// <reference types="angular" />
-
-/**
+﻿/**
  * Interface for the characteristic type
  */
 interface ILink {
@@ -19,7 +17,7 @@ interface IArrangementType {
 /**
  * Interface for the characteristic type
  */
-interface ICharacteristicType {
+export interface ICharacteristicType {
     id: number;
     name: string;
     description?: string;
@@ -30,7 +28,7 @@ interface ICharacteristicType {
 /**
  * Interface for the characteristic
  */
-interface ICharacteristic {
+export interface ICharacteristic {
     characteristicType: ICharacteristicType;
     link?: ILink;
     arrangementType?: IArrangementType;
@@ -39,7 +37,7 @@ interface ICharacteristic {
 /**
  * Interface for the scope in Angular controllers
  */
-interface IAngularScope extends ng.IScope {
+interface IAngularScope extends angular.IScope {
     [key: string]: any;
 }
 /**
@@ -79,10 +77,45 @@ class LibiadaWebUtils {
 }
 
 // For backward compatibility with existing JavaScript code
-function MapModelFromJson(scope: IAngularScope, data: IDataObject): void {
+export function MapModelFromJson(scope: IAngularScope, data: IDataObject): void {
     LibiadaWebUtils.MapModelFromJson(scope, data);
 }
 
-function SelectLink(characteristic: ICharacteristic): void {
+export function SelectLink(characteristic: ICharacteristic): void {
     LibiadaWebUtils.SelectLink(characteristic);
+}
+
+export function getArrayMinMax(array: number[]): { min: number, max: number } {
+    let min: number = array[0];
+    let max: number = array[0];
+    let length: number = array.length;
+
+    for (let i: number = 1; i < length; i++) {
+        if (array[i] < min) min = array[i];
+        else if (array[i] > max) max = array[i];
+    }
+
+    return { min, max };
+}
+
+export function arrayMin(array: number[]): number {
+    let min: number = array[0];
+    let length: number = array.length;
+
+    for (let i: number = 1; i < length; i++) {
+        min = array[i] < min ? array[i] : min;
+    }
+
+    return min;
+}
+
+export function arrayMax(array: number[]): number {
+    let max: number = array[0];
+    let length: number = array.length;
+
+    for (let i: number = 1; i < length; i++) {
+        max = array[i] > max ? array[i] : max;
+    }
+
+    return max;
 }

@@ -1,4 +1,4 @@
-﻿/// <reference types="angular" />
+﻿import { MapModelFromJson } from "functions";
 
 /**
 * Interface for the research object
@@ -78,6 +78,6 @@ class SequencesOrderDistributionHandler {
 * @param data Data to initialize the controller
 * @returns Order distribution controller instance
 */
-function SequencesOrderDistributionController(data: ISequencesOrderDistributionData): SequencesOrderDistributionHandler {
+export default function SequencesOrderDistributionController(data: ISequencesOrderDistributionData): SequencesOrderDistributionHandler {
     return new SequencesOrderDistributionHandler(data);
 }

@@ -1,6 +1,6 @@
-﻿function MusicScoreController(data) {
-    "use strict";
+﻿import { MapModelFromJson } from "functions";
 
+export default function MusicScoreController(data) {
     function musicScore($scope) {
         MapModelFromJson($scope, data);
 

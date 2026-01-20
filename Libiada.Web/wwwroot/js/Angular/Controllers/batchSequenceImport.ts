@@ -1,4 +1,4 @@
-﻿/// <reference types="angular" />
+﻿import { MapModelFromJson } from "functions";
 
 /**
  * Интерфейс для элемента списка идентификаторов последовательностей
@@ -85,6 +85,6 @@ class BatchSequenceImportHandler {
  * @param data Данные для инициализации контроллера
  * @returns Instance of batch sequence import handler
  */
-function BatchSequenceImportController(data: IBatchSequenceImportData): BatchSequenceImportHandler {
+export default function BatchSequenceImportController(data: IBatchSequenceImportData): BatchSequenceImportHandler {
     return new BatchSequenceImportHandler(data);
 }

@@ -125,6 +125,7 @@
                 @Html.LabelFor(model => model.RemoteDb, new { @class = "col-form-label col-md-2" })
                 <div class="col-md-10">
                     <select class="form-select"
+                            id="RemoteDb"
                             ng-options="r.Value as r.Text for r in remoteDbs | filter: { Nature: nature }"
                             ng-model="remoteDbId">
                         <option value="">None</option>
@@ -219,5 +220,5 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script src="~/js/Angular/Components/localFile.js" asp-append-version="true"></script>
+    <script type="module" src="~/js/Angular/Components/localFile.js" asp-append-version="true"></script>
 }

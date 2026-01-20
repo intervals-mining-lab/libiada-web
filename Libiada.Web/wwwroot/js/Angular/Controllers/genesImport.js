@@ -1,5 +1,4 @@
-"use strict";
-/// <reference types="angular" />
+import { MapModelFromJson } from "functions";
 /**
  * Controller for genes import functionality
  */
@@ -28,7 +27,7 @@ class GenesImportHandler {
  * @param data Data for controller initialization
  * @returns Instance of genes import handler
  */
-function GenesImportController(data) {
+export default function GenesImportController(data) {
     return new GenesImportHandler(data);
 }
 //# sourceMappingURL=genesImport.js.map

@@ -1,7 +1,5 @@
-"use strict";
-/// <reference types="angular" />
-/// <reference types="d3" />
-/// <reference path="./Interfaces/commonInterfaces.d.ts" />
+//import d3 from "d3";
+import { MapModelFromJson } from "functions";
 // Methods in IOrderTransformationVisualizationScope interface
 /**
 * Controller for visualizing order transformation results
@@ -490,7 +488,7 @@ class OrderTransformationVisualizationResultHandler {
 /**
 * Wrapper for backward compatibility
 */
-function OrderTransformationVisualizationResultController() {
+export default function OrderTransformationVisualizationResultController() {
     return new OrderTransformationVisualizationResultHandler();
 }
-//# sourceMappingURL=OrderTransformationVisualizationResult.js.map
+//# sourceMappingURL=orderTransformationVisualizationResult.js.map

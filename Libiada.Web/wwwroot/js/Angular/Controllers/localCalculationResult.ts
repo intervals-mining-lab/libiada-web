@@ -1,6 +1,6 @@
-﻿/// <reference types="angular" />
-/// <reference types="d3" />
-/// <reference types="plotly.js" />
+﻿import { MapModelFromJson, getArrayMinMax } from "functions";
+//import d3 from "d3";
+//import Plotly from "plotly.js";
 /// <reference types="jquery" />
 
 /**
@@ -165,7 +165,7 @@ interface ILocalCalculationResultScope extends ng.IScope {
 /**
  * Controller for displaying local calculation results
  */
-function LocalCalculationResultController(): void {
+export default function LocalCalculationResultController(): void {
     function localCalculationResult($scope: ILocalCalculationResultScope, $http: ng.IHttpService): void {
         function calculateLocalCharacteristicsSimilarityMatrix(): void {
             $http.get<ILocalCharacteristicsSimilarityMatrixResponse>("/api/LocalCalculationApi/CalculateLocalCharacteristicsSimilarityMatrix", {
@@ -285,8 +285,7 @@ function LocalCalculationResultController(): void {
         function fillLinePlotData(): void {
             let characteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
             let characteristicsValues = $scope.points.map((p => p.fragmentsData.map(fd => fd.characteristics[characteristicIndex]))).flat();
-            let min = Math.min(...characteristicsValues);
-            let max = Math.max(...characteristicsValues);
+            let { min, max } = getArrayMinMax(characteristicsValues);
             let range = Math.abs(max - min);
 
             // adding margins

@@ -1,5 +1,4 @@
-"use strict";
-/// <reference types="angular" />
+import { MapModelFromJson } from "functions";
 /**
  * Controller for order transformation result visualization
  */
@@ -37,7 +36,7 @@ class OrderTransformationResultHandler {
 /**
  * Wrapper function for backward compatibility
  */
-function OrderTransformationResultController() {
+export default function OrderTransformationResultController() {
     return new OrderTransformationResultHandler();
 }
 //# sourceMappingURL=orderTransformationResult.js.map

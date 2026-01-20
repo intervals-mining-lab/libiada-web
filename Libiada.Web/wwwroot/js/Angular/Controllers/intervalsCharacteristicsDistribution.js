@@ -1,5 +1,4 @@
-"use strict";
-/// <reference types="angular" />
+import { MapModelFromJson } from "functions";
 /**
  * Controller for intervals characteristics distribution
  */
@@ -26,7 +25,7 @@ class IntervalsCharacteristicsDistributionHandler {
  * @param data Data for controller initialization
  * @returns Instance of IntervalsCharacteristicsDistributionHandler
  */
-function IntervalsCharacteristicsDistributionController(data) {
+export default function IntervalsCharacteristicsDistributionController(data) {
     return new IntervalsCharacteristicsDistributionHandler(data);
 }
 //# sourceMappingURL=intervalsCharacteristicsDistribution.js.map

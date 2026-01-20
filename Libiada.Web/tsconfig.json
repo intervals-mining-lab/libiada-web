@@ -21,7 +21,8 @@
     "typeRoots": [
       "wwwroot/lib/microsoft",
       "wwwroot/lib/@types"
-    ]
+    ],
+    "allowUmdGlobalAccess": true
     // "noEmitOnError": true
 
   },

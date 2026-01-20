@@ -1,5 +1,4 @@
-"use strict";
-/// <reference types="angular" />
+import { MapModelFromJson } from "functions";
 /**
 * Controller for sequence prediction results
 */
@@ -49,7 +48,7 @@ class SequencePredictionResultHandler {
 * Wrapper function for backward compatibility
 * @returns Sequence prediction result controller instance
 */
-function SequencePredictionResultController() {
+export default function SequencePredictionResultController() {
     return new SequencePredictionResultHandler();
 }
 //# sourceMappingURL=sequencePredictionResult.js.map

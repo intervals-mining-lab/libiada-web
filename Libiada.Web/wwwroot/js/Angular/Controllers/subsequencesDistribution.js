@@ -1,5 +1,4 @@
-"use strict";
-/// <reference types="angular" />
+import { MapModelFromJson } from "functions";
 // Main controller class
 class SubsequencesDistributionManager {
     constructor(data) {
@@ -18,7 +17,7 @@ class SubsequencesDistributionManager {
     }
 }
 // Export the constructor for use in _AngularControllerInitializer.cshtml
-function SubsequencesDistributionController(data) {
+export default function SubsequencesDistributionController(data) {
     return new SubsequencesDistributionManager(data);
 }
 ;

@@ -1,4 +1,6 @@
-﻿/**
+﻿import { MapModelFromJson } from "functions";
+
+/**
 * Interface for OrdersIntervalsDistributionsAccordance controller input data
 */
 interface IOrdersIntervalsDistributionsAccordanceData {
@@ -41,6 +43,6 @@ class OrdersIntervalsDistributionsAccordanceHandler {
 * @param data Data for controller initialization
 * @returns OrdersIntervalsDistributionsAccordanceHandler instance
 */
-function OrdersIntervalsDistributionsAccordanceController(data: IOrdersIntervalsDistributionsAccordanceData): OrdersIntervalsDistributionsAccordanceHandler {
+export default function OrdersIntervalsDistributionsAccordanceController(data: IOrdersIntervalsDistributionsAccordanceData): OrdersIntervalsDistributionsAccordanceHandler {
     return new OrdersIntervalsDistributionsAccordanceHandler(data);
 }

@@ -1,4 +1,4 @@
-﻿/// <reference types="angular" />
+﻿import { MapModelFromJson } from "functions";
 
 /**
  * Interface for nature object
@@ -87,6 +87,6 @@ class MultisequenceCreateHandler {
  * @param data Data for controller initialization
  * @returns Instance of multisequence create handler
  */
-function MultisequenceCreateController(data: IMultisequenceCreateData): MultisequenceCreateHandler {
+export default function MultisequenceCreateController(data: IMultisequenceCreateData): MultisequenceCreateHandler {
     return new MultisequenceCreateHandler(data);
 }

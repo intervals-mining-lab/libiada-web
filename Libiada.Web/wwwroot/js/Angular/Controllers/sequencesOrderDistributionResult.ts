@@ -1,6 +1,6 @@
-/// <reference types="angular" />
-/// <reference types="d3" />
-/// <reference path="./Interfaces/commonInterfaces.d.ts" />
+//import d3 from "d3";
+import { MapModelFromJson } from "functions";
+import { IBasePoint } from "./Interfaces/commonInterfaces";
 
 // Interface for accordance level data
 interface IAccordanceLevel {
@@ -388,6 +388,6 @@ class SequencesOrderDistributionResultHandler {
  * Wrapper function for backward compatibility
  * @returns SequencesOrderDistributionResultHandler instance
  */
-function SequencesOrderDistributionResultController(): SequencesOrderDistributionResultHandler {
+export default function SequencesOrderDistributionResultController(): SequencesOrderDistributionResultHandler {
     return new SequencesOrderDistributionResultHandler();
 }

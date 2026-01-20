@@ -1,5 +1,4 @@
-"use strict";
-/// <reference types="angular" />
+import { MapModelFromJson } from "functions";
 /**
 * Controller for sequence groups
 */
@@ -28,7 +27,7 @@ class SequenceGroupsHandler {
 * @param data Data to initialize the controller
 * @returns Sequence Groups Controller instance
 */
-function SequenceGroupsController(data) {
+export default function SequenceGroupsController(data) {
     return new SequenceGroupsHandler(data);
 }
 //# sourceMappingURL=sequenceGroups.js.map

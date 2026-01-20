@@ -1,4 +1,4 @@
-﻿/// <reference types="angular" />
+﻿import { MapModelFromJson } from "functions";
 
 // Interface for the data object that is passed to the controller
 interface ICalculationData {
@@ -208,6 +208,6 @@ class CalculationOperator {
 }
 
 // Wrapper function for backwards compatibility
-function CalculationController(data: ICalculationData): CalculationOperator {
+export default function CalculationController(data: ICalculationData): CalculationOperator {
     return new CalculationOperator(data);
 }

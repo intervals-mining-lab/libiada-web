@@ -2,6 +2,7 @@
 @using Libiada.Web.Helpers
 @{
     ViewBag.Title = "Libiada";
+    var separator = " | ";
 }
 
 <h1>Libiada - FOA Research Lab</h1>
@@ -11,10 +12,11 @@
     <div class="row mb-3">
         <div class="col-md-4">
             <h2>Data</h2>
-            @Html.ActionLink("Research objects", "Index", "ResearchObjects")
-            <br />
+            
             @if (User.IsAdmin())
             {
+                @Html.ActionLink("Research objects", "Index", "ResearchObjects")
+                @separator
                 @Html.ActionLink("Create research object", "Create", "ResearchObjects")
                 <br />
                 @Html.ActionLink("Multisequences", "Index", "Multisequence")
@@ -45,16 +47,16 @@
                 <br />
                 @Html.ActionLink("Genetic sequences transformation", "Index", "GeneticSequencesTransformation")
                 <br />
-                @Html.ActionLink("Order transformation (high order)", "Index", "OrderTransformer")
-                <br />
-                @Html.ActionLink("Custom sequences order transformation (high order)", "Index", "CustomSequenceOrderTransformer")
-                <br />
                 @Html.ActionLink("Music fmotifs dictionaries", "Index", "FmotifsDictionary")
                 <br />
                 @Html.ActionLink("Custom sequences segmentation", "Index", "CustomSequenceSegmentation")
                 <br />
                 @Html.ActionLink("Poems segmentation", "Index", "PoemSegmentation")
             }
+            <br />
+            @Html.ActionLink("Order transformation (high order)", "Index", "OrderTransformer")
+            <br />
+            @Html.ActionLink("Custom sequences order transformation (high order)", "Index", "CustomSequenceOrderTransformer")
         </div>
         <div class="col-md-4">
             <h2>Calculators</h2>

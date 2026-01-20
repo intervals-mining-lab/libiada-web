@@ -1,5 +1,4 @@
-"use strict";
-/// <reference types="angular" />
+import { MapModelFromJson } from "functions";
 /**
  * Controller for accordance functionality
  */
@@ -28,7 +27,7 @@ class AccordanceHandler {
  * @param data Data for controller initialization
  * @returns Instance of accordance handler
  */
-function AccordanceController(data) {
+export default function AccordanceController(data) {
     return new AccordanceHandler(data);
 }
 //# sourceMappingURL=accordance.js.map

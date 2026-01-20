@@ -1,4 +1,4 @@
-﻿/// <reference types="angular" />
+﻿import { MapModelFromJson } from "functions";
 
 /**
 * Interface for link
@@ -150,6 +150,6 @@ class OrderTransformerHandler {
 * @param data Data for controller initialization
 * @returns Order transformation controller instance
 */
-function OrderTransformerController(data: IOrderTransformerData): OrderTransformerHandler {
+export default function OrderTransformerController(data: IOrderTransformerData): OrderTransformerHandler {
     return new OrderTransformerHandler(data);
 }

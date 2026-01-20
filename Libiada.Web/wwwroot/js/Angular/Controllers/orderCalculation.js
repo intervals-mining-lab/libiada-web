@@ -1,5 +1,4 @@
-"use strict";
-/// <reference types="angular" />
+import { MapModelFromJson } from "functions";
 /**
  * Controller for order calculations
  */
@@ -26,7 +25,7 @@ class OrderCalculationHandler {
  * @param data Data for controller initialization
  * @returns Instance of OrderCalculationHandler
  */
-function OrderCalculationController(data) {
+export default function OrderCalculationController(data) {
     return new OrderCalculationHandler(data);
 }
 //# sourceMappingURL=orderCalculation.js.map

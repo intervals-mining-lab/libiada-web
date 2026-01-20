@@ -1,13 +1,14 @@
-﻿/// <reference types="angular" />
+﻿import { Feature, ResearchObject } from "viewDataTypes";
+import { MapModelFromJson, ICharacteristicType, ICharacteristic } from "functions";
 
 /**
 * Interface for subsequence calculation controller data
 */
-interface ISubsequencesCalculationData {
+interface SubsequencesCalculationData {
     // Basic data properties
-    features?: IFeature[];
+    features?: Feature[];
     attributeTypes?: string[];
-    researchObjects?: IResearchObject[];
+    researchObjects?: ResearchObject[];
     characteristicTypes?: ICharacteristicType[];
 
     // Pre-selected values ​​(optional)
@@ -16,24 +17,18 @@ interface ISubsequencesCalculationData {
     featureId?: number;
 }
 
-interface IFeature {
-    Text: string;
-    Value: string | number;
-    Selected?: boolean;
-}
-
 /**
 * Interface for the subsequence calculation scope controller
 */
-interface ISubsequencesCalculationScope extends ng.IScope {
+interface SubsequencesCalculationScope extends ng.IScope {
     // Filtering parameters
     filters: any[];
     hideNotation: boolean;
 
     // Data for working with sequences (may be absent in the simplified controller)
-    features?: IFeature[];
+    features?: Feature[];
     attributeTypes?: string[];
-    researchObjects?: IResearchObject[];
+    researchObjects?: ResearchObject[];
     characteristicTypes?: ICharacteristicType[];
 
     // Selected values
@@ -44,7 +39,7 @@ interface ISubsequencesCalculationScope extends ng.IScope {
 
     // Methods
     applyFilter: (filter: any) => void;
-    toggleResearchObjectSelection?: (researchObject: IResearchObject) => void;
+    toggleResearchObjectSelection?: (researchObject: ResearchObject) => void;
     addCharacteristic?: () => void;
     deleteCharacteristic?: (index: number) => void;
 }
@@ -58,15 +53,15 @@ class SubsequencesCalculationHandler {
     * Creates an instance of the subsequence calculation controller
     * @param data Data for initializing the controller
     */
-    constructor(data: ISubsequencesCalculationData) {
+    constructor(data: SubsequencesCalculationData) {
         this.ngOnInit(data);
     }
 
     /**
     * Initializes the Angular controller
     */
-    private ngOnInit(data: ISubsequencesCalculationData): void {
-        const subsequencesCalculation = ($scope: ISubsequencesCalculationScope): void => {
+    private ngOnInit(data: SubsequencesCalculationData): void {
+        const subsequencesCalculation = ($scope: SubsequencesCalculationScope): void => {
             // Initialize scope with data from parameter
             MapModelFromJson($scope, data);
 
@@ -97,6 +92,6 @@ class SubsequencesCalculationHandler {
 * @param data Data for controller initialization
 * @returns Subsequence calculation controller instance
 */
-function SubsequencesCalculationController(data: ISubsequencesCalculationData): SubsequencesCalculationHandler {
+export default function SubsequencesCalculationController(data: SubsequencesCalculationData): SubsequencesCalculationHandler {
     return new SubsequencesCalculationHandler(data);
 }

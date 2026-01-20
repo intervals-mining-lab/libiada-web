@@ -1,4 +1,4 @@
-"use strict";
+import { MapModelFromJson } from "functions";
 /**
 * Controller for displaying order interval distribution correspondence
 */
@@ -25,7 +25,7 @@ class OrdersIntervalsDistributionsAccordanceHandler {
 * @param data Data for controller initialization
 * @returns OrdersIntervalsDistributionsAccordanceHandler instance
 */
-function OrdersIntervalsDistributionsAccordanceController(data) {
+export default function OrdersIntervalsDistributionsAccordanceController(data) {
     return new OrdersIntervalsDistributionsAccordanceHandler(data);
 }
 //# sourceMappingURL=ordersIntervalsDistributionsAccordance.js.map

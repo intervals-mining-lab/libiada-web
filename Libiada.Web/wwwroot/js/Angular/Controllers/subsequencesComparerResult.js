@@ -1,6 +1,6 @@
-﻿function SubsequencesComparerResultController() {
-    "use strict";
+﻿import { MapModelFromJson } from "functions";
 
+export default function SubsequencesComparerResultController() {
     function subsequencesComparerResult($scope, $http) {
 
         // adds and applies new filter

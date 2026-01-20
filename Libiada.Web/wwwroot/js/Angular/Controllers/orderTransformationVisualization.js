@@ -1,5 +1,4 @@
-"use strict";
-/// <reference types="angular" />
+import { MapModelFromJson } from "functions";
 /**
 * Controller for visualizing order transformation
 */
@@ -28,7 +27,7 @@ class OrderTransformationVisualizationHandler {
 * @param data Data for controller initialization
 * @returns Order transformation visualization controller instance
 */
-function OrderTransformationVisualizationController(data) {
+export default function OrderTransformationVisualizationController(data) {
     return new OrderTransformationVisualizationHandler(data);
 }
-//# sourceMappingURL=OrderTransformationVisualization.js.map
+//# sourceMappingURL=orderTransformationVisualization.js.map
