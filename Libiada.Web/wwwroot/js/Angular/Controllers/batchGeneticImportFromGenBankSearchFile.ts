@@ -1,23 +1,17 @@
 ﻿import { MapModelFromJson } from "functions";
-/**
- * Interface for object with boolean value
- */
-interface IBooleanValue {
-    value: boolean;
-}
 
 /**
  * Interface for initial controller data
  */
-interface IBatchGeneticImportFromGenBankSearchFileData {
+interface BatchGeneticImportFromGenBankSearchFileData {
 }
 
 /**
  * Interface for controller scope
  */
-interface IBatchGeneticImportFromGenBankSearchFileScope extends ng.IScope {
+interface BatchGeneticImportFromGenBankSearchFileScope extends ng.IScope {
     // File status properties
-    fileSelected: IBooleanValue;
+    fileSelected: {value : boolean};
 
     // Methods
     fileChanged: (filePath: HTMLInputElement) => void;
@@ -31,7 +25,7 @@ class BatchGeneticImportFromGenBankSearchFileHandler {
      * Creates a new controller instance
      * @param data Data for controller initialization
      */
-    constructor(data: IBatchGeneticImportFromGenBankSearchFileData) {
+    constructor(data: BatchGeneticImportFromGenBankSearchFileData) {
         this.ngOnInit(data);
     }
 
@@ -39,8 +33,8 @@ class BatchGeneticImportFromGenBankSearchFileHandler {
      * Initializes Angular controller
      * @param data Data for controller initialization
      */
-    private ngOnInit(data: IBatchGeneticImportFromGenBankSearchFileData): void {
-        const batchGeneticImportFromGenBankSearchFile = ($scope: IBatchGeneticImportFromGenBankSearchFileScope): void => {
+    private ngOnInit(data: BatchGeneticImportFromGenBankSearchFileData): void {
+        const batchGeneticImportFromGenBankSearchFile = ($scope: BatchGeneticImportFromGenBankSearchFileScope): void => {
             MapModelFromJson($scope, data);
 
             function fileChanged(filePath: HTMLInputElement): void {
@@ -69,7 +63,7 @@ class BatchGeneticImportFromGenBankSearchFileHandler {
  * @returns Instance of batch genetic import from GenBank search file handler
  */
 export default function BatchGeneticImportFromGenBankSearchFileController(
-    data: IBatchGeneticImportFromGenBankSearchFileData
+    data: BatchGeneticImportFromGenBankSearchFileData
 ): BatchGeneticImportFromGenBankSearchFileHandler {
     return new BatchGeneticImportFromGenBankSearchFileHandler(data);
 }

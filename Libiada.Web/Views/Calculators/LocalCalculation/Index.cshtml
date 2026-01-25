@@ -30,30 +30,16 @@
         <characteristics-without-notation characteristic-types="::characteristicTypes"
                                           characteristics-dictionary="::characteristicsDictionary">
         </characteristics-without-notation>
+        <characteristic-nature-params characteristic="characteristic"
+                                      nature="nature"
+                                      notations="notations"
+                                      languages="::languages"
+                                      translators="::translators"
+                                      pause-treatments="::pauseTreatments"
+                                      trajectories="::trajectories">
+        </characteristic-nature-params>
         @if (User.IsAdmin())
         {
-            <div class="row mb-1">
-                <label class="col-form-label col-md-2" for="notation">Notation:</label>
-                <div class="col-md-10">
-                    <select class="form-select"
-                            title="Notation"
-                            ng-model="notation"
-                            ng-options="n.Text for n in notations | filter:{ Nature: nature }"
-                            id="notation"></select>
-                </div>
-            </div>
-        }
-        <input type="hidden" name="notation" ng-value="notation.Value" />
-        @if (User.IsAdmin())
-        {
-            <characteristic-nature-params characteristic="characteristic"
-                                          nature="nature"
-                                          notations="notations"
-                                          languages="::languages"
-                                          translators="::translators"
-                                          pause-treatments="::pauseTreatments"
-                                          trajectories="::trajectories">
-            </characteristic-nature-params>
             <div class="row mb-1">
                 <label class="col-form-label col-md-2" for="length">Window size:</label>
                 <div class="col-md-10">

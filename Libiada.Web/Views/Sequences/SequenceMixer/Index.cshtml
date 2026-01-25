@@ -3,20 +3,19 @@
 }
 
 @{
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "OrdersSimilarity");
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "SequenceMixer");
 }
 
 <h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm())
 {
-    <div ng-controller="OrdersSimilarityCtrl">
+    <div ng-controller="SequenceMixerCtrl">
         <h4>Sequences and parameters</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <nature-select natures="natures"
-                       nature="nature"
-                       filter-by-nature="filterByNature()">
+                       nature="nature">
         </nature-select>
         <research-objects-table nature="nature"
                                 groups="groups"
@@ -25,22 +24,12 @@
                                 selected-research-objects-count="selectedResearchObjectsCount"
                                 group-and-type-required="::false">
         </research-objects-table>
-        <div class="row mb-1">
-            <div class="col-md-10">
-                <select class="form-select"
-                        title="Notation"
-                        ng-model="notation"
-                        ng-options="n.Text for n in notations | filter:{ Nature: nature }">
-                </select>
-                <input type="hidden" name="notation" ng-value="notation.Value" />
-            </div>
-        </div>
         <characteristic-nature-params characteristic="characteristic"
                                       nature="nature"
                                       notations="notations"
                                       languages="::languages"
                                       translators="::translators"
-                                      pauseTreatments="::pauseTreatments"
+                                      pause-treatments="::pauseTreatments"
                                       trajectories="::trajectories">
         </characteristic-nature-params>
         <div class="row mb-1">

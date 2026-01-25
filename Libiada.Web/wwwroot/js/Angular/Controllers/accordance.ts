@@ -21,7 +21,8 @@ interface AccordanceData {
     characteristicTypes: CharacterisrticType[];
     characteristicsDictionary: { [key: string]: number };
     features: Feature[];
-    groups: Group[];    natures: Nature[];
+    groups: Group[];
+    natures: Nature[];
     notations: Notation[];
     languages: Language[];
     pauseTreatments: PauseTreatment[];

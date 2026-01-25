@@ -1,16 +1,15 @@
 ﻿namespace Libiada.Web.Controllers.Sequences;
 
-using System.Text;
-
 using Libiada.Core.Core;
-
 using Libiada.Database.Helpers;
 using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
+using Libiada.Web.Helpers;
+using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
 
-using Libiada.Web.Tasks;
+using System.Text;
 
 /// <summary>
 /// The sequence check controller.
@@ -21,6 +20,7 @@ public class SequenceCheckController : AbstractResultController
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
     private readonly IResearchObjectsCache cache;
+    private readonly IViewDataBuilder viewDataBuilder;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SequenceCheckController"/> class.
@@ -28,12 +28,14 @@ public class SequenceCheckController : AbstractResultController
     public SequenceCheckController(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                    ITaskManager taskManager,
                                    ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
-                                   IResearchObjectsCache cache)
+                                   IResearchObjectsCache cache,
+                                   IViewDataBuilder viewDataBuilder)
         : base(TaskType.SequenceCheck, taskManager)
     {
         this.dbFactory = dbFactory;
         this.sequenceRepositoryFactory = sequenceRepositoryFactory;
         this.cache = cache;
+        this.viewDataBuilder = viewDataBuilder;
     }
 
     /// <summary>
@@ -44,7 +46,12 @@ public class SequenceCheckController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        ViewBag.researchObjectId = new SelectList(cache.ResearchObjects.Where(m => m.Nature == Nature.Genetic).ToArray(), "id", "name");
+        var viewData = viewDataBuilder.SetNature(Nature.Genetic)
+                                      .AddMinMaxResearchObjects(1, 1)
+                                      .AddSequenceTypes(onlyGenetic: true)
+                                      .AddGroups(onlyGenetic: true)
+                                      .Build();
+        ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }
 
@@ -63,87 +70,110 @@ public class SequenceCheckController : AbstractResultController
     [HttpPost]
     public ActionResult Index(long researchObjectId, IFormFile file)
     {
+        Stream fileStream = Helpers.FileHelper.GetFileStream(file);
+
         return CreateTask(() =>
         {
-            if (file == null || file.Length == 0)
+            try
             {
-                throw new ArgumentNullException(nameof(file), "Sequence file not found or empty.");
-            }
+                byte[] input = new byte[fileStream.Length];
+                // Read the file into the byte array.
+                fileStream.Read(input, 0, (int)fileStream.Length);
 
-            // Initialize the stream.
-            using Stream fileStream = Helpers.FileHelper.GetFileStream(file);
-            byte[] input = new byte[fileStream.Length];
-            // Read the file into the byte array.
-            fileStream.Read(input, 0, (int)fileStream.Length);
+                // Copy the byte array into a string.
+                string stringSequence = Encoding.ASCII.GetString(input);
+                string[] tempString = stringSequence.Split('\n', '\r');
+                string externalSequenceName = tempString[0];
 
-            // Copy the byte array into a string.
-            string stringSequence = Encoding.ASCII.GetString(input);
-            string[] tempString = stringSequence.Split('\n', '\r');
-
-            var sequenceStringBuilder = new StringBuilder(stringSequence.Length);
-
-            for (int j = 1; j < tempString.Length; j++)
-            {
-                sequenceStringBuilder.Append(tempString[j]);
-            }
-
-            string resultStringSequence = DataTransformers.CleanFastaFile(sequenceStringBuilder.ToString());
-
-            var sequence = new Sequence(resultStringSequence);
-            string message;
-            string status;
-            Sequence dbSequence;
-            using var db = dbFactory.CreateDbContext();
-            long sequenceId = db.CombinedSequenceEntities.Single(c => c.ResearchObjectId == researchObjectId).Id;
-            using var sequenceRepository = sequenceRepositoryFactory.Create();
-            dbSequence = sequenceRepository.GetLibiadaSequence(sequenceId);
-
-
-            if (dbSequence.Equals(sequence))
-            {
-                message = "Sequence in db and in file are equal";
-                status = "Success";
-            }
-            else
-            {
-                status = "Error";
-                if (sequence.Alphabet.Cardinality != dbSequence.Alphabet.Cardinality)
+                StringBuilder sequenceStringBuilder = new(stringSequence.Length);
+                for (int j = 1; j < tempString.Length; j++)
                 {
-                    message = $"Alphabet sizes are not equal. In db - {dbSequence.Alphabet.Cardinality}. In file - {sequence.Alphabet.Cardinality}";
-                    return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(new { message }) } };
+                    sequenceStringBuilder.Append(tempString[j]);
                 }
 
-                for (int i = 0; i < sequence.Alphabet.Cardinality; i++)
+                string resultStringSequence = DataTransformers.CleanFastaFile(sequenceStringBuilder.ToString());
+                var sequence = new Sequence(resultStringSequence);
+
+                CheckResult result;
+                using var db = dbFactory.CreateDbContext();
+                long sequenceId = db.CombinedSequenceEntities.Single(c => c.ResearchObjectId == researchObjectId && c.Notation == Notation.Nucleotides).Id;
+                using var sequenceRepository = sequenceRepositoryFactory.Create();
+                Sequence dbSequence = sequenceRepository.GetLibiadaSequence(sequenceId);
+
+                string dbSequenceName = db.ResearchObjects.Single(ro => ro.Id == researchObjectId).Name;
+                // comparing sequences
+                if (dbSequence.Equals(sequence))
                 {
-                    if (!sequence.Alphabet[i].ToString().Equals(dbSequence.Alphabet[i].ToString()))
+                    result = new CheckResult(
+                        dbSequenceName,
+                        externalSequenceName,
+                        "Sequence in db and in file are equal",
+                        "Success");
+                }
+                else
+                {
+                    // if they are not equal, comparing alphabets
+                    if (sequence.Alphabet.Cardinality != dbSequence.Alphabet.Cardinality)
                     {
-                        message = $"{i} elements in alphabet are not equal. In db - {dbSequence.Alphabet[i]}. In file - {sequence.Alphabet[i]}";
-                        return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(new { message }) } };
+                        result = new CheckResult(
+                            dbSequenceName,
+                            externalSequenceName,
+                            $"Alphabet sizes are not equal. In db - {dbSequence.Alphabet.Cardinality}. In file - {sequence.Alphabet.Cardinality}");
+
+                        return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
                     }
-                }
 
-                if (sequence.Length != dbSequence.Length)
-                {
-                    message = $"Sequence length in db {dbSequence.Length}, and sequence length from file{sequence.Length}";
-                    return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(new { message, status }) } };
-                }
-
-                int[] libiadaOrder = sequence.Order;
-                int[] databaseOrder = dbSequence.Order;
-
-                for (int j = 0; j < sequence.Length; j++)
-                {
-                    if (libiadaOrder[j] != databaseOrder[j])
+                    for (int i = 0; i < sequence.Alphabet.Cardinality; i++)
                     {
-                        message = $"{j} sequences elements are not equal. In db {databaseOrder[j]}. In file {libiadaOrder[j]}";
-                        return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(new { message, status }) } };
+                        if (!sequence.Alphabet[i].ToString().Equals(dbSequence.Alphabet[i].ToString()))
+                        {
+                            result = new CheckResult(
+                                dbSequenceName,
+                                externalSequenceName,
+                                $"{i} elements in alphabet are not equal. In db - {dbSequence.Alphabet[i]}. In file - {sequence.Alphabet[i]}");
+                            return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
+                        }
                     }
+
+                    // if alphabets are equal, comparing orders
+                    if (sequence.Length != dbSequence.Length)
+                    {
+                        result = new CheckResult(
+                            dbSequenceName,
+                            externalSequenceName,
+                            $"Sequence length in db {dbSequence.Length}, and sequence length from file {sequence.Length}");
+                        return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
+                    }
+
+                    int[] libiadaOrder = sequence.Order;
+                    int[] databaseOrder = dbSequence.Order;
+
+                    for (int j = 0; j < sequence.Length; j++)
+                    {
+                        if (libiadaOrder[j] != databaseOrder[j])
+                        {
+                            result = new CheckResult(
+                                dbSequenceName,
+                                externalSequenceName,
+                                $"{j} sequences elements are not equal. In db {databaseOrder[j]}. In file {libiadaOrder[j]}");
+                            return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
+                        }
+                    }
+
+                    result = new CheckResult(
+                        dbSequenceName,
+                        externalSequenceName,
+                        "Sequences are equal and not equal at the same time.");
                 }
 
-                message = "Sequences are equal and not equal at the same time.";
+                return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
             }
-
-            return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(new { message, status }) } };
+            finally
+            {
+                fileStream.Dispose();
+            }
         });
     }
+
+    private record struct CheckResult(string dbSequenceName, string fileSequenceName, string message, string status = "Error");
 }

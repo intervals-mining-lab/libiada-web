@@ -1,16 +1,14 @@
 ﻿namespace Libiada.Web.Controllers.Sequences;
 
+using Libiada.Core.Extensions;
 using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
-
-using Newtonsoft.Json;
-
-using Libiada.Core.Extensions;
-
 using Libiada.Web.Tasks;
 
 using Microsoft.EntityFrameworkCore;
+
+using Newtonsoft.Json;
 
 [Authorize(Roles = "Admin")]
 public class BatchImagesImportController : AbstractResultController
@@ -33,7 +31,8 @@ public class BatchImagesImportController : AbstractResultController
     [HttpPost]
     public ActionResult Index(List<IFormFile> files)
     {
-        var fileStreams = files.Select(Helpers.FileHelper.GetFileStream).ToList();
+        var fileStreams = files.Select(Helpers.FileHelper.GetFileStream).ToArray();
+        var fileNames = files.Select(f => f.FileName).ToArray();
         return CreateTask(() =>
         {
             using var db = dbFactory.CreateDbContext();
@@ -42,10 +41,10 @@ public class BatchImagesImportController : AbstractResultController
             ResearchObject[] researchObjects = db.ResearchObjects.Where(m => m.Nature == Nature.Image).ToArray();
             var researchObjectRepository = new ResearchObjectRepository(db, cache);
 
-            for (int i = 0; i < files.Count; i++)
+            for (int i = 0; i < fileStreams.Length; i++)
             {
-                IFormFile file = files[i];
-                string sequenceName = file.FileName.Substring(0, file.FileName.LastIndexOf('.'));
+                string fileName = fileNames[i];
+                string sequenceName = fileName[0..fileName.LastIndexOf('.')];
 
                 var importResult = new ResearchObjectImportResult()
                 {
@@ -54,11 +53,6 @@ public class BatchImagesImportController : AbstractResultController
 
                 try
                 {
-                    if (file == null)
-                    {
-                        throw new FileNotFoundException($"No image file is provided. Iteration: {i}");
-                    }
-
                     if (researchObjects.Any(m => m.Name == sequenceName))
                     {
                         importResult.Result = "Image already exists";

@@ -1,11 +1,13 @@
 ﻿import { MapModelFromJson } from "functions";
-import { SequenceImportResult } from "viewDataTypes";
 
-interface BatchSequenceImportResultData {
-    Results: SequenceImportResult[];
+interface SequenceCheckResultData {
+    dbSequenceName: string;
+    fileSequenceName: string;
+    message: string;
+    status: string;
 }
 
-interface BatchSequenceImportResultScope extends ng.IScope, BatchSequenceImportResultData {
+interface SequenceCheckResultScope extends ng.IScope, SequenceCheckResultData {
 
     loadingScreenHeader: string;
     loading: boolean;
@@ -14,19 +16,17 @@ interface BatchSequenceImportResultScope extends ng.IScope, BatchSequenceImportR
     calculateStatusClass: (status: string) => string;
 }
 
-class BatchSequenceImportResultHandler {
+class SequenceCheckResultHandler {
 
     constructor() {
         this.ngOnInit();
     }
 
     private ngOnInit(): void {
-        const batchSequenceImportResult = ($scope: BatchSequenceImportResultScope, $http: ng.IHttpService): void => {
+        const sequenceCheckResult = ($scope: SequenceCheckResultScope, $http: ng.IHttpService): void => {
             // returns css class for given status
             function calculateStatusClass(status: string): string {
-                return status === "Success" ? "table-success"
-                     : status === "Exists" ? "table-info"
-                     : status === "Error" ? "table-danger" : "";
+                return status === "Success" ? "text-success" : "text-danger";
             }
 
             $scope.calculateStatusClass = calculateStatusClass;
@@ -38,7 +38,7 @@ class BatchSequenceImportResultHandler {
             let location = window.location.href.split("/");
             $scope.taskId = location[location.length - 1];
 
-            $http.get<BatchSequenceImportResultData>(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
+            $http.get<SequenceCheckResultData>(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
                 .then(function (data) {
                     MapModelFromJson($scope, data.data);
                     $scope.loading = false;
@@ -50,14 +50,14 @@ class BatchSequenceImportResultHandler {
         };
 
         // Register controller in Angular module
-        angular.module("libiada").controller("BatchSequenceImportResultCtrl", ["$scope", "$http", batchSequenceImportResult]);
+        angular.module("libiada").controller("SequenceCheckResultCtrl", ["$scope", "$http", sequenceCheckResult]);
     }
 }
 
 /**
  * Wrapper function for backward compatibility
- * @returns Instance of batch sequence import result handler
+ * @returns Instance of sequence check result handler
  */
-export default function BatchSequenceImportResultController(): BatchSequenceImportResultHandler {
-    return new BatchSequenceImportResultHandler();
+export default function SequenceCheckResultController(): SequenceCheckResultHandler {
+    return new SequenceCheckResultHandler();
 }

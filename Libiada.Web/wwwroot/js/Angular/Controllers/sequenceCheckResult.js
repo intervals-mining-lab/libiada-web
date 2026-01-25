@@ -1,15 +1,13 @@
 import { MapModelFromJson } from "functions";
-class BatchSequenceImportResultHandler {
+class SequenceCheckResultHandler {
     constructor() {
         this.ngOnInit();
     }
     ngOnInit() {
-        const batchSequenceImportResult = ($scope, $http) => {
+        const sequenceCheckResult = ($scope, $http) => {
             // returns css class for given status
             function calculateStatusClass(status) {
-                return status === "Success" ? "table-success"
-                    : status === "Exists" ? "table-info"
-                        : status === "Error" ? "table-danger" : "";
+                return status === "Success" ? "text-success" : "text-danger";
             }
             $scope.calculateStatusClass = calculateStatusClass;
             // loading import results from the server
@@ -28,14 +26,14 @@ class BatchSequenceImportResultHandler {
             });
         };
         // Register controller in Angular module
-        angular.module("libiada").controller("BatchSequenceImportResultCtrl", ["$scope", "$http", batchSequenceImportResult]);
+        angular.module("libiada").controller("SequenceCheckResultCtrl", ["$scope", "$http", sequenceCheckResult]);
     }
 }
 /**
  * Wrapper function for backward compatibility
- * @returns Instance of batch sequence import result handler
+ * @returns Instance of sequence check result handler
  */
-export default function BatchSequenceImportResultController() {
-    return new BatchSequenceImportResultHandler();
+export default function SequenceCheckResultController() {
+    return new SequenceCheckResultHandler();
 }
-//# sourceMappingURL=batchSequenceImportResult.js.map
+//# sourceMappingURL=sequenceCheckResult.js.map

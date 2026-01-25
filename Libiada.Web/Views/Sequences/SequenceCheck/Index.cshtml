@@ -2,32 +2,36 @@
     ViewBag.Title = "Sequences check";
 }
 
-@{
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchGeneticImportFromGenBankSearchFile");
-}
-
 <h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm("Index", "SequenceCheck", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.ValidationSummary(true)
-    <div ng-controller="BatchGeneticImportFromGenBankSearchFileCtrl">
-        <div class="row mb-1">
-            <label class="col-form-label col-md-2" for="researchObjectId">Sequence:</label>
-            <div class="col-md-10">
-                @Html.DropDownList("researchObjectId", null, htmlAttributes: new { @class = "form-select" })
-            </div>
-        </div>
-        <div class="row mb-1">
+    <div ng-controller="SequenceCheckCtrl">
+        <div class="row mb-3">
             <label class="col-form-label col-md-2" for="file">Sequence file:</label>
             <div class="col-md-10">
                 <input type="file" name="file" id="file" onchange="angular.element(this).scope().fileChanged(this)" />
             </div>
         </div>
+        <research-objects-table nature="nature"
+                                groups="groups"
+                                sequence-types="sequenceTypes"
+                                maximum-selected-research-objects="::maximumSelectedResearchObjects"
+                                selected-research-objects-count="selectedResearchObjectsCount"
+                                group-and-type-required="::false">
+        </research-objects-table>
         <div class="row mb-3">
             <div class="offset-md-2 col-md-10">
-                <input type="submit" value="Check" class="btn btn-secondary" ng-disabled="!fileSelected.value" />
+                <input type="submit" value="Check" class="btn btn-secondary" ng-disabled="!fileSelected.value || selectedResearchObjectsCount === 0" />
             </div>
         </div>
     </div>
+}
+
+@section Scripts {
+    <script type="module" src="~/js/Angular/Components/researchObjectsTable.js" asp-append-version="true"></script>
+    @{
+        await Html.RenderPartialAsync("_AngularControllerInitializer", "SequenceCheck");
+    }
 }

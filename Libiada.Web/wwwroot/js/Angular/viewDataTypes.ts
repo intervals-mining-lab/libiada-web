@@ -125,3 +125,11 @@ export interface ResearchObject {
     sequenceType?: number;
     selected?: boolean;
 }
+
+export interface SequenceImportResult {
+    Matter: string;
+    Name: string;
+    Nature: string;
+    Status: string;
+    ErrorMessage?: string;
+}

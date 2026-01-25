@@ -149,7 +149,7 @@
                                    class="form-check-input"
                                    name="${ctrl.researchObjectsInputName}"
                                    id="researchObject${m.Value}"
-                                   value="${m.Value}" 
+                                   value="${m.Value}"
                                    ${m.Selected ? `checked` : ``} />
                             <label class="form-check-label" for="researchObject${m.Value}">${m.Text}</label>
                         </div>

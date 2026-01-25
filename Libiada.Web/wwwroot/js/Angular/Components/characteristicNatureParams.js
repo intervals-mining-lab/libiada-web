@@ -8,6 +8,7 @@
         ctrl.characteristic.translator = ctrl.translators?.[0];
         ctrl.characteristic.pauseTreatment = ctrl.pauseTreatments?.[0];
         ctrl.characteristic.trajectory = ctrl.trajectories?.[0];
+        ctrl.characteristic.sequentialTransfer = false;
     };
 
     ctrl.$onChanges = changes => {

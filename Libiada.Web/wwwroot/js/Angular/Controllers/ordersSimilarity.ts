@@ -3,25 +3,21 @@
 /**
 * Interface for OrdersSimilarity controller input data
 */
-interface IOrdersSimilarityData {
-    // List of notations
-    notations?: { Nature: number; Value: string; Text: string }[];
+interface OrdersSimilarityData {
+    // List of all notations
+    notations: { Nature: number; Value: string; Text: string }[];
     // List of available nature types (genetic, literary, etc.)
-    natures?: { Value: number; Text: string }[];
+    natures: { Value: number; Text: string }[];
 }
 
 /**
 * Interface for OrdersSimilarity external controller scope
 */
-interface IOrdersSimilarityScope extends ng.IScope {
+interface OrdersSimilarityScope extends ng.IScope, OrdersSimilarityData {
     // Selected nature (value)
     nature: number;
     // Selected notation
     notation: { Nature: number; Value: string; Text: string };
-    // List of all notations
-    notations: { Nature: number; Value: string; Text: string }[];
-    // List of available nature types
-    natures: { Value: number; Text: string }[];
 
     // function to filter notations by nature
     filterByNature: () => void;
@@ -35,16 +31,16 @@ class OrdersSimilarityHandler  {
     * Creates a new controller instance.
     * @param data Data to create the controller
     */
-    constructor(data: IOrdersSimilarityData) {
+    constructor(data: OrdersSimilarityData) {
         this.ngOnInit(data);
     }
 
     /**
     * Initializes the Angular controller.
     */
-    private ngOnInit(data: IOrdersSimilarityData): void {
+    private ngOnInit(data: OrdersSimilarityData): void {
 
-        const ordersSimilarity = ($scope: IOrdersSimilarityScope, filterFilter: ng.IFilterFilter): void => {
+        const ordersSimilarity = ($scope: OrdersSimilarityScope, filterFilter: ng.IFilterFilter): void => {
             MapModelFromJson($scope, data);
 
             function filterByNature() {
@@ -63,6 +59,6 @@ class OrdersSimilarityHandler  {
 * @param data Data to create controller
 * @returns OrdersSimilarityHandler instance
 */
-export default function OrdersSimilarityController(data: IOrdersSimilarityData): OrdersSimilarityHandler {
+export default function OrdersSimilarityController(data: OrdersSimilarityData): OrdersSimilarityHandler {
     return new OrdersSimilarityHandler(data);
 }
