@@ -12,22 +12,7 @@
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <div class="mb-3" ng-disabled="loading">
             <h3>Found sequences:</h3>
-            <table class="table table-bordered table-hover" ng-cloak>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Sequence name</th>
-                        <th>Result</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="researchObject in ::result" ng-class="::calculateStatusClass(researchObject.Status)">
-                        <td ng-bind="::$index + 1" />
-                        <td ng-bind="::researchObject.ResearchObjectName" />
-                        <td ng-bind="::researchObject.Result" />
-                    </tr>
-                </tbody>
-            </table>
+            <import-results-table result="result"></import-results-table>
             <h3>Found accessions:</h3>
             <div ng-repeat="accession in ::accessions">
                 {{::accession}}
@@ -36,5 +21,6 @@
     </div>
 
     @section Scripts {
+        <script type="module" src="~/js/Angular/Components/importResultsTable.js" asp-append-version="true"></script>
     }
 }

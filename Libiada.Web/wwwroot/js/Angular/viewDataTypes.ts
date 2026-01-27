@@ -133,3 +133,11 @@ export interface SequenceImportResult {
     Status: string;
     ErrorMessage?: string;
 }
+
+export interface ImportResult {
+    Status: string;
+    ResearchObjectName: string;
+    Result: string;
+    Group?: string;
+    SequenceType?: string;
+}

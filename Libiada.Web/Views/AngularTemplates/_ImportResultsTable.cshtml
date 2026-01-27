@@ -1,0 +1,20 @@
+﻿<table class="table table-bordered table-hover" ng-cloak>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Sequence name</th>
+            <th ng-if="::$ctrl.hasGroupAndSequenceType">Group</th>
+            <th ng-if="::$ctrl.hasGroupAndSequenceType">Sequence type</th>
+            <th>Result</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="researchObject in ::$ctrl.result" ng-class="::$ctrl.calculateStatusClass(researchObject.Status)">
+            <td ng-bind="::$index + 1" />
+            <td ng-bind="::researchObject.ResearchObjectName" />
+            <td ng-if="::$ctrl.hasGroupAndSequenceType" ng-bind="::researchObject.Group" />
+            <td ng-if="::$ctrl.hasGroupAndSequenceType" ng-bind="::researchObject.SequenceType" />
+            <td ng-bind="::researchObject.Result" />
+        </tr>
+    </tbody>
+</table>

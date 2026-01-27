@@ -11,29 +11,11 @@
     <div ng-controller="BatchSequenceImportResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <div ng-disabled="loading">
-            <table class="table table-bordered table-hover" ng-cloak>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Sequence name</th>
-                        <th>Group</th>
-                        <th>Sequence type</th>
-                        <th>Result</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="researchObject in ::result" ng-class="::calculateStatusClass(researchObject.Status)">
-                        <td ng-bind="::$index + 1" />
-                        <td ng-bind="::researchObject.ResearchObjectName" />
-                        <td ng-bind="::researchObject.Group" />
-                        <td ng-bind="::researchObject.SequenceType" />
-                        <td ng-bind="::researchObject.Result" />
-                    </tr>
-                </tbody>
-            </table>
+            <import-results-table result="result" has-group-and-sequence-type="true"></import-results-table>
         </div>
     </div>
 
     @section Scripts {
+        <script type="module" src="~/js/Angular/Components/importResultsTable.js" asp-append-version="true"></script>
     }
 }

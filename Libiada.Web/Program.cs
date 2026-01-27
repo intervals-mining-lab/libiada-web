@@ -1,4 +1,4 @@
-using Libiada.Database.Helpers;
+﻿using Libiada.Database.Helpers;
 using Libiada.Database.Models.Calculators;
 using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Models.Repositories.Sequences;
@@ -99,7 +99,7 @@ builder.Services.Configure<RazorViewEngineOptions>(options =>
 });
 
 builder.Services
-       .AddControllersWithViews(options =>{ options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()); })
+       .AddControllersWithViews(options => { options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()); })
        .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
 
 // TODO: fix json naming

@@ -39,7 +39,7 @@ class BatchSequenceImportResultHandler {
             $scope.taskId = location[location.length - 1];
 
             $http.get<BatchSequenceImportResultData>(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
-                .then(function (data) {
+                .then(function (data: { data: BatchSequenceImportResultData }) {
                     MapModelFromJson($scope, data.data);
                     $scope.loading = false;
                 })
