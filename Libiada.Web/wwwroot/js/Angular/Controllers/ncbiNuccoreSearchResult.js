@@ -1,21 +1,21 @@
 import { initScopeFromServer } from "functions";
-class BatchSequenceImportResultHandler {
+class NcbiNuccoreSearchResultHandler {
     constructor() {
         this.ngOnInit();
     }
     ngOnInit() {
-        const batchSequenceImportResult = ($scope, $http) => {
+        const ncbiNuccoreSearchResult = ($scope, $http) => {
             initScopeFromServer($http, $scope, "Loading import results", "Failed loading import results");
         };
         // Register controller in Angular module
-        angular.module("libiada").controller("BatchSequenceImportResultCtrl", ["$scope", "$http", batchSequenceImportResult]);
+        angular.module("libiada").controller("NcbiNuccoreSearchResultCtrl", ["$scope", "$http", ncbiNuccoreSearchResult]);
     }
 }
 /**
  * Wrapper function for backward compatibility
  * @returns Instance of batch sequence import result handler
  */
-export default function BatchSequenceImportResultController() {
-    return new BatchSequenceImportResultHandler();
+export default function NcbiNuccoreSearchResultController() {
+    return new NcbiNuccoreSearchResultHandler();
 }
-//# sourceMappingURL=batchSequenceImportResult.js.map
+//# sourceMappingURL=ncbiNuccoreSearchResult.js.map

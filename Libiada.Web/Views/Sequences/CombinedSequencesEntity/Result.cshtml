@@ -6,13 +6,13 @@
 
 @if (ViewBag.Error == null)
 {
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchSequenceImportResult");
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "CombinedSequencesEntityResult");
 
-    <div ng-controller="BatchSequenceImportResultCtrl">
+    <div ng-controller="CombinedSequencesEntityResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
-        <p>
-            Sequence <strong> @ViewBag.researchObjectName </strong> imported successfully
-        </p>
+        <h5>
+            Sequence <strong ng-bind="::Name"></strong> imported successfully
+        </h5>
         <ul class="list-group">
             <li class="list-group-item">
                 Nature: {{::Nature}}
@@ -24,7 +24,19 @@
                 Group: {{::Group}}
             </li>
             <li class="list-group-item">
-                SequenceType: {{::SequenceType}}
+                Sequence type: {{::SequenceType}}
+            </li>
+            <li class="list-group-item">
+                Multisequence name: {{::MultisequenceName}}
+            </li>
+            <li class="list-group-item">
+                Multisequence number: {{::MultisequenceNumber}}
+            </li>
+            <li class="list-group-item">
+                Collection country: {{::CollectionCountry}}
+            </li>
+            <li class="list-group-item">
+                Collection date: {{::CollectionDate}}
             </li>
             <li class="list-group-item">
                 Description: {{::Description}}
@@ -41,14 +53,26 @@
             <li class="list-group-item" ng-if="::Translator && Translator.length > 0">
                 Translator: {{::Translator}}
             </li>
-            <li class="list-group-item" ng-if="::Partial">
-                Sequence is partial
+            <li class="list-group-item">
+                {{::Partial ? 'Sequence is partial' : 'Sequence is complete'}}
             </li>
             <li class="list-group-item" ng-if="::Precision">
                 Data precision: {{::Precision}}
             </li>
+            <li class="list-group-item" ng-if="::CollectionCountry">
+                Collected in: {{::CollectionCountry}}
+            </li>
+            <li class="list-group-item" ng-if="::CollectionDate">
+                Collection date: {{::CollectionDate}}
+            </li>
+            <li class="list-group-item" ng-if="::MultisequenceName">
+                Multisequence name: {{::MultisequenceName}}
+            </li>
+            <li class="list-group-item" ng-if="::MultisequenceNumber">
+                Multisequence number: {{::MultisequenceNumber}}
+            </li>
         </ul>
-        <div>
+        <div class="mb-2">
             @Html.ActionLink("Import another sequence", "Create") or go @Html.ActionLink("back to List", "Index").
         </div>
     </div>

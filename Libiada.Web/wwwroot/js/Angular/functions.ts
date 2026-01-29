@@ -77,8 +77,31 @@ class LibiadaWebUtils {
 }
 
 // For backward compatibility with existing JavaScript code
-export function MapModelFromJson(scope: IAngularScope, data: IDataObject): void {
-    LibiadaWebUtils.MapModelFromJson(scope, data);
+export function MapModelFromJson($scope: IAngularScope, data: IDataObject): void {
+    LibiadaWebUtils.MapModelFromJson($scope, data);
+}
+
+export function initScopeFromServer<ResponceType>(
+    $http: ng.IHttpService,
+    $scope: IAngularScope,
+    loadingScreenHeader: string,
+    errorMessage: string = "Failed loading data from server"): void {
+    // loading import results from the server
+    $scope.loadingScreenHeader = loadingScreenHeader;
+    $scope.loading = true;
+
+    let location = window.location.href.split("/");
+    $scope.taskId = location[location.length - 1];
+
+    $http.get<ResponceType>(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
+        .then(function (data: { data: ResponceType }) {
+            MapModelFromJson($scope, data.data);
+            $scope.loading = false;
+        })
+        .catch(function () {
+            alert(errorMessage);
+            $scope.loading = false;
+        });
 }
 
 export function SelectLink(characteristic: ICharacteristic): void {

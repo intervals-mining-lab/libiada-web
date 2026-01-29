@@ -6,9 +6,9 @@
 
 @if (ViewBag.Error == null)
 {
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchSequenceImportResult");
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "ResearchObjectsSequenceCreateResult");
 
-    <div ng-controller="BatchSequenceImportResultCtrl">
+    <div ng-controller="ResearchObjectsSequenceCreateResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <h5>
             Sequence <strong ng-bind="::Name"></strong> imported successfully
@@ -39,7 +39,7 @@
                 Collection date: {{::CollectionDate}}
             </li>
             <li class="list-group-item">
-                Description: {{Description}}
+                Description: {{::Description}}
             </li>
             <li class="list-group-item" ng-if="::RemoteId && RemoteId.length > 0">
                 Remote id: {{::RemoteId}}
@@ -53,11 +53,23 @@
             <li class="list-group-item" ng-if="::Translator && Translator.length > 0">
                 Translator: {{::Translator}}
             </li>
-            <li class="list-group-item" ng-if="::Partial">
-                Sequence is partial
+            <li class="list-group-item">
+                {{::Partial ? 'Sequence is partial' : 'Sequence is complete'}}
             </li>
             <li class="list-group-item" ng-if="::Precision">
                 Data precision: {{::Precision}}
+            </li>
+            <li class="list-group-item" ng-if="::CollectionCountry">
+                Collected in: {{::CollectionCountry}}
+            </li>
+            <li class="list-group-item" ng-if="::CollectionDate">
+                Collection date: {{::CollectionDate}}
+            </li>
+            <li class="list-group-item" ng-if="::MultisequenceName">
+                Multisequence name: {{::MultisequenceName}}
+            </li>
+            <li class="list-group-item" ng-if="::MultisequenceNumber">
+                Multisequence number: {{::MultisequenceNumber}}
             </li>
         </ul>
         <div class="mb-2">

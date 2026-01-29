@@ -6,9 +6,9 @@
 
 @if (ViewBag.Error == null)
 {
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchSequenceImportResult");
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "NcbiNuccoreSearchResult");
 
-    <div ng-controller="BatchSequenceImportResultCtrl">
+    <div ng-controller="NcbiNuccoreSearchResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <div class="mb-3" ng-disabled="loading">
             <h3>Found sequences:</h3>

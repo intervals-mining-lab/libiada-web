@@ -4,9 +4,9 @@
 
 @if (ViewBag.Error == null)
 {
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchSequenceImportResult");
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "GenesImportResult");
 
-    <div ng-controller="BatchSequenceImportResultCtrl">
+    <div ng-controller="GenesImportResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <h3 class="my-3">Subsequences import results for <span class="fw-bold" ng-bind="::researchObjectName"></span></h3>
         <table class="table table-bordered table-hover table-sm" ng-cloak>
@@ -17,17 +17,23 @@
                     <th>Gene position</th>
                     <th>Gene length</th>
                     <th>Partial</th>
-                    <th>Additional positions count</th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="gene in ::genes">
                     <td ng-bind="::$index + 1" />
                     <td ng-bind="::features[gene.FeatureId]" />
-                    <td ng-bind="::gene.Starts[0]" />
-                    <td ng-bind="::gene.Lengths[0]" />
-                    <td ng-bind="::gene.Partial" />
-                    <td ng-bind="::gene.Starts.length - 1" />
+                    <td>
+                        <p ng-repeat="start in ::gene.Starts track by $index">
+                            {{::start}}
+                        </p>
+                    </td>
+                    <td>
+                        <p ng-repeat="length in ::gene.Lengths track by $index">
+                            {{::length}}
+                        </p>
+                    </td>
+                    <td ng-bind="::gene.Partial ? 'Partial': 'Complete'" />
                 </tr>
             </tbody>
         </table>

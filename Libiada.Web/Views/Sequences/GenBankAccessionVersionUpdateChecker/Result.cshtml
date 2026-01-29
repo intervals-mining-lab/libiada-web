@@ -6,9 +6,9 @@
 
 @if (ViewBag.Error == null)
 {
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchSequenceImportResult");
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "GenBankAccessionVersionUpdateCheckerResult");
 
-    <div ng-controller="BatchSequenceImportResultCtrl">
+    <div ng-controller="GenBankAccessionVersionUpdateCheckerResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <div ng-disabled="loading">
             <table class="table table-bordered table-hover" ng-cloak>
@@ -26,7 +26,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="result in ::results" ng-class="::result.Updated ? result.NameUpdated ? 'table-warning' : 'table-danger' : result.NameUpdated ? '' : 'table-info'">
+                    <tr ng-repeat="result in ::results" ng-class="::calculateStatusClass(result)">
                         <td ng-bind="::$index + 1" />
                         <td ng-bind="::result.Name" />
                         <td ng-bind="::result.RemoteName" />

@@ -6,9 +6,9 @@
 
 @if (ViewBag.Error == null)
 {
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchSequenceImportResult");
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "GeneticSequencesTransformationResult");
 
-    <div ng-controller="BatchSequenceImportResultCtrl">
+    <div ng-controller="GeneticSequencesTransformationResultCtrl">
         <import-results-table result="result"></import-results-table>
     </div>
 

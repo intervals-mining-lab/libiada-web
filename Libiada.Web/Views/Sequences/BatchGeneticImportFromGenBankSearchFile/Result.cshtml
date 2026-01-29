@@ -1,14 +1,14 @@
 ﻿@{
-    ViewBag.Title = "Batch sequences import result";
+    ViewBag.Title = "Batch sequences import from Genbank search file result";
 }
 
 <h2>@ViewBag.Title</h2>
 
 @if (ViewBag.Error == null)
 {
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchSequenceImportResult");
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchGeneticImportFromGenBankSearchFileResult");
 
-    <div ng-controller="BatchSequenceImportResultCtrl">
+    <div ng-controller="BatchGeneticImportFromGenBankSearchFileResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <div ng-disabled="loading">
             <import-results-table result="result" has-group-and-sequence-type="true"></import-results-table>

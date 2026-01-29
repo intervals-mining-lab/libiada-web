@@ -25,8 +25,24 @@ class LibiadaWebUtils {
     }
 }
 // For backward compatibility with existing JavaScript code
-export function MapModelFromJson(scope, data) {
-    LibiadaWebUtils.MapModelFromJson(scope, data);
+export function MapModelFromJson($scope, data) {
+    LibiadaWebUtils.MapModelFromJson($scope, data);
+}
+export function initScopeFromServer($http, $scope, loadingScreenHeader, errorMessage = "Failed loading data from server") {
+    // loading import results from the server
+    $scope.loadingScreenHeader = loadingScreenHeader;
+    $scope.loading = true;
+    let location = window.location.href.split("/");
+    $scope.taskId = location[location.length - 1];
+    $http.get(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
+        .then(function (data) {
+        MapModelFromJson($scope, data.data);
+        $scope.loading = false;
+    })
+        .catch(function () {
+        alert(errorMessage);
+        $scope.loading = false;
+    });
 }
 export function SelectLink(characteristic) {
     LibiadaWebUtils.SelectLink(characteristic);
