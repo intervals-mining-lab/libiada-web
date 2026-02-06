@@ -37,13 +37,13 @@ export interface ICharacteristic {
 /**
  * Interface for the scope in Angular controllers
  */
-interface IAngularScope extends angular.IScope {
+interface AngularScope extends angular.IScope {
     [key: string]: any;
 }
 /**
  * Interface for data object
  */
-interface IDataObject {
+interface DataObject {
     [key: string]: any;
 }
 
@@ -57,7 +57,7 @@ class LibiadaWebUtils {
      * @param scope - The Angular scope to map properties to
      * @param data - The source data object to map from
      */
-    public static MapModelFromJson(scope: IAngularScope, data: IDataObject): void {
+    public static MapModelFromJson(scope: AngularScope, data: DataObject): void {
         let param: string;
         for (param in data) {
             if (Object.prototype.hasOwnProperty.call(data, param)) {
@@ -77,13 +77,13 @@ class LibiadaWebUtils {
 }
 
 // For backward compatibility with existing JavaScript code
-export function MapModelFromJson($scope: IAngularScope, data: IDataObject): void {
+export function MapModelFromJson($scope: AngularScope, data: DataObject): void {
     LibiadaWebUtils.MapModelFromJson($scope, data);
 }
 
 export function initScopeFromServer<ResponceType>(
     $http: ng.IHttpService,
-    $scope: IAngularScope,
+    $scope: AngularScope,
     loadingScreenHeader: string,
     errorMessage: string = "Failed loading data from server"): void {
     // loading import results from the server

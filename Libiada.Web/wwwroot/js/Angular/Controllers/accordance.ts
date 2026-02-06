@@ -9,7 +9,7 @@ import type {
     Translator,
     Group,
     Feature,
-    CharacterisrticType
+    CharacteristicType
 } from "viewDataTypes";
 
 /**
@@ -18,7 +18,7 @@ import type {
 interface AccordanceData {
     maximumSelectedResearchObjects: number;
     minimumSelectedResearchObjects: number;
-    characteristicTypes: CharacterisrticType[];
+    characteristicTypes: CharacteristicType[];
     characteristicsDictionary: { [key: string]: number };
     features: Feature[];
     groups: Group[];

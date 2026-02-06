@@ -2,7 +2,7 @@
 @using Libiada.Web.Helpers
 
 @{
-    ViewBag.Title = "Characteristics calculation";
+    ViewBag.Title = "Libiada - Characteristics calculation";
 }
 
 @{
@@ -26,7 +26,7 @@
                    name="tableType"
                    id="researchObjectsTableRadio"
                    value="researchObjects"
-                   ng-model="calculaionFor"
+                   ng-model="calculationFor"
                    autocomplete="off">
             <label class="btn btn-outline-secondary" for="researchObjectsTableRadio">Sequences</label>
             <input type="radio"
@@ -34,12 +34,12 @@
                    name="tableType"
                    id="sequenceGroupsTableRadio"
                    value="sequenceGroups"
-                   ng-model="calculaionFor"
+                   ng-model="calculationFor"
                    ng-change="clearSelection()"
                    autocomplete="off">
             <label class="btn btn-outline-secondary" for="sequenceGroupsTableRadio">Sequence groups</label>
         </div>
-        <research-objects-table ng-show="calculaionFor === 'researchObjects'"
+        <research-objects-table ng-show="calculationFor === 'researchObjects'"
                                 nature="nature"
                                 groups="groups"
                                 sequence-types="sequenceTypes"
@@ -48,7 +48,7 @@
                                 group-and-type-required="::false"
                                 set-unselect-all-research-objects-function="setUnselectAllResearchObjectsFunction(func)">
         </research-objects-table>
-        <sequence-groups-table ng-show="calculaionFor === 'sequenceGroups'"
+        <sequence-groups-table ng-show="calculationFor === 'sequenceGroups'"
                                sequence-groups="sequenceGroups"
                                nature="nature"
                                groups="groups"

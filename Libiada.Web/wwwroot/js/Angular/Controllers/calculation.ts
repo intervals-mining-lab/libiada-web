@@ -1,175 +1,97 @@
 ﻿import { MapModelFromJson } from "functions";
+import type {
+    SequenceType,
+    Nature,
+    Notation,
+    Language,
+    PauseTreatment,
+    Trajectory,
+    Translator,
+    Group,
+    SequenceGroup,
+    CharacteristicType,
+    Link,
+    ArrangementType
+} from "viewDataTypes";
 
 // Interface for the data object that is passed to the controller
-interface ICalculationData {
-    // Basic settings
-    natures: INature[];
-    nature?: number;
-
-    // Notations
-    notations: INotation[];
-    hideNotation?: boolean;
-
-    // Characteristics
-    characteristicTypes: ICharacteristicType[];
-    characteristicsDictionary: { [key: string]: string };
-    characteristics?: ICharacteristic[];
-
-    // Groups and sequence types
-    groups: IGroup[];
-    sequenceTypes: ISequenceType[];
-
-    // Additional settings
-    languages?: string[];
-    translators?: string[];
-    pauseTreatments?: IPauseTreatment[];
-    trajectories?: ITrajectory[];
-
-    // Limits for selecting research objects
+interface CalculationData {
+    characteristicTypes: CharacteristicType[];
+    characteristicsDictionary: { [key: string]: number };
+    groups: Group[];
+    languages: Language[];
+    maximumSelectedResearchObjects: number;
     minimumSelectedResearchObjects: number;
-    maximumSelectedResearchObjects?: number;
-
-    // Options for clustering (if any)
-    ClusterizatorsTypes?: IClusterizatorType[];
+    natures: Nature[];
+    notations: Notation[];
+    pauseTreatments: PauseTreatment[];
+    sequenceGroups: SequenceGroup[];
+    sequenceTypes: SequenceType[];
+    trajectories: Trajectory[];
+    translators: Translator[];
+    //ClusterizatorsTypes: ClusterizatorType[];
 }
 
 // Interface for the $scope controller
-interface ICalculationScope extends ng.IScope {
-    // Properties related to nature and notation processing
+interface CalculationScope extends ng.IScope, CalculationData {
+    calculationFor: displayedTable;
     nature: number;
-    natures: INature[];
-    notation: INotation;
-    notations: INotation[];
-    hideNotation: boolean;
+    hideNotation?: boolean;
+    //notation: Notation;
+    //language: Language;
+    //translator: Translator;
+    //pauseTreatment: PauseTreatment;
+    selectedResearchObjectsCount: number;
+    selectedSequenceGroupsCount: number;
+    complementary: boolean;
+    rotate: boolean;
 
-    // Characteristics
-    characteristics: ICharacteristic[];
-    characteristicTypes: ICharacteristicType[];
-    characteristicsDictionary: { [key: string]: string };
-
-    // Selecting research objects
-    calculaionFor: string; // "researchObjects" or "sequenceGroups"
-    selectedResearchObjectsCount?: number;
-    selectedSequenceGroupsCount?: number;
-
-    // Sequence groups and types
-    groups: IGroup[];
-    sequenceTypes: ISequenceType[];
-
-    // Additional settings
-    language: string;
-    languages: string[];
-    translator: string;
-    translators: string[];
-    pauseTreatment: IPauseTreatment;
-    pauseTreatments: IPauseTreatment[];
-    trajectories?: ITrajectory[];
-
-    // Properties for controlling rotation and complementarity of sequences
-    complementary?: boolean;
-    rotate?: boolean;
-    rotationLength?: number;
-
-    // Clustering (if any)
-    ClusterizatorsTypes?: IClusterizatorType[];
-    ClusterizationType?: IClusterizatorType;
+    //ClusterizationType: ClusterizatorType;
 
     // Methods 
-    filterByNature: () => void;
+    //filterByNature: () => void;
     clearSelection: () => void;
     setUnselectAllResearchObjectsFunction: (func: Function) => void;
     setUnselectAllSequenceGroupsFunction: (func: Function) => void;
-    unselectAllResearchObjects?: Function;
-    unselectAllSequenceGroups?: Function;
+    unselectAllResearchObjects: Function;
+    unselectAllSequenceGroups: Function;
 }
+
+type displayedTable = "researchObjects" | "sequenceGroups";
 
 // Auxiliary interfaces
 
-interface INature {
-    id: number;
-    name: string;
-}
-
-interface INotation {
-    id: number;
-    name: string;
-    Nature: number;
-}
-
-interface ICharacteristicType {
-    id: number;
-    name: string;
-    description?: string;
-    Links: ILink[];
-    ArrangementTypes: IArrangementType[];
-}
-
 interface ICharacteristic {
-    characteristicType: ICharacteristicType;
-    notation: INotation;
-    link?: ILink;
-    arrangementType?: IArrangementType;
+    characteristicType: CharacteristicType;
+    notation: Notation;
+    link?: Link;
+    arrangementType?: ArrangementType;
     language?: string;
     translator?: string;
-    pauseTreatment?: IPauseTreatment;
-    trajectory?: ITrajectory;
-}
-
-interface ILink {
-    id: number;
-    name: string;
-}
-
-interface IArrangementType {
-    id: number;
-    name: string;
-}
-
-interface IGroup {
-    id: number;
-    name: string;
-}
-
-interface ISequenceType {
-    id: number;
-    name: string;
-}
-
-interface IPauseTreatment {
-    id: number;
-    name: string;
-}
-
-interface ITrajectory {
-    id: number;
-    name: string;
-}
-
-interface IClusterizatorType {
-    id: number;
-    name: string;
+    pauseTreatment?: PauseTreatment;
+    trajectory?: Trajectory;
 }
 
 // Updated controller class
 class CalculationOperator {
-    constructor(data: ICalculationData) {
+    constructor(data: CalculationData) {
         this.ngOnInit(data);
     }
 
-    private ngOnInit(data: ICalculationData): void {
-        const calculation = ($scope: ICalculationScope, filterFilter: ng.IFilterFilter): void => {
+    private ngOnInit(data: CalculationData): void {
+        const calculation = ($scope: CalculationScope, filterFilter: ng.IFilterFilter): void => {
             MapModelFromJson($scope, data);
 
-            function filterByNature(): void {
-                if (!$scope.hideNotation) {
-                    $scope.notation = filterFilter($scope.notations, { Nature: $scope.nature })[0];
+            //function filterByNature(): void {
+            //    if (!$scope.hideNotation) {
+            //        const notation: Notation = filterFilter($scope.notations, { Nature: $scope.nature })[0];
 
-                    // if notation is not linked to characteristic 
-                    angular.forEach($scope.characteristics, (characteristic: ICharacteristic) => {
-                        characteristic.notation = $scope.notation;
-                    });
-                }
-            }
+            //        // if notation is not linked to characteristic 
+            //        angular.forEach($scope.characteristics, (characteristic: ICharacteristic) => {
+            //            characteristic.notation = notation;
+            //        });
+            //    }
+            //}
 
             function setUnselectAllResearchObjectsFunction(func: Function): void {
                 $scope.unselectAllResearchObjects = func;
@@ -185,22 +107,25 @@ class CalculationOperator {
                 if ($scope.unselectAllSequenceGroups) $scope.unselectAllSequenceGroups();
             }
 
-            $scope.filterByNature = filterByNature;
+            //$scope.filterByNature = filterByNature;
             $scope.setUnselectAllResearchObjectsFunction = setUnselectAllResearchObjectsFunction;
             $scope.setUnselectAllSequenceGroupsFunction = setUnselectAllSequenceGroupsFunction;
             $scope.clearSelection = clearSelection;
 
             // if notation is not linked to characteristic 
-            $scope.notation = filterFilter($scope.notations, { Nature: $scope.nature })[0];
-            $scope.language = $scope.languages?.[0];
-            $scope.translator = $scope.translators?.[0];
-            $scope.pauseTreatment = $scope.pauseTreatment ?? $scope.pauseTreatments?.[0];
-            $scope.calculaionFor = "researchObjects";
+            //$scope.notation = filterFilter($scope.notations, { Nature: $scope.nature })[0];
+            //$scope.language = $scope.languages?.[0];
+            //$scope.translator = $scope.translators?.[0];
+            //$scope.pauseTreatment = $scope.pauseTreatment ?? $scope.pauseTreatments?.[0];
+
+            $scope.calculationFor = "researchObjects";
+            $scope.complementary = false;
+            $scope.rotate = false;
 
             // if we are in clusterization 
-            if ($scope.ClusterizatorsTypes) {
-                $scope.ClusterizationType = $scope.ClusterizatorsTypes[0];
-            }
+            //if ($scope.ClusterizatorsTypes) {
+            //    $scope.ClusterizationType = $scope.ClusterizatorsTypes[0];
+            //}
         };
 
         angular.module("libiada").controller("CalculationCtrl", ["$scope", "filterFilter", calculation]);
@@ -208,6 +133,6 @@ class CalculationOperator {
 }
 
 // Wrapper function for backwards compatibility
-export default function CalculationController(data: ICalculationData): CalculationOperator {
+export default function CalculationController(data: CalculationData): CalculationOperator {
     return new CalculationOperator(data);
 }

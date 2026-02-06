@@ -104,7 +104,7 @@ export interface ArrangementType {
     Group: null; // TODO: check what type it could be
 }
 
-export interface CharacterisrticType {
+export interface CharacteristicType {
     ArrangementTypes: ArrangementType[];
     Links: Link[];
     Value: string;

@@ -1,4 +1,4 @@
-﻿import type { SequenceType, SequenceGroup, Notation, Group, Feature, CharacterisrticType } from "viewDataTypes";
+﻿import type { SequenceType, SequenceGroup, Notation, Group, Feature, CharacteristicType } from "viewDataTypes";
 import { MapModelFromJson } from "functions";
 
 // Interface for data passed to the controller from server on page load
@@ -6,7 +6,7 @@ interface SubsequencesDistributionData {
 
     maximumSelectedResearchObjects: number;
     minimumSelectedResearchObjects: number;
-    characteristicTypes: CharacterisrticType[];
+    characteristicTypes: CharacteristicType[];
     characteristicsDictionary: { [key: string]: number };
     features: Feature[];
     groups: Group[];
