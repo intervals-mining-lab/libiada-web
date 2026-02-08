@@ -1,10 +1,9 @@
 ﻿namespace Libiada.Web.Controllers.Calculators;
 
 using Libiada.Database.Tasks;
+using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
-
-using Libiada.Web.Tasks;
 
 /// <summary>
 /// The music files controller.

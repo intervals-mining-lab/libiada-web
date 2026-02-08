@@ -52,11 +52,11 @@ public class CustomSequenceCalculationController : AbstractResultController
     /// </returns>
     public ActionResult Index()
     {
-        var imageTransformers = Extensions.EnumExtensions.GetSelectList<ImageTransformer>();
+
 
         var viewData = viewDataBuilder.AddCharacteristicsData(CharacteristicCategory.Full)
-                                     .Build();
-        viewData.Add("imageTransformers", imageTransformers);
+                                      .AddImageTransformers()
+                                      .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }

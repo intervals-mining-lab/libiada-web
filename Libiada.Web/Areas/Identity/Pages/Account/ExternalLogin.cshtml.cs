@@ -4,15 +4,15 @@
 
 namespace Libiada.Web.Areas.Identity.Pages.Account;
 
-using System.ComponentModel.DataAnnotations;
-using System.Security.Claims;
-using System.Text;
-using System.Text.Encodings.Web;
-
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+
+using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
+using System.Text;
+using System.Text.Encodings.Web;
 
 [AllowAnonymous]
 public class ExternalLoginModel : PageModel
@@ -79,7 +79,7 @@ public class ExternalLoginModel : PageModel
         [EmailAddress]
         public string Email { get; set; }
     }
-    
+
     public IActionResult OnGet() => RedirectToPage("./Login");
 
     public IActionResult OnPost(string provider, string returnUrl = null)

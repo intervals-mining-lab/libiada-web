@@ -1,18 +1,16 @@
 ﻿namespace Libiada.Web.Controllers.Calculators;
 
-using Newtonsoft.Json;
-
 using Libiada.Core.TimeSeries.Aggregators;
 using Libiada.Core.TimeSeries.Aligners;
 using Libiada.Core.TimeSeries.OneDimensional.Comparers;
 using Libiada.Core.TimeSeries.OneDimensional.DistanceCalculators;
-
-using Libiada.Database.Models.CalculatorsData;
-using Libiada.Database.Models.Repositories.Sequences;
-using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Models.Calculators;
-
+using Libiada.Database.Models.CalculatorsData;
+using Libiada.Database.Models.Repositories.Catalogs;
+using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Web.Tasks;
+
+using Newtonsoft.Json;
 
 /// <summary>
 /// The local calculation web api controller.

@@ -4,12 +4,12 @@
 
 namespace Libiada.Web.Areas.Identity.Pages.Account;
 
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+
+using System.ComponentModel.DataAnnotations;
+using System.Text;
 
 public class ResetPasswordModel : PageModel
 {

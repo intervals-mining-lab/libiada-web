@@ -4,9 +4,9 @@
 
 namespace Libiada.Web.Areas.Identity.Pages;
 
-using System.Diagnostics;
-
 using Microsoft.AspNetCore.Mvc.RazorPages;
+
+using System.Diagnostics;
 
 /// <summary>
 ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used

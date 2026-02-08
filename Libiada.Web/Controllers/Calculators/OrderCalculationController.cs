@@ -2,17 +2,14 @@
 
 using Libiada.Core.Core;
 using Libiada.Core.Core.Characteristics.Calculators.FullCalculators;
-
-using Libiada.Database.Tasks;
 using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Models.Repositories.Catalogs;
+using Libiada.Database.Tasks;
+using Libiada.SequenceGenerator;
+using Libiada.Web.Helpers;
+using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
-
-using Libiada.SequenceGenerator;
-
-using Libiada.Web.Tasks;
-using Libiada.Web.Helpers;
 
 /// <summary>
 /// Calculates distribution of sequences by order.
@@ -29,9 +26,9 @@ public class OrderCalculationController : AbstractResultController
     /// <summary>
     /// Initializes a new instance of the <see cref="OrderCalculationController"/> class.
     /// </summary>
-    public OrderCalculationController(IViewDataBuilder viewDataBuilder, 
+    public OrderCalculationController(IViewDataBuilder viewDataBuilder,
                                       ITaskManager taskManager,
-                                      IFullCharacteristicRepository characteristicTypeLinkRepository) 
+                                      IFullCharacteristicRepository characteristicTypeLinkRepository)
         : base(TaskType.OrderCalculation, taskManager)
     {
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;

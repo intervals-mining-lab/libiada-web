@@ -1,19 +1,16 @@
 ﻿namespace Libiada.Web.Controllers.Calculators;
 
 using Libiada.Core.Music;
-
+using Libiada.Database.Models.Calculators;
+using Libiada.Database.Models.CalculatorsData;
+using Libiada.Database.Models.Repositories.Catalogs;
+using Libiada.Database.Models.Repositories.Sequences;
+using Libiada.Database.Tasks;
 using Libiada.Web.Helpers;
+using Libiada.Web.Models.CalculatorsData;
 using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
-
-using Libiada.Database.Models.Repositories.Sequences;
-using Libiada.Database.Models.CalculatorsData;
-using Libiada.Database.Models.Repositories.Catalogs;
-using Libiada.Database.Models.Calculators;
-using Libiada.Database.Tasks;
-
-using Libiada.Web.Models.CalculatorsData;
 
 
 /// <summary>

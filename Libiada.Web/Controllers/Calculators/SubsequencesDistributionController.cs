@@ -1,23 +1,21 @@
 ﻿namespace Libiada.Web.Controllers.Calculators;
 
-using System.Net.Http;
-using System.Text;
-
-using Newtonsoft.Json;
+using Bio.IO.FastA;
 
 using Libiada.Core.Extensions;
-
-using Libiada.Web.Extensions;
-using Libiada.Web.Helpers;
-using Libiada.Web.Tasks;
-
 using Libiada.Database.Models.Calculators;
 using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
+using Libiada.Web.Extensions;
+using Libiada.Web.Helpers;
+using Libiada.Web.Tasks;
 
-using Bio.IO.FastA;
+using Newtonsoft.Json;
+
+using System.Net.Http;
+using System.Text;
 
 using EnumExtensions = Core.Extensions.EnumExtensions;
 

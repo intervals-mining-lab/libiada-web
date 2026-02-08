@@ -2,10 +2,8 @@
 
 using Libiada.Core.Exceptions;
 using Libiada.Core.Extensions;
-
-using Libiada.Web.Models.CalculatorsData;
-
 using Libiada.Database.Attributes;
+using Libiada.Web.Models.CalculatorsData;
 
 /// <summary>
 /// The enum helper.
@@ -48,7 +46,7 @@ public static class EnumExtensions
     public static IEnumerable<SelectListItem> GetSelectList<T>(bool useDisplayValueAsValue = false)
     where T : struct, IComparable, IFormattable, IConvertible
     {
-        
+
         return GetSelectList(Array.Empty<T>(), useDisplayValueAsValue);
     }
 

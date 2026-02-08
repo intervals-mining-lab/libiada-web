@@ -1,18 +1,16 @@
 ﻿namespace Libiada.Web.Controllers.Sequences;
 
-using System.Globalization;
-
-using Libiada.Web.Helpers;
-using Libiada.Web.Tasks;
-
 using Libiada.Database.Tasks;
-
-using Newtonsoft.Json;
-
+using Libiada.Segmenter.Model;
 using Libiada.Segmenter.Model.Criterion;
 using Libiada.Segmenter.Model.Seekers;
 using Libiada.Segmenter.Model.Threshold;
-using Libiada.Segmenter.Model;
+using Libiada.Web.Helpers;
+using Libiada.Web.Tasks;
+
+using Newtonsoft.Json;
+
+using System.Globalization;
 
 /// <summary>
 /// The custom sequence segmentation controller.

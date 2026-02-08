@@ -2,16 +2,14 @@
 
 using Libiada.Core.Core;
 using Libiada.Core.Music;
-
 using Libiada.Database.Models;
 using Libiada.Database.Models.Repositories.Sequences;
-
-using Libiada.Web.Helpers;
 using Libiada.Web.Extensions;
-
-using Newtonsoft.Json;
+using Libiada.Web.Helpers;
 
 using Microsoft.EntityFrameworkCore;
+
+using Newtonsoft.Json;
 
 /// <summary>
 /// The sequence mixer controller.

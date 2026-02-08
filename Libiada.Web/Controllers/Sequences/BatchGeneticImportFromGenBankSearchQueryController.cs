@@ -3,17 +3,15 @@
 using Bio.Core.Extensions;
 using Bio.IO.GenBank;
 
-using Newtonsoft.Json;
-
 using Libiada.Core.Extensions;
-
 using Libiada.Database.Helpers;
 using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Models.NcbiSequencesData;
 using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
-
 using Libiada.Web.Tasks;
+
+using Newtonsoft.Json;
 
 [Authorize(Roles = "Admin")]
 public class BatchGeneticImportFromGenBankSearchQueryController : AbstractResultController

@@ -3,16 +3,14 @@
 using Bio.Extensions;
 
 using Libiada.Core.Extensions;
-
 using Libiada.Database.Models.Calculators;
 using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
+using Libiada.Web.Helpers;
+using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
-
-using Libiada.Web.Tasks;
-using Libiada.Web.Helpers;
 
 /// <summary>
 /// The alignment controller.

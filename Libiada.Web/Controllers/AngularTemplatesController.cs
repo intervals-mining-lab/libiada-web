@@ -18,5 +18,5 @@ public class AngularTemplatesController : Controller
     /// </returns>
     [HttpGet("{viewName}")]
     public IActionResult HandleUnknownAction(string viewName) => PartialView(viewName);
-    
+
 }

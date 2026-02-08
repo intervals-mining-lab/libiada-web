@@ -58,7 +58,6 @@ public class GeneticSequencesTransformationController : AbstractResultController
     public ActionResult Index()
     {
         var data = viewDataBuilder.AddMinMaxResearchObjects()
-                                  .AddSequenceGroups()
                                   .SetNature(Nature.Genetic)
                                   .AddNotations()
                                   .AddSequenceTypes()

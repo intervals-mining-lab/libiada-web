@@ -4,10 +4,9 @@ using Libiada.Database.Helpers;
 using Libiada.Database.Models.NcbiSequencesData;
 using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
+using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
-
-using Libiada.Web.Tasks;
 
 public class GenBankAccessionVersionUpdateCheckerController : AbstractResultController
 {

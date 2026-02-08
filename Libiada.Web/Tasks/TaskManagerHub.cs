@@ -1,13 +1,11 @@
 ﻿namespace Libiada.Web.Tasks;
 
+using Libiada.Core.Extensions;
+using Libiada.Database.Tasks;
+using Libiada.Web.Extensions;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
-
-using Libiada.Database.Tasks;
-
-using Libiada.Core.Extensions;
-
-using Libiada.Web.Extensions;
 
 using SystemTask = System.Threading.Tasks.Task;
 

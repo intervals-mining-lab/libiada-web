@@ -2,16 +2,14 @@
 
 using Bio.Extensions;
 
-using Libiada.Database.Models.CalculatorsData;
-using Libiada.Database.Models.Repositories.Catalogs;
-using Libiada.Database.Tasks;
-using Libiada.Database.Helpers;
-
 using Libiada.Core.Core;
 using Libiada.Core.Core.Characteristics.Calculators.FullCalculators;
 using Libiada.Core.DataTransformers;
 using Libiada.Core.Extensions;
-
+using Libiada.Database.Helpers;
+using Libiada.Database.Models.CalculatorsData;
+using Libiada.Database.Models.Repositories.Catalogs;
+using Libiada.Database.Tasks;
 using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
 
@@ -33,7 +31,7 @@ public class CustomSequenceOrderTransformationCalculationController : AbstractRe
     /// <summary>
     /// Initializes a new instance of the <see cref="CustomSequenceOrderTransformationCalculationController"/> class.
     /// </summary>
-    public CustomSequenceOrderTransformationCalculationController(IViewDataBuilder viewDataBuilder, 
+    public CustomSequenceOrderTransformationCalculationController(IViewDataBuilder viewDataBuilder,
                                                                   ITaskManager taskManager,
                                                                   IFullCharacteristicRepository characteristicTypeLinkRepository)
         : base(TaskType.CustomSequenceOrderTransformationCalculation, taskManager)
@@ -51,8 +49,9 @@ public class CustomSequenceOrderTransformationCalculationController : AbstractRe
     public ActionResult Index()
     {
         var data = viewDataBuilder.AddCharacteristicsData(CharacteristicCategory.Full)
-                                 .AddOrderTransformations()
-                                 .Build();
+                                  .AddOrderTransformations()
+                                  .AddImageTransformers()
+                                  .Build();
         ViewBag.data = JsonConvert.SerializeObject(data);
         return View();
     }

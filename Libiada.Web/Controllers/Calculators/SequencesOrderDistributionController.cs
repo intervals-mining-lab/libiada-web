@@ -1,14 +1,11 @@
 ﻿namespace Libiada.Web.Controllers.Calculators;
 
 using Libiada.Core.Core;
-
 using Libiada.Database.Tasks;
+using Libiada.SequenceGenerator;
+using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
-
-using Libiada.SequenceGenerator;
-
-using Libiada.Web.Tasks;
 
 /// <summary>
 /// Calculates distribution of sequences by order.
@@ -92,12 +89,12 @@ public class SequencesOrderDistributionController : AbstractResultController
 
             var result = new Dictionary<string, object>
             {
-                { 
+                {
                     "result", SequecesOrdersDistribution.Select(r => new
                     {
                         order = r.Key,
                         sequences = r.Value.Select(s => s.ToString(",")).ToArray()
-                    }) 
+                    })
                 }
             };
 

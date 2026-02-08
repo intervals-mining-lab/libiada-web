@@ -1,17 +1,15 @@
 ﻿namespace Libiada.Web.Controllers.Sequences;
 
 using Libiada.Core.Extensions;
-
+using Libiada.Database.Models.CalculatorsData;
+using Libiada.Database.Models.Repositories.Sequences;
+using Libiada.Database.Tasks;
 using Libiada.Web.Extensions;
 using Libiada.Web.Tasks;
 
-using Libiada.Database.Models.Repositories.Sequences;
-using Libiada.Database.Models.CalculatorsData;
-using Libiada.Database.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 using Newtonsoft.Json;
-
-using Microsoft.EntityFrameworkCore;
 
 [Authorize(Roles = "Admin")]
 public class BatchPoemsImportController : AbstractResultController

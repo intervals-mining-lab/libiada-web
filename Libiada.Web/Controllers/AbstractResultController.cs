@@ -1,10 +1,9 @@
 ﻿namespace Libiada.Web.Controllers;
 
 using Libiada.Database.Tasks;
+using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
-
-using Libiada.Web.Tasks;
 
 /// <summary>
 /// Abstract parent controller for all tasks controllers (calculators, etc.).

@@ -19,7 +19,7 @@ public class TaskManagerController : Controller
             ViewBag.Error = true;
             ViewBag.ErrorMessage = ViewBag.UserError = TempData["ErrorMessage"];
         }
-        
+
         return View();
     }
 }

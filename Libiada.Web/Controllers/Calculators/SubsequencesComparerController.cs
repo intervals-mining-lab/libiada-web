@@ -1,24 +1,22 @@
 ﻿namespace Libiada.Web.Controllers.Calculators;
 
-using System.Globalization;
-
+using Libiada.Core.Extensions;
+using Libiada.Core.TimeSeries.Aggregators;
+using Libiada.Core.TimeSeries.Aligners;
+using Libiada.Core.TimeSeries.OneDimensional.Comparers;
+using Libiada.Core.TimeSeries.OneDimensional.DistanceCalculators;
 using Libiada.Database.Models.Calculators;
 using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Models.Repositories.Catalogs;
-using Libiada.Database.Tasks;
 using Libiada.Database.Models.Repositories.Sequences;
+using Libiada.Database.Tasks;
+using Libiada.Web.Extensions;
+using Libiada.Web.Helpers;
+using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
 
-using Libiada.Core.Extensions;
-using Libiada.Core.TimeSeries.OneDimensional.DistanceCalculators;
-using Libiada.Core.TimeSeries.OneDimensional.Comparers;
-using Libiada.Core.TimeSeries.Aligners;
-using Libiada.Core.TimeSeries.Aggregators;
-
-using Libiada.Web.Tasks;
-using Libiada.Web.Extensions;
-using Libiada.Web.Helpers;
+using System.Globalization;
 
 using static Libiada.Core.Extensions.EnumExtensions;
 

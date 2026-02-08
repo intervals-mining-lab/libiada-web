@@ -8,17 +8,15 @@ using Libiada.Core.Music;
 using Libiada.Core.TimeSeries.Aggregators;
 using Libiada.Core.TimeSeries.Aligners;
 using Libiada.Core.TimeSeries.OneDimensional.DistanceCalculators;
-
+using Libiada.Database.Models.CalculatorsData;
+using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
-using Libiada.Database.Models.Repositories.Catalogs;
-using Libiada.Database.Models.CalculatorsData;
+using Libiada.Web.Helpers;
+using Libiada.Web.Math;
+using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
-
-using Libiada.Web.Helpers;
-using Libiada.Web.Tasks;
-using Libiada.Web.Math;
 
 /// <summary>
 /// The local calculation controller.
@@ -64,7 +62,6 @@ public class LocalCalculationController : AbstractResultController
     public ActionResult Index()
     {
         var viewData = viewDataBuilder.AddMinMaxResearchObjects()
-                                      .AddSequenceGroups()
                                       .AddNatures()
                                       .AddNotations()
                                       .AddLanguages()

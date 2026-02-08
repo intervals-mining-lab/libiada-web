@@ -1,12 +1,10 @@
 ﻿namespace Libiada.Web.Controllers.Sequences;
 
 using Libiada.Core.Core.SimpleTypes;
-
 using Libiada.Database.Tasks;
+using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
-
-using Libiada.Web.Tasks;
 
 /// <summary>
 /// The Fmotifs dictionary controller.
@@ -113,7 +111,7 @@ public class FmotifsDictionaryController : AbstractResultController
             fmotifsSequence.Add(newFmotif);
         }
 
-        foreach(var fmotifCount in sortedFmotifs.Values)
+        foreach (var fmotifCount in sortedFmotifs.Values)
         {
             fmotifsCounts.Add(fmotifCount);
         }

@@ -4,11 +4,11 @@
 
 namespace Libiada.Web.Areas.Identity.Pages.Account;
 
-using System.Text;
-
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+
+using System.Text;
 
 public class ConfirmEmailChangeModel : PageModel
 {

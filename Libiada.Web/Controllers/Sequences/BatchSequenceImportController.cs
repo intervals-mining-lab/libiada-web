@@ -4,16 +4,14 @@ using Bio.Extensions;
 using Bio.IO.GenBank;
 
 using Libiada.Core.Extensions;
-
-using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Helpers;
+using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
+using Libiada.Web.Extensions;
+using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
-
-using Libiada.Web.Tasks;
-using Libiada.Web.Extensions;
 
 
 /// <summary>
@@ -99,7 +97,7 @@ public class BatchSequenceImportController : AbstractResultController
 
                     // TODO: refactor this to use DI (and probably factories) 
                     var researchObjectRepository = new ResearchObjectRepository(db, cache);
-                    
+
                     ResearchObject researchObject = researchObjectRepository.CreateResearchObjectFromGenBankMetadata(metadata);
 
                     importResult.SequenceType = researchObject.SequenceType.GetDisplayValue();

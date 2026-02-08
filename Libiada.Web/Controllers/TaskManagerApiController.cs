@@ -1,10 +1,9 @@
 ﻿namespace Libiada.Web.Controllers;
 
 using Libiada.Web.Extensions;
+using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
-
-using Libiada.Web.Tasks;
 
 /// <summary>
 /// The task manager web api controller.

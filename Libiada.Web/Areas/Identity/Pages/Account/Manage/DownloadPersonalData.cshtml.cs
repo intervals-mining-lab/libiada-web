@@ -4,10 +4,10 @@
 
 namespace Libiada.Web.Areas.Identity.Pages.Account.Manage;
 
-using System.Text.Json;
-
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+
+using System.Text.Json;
 
 public class DownloadPersonalDataModel : PageModel
 {

@@ -3,13 +3,11 @@
 using Libiada.Core.Core;
 using Libiada.Core.Core.Characteristics.Calculators.AccordanceCalculators;
 using Libiada.Core.Music;
-
-using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Models.Repositories.Catalogs;
+using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
-
-using Libiada.Web.Tasks;
 using Libiada.Web.Helpers;
+using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
 

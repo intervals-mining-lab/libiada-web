@@ -1,7 +1,7 @@
 ﻿namespace Libiada.Web.Models;
 
-using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 using System.Reflection;
 

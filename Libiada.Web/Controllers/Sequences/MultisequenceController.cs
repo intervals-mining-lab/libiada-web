@@ -44,7 +44,7 @@ public class MultisequenceController : Controller
     /// </returns>
     public ActionResult Create()
     {
-        
+
         var data = viewDataBuilder.AddMinMaxResearchObjects(2, int.MaxValue)
                                   .AddNatures()
                                   .AddNotations()

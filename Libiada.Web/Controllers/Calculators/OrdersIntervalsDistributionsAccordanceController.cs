@@ -2,14 +2,11 @@
 
 using Libiada.Core.Core;
 using Libiada.Core.Extensions;
-
 using Libiada.Database.Tasks;
+using Libiada.SequenceGenerator;
+using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
-
-using Libiada.SequenceGenerator;
-
-using Libiada.Web.Tasks;
 
 /// <summary>
 /// Calculates accordance of orders to intervals distributions.
@@ -99,13 +96,13 @@ public class OrdersIntervalsDistributionsAccordanceController : AbstractResultCo
                         accordance.Add(fullIntervals, [order]);
                     }
                 }
-                
+
                 distributionsAccordance.Add(link.GetDisplayValue(), accordance);
             }
-            
+
             var linksList = Extensions.EnumExtensions.GetSelectList<Link>().ToList();
             linksList.RemoveAt(0);
-            
+
             var result = new Dictionary<string, object>
             {
                 { "result", distributionsAccordance.Select(r => new

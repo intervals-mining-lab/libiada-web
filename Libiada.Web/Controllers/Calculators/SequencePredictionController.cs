@@ -1,20 +1,18 @@
 ﻿namespace Libiada.Web.Controllers.Calculators;
 
-using System.Globalization;
-
 using Libiada.Core.Core;
 using Libiada.Core.Core.Characteristics.Calculators.FullCalculators;
 using Libiada.Core.Extensions;
-
 using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
+using Libiada.Web.Helpers;
+using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
 
-using Libiada.Web.Helpers;
-using Libiada.Web.Tasks;
+using System.Globalization;
 
 /// <summary>
 /// The sequence prediction controller.
