@@ -3,17 +3,15 @@
 using Libiada.Core.Core;
 using Libiada.Core.Core.Characteristics.Calculators.CongenericCalculators;
 using Libiada.Core.Music;
-
-using Newtonsoft.Json;
-
-using Libiada.Database.Tasks;
-using Libiada.Database.Models.Repositories.Sequences;
-using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Models.Calculators;
 using Libiada.Database.Models.CalculatorsData;
-
+using Libiada.Database.Models.Repositories.Catalogs;
+using Libiada.Database.Models.Repositories.Sequences;
+using Libiada.Database.Tasks;
 using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
+
+using Newtonsoft.Json;
 
 using System.Linq;
 
@@ -66,7 +64,6 @@ public class CongenericCalculationController : AbstractResultController
     public ActionResult Index()
     {
         var viewData = viewDataBuilder.AddMinMaxResearchObjects()
-                                      .AddSequenceGroups()
                                       .AddNatures()
                                       .AddNotations()
                                       .AddLanguages()

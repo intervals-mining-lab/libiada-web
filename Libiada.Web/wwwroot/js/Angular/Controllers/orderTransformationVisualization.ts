@@ -1,5 +1,5 @@
 ﻿import { MapModelFromJson } from "functions";
-import { ResearchObject } from "viewDataTypes";
+import type { ResearchObject } from "viewDataTypes";
 
 /**
 * Interface for the object being researched

@@ -55,7 +55,7 @@ angular.module("libiada").component("characteristics", {
         nature: "<",
         notations: "<",
         characteristicsDictionary: "<",
-        percentageDifferenseNeeded: "<",
+        percentageDifferenseNeeded: "<?",
         hideNotation: "@",
         languages: "<?",
         translators: "<?",

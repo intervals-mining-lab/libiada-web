@@ -1,5 +1,5 @@
 import { MapModelFromJson } from "functions";
-import { Group, SequenceType } from "viewDataTypes"; 
+import type { Group, SequenceType } from "viewDataTypes"; 
 
 /**
  * Interface for initial controller data

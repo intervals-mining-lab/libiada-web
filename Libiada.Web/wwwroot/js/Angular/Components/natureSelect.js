@@ -3,6 +3,7 @@
 
     ctrl.$onInit = () => {
         ctrl.nature ??= ctrl.natures[0].Value;
+        ctrl.filterByNature ??= () => { };
         ctrl.filterByNature();
     };
 }
@@ -13,6 +14,6 @@ angular.module("libiada").component("natureSelect", {
     bindings: {
         natures: "<",
         nature: "=",
-        filterByNature: "&"
+        filterByNature: "&?"
     }
 });

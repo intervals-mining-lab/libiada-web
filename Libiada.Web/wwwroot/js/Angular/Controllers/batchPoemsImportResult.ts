@@ -1,5 +1,5 @@
 ﻿import { initScopeFromServer } from "functions";
-import { SequenceImportResult } from "viewDataTypes";
+import type { SequenceImportResult } from "viewDataTypes";
 
 interface BatchPoemsImportResultData {
     Results: SequenceImportResult[];

@@ -1,108 +1,50 @@
-﻿export interface SequenceType {
+﻿interface SelectListItem {
     Value: string;
     Text: string;
     Selected: boolean;
     Disabled: boolean;
+    Group: null; // TODO: check what type it could be
+}
+
+interface SelectListItemWithNature extends SelectListItem {
     Nature: number;
-    Group: null; // TODO: check what type it could be
 }
 
-export interface SequenceGroup {
-    Value: string;
-    Text: string;
-    Selected: boolean;
-    Disabled: boolean;
-    Nature: number;
-    Group: string;
-}
+export interface SequenceType extends SelectListItemWithNature { }
 
-export interface Nature {
-    Value: string;
-    Text: string;
-    Selected: boolean;
-    Disabled: boolean;
-    Nature: number;
-    Group: null; // TODO: check what type it could be
-}
+export interface SequenceGroup extends SelectListItemWithNature { }
 
-export interface Notation {
-    Value: string;
-    Text: string;
-    Selected: boolean;
-    Disabled: boolean;
-    Nature: number;
-    Group: null; // TODO: check what type it could be
-}
+export interface Nature extends SelectListItem { }
 
-export interface Language {
-    Value: string;
-    Text: string;
-    Selected: boolean;
-    Disabled: boolean;
-    Nature: number;
-    Group: null; // TODO: check what type it could be
-}
+export interface Notation extends SelectListItemWithNature { }
 
-export interface PauseTreatment {
-    Value: string;
-    Text: string;
-    Selected: boolean;
-    Disabled: boolean;
-    Nature: number;
-    Group: null; // TODO: check what type it could be
-}
+export interface Language extends SelectListItem { }
 
-export interface Trajectory {
-    Value: string;
-    Text: string;
-    Selected: boolean;
-    Disabled: boolean;
-    Nature: number;
-    Group: null; // TODO: check what type it could be
-}
+export interface PauseTreatment extends SelectListItem { }
 
-export interface Translator {
-    Value: string;
-    Text: string;
-    Selected: boolean;
-    Disabled: boolean;
-    Nature: number;
-    Group: null; // TODO: check what type it could be
-}
+export interface Trajectory extends SelectListItem { }
 
-export interface Group {
-    Value: string;
-    Text: string;
-    Selected: boolean;
-    Disabled: boolean;
-    Nature: number;
-    Group: null; // TODO: check what type it could be
-}
+export interface Translator extends SelectListItem { }
 
-export interface Feature {
-    Value: string;
-    Text: string;
-    Selected: boolean;
-    Disabled: boolean;
-    Nature: number;
-    Group: null; // TODO: check what type it could be
-}
+export interface Group extends SelectListItemWithNature { }
 
-export interface Link {
-    Value: string;
-    Text: string;
-    Selected: boolean;
-    Disabled: boolean;
-    Group: null; // TODO: check what type it could be
-}
+export interface Feature extends SelectListItemWithNature { }
 
-export interface ArrangementType {
-    Value: string;
-    Text: string;
-    Selected: boolean;
-    Disabled: boolean;
-    Group: null; // TODO: check what type it could be
-}
+export interface Link extends SelectListItem { }
+
+export interface ArrangementType extends SelectListItem { }
+
+export interface ClusterizatorType extends SelectListItem { }
+
+export interface ImageTransformer extends SelectListItem { }
+
+export interface OrderTransformation extends SelectListItem { }
+
+export interface DeviationCalculationMethod extends SelectListItem { }
+
+export interface SegmentationCriterion extends SelectListItem { }
+
+export interface Threshold extends SelectListItem { }
 
 export interface CharacteristicType {
     ArrangementTypes: ArrangementType[];

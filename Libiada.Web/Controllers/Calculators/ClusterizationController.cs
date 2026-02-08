@@ -1,18 +1,15 @@
 ﻿namespace Libiada.Web.Controllers.Calculators;
 
 using Libiada.Clusterizator;
-
 using Libiada.Core.Music;
-
+using Libiada.Database.Models.Calculators;
+using Libiada.Database.Models.CalculatorsData;
+using Libiada.Database.Models.Repositories.Catalogs;
+using Libiada.Database.Models.Repositories.Sequences;
+using Libiada.Database.Tasks;
 using Libiada.Web.Extensions;
 using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
-
-using Libiada.Database.Tasks;
-using Libiada.Database.Models.Repositories.Catalogs;
-using Libiada.Database.Models.Repositories.Sequences;
-using Libiada.Database.Models.Calculators;
-using Libiada.Database.Models.CalculatorsData;
 
 using Newtonsoft.Json;
 
@@ -72,7 +69,6 @@ public class ClusterizationController : AbstractResultController
     public ActionResult Index()
     {
         var viewData = viewDataBuilder.AddMinMaxResearchObjects(3, int.MaxValue)
-                                      .AddSequenceGroups()
                                       .AddNatures()
                                       .AddNotations()
                                       .AddLanguages()
@@ -83,7 +79,7 @@ public class ClusterizationController : AbstractResultController
                                       .AddGroups()
                                       .AddCharacteristicsData(CharacteristicCategory.Full)
                                       .Build();
-        viewData.Add("ClusterizatorsTypes", EnumExtensions.ToArray<ClusterizationType>().ToSelectList());
+        viewData.Add("clusterizatorsTypes", EnumExtensions.ToArray<ClusterizationType>().ToSelectList());
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }

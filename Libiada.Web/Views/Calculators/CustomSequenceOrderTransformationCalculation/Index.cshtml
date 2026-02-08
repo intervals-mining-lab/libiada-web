@@ -5,12 +5,12 @@
 <h2>@ViewBag.Title</h2>
 
 @{
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "CustomCalculation");
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "CustomSequenceOrderTransformationCalculation");
 }
 
 @using (Html.BeginForm("Index", "CustomSequenceOrderTransformationCalculation", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
-    <div ng-controller="CustomCalculationCtrl">
+    <div ng-controller="CustomSequenceOrderTransformationCalculationCtrl">
         <h4>Sequence and parameters</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })

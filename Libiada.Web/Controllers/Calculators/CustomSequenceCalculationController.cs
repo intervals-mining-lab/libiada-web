@@ -1,26 +1,24 @@
 ﻿namespace Libiada.Web.Controllers.Calculators;
 
-using System.Text.RegularExpressions;
-
 using Bio.Extensions;
 
 using Libiada.Core.Core;
 using Libiada.Core.Core.SimpleTypes;
 using Libiada.Core.Images;
-
+using Libiada.Database.Helpers;
 using Libiada.Database.Models.Calculators;
+using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Tasks;
-using Libiada.Database.Helpers;
-using Libiada.Database.Models.CalculatorsData;
+using Libiada.Web.Helpers;
+using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
 
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
-using Libiada.Web.Helpers;
-using Libiada.Web.Tasks;
+using System.Text.RegularExpressions;
 
 /// <summary>
 /// The quick calculation controller.
@@ -37,9 +35,9 @@ public class CustomSequenceCalculationController : AbstractResultController
     /// <summary>
     /// Initializes a new instance of the <see cref="CustomSequenceCalculationController"/> class.
     /// </summary>
-    public CustomSequenceCalculationController(IViewDataBuilder viewDataBuilder, 
+    public CustomSequenceCalculationController(IViewDataBuilder viewDataBuilder,
                                                ITaskManager taskManager,
-                                               IFullCharacteristicRepository characteristicTypeLinkRepository) 
+                                               IFullCharacteristicRepository characteristicTypeLinkRepository)
         : base(TaskType.CustomSequenceCalculation, taskManager)
     {
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;

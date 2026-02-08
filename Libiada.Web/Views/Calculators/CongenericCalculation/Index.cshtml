@@ -3,18 +3,17 @@
 }
 
 @{
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "Calculation");
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "CongenericCalculation");
 }
 
 <h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm())
 {
-    <div ng-controller="CalculationCtrl">
+    <div ng-controller="CongenericCalculationCtrl">
         @(Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" }))
         <nature-select natures="natures"
-                       nature="nature"
-                       filter-by-nature="filterByNature()">
+                       nature="nature">
         </nature-select>
         <research-objects-table nature="nature"
                                 groups="groups"

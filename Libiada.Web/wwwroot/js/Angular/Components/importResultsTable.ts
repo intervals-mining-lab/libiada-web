@@ -1,4 +1,4 @@
-﻿import { ImportResult } from "viewDataTypes";
+﻿import type { ImportResult } from "viewDataTypes";
 
 interface ImportResultsTableComponentController extends ng.IController {
     result: ImportResult[];
