@@ -1,7 +1,4 @@
 import { MapModelFromJson } from "functions";
-/**
- * Controller for accordance functionality
- */
 class AccordanceHandler {
     /**
      * Creates a new controller instance
@@ -18,7 +15,6 @@ class AccordanceHandler {
         const accordance = ($scope, filterFilter) => {
             MapModelFromJson($scope, data);
         };
-        // Register controller in Angular module
         angular.module("libiada").controller("AccordanceCtrl", ["$scope", "filterFilter", accordance]);
     }
 }

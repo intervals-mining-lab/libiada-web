@@ -1,8 +1,8 @@
-// Interface for the $scope controller
+// Interface for the controller's scope
 interface MusicFilesScope extends ng.IScope {
 }
 
-// Controller class
+// Angular controller class
 class MusicFilesOperator {
     constructor() {
         this.ngOnInit();

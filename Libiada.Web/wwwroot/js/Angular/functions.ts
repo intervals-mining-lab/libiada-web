@@ -81,6 +81,13 @@ export function MapModelFromJson($scope: AngularScope, data: DataObject): void {
     LibiadaWebUtils.MapModelFromJson($scope, data);
 }
 
+/**
+ * Initializes angular controller's scope using data from server
+ * @param $http
+ * @param $scope scope to initialize
+ * @param loadingScreenHeader displayed maeesage of loading screen
+ * @param errorMessage displayed message in case of error
+ */
 export function initScopeFromServer<ResponceType>(
     $http: ng.IHttpService,
     $scope: AngularScope,
@@ -108,6 +115,7 @@ export function SelectLink(characteristic: ICharacteristic): void {
     LibiadaWebUtils.SelectLink(characteristic);
 }
 
+// Finds minimum and maximum values in the array of numbers
 export function getArrayMinMax(array: number[]): { min: number, max: number } {
     let min: number = array[0];
     let max: number = array[0];
@@ -121,6 +129,7 @@ export function getArrayMinMax(array: number[]): { min: number, max: number } {
     return { min, max };
 }
 
+// Finds minimum value in the array of numbers
 export function arrayMin(array: number[]): number {
     let min: number = array[0];
     let length: number = array.length;
@@ -132,6 +141,8 @@ export function arrayMin(array: number[]): number {
     return min;
 }
 
+
+// Finds maximum value in the array of numbers
 export function arrayMax(array: number[]): number {
     let max: number = array[0];
     let length: number = array.length;

@@ -3,18 +3,23 @@
 }
 
 @{
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchGeneticImportFromGenBankSearchFile");
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "NcbiNuccoreSearch");
 }
 
 <h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm())
 {
-    <div ng-controller="BatchGeneticImportFromGenBankSearchFileCtrl">
+    <div ng-controller="NcbiNuccoreSearchCtrl">
         <div class="row mb-2">
             <div class="col-md-10">
                 <label class="form-label" for="searchQuery">GenBank search query:</label>
-                <input type="text" class="form-control" name="searchQuery" id="searchQuery" placeholder="Enter term" ng-model="searchQuery">
+                <input type="text"
+                       class="form-control"
+                       name="searchQuery"
+                       id="searchQuery"
+                       placeholder="Enter term"
+                       ng-model="searchQuery">
             </div>
         </div>
         <div class="form-check">

@@ -3,14 +3,14 @@
 }
 
 @{
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchGeneticImportFromGenBankSearchFile");
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "GenBankAccessionVersionUpdateChecker");
 }
 
 <h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm())
 {
-    <div ng-controller="BatchGeneticImportFromGenBankSearchFileCtrl">
+    <div ng-controller="GenBankAccessionVersionUpdateCheckerCtrl">
         <div class="form-check mb-2">
             <input type="checkbox"
                    class="form-check-input"

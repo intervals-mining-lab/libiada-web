@@ -12,9 +12,7 @@ import type {
     CharacteristicType
 } from "viewDataTypes";
 
-/**
- * Interface for accordion data
- */
+// Interface for the data object that is passed to the controller
 interface AccordanceData {
     maximumSelectedResearchObjects: number;
     minimumSelectedResearchObjects: number;
@@ -30,17 +28,14 @@ interface AccordanceData {
     translators: Translator[];
     sequenceTypes: SequenceType[];
 }
-/**
- * Interface for controller scope
- */
+
+// Interface for the controller's scope
 interface AccordanceScope extends angular.IScope, AccordanceData {
     nature: string;
     selectedResearchObjectsCount: number;
 }
 
-/**
- * Controller for accordance functionality
- */
+
 class AccordanceHandler {
     /**
      * Creates a new controller instance
@@ -59,7 +54,6 @@ class AccordanceHandler {
             MapModelFromJson($scope, data);
         };
 
-        // Register controller in Angular module
         angular.module("libiada").controller("AccordanceCtrl", ["$scope", "filterFilter", accordance]);
     }
 }

@@ -30,10 +30,6 @@ export interface Group extends SelectListItemWithNature { }
 
 export interface Feature extends SelectListItemWithNature { }
 
-export interface Link extends SelectListItem { }
-
-export interface ArrangementType extends SelectListItem { }
-
 export interface ClusterizatorType extends SelectListItem { }
 
 export interface ImageTransformer extends SelectListItem { }
@@ -46,14 +42,13 @@ export interface SegmentationCriterion extends SelectListItem { }
 
 export interface Threshold extends SelectListItem { }
 
-export interface CharacteristicType {
+export interface Link extends SelectListItem { }
+
+export interface ArrangementType extends SelectListItem { }
+
+export interface CharacteristicType extends SelectListItem {
     ArrangementTypes: ArrangementType[];
     Links: Link[];
-    Value: string;
-    Text: string;
-    Selected: boolean;
-    Disabled: boolean;
-    Group: null; // TODO: check what type it could be
 }
 
 /**

@@ -1,16 +1,16 @@
 ﻿@{
-    ViewBag.Title = "Batch images import";
+    ViewBag.Title = "Libiada - Batch images import";
 }
 
 @{
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchMusicImport");
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchImagesImport");
 }
 
 <h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm("Index", "BatchImagesImport", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
-    <div ng-controller="BatchMusicImportCtrl">
+    <div ng-controller="BatchImagesImportCtrl">
         <div class="row mb-1">
             <label class="col-form-label col-md-2" for="files">Images files:</label>
             <div class="col-md-10">

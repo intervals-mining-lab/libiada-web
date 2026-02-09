@@ -1,4 +1,4 @@
-// Controller class
+// Angular controller class
 class MusicFilesOperator {
     constructor() {
         this.ngOnInit();

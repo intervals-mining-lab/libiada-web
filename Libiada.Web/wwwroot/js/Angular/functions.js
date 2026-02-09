@@ -28,6 +28,13 @@ class LibiadaWebUtils {
 export function MapModelFromJson($scope, data) {
     LibiadaWebUtils.MapModelFromJson($scope, data);
 }
+/**
+ * Initializes angular controller's scope using data from server
+ * @param $http
+ * @param $scope scope to initialize
+ * @param loadingScreenHeader displayed maeesage of loading screen
+ * @param errorMessage displayed message in case of error
+ */
 export function initScopeFromServer($http, $scope, loadingScreenHeader, errorMessage = "Failed loading data from server") {
     // loading import results from the server
     $scope.loadingScreenHeader = loadingScreenHeader;
@@ -47,6 +54,7 @@ export function initScopeFromServer($http, $scope, loadingScreenHeader, errorMes
 export function SelectLink(characteristic) {
     LibiadaWebUtils.SelectLink(characteristic);
 }
+// Finds minimum and maximum values in the array of numbers
 export function getArrayMinMax(array) {
     let min = array[0];
     let max = array[0];
@@ -59,6 +67,7 @@ export function getArrayMinMax(array) {
     }
     return { min, max };
 }
+// Finds minimum value in the array of numbers
 export function arrayMin(array) {
     let min = array[0];
     let length = array.length;
@@ -67,6 +76,7 @@ export function arrayMin(array) {
     }
     return min;
 }
+// Finds maximum value in the array of numbers
 export function arrayMax(array) {
     let max = array[0];
     let length = array.length;

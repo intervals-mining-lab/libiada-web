@@ -29,7 +29,7 @@ interface CalculationData {
     translators: Translator[];
 }
 
-// Interface for the $scope controller
+// Interface for the controller's scope
 interface CalculationScope extends ng.IScope, CalculationData {
     calculationFor: displayedTable;
     nature: number;
