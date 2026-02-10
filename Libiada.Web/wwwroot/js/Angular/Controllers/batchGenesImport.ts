@@ -7,7 +7,7 @@ import type {
 /**
  * Interface for the data object that is passed to the controller
  */
-interface GenesImportData {
+interface BatchGenesImportData {
     groups: Group[];
     maximumSelectedResearchObjects: number;
     minimumSelectedResearchObjects: number;
@@ -18,19 +18,19 @@ interface GenesImportData {
 /**
  * Interface for controller's scope
  */
-interface GenesImportScope extends ng.IScope, GenesImportData {
+interface BatchGenesImportScope extends ng.IScope, BatchGenesImportData {
     selectedResearchObjectsCount: number;
 }
 
 /**
  * Angular controller class
  */
-class GenesImportHandler {
+class BatchGenesImportHandler {
     /**
      * Creates a new controller instance
      * @param data Data for controller initialization
      */
-    constructor(data: GenesImportData) {
+    constructor(data: BatchGenesImportData) {
         this.ngOnInit(data);
     }
 
@@ -38,13 +38,13 @@ class GenesImportHandler {
      * Initializes Angular controller
      * @param data Data for controller initialization
      */
-    private ngOnInit(data: GenesImportData): void {
-        const genesImport = ($scope: GenesImportScope): void => {
+    private ngOnInit(data: BatchGenesImportData): void {
+        const batchGenesImport = ($scope: BatchGenesImportScope): void => {
             MapModelFromJson($scope, data);
         };
 
         // Register controller in Angular module
-        angular.module("libiada").controller("GenesImportCtrl", ["$scope", genesImport]);
+        angular.module("libiada").controller("BatchGenesImportCtrl", ["$scope", batchGenesImport]);
     }
 }
 
@@ -53,6 +53,6 @@ class GenesImportHandler {
  * @param data Data for controller initialization
  * @returns Instance of genes import handler
  */
-export default function GenesImportController(data: GenesImportData): GenesImportHandler {
-    return new GenesImportHandler(data);
+export default function BatchGenesImportController(data: BatchGenesImportData): BatchGenesImportHandler {
+    return new BatchGenesImportHandler(data);
 }

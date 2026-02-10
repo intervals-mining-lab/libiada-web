@@ -1,5 +1,5 @@
-﻿import { Feature, ResearchObject } from "viewDataTypes";
-import type { MapModelFromJson, ICharacteristicType, ICharacteristic } from "functions";
+﻿import type { Feature, ResearchObject } from "viewDataTypes";
+import { MapModelFromJson, ICharacteristicType, ICharacteristic } from "functions";
 
 /**
 * Interface for subsequence calculation controller data

@@ -8,13 +8,16 @@ import type {
     Trajectory,
     Translator,
     Group,
+    CharacteristicType,
     OrderTransformation
 } from "viewDataTypes";
 
 /**
 * Interface for the data object that is passed to the controller
 */
-interface OrderTransformerData {
+interface OrderTransformationCalculationData {
+    characteristicTypes: CharacteristicType[];
+    characteristicsDictionary: { [key: string]: number };
     groups: Group[];
     languages: Language[];
     maximumSelectedResearchObjects: number;
@@ -31,41 +34,40 @@ interface OrderTransformerData {
 /**
 * Interface for the angular controller's scope
 */
-interface OrderTransformerScope extends ng.IScope, OrderTransformerData {
+interface OrderTransformationCalculationScope extends ng.IScope, OrderTransformationCalculationData {
     nature: string;
     selectedResearchObjectsCount: number;
 }
 /**
 * Angular controller class
 */
-class OrderTransformerHandler {
+class OrderTransformationCalculationHandler {
     /**
-    * Creates an instance of the order transformation controller
+    * Creates an instance of the order transformation calculation controller
     * @param data Data for initializing the controller
     */
-    constructor(data: OrderTransformerData) {
+    constructor(data: OrderTransformationCalculationData) {
         this.ngOnInit(data);
     }
 
     /**
     * Initializes the Angular controller
     */
-    private ngOnInit(data: OrderTransformerData): void {
-        const orderTransformer = ($scope: OrderTransformerScope, filterFilter: ng.IFilterFilter): void => {
+    private ngOnInit(data: OrderTransformationCalculationData): void {
+        const orderTransformationCalculation = ($scope: OrderTransformationCalculationScope, filterFilter: ng.IFilterFilter): void => {
             // Initialize scope with data from the parameter
             MapModelFromJson($scope, data);
         };
 
-        // Register the controller in Angular
-        angular.module("libiada").controller("OrderTransformerCtrl", ["$scope", "filterFilter", orderTransformer]);
+        angular.module("libiada").controller("OrderTransformationCalculationCtrl", ["$scope", "filterFilter", orderTransformationCalculation]);
     }
 }
 
 /**
 * Wrapper function for backward compatibility
 * @param data Data for controller initialization
-* @returns Order transformation controller instance
+* @returns Order transformation calculation controller instance
 */
-export default function OrderTransformerController(data: OrderTransformerData): OrderTransformerHandler {
-    return new OrderTransformerHandler(data);
+export default function OrderTransformationCalculationController(data: OrderTransformationCalculationData): OrderTransformationCalculationHandler {
+    return new OrderTransformationCalculationHandler(data);
 }

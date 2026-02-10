@@ -1,5 +1,5 @@
 import { MapModelFromJson } from "functions";
-// Сontroller class
+// Angular controller class
 class CalculationOperator {
     constructor(data) {
         this.ngOnInit(data);

@@ -3,18 +3,17 @@
 }
 
 @{
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "OrderTransformer");
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "OrderTransformationCalculation");
 }
 
 <h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm())
 {
-    <div ng-controller="OrderTransformerCtrl">
+    <div ng-controller="OrderTransformationCalculationCtrl">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <nature-select natures="natures"
-                       nature="nature"
-                       filter-by-nature="filterByNature()">
+                       nature="nature">
         </nature-select>
         <research-objects-table nature="nature"
                                 groups="groups"

@@ -29,7 +29,7 @@ interface SequencePredictionData {
 
 // Interface for the $scope controller
 interface SequencePredictionScope extends ng.IScope, SequencePredictionData {
-    nature: number;
+    nature: string;
     selectedResearchObjectsCount: number;
 }
 

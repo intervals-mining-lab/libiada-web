@@ -1,3 +1,4 @@
+import { MapModelFromJson } from "functions";
 /**
 * Controller for calculating subsequences
 */

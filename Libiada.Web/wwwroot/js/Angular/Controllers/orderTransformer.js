@@ -1,6 +1,6 @@
 import { MapModelFromJson } from "functions";
 /**
-* Controller for order transformation
+* Angular controller class
 */
 class OrderTransformerHandler {
     /**
@@ -17,27 +17,6 @@ class OrderTransformerHandler {
         const orderTransformer = ($scope, filterFilter) => {
             // Initialize scope with data from the parameter
             MapModelFromJson($scope, data);
-            /**
-            * Filters notations by the selected nature
-            */
-            function filterByNature() {
-                if (!$scope.hideNotation) {
-                    $scope.notation = filterFilter($scope.notations, { Nature: $scope.nature })[0];
-                    // If the notation is not associated with a characteristic
-                    if ($scope.characteristics) {
-                        angular.forEach($scope.characteristics, (characteristic) => {
-                            characteristic.notation = $scope.notation;
-                        });
-                    }
-                }
-            }
-            // Assign methods to $scope
-            $scope.filterByNature = filterByNature;
-            // Initialize the selected values
-            $scope.notation = filterFilter($scope.notations, { Nature: $scope.nature })[0];
-            $scope.language = $scope.languages ? $scope.languages[0] : undefined;
-            $scope.translator = $scope.translators ? $scope.translators[0] : undefined;
-            $scope.pauseTreatment = $scope.pauseTreatments ? $scope.pauseTreatments[0] : undefined;
         };
         // Register the controller in Angular
         angular.module("libiada").controller("OrderTransformerCtrl", ["$scope", "filterFilter", orderTransformer]);

@@ -54,7 +54,6 @@ public class OrderTransformationCalculationController : AbstractResultController
     public ActionResult Index()
     {
         Dictionary<string, object> data = viewDataBuilder.AddMinMaxResearchObjects()
-                                                         .AddSequenceGroups()
                                                          .AddNatures()
                                                          .AddNotations()
                                                          .AddLanguages()

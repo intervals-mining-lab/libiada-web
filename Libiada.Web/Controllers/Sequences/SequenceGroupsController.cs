@@ -75,7 +75,6 @@ public class SequenceGroupsController : Controller
     public ActionResult Create()
     {
         var viewData = viewDataBuilder.AddMinMaxResearchObjects()
-                                      .AddSequenceGroups()
                                       .AddNatures()
                                       .AddSequenceTypes()
                                       .AddGroups()
@@ -146,7 +145,6 @@ public class SequenceGroupsController : Controller
         var selectedResearchObjectIds = sequenceGroup.ResearchObjects.Select(m => m.Id);
         var viewData = viewDataBuilder.AddResearchObjects(m => true, m => selectedResearchObjectIds.Contains(m.Id))
                                       .AddMinMaxResearchObjects()
-                                      .AddSequenceGroups()
                                       .AddNatures()
                                       .AddSequenceTypes()
                                       .AddGroups()

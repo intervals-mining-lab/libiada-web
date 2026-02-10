@@ -1,16 +1,16 @@
 ﻿@{
-    ViewBag.Title = "Batch genes import";
+    ViewBag.Title = "Libiada - Batch genes (annotations) import";
 }
 
 @{
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "GenesImport");
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchGenesImport");
 }
 
 <h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm())
 {
-    <div ng-controller="GenesImportCtrl">
+    <div ng-controller="BatchGenesImportCtrl">
         <research-objects-table research-objects-endpoint="GetResearchObjectsForGenesImport"
                                 nature="nature"
                                 groups="groups"

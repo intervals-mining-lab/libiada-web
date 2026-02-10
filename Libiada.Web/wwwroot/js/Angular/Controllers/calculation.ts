@@ -32,7 +32,7 @@ interface CalculationData {
 // Interface for the controller's scope
 interface CalculationScope extends ng.IScope, CalculationData {
     calculationFor: displayedTable;
-    nature: number;
+    nature: string;
     selectedResearchObjectsCount: number;
     selectedSequenceGroupsCount: number;
     complementary: boolean;
@@ -48,7 +48,7 @@ interface CalculationScope extends ng.IScope, CalculationData {
 
 type displayedTable = "researchObjects" | "sequenceGroups";
 
-// Сontroller class
+// Angular controller class
 class CalculationOperator {
     constructor(data: CalculationData) {
         this.ngOnInit(data);

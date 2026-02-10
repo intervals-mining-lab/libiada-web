@@ -12,8 +12,7 @@
 {
     <div ng-controller="OrderTransformerCtrl">
         <nature-select natures="natures"
-                       nature="nature"
-                       filter-by-nature="filterByNature()">
+                       nature="nature">
         </nature-select>
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <research-objects-table research-objects="researchObjects"
@@ -24,8 +23,7 @@
                                 selected-research-objects-count="selectedResearchObjectsCount"
                                 group-and-type-required="::false">
         </research-objects-table>
-        <characteristic-nature-params characteristic="characteristic"
-                                      nature="nature"
+        <characteristic-nature-params nature="nature"
                                       notations="notations"
                                       languages="::languages"
                                       translators="::translators"

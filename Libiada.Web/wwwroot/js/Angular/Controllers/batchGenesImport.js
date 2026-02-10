@@ -2,7 +2,7 @@ import { MapModelFromJson } from "functions";
 /**
  * Angular controller class
  */
-class GenesImportHandler {
+class BatchGenesImportHandler {
     /**
      * Creates a new controller instance
      * @param data Data for controller initialization
@@ -15,11 +15,11 @@ class GenesImportHandler {
      * @param data Data for controller initialization
      */
     ngOnInit(data) {
-        const genesImport = ($scope) => {
+        const batchGenesImport = ($scope) => {
             MapModelFromJson($scope, data);
         };
         // Register controller in Angular module
-        angular.module("libiada").controller("GenesImportCtrl", ["$scope", genesImport]);
+        angular.module("libiada").controller("BatchGenesImportCtrl", ["$scope", batchGenesImport]);
     }
 }
 /**
@@ -27,7 +27,7 @@ class GenesImportHandler {
  * @param data Data for controller initialization
  * @returns Instance of genes import handler
  */
-export default function GenesImportController(data) {
-    return new GenesImportHandler(data);
+export default function BatchGenesImportController(data) {
+    return new BatchGenesImportHandler(data);
 }
-//# sourceMappingURL=genesImport.js.map
+//# sourceMappingURL=batchGenesImport.js.map

@@ -29,7 +29,7 @@ interface LocalCalculationData {
 
 // Interface for the $scope controller
 interface LocalCalculationScope extends ng.IScope, LocalCalculationData {
-    nature: number;
+    nature: string;
     selectedResearchObjectsCount: number;
 }
 

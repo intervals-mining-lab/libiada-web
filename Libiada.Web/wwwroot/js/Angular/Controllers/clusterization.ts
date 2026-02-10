@@ -31,7 +31,7 @@ interface ClusterizationData {
 
 // Interface for the $scope controller
 interface ClusterizationScope extends ng.IScope, ClusterizationData {
-    nature: number;
+    nature: string;
     selectedResearchObjectsCount: number;
     selectedSequenceGroupsCount: number;
     clusterizationType: ClusterizatorType;

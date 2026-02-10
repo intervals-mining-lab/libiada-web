@@ -15,7 +15,7 @@ interface OrdersSimilarityData {
 */
 interface OrdersSimilarityScope extends ng.IScope, OrdersSimilarityData {
     // Selected nature (value)
-    nature: number;
+    nature: string;
     // Selected notation
     notation: { Nature: number; Value: string; Text: string };
 

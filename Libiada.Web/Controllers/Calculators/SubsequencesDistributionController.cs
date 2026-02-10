@@ -73,7 +73,6 @@ public class SubsequencesDistributionController : AbstractResultController
     public ActionResult Index()
     {
         var viewData = viewDataBuilder.AddMinMaxResearchObjects()
-                                      .AddSequenceGroups()
                                       .AddCharacteristicsData(CharacteristicCategory.Full)
                                       .SetNature(Nature.Genetic)
                                       .AddNotations(onlyGenetic: true)

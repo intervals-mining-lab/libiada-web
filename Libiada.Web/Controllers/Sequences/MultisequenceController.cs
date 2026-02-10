@@ -199,7 +199,6 @@ public class MultisequenceController : Controller
 
         var data = viewDataBuilder.AddResearchObjects(filter, m => sellectedResearchObjectIds.Contains(m.Id))
                                   .AddMinMaxResearchObjects(2, int.MaxValue)
-                                  .AddSequenceGroups()
                                   .AddNatures()
                                   .AddNotations()
                                   .AddLanguages()
