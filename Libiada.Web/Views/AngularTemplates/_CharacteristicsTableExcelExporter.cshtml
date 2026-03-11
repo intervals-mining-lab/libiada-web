@@ -1,0 +1,20 @@
+﻿<div class="row my-2">
+    <label class="col-form-label col-md-2" for="excelFileName">Excel file name:</label>
+    <div class="col-md-10">
+        <input type="text"
+               class="form-control"
+               name="excelFileName"
+               id="excelFileName"
+               placeholder="results"
+               ng-model="$ctrl.excelFileName" />
+
+    </div>
+</div>
+<div class="row mb-2">
+    <div class="offset-md-2 col-md-10">
+        <input type="button"
+               class="btn btn-secondary"
+               ng-click="$ctrl.exportToExcel()"
+               value="Download results as excel file" />
+    </div>
+</div>

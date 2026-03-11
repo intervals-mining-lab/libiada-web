@@ -88,27 +88,33 @@ export function MapModelFromJson($scope: AngularScope, data: DataObject): void {
  * @param loadingScreenHeader displayed maeesage of loading screen
  * @param errorMessage displayed message in case of error
  */
-export function initScopeFromServer<ResponceType>(
+export async function initScopeFromServer<ResponceType>(
     $http: ng.IHttpService,
     $scope: AngularScope,
     loadingScreenHeader: string,
-    errorMessage: string = "Failed loading data from server"): void {
-    // loading import results from the server
+    errorMessage: string = "Failed loading data from server"): Promise<void> {
+
+    // Set loading message
     $scope.loadingScreenHeader = loadingScreenHeader;
     $scope.loading = true;
+    try {
+        // Extract task ID from URL
+        let location: string[] = window.location.href.split("/");
+        $scope.taskId = location[location.length - 1];
 
-    let location = window.location.href.split("/");
-    $scope.taskId = location[location.length - 1];
+        // Fetch data from server
+        const result: { data: ResponceType } = await $http.get<ResponceType>(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`);
 
-    $http.get<ResponceType>(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
-        .then(function (data: { data: ResponceType }) {
-            MapModelFromJson($scope, data.data);
-            $scope.loading = false;
-        })
-        .catch(function () {
-            alert(errorMessage);
-            $scope.loading = false;
-        });
+        MapModelFromJson($scope, result.data);
+
+    } catch(error) {
+        //TODO: change it to alertify
+        alert(errorMessage);
+            
+    } finally {
+        $scope.loading = false;
+        $scope.$apply();
+    }
 }
 
 export function SelectLink(characteristic: ICharacteristic): void {
@@ -152,4 +158,9 @@ export function arrayMax(array: number[]): number {
     }
 
     return max;
+}
+
+// Helper function to throw errors in ?? operator
+export function throwHelper(errorMessage: string): never {
+  throw new Error(errorMessage);
 }

@@ -89,7 +89,7 @@ interface IChartsScope extends ng.IScope {
     keyCodes: { [key: string]: number };
 
     // Functions
-    parseTabularData: (text: string) => string[][];
+    parseTabularData: (text: string) => string[][] | null;
     textChanged: () => void;
     handleKeyDown: (e: JQuery.KeyDownEvent, args: any) => void;
     fillBarPlotData: () => void;
@@ -130,7 +130,7 @@ class ChartsControllerHandler {
              * @param text Text with tab-delimited data
              * @returns Array of parsed data rows or null if parsing fails
              */
-            function parseTabularData(text: string): string[][] {
+            function parseTabularData(text: string): string[][] | null {
                 //The array we will return
                 let result: string[][] = [];
                 try {
@@ -400,7 +400,7 @@ class ChartsControllerHandler {
                     type: "bar",
                     customdata: { legendId: p.legendId },
                     name: p.name,
-                    visible: $scope.legend[p.legendIndex].visible ? "true" : "legendonly"
+                    visible: $scope.legend[p.legendIndex].visible ? true : "legendonly"
                 }));
             }
 

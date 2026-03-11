@@ -244,8 +244,8 @@
     </div>
 
     @section Scripts {
-    <script src="~/lib/exceljs/exceljs.min.js" asp-append-version="true"></script>
-    @{
+        <script src="~/lib/exceljs/exceljs.min.js" asp-append-version="true"></script>
+        @{
             await Html.RenderPartialAsync("_AngularControllerInitializer", "CalculationResult");
         }
     }

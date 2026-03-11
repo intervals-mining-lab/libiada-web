@@ -1,13 +1,13 @@
 ﻿@{
-    ViewBag.Title = "Segmentation results";
+    ViewBag.Title = "Libiada - Custom sequences segmentation results";
 }
 
 <h2>@ViewBag.Title</h2>
 @if (ViewBag.Error == null)
 {
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "SegmentationResult");
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "CustomSequenceSegmentationResult");
 
-    <div ng-controller="SegmentationResultCtrl">
+    <div ng-controller="CustomSequenceSegmentationResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <div ng-disabled="loading">
             <table class="table table-bordered table-hover table-sm" ng-cloak>

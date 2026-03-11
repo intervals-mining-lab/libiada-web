@@ -1,5 +1,5 @@
 ﻿function LocalFileController() {
-    let ctrl = this;
+    const ctrl = this;
 
     ctrl.$onInit = () => {
         ctrl.localFile = false;

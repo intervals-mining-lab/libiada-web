@@ -1,5 +1,5 @@
 ﻿function CharacteristicNatureParamsController(filterFilter) {
-    let ctrl = this;
+    const ctrl = this;
 
     ctrl.$onInit = () => {
         ctrl.characteristic ??= {};

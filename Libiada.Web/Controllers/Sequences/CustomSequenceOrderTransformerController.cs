@@ -119,7 +119,6 @@ public class CustomSequenceOrderTransformerController : AbstractResultController
 
             var result = new Dictionary<string, object>
             {
-                { "names", names },
                 { "sequences", sequences.Select((s, i) => new { name = names[i], value = s.ToString(" ") }).ToArray() },
                 { "transformationsList", transformations },
                 { "iterationsCount", iterationsCount }

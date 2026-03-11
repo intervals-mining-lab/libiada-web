@@ -1,0 +1,142 @@
+﻿<div id="container" class="d-flex" ng-disabled="loading" ng-cloack>
+    <div id="chart"></div>
+    <div id="dragbar" class="bg-secondary" ng-mousedown="$ctrl.dragbarMouseDown()"></div>
+    <div id="sidebar">
+        <ul id='plotnav' class="nav nav-tabs justify-content-evenly pt-1" role="tablist">
+            <li class="nav-item" role="presentation" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Legend">
+                <button class="nav-link p-1"
+                        id="legend-tab" data-bs-toggle="tab"
+                        data-bs-target="#legend-tab-pane"
+                        type="button"
+                        role="tab"
+                        aria-controls="legend-tab-pane"
+                        aria-selected="false">
+                    <i class="bi-list-ul fs-3" aria-label="Legend" role="img"></i>
+                </button>
+            </li>
+            <li class="nav-item" role="presentation" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Display settings">
+                <button class="nav-link active p-1"
+                        id="characteristic-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#characteristic-tab-pane"
+                        type="button"
+                        role="tab"
+                        aria-controls="characteristic-tab-pane"
+                        aria-selected="true">
+                    <i class="bi-display fs-3" aria-label="Display settings" role="img"></i>
+                </button>
+            </li>
+            <li class="nav-item" role="presentation" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Tooltip">
+                <button class="nav-link p-1"
+                        id="tooltip-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#tooltip-tab-pane"
+                        type="button"
+                        role="tab"
+                        aria-controls="tooltip-tab-pane"
+                        aria-selected="false">
+                    <i class="bi-info-circle fs-3" aria-label="Tooltip" role="img"></i>
+                </button>
+            </li>
+        </ul>
+        <div class="tab-content subtab-content-full-height px-2 pt-2">
+            <div id="legend-tab-pane" class="tab-pane fade" role="tabpanel" aria-labelledby="legend-tab" tabindex="0">
+                <div class="row">
+                    <div class="col-md-12 mb-2 btn-group" role="group" aria-label="Legend control buttons">
+                        <button type="button" class="btn btn-outline-secondary btn-sm" ng-click="$ctrl.legendSetVisibilityForAll(true)">
+                            Show all
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm" ng-click="$ctrl.legendSetVisibilityForAll(false)">
+                            Hide all
+                        </button>
+                    </div>
+                </div>
+                <!-- .roundedOne -->
+                <div ng-repeat="legendItem in $ctrl.legend">
+                    <div class="rounded-check form-check d-flex mb-2 lh-sm w-100">
+                        <input type="checkbox"
+                               class="form-check-input"
+                               ng-click="$ctrl.legendClick(legendItem)"
+                               ng-model="legendItem.visible"
+                               id="{{::'researchObject' + legendItem.id}}"
+                               name="check"
+                               checked />
+                        <label class="me-1 check-color text-start"
+                               for="{{::'researchObject' + legendItem.id}}"
+                               ng-class="'legend' + legendItem.id"></label>
+                        <label class="form-check-label font-monospace"
+                               for="{{::'researchObject' + legendItem.id}}"
+                               ng-bind="::legendItem.name"></label>
+                    </div>
+                </div>
+                <!-- end .roundedOne -->
+            </div>
+            <div id="characteristic-tab-pane" class="tab-pane fade show active" role="tabpanel" aria-labelledby="characteristic-tab" tabindex="0">
+                <div ng-repeat="characteristic in $ctrl.chartCharacteristics">
+                    <div class="row mb-1 mt-2">
+                        <div class="col-md-12">
+                            <select class="form-select"
+                                    title="Characteristic"
+                                    ng-model="$ctrl.chartCharacteristics[$index]"
+                                    ng-options="c.Text for c in ::$ctrl.characteristicsList"
+                                    id="characteristic{{$index}}"></select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="offset-md-2 col-md-10">
+                            <button type="button"
+                                    class="btn btn-danger"
+                                    ng-click="$ctrl.deleteCharacteristic(characteristic)"
+                                    ng-disabled="$ctrl.chartCharacteristics.length <= 1">
+                                Delete characteristic
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="offset-md-2 col-md-10">
+                        <button type="button"
+                                class="btn btn-success"
+                                ng-click="$ctrl.addCharacteristic()"
+                                ng-disabled="$ctrl.chartCharacteristics.length == $ctrl.characteristicsList.length">
+                            Add characteristic
+                        </button>
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="offset-md-2 col-md-2">
+                        <input type="button" class="btn btn-secondary" ng-click="$ctrl.draw()" value="Draw" />
+                    </div>
+                </div>
+            </div>
+            <div id="tooltip-tab-pane" class="tab-pane fade" role="tabpanel" aria-labelledby="tooltip-tab" tabindex="0">
+                <div class="font-monospace text-break">
+                    <h6 ng-bind="$ctrl.tooltip.name"></h6>
+                    <div class="card">
+                        <div class="card-header">
+                            <button type="button"
+                                    class="btn btn-outline-secondary btn-sm"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#tooltipCharacteristics"
+                                    aria-expanded="false"
+                                    aria-controls="tooltipCharacteristics">
+                                Numeric characteristics
+                            </button>
+                        </div>
+                        <div class="card-collapse collapse" id="tooltipCharacteristics">
+                            <table class="table table-bordered table-sm fs-6 small">
+                                <tbody ng-repeat="value in $ctrl.tooltip.characteristics">
+                                    <tr>
+                                        <td align=center scope="col" ng-bind="$ctrl.characteristicNames[$index]" />
+                                        <td scope="col" ng-bind="value" />
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <hr />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

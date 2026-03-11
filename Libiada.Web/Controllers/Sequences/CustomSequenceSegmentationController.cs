@@ -67,7 +67,7 @@ public class CustomSequenceSegmentationController : AbstractResultController
 
             string[] sequencesNames = new string[sequencesCount];
             string[] sequences = new string[sequencesCount];
-            object[] results = new object[sequencesCount];
+            MainOutputData[][] results = new MainOutputData[sequencesCount][];
 
             for (int i = 0; i < sequencesCount; i++)
             {
@@ -107,7 +107,7 @@ public class CustomSequenceSegmentationController : AbstractResultController
                 var segmenter = new Algorithm(inputData);
 
                 segmenter.Slot();
-                results[i] = segmenter.Upload();
+                results[i] = segmenter.Upload().ToArray();
             }
 
             var result = new Dictionary<string, object>

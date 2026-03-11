@@ -5,10 +5,9 @@
 <h2>@ViewBag.Title</h2>
 @if (ViewBag.Error == null)
 {
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "ClusterizationResult");
-
-    <h3>@ViewBag.poemName</h3>
-    <div ng-controller="ClusterizationResultCtrl">
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "PoemSegmentationResult");
+    <div ng-controller="PoemSegmentationResultCtrl">
+        <h3>{{poemName}}</h3>
         <table class="table table-bordered table-hover" ng-cloak>
             <thead>
                 <tr>

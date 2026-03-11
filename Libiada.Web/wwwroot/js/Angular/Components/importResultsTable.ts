@@ -7,10 +7,7 @@ interface ImportResultsTableComponentController extends ng.IController {
 }
 
 function ImportResultsTableController(this: ImportResultsTableComponentController) {
-    const ctrl = this;
-
-    ctrl.hasGroupColumn = false;
-    ctrl.hasSequenceTypeColumn = false;
+    const ctrl: ImportResultsTableComponentController = this;
 
     ctrl.calculateStatusClass = (status: string): string => {
         return status === "Success" ? "table-success"

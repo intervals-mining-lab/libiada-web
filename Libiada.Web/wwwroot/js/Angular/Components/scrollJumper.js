@@ -1,5 +1,5 @@
 ﻿function ScrollJumperController() {
-    let ctrl = this;
+    const ctrl = this;
 
     ctrl.$onInit = () => {
         ctrl.scrolledUp = false;

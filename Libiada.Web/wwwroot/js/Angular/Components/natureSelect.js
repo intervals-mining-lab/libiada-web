@@ -1,5 +1,5 @@
 ﻿function NatureSelectController() {
-    let ctrl = this;
+    const ctrl = this;
 
     ctrl.$onInit = () => {
         ctrl.nature ??= ctrl.natures[0].Value;

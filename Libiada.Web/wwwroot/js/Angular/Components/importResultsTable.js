@@ -1,7 +1,5 @@
 function ImportResultsTableController() {
     const ctrl = this;
-    ctrl.hasGroupColumn = false;
-    ctrl.hasSequenceTypeColumn = false;
     ctrl.calculateStatusClass = (status) => {
         return status === "Success" ? "table-success"
             : status === "Exists" ? "table-info"

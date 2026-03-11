@@ -1,0 +1,12 @@
+﻿<table id="characteristicsTable" class="table table-bordered table-hover table-sm mt-2">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Sequence name</th>
+            <th ng-if="sequenceGroups">Sequences group</th>
+            <th ng-repeat="characteristicName in ::$ctrl.characteristicNames" ng-bind="::characteristicName" />
+        </tr>
+    </thead>
+    <tbody id="calculationResults">
+    </tbody>
+</table>

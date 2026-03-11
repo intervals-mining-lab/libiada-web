@@ -10,6 +10,10 @@ interface SelectListItemWithNature extends SelectListItem {
     Nature: number;
 }
 
+export interface Characteristic extends SelectListItem { }
+
+export interface Cluster extends SelectListItem { }
+
 export interface SequenceType extends SelectListItemWithNature { }
 
 export interface SequenceGroup extends SelectListItemWithNature { }
@@ -77,4 +81,10 @@ export interface ImportResult {
     Result: string;
     Group?: string;
     SequenceType?: string;
+}
+
+export interface SequenceCharacteristics {
+    ResearchObjectName: string;
+    Characteristics: number[];
+    SequenceGroupId?: number;
 }

@@ -44,7 +44,7 @@ public class OrderCalculationController : AbstractResultController
     public ActionResult Index()
     {
         Dictionary<string, object> viewData = viewDataBuilder.AddCharacteristicsData(CharacteristicCategory.Full)
-                                                            .Build();
+                                                             .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }
@@ -79,10 +79,6 @@ public class OrderCalculationController : AbstractResultController
 
             double[][] characteristics = new double[orders.Count][];
             List<SequenceCharacteristics> sequencesCharacteristics = [];
-            for (int i = 0; i < orders.Count; i++)
-            {
-                sequencesCharacteristics.Add(new SequenceCharacteristics());
-            }
             for (int j = 0; j < orders.Count; j++)
             {
                 var sequence = new ComposedSequence(orders[j].Select(Convert.ToInt16).ToArray());
@@ -97,11 +93,11 @@ public class OrderCalculationController : AbstractResultController
                     characteristics[j][k] = calculator.Calculate(sequence, link);
                 }
 
-                sequencesCharacteristics[j] = new SequenceCharacteristics
+                sequencesCharacteristics.Add(new SequenceCharacteristics
                 {
-                    ResearchObjectName = string.Join(",", orders[j].Select(n => n.ToString()).ToArray()),
+                    ResearchObjectName = "Order: " + string.Join(",", orders[j].Select(n => n.ToString()).ToArray()),
                     Characteristics = characteristics[j]
-                };
+                });
             }
 
             string[] characteristicNames = new string[characteristicLinkIds.Length];
@@ -122,17 +118,12 @@ public class OrderCalculationController : AbstractResultController
                                                                                  double.IsNaN(v) ||
                                                                                  double.IsNegativeInfinity(v) ||
                                                                                  double.IsPositiveInfinity(v)));
-            int[] index = new int[characteristicsList.Length];
-            for (int i = 0; i < index.Length; i++)
-            {
-                index[i] = i;
-            }
+
             var result = new Dictionary<string, object>
             {
                 { "characteristics", sequencesCharacteristics.ToArray() },
                 { "characteristicNames", characteristicNames },
-                { "characteristicsList", characteristicsList },
-                { "characteristicsIndex", index }
+                { "characteristicsList", characteristicsList }
             };
 
             return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };

@@ -268,7 +268,7 @@ class ChartsControllerHandler {
                     type: "bar",
                     customdata: { legendId: p.legendId },
                     name: p.name,
-                    visible: $scope.legend[p.legendIndex].visible ? "true" : "legendonly"
+                    visible: $scope.legend[p.legendIndex].visible ? true : "legendonly"
                 }));
             }
             /**

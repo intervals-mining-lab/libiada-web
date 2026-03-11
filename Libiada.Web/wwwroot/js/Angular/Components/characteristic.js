@@ -1,7 +1,7 @@
 import { SelectLink } from "../functions.js";
 
 function CharacteristicController(filterFilter) {
-    let ctrl = this;
+    const ctrl = this;
 
     ctrl.$onInit = () => {
         ctrl.characteristicName ??= "characteristicLinkId";

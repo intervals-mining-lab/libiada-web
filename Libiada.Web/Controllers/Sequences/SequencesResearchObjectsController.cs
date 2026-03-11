@@ -103,10 +103,14 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
         int userId = User.GetUserId();
         sequence.CreatorId = userId;
         sequence.ModifierId = userId;
+        Stream? sequenceStream = null;
+        if ((sequence.Notation.GetNature() != Nature.Genetic || localFile) && file is not null)
+        {
+            sequenceStream = FileHelper.GetFileStream(file);
+        }
 
         return CreateTask(() =>
         {
-            Stream? sequenceStream = null;
             try
             {
                 // Remove alphabet and order from validation 
@@ -127,9 +131,9 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
                 {
                     sequenceStream = ncbiHelper.GetFastaFileStream(sequence.RemoteId ?? throw new Exception("No remote id is provided for genetic sequence to import"));
                 }
-                else
+                else if (sequenceStream is null)
                 {
-                    sequenceStream = FileHelper.GetFileStream(file ?? throw new Exception("No file with sequence is provided for import"));
+                    throw new Exception("No file with sequence is provided for import");
                 }
 
                 using var db = dbFactory.CreateDbContext();

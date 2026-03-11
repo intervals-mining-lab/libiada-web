@@ -1,98 +1,104 @@
 ﻿@{
-    ViewBag.Title = "Characteristics of custom sequence";
+    Layout = "_EmptyLayout";
+    ViewBag.Title = "Libiada - Order transformation characteristics of custom sequences";
 }
-
-<h2>@ViewBag.Title</h2>
 
 @if (ViewBag.Error == null)
 {
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "ClusterizationResult");
-
-    <div ng-controller="ClusterizationResultCtrl">
+    <div class="no-margin" ng-controller="CustomSequenceOrderTransformationCalculationResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
-        <div ng-disabled="loading">
-            <table class="table table-bordered table-hover" ng-cloak>
-                <tbody>
-                    <tr ng-repeat="transformation in ::transformationsList track by $index">
-                        <td ng-bind="::transformation" />
-                    </tr>
-                </tbody>
-            </table>
-            <div class="font-monospace">
-                Transformations repeated {{::iterationsCount}} times
-            </div>
-            <table st-table="characteristics" class="table table-bordered table-hover" ng-cloak>
-                <thead>
-                    <tr>
-                        <th>Sequence name</th>
-                        <th ng-repeat="characteristicName in ::characteristicNames" ng-bind="::characteristicName" />
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="characteristic in ::characteristics">
-                        <td ng-bind="::characteristic.ResearchObjectName" />
-                        <td ng-repeat="value in ::characteristic.Characteristics" ng-bind="::value" />
-                    </tr>
-                </tbody>
-            </table>
-            <div class="row mb-1">
-                <label class="col-form-label col-md-2" for="firstCharacteristic">First characteristic:</label>
-                <div class="col-md-10">
-                    <select class="form-select"
-                            title="First characteristic"
-                            ng-model="firstCharacteristic"
-                            ng-options="c.Text for c in ::characteristicsList"
-                            id="firstCharacteristic"></select>
-                </div>
-            </div>
-            <div class="row mb-1">
-                <label class="col-form-label col-md-2" for="secondCharacteristic">Second characteristic:</label>
-                <div class="col-md-10">
-                    <select class="form-select"
-                            title="Second characteristic"
-                            ng-model="secondCharacteristic"
-                            ng-options="c.Text for c in ::characteristicsList"
-                            id="secondCharacteristic"></select>
-                </div>
-            </div>
-            <div class="row mb-1">
-                <label class="col-form-label col-md-2" for="height">Height:</label>
-                <div class="col-md-10">
-                    <input class="form-control" name="height" id="height" type="number" min="500" step="20" ng-model="height" />
-                </div>
-            </div>
-            <div class="row mb-1">
-                <label class="col-form-label col-md-2" for="width">Width:</label>
-                <div class="col-md-10">
-                    <input class="form-control" name="width" id="width" type="number" min="400" step="20" ng-model="width" />
-                </div>
-            </div>
-            <div class="form-check">
-                <input type="checkbox"
-                       class="form-check-input"
-                       name="showLegend"
-                       id="showLegend"
-                       ng-model="legendSettings.show" />
-                <label class="form-check-label" for="showLegend">
-                    Draw legend
-                </label>
-            </div>
-            <input type="button" class="btn btn-secondary mb-2" ng-click="draw()" value="Draw" />
-            <div class="row" id="chart-visibility-buttons" ng-show="chartDisplayed">
-                <div class="col-md-4 mt-2 btn-group" role="group" aria-label="Legend control buttons">
-                    <button type="button" class="btn btn-outline-secondary btn-sm" ng-click="legendSetVisibilityForAll(true)">
-                        Show all
+        @* dirty hack to prevent components from loading before server data *@
+        <div ng-if="loading === false">
+            <ul id='nav' class="nav nav-tabs d-flex justify-content-evenly pt-1" role="tablist">
+                <li class="nav-item" role="presentation" title="Charts">
+                    <button class="nav-link active"
+                            id="charts-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#charts-tab-pane"
+                            type="button"
+                            role="tab"
+                            aria-controls="charts-tab-pane"
+                            aria-selected="true">
+                        Charts
                     </button>
-                    <button type="button" class="btn btn-outline-secondary btn-sm" ng-click="legendSetVisibilityForAll(false)">
-                        Hide all
+                </li>
+                <li class="nav-item" role="presentation" title="Data export">
+                    <button class="nav-link"
+                            id="export-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#export-tab-pane"
+                            type="button"
+                            role="tab"
+                            aria-controls="export-tab-pane"
+                            aria-selected="false">
+                        Data export
                     </button>
+                </li>
+                <li class="nav-item" role="presentation" title="Data table" ng-click="characteristicsTableTabSelected = true">
+                    <button class="nav-link"
+                            id="data-table-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#data-table-tab-pane"
+                            type="button"
+                            role="tab"
+                            aria-controls="data-table-tab-pane"
+                            aria-selected="false">
+                        Results
+                    </button>
+                </li>
+            </ul>
+            <div class="tab-content tab-content-full-height">
+                <div id="charts-tab-pane"
+                     class="tab-pane fade show active"
+                     role="tabpanel"
+                     aria-labelledby="charts-tab"
+                     tabindex="0">
+                    <characteristics-visualizations characteristics-list="characteristicsList"
+                                                    characteristic-names="characteristicNames"
+                                                    characteristics="characteristics"
+                                                    sequence-groups="sequenceGroups">
+                    </characteristics-visualizations>
                 </div>
-            </div>
-            <div id="chart" class="font-monospace mb-2">
+                <div id="export-tab-pane"
+                     class="tab-pane fade"
+                     role="tabpanel"
+                     aria-labelledby="export-tab"
+                     tabindex="0">
+                    <characteristics-table-excel-exporter characteristic-names="::characteristicNames"
+                                                          characteristics="::characteristics"
+                                                          sequence-groups="::sequenceGroups">
+                    </characteristics-table-excel-exporter>
+                </div>
+                <div id="data-table-tab-pane"
+                     class="tab-pane fade"
+                     role="tabpanel"
+                     aria-labelledby="data-table-tab"
+                     tabindex="0">
+                    <h4 class="font-monospace">Transformations repeated {{::iterationsCount}} times:</h4>
+                    <table class="table table-bordered table-hover table-sm" ng-cloak>
+                        <tbody>
+                            <tr ng-repeat="transformation in ::transformationsList track by $index">
+                                <td ng-bind="::transformation" />
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h4>Calculated characteristics:</h4>
+                    <characteristics-table characteristic-names="characteristicNames"
+                                           characteristics="characteristics"
+                                           characteristics-table-tab-selected="characteristicsTableTabSelected">
+                    </characteristics-table>
+                </div>
             </div>
         </div>
     </div>
 
     @section Scripts {
+        <script src="~/lib/exceljs/exceljs.min.js" asp-append-version="true"></script>
+        <script type="module" src="~/js/Angular/Components/characteristicsTableExcelExporter.js" asp-append-version="true"></script>
+        <script type="module" src="~/js/Angular/Components/characteristicsVisualizations.js" asp-append-version="true"></script>
+        <script type="module" src="~/js/Angular/Components/characteristicsTable.js" asp-append-version="true"></script>
+        @{
+            await Html.RenderPartialAsync("_AngularControllerInitializer", "CustomSequenceOrderTransformationCalculationResult");
+        }
     }
 }

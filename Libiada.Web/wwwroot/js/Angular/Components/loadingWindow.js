@@ -1,5 +1,5 @@
 ﻿function LoadingWindowController() {
-    let ctrl = this;
+    const ctrl = this;
 
     ctrl.loadingWindow = new bootstrap.Modal("#loadingDialog");
 

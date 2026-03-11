@@ -165,7 +165,7 @@ export default function LocalCalculationResultController() {
                 mode: "lines+markers",
                 customdata: { legendId: p.legendId },
                 name: p.researchObjectName,
-                visible: $scope.legend[p.legendIndex].visible ? "true" : "legendonly"
+                visible: $scope.legend[p.legendIndex].visible ? true : "legendonly"
             }));
         }
         function fillScatterPlotData() {

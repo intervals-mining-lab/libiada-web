@@ -1,5 +1,5 @@
 ﻿function ResearchObjectsTableController($scope, $http, filterFilter) {
-    let ctrl = this;
+    const ctrl = this;
 
     ctrl.$onInit = () => {
         ctrl.researchObjectsEndpoint ??= "GetAllResearchObjects";

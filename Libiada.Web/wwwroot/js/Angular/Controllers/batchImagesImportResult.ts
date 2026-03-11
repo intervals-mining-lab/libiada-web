@@ -6,7 +6,6 @@ interface BatchImagesImportResultData {
 }
 
 interface BatchImagesImportResultScope extends ng.IScope, BatchImagesImportResultData {
-
     loadingScreenHeader: string;
     loading: boolean;
     taskId: string;

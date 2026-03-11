@@ -336,7 +336,7 @@ export default function SubsequencesDistributionResultController() {
                 let characteristic;
                 let firstPointCharacteristic;
                 let secondPointCharacteristic;
-                switch (keyCode) {
+                switch (key) {
                     case "ArrowUp":
                         for (let i = $scope.selectedPointIndex + 1; i < visibleResearchObjectsPoints.length; i++) {
                             characteristic = $scope.subsequenceCharacteristic.Value;

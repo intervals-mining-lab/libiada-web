@@ -1,5 +1,5 @@
 ﻿function CustomSequencesController() {
-    let ctrl = this;
+    const ctrl = this;
 
     ctrl.$onInit = () => {
         ctrl.fileType = "genetic";

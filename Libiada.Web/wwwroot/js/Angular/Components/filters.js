@@ -1,5 +1,5 @@
 ﻿function FiltersController() {
-    let ctrl = this;
+    const ctrl = this;
 
     ctrl.$onInit = () => {
         ctrl.filters ??= [];

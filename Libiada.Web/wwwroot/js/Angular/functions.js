@@ -35,21 +35,26 @@ export function MapModelFromJson($scope, data) {
  * @param loadingScreenHeader displayed maeesage of loading screen
  * @param errorMessage displayed message in case of error
  */
-export function initScopeFromServer($http, $scope, loadingScreenHeader, errorMessage = "Failed loading data from server") {
-    // loading import results from the server
+export async function initScopeFromServer($http, $scope, loadingScreenHeader, errorMessage = "Failed loading data from server") {
+    // Set loading message
     $scope.loadingScreenHeader = loadingScreenHeader;
     $scope.loading = true;
-    let location = window.location.href.split("/");
-    $scope.taskId = location[location.length - 1];
-    $http.get(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
-        .then(function (data) {
-        MapModelFromJson($scope, data.data);
-        $scope.loading = false;
-    })
-        .catch(function () {
+    try {
+        // Extract task ID from URL
+        let location = window.location.href.split("/");
+        $scope.taskId = location[location.length - 1];
+        // Fetch data from server
+        const result = await $http.get(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`);
+        MapModelFromJson($scope, result.data);
+    }
+    catch (error) {
+        //TODO: change it to alertify
         alert(errorMessage);
+    }
+    finally {
         $scope.loading = false;
-    });
+        $scope.$apply();
+    }
 }
 export function SelectLink(characteristic) {
     LibiadaWebUtils.SelectLink(characteristic);
@@ -84,5 +89,9 @@ export function arrayMax(array) {
         max = array[i] > max ? array[i] : max;
     }
     return max;
+}
+// Helper function to throw errors in ?? operator
+export function throwHelper(errorMessage) {
+    throw new Error(errorMessage);
 }
 //# sourceMappingURL=functions.js.map

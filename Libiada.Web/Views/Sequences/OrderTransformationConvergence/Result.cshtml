@@ -1,13 +1,13 @@
 ﻿@{
-    ViewBag.Title = "Order transformation convergence result";
+    ViewBag.Title = "Libiada - Order transformation convergence result";
 }
 
 <h2>@ViewBag.Title</h2>
 @if (ViewBag.Error == null)
 {
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "OrderTransformationResult");
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "OrderTransformationConvergenceResult");
 
-    <div ng-controller="OrderTransformationResultCtrl">
+    <div ng-controller="OrderTransformationConvergenceResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <div ng-disabled="loading">
             <table class="table table-bordered table-hover table-sm" ng-cloak>
@@ -25,8 +25,9 @@
                 </tbody>
             </table>
             <div class="font-monospace my-3">
-                <h6>Loop iteration = {{::loopIteration}}</h6>
-                <h6>Last iteration = {{::lastIteration}}</h6>
+                <h6 ng-if="loopIteration != -1">Last sequence repeated seqience from iteration {{::loopIteration}}</h6>
+                <h6 ng-if="loopIteration == -1">Sequence did not repeat itself on any iteration</h6>
+                <h6>Last iteration index {{::lastIteration}}</h6>
                 <h6 class="mb-3">Transformations repeated {{::iterationsCount}} times</h6>
                 <h5>Resulting sequence:</h5>
                 <div ng-bind="::sequence"></div>

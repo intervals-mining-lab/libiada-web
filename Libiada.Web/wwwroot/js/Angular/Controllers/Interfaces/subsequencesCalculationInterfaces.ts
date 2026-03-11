@@ -54,13 +54,13 @@ export interface ISubsequencePoint {
 
 // Интерфейс для данных точки на графике, наследующийся от IBasePoint
 export interface ISubsequencesCalculationPoint extends IBasePoint {
-    legendIndex?: number;
+    legendIndex: number;
     legendId?: number;
-    researchObjectName?: string;
+    researchObjectName: string;
     name?: string;  // Добавлено для совместимости с исходным JavaScript кодом
     researchObjectId?: number;
     sequenceRemoteId?: string;
-    subsequencesData?: ISubsequencePoint[];
+    subsequencesData: ISubsequencePoint[];
 }
 
 // Интерфейс для данных последовательности
