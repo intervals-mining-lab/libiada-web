@@ -225,8 +225,8 @@ public class ClusterizationController : AbstractResultController
 
             var result = new Dictionary<string, object>
             {
-                { "characteristicNames", characteristicNames },
                 { "characteristics", researchObjectsCharacteristics },
+                { "characteristicNames", characteristicNames },
                 { "characteristicsList", characteristicsList },
                 { "sequenceGroups", sequenceGroupsSelectlist }
             };
