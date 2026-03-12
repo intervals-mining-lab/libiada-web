@@ -1,11 +1,11 @@
 ﻿@{
     Layout = "_EmptyLayout";
-    ViewBag.Title = "Libiada - Cluster analysis of integral characteristics";
+    ViewBag.Title = "Libiada - Cluster analysis based on integral characteristics";
 }
 
 @if (ViewBag.Error == null)
 {
-    <div class="no-margin" ng-controller="CalculationResultCtrl">
+    <div class="no-margin" ng-controller="ClusterizationResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         @* dirty hack to prevent components from loading before server data *@
         <div ng-if="loading === false">
@@ -90,7 +90,7 @@
         <script type="module" src="~/js/Angular/Components/characteristicsVisualizations.js" asp-append-version="true"></script>
         <script type="module" src="~/js/Angular/Components/characteristicsTable.js" asp-append-version="true"></script>
         @{
-            await Html.RenderPartialAsync("_AngularControllerInitializer", "CalculationResult");
+            await Html.RenderPartialAsync("_AngularControllerInitializer", "ClusterizationResult");
         }
     }
 }

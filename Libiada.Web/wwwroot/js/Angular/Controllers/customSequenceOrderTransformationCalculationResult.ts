@@ -4,14 +4,13 @@ import type { Characteristic, SequenceCharacteristics } from "viewDataTypes";
 /**
  * Interface for the data object fetched from the server
  */
-interface CustomSequenceOrderTransformationCalculationResultData extends ng.IScope {
+interface CustomSequenceOrderTransformationCalculationResultData {
     transformationsList: string[];
     iterationsCount: number;
     characteristics: SequenceCharacteristics[];
     characteristicNames: string[];
     characteristicsList: Characteristic[];
 }
-
 
 /**
  * Interface for the custom sequence order transformation calculation result scope

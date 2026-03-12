@@ -1,14 +1,14 @@
 ﻿@{
-    ViewBag.Title = "Order transformation result";
+    ViewBag.Title = "Libiada - Order transformation results";
 }
 
 <h2>@ViewBag.Title</h2>
 
 @if (ViewBag.Error == null)
 {
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "OrderTransformationResult");
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "OrderTransformerResult");
 
-    <div ng-controller="OrderTransformationResultCtrl">
+    <div ng-controller="OrderTransformerResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <div ng-disabled="loading">
             <table class="table table-bordered table-hover" ng-cloak>

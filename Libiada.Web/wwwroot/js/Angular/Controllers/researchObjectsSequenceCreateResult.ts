@@ -20,7 +20,6 @@ interface ResearchObjectsSequenceCreateResultData {
 }
 
 interface ResearchObjectsSequenceCreateResultScope extends ng.IScope, ResearchObjectsSequenceCreateResultData {
-
     loadingScreenHeader: string;
     loading: boolean;
     taskId: string;

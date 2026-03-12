@@ -11,7 +11,7 @@ interface SequenceData {
 /**
  * Interface for the data object fetched from the server
  */
-interface CustomSequenceSegmentationResultData extends ng.IScope {
+interface CustomSequenceSegmentationResultData {
     sequences: SequenceData[];
 }
 

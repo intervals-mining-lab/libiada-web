@@ -5,7 +5,7 @@ import type { Characteristic, SequenceCharacteristics, Cluster } from "viewDataT
 /**
  * Interface for the data object fetched from the server
  */
-interface ClusterizationResultData extends ng.IScope {
+interface ClusterizationResultData {
     transformationsList: string[];
     iterationsCount: number;
     characteristics: SequenceCharacteristics[];

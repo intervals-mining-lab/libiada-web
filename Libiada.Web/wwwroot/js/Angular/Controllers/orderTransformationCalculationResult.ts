@@ -5,7 +5,7 @@ import type { Characteristic, SequenceCharacteristics } from "viewDataTypes";
 /**
  * Interface for the data object fetched from the server
  */
-interface OrderTransformationCalculationResultData extends ng.IScope {
+interface OrderTransformationCalculationResultData {
     transformationsList: string[];
     iterationsCount: number;
     characteristics: SequenceCharacteristics[];

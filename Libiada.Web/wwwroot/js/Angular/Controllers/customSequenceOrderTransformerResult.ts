@@ -11,7 +11,7 @@ interface SequenceData {
 /**
  * Interface for the data object fetched from the server
  */
-interface CustomSequenceOrderTransformerResultData extends ng.IScope {
+interface CustomSequenceOrderTransformerResultData {
     transformationsList: string[];
     iterationsCount: number;
     sequences: SequenceData[];
