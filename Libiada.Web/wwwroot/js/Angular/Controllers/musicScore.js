@@ -4,7 +4,7 @@ export default function MusicScoreController(data) {
     function musicScore($scope) {
         MapModelFromJson($scope, data);
 
-        // Инициализация MIDI-плеера
+        // MIDI-player initialization
         $scope.onLoad = () => {
             MIDI.loadPlugin({
                 soundfontUrl: "../../js/",

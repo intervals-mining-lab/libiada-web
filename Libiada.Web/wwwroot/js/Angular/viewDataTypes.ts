@@ -6,7 +6,7 @@
     Group: null; // TODO: check what type it could be
 }
 
-interface SelectListItemWithNature extends SelectListItem {
+export interface SelectListItemWithNature extends SelectListItem {
     Nature: number;
 }
 
@@ -16,11 +16,13 @@ export interface Cluster extends SelectListItem { }
 
 export interface SequenceType extends SelectListItemWithNature { }
 
-export interface SequenceGroup extends SelectListItemWithNature { }
+export interface Group extends SelectListItemWithNature { }
 
 export interface Nature extends SelectListItem { }
 
 export interface Notation extends SelectListItemWithNature { }
+
+export interface RemoteDb extends SelectListItemWithNature { }
 
 export interface Language extends SelectListItem { }
 
@@ -30,8 +32,6 @@ export interface Trajectory extends SelectListItem { }
 
 export interface Translator extends SelectListItem { }
 
-export interface Group extends SelectListItemWithNature { }
-
 export interface Feature extends SelectListItemWithNature { }
 
 export interface ClusterizatorType extends SelectListItem { }
@@ -39,6 +39,10 @@ export interface ClusterizatorType extends SelectListItem { }
 export interface ImageTransformer extends SelectListItem { }
 
 export interface OrderTransformation extends SelectListItem { }
+
+export interface SequenceGroup extends SelectListItemWithNature { }
+
+export interface Multisequence extends SelectListItemWithNature { }
 
 export interface DeviationCalculationMethod extends SelectListItem { }
 
@@ -55,16 +59,8 @@ export interface CharacteristicType extends SelectListItem {
     Links: Link[];
 }
 
-/**
-* Interface for the research object
-*/
-export interface ResearchObject {
-    id: number;
-    name: string;
-    nature?: number;
-    group?: number;
-    sequenceType?: number;
-    selected?: boolean;
+export interface ResearchObject extends SelectListItemWithNature {
+    SequenceType: string;
 }
 
 export interface SequenceImportResult {

@@ -1,6 +1,8 @@
 ﻿import { MapModelFromJson } from "functions";
 
-// Interface for the data object that is passed to the controller
+/**
+ * Interface for the data object passed from the server
+ */
 interface IResearchObjectEditData {
     nature: number;
     natures: INature[];
@@ -11,7 +13,9 @@ interface IResearchObjectEditData {
     sequencesCount?: number;
 }
 
-// Interface for scope in the controller
+/**
+ * Interface for the angular controller's scope
+ */
 interface IResearchObjectEditScope extends ng.IScope {
     nature: string;
     natures: INature[];

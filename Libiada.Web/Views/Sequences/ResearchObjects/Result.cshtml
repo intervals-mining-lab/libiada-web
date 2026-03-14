@@ -1,14 +1,14 @@
 ﻿@{
-    ViewBag.Title = "Sequence import result";
+    ViewBag.Title = "Libiada - Research object creation result";
 }
 
 <h2>@ViewBag.Title</h2>
 
 @if (ViewBag.Error == null)
 {
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "ResearchObjectsSequenceCreateResult");
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "ResearchObjectCreateResult");
 
-    <div ng-controller="ResearchObjectsSequenceCreateResultCtrl">
+    <div ng-controller="ResearchObjectCreateResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <h5>
             Sequence <strong ng-bind="::Name"></strong> imported successfully

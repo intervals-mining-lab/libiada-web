@@ -13,12 +13,17 @@ interface GenBankSearchResult {
     RemoteUpdateDate?: string;
 }
 
+/**
+ * Interface for the data object passed from the server
+ */
 interface GenBankAccessionVersionUpdateCheckerResultData {
     Results: GenBankSearchResult[];
 }
 
+/**
+ * Interface for the controller's scope
+ */
 interface GenBankAccessionVersionUpdateCheckerResultScope extends ng.IScope, GenBankAccessionVersionUpdateCheckerResultData {
-
     loadingScreenHeader: string;
     loading: boolean;
     taskId: string;

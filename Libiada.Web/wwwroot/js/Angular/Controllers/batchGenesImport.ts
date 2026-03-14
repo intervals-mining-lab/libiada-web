@@ -5,7 +5,7 @@ import type {
 } from "viewDataTypes";
 
 /**
- * Interface for the data object that is passed to the controller
+ * Interface for the data object that is passed from the controller
  */
 interface BatchGenesImportData {
     groups: Group[];

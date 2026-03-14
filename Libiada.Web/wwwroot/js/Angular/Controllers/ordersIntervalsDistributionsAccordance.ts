@@ -1,15 +1,15 @@
 ﻿import { MapModelFromJson } from "functions";
 
 /**
-* Interface for OrdersIntervalsDistributionsAccordance controller input data
-*/
+ * Interface for the data object passed from the server
+ */
 interface IOrdersIntervalsDistributionsAccordanceData {
 
 }
 
 /**
-* Interface for OrdersIntervalsDistributionsAccordance controller scope
-*/
+ * Interface for the angular controller's scope
+ */
 interface IOrdersIntervalsDistributionsAccordanceScope extends ng.IScope {
 
 }

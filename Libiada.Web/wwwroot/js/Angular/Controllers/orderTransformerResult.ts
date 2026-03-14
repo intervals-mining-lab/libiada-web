@@ -11,7 +11,7 @@ interface OrderTransformerResultData {
 }
 
 /**
- * Interface for the controller's scope
+ * Interface for the angular controller's scope
  */
 interface OrderTransformerResultScope extends ng.IScope, OrderTransformerResultData {
     loading: boolean;

@@ -26,12 +26,16 @@ interface ID3Tooltip extends d3.Selection<HTMLDivElement, unknown, HTMLElement, 
     selectedDots?: any;
 }
 
-// Interface for data received from API
+/**
+ * Interface for the data object fetched from the server
+ */
 interface ISequencesOrderDistributionData {
     result: ISequence[];
 }
 
-// Interface for the controller scope
+/**
+ * Interface for the angular controller's scope
+ */
 interface ISequencesOrderDistributionScope extends ng.IScope {
     // Chart data
     result: ISequence[];

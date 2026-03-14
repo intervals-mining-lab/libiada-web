@@ -1,6 +1,8 @@
 ﻿import { MapModelFromJson } from "functions";
 
-// Interface for SubsequenceData
+/**
+ * Interface for the data object fetched from the server
+ */
 interface SubsequenceData {
     Attributes: number[],
     CharacteristicsValues: number[],
@@ -29,7 +31,9 @@ interface SubsequencesSimilarityResultData {
     secondSequenceAttributes: { AttributeId: number, Value: string }[][];
 }
 
-// Interface for the controller scope
+/**
+ * Interface for the controller's scope
+ */
 interface SubsequencesSimilarityResultScope extends ng.IScope, SubsequencesSimilarityResultData {
     loading: boolean;
     loadingScreenHeader: string;

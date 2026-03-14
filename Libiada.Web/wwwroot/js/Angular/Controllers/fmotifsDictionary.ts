@@ -61,7 +61,7 @@ interface IFmotif {
 }
 
 /**
- * Interface for controller data
+ * Interface for the data object passed from the server
  */
 interface IFmotifsDictionaryData {
     fmotifs: IFmotif[];
@@ -69,7 +69,7 @@ interface IFmotifsDictionaryData {
 }
 
 /**
- * Interface for controller scope
+ * Interface for the angular controller's scope
  */
 interface IFmotifsDictionaryScope extends ng.IScope {
     // Data properties

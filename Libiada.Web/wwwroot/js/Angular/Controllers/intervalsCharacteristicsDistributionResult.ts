@@ -49,7 +49,9 @@ interface ID3Tooltip extends d3.Selection<HTMLDivElement, unknown, HTMLElement, 
     selectedDots?: any;
 }
 
-// Interface for the controller scope
+/**
+ * Interface for the angular controller's scope
+ */
 interface IIntervalsCharacteristicsDistributionResultScope extends ng.IScope {
     // Chart data and settings
     result: ILinkResult[];

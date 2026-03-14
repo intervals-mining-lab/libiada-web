@@ -5,7 +5,7 @@ import type {
 } from "viewDataTypes";
 
 /**
- * Interface for the data object that is passed to the controller
+ * Interface for the data object passed from the server
  */
 interface GenesImportData {
     groups: Group[];

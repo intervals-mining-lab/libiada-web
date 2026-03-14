@@ -17,7 +17,7 @@ interface INotation {
 }
 
 /**
- * Interface for initial controller data
+ * Interface for the data object passed from the server
  */
 interface IBatchPoemsImportData {
     notations: INotation[];
@@ -25,7 +25,7 @@ interface IBatchPoemsImportData {
 }
 
 /**
- * Interface for controller scope
+ * Interface for the angular controller's scope
  */
 interface IBatchPoemsImportScope extends ng.IScope {
     // File status properties

@@ -1,7 +1,6 @@
 ﻿//import type ExcelJS from "../../../lib/exceljs/exceljs.js";
 import type { SequenceCharacteristics, Cluster } from "viewDataTypes";
 
-
 interface ExcelRow {
     id: number;
     name: string;

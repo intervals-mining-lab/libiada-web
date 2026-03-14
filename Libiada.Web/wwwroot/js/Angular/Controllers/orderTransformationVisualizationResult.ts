@@ -57,19 +57,20 @@ interface IResultTransformation {
     OrderId: number;
 }
 
-// Interface for controller data
+/**
+ * Interface for the data object fetched from the server
+ */
 interface IOrderTransformationVisualizationData {
     orders: string[];
     transformationsData: { [key: number]: ITransformationData };
     transformationsList: ITransformationType[];
 }
 
-// Interface for controller scope
-interface IOrderTransformationVisualizationScope extends ng.IScope {
-    // Data from server
-    orders: string[];
-    transformationsData: { [key: number]: ITransformationData };
-    transformationsList: ITransformationType[];
+/**
+ * Interface for the angular controller's scope
+ */
+interface IOrderTransformationVisualizationScope extends ng.IScope, IOrderTransformationVisualizationData {
+
 
     // Chart settings
     width: number;
@@ -656,7 +657,7 @@ class OrderTransformationVisualizationResultHandler {
             $scope.loading = true;
 
             // Loading data from the server 
-            $http.get<any>(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
+            $http.get<IOrderTransformationVisualizationData>(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
                 .then(function (data) {
                     MapModelFromJson($scope, data.data);
 

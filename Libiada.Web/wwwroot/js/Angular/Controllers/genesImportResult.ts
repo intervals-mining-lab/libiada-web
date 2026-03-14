@@ -8,12 +8,18 @@ interface SubsequenceData {
     RemoteId?: string;
 }
 
+/**
+ * Interface for the data object fetched from the server
+ */
 interface GenesImportResultData {
     researchObjectName: string;
     genes: SubsequenceData[];
     features: { [key: number]: string; };
 }
 
+/**
+ * Interface for the controller's scope
+ */
 interface GenesImportResultScope extends ng.IScope, GenesImportResultData {
 
     loadingScreenHeader: string;

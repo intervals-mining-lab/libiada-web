@@ -2,7 +2,9 @@
 import { MapModelFromJson } from "functions";
 /// <reference path="./Interfaces/commonInterfaces.d.ts" />
 
-// Interface for characteristic data
+/**
+ * Interface for the data object fetched from the server
+ */
 interface ICharacteristicData {
     researchObjectName: string;
     characteristics: number[];
@@ -33,7 +35,9 @@ interface ID3Tooltip extends d3.Selection<HTMLDivElement, unknown, HTMLElement, 
     selectedDots?: any;
 }
 
-// Interface for the controller scope
+/**
+ * Interface for the angular controller's scope
+ */
 interface IOrderTransformationCharacteristicsDynamicScope extends ng.IScope {
     // Chart data
     characteristics: ICharacteristicData[];

@@ -1,13 +1,13 @@
 ﻿import { MapModelFromJson } from "functions";
 
 /**
- * Interface for order calculation data
+ * Interface for the data object passed from the server
  */
 interface IOrderCalculationData {
 }
 
 /**
- * Interface for the order calculation scope
+ * Interface for the angular controller's scope
  */
 interface IOrderCalculationScope extends ng.IScope {
 

@@ -1,4 +1,6 @@
-// Interface for the controller's scope
+/**
+ * Interface for the controller's scope
+ */
 interface MusicFilesScope extends ng.IScope {
 }
 

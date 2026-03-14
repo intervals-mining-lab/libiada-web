@@ -96,7 +96,9 @@ export interface ISubsequencesCalculationResultData {
     attributeValues: IAttributeValue[];
 }
 
-// Интерфейс для объекта области видимости контроллера
+/**
+ * Interface for the angular controller's scope
+ */
 export interface ISubsequencesCalculationResultScope extends ng.IScope {
     // Данные графика
     sequencesData: ISequenceData[];

@@ -9,7 +9,7 @@ interface INature {
 }
 
 /**
- * Interface for multisequence create data
+ * Interface for the data object passed from the server
  */
 interface IMultisequenceCreateData {
     // Natures list for selection
@@ -27,7 +27,7 @@ interface IMultisequenceCreateData {
 }
 
 /**
- * Interface for controller scope
+ * Interface for the angular controller's scope
  */
 interface IMultisequenceCreateScope extends ng.IScope {
     // Properties

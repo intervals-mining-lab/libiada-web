@@ -88,7 +88,7 @@ export function MapModelFromJson($scope: AngularScope, data: DataObject): void {
  * @param loadingScreenHeader displayed maeesage of loading screen
  * @param errorMessage displayed message in case of error
  */
-export async function initScopeFromServer<ResponceType>(
+export async function initScopeFromServer<ResponceType extends DataObject>(
     $http: ng.IHttpService,
     $scope: AngularScope,
     loadingScreenHeader: string,

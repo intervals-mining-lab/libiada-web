@@ -58,7 +58,7 @@ interface IChartsCharacteristicSelection {
 }
 
 /**
- * Interface for controller scope
+ * Interface for the angular controller's scope
  */
 interface IChartsScope extends ng.IScope {
     // Chart data and settings

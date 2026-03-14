@@ -1,14 +1,14 @@
 ﻿import { MapModelFromJson } from "functions";
 
 /**
- * Interface for music files result data
+ * Interface for the data object fetched from the server
  */
 interface IMusicFilesResultData {
 
 }
 
 /**
- * Interface for the controller scope
+ * Interface for the angular controller's scope
  */
 interface IMusicFilesResultScope extends ng.IScope {
     // Task identifier for loading data

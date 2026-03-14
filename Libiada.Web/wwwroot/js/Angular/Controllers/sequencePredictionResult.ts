@@ -1,8 +1,8 @@
 ﻿import { MapModelFromJson } from "functions";
 
 /**
-* Interface for the sequence prediction results scope controller
-*/
+ * Interface for the angular controller's scope
+ */
 interface ISequencePredictionResultScope extends ng.IScope {
     // Loading data
     loading: boolean;

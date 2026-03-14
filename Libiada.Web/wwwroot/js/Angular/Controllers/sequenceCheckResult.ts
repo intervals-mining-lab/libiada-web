@@ -1,5 +1,8 @@
 ﻿import { MapModelFromJson } from "functions";
 
+/**
+ * Interface for the data object fetched from the server
+ */
 interface SequenceCheckResultData {
     dbSequenceName: string;
     fileSequenceName: string;
@@ -7,6 +10,9 @@ interface SequenceCheckResultData {
     status: string;
 }
 
+/**
+ * Interface for the controller's scope
+ */
 interface SequenceCheckResultScope extends ng.IScope, SequenceCheckResultData {
 
     loadingScreenHeader: string;

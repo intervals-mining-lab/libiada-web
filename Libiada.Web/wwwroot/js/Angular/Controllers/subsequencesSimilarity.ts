@@ -7,7 +7,9 @@ import type {
     Feature
 } from "viewDataTypes";
 
-// Interface for the data object that is passed to the controller
+/**
+ * Interface for the data object passed from the server
+ */
 interface SubsequencesSimilarityData {
     characteristicTypes: CharacteristicType[];
     characteristicsDictionary: { [key: string]: number };
@@ -20,7 +22,9 @@ interface SubsequencesSimilarityData {
     features: Feature[];
 }
 
-// Interface for the $scope controller
+/**
+ * Interface for the angular controller's scope
+ */
 interface SubsequencesSimilarityScope extends ng.IScope, SubsequencesSimilarityData {
     selectedResearchObjectsCount: number;
 }

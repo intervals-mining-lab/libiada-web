@@ -1,14 +1,13 @@
-﻿import type { Feature, ResearchObject } from "viewDataTypes";
+﻿import type { Feature } from "viewDataTypes";
 import { MapModelFromJson, ICharacteristicType, ICharacteristic } from "functions";
 
 /**
-* Interface for subsequence calculation controller data
-*/
+ * Interface for the data object passed from the server
+ */
 interface SubsequencesCalculationData {
     // Basic data properties
     features?: Feature[];
     attributeTypes?: string[];
-    researchObjects?: ResearchObject[];
     characteristicTypes?: ICharacteristicType[];
 
     // Pre-selected values ​​(optional)
@@ -18,8 +17,8 @@ interface SubsequencesCalculationData {
 }
 
 /**
-* Interface for the subsequence calculation scope controller
-*/
+ * Interface for the controller's scope
+ */
 interface SubsequencesCalculationScope extends ng.IScope {
     // Filtering parameters
     filters: any[];
@@ -28,7 +27,6 @@ interface SubsequencesCalculationScope extends ng.IScope {
     // Data for working with sequences (may be absent in the simplified controller)
     features?: Feature[];
     attributeTypes?: string[];
-    researchObjects?: ResearchObject[];
     characteristicTypes?: ICharacteristicType[];
 
     // Selected values
@@ -39,7 +37,6 @@ interface SubsequencesCalculationScope extends ng.IScope {
 
     // Methods
     applyFilter: (filter: any) => void;
-    toggleResearchObjectSelection?: (researchObject: ResearchObject) => void;
     addCharacteristic?: () => void;
     deleteCharacteristic?: (index: number) => void;
 }

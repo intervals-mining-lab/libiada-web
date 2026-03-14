@@ -1,7 +1,7 @@
 ﻿import { MapModelFromJson } from "functions";
 
 /**
- * Interface for accordion data
+ * Interface for the data object fetched from the server
  */
 interface RelationCalculationResultData {
     characteristicName: string;
@@ -15,8 +15,9 @@ interface RelationCalculationResultData {
     firstElements?: string[];
     secondElements?: string[];
 }
+
 /**
- * Interface for controller scope
+ * Interface for the angular controller's scope
  */
 interface RelationCalculationResultScope extends angular.IScope, RelationCalculationResultData {
     loadingScreenHeader: string;

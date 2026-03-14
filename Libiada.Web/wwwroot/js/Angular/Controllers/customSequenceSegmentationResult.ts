@@ -15,8 +15,6 @@ interface CustomSequenceSegmentationResultData {
     sequences: SequenceData[];
 }
 
-
-
 /**
  * Interface for the controller's scope
  */

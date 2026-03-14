@@ -2,9 +2,6 @@
  * Angular controller class
  */
 class BatchImagesImportHandler {
-    /**
-     * Creates a new controller instance
-     */
     constructor() {
         this.ngOnInit();
     }

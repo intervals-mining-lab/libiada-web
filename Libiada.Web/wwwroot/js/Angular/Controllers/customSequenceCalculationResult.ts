@@ -11,7 +11,7 @@ interface CustomSequenceCalculationResultData {
 }
 
 /**
- * Interface for the custom sequence calculation result scope
+ * Interface for the angular controller's scope
  */
 interface CustomSequenceCalculationResultScope extends ng.IScope, CustomSequenceCalculationResultData {
     loading: boolean;

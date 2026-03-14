@@ -4,7 +4,7 @@
 /// <reference types="jquery" />
 
 /**
- * Interface for local calculation result data
+ * Interface for the data object fetched from the server
  */
 interface ILocalCalculationResultData {
     // Data returned from TaskManagerApi/GetTaskData
@@ -94,7 +94,7 @@ interface ILocalCharacteristicsSimilarityMatrixResponse {
 }
 
 /**
- * Interface for controller scope
+ * Interface for the angular controller's scope
  */
 interface ILocalCalculationResultScope extends ng.IScope {
     // Task ID for API calls

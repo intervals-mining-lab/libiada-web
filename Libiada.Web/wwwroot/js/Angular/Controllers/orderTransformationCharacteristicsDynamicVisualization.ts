@@ -13,7 +13,7 @@ import type {
 } from "viewDataTypes";
 
 /**
- * Interface for order transformation characteristics dynamic visualization data
+ * Interface for the data object passed from the server
  */
 interface OrderTransformationCharacteristicsDynamicVisualizationData {
     characteristicTypes: CharacteristicType[];
@@ -32,7 +32,7 @@ interface OrderTransformationCharacteristicsDynamicVisualizationData {
 }
 
 /**
- * Interface for controller scope
+ * Interface for the controller's scope
  */
 interface OrderTransformationCharacteristicsDynamicVisualizationScope extends angular.IScope, OrderTransformationCharacteristicsDynamicVisualizationData {
     nature: string;

@@ -1,7 +1,7 @@
 ﻿import { MapModelFromJson } from "functions";
 
 /**
- * Interface for sequences alignment result data
+ * Interface for the data object fetched from the server
  */
 interface SequencesAlignmentResultData {
     characteristicName: string;
@@ -14,8 +14,9 @@ interface SequencesAlignmentResultData {
     sort: boolean;
     validationType: string;
 }
+
 /**
- * Interface for controller scope
+ * Interface for the angular controller's scope
  */
 interface SequencesAlignmentResultScope extends angular.IScope, SequencesAlignmentResultData {
     loadingScreenHeader: string;

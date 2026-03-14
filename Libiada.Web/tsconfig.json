@@ -11,9 +11,9 @@
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "sourceMap": true,
-    "rootDir": "./wwwroot/js/Angular/",
-    "outDir": "./wwwroot/js/Angular/",
     "skipLibCheck": true,
+    "rootDir": "./wwwroot/js/",
+    "outDir": "./wwwroot/js/",
     //"allowJs": true,
     //"checkJs": true,
     //"declaration": true,
@@ -27,7 +27,7 @@
 
   },
   "include": [
-    "wwwroot/js/Angular/**/*.ts"
+    "wwwroot/js/**/*.ts"
   ],
   "exclude": [
     //"node_modules",
@@ -35,5 +35,4 @@
     //"wwwroot/lib/!([@types]/**)"
 
   ]
-
 }

@@ -15,7 +15,7 @@ interface ClusterizationResultData {
 }
 
 /**
- * Interface for the controller's scope
+ * Interface for the angular controller's scope
  */
 interface ClusterizationResultScope extends ng.IScope, ClusterizationResultData {
     loading: boolean;

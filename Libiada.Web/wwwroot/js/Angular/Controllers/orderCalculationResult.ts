@@ -11,7 +11,7 @@ interface OrderCalculationResultData {
 }
 
 /**
- * Interface for the order calculation result scope
+ * Interface for the angular controller's scope
  */
 interface OrderCalculationResultScope extends ng.IScope, OrderCalculationResultData {
     loading: boolean;

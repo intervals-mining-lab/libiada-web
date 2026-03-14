@@ -22,8 +22,8 @@ interface IOrderTransformerType {
 }
 
 /**
-* Interface for the order distribution controller data
-*/
+ * Interface for the data object passed from the server
+ */
 interface ISequencesOrderDistributionData {
     // Basic data properties
     researchObjects?: IResearchObject[];
@@ -35,8 +35,8 @@ interface ISequencesOrderDistributionData {
 }
 
 /**
-* Interface for scope order distribution controller
-*/
+ * Interface for the angular controller's scope
+ */
 interface ISequencesOrderDistributionScope extends ng.IScope {
     // Basic data
     researchObjects?: IResearchObject[];

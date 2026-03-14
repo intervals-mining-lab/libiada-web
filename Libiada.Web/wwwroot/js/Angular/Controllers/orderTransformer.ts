@@ -12,8 +12,8 @@ import type {
 } from "viewDataTypes";
 
 /**
-* Interface for the data object that is passed to the controller
-*/
+ * Interface for the data object passed from the server
+ */
 interface OrderTransformerData {
     groups: Group[];
     languages: Language[];
@@ -29,8 +29,8 @@ interface OrderTransformerData {
 }
 
 /**
-* Interface for the angular controller's scope
-*/
+ * Interface for the angular controller's scope
+ */
 interface OrderTransformerScope extends ng.IScope, OrderTransformerData {
     nature: string;
     selectedResearchObjectsCount: number;

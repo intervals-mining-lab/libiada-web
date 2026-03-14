@@ -13,7 +13,7 @@ interface OrderTransformationConvergenceResultData {
 }
 
 /**
- * Interface for the controller's scope
+ * Interface for the angular controller's scope
  */
 interface OrderTransformationConvergenceResultScope extends ng.IScope, OrderTransformationConvergenceResultData {
     loading: boolean;

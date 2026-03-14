@@ -79,18 +79,6 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
     /// <param name="file">
     /// Sequence file as <see cref="IFormFile"/>.
     /// </param>
-    /// <param name="language">
-    /// The language id.
-    /// </param>
-    /// <param name="original">
-    /// The original.
-    /// </param>
-    /// <param name="translator">
-    /// The translator id.
-    /// </param>
-    /// <param name="partial">
-    /// The partial.
-    /// </param>
     /// <param name="precision">
     /// Precision of data sequence.
     /// </param>

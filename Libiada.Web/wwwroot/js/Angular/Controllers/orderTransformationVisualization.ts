@@ -1,56 +1,17 @@
 ﻿import { MapModelFromJson } from "functions";
-import type { ResearchObject } from "viewDataTypes";
-
-/**
-* Interface for the object being researched
-*/
 
 
 /**
-* Interface for the transformation type
-*/
-interface ITransformation {
-    Text: string;
-    Value: string;
-    selected?: boolean;
+ * Interface for the data object passed from the server
+ */
+interface OrderTransformationVisualizationData {
+
 }
 
 /**
-* Interface for the order transformer type
-*/
-interface IOrderTransformerType {
-    Text: string;
-    Value: string;
-}
-
-/**
-* Interface for order transformation visualization controller data
-*/
-interface IOrderTransformationVisualizationData {
-    // Basic data
-    researchObjects?: ResearchObject[];
-    orderTransformerTypes?: IOrderTransformerType[];
-    transformationsPossible?: ITransformation[];
-
-    // Selected values
-    selectedResearchObjects?: number[];
-    orderTransformerType?: IOrderTransformerType;
-    transformationsSelected?: ITransformation[];
-}
-
-/**
-* Interface for order transformation visualization controller scope
-*/
-interface IOrderTransformationVisualizationScope extends ng.IScope {
-    // Basic data
-    researchObjects?: ResearchObject[];
-    orderTransformerTypes?: IOrderTransformerType[];
-    transformationsPossible?: ITransformation[];
-
-    // Selected values
-    selectedResearchObjects?: number[];
-    orderTransformerType?: IOrderTransformerType;
-    transformationsSelected?: ITransformation[];
+ * Interface for the controller's scope
+ */
+interface OrderTransformationVisualizationScope extends ng.IScope {
 }
 
 /**
@@ -61,16 +22,15 @@ class OrderTransformationVisualizationHandler {
     * Creates an instance of the order transformation visualization controller
     * @param data Data for initializing the controller
     */
-    constructor(data: IOrderTransformationVisualizationData) {
+    constructor(data: OrderTransformationVisualizationData) {
         this.ngOnInit(data);
     }
 
     /**
     * Initializes the Angular controller
     */
-    private ngOnInit(data: IOrderTransformationVisualizationData): void {
-        const orderTransformationVisualization = ($scope: IOrderTransformationVisualizationScope): void => {
-            // Initialize scope with data from the parameter
+    private ngOnInit(data: OrderTransformationVisualizationData): void {
+        const orderTransformationVisualization = ($scope: OrderTransformationVisualizationScope): void => {
             MapModelFromJson($scope, data);
         };
 
@@ -84,6 +44,6 @@ class OrderTransformationVisualizationHandler {
 * @param data Data for controller initialization
 * @returns Order transformation visualization controller instance
 */
-export default function OrderTransformationVisualizationController(data: IOrderTransformationVisualizationData): OrderTransformationVisualizationHandler {
+export default function OrderTransformationVisualizationController(data: OrderTransformationVisualizationData): OrderTransformationVisualizationHandler {
     return new OrderTransformationVisualizationHandler(data);
 }

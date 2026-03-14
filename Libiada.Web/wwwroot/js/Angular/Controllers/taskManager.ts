@@ -19,7 +19,9 @@ interface Task {
 // Task state types
 type TaskState = "InQueue" | "InProgress" | "Completed" | "Error";
 
-// Interface for the task manager scope
+/**
+ * Interface for the angular controller's scope
+ */
 interface TaskManagerScope extends angular.IScope {
     // Tasks and loading state
     tasks: Task[];
@@ -178,7 +180,7 @@ class TaskManagerControllerHandler {
                     () => { /* Cancel action */ });
             }
 
-            //TODO Check List
+            //TODO: Check List
             function tryRedirectToResult(task: Task): void {
                 if ($scope.autoRedirect && (task.Id === $scope.RedirectTaskId)
                     && (task.TaskState === "Completed" || task.TaskState === "Error")) {

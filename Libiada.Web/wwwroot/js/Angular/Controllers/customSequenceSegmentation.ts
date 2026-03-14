@@ -6,7 +6,9 @@ import type {
     Threshold
 } from "viewDataTypes";
 
-// Interface for the data object that is passed to the controller
+/**
+ * Interface for the data object passed from the server
+ */
 interface CustomSequenceSegmentationData {
     thresholds: Threshold[];
     segmentationCriteria: SegmentationCriterion[];
@@ -14,7 +16,9 @@ interface CustomSequenceSegmentationData {
     imageTransformers: ImageTransformer[];
 }
 
-// Interface for the $scope controller
+/**
+ * Interface for the controller's scope
+ */
 interface CustomSequenceSegmentationScope extends ng.IScope, CustomSequenceSegmentationData {
     leftBorder: number;
     rightBorder: number;

@@ -13,8 +13,8 @@ import type {
 } from "viewDataTypes";
 
 /**
-* Interface for the data object that is passed to the controller
-*/
+ * Interface for the data object passed from the server
+ */
 interface OrderTransformationCalculationData {
     characteristicTypes: CharacteristicType[];
     characteristicsDictionary: { [key: string]: number };
@@ -32,8 +32,8 @@ interface OrderTransformationCalculationData {
 }
 
 /**
-* Interface for the angular controller's scope
-*/
+ * Interface for the controller's scope
+ */
 interface OrderTransformationCalculationScope extends ng.IScope, OrderTransformationCalculationData {
     nature: string;
     selectedResearchObjectsCount: number;

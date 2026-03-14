@@ -106,7 +106,7 @@ class TaskManagerControllerHandler {
                     }
                 }, () => { });
             }
-            //TODO Check List
+            //TODO: Check List
             function tryRedirectToResult(task) {
                 if ($scope.autoRedirect && (task.Id === $scope.RedirectTaskId)
                     && (task.TaskState === "Completed" || task.TaskState === "Error")) {

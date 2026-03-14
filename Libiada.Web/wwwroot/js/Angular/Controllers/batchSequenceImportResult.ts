@@ -1,10 +1,16 @@
 ﻿import { initScopeFromServer } from "functions";
 import type { SequenceImportResult } from "viewDataTypes";
 
+/**
+ * Interface for the data object fetched from the server
+ */
 interface BatchSequenceImportResultData {
     Results: SequenceImportResult[];
 }
 
+/**
+ * Interface for the angular controller's scope
+ */
 interface BatchSequenceImportResultScope extends ng.IScope, BatchSequenceImportResultData {
 
     loadingScreenHeader: string;

@@ -5,7 +5,9 @@ import type {
     OrderTransformation
 } from "viewDataTypes";
 
-// Interface for the data object that is passed to the controller
+/**
+ * Interface for the data object passed from the server
+ */
 interface CustomSequenceOrderTransformationCalculationData {
     characteristicTypes: CharacteristicType[];
     characteristicsDictionary: { [key: string]: number };
@@ -13,7 +15,9 @@ interface CustomSequenceOrderTransformationCalculationData {
     transformations: OrderTransformation[];
 }
 
-// Interface for the $scope controller
+/**
+ * Interface for the angular controller's scope
+ */
 interface CustomSequenceOrderTransformationCalculationScope extends ng.IScope, CustomSequenceOrderTransformationCalculationData {
     // No additional scope properties needed for this controller
 }

@@ -37,8 +37,8 @@ interface ISequenceType {
 }
 
 /**
-* Interface for sequence group controller data
-*/
+ * Interface for the data object passed from the server
+ */
 interface ISequenceGroupsData {
     // Basic data
     researchObjects?: IResearchObject[];
@@ -55,8 +55,8 @@ interface ISequenceGroupsData {
 }
 
 /**
-* Interface for sequence group controller scope
-*/
+ * Interface for the angular controller's scope
+ */
 interface ISequenceGroupsScope extends ng.IScope {
     // Basic data
     researchObjects?: IResearchObject[];
@@ -72,7 +72,6 @@ interface ISequenceGroupsScope extends ng.IScope {
     selectedSequenceType?: ISequenceType;
 
     // Methods
-    toggleResearchObjectSelection?: (researchObject: IResearchObject) => void;
     selectAll?: () => void;
     deselectAll?: () => void;
 }

@@ -4,14 +4,18 @@ import type {
     ImageTransformer
 } from "viewDataTypes";
 
-// Interface for the data object that is passed to the controller
+/**
+ * Interface for the data object passed from the server
+ */
 interface CustomSequenceCalculationData {
     characteristicTypes: CharacteristicType[];
     characteristicsDictionary: { [key: string]: number };
     imageTransformers: ImageTransformer[];
 }
 
-// Interface for the $scope controller
+/**
+ * Interface for the angular controller's scope
+ */
 interface CustomSequenceCalculationScope extends ng.IScope, CustomSequenceCalculationData {
 }
 

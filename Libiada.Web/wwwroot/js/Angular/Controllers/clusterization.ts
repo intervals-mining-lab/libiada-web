@@ -12,7 +12,9 @@ import type {
     ClusterizatorType
 } from "viewDataTypes";
 
-// Interface for the data object that is passed to the controller
+/**
+ * Interface for the data object passed from the server
+ */
 interface ClusterizationData {
     characteristicTypes: CharacteristicType[];
     characteristicsDictionary: { [key: string]: number };
@@ -29,7 +31,9 @@ interface ClusterizationData {
     clusterizatorsTypes: ClusterizatorType[];
 }
 
-// Interface for the $scope controller
+/**
+ * Interface for the angular controller's scope
+ */
 interface ClusterizationScope extends ng.IScope, ClusterizationData {
     nature: string;
     selectedResearchObjectsCount: number;

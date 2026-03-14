@@ -11,7 +11,9 @@ import type {
     CharacteristicType
 } from "viewDataTypes";
 
-// Interface for the data object that is passed to the controller
+/**
+ * Interface for the data object passed from the server
+ */
 interface CongenericCalculationData {
     characteristicTypes: CharacteristicType[];
     characteristicsDictionary: { [key: string]: number };
@@ -27,7 +29,9 @@ interface CongenericCalculationData {
     translators: Translator[];
 }
 
-// Interface for the $scope controller
+/**
+ * Interface for the angular controller's scope
+ */
 interface CongenericCalculationScope extends ng.IScope, CongenericCalculationData {
     nature?: number;
     selectedResearchObjectsCount?: number;

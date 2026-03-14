@@ -7,7 +7,9 @@ import type {
     SequenceType,
 } from "viewDataTypes";
 
-// Interface for the data object that is passed to the controller
+/**
+ * Interface for the data object passed from the server
+ */
 interface PoemSegmentationData {
     groups: Group[];
     languages: Language[];
@@ -19,7 +21,9 @@ interface PoemSegmentationData {
     translators: Translator[];
 }
 
-// Interface for the $scope controller
+/**
+ * Interface for the controller's scope
+ */
 interface PoemSegmentationScope extends ng.IScope, PoemSegmentationData {
     selectedResearchObjectsCount: number;
 }

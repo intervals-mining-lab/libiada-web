@@ -1,14 +1,14 @@
 ﻿@{
-    ViewBag.Title = "Sequence import result";
+    ViewBag.Title = "Libiada - Sequence creation result";
 }
 
 <h2>@ViewBag.Title</h2>
 
 @if (ViewBag.Error == null)
 {
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "CombinedSequencesEntityResult");
+    await Html.RenderPartialAsync("_AngularControllerInitializer", "CombinedSequencesEntityCreateResult");
 
-    <div ng-controller="CombinedSequencesEntityResultCtrl">
+    <div ng-controller="CombinedSequencesEntityCreateResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <h5>
             Sequence <strong ng-bind="::Name"></strong> imported successfully

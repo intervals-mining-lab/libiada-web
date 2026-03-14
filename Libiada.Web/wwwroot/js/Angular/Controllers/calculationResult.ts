@@ -14,7 +14,7 @@ interface CalculationResultData {
 }
 
 /**
- * Interface for the controller's scope
+ * Interface for the angular controller's scope
  */
 interface CalculationResultScope extends ng.IScope, CalculationResultData {
     loading: boolean;

@@ -15,7 +15,6 @@ class OrderTransformationVisualizationHandler {
     */
     ngOnInit(data) {
         const orderTransformationVisualization = ($scope) => {
-            // Initialize scope with data from the parameter
             MapModelFromJson($scope, data);
         };
         // Register the controller in Angular

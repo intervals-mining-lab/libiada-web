@@ -11,8 +11,8 @@ import type {
 } from "viewDataTypes";
 
 /**
-* Interface for sequence mixer controller input data
-*/
+ * Interface for the data object passed from the server
+ */
 interface SequenceMixerData {
     groups: Group[];
     languages: Language[];
@@ -27,8 +27,8 @@ interface SequenceMixerData {
 }
 
 /**
-* Interface for sequence mixer angular controller scope
-*/
+ * Interface for the angular controller's scope
+ */
 interface SequenceMixerScope extends ng.IScope, SequenceMixerData {
     // Selected nature (value)
     nature: number;

@@ -1,5 +1,5 @@
 /**
- * Interface for controller scope
+ * Interface for the angular controller's scope
  */
 interface BatchGeneticImportFromGenBankSearchQueryScope extends angular.IScope {
     searchQuery: string;

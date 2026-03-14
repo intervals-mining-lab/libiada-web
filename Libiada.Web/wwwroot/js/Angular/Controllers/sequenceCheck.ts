@@ -2,7 +2,7 @@ import { MapModelFromJson } from "functions";
 import type { Group, SequenceType } from "viewDataTypes"; 
 
 /**
- * Interface for initial controller data
+ * Interface for the data object passed from the server
  */
 interface SequenceCheckData {
     nature: string;
@@ -14,7 +14,7 @@ interface SequenceCheckData {
 }
 
 /**
- * Interface for controller scope
+ * Interface for the controller's scope
  */
 interface SequenceCheckScope extends ng.IScope, SequenceCheckData {
     // Research objects selection

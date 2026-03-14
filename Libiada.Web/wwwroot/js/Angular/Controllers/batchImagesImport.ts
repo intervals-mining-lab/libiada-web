@@ -1,5 +1,5 @@
 /**
- * Interface for the controller's scope
+ * Interface for the angular controller's scope
  */
 interface BatchImagesImportScope extends angular.IScope {
     fileSelected: { value: boolean; };
@@ -10,9 +10,6 @@ interface BatchImagesImportScope extends angular.IScope {
  * Angular controller class
  */
 class BatchImagesImportHandler {
-    /**
-     * Creates a new controller instance
-     */
     constructor() {
         this.ngOnInit();
     }

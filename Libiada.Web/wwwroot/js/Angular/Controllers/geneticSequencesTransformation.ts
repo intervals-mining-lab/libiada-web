@@ -5,7 +5,9 @@ import type {
     SequenceType
 } from "viewDataTypes";
 
-// Interface for the data object that is passed to the controller
+/**
+ * Interface for the data object passed from the server
+ */
 interface GeneticSequencesTransformationData {
     groups: Group[];
     maximumSelectedResearchObjects: number;
@@ -15,7 +17,9 @@ interface GeneticSequencesTransformationData {
     sequenceTypes: SequenceType[];
 }
 
-// Interface for the $scope of the controller
+/**
+ * Interface for the controller's scope
+ */
 interface GeneticSequencesTransformationScope extends ng.IScope, GeneticSequencesTransformationData {
     selectedResearchObjectsCount: number;
 }

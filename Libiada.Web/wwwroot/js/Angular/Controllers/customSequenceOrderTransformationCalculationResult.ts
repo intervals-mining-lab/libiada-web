@@ -13,7 +13,7 @@ interface CustomSequenceOrderTransformationCalculationResultData {
 }
 
 /**
- * Interface for the custom sequence order transformation calculation result scope
+ * Interface for the angular controller's scope
  */
 interface CustomSequenceOrderTransformationCalculationResultScope extends ng.IScope, CustomSequenceOrderTransformationCalculationResultData {
     loading: boolean;

@@ -18,7 +18,7 @@ interface CustomSequenceOrderTransformerResultData {
 }
 
 /**
- * Interface for the controller's scope
+ * Interface for the angular controller's scope
  */
 interface CustomSequenceOrderTransformerResultScope extends ng.IScope, CustomSequenceOrderTransformerResultData {
     loading: boolean;

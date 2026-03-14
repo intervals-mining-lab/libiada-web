@@ -12,7 +12,9 @@ import type {
     CharacteristicType
 } from "viewDataTypes";
 
-// Interface for the data object that is passed to the controller
+/**
+ * Interface for the data object passed from the server
+ */
 interface CalculationData {
     characteristicTypes: CharacteristicType[];
     characteristicsDictionary: { [key: string]: number };
@@ -29,7 +31,9 @@ interface CalculationData {
     translators: Translator[];
 }
 
-// Interface for the controller's scope
+/**
+ * Interface for the angular controller's scope
+ */
 interface CalculationScope extends ng.IScope, CalculationData {
     calculationFor: displayedTable;
     nature: string;

@@ -8,29 +8,23 @@ interface IAccession {
 }
 
 /**
- * Интерфейс для начальных данных контроллера
+ * Interface for the data object passed from the server
  */
 interface IBatchSequenceImportData {
-    // Свойства передаваемых данных
-    // (при необходимости можно расширить в соответствии с реальными данными)
+
     matters?: { id: number; value: string }[];
     natures?: { id: number; value: string }[];
-    // другие возможные свойства...
+
 }
 
 /**
- * Интерфейс для области видимости контроллера
+ * Interface for the angular controller's scope
  */
-interface IBatchSequenceImportScope extends ng.IScope {
-    // Входное поле и список идентификаторов
+interface IBatchSequenceImportScope extends ng.IScope, IBatchSequenceImportData {
+
     accessionsField: string;
     accessions: IAccession[];
 
-    // Возможные свойства, передаваемые через data
-    matters?: { id: number; value: string }[];
-    natures?: { id: number; value: string }[];
-
-    // Методы
     parseIds: () => void;
     deleteId: (accession: IAccession) => void;
 }

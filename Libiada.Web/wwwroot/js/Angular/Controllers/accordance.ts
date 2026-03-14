@@ -12,7 +12,9 @@ import type {
     CharacteristicType
 } from "viewDataTypes";
 
-// Interface for the data object that is passed to the controller
+/**
+ * Interface for the data object passed from the server
+ */
 interface AccordanceData {
     maximumSelectedResearchObjects: number;
     minimumSelectedResearchObjects: number;
@@ -29,7 +31,9 @@ interface AccordanceData {
     sequenceTypes: SequenceType[];
 }
 
-// Interface for the controller's scope
+/**
+ * Interface for the angular controller's scope
+ */
 interface AccordanceScope extends angular.IScope, AccordanceData {
     nature: string;
     selectedResearchObjectsCount: number;

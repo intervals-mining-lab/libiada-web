@@ -11,7 +11,9 @@ import type {
     Group
 } from "viewDataTypes";
 
-// Interface for the data object that is passed to the controller
+/**
+ * Interface for the data object passed from the server
+ */
 interface OrderTransformationConvergenceData {
     groups: Group[];
     languages: Language[];
@@ -26,7 +28,9 @@ interface OrderTransformationConvergenceData {
     transformations: OrderTransformation[];
 }
 
-// Interface for the controller's scope
+/**
+ * Interface for the controller's scope
+ */
 interface OrderTransformationConvergenceScope extends angular.IScope, OrderTransformationConvergenceData {
     nature: string;
     selectedResearchObjectsCount: number;

@@ -8,13 +8,13 @@ interface IBooleanValue {
 }
 
 /**
- * Interface for initial controller data
+ * Interface for the data object passed from the server
  */
 interface IBatchMusicImportData {
 }
 
 /**
- * Interface for controller scope
+ * Interface for the angular controller's scope
  */
 interface IBatchMusicImportScope extends ng.IScope {
     // File status properties

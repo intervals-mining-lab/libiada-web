@@ -1,5 +1,4 @@
 ﻿import { MapModelFromJson } from "functions";
-import type { ResearchObject } from "viewDataTypes";
 
 /**
 * Interface for the alignment type
@@ -18,11 +17,10 @@ interface ISimilarityType {
 }
 
 /**
-* Interface for the sequence alignment controller data
-*/
+ * Interface for the data object passed from the server
+ */
 interface ISequencesAlignmentData {
-    // Basic data properties
-    researchObjects?: ResearchObject[];
+
     alignerTypes?: IAlignerType[];
     similarityTypes?: ISimilarityType[];
 
@@ -33,11 +31,10 @@ interface ISequencesAlignmentData {
 }
 
 /**
-* Interface for the sequence alignment scope controller
-*/
+ * Interface for the angular controller's scope
+ */
 interface ISequencesAlignmentScope extends ng.IScope {
-    // Basic data
-    researchObjects?: ResearchObject[];
+
     alignerTypes?: IAlignerType[];
     similarityTypes?: ISimilarityType[];
 

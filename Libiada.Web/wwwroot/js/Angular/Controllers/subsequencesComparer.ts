@@ -7,7 +7,9 @@ import type {
     Feature
 } from "viewDataTypes";
 
-// Interface for the data object that is passed to the controller
+/**
+ * Interface for the data object passed from the server
+ */
 interface SubsequencesComparerData {
     characteristicTypes: CharacteristicType[];
     characteristicsDictionary: { [key: string]: number };
@@ -21,7 +23,9 @@ interface SubsequencesComparerData {
     features: Feature[];
 }
 
-// Interface for the $scope controller
+/**
+ * Interface for the angular controller's scope
+ */
 interface SubsequencesComparerScope extends ng.IScope, SubsequencesComparerData {
     selectedResearchObjectsCount: number;
 }

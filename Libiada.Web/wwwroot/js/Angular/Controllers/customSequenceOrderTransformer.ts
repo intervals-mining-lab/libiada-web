@@ -4,13 +4,17 @@ import type {
     OrderTransformation
 } from "viewDataTypes";
 
-// Interface for the data object that is passed to the controller
+/**
+ * Interface for the data object passed from the server
+ */
 interface CustomSequenceOrderTransformerData {
     orderTransformations: OrderTransformation[];
     imageTransformers: ImageTransformer[];
 }
 
-// Interface for the $scope controller
+/**
+ * Interface for the angular controller's scope
+ */
 interface CustomSequenceOrderTransformerScope extends ng.IScope, CustomSequenceOrderTransformerData {
 }
 

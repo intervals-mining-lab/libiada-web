@@ -1,11 +1,17 @@
 ﻿import { initScopeFromServer } from "functions";
 import type { SequenceImportResult } from "viewDataTypes";
 
+/**
+ * Interface for the data object fetched from the server
+ */
 interface NcbiNuccoreSearchResultData {
     Results: SequenceImportResult[];
     accessions: string[];
 }
 
+/**
+ * Interface for the angular controller's scope
+ */
 interface NcbiNuccoreSearchResultScope extends ng.IScope, NcbiNuccoreSearchResultData {
 
     loadingScreenHeader: string;

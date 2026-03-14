@@ -11,7 +11,9 @@ import type {
     CharacteristicType
 } from "viewDataTypes";
 
-// Interface for the data object that is passed to the controller
+/**
+ * Interface for the data object passed from the server
+ */
 interface RelationCalculationData {
     characteristicTypes: CharacteristicType[];
     characteristicsDictionary: { [key: string]: number };
@@ -27,7 +29,9 @@ interface RelationCalculationData {
     translators: Translator[];
 }
 
-// Interface for the controller's scope
+/**
+ * Interface for the controller's scope
+ */
 interface RelationCalculationScope extends angular.IScope, RelationCalculationData {
     nature: string;
     selectedResearchObjectsCount: number;

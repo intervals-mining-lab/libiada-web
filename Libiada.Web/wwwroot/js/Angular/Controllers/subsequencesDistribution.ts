@@ -1,7 +1,9 @@
 ﻿import type { SequenceType, SequenceGroup, Notation, Group, Feature, CharacteristicType } from "viewDataTypes";
 import { MapModelFromJson } from "functions";
 
-// Interface for data passed to the controller from server on page load
+/**
+ * Interface for the data object passed from the server
+ */
 interface SubsequencesDistributionData {
 
     maximumSelectedResearchObjects: number;
@@ -16,7 +18,9 @@ interface SubsequencesDistributionData {
     sequenceTypes: SequenceType[];
 }
 
-// Interface for $scope in controller
+/**
+ * Interface for the angular controller's scope
+ */
 interface SubsequencesDistributionScope extends ng.IScope, SubsequencesDistributionData {
     selectedResearchObjectsCount: number;
 }
