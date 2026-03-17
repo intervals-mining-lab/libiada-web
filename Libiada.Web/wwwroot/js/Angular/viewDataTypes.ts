@@ -3,7 +3,7 @@
     Text: string;
     Selected: boolean;
     Disabled: boolean;
-    Group: null; // TODO: check what type it could be
+    Group: string | null; // TODO: check what type it could be
 }
 
 export interface SelectListItemWithNature extends SelectListItem {
@@ -40,6 +40,8 @@ export interface ImageTransformer extends SelectListItem { }
 
 export interface OrderTransformation extends SelectListItem { }
 
+export interface SequenceGroupType extends SelectListItemWithNature { }
+
 export interface SequenceGroup extends SelectListItemWithNature { }
 
 export interface Multisequence extends SelectListItemWithNature { }
@@ -60,6 +62,7 @@ export interface CharacteristicType extends SelectListItem {
 }
 
 export interface ResearchObject extends SelectListItemWithNature {
+    Group: string;
     SequenceType: string;
 }
 

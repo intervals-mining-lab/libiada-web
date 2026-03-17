@@ -1,5 +1,17 @@
 ﻿import { MapModelFromJson } from "functions";
-import { Nature, SequenceType, Group, Language, Multisequence, Notation, RemoteDb, ResearchObject, Trajectory, Translator, SelectListItemWithNature } from "viewDataTypes";
+import type {
+    Nature,
+    SequenceType,
+    Group,
+    Language,
+    Multisequence,
+    Notation,
+    RemoteDb,
+    ResearchObject,
+    Trajectory,
+    Translator,
+    SelectListItemWithNature
+} from "viewDataTypes";
 
 /**
  * Interface for the data object passed from the server

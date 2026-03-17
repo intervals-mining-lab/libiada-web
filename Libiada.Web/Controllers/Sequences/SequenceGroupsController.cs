@@ -157,6 +157,14 @@ public class SequenceGroupsController : Controller
         SelectListItemWithNature sequenceTypeSelectListItem = sequenceTypes.Single(st => st.Value == sequenceTypeValue);
         viewData["sequenceTypeIndex"] = Array.IndexOf(sequenceTypes, sequenceTypeSelectListItem);
 
+        if (sequenceGroup.SequenceGroupType is not null)
+        {
+            SelectListItemWithNature[] sequenceGroupTypes = ((IEnumerable<SelectListItemWithNature>)viewData["sequenceGroupTypes"]).ToArray();
+            string sequenceGroupTypeValue = Convert.ToByte(sequenceGroup.SequenceGroupType).ToString();
+            SelectListItemWithNature sequenceGroupTypeSelectListItem = sequenceGroupTypes.Single(st => st.Value == sequenceGroupTypeValue);
+            viewData["sequenceGroupTypeIndex"] = Array.IndexOf(sequenceGroupTypes, sequenceGroupTypeSelectListItem);
+        }
+
         SelectListItemWithNature[] groups = ((IEnumerable<SelectListItemWithNature>)viewData["sequenceTypes"]).ToArray();
         string groupValue = Convert.ToByte(sequenceGroup.Group).ToString();
         SelectListItemWithNature groupSelectListItem = groups.Single(g => g.Value == groupValue);

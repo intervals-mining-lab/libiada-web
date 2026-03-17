@@ -2,11 +2,12 @@
   "compileOnSave": true,
   "compilerOptions": {
     "target": "es2024",
-    "module": "es2022",
+    "module": "esnext",
     "strict": true,
     "alwaysStrict": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
+    "noUncheckedSideEffectImports": true,
     //"noUncheckedIndexedAccess": true,
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,

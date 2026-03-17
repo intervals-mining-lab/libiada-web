@@ -1,5 +1,12 @@
-﻿import type { SequenceType, SequenceGroup, Notation, Group, Feature, CharacteristicType } from "viewDataTypes";
-import { MapModelFromJson } from "functions";
+﻿import { MapModelFromJson } from "functions";
+import type {
+    SequenceType,
+    SequenceGroup,
+    Notation,
+    Group,
+    Feature,
+    CharacteristicType
+} from "viewDataTypes";
 
 /**
  * Interface for the data object passed from the server

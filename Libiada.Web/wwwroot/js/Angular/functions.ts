@@ -76,6 +76,7 @@ class LibiadaWebUtils {
     }
 }
 
+//TODO: try making this method generic
 // For backward compatibility with existing JavaScript code
 export function MapModelFromJson($scope: AngularScope, data: DataObject): void {
     LibiadaWebUtils.MapModelFromJson($scope, data);

@@ -24,6 +24,7 @@ class LibiadaWebUtils {
         characteristic.arrangementType = characteristic.characteristicType.ArrangementTypes[0];
     }
 }
+//TODO: try making this method generic
 // For backward compatibility with existing JavaScript code
 export function MapModelFromJson($scope, data) {
     LibiadaWebUtils.MapModelFromJson($scope, data);
