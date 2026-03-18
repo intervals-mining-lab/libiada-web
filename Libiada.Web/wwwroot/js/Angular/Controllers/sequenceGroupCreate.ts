@@ -41,8 +41,8 @@ class SequenceGroupCreateHandler {
 
 /**
 * Wrapper function for backward compatibility
-* @param data Data to initialize the controller
-* @returns SequenceGroupsCreate Controller instance
+* @param data Data for controller initialization
+* @returns SequenceGroupCreateHandler instance
 */
 export default function SequenceGroupCreateController(data: SequenceGroupCreateData): SequenceGroupCreateHandler {
     return new SequenceGroupCreateHandler(data);

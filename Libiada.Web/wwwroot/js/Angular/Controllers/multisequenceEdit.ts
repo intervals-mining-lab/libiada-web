@@ -13,7 +13,7 @@ import type {
 /**
  * Interface for the data object passed from the server
  */
-interface MultisequenceCreateData {
+interface MultisequenceEditData {
     groups: Group[];
     languages: Language[];
     maximumSelectedResearchObjects: number;
@@ -29,7 +29,7 @@ interface MultisequenceCreateData {
 /**
  * Interface for the angular controller's scope
  */
-interface MultisequenceCreateScope extends ng.IScope, MultisequenceCreateData {    
+interface MultisequenceEditScope extends ng.IScope, MultisequenceEditData {    
     nature: string;
     name: string;
     displayMultisequenceNumber: boolean;
@@ -41,13 +41,13 @@ interface MultisequenceCreateScope extends ng.IScope, MultisequenceCreateData {
 /**
  * Angular controller class for multisequence creation page
  */
-class MultisequenceCreateHandler {
-    constructor(data: MultisequenceCreateData) {
+class MultisequenceEditHandler {
+    constructor(data: MultisequenceEditData) {
         this.ngOnInit(data);
     }
 
-    private ngOnInit(data: MultisequenceCreateData): void {
-        const multisequenceCreate = ($scope: MultisequenceCreateScope, filterFilter: ng.IFilterFilter): void => {
+    private ngOnInit(data: MultisequenceEditData): void {
+        const multisequenceEdit = ($scope: MultisequenceEditScope, filterFilter: ng.IFilterFilter): void => {
             MapModelFromJson($scope, data);
 
             // Initialize properties with default values
@@ -57,15 +57,15 @@ class MultisequenceCreateHandler {
         };
 
         // Register controller in Angular module
-        angular.module("libiada").controller("MultisequenceCreateCtrl", ["$scope", "filterFilter", multisequenceCreate]);
+        angular.module("libiada").controller("MultisequenceEditCtrl", ["$scope", "filterFilter", multisequenceEdit]);
     }
 }
 
 /**
  * Wrapper function for backward compatibility
  * @param data Data for controller initialization
- * @returns Instance of MultisequenceCreateHandler
+ * @returns Instance of MultisequenceEditHandler
  */
-export default function MultisequenceCreateController(data: MultisequenceCreateData): MultisequenceCreateHandler {
-    return new MultisequenceCreateHandler(data);
+export default function MultisequenceEditController(data: MultisequenceEditData): MultisequenceEditHandler {
+    return new MultisequenceEditHandler(data);
 }

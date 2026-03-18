@@ -3,11 +3,7 @@
 @model Multisequence
 
 @{
-    ViewBag.Title = "Edit multisequence";
-}
-
-@{
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "MultisequenceCreate");
+    ViewBag.Title = "Libiada - Edit multisequence";
 }
 
 <h2>@ViewBag.Title</h2>
@@ -16,31 +12,13 @@
 
 @using (Html.BeginForm())
 {
-    <div ng-controller="MultisequenceCreateCtrl">
+    <div ng-controller="MultisequenceEditCtrl">
         <h4>Multisequence parameters</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @if (User.IsAdmin())
-        {
-            <div class="row mb-1">
-                @Html.LabelFor(model => model.Nature, new { @class = "col-form-label col-md-2" })
-                <div class="col-md-10">
-                    <select class="form-select"
-                            ng-model="nature"
-                            ng-options="n.Value as n.Text for n in ::natures"
-                            ng-change="filterByNature()"
-                            ng-init="filterByNature()"></select>
-                    <input type="hidden" name="Nature" ng-value="nature" />
-                    @Html.ValidationMessageFor(model => model.Nature, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        }
-        else
-        {
-            <div ng-hide="true" ng-init="filterByNature()"></div>
-            <input type="hidden" name="Multisequence.Nature" ng-value="nature" />
-        }
-
+        <nature-select natures="natures"
+                       nature="nature">
+        </nature-select>
         <div class="row mb-1">
             @Html.LabelFor(model => model.Name, new { @class = "col-form-label col-md-2" })
             <div class="col-md-10">
@@ -71,7 +49,11 @@
 }
 
 @section Scripts {
+    @{
+        await Html.RenderPartialAsync("_AngularControllerInitializer", "MultisequenceEdit");
+    }
     <partial name="_ValidationScriptsPartial" />
+    <script type="module" src="~/js/Angular/Components/natureSelect.js" asp-append-version="true"></script>
     <script type="module" src="~/js/Angular/Components/researchObjectsTable.js" asp-append-version="true"></script>
     <script type="module" src="~/js/Angular/Components/researchObjectsSubmit.js" asp-append-version="true"></script>
 }

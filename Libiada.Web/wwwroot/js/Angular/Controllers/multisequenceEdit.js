@@ -2,12 +2,12 @@ import { MapModelFromJson } from "functions";
 /**
  * Angular controller class for multisequence creation page
  */
-class MultisequenceCreateHandler {
+class MultisequenceEditHandler {
     constructor(data) {
         this.ngOnInit(data);
     }
     ngOnInit(data) {
-        const multisequenceCreate = ($scope, filterFilter) => {
+        const multisequenceEdit = ($scope, filterFilter) => {
             MapModelFromJson($scope, data);
             // Initialize properties with default values
             $scope.nature = $scope.natures[0].Value;
@@ -15,15 +15,15 @@ class MultisequenceCreateHandler {
             $scope.displayMultisequenceNumber = true;
         };
         // Register controller in Angular module
-        angular.module("libiada").controller("MultisequenceCreateCtrl", ["$scope", "filterFilter", multisequenceCreate]);
+        angular.module("libiada").controller("MultisequenceEditCtrl", ["$scope", "filterFilter", multisequenceEdit]);
     }
 }
 /**
  * Wrapper function for backward compatibility
  * @param data Data for controller initialization
- * @returns Instance of MultisequenceCreateHandler
+ * @returns Instance of MultisequenceEditHandler
  */
-export default function MultisequenceCreateController(data) {
-    return new MultisequenceCreateHandler(data);
+export default function MultisequenceEditController(data) {
+    return new MultisequenceEditHandler(data);
 }
-//# sourceMappingURL=multisequenceCreate.js.map
+//# sourceMappingURL=multisequenceEdit.js.map
