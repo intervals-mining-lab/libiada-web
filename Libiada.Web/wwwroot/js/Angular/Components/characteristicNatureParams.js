@@ -25,7 +25,7 @@
 }
 
 angular.module("libiada").component("characteristicNatureParams", {
-    templateUrl: `${window.location.origin}/AngularTemplates/_CharacteristicNatureParams`,
+    templateUrl: `/AngularTemplates/_CharacteristicNatureParams`,
     controller: ["filterFilter", CharacteristicNatureParamsController],
     bindings: {
         characteristic: "=?",

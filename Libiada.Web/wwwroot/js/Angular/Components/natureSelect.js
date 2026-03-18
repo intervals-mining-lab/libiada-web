@@ -9,7 +9,7 @@
 }
 
 angular.module("libiada").component("natureSelect", {
-    templateUrl: `${window.location.origin}/AngularTemplates/_NatureSelect`,
+    templateUrl: `/AngularTemplates/_NatureSelect`,
     controller: NatureSelectController,
     bindings: {
         natures: "<",

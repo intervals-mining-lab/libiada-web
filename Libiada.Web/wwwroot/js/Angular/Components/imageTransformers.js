@@ -14,7 +14,7 @@
 }
 
 angular.module("libiada").component("imageTransformers", {
-    templateUrl: `${window.location.origin}/AngularTemplates/_ImageTransformers`,
+    templateUrl: `/AngularTemplates/_ImageTransformers`,
     controller: ImageTransformersController,
     bindings: {
         imageTransformers: "<",

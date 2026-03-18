@@ -18,7 +18,7 @@
 }
 
 angular.module("libiada").component("loadingWindow", {
-    templateUrl: `${window.location.origin}/AngularTemplates/_LoadingWindow`,
+    templateUrl: `/AngularTemplates/_LoadingWindow`,
     controller: LoadingWindowController,
     bindings: {
         loading: "<",

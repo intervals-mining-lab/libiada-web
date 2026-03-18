@@ -101,7 +101,7 @@
 }
 
 angular.module("libiada").component("sequenceGroupsTable", {
-    templateUrl: `${window.location.origin}/AngularTemplates/_SequenceGroupsTable`,
+    templateUrl: `/AngularTemplates/_SequenceGroupsTable`,
     controller: ["$scope", "filterFilter", SequenceGroupsTableController],
     bindings: {
         selectedSequenceGroupsCount: "=",

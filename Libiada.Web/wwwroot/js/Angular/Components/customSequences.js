@@ -19,7 +19,7 @@
 }
 
 angular.module("libiada").component("customSequences", {
-    templateUrl: `${window.location.origin}/AngularTemplates/_CustomSequences`,
+    templateUrl: `/AngularTemplates/_CustomSequences`,
     controller: CustomSequencesController,
     bindings: {
         imageTransformers: "<"

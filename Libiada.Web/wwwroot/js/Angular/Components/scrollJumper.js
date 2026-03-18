@@ -35,6 +35,6 @@
 }
 
 angular.module("libiada").component("scrollJumper", {
-    templateUrl: `${window.location.origin}/AngularTemplates/_ScrollJumper`,
+    templateUrl: `/AngularTemplates/_ScrollJumper`,
     controller: ScrollJumperController
 });

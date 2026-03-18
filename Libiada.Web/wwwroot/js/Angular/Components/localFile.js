@@ -7,6 +7,6 @@
 }
 
 angular.module("libiada").component("localFile", {
-    templateUrl: `${window.location.origin}/AngularTemplates/_LocalFile`,
+    templateUrl: `/AngularTemplates/_LocalFile`,
     controller: LocalFileController
 });

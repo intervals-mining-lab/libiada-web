@@ -10,7 +10,7 @@
 }
 
 angular.module("libiada").component("researchObjectsSubmit", {
-    templateUrl: `${window.location.origin}/AngularTemplates/_ResearchObjectsSubmit`,
+    templateUrl: `/AngularTemplates/_ResearchObjectsSubmit`,
     controller: ResearchObjectsSubmitController,
     bindings: {
         submitName: "@?",

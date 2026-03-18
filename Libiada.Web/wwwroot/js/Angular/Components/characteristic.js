@@ -34,7 +34,7 @@ function CharacteristicController(filterFilter) {
 }
 
 angular.module("libiada").component("characteristic", {
-    templateUrl: `${window.location.origin}/AngularTemplates/_Characteristic`,
+    templateUrl: `/AngularTemplates/_Characteristic`,
     controller: ["filterFilter", CharacteristicController],
     bindings: {
         characteristicTypes: "<",

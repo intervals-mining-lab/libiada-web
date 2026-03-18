@@ -20,7 +20,7 @@
 }
 
 angular.module("libiada").component("orderTransformations", {
-    templateUrl: `${window.location.origin}/AngularTemplates/_OrderTransformations`,
+    templateUrl: `/AngularTemplates/_OrderTransformations`,
     controller: OrderTransformationsController,
     bindings: {
         transformations: "<"

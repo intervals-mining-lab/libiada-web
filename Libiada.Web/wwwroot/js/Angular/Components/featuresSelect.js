@@ -13,7 +13,7 @@
 }
 
 angular.module("libiada").component("featuresSelect", {
-    templateUrl: `${window.location.origin}/AngularTemplates/_FeaturesSelect`,
+    templateUrl: `/AngularTemplates/_FeaturesSelect`,
     controller: FeaturesSelectController,
     bindings: {
         features: "<",

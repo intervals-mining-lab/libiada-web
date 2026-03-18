@@ -22,7 +22,7 @@
 }
 
 angular.module("libiada").component("filters", {
-    templateUrl: `${window.location.origin}/AngularTemplates/_Filters`,
+    templateUrl: `/AngularTemplates/_Filters`,
     controller: FiltersController,
     bindings: {
         filters: "=?",

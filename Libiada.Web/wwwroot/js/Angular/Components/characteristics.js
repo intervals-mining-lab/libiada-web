@@ -48,7 +48,7 @@
 }
 
 angular.module("libiada").component("characteristics", {
-    templateUrl: `${window.location.origin}/AngularTemplates/_Characteristics`,
+    templateUrl: `/AngularTemplates/_Characteristics`,
     controller: ["filterFilter", CharacteristicsController],
     bindings: {
         characteristicTypes: "<",

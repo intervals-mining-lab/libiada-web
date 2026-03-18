@@ -29,7 +29,7 @@
 }
 
 angular.module("libiada").component("characteristicsWithoutNotation", {
-    templateUrl: `${window.location.origin}/AngularTemplates/_CharacteristicsWithoutNotation`,
+    templateUrl: `/AngularTemplates/_CharacteristicsWithoutNotation`,
     controller: CharacteristicsWithoutNotationController,
     bindings: {
         characteristicTypes: "<",

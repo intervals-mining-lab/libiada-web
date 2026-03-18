@@ -230,7 +230,7 @@
 }
 
 angular.module("libiada").component("researchObjectsTable", {
-    templateUrl: `${window.location.origin}/AngularTemplates/_ResearchObjectsTable`,
+    templateUrl: `/AngularTemplates/_ResearchObjectsTable`,
     controller: ["$scope", "$http", "filterFilter", ResearchObjectsTableController],
     bindings: {
         selectedResearchObjectsCount: "=",
