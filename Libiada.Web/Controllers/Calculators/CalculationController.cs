@@ -68,7 +68,6 @@ public class CalculationController : AbstractResultController
                                       .Build();
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
-
     }
 
     /// <summary>

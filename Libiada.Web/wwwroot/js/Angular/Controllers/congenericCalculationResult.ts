@@ -5,18 +5,19 @@ import type { Characteristic, SequenceCharacteristics } from "viewDataTypes";
 /**
  * Interface for the data object fetched from the server
  */
-interface CalculationResultData {
+interface CongenericCalculationResultData {
     transformationsList: string[];
     iterationsCount: number;
     characteristics: SequenceCharacteristics[];
     characteristicNames: string[];
     characteristicsList: Characteristic[];
+    theoreticalRanks: number[][][];
 }
 
 /**
  * Interface for the angular controller's scope
  */
-interface CalculationResultScope extends ng.IScope, CalculationResultData {
+interface CongenericCalculationResultScope extends ng.IScope, CongenericCalculationResultData {
     loading: boolean;
     loadingScreenHeader: string;
     taskId: string;
@@ -25,21 +26,21 @@ interface CalculationResultScope extends ng.IScope, CalculationResultData {
 }
 
 /**
- * Angular controller class for integral characteristics calculation results visualization
+ * Angular controller class for congeneric characteristics calculation results visualization
  */
-class CalculationResultHandler {
+class CongenericCalculationResultHandler {
     constructor() {
         this.ngOnInit();
     }
 
     private ngOnInit(): void {
-        const calculationResult = async ($scope: CalculationResultScope, $http: ng.IHttpService): Promise<void> => {
+        const congenericCalculationResult = async ($scope: CongenericCalculationResultScope, $http: ng.IHttpService): Promise<void> => {
             $scope.characteristicsTableTabSelected = false;
             
             // initialyzing tooltips for tabs
             $('[data-bs-toggle="tooltip"]').tooltip();
 
-            initScopeFromServer<CalculationResultData>(
+            initScopeFromServer<CongenericCalculationResultData>(
                 $http,
                 $scope,
                 "Loading characteristics calculation results",
@@ -47,13 +48,13 @@ class CalculationResultHandler {
         };
 
         // Register controller in Angular module
-        angular.module("libiada").controller("CalculationResultCtrl", ["$scope", "$http", calculationResult]);
+        angular.module("libiada").controller("CongenericCalculationResultCtrl", ["$scope", "$http", congenericCalculationResult]);
     }
 }
 
 /**
  * Wrapper function for backward compatibility
  */
-export default function CalculationResultController():  CalculationResultHandler {
-    return new  CalculationResultHandler();
+export default function CongenericCalculationResultController(): CongenericCalculationResultHandler {
+    return new CongenericCalculationResultHandler();
 }

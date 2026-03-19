@@ -33,9 +33,6 @@ class ClusterizationResultHandler {
         this.ngOnInit();
     }
 
-    /**
-     * Initializes the Angular controller
-     */
     private ngOnInit(): void {
         const clusterizationResult = async ($scope: ClusterizationResultScope, $http: ng.IHttpService): Promise<void> => {
             $scope.characteristicsTableTabSelected = false;
