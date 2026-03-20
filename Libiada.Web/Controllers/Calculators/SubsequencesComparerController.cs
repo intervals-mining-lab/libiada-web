@@ -12,6 +12,7 @@ using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
 using Libiada.Web.Extensions;
 using Libiada.Web.Helpers;
+using Libiada.Web.Models.CalculatorsData;
 using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
@@ -26,7 +27,7 @@ using static Libiada.Core.Extensions.EnumExtensions;
 [Authorize]
 public class SubsequencesComparerController : AbstractResultController
 {
-    //TODO: replace all possible tupels with classes in this file 
+    //TODO: replace all possible tuples with classes in this file
 
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IFullCharacteristicRepository fullCharacteristicRepository;
@@ -159,8 +160,18 @@ public class SubsequencesComparerController : AbstractResultController
 
 
             string sequenceCharacteristicName = fullCharacteristicRepository.GetCharacteristicName(characteristicLinkId);
-            string characteristicName = fullCharacteristicRepository.GetCharacteristicName(characteristicLinkIds[0]);
-
+            string[] characteristicNames = new string[characteristicLinkIds.Length];
+            var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
+            for (int k = 0; k < characteristicLinkIds.Length; k++)
+            {
+                characteristicNames[k] = fullCharacteristicRepository.GetCharacteristicName(characteristicLinkIds[k]);
+                characteristicsList[k] = new SelectListItem
+                {
+                    Value = k.ToString(),
+                    Text = characteristicNames[k],
+                    Selected = false
+                };
+            }
             var characteristicValueSubsequences = new Dictionary<double, List<(int researchObjectIndex, int subsequenceIndex, double[] additionalCharacteristics)>>();
 
             // cycle through research objects
@@ -218,7 +229,7 @@ public class SubsequencesComparerController : AbstractResultController
             var result = new Dictionary<string, object>
             {
                 { "researchObjectsNames", researchObjectNames },
-                { "characteristicName", characteristicName },
+                { "characteristicNames", characteristicNames },
                 { "similarities", similarities },
                 { "filteredSimilarities", filteredSimilarities },
                 { "features", features.ToDictionary(f => (byte)f, f => f.GetDisplayValue()) },
@@ -341,15 +352,15 @@ public class SubsequencesComparerController : AbstractResultController
     /// The research objects count.
     /// </param>
     /// <returns>
-    /// The <see cref="T:object[,]"/>.
+    /// The <see cref="T:SimilarityData[,]"/>.
     /// </returns>
     [NonAction]
-    private object[,] Similarities(
+    private SimilarityData[,] Similarities(
         List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>[,] similarityMatrix,
         SubsequenceData[][] characteristics,
         int researchObjectsCount)
     {
-        object[,] similarities = new object[researchObjectsCount, researchObjectsCount];
+        SimilarityData[,] similarities = new SimilarityData[researchObjectsCount, researchObjectsCount];
         for (int i = 0; i < researchObjectsCount; i++)
         {
             for (int j = 0; j < researchObjectsCount; j++)
@@ -412,17 +423,19 @@ public class SubsequencesComparerController : AbstractResultController
                 double formula3 = similarSequencesCharacteristicSum / allSequencesCharacteristicSum;
 
                 const int digits = 5;
-                similarities[i, j] = new
+                similarities[i, j] = new SimilarityData
                 {
-                    formula1 = System.Math.Round(formula1, digits),
-                    formula2 = System.Math.Round(formula2, digits),
-                    formula3 = System.Math.Round(formula3, digits),
-                    firstAbsolutelyEqualElementsCount = firstAbsolutelyEqualCount,
-                    firstNearlyEqualElementsCount = firstNearlyEqualCount,
-                    firstNotEqualElementsCount = characteristics[i].Length - firstEqualCount,
-                    secondAbsolutelyEqualElementsCount = secondAbsolutelyEqualCount,
-                    secondNearlyEqualElementsCount = secondNearlyEqualCount,
-                    secondNotEqualElementsCount = characteristics[j].Length - secondEqualCount,
+                    Formula1 = System.Math.Round(formula1, digits),
+                    Formula2 = System.Math.Round(formula2, digits),
+                    Formula3 = System.Math.Round(formula3, digits),
+                    FirstAbsolutelyEqualElementsCount = firstAbsolutelyEqualCount,
+                    FirstNearlyEqualElementsCount = firstNearlyEqualCount,
+                    FirstNotEqualElementsCount = characteristics[i].Length - firstEqualCount,
+                    FirstTotalElementsCount = characteristics[i].Length,
+                    SecondAbsolutelyEqualElementsCount = secondAbsolutelyEqualCount,
+                    SecondNearlyEqualElementsCount = secondNearlyEqualCount,
+                    SecondNotEqualElementsCount = characteristics[j].Length - secondEqualCount,
+                    SecondTotalElementsCount = characteristics[j].Length
                 };
             }
         }

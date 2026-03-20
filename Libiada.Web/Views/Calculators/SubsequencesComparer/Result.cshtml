@@ -10,12 +10,27 @@
 
     <div ng-controller="SubsequencesComparerResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
-        <div>
+        <div class="mb-2">
             Sequences characteristic: <b>{{sequenceCharacteristicName}}</b>
         </div>
-        <div>
-            Subsequences characteristic: <b>{{characteristicName}}</b>
-        </div>
+        <table class="table table-bordered table-hover table-sm">
+            <thead>
+                <tr>
+                    <td>
+                        <b>Subsequences characteristics</b>
+                    </td>
+                    <td>
+                        <b>Maximum difference (%)</b>
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="characteristicName in ::characteristicNames">
+                    <td ng-bind="::characteristicName" />
+                    <td ng-bind="::maxPercentageDifferences[$index]" />
+                </tr>
+            </tbody>
+        </table>
         <br />
         <div ng-show="filteredSimilarities" class="form-check">
             <input type="checkbox"
@@ -38,13 +53,13 @@
                     <td title="{{researchObjectsNames[$index]}}">{{$index + 1}}</td>
                     <td ng-repeat="value in similarity"
                         ng-click="showEqualPairs($parent.$index, $index, value)"
-                        ng-style="getHighlightColor(value.formula1)"
+                        ng-style="getHighlightColor(value.Formula1)"
                         title="{{researchObjectsNames[$parent.$index]}} &#13{{researchObjectsNames[$index]}}">
-                        {{(value.formula1 * 100).toFixed(3)}}%
+                        {{(value.Formula1 * 100).toFixed(3)}}%
                         <br />
-                        {{(value.formula2).toFixed(5)}}
+                        {{(value.Formula2).toFixed(5)}}
                         <br />
-                        {{(value.formula3 * 100).toFixed(3)}}%
+                        {{(value.Formula3 * 100).toFixed(3)}}%
                     </td>
                     <td title="{{researchObjectsNames[$index]}}">{{$index + 1}}</td>
                 </tr>
@@ -59,22 +74,23 @@
             <li class="list-group-item" ng-repeat="researchObjectName in researchObjectsNames"> <b> {{$index + 1}} - {{researchObjectName}} </b> </li>
         </ul>
         <hr />
-        <div class="row mb-1">
-            <p>Maximum difference = {{::maxPercentageDifference}}%</p>
-        </div>
         <div class="row mb-1" ng-show="similarityValueSelected">
             <p>
-                Number of equal subsequences from first sequence = {{similarityValue.firstAbsolutelyEqualElementsCount}}
+                <b>Number of equal subsequences from first sequence = {{similarityValue.FirstAbsolutelyEqualElementsCount}}</b>
                 <br />
-                Number of similar subsequences from first sequence = {{similarityValue.firstNearlyEqualElementsCount}}
+                Number of similar subsequences from first sequence = {{similarityValue.FirstNearlyEqualElementsCount}}
                 <br />
-                Number of not equal subsequences from first sequence = {{similarityValue.firstNotEqualElementsCount}}
+                Number of not equal subsequences from first sequence = {{similarityValue.FirstNotEqualElementsCount}}
                 <br />
-                Number of equal subsequences from second sequence = {{similarityValue.secondAbsolutelyEqualElementsCount}}
+                Total number of subsequences in first sequence =  {{similarityValue.FirstTotalElementsCount}}
                 <br />
-                Number of similar subsequences from second sequence = {{similarityValue.secondNearlyEqualElementsCount}}
+                <b>Number of equal subsequences from second sequence = {{similarityValue.SecondAbsolutelyEqualElementsCount}}</b>
                 <br />
-                Number of not equal subsequences from second sequence = {{similarityValue.secondNotEqualElementsCount}}
+                Number of similar subsequences from second sequence = {{similarityValue.SecondNearlyEqualElementsCount}}
+                <br />
+                Number of not equal subsequences from second sequence = {{similarityValue.SecondNotEqualElementsCount}}
+                <br />
+                Total number of subsequences in second sequence =  {{similarityValue.SecondTotalElementsCount}}
             </p>
         </div>
         <filters filters="filters" add-filter="addFilter(newFilter)" delete-filter="deleteFilter(filter, filterIndex)"></filters>
@@ -168,7 +184,7 @@
     </div>
 
     @section Scripts {
-    <script type="module" src="~/js/Angular/Components/characteristic.js" asp-append-version="true"></script>
-    <script type="module" src="~/js/Angular/Components/filters.js" asp-append-version="true"></script>
+        <script type="module" src="~/js/Angular/Components/characteristic.js" asp-append-version="true"></script>
+        <script type="module" src="~/js/Angular/Components/filters.js" asp-append-version="true"></script>
     }
 }
