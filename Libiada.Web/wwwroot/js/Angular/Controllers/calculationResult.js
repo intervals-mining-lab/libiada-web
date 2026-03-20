@@ -6,9 +6,6 @@ class CalculationResultHandler {
     constructor() {
         this.ngOnInit();
     }
-    /**
-     * Initializes the Angular controller
-     */
     ngOnInit() {
         const calculationResult = async ($scope, $http) => {
             $scope.characteristicsTableTabSelected = false;

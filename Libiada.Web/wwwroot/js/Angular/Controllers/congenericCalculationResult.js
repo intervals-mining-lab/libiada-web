@@ -1,29 +1,26 @@
 import { initScopeFromServer } from "functions";
 /**
- * Angular controller class for integral characteristics calculation results visualization
+ * Angular controller class for congeneric characteristics calculation results visualization
  */
-class CalculationResultHandler {
+class CongenericCalculationResultHandler {
     constructor() {
         this.ngOnInit();
     }
-    /**
-     * Initializes the Angular controller
-     */
     ngOnInit() {
-        const calculationResult = async ($scope, $http) => {
+        const congenericCalculationResult = async ($scope, $http) => {
             $scope.characteristicsTableTabSelected = false;
             // initialyzing tooltips for tabs
             $('[data-bs-toggle="tooltip"]').tooltip();
             initScopeFromServer($http, $scope, "Loading characteristics calculation results", "Failed loading characteristics calculation results");
         };
         // Register controller in Angular module
-        angular.module("libiada").controller("CalculationResultCtrl", ["$scope", "$http", calculationResult]);
+        angular.module("libiada").controller("CongenericCalculationResultCtrl", ["$scope", "$http", congenericCalculationResult]);
     }
 }
 /**
  * Wrapper function for backward compatibility
  */
-export default function CalculationResultController() {
-    return new CalculationResultHandler();
+export default function CongenericCalculationResultController() {
+    return new CongenericCalculationResultHandler();
 }
-//# sourceMappingURL=calculationResult.js.map
+//# sourceMappingURL=congenericCalculationResult.js.map
