@@ -1,9 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Congeneric sequences characteristics calculation";
-}
-
-@{
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "CongenericCalculation");
+    ViewBag.Title = "Libiada - Congeneric sequences characteristics calculation";
 }
 
 <h2>@ViewBag.Title</h2>
@@ -11,17 +7,47 @@
 @using (Html.BeginForm())
 {
     <div ng-controller="CongenericCalculationCtrl">
-        @(Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" }))
+        <h4>Sequences and parameters</h4>
+        <hr />
         <nature-select natures="natures"
                        nature="nature">
         </nature-select>
-        <research-objects-table nature="nature"
+        <div class="btn-group" role="group" aria-label="Table type radio toggle button group">
+            <input type="radio"
+                   class="btn-check"
+                   name="tableType"
+                   id="researchObjectsTableRadio"
+                   value="researchObjects"
+                   ng-model="calculationFor"
+                   autocomplete="off">
+            <label class="btn btn-outline-secondary" for="researchObjectsTableRadio">Sequences</label>
+            <input type="radio"
+                   class="btn-check"
+                   name="tableType"
+                   id="sequenceGroupsTableRadio"
+                   value="sequenceGroups"
+                   ng-model="calculationFor"
+                   ng-change="clearSelection()"
+                   autocomplete="off">
+            <label class="btn btn-outline-secondary" for="sequenceGroupsTableRadio">Sequence groups</label>
+        </div>
+        <research-objects-table ng-show="calculationFor === 'researchObjects'"
+                                nature="nature"
                                 groups="groups"
                                 sequence-types="sequenceTypes"
-                                maximum-selected-research-objects="maximumSelectedResearchObjects"
+                                maximum-selected-research-objects="::maximumSelectedResearchObjects"
                                 selected-research-objects-count="selectedResearchObjectsCount"
-                                group-and-type-required="::false">
+                                group-and-type-required="::false"
+                                set-unselect-all-research-objects-function="setUnselectAllResearchObjectsFunction(func)">
         </research-objects-table>
+        <sequence-groups-table ng-show="calculationFor === 'sequenceGroups'"
+                               sequence-groups="sequenceGroups"
+                               nature="nature"
+                               groups="groups"
+                               sequence-types="sequenceTypes"
+                               selected-sequence-groups-count="selectedSequenceGroupsCount"
+                               set-unselect-all-sequence-groups-function="setUnselectAllSequenceGroupsFunction(func)">
+        </sequence-groups-table>
         <characteristics characteristic-types="::characteristicTypes"
                          characteristics-dictionary="::characteristicsDictionary"
                          nature="nature"
@@ -53,8 +79,12 @@
 }
 
 @section Scripts {
+    @{
+        await Html.RenderPartialAsync("_AngularControllerInitializer", "CongenericCalculation");
+    }
     <script type="module" src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
     <script type="module" src="~/js/Angular/Components/researchObjectsTable.js" asp-append-version="true"></script>
+    <script type="module" src="~/js/Angular/Components/sequenceGroupsTable.js" asp-append-version="true"></script>
     <script type="module" src="~/js/Angular/Components/natureSelect.js" asp-append-version="true"></script>
     <script type="module" src="~/js/Angular/Components/researchObjectsSubmit.js" asp-append-version="true"></script>
 }

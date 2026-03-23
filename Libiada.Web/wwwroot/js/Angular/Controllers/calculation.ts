@@ -9,7 +9,8 @@ import type {
     Translator,
     Group,
     SequenceGroup,
-    CharacteristicType
+    CharacteristicType,
+    DisplayedTable
 } from "viewDataTypes";
 
 /**
@@ -35,7 +36,7 @@ interface CalculationData {
  * Interface for the angular controller's scope
  */
 interface CalculationScope extends ng.IScope, CalculationData {
-    calculationFor: displayedTable;
+    calculationFor: DisplayedTable;
     nature: string;
     selectedResearchObjectsCount: number;
     selectedSequenceGroupsCount: number;
@@ -50,7 +51,7 @@ interface CalculationScope extends ng.IScope, CalculationData {
     unselectAllSequenceGroups: Function;
 }
 
-type displayedTable = "researchObjects" | "sequenceGroups";
+
 
 // Angular controller class
 class CalculationOperator {

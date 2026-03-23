@@ -215,7 +215,7 @@ public class SubsequencesComparerController : AbstractResultController
 
             List<((int researchObjectIndex, int subsequenceIndex) firstSequence, (int researchObjectIndex, int subsequenceIndex) secondSequence, double difference)> filteredSimilarPairs;
             List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>[,] filteredSimilarityMatrix = null;
-            object[,] filteredSimilarities = null;
+            object[,]? filteredSimilarities = null;
 
             if (filterMatrix)
             {

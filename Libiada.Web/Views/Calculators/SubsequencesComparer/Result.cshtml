@@ -1,13 +1,11 @@
 ﻿@{
-    ViewBag.Title = "Similarity matrix";
+    ViewBag.Title = "Libiada - Similarity matrix";
 }
 
 <h2>@ViewBag.Title</h2>
 
 @if (ViewBag.Error == null)
 {
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "SubsequencesComparerResult");
-
     <div ng-controller="SubsequencesComparerResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <div class="mb-2">
@@ -184,6 +182,9 @@
     </div>
 
     @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_AngularControllerInitializer", "SubsequencesComparerResult");
+        }
         <script type="module" src="~/js/Angular/Components/characteristic.js" asp-append-version="true"></script>
         <script type="module" src="~/js/Angular/Components/filters.js" asp-append-version="true"></script>
     }

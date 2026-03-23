@@ -9,6 +9,7 @@ using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
 using Libiada.Web.Helpers;
+using Libiada.Web.Models.CalculatorsData;
 using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
@@ -64,6 +65,7 @@ public class CongenericCalculationController : AbstractResultController
     public ActionResult Index()
     {
         var viewData = viewDataBuilder.AddMinMaxResearchObjects()
+                                      .AddSequenceGroups()
                                       .AddNatures()
                                       .AddNotations()
                                       .AddLanguages()
@@ -81,8 +83,16 @@ public class CongenericCalculationController : AbstractResultController
     /// <summary>
     /// The index.
     /// </summary>
+    /// <param name="tableType">
+    /// Selector between reasearch objects ids 
+    /// and sequence groups ids.
+    /// </param>
     /// <param name="researchObjectIds">
-    /// The research object ids.
+    /// The research objects ids.
+    /// </param>
+    /// <param name="sequenceGroupIds">
+    /// Sequence groups ids. 
+    /// Alternative to separate research objects ids.
     /// </param>
     /// <param name="characteristicLinkIds">
     /// The characteristic type and link ids.
@@ -116,7 +126,9 @@ public class CongenericCalculationController : AbstractResultController
     /// </returns>
     [HttpPost]
     public ActionResult Index(
+        string tableType,
         long[] researchObjectIds,
+        int[] sequenceGroupIds,
         short[] characteristicLinkIds,
         Notation[] notations,
         Language[] languages,
@@ -128,32 +140,36 @@ public class CongenericCalculationController : AbstractResultController
     {
         return CreateTask(() =>
         {
+            using var db = dbFactory.CreateDbContext();
+            IEnumerable<SelectListItem>? sequenceGroupsSelectList = null;
+            Dictionary<long, int>? researchObjectsIdsSequenceGroupIds = null;
+            if (tableType.Equals("sequenceGroups"))
+            {
+                SequenceGroup[] sequenceGroups = db.SequenceGroups.Where(sg => sequenceGroupIds.Contains(sg.Id)).Include(sg => sg.ResearchObjects).ToArray();
+                researchObjectIds = sequenceGroups.Select(sg => sg.ResearchObjects.Select(m => m.Id)).SelectMany(m => m).ToArray();
+                int distinctResearchObjectsCount = researchObjectIds.Distinct().ToArray().Length;
+                if (researchObjectIds.Length != distinctResearchObjectsCount)
+                {
+                    throw new ArgumentException("Sequence groups contain intesecting sets of sequences", nameof(sequenceGroupIds));
+                }
+
+                researchObjectsIdsSequenceGroupIds = sequenceGroups.SelectMany(sg => sg.ResearchObjects.Select(m => new { id = sg.Id, researchObjectId = m.Id }))
+                                                           .ToDictionary(sg => sg.researchObjectId, sg => sg.id);
+
+                sequenceGroupsSelectList = db.SequenceGroups
+                                             .Where(sg => sequenceGroupIds.Contains(sg.Id))
+                                             .OrderBy(m => m.Created)
+                                             .Select(sg => new ResearchObjectTableRow(sg, false))
+                                             .ToArray();
+            }
+
             var sequencesCharacteristics = new SequenceCharacteristics[researchObjectIds.Length];
-            Dictionary<long, string> researchObjectsNames;
-            long[][] sequenceIds;
-
-            researchObjectsNames = cache.ResearchObjects.Where(m => researchObjectIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
+            Dictionary<long, string> researchObjectsNames = cache.ResearchObjects.Where(m => researchObjectIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
             using var sequenceRepository = sequenceRepositoryFactory.Create();
-            sequenceIds = sequenceRepository.GetSequenceIds(researchObjectIds, notations, languages, translators, pauseTreatments, sequentialTransfers, trajectories);
-
-            //// characteristics names
-            //for (int k = 0; k < characteristicLinkIds.Length; k++)
-            //{
-            //    string characteristicType = congenericCharacteristicRepository.GetCharacteristicName(characteristicLinkIds[k], notations[k]);
-            //    if (isLiteratureSequence)
-            //    {
-            //        Language language = languages[k];
-            //        characteristicNames.Add($"{characteristicType} {language.GetDisplayValue()}");
-            //    }
-            //    else
-            //    {
-            //        characteristicNames.Add(characteristicType);
-            //    }
-            //}
+            long[][] sequenceIds = sequenceRepository.GetSequenceIds(researchObjectIds, notations, languages, translators, pauseTreatments, sequentialTransfers, trajectories);
 
             var characteristics = congenericSequencesCharacteristicsCalculator.Calculate(sequenceIds, characteristicLinkIds);
 
-            using var db = dbFactory.CreateDbContext();
             var flatSequenceIds = sequenceIds.SelectMany(si => si);
             var elementIds = db.CombinedSequenceEntities
                                 .Where(cs => flatSequenceIds.Contains(cs.Id))
@@ -280,21 +296,9 @@ public class CongenericCalculationController : AbstractResultController
                 { "characteristicsList", characteristicsList }
             };
 
+            if (sequenceGroupsSelectList is not null) result.Add("sequenceGroups", sequenceGroupsSelectList);
+
             return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
         });
-    }
-
-
-    /// <summary>
-    /// The sort key value pair list.
-    /// </summary>
-    /// <param name="arrayForSort">
-    /// The array for sort.
-    /// </param>
-    [NonAction]
-    private void SortKeyValuePairList(List<KeyValuePair<int, double>> arrayForSort)
-    {
-        //TODO: refactor this to use tuples
-        arrayForSort.Sort((firstPair, nextPair) => nextPair.Value.CompareTo(firstPair.Value));
     }
 }

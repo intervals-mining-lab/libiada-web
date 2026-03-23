@@ -8,7 +8,8 @@ import type {
     Trajectory,
     Translator,
     Group,
-    CharacteristicType
+    CharacteristicType,
+    DisplayedTable
 } from "viewDataTypes";
 
 /**
@@ -33,10 +34,16 @@ interface CongenericCalculationData {
  * Interface for the angular controller's scope
  */
 interface CongenericCalculationScope extends ng.IScope, CongenericCalculationData {
-    nature?: number;
-    selectedResearchObjectsCount?: number;
-    selectedSequenceGroupsCount?: number;
+    calculationFor: DisplayedTable;
+    nature: string;
+    selectedResearchObjectsCount: number;
+    selectedSequenceGroupsCount: number;
 
+    clearSelection: () => void;
+    setUnselectAllResearchObjectsFunction: (func: Function) => void;
+    setUnselectAllSequenceGroupsFunction: (func: Function) => void;
+    unselectAllResearchObjects: Function;
+    unselectAllSequenceGroups: Function;
 }
 
 // Controller class
@@ -48,8 +55,27 @@ class CongenericCalculationOperator {
     private ngOnInit(data: CongenericCalculationData): void {
         const congenericCalculation = ($scope: CongenericCalculationScope, filterFilter: ng.IFilterFilter): void => {
             MapModelFromJson($scope, data);
-        };
 
+            function setUnselectAllResearchObjectsFunction(func: Function): void {
+                $scope.unselectAllResearchObjects = func;
+            }
+
+            function setUnselectAllSequenceGroupsFunction(func: Function): void {
+                $scope.unselectAllSequenceGroups = func;
+            }
+
+            function clearSelection(): void {
+                if ($scope.unselectAllResearchObjects) $scope.unselectAllResearchObjects();
+
+                if ($scope.unselectAllSequenceGroups) $scope.unselectAllSequenceGroups();
+            }
+
+            $scope.setUnselectAllResearchObjectsFunction = setUnselectAllResearchObjectsFunction;
+            $scope.setUnselectAllSequenceGroupsFunction = setUnselectAllSequenceGroupsFunction;
+            $scope.clearSelection = clearSelection;
+
+            $scope.calculationFor = "researchObjects";
+        };
         angular.module("libiada").controller("CongenericCalculationCtrl", ["$scope", "filterFilter", congenericCalculation]);
     }
 }

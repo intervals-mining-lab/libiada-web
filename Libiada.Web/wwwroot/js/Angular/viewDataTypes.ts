@@ -87,3 +87,5 @@ export interface SequenceCharacteristics {
     Characteristics: number[];
     SequenceGroupId?: number;
 }
+
+export type DisplayedTable = "researchObjects" | "sequenceGroups";

@@ -73,8 +73,16 @@ public class CalculationController : AbstractResultController
     /// <summary>
     /// The index.
     /// </summary>
+    /// <param name="tableType">
+    /// Selector between reasearch objects ids 
+    /// and sequence groups ids.
+    /// </param>
     /// <param name="researchObjectIds">
     /// The research objects ids.
+    /// </param>
+    /// <param name="sequenceGroupIds">
+    /// Sequence groups ids. 
+    /// Alternative to separate research objects ids.
     /// </param>
     /// <param name="characteristicLinkIds">
     /// The characteristic type and link ids.
@@ -151,14 +159,13 @@ public class CalculationController : AbstractResultController
             }
 
             using var sequenceRepository = sequenceRepositoryFactory.Create();
-            long[][] sequenceIds;
-            sequenceIds = sequenceRepository.GetSequenceIds(researchObjectIds,
-                                                            notations,
-                                                            languages,
-                                                            translators,
-                                                            pauseTreatments,
-                                                            sequentialTransfers,
-                                                            trajectories);
+            long[][] sequenceIds = sequenceRepository.GetSequenceIds(researchObjectIds,
+                                                                     notations,
+                                                                     languages,
+                                                                     translators,
+                                                                     pauseTreatments,
+                                                                     sequentialTransfers,
+                                                                     trajectories);
             Dictionary<long, string> researchObjectsNames = cache.ResearchObjects.Where(m => researchObjectIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
 
             double[][] characteristics;

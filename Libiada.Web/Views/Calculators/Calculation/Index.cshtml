@@ -1,12 +1,5 @@
-﻿@using Libiada.Web.Extensions
-@using Libiada.Web.Helpers
-
-@{
+﻿@{
     ViewBag.Title = "Libiada - Characteristics calculation";
-}
-
-@{
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "Calculation");
 }
 
 <h2>@ViewBag.Title</h2>
@@ -105,6 +98,9 @@
     </div>
 }
 @section Scripts {
+    @{
+        await Html.RenderPartialAsync("_AngularControllerInitializer", "Calculation");
+    }
     <script type="module" src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
     <script type="module" src="~/js/Angular/Components/researchObjectsTable.js" asp-append-version="true"></script>
     <script type="module" src="~/js/Angular/Components/sequenceGroupsTable.js" asp-append-version="true"></script>
