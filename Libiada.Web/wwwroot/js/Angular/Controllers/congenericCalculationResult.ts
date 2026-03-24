@@ -1,5 +1,5 @@
 import { initScopeFromServer  } from "functions";
-import type { Characteristic, SequenceCharacteristics } from "viewDataTypes";
+import type { Characteristic, SequenceCharacteristics, SequencesGroup } from "viewDataTypes";
 
 
 /**
@@ -12,6 +12,7 @@ interface CongenericCalculationResultData {
     characteristicNames: string[];
     characteristicsList: Characteristic[];
     theoreticalRanks: number[][][];
+    sequenceGroups?: SequencesGroup[]
 }
 
 /**

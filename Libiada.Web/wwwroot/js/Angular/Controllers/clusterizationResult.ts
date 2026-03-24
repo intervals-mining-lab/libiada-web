@@ -1,5 +1,5 @@
 import { initScopeFromServer  } from "functions";
-import type { Characteristic, SequenceCharacteristics, Cluster } from "viewDataTypes";
+import type { Characteristic, SequenceCharacteristics, SequencesGroup } from "viewDataTypes";
 
 
 /**
@@ -11,7 +11,7 @@ interface ClusterizationResultData {
     characteristics: SequenceCharacteristics[];
     characteristicNames: string[];
     characteristicsList: Characteristic[];
-    sequenceGroups: Cluster[];
+    sequenceGroups: SequencesGroup[];
 }
 
 /**

@@ -1,5 +1,5 @@
 ﻿//import type ExcelJS from "../../../lib/exceljs/exceljs.js";
-import type { SequenceCharacteristics, Cluster } from "viewDataTypes";
+import type { SequenceCharacteristics, SequencesGroup } from "viewDataTypes";
 
 interface ExcelRow {
     id: number;
@@ -10,7 +10,7 @@ interface ExcelRow {
 
 interface CharacteristicsTableExcelExporterComponentController extends ng.IController {
     excelFileName: string;
-    sequenceGroups?: Cluster[];
+    sequenceGroups?: SequencesGroup[];
     characteristics: SequenceCharacteristics[];
     characteristicNames: string[];
 

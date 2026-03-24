@@ -12,7 +12,7 @@ export interface SelectListItemWithNature extends SelectListItem {
 
 export interface Characteristic extends SelectListItem { }
 
-export interface Cluster extends SelectListItem { }
+export interface SequencesGroup extends SelectListItem { }
 
 export interface SequenceType extends SelectListItemWithNature { }
 

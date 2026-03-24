@@ -1,7 +1,7 @@
-﻿import type { SequenceCharacteristics, Cluster } from "viewDataTypes";
+﻿import type { SequenceCharacteristics, SequencesGroup } from "viewDataTypes";
 
 interface CharacteristicsTableComponentController extends ng.IController {
-    sequenceGroups?: Cluster[];
+    sequenceGroups?: SequencesGroup[];
     characteristics: SequenceCharacteristics[];
     characteristicNames: string[];
     characteristicsTableTabSelected: boolean;

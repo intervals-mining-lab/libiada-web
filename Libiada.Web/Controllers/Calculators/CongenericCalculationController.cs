@@ -9,7 +9,6 @@ using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
 using Libiada.Web.Helpers;
-using Libiada.Web.Models.CalculatorsData;
 using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
@@ -159,7 +158,11 @@ public class CongenericCalculationController : AbstractResultController
                 sequenceGroupsSelectList = db.SequenceGroups
                                              .Where(sg => sequenceGroupIds.Contains(sg.Id))
                                              .OrderBy(m => m.Created)
-                                             .Select(sg => new ResearchObjectTableRow(sg, false))
+                                             .Select(sg => new SelectListItem
+                                             {
+                                                 Text = sg.Name,
+                                                 Value = sg.Id.ToString(),
+                                             })
                                              .ToArray();
             }
 
@@ -199,6 +202,7 @@ public class CongenericCalculationController : AbstractResultController
                 sequencesCharacteristics[i] = new SequenceCharacteristics
                 {
                     ResearchObjectName = researchObjectsNames[researchObjectIds[i]],
+                    SequenceGroupId = researchObjectsIdsSequenceGroupIds?[researchObjectIds[i]],
                     Characteristics = characteristicsValues
                 };
             }

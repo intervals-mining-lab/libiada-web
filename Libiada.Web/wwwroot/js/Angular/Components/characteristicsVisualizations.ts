@@ -1,5 +1,5 @@
 ﻿import * as plotly from "plotly.js";
-import type { Characteristic, Cluster,SequenceCharacteristics } from "viewDataTypes";
+import type { Characteristic, SequencesGroup,SequenceCharacteristics } from "viewDataTypes";
 import { getArrayMinMax, arrayMax, throwHelper } from "functions";
 
 interface Point {
@@ -17,7 +17,7 @@ interface LegendItem {
 interface CharacteristicsVisualizationsComponentController extends ng.IController {
     characteristicsList: Characteristic[];
     characteristics: SequenceCharacteristics[];
-    sequenceGroups?: Cluster[];
+    sequenceGroups?: SequencesGroup[];
     legend: LegendItem[];
     chartCharacteristics: Characteristic[];
     points: Point[];
