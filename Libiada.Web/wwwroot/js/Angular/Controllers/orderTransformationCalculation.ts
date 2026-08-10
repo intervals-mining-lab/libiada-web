@@ -54,12 +54,12 @@ class OrderTransformationCalculationHandler {
     * Initializes the Angular controller
     */
     private ngOnInit(data: OrderTransformationCalculationData): void {
-        const orderTransformationCalculation = ($scope: OrderTransformationCalculationScope, filterFilter: ng.IFilterFilter): void => {
+        const orderTransformationCalculation = ($scope: OrderTransformationCalculationScope): void => {
             // Initialize scope with data from the parameter
             MapModelFromJson($scope, data);
         };
 
-        angular.module("libiada").controller("OrderTransformationCalculationCtrl", ["$scope", "filterFilter", orderTransformationCalculation]);
+        angular.module("libiada").controller("OrderTransformationCalculationCtrl", ["$scope", orderTransformationCalculation]);
     }
 }
 

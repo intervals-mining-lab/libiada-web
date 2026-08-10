@@ -148,7 +148,7 @@ class TaskManagerControllerHandler {
                         $scope.$apply();
                         $scope.tasksHub.invoke("deleteAllTasks")
                             .then(() => alertify.success("All tasks have been deleted."))
-                            .catch(e => console.error(e instanceof Error ? e.message : String(e)));
+                            .catch((e: any) => console.error(e instanceof Error ? e.message : String(e)));
                     },
                     () => { /* Cancel action */ });
             }
@@ -160,7 +160,7 @@ class TaskManagerControllerHandler {
                         $scope.$apply();
                         $scope.tasksHub.invoke("deleteTasksWithState", taskStatus)
                             .then(() => alertify.success(`All tasks with "${taskStatus}" status have been deleted.`))
-                            .catch(e => console.error(e instanceof Error ? e.message : String(e)));
+                            .catch((e: any) => console.error(e instanceof Error ? e.message : String(e)));
                     },
                     () => { /* Cancel action */ });
             }
@@ -174,7 +174,7 @@ class TaskManagerControllerHandler {
                             $scope.$apply();
                             $scope.tasksHub.invoke("deleteTask", id)
                                 .then(() => alertify.success("The task has been deleted."))
-                                .catch(e => console.error(e instanceof Error ? e.message : String(e)));
+                                .catch((e: any) => console.error(e instanceof Error ? e.message : String(e)));
                         }
                     },
                     () => { /* Cancel action */ });
@@ -214,7 +214,7 @@ class TaskManagerControllerHandler {
 
             $scope.tasksHub.start()
                 .then(() => $scope.tasksHub.invoke("getAllTasks").then($scope.onHubStart))
-                .catch(e => console.error(e instanceof Error ? e.message : String(e)));
+                .catch((e: any) => console.error(e instanceof Error ? e.message : String(e)));
 
             // Initializing scope properties
             let location: string[] = window.location.href.split("/");

@@ -36,11 +36,11 @@ class SubsequencesSimilarityOperator {
     }
 
     private ngOnInit(data: SubsequencesSimilarityData): void {
-        const subsequencesSimilarity = ($scope: SubsequencesSimilarityScope, filterFilter: ng.IFilterFilter): void => {
+        const subsequencesSimilarity = ($scope: SubsequencesSimilarityScope): void => {
             MapModelFromJson($scope, data);
         };
 
-        angular.module("libiada").controller("SubsequencesSimilarityCtrl", ["$scope", "filterFilter", subsequencesSimilarity]);
+        angular.module("libiada").controller("SubsequencesSimilarityCtrl", ["$scope", subsequencesSimilarity]);
     }
 }
 

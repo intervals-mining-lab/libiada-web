@@ -228,7 +228,7 @@ function CharacteristicsVisualizationsController($scope) {
                 //pad: [80, 80, 80, 80],
                 line: {
                     color: ctrl.points.map(p => p.legendIndex),
-                    colorscale: "Turbo"
+                    //colorscale: "Turbo"
                 },
                 dimensions: characteristicsIndices.map(ci => ({
                     label: ctrl.characteristicNames[ci],
@@ -288,10 +288,10 @@ function CharacteristicsVisualizationsController($scope) {
         }
     };
     ctrl.dragbarMouseDown = async () => {
-        let right = document.getElementById("sidebar");
+        //let right = document.getElementById("sidebar");
         let bar = document.getElementById("dragbar");
         const drag = (e) => {
-            document.selection ? document.selection.empty() : window.getSelection().removeAllRanges();
+            document.selection ? document.selection.empty() : window.getSelection()?.removeAllRanges();
             ctrl.chartElement.style.width = `${e.pageX - bar.offsetWidth / 2}px`;
             Plotly.relayout(ctrl.chartElement, { autosize: true });
         };

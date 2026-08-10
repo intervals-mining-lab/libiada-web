@@ -1,6 +1,6 @@
 /*import * as d3 from "d3";*/
 //import Plotly from "plotly.js";
-import { getArrayMinMax, arrayMax } from "functions";
+import { getArrayMinMax, arrayMax, throwHelper } from "functions";
 /**
  * Controller for charts visualization
  */
@@ -29,9 +29,10 @@ class ChartsControllerHandler {
                     //Pasted data split into rows
                     let rows = text.split(/[\n\f\r]/);
                     // extracting first row that contains characteristics names
-                    let characteristics = rows.shift().split("\t");
+                    let row = rows.shift() ?? throwHelper("No data to parse");
+                    let characteristics = row.split("\t");
                     // extracting sequence name column
-                    $scope.sequencesName = characteristics.shift();
+                    $scope.sequencesName = characteristics.shift() ?? throwHelper("No characteristics to parse");
                     let rawCharacteristics = rows.map(r => r.split("\t"));
                     $scope.characteristics = [];
                     for (let i = 0; i < rawCharacteristics.length; i++) {
@@ -442,8 +443,8 @@ class ChartsControllerHandler {
             $scope.chartsCharacterisrticsCount = 1;
             $scope.chartElement = document.getElementById("chart");
             $scope.keyCodes = {
-                "C": 67,
-                "V": 86
+                C: 67,
+                V: 86
             };
             $scope.inFocus = false;
             $scope.rawData = "";

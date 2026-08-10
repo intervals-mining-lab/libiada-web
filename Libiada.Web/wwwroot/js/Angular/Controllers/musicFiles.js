@@ -4,9 +4,9 @@ class MusicFilesOperator {
         this.ngOnInit();
     }
     ngOnInit() {
-        const musicFiles = ($scope) => {
+        const musicFiles = () => {
         };
-        angular.module("libiada").controller("MusicFilesCtrl", ["$scope", musicFiles]);
+        angular.module("libiada").controller("MusicFilesCtrl", [musicFiles]);
     }
 }
 // Wrapper function for backwards compatibility

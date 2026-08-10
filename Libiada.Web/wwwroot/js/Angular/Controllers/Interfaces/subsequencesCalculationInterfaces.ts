@@ -1,4 +1,4 @@
-﻿import { IBasePoint } from "commonInterfaces";
+﻿import { IBasePoint } from "./commonInterfaces";
 
 // Интерфейс для характеристики
 export interface IChartCharacteristic {

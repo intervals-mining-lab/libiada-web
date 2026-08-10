@@ -53,11 +53,11 @@ class SequenceMixerHandler  {
     */
     private ngOnInit(data: SequenceMixerData): void {
 
-        const sequenceMixer = ($scope: SequenceMixerScope, filterFilter: ng.IFilterFilter): void => {
+        const sequenceMixer = ($scope: SequenceMixerScope): void => {
             MapModelFromJson($scope, data);
         };
 
-        angular.module("libiada").controller("SequenceMixerCtrl", ["$scope", "filterFilter", sequenceMixer]);
+        angular.module("libiada").controller("SequenceMixerCtrl", ["$scope", sequenceMixer]);
     }
 }
 

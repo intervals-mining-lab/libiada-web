@@ -51,13 +51,13 @@ class OrderTransformerHandler {
     * Initializes the Angular controller
     */
     private ngOnInit(data: OrderTransformerData): void {
-        const orderTransformer = ($scope: OrderTransformerScope, filterFilter: ng.IFilterFilter): void => {
+        const orderTransformer = ($scope: OrderTransformerScope): void => {
             // Initialize scope with data from the parameter
             MapModelFromJson($scope, data);
         };
 
         // Register the controller in Angular
-        angular.module("libiada").controller("OrderTransformerCtrl", ["$scope", "filterFilter", orderTransformer]);
+        angular.module("libiada").controller("OrderTransformerCtrl", ["$scope", orderTransformer]);
     }
 }
 

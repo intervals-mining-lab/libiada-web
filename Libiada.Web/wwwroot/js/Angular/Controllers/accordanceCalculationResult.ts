@@ -3,7 +3,7 @@
 /**
  * Interface for the data object fetched from the server
  */
-interface AccordanceResultData {
+interface AccordanceCalculationResultData {
     alphabet?: string[];
     calculationType: string;
     characteristicName: string;
@@ -16,7 +16,7 @@ interface AccordanceResultData {
 /**
  * Interface for the angular controller's scope
  */
-interface AccordanceResultScope extends angular.IScope, AccordanceResultData {
+interface AccordanceCalculationResultScope extends angular.IScope, AccordanceCalculationResultData {
     loadingScreenHeader: string;
     loading: boolean;
     taskId: string;
@@ -25,7 +25,7 @@ interface AccordanceResultScope extends angular.IScope, AccordanceResultData {
 /**
  * Controller for accordance functionality
  */
-class AccordanceResultHandler {
+class AccordanceCalculationResultHandler {
     /**
      * Creates a new controller instance
      * @param data Data for controller initialization
@@ -39,35 +39,35 @@ class AccordanceResultHandler {
      * @param data Data for controller initialization
      */
     private ngOnInit(): void {
-        const accordanceResult = ($scope: AccordanceResultScope, $http: ng.IHttpService): void => {
-            $scope.loadingScreenHeader = "Loading data";
+        const accordanceCalculationResult = ($scope: AccordanceCalculationResultScope, $http: ng.IHttpService): void => {
+            $scope.loadingScreenHeader = "Loading accordance data";
 
             let location = window.location.href.split("/");
             $scope.taskId = location[location.length - 1];
 
             $scope.loading = true;
 
-            $http.get<AccordanceResultData>(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
+            $http.get<AccordanceCalculationResultData>(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
                 .then(function (data) {
                     MapModelFromJson($scope, data.data);
                     $scope.loading = false;
                 })
                 .catch(function () {
-                    alert("Failed loading import results");
+                    alert("Failed loading accordance data");
                     $scope.loading = false;
                 });
         };
 
         // Register controller in Angular module
-        angular.module("libiada").controller("AccordanceResultCtrl", ["$scope", "$http", accordanceResult]);
+        angular.module("libiada").controller("AccordanceCalculationResultCtrl", ["$scope", "$http", accordanceCalculationResult]);
     }
 }
 
 /**
  * Wrapper function for backward compatibility
  * @param data Data for controller initialization
- * @returns Instance of accordance handler
+ * @returns Instance of accordance calculation result handler
  */
-export default function AccordanceResultController(): AccordanceResultHandler {
-    return new AccordanceResultHandler();
+export default function AccordanceCalculationResultController(): AccordanceCalculationResultHandler {
+    return new AccordanceCalculationResultHandler();
 }

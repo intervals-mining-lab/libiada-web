@@ -1,9 +1,3 @@
-/**
- * Interface for the controller's scope
- */
-interface MusicFilesScope extends ng.IScope {
-}
-
 // Angular controller class
 class MusicFilesOperator {
     constructor() {
@@ -11,10 +5,10 @@ class MusicFilesOperator {
     }
 
     private ngOnInit(): void {
-        const musicFiles = ($scope: MusicFilesScope): void => {
+        const musicFiles = (): void => {
         };
 
-        angular.module("libiada").controller("MusicFilesCtrl", ["$scope", musicFiles]);
+        angular.module("libiada").controller("MusicFilesCtrl", [musicFiles]);
     }
 }
 

@@ -5,7 +5,7 @@ class CalculationOperator {
         this.ngOnInit(data);
     }
     ngOnInit(data) {
-        const calculation = ($scope, filterFilter) => {
+        const calculation = ($scope) => {
             MapModelFromJson($scope, data);
             function setUnselectAllResearchObjectsFunction(func) {
                 $scope.unselectAllResearchObjects = func;
@@ -26,7 +26,7 @@ class CalculationOperator {
             $scope.complementary = false;
             $scope.rotate = false;
         };
-        angular.module("libiada").controller("CalculationCtrl", ["$scope", "filterFilter", calculation]);
+        angular.module("libiada").controller("CalculationCtrl", ["$scope", calculation]);
     }
 }
 // Wrapper function for backwards compatibility

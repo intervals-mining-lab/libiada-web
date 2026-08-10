@@ -15,7 +15,7 @@ import type {
 /**
  * Interface for the data object passed from the server
  */
-interface AccordanceData {
+interface AccordanceCalculationData {
     maximumSelectedResearchObjects: number;
     minimumSelectedResearchObjects: number;
     characteristicTypes: CharacteristicType[];
@@ -34,18 +34,17 @@ interface AccordanceData {
 /**
  * Interface for the angular controller's scope
  */
-interface AccordanceScope extends angular.IScope, AccordanceData {
+interface AccordanceCalculationScope extends angular.IScope, AccordanceCalculationData {
     nature: string;
     selectedResearchObjectsCount: number;
 }
 
-
-class AccordanceHandler {
+class AccordanceCalculationHandler {
     /**
      * Creates a new controller instance
      * @param data Data for controller initialization
      */
-    constructor(data: AccordanceData) {
+    constructor(data: AccordanceCalculationData) {
         this.ngOnInit(data);
     }
 
@@ -53,20 +52,20 @@ class AccordanceHandler {
      * Initializes Angular controller
      * @param data Data for controller initialization
      */
-    private ngOnInit(data: AccordanceData): void {
-        const accordance = ($scope: AccordanceScope, filterFilter: ng.IFilterFilter): void => {
+    private ngOnInit(data: AccordanceCalculationData): void {
+        const accordanceCalculation = ($scope: AccordanceCalculationScope): void => {
             MapModelFromJson($scope, data);
         };
 
-        angular.module("libiada").controller("AccordanceCtrl", ["$scope", "filterFilter", accordance]);
+        angular.module("libiada").controller("AccordanceCalculationCtrl", ["$scope", accordanceCalculation]);
     }
 }
 
 /**
  * Wrapper function for backward compatibility
  * @param data Data for controller initialization
- * @returns Instance of accordance handler
+ * @returns Instance of accordance calculation handler
  */
-export default function AccordanceController(data: AccordanceData): AccordanceHandler {
-    return new AccordanceHandler(data);
+export default function AccordanceCalculationController(data: AccordanceCalculationData): AccordanceCalculationHandler {
+    return new AccordanceCalculationHandler(data);
 }

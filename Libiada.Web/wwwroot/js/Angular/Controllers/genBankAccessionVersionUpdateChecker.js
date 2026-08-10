@@ -12,10 +12,10 @@ class GenBankAccessionVersionUpdateCheckerHandler {
      * Initializes Angular controller
      */
     ngOnInit() {
-        const genBankAccessionVersionUpdateChecker = ($scope) => {
+        const genBankAccessionVersionUpdateChecker = () => {
         };
         // Register controller in Angular module
-        angular.module("libiada").controller("GenBankAccessionVersionUpdateCheckerCtrl", ["$scope", genBankAccessionVersionUpdateChecker]);
+        angular.module("libiada").controller("GenBankAccessionVersionUpdateCheckerCtrl", [genBankAccessionVersionUpdateChecker]);
     }
 }
 /**

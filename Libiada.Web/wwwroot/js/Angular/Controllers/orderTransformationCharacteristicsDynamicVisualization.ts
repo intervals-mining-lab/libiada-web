@@ -56,12 +56,12 @@ class OrderTransformationCharacteristicsDynamicVisualizationHandler {
      * @param data Data for controller initialization
      */
     private ngOnInit(data: OrderTransformationCharacteristicsDynamicVisualizationData): void {
-        const orderTransformationCharacteristicsDynamicVisualization = ($scope: OrderTransformationCharacteristicsDynamicVisualizationScope, filterFilter: ng.IFilterFilter): void => {
+        const orderTransformationCharacteristicsDynamicVisualization = ($scope: OrderTransformationCharacteristicsDynamicVisualizationScope): void => {
             MapModelFromJson($scope, data);
         };
 
         // Register controller in Angular module
-        angular.module("libiada").controller("OrderTransformationCharacteristicsDynamicVisualizationCtrl", ["$scope", "filterFilter", orderTransformationCharacteristicsDynamicVisualization]);
+        angular.module("libiada").controller("OrderTransformationCharacteristicsDynamicVisualizationCtrl", ["$scope", orderTransformationCharacteristicsDynamicVisualization]);
     }
 }
 

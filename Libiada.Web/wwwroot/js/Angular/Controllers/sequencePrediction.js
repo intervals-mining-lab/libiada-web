@@ -5,10 +5,10 @@ class SequencePredictionOperator {
         this.ngOnInit(data);
     }
     ngOnInit(data) {
-        const sequencePrediction = ($scope, filterFilter) => {
+        const sequencePrediction = ($scope) => {
             MapModelFromJson($scope, data);
         };
-        angular.module("libiada").controller("SequencePredictionCtrl", ["$scope", "filterFilter", sequencePrediction]);
+        angular.module("libiada").controller("SequencePredictionCtrl", ["$scope", sequencePrediction]);
     }
 }
 // Wrapper function for backwards compatibility

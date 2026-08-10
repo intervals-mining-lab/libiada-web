@@ -35,11 +35,11 @@ class PoemSegmentationOperator {
     }
 
     private ngOnInit(data: PoemSegmentationData): void {
-        const poemSegmentation = ($scope: PoemSegmentationScope, filterFilter: ng.IFilterFilter): void => {
+        const poemSegmentation = ($scope: PoemSegmentationScope): void => {
             MapModelFromJson($scope, data);
         };
 
-        angular.module("libiada").controller("PoemSegmentationCtrl", ["$scope", "filterFilter", poemSegmentation]);
+        angular.module("libiada").controller("PoemSegmentationCtrl", ["$scope", poemSegmentation]);
     }
 }
 

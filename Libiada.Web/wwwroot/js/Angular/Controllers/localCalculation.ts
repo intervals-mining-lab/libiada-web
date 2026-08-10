@@ -44,11 +44,11 @@ class LocalCalculationOperator {
     }
 
     private ngOnInit(data: LocalCalculationData): void {
-        const localCalculation = ($scope: LocalCalculationScope, filterFilter: ng.IFilterFilter): void => {
+        const localCalculation = ($scope: LocalCalculationScope): void => {
             MapModelFromJson($scope, data);
         };
 
-        angular.module("libiada").controller("LocalCalculationCtrl", ["$scope", "filterFilter", localCalculation]);
+        angular.module("libiada").controller("LocalCalculationCtrl", ["$scope", localCalculation]);
     }
 }
 

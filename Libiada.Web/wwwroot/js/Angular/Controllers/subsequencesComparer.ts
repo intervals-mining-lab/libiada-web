@@ -37,11 +37,11 @@ class SubsequencesComparerOperator {
     }
 
     private ngOnInit(data: SubsequencesComparerData): void {
-        const subsequencesComparer = ($scope: SubsequencesComparerScope, filterFilter: ng.IFilterFilter): void => {
+        const subsequencesComparer = ($scope: SubsequencesComparerScope): void => {
             MapModelFromJson($scope, data);
         };
 
-        angular.module("libiada").controller("SubsequencesComparerCtrl", ["$scope", "filterFilter", subsequencesComparer]);
+        angular.module("libiada").controller("SubsequencesComparerCtrl", ["$scope", subsequencesComparer]);
     }
 }
 

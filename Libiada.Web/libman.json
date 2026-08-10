@@ -25,7 +25,7 @@
 
     {
       "provider": "unpkg",
-      "library": "midi.js@0.3.1",
+      "library": "midi.js@0.3.1/",
       "destination": "wwwroot/lib/midi.js/"
     },
     {
@@ -42,7 +42,7 @@
     },
     {
       "provider": "unpkg",
-      "library": "@microsoft/signalr@latest",
+      "library": "@microsoft/signalr@10.0.11",
       "destination": "wwwroot/lib/microsoft/signalr/"
     },
     {
@@ -54,7 +54,7 @@
       "destination": "wwwroot/lib/bootstrap-icons/"
     },
     {
-      "library": "exceljs@4.3.0",
+      "library": "exceljs@4.4.0",
       "destination": "wwwroot/lib/exceljs/"
     },
     {
@@ -133,8 +133,8 @@
     },
     {
       "provider": "jsdelivr",
-      "library": "@types/exceljs@1.3.2",
-      "destination": "wwwroot/lib/exceljs/"
-    }
+      "library": "@types/bootstrap@5.2.3",
+      "destination": "wwwroot/lib/@types/bootstrap/"
+    }    
   ]
 }

@@ -37,7 +37,7 @@ export interface ICharacteristic {
 /**
  * Interface for the scope in Angular controllers
  */
-interface AngularScope extends angular.IScope {
+export interface AngularScope extends angular.IScope {
     [key: string]: any;
 }
 /**
@@ -47,6 +47,11 @@ interface DataObject {
     [key: string]: any;
 }
 
+export interface ResultScope extends AngularScope {
+    loadingScreenHeader: string;
+    loading: boolean;
+    taskId: string;
+}
 
 /**
  * Utility functions for LibiadaWeb Angular application
@@ -91,7 +96,7 @@ export function MapModelFromJson($scope: AngularScope, data: DataObject): void {
  */
 export async function initScopeFromServer<ResponceType extends DataObject>(
     $http: ng.IHttpService,
-    $scope: AngularScope,
+    $scope: ResultScope,
     loadingScreenHeader: string,
     errorMessage: string = "Failed loading data from server"): Promise<void> {
 

@@ -5,10 +5,10 @@ class LocalCalculationOperator {
         this.ngOnInit(data);
     }
     ngOnInit(data) {
-        const localCalculation = ($scope, filterFilter) => {
+        const localCalculation = ($scope) => {
             MapModelFromJson($scope, data);
         };
-        angular.module("libiada").controller("LocalCalculationCtrl", ["$scope", "filterFilter", localCalculation]);
+        angular.module("libiada").controller("LocalCalculationCtrl", ["$scope", localCalculation]);
     }
 }
 // Wrapper function for backwards compatibility

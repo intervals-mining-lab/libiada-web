@@ -2,7 +2,7 @@ function CharacteristicsTableController() {
     const ctrl = this;
     ctrl.characteristicsTableRendered = false;
     ctrl.$onChanges = (changes) => {
-        if (changes.characteristicsTableTabSelected) {
+        if (changes["characteristicsTableTabSelected"]) {
             if (ctrl.characteristicsTableTabSelected === true) {
                 ctrl.renderResultsTable();
             }

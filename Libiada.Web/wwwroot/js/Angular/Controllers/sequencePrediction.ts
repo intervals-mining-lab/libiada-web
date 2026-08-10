@@ -44,11 +44,11 @@ class SequencePredictionOperator {
     }
 
     private ngOnInit(data: SequencePredictionData): void {
-        const sequencePrediction = ($scope: SequencePredictionScope, filterFilter: ng.IFilterFilter): void => {
+        const sequencePrediction = ($scope: SequencePredictionScope): void => {
             MapModelFromJson($scope, data);
         };
 
-        angular.module("libiada").controller("SequencePredictionCtrl", ["$scope", "filterFilter", sequencePrediction]);
+        angular.module("libiada").controller("SequencePredictionCtrl", ["$scope", sequencePrediction]);
     }
 }
 

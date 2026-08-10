@@ -7,7 +7,7 @@ class MultisequenceCreateHandler {
         this.ngOnInit(data);
     }
     ngOnInit(data) {
-        const multisequenceCreate = ($scope, filterFilter) => {
+        const multisequenceCreate = ($scope) => {
             MapModelFromJson($scope, data);
             // Initialize properties with default values
             $scope.nature = $scope.natures[0].Value;
@@ -15,7 +15,7 @@ class MultisequenceCreateHandler {
             $scope.displayMultisequenceNumber = true;
         };
         // Register controller in Angular module
-        angular.module("libiada").controller("MultisequenceCreateCtrl", ["$scope", "filterFilter", multisequenceCreate]);
+        angular.module("libiada").controller("MultisequenceCreateCtrl", ["$scope", multisequenceCreate]);
     }
 }
 /**

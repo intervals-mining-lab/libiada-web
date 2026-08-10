@@ -19,7 +19,7 @@ function CharacteristicsTableController(this: CharacteristicsTableComponentContr
     ctrl.characteristicsTableRendered = false;
 
     ctrl.$onChanges = (changes: ng.IOnChangesObject) => {
-        if (changes.characteristicsTableTabSelected) {
+        if (changes["characteristicsTableTabSelected"]) {
             if (ctrl.characteristicsTableTabSelected === true) {
                 ctrl.renderResultsTable();
             }

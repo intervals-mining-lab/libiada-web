@@ -15,11 +15,6 @@ import {
 /// <reference path="../../typings/bootstrap-jquery-extensions.d.ts" />
 /// <reference path="../../typings/plotly-extensions.d.ts" />
 
-interface Document {
-    selection?: {
-        empty(): void;
-    }
-}
 /**
  * Controller for displaying subsequences calculation results
  */
@@ -207,7 +202,7 @@ class SubsequencesCalculationResultHandler {
                         y.sort((first, second) => second - first);
                         ranks.push({
                             //x is range from 1 to subsequencesData length
-                            x: Array.from({ length: y.length }, (x, i) => i + 1),
+                            x: Array.from({ length: y.length }, (_, i) => i + 1),
                             y: y
                         });
                     }
@@ -443,7 +438,7 @@ class SubsequencesCalculationResultHandler {
 
             function dragbarMouseDown(): void {
                 let right = document.getElementById("sidebar");
-                let bar = document.getElementById("dragbar");
+                let bar = document.getElementById("dragbar")!;
 
                 const drag = (e: MouseEvent): void => {
                     document.selection ? document.selection.empty() : window.getSelection()?.removeAllRanges();

@@ -5,10 +5,10 @@ class SubsequencesSimilarityOperator {
         this.ngOnInit(data);
     }
     ngOnInit(data) {
-        const subsequencesSimilarity = ($scope, filterFilter) => {
+        const subsequencesSimilarity = ($scope) => {
             MapModelFromJson($scope, data);
         };
-        angular.module("libiada").controller("SubsequencesSimilarityCtrl", ["$scope", "filterFilter", subsequencesSimilarity]);
+        angular.module("libiada").controller("SubsequencesSimilarityCtrl", ["$scope", subsequencesSimilarity]);
     }
 }
 // Wrapper function for backwards compatibility

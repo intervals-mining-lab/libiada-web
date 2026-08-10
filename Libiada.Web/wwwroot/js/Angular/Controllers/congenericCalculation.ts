@@ -53,7 +53,7 @@ class CongenericCalculationOperator {
     }
 
     private ngOnInit(data: CongenericCalculationData): void {
-        const congenericCalculation = ($scope: CongenericCalculationScope, filterFilter: ng.IFilterFilter): void => {
+        const congenericCalculation = ($scope: CongenericCalculationScope): void => {
             MapModelFromJson($scope, data);
 
             function setUnselectAllResearchObjectsFunction(func: Function): void {
@@ -76,7 +76,7 @@ class CongenericCalculationOperator {
 
             $scope.calculationFor = "researchObjects";
         };
-        angular.module("libiada").controller("CongenericCalculationCtrl", ["$scope", "filterFilter", congenericCalculation]);
+        angular.module("libiada").controller("CongenericCalculationCtrl", ["$scope", congenericCalculation]);
     }
 }
 

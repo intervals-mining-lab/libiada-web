@@ -39,7 +39,7 @@ function CharacteristicsTableExcelExporterController(this: CharacteristicsTableE
         for (let i = 0; i < ctrl.characteristics.length; i++) {
             let row: ExcelRow = { id: i + 1, name: ctrl.characteristics[i].ResearchObjectName };
 
-            if (ctrl.sequenceGroups) row.sequenceGroup = ctrl.characteristics[i].SequenceGroupId;
+            if (ctrl.sequenceGroups) row.sequenceGroup = ctrl.characteristics[i].SequenceGroupId!;
 
             ctrl.characteristics[i].Characteristics.forEach((cv, j) => row[ctrl.characteristicNames[j]] = cv);
             worksheet.addRow(row).commit();

@@ -5,10 +5,10 @@ class SubsequencesComparerOperator {
         this.ngOnInit(data);
     }
     ngOnInit(data) {
-        const subsequencesComparer = ($scope, filterFilter) => {
+        const subsequencesComparer = ($scope) => {
             MapModelFromJson($scope, data);
         };
-        angular.module("libiada").controller("SubsequencesComparerCtrl", ["$scope", "filterFilter", subsequencesComparer]);
+        angular.module("libiada").controller("SubsequencesComparerCtrl", ["$scope", subsequencesComparer]);
     }
 }
 // Wrapper function for backwards compatibility

@@ -1,10 +1,4 @@
 /**
- * Interface for the controller's scope
- */
-interface GenBankAccessionVersionUpdateCheckerScope extends angular.IScope {
-}
-
-/**
  * Angular controller class
  */
 class GenBankAccessionVersionUpdateCheckerHandler {
@@ -19,11 +13,11 @@ class GenBankAccessionVersionUpdateCheckerHandler {
      * Initializes Angular controller
      */
     private ngOnInit(): void {
-        const genBankAccessionVersionUpdateChecker = ($scope: GenBankAccessionVersionUpdateCheckerScope): void => {
+        const genBankAccessionVersionUpdateChecker = (): void => {
         };
 
         // Register controller in Angular module
-        angular.module("libiada").controller("GenBankAccessionVersionUpdateCheckerCtrl", ["$scope", genBankAccessionVersionUpdateChecker]);
+        angular.module("libiada").controller("GenBankAccessionVersionUpdateCheckerCtrl", [genBankAccessionVersionUpdateChecker]);
     }
 }
 

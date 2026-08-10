@@ -1,5 +1,5 @@
 import { MapModelFromJson } from "functions";
-class AccordanceHandler {
+class AccordanceCalculationHandler {
     /**
      * Creates a new controller instance
      * @param data Data for controller initialization
@@ -12,18 +12,18 @@ class AccordanceHandler {
      * @param data Data for controller initialization
      */
     ngOnInit(data) {
-        const accordance = ($scope, filterFilter) => {
+        const accordanceCalculation = ($scope) => {
             MapModelFromJson($scope, data);
         };
-        angular.module("libiada").controller("AccordanceCtrl", ["$scope", "filterFilter", accordance]);
+        angular.module("libiada").controller("AccordanceCalculationCtrl", ["$scope", accordanceCalculation]);
     }
 }
 /**
  * Wrapper function for backward compatibility
  * @param data Data for controller initialization
- * @returns Instance of accordance handler
+ * @returns Instance of accordance calculation handler
  */
-export default function AccordanceController(data) {
-    return new AccordanceHandler(data);
+export default function AccordanceCalculationController(data) {
+    return new AccordanceCalculationHandler(data);
 }
-//# sourceMappingURL=accordance.js.map
+//# sourceMappingURL=accordanceCalculation.js.map

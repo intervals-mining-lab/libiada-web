@@ -6,7 +6,7 @@
 
 @if (ViewBag.Error == null)
 {
-    <div ng-controller="AccordanceResultCtrl">
+    <div ng-controller="AccordanceCalculationResultCtrl">
         <h4 class="mb-2" ng-bind="::researchObjectNames[0]"></h4>
         <h4 ng-bind="::researchObjectNames[1]"></h4>
         <div ng-switch="calculationType">
@@ -55,7 +55,7 @@
 
     @section Scripts {
         @{
-            await Html.RenderPartialAsync("_AngularControllerInitializer", "AccordanceResult");
+            await Html.RenderPartialAsync("_AngularControllerInitializer", "AccordanceCalculationResult");
         }
     }
 }

@@ -14,10 +14,10 @@ class SequenceMixerHandler {
     * Initializes the Angular controller.
     */
     ngOnInit(data) {
-        const sequenceMixer = ($scope, filterFilter) => {
+        const sequenceMixer = ($scope) => {
             MapModelFromJson($scope, data);
         };
-        angular.module("libiada").controller("SequenceMixerCtrl", ["$scope", "filterFilter", sequenceMixer]);
+        angular.module("libiada").controller("SequenceMixerCtrl", ["$scope", sequenceMixer]);
     }
 }
 /**

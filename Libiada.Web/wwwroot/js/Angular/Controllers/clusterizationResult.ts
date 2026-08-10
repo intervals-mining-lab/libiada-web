@@ -1,4 +1,5 @@
-import { initScopeFromServer  } from "functions";
+import { initScopeFromServer } from "functions";
+//import * as bootstrap from "bootstrap";
 import type { Characteristic, SequenceCharacteristics, SequencesGroup } from "viewDataTypes";
 
 
@@ -22,6 +23,7 @@ interface ClusterizationResultScope extends ng.IScope, ClusterizationResultData 
     loadingScreenHeader: string;
     taskId: string;
 
+    tooltip: bootstrap.Tooltip;
     characteristicsTableTabSelected: boolean;
 }
 
@@ -38,7 +40,8 @@ class ClusterizationResultHandler {
             $scope.characteristicsTableTabSelected = false;
             
             // initialyzing tooltips for tabs
-            $('[data-bs-toggle="tooltip"]').tooltip();
+            const tooltipElements = $('[data-bs-toggle="tooltip"]');
+            $scope.tooltip = new bootstrap.Tooltip(tooltipElements);
 
             initScopeFromServer<ClusterizationResultData>(
                 $http,

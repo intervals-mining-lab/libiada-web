@@ -11,13 +11,18 @@ interface Point {
 }
 
 interface LegendItem {
-    id: number, name: string | number, visible: boolean, color: string
+    id: number;
+    name: string | number;
+    visible: boolean;
+    color: string;
 }
 
 interface CharacteristicsVisualizationsComponentController extends ng.IController {
     characteristicsList: Characteristic[];
+    characteristicNames: string[];
     characteristics: SequenceCharacteristics[];
     sequenceGroups?: SequencesGroup[];
+
     legend: LegendItem[];
     chartCharacteristics: Characteristic[];
     points: Point[];
@@ -42,6 +47,9 @@ interface CharacteristicsVisualizationsComponentController extends ng.IControlle
     fill3dScatterPlotData(): void;
     fillParallelCoordinatesPlotData(): void;
     draw(): void;
+    legendClick(legendItem: LegendItem): void;
+    legendSetVisibilityForAll(visibility: boolean): void;
+    dragbarMouseDown(): void;
 }
 
 function CharacteristicsVisualizationsController(this: CharacteristicsVisualizationsComponentController, $scope: ng.IScope,) {
@@ -306,7 +314,7 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
             //pad: [80, 80, 80, 80],
             line: {
                 color: ctrl.points.map(p => p.legendIndex),
-                colorscale: "Turbo"
+                //colorscale: "Turbo"
             },
 
             dimensions: characteristicsIndices.map(ci => ({
@@ -376,11 +384,11 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
     }
 
     ctrl.dragbarMouseDown = async () => {
-        let right = document.getElementById("sidebar");
+        //let right = document.getElementById("sidebar");
         let bar: HTMLElement = document.getElementById("dragbar")!;
 
         const drag = (e: MouseEvent) => {
-            document.selection ? document.selection.empty() : window.getSelection().removeAllRanges();
+            document.selection ? document.selection.empty() : window.getSelection()?.removeAllRanges();
             ctrl.chartElement.style.width = `${e.pageX - bar.offsetWidth / 2}px`;
 
             Plotly.relayout(ctrl.chartElement, { autosize: true });

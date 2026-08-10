@@ -1,29 +1,39 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
-    "target": "es2024",
+    "target": "esnext",
     "module": "esnext",
     "strict": true,
-    "alwaysStrict": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "noUncheckedSideEffectImports": true,
+    "noFallthroughCasesInSwitch": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "exactOptionalPropertyTypes": true,
     //"noUncheckedIndexedAccess": true,
     "forceConsistentCasingInFileNames": true,
-    "esModuleInterop": true,
     "sourceMap": true,
+    "allowUmdGlobalAccess": true,
+    "rootDir": "./wwwroot/",
+    "outDir": "./wwwroot/",
     "skipLibCheck": true,
-    "rootDir": "./wwwroot/js/",
-    "outDir": "./wwwroot/js/",
-    //"allowJs": true,
-    //"checkJs": true,
+    "allowJs": true,
+    "checkJs": true,
     //"declaration": true,
     //"types": [ "angular" ],
     "typeRoots": [
       "wwwroot/lib/microsoft",
       "wwwroot/lib/@types"
     ],
-    "allowUmdGlobalAccess": true
+    "types": [ "*" ],
+    "paths": {
+      //"/lib/*": [ "/wwwroot/lib/*" ],
+      "functions": [ "./wwwroot/js/Angular/functions.ts" ],
+      "viewDataTypes": [ "./wwwroot/js/Angular/viewDataTypes.ts" ],
+      "bootstrap": [ "./wwwroot/lib/twitter-bootstrap/js/bootstrap.esm.js" ]
+    }
     // "noEmitOnError": true
 
   },
@@ -31,6 +41,7 @@
     "wwwroot/js/**/*.ts"
   ],
   "exclude": [
+    //"wwwroot/lib/twitter-bootstrap"
     //"node_modules",
     //"wwwroot/lib",
     //"wwwroot/lib/!([@types]/**)"

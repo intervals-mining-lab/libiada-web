@@ -5,11 +5,11 @@ class ClusterizationOperator {
         this.ngOnInit(data);
     }
     ngOnInit(data) {
-        const clusterization = ($scope, filterFilter) => {
+        const clusterization = ($scope) => {
             MapModelFromJson($scope, data);
             $scope.clusterizationType = $scope.clusterizatorsTypes[0];
         };
-        angular.module("libiada").controller("ClusterizationCtrl", ["$scope", "filterFilter", clusterization]);
+        angular.module("libiada").controller("ClusterizationCtrl", ["$scope", clusterization]);
     }
 }
 // Wrapper function for backwards compatibility

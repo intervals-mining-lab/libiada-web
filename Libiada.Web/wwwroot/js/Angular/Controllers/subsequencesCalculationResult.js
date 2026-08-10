@@ -1,6 +1,9 @@
 //import d3 from "d3";
 //import Plotly from "plotly.js";
 import { MapModelFromJson, getArrayMinMax } from "functions";
+/// <reference path="./Interfaces/commonInterfaces.d.ts" />
+/// <reference path="../../typings/bootstrap-jquery-extensions.d.ts" />
+/// <reference path="../../typings/plotly-extensions.d.ts" />
 /**
  * Controller for displaying subsequences calculation results
  */
@@ -167,7 +170,7 @@ class SubsequencesCalculationResultHandler {
                         y.sort((first, second) => second - first);
                         ranks.push({
                             //x is range from 1 to subsequencesData length
-                            x: Array.from({ length: y.length }, (x, i) => i + 1),
+                            x: Array.from({ length: y.length }, (_, i) => i + 1),
                             y: y
                         });
                     }

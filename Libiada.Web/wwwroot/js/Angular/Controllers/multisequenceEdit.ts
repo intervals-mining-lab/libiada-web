@@ -47,7 +47,7 @@ class MultisequenceEditHandler {
     }
 
     private ngOnInit(data: MultisequenceEditData): void {
-        const multisequenceEdit = ($scope: MultisequenceEditScope, filterFilter: ng.IFilterFilter): void => {
+        const multisequenceEdit = ($scope: MultisequenceEditScope): void => {
             MapModelFromJson($scope, data);
 
             // Initialize properties with default values
@@ -57,7 +57,7 @@ class MultisequenceEditHandler {
         };
 
         // Register controller in Angular module
-        angular.module("libiada").controller("MultisequenceEditCtrl", ["$scope", "filterFilter", multisequenceEdit]);
+        angular.module("libiada").controller("MultisequenceEditCtrl", ["$scope", multisequenceEdit]);
     }
 }
 

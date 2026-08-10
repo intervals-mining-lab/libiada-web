@@ -31,11 +31,11 @@ class GeneticSequencesTransformationOperator {
     }
 
     private ngOnInit(data: GeneticSequencesTransformationData): void {
-        const geneticSequencesTransformation = ($scope: GeneticSequencesTransformationScope, filterFilter: ng.IFilterFilter): void => {
+        const geneticSequencesTransformation = ($scope: GeneticSequencesTransformationScope): void => {
             MapModelFromJson($scope, data);
         };
 
-        angular.module("libiada").controller("GeneticSequencesTransformationCtrl", ["$scope", "filterFilter", geneticSequencesTransformation]);
+        angular.module("libiada").controller("GeneticSequencesTransformationCtrl", ["$scope", geneticSequencesTransformation]);
     }
 }
 

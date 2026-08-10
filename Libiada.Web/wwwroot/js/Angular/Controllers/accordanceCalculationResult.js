@@ -2,7 +2,7 @@ import { MapModelFromJson } from "functions";
 /**
  * Controller for accordance functionality
  */
-class AccordanceResultHandler {
+class AccordanceCalculationResultHandler {
     /**
      * Creates a new controller instance
      * @param data Data for controller initialization
@@ -15,8 +15,8 @@ class AccordanceResultHandler {
      * @param data Data for controller initialization
      */
     ngOnInit() {
-        const accordanceResult = ($scope, $http) => {
-            $scope.loadingScreenHeader = "Loading data";
+        const accordanceCalculationResult = ($scope, $http) => {
+            $scope.loadingScreenHeader = "Loading accordance data";
             let location = window.location.href.split("/");
             $scope.taskId = location[location.length - 1];
             $scope.loading = true;
@@ -26,20 +26,20 @@ class AccordanceResultHandler {
                 $scope.loading = false;
             })
                 .catch(function () {
-                alert("Failed loading import results");
+                alert("Failed loading accordance data");
                 $scope.loading = false;
             });
         };
         // Register controller in Angular module
-        angular.module("libiada").controller("AccordanceResultCtrl", ["$scope", "$http", accordanceResult]);
+        angular.module("libiada").controller("AccordanceCalculationResultCtrl", ["$scope", "$http", accordanceCalculationResult]);
     }
 }
 /**
  * Wrapper function for backward compatibility
  * @param data Data for controller initialization
- * @returns Instance of accordance handler
+ * @returns Instance of accordance calculation result handler
  */
-export default function AccordanceResultController() {
-    return new AccordanceResultHandler();
+export default function AccordanceCalculationResultController() {
+    return new AccordanceCalculationResultHandler();
 }
-//# sourceMappingURL=accordanceResult.js.map
+//# sourceMappingURL=accordanceCalculationResult.js.map

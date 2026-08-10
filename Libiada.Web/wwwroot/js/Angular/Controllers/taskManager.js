@@ -82,7 +82,7 @@ class TaskManagerControllerHandler {
                     $scope.$apply();
                     $scope.tasksHub.invoke("deleteAllTasks")
                         .then(() => alertify.success("All tasks have been deleted."))
-                        .catch(e => console.error(e instanceof Error ? e.message : String(e)));
+                        .catch((e) => console.error(e instanceof Error ? e.message : String(e)));
                 }, () => { });
             }
             function deleteTasksWithStatus(taskStatus) {
@@ -91,7 +91,7 @@ class TaskManagerControllerHandler {
                     $scope.$apply();
                     $scope.tasksHub.invoke("deleteTasksWithState", taskStatus)
                         .then(() => alertify.success(`All tasks with "${taskStatus}" status have been deleted.`))
-                        .catch(e => console.error(e instanceof Error ? e.message : String(e)));
+                        .catch((e) => console.error(e instanceof Error ? e.message : String(e)));
                 }, () => { });
             }
             function deleteTask(id) {
@@ -102,7 +102,7 @@ class TaskManagerControllerHandler {
                         $scope.$apply();
                         $scope.tasksHub.invoke("deleteTask", id)
                             .then(() => alertify.success("The task has been deleted."))
-                            .catch(e => console.error(e instanceof Error ? e.message : String(e)));
+                            .catch((e) => console.error(e instanceof Error ? e.message : String(e)));
                     }
                 }, () => { });
             }
@@ -136,7 +136,7 @@ class TaskManagerControllerHandler {
             $scope.tasksHub.onclose($scope.onCloseConnection);
             $scope.tasksHub.start()
                 .then(() => $scope.tasksHub.invoke("getAllTasks").then($scope.onHubStart))
-                .catch(e => console.error(e instanceof Error ? e.message : String(e)));
+                .catch((e) => console.error(e instanceof Error ? e.message : String(e)));
             // Initializing scope properties
             let location = window.location.href.split("/");
             if (location[location.length - 1] !== "TaskManager") {

@@ -5,10 +5,10 @@ class GeneticSequencesTransformationOperator {
         this.ngOnInit(data);
     }
     ngOnInit(data) {
-        const geneticSequencesTransformation = ($scope, filterFilter) => {
+        const geneticSequencesTransformation = ($scope) => {
             MapModelFromJson($scope, data);
         };
-        angular.module("libiada").controller("GeneticSequencesTransformationCtrl", ["$scope", "filterFilter", geneticSequencesTransformation]);
+        angular.module("libiada").controller("GeneticSequencesTransformationCtrl", ["$scope", geneticSequencesTransformation]);
     }
 }
 // Wrapper function for backwards compatibility

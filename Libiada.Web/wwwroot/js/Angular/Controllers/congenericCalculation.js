@@ -5,7 +5,7 @@ class CongenericCalculationOperator {
         this.ngOnInit(data);
     }
     ngOnInit(data) {
-        const congenericCalculation = ($scope, filterFilter) => {
+        const congenericCalculation = ($scope) => {
             MapModelFromJson($scope, data);
             function setUnselectAllResearchObjectsFunction(func) {
                 $scope.unselectAllResearchObjects = func;
@@ -24,7 +24,7 @@ class CongenericCalculationOperator {
             $scope.clearSelection = clearSelection;
             $scope.calculationFor = "researchObjects";
         };
-        angular.module("libiada").controller("CongenericCalculationCtrl", ["$scope", "filterFilter", congenericCalculation]);
+        angular.module("libiada").controller("CongenericCalculationCtrl", ["$scope", congenericCalculation]);
     }
 }
 // Wrapper function for backwards compatibility

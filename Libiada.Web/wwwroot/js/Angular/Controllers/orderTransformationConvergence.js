@@ -13,11 +13,11 @@ class OrderTransformationConvergenceHandler {
      * @param data Data for controller initialization
      */
     ngOnInit(data) {
-        const orderTransformationConvergence = ($scope, filterFilter) => {
+        const orderTransformationConvergence = ($scope) => {
             MapModelFromJson($scope, data);
         };
         // Register controller in Angular module
-        angular.module("libiada").controller("OrderTransformationConvergenceCtrl", ["$scope", "filterFilter", orderTransformationConvergence]);
+        angular.module("libiada").controller("OrderTransformationConvergenceCtrl", ["$scope", orderTransformationConvergence]);
     }
 }
 /**

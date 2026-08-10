@@ -60,7 +60,7 @@ class CalculationOperator {
     }
 
     private ngOnInit(data: CalculationData): void {
-        const calculation = ($scope: CalculationScope, filterFilter: ng.IFilterFilter): void => {
+        const calculation = ($scope: CalculationScope): void => {
             MapModelFromJson($scope, data);
 
             function setUnselectAllResearchObjectsFunction(func: Function): void {
@@ -86,7 +86,7 @@ class CalculationOperator {
             $scope.rotate = false;
         };
 
-        angular.module("libiada").controller("CalculationCtrl", ["$scope", "filterFilter", calculation]);
+        angular.module("libiada").controller("CalculationCtrl", ["$scope", calculation]);
     }
 }
 

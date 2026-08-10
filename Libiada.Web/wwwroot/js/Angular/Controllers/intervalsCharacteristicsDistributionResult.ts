@@ -1,5 +1,6 @@
 ﻿/*import d3 from "d3";*/
 import { MapModelFromJson } from "functions";
+import { IBasePoint } from "./Interfaces/commonInterfaces.js"; 
 /// <reference path="./Interfaces/commonInterfaces.d.ts" />
 
 // Interface for distribution interval data
