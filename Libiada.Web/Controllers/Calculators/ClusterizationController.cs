@@ -16,8 +16,6 @@ using Libiada.Database.Models.CalculatorsData;
 
 using Newtonsoft.Json;
 
-using EnumExtensions = Core.Extensions.EnumExtensions;
-
 
 /// <summary>
 /// The clusterization controller.
@@ -83,7 +81,7 @@ public class ClusterizationController : AbstractResultController
                                       .AddGroups()
                                       .AddCharacteristicsData(CharacteristicCategory.Full)
                                       .Build();
-        viewData.Add("ClusterizatorsTypes", EnumExtensions.ToArray<ClusterizationType>().ToSelectList());
+        viewData.Add("ClusterizatorsTypes", Enum.GetValues<ClusterizationType>().ToSelectList());
         ViewBag.data = JsonConvert.SerializeObject(viewData);
         return View();
     }

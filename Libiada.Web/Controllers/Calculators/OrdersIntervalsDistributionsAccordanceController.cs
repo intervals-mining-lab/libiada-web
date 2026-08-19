@@ -63,7 +63,7 @@ public class OrdersIntervalsDistributionsAccordanceController : AbstractResultCo
                 _ => throw new ArgumentException("Invalid type of generate"),
             };
             var distributionsAccordance = new Dictionary<string, Dictionary<Dictionary<int, int>, List<int[]>>>();
-            foreach (Link link in EnumExtensions.ToArray<Link>())
+            foreach (Link link in Enum.GetValues<Link>())
             {
                 if (link == Link.NotApplied)
                 {

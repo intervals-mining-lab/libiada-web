@@ -1,16 +1,13 @@
 ﻿namespace Libiada.Web.Models.Repositories.Catalogs;
 
-using System.Security.Claims;
-
 using Libiada.Core.Core;
 using Libiada.Core.Core.ArrangementManagers;
 using Libiada.Core.Core.Characteristics.Calculators.FullCalculators;
 using Libiada.Core.Extensions;
-
-using Libiada.Web.Models.CalculatorsData;
 using Libiada.Web.Extensions;
+using Libiada.Web.Models.CalculatorsData;
 
-using EnumExtensions = Core.Extensions.EnumExtensions;
+using System.Security.Claims;
 
 /// <summary>
 /// The full characteristic repository.
@@ -49,9 +46,9 @@ public class FullCharacteristicRepository
 
         if (currentUser.IsAdmin())
         {
-            links = EnumExtensions.ToArray<Link>();
-            characteristics = EnumExtensions.ToArray<FullCharacteristic>();
-            arrangementTypes = EnumExtensions.ToArray<ArrangementType>();
+            links = Enum.GetValues<Link>();
+            characteristics = Enum.GetValues<FullCharacteristic>();
+            arrangementTypes = Enum.GetValues<ArrangementType>();
         }
         else
         {

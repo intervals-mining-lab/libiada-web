@@ -100,7 +100,7 @@ public class ViewDataBuilder(IDbContextFactory<LibiadaDatabaseEntities> dbFactor
     /// <returns></returns>
     public IViewDataBuilder AddNatures()
     {
-        Nature[] natures = user.IsAdmin() ? EnumExtensions.ToArray<Nature>() : [Nature.Genetic];
+        Nature[] natures = user.IsAdmin() ? Enum.GetValues<Nature>() : [Nature.Genetic];
         viewData.Add("natures", natures.ToSelectList());
         return this;
     }
@@ -126,7 +126,7 @@ public class ViewDataBuilder(IDbContextFactory<LibiadaDatabaseEntities> dbFactor
     /// <returns></returns>
     public IViewDataBuilder AddNotations(bool onlyGenetic = false)
     {
-        Notation[] notations = user.IsAdmin() ? EnumExtensions.ToArray<Notation>() : [Notation.Nucleotides];
+        Notation[] notations = user.IsAdmin() ? Enum.GetValues<Notation>() : [Notation.Nucleotides];
         if (onlyGenetic)
         {
             notations = notations.Where(n => n.GetNature() == Nature.Genetic).ToArray();
@@ -142,7 +142,7 @@ public class ViewDataBuilder(IDbContextFactory<LibiadaDatabaseEntities> dbFactor
     /// <returns></returns>
     public IViewDataBuilder AddRemoteDatabases()
     {
-        IEnumerable<RemoteDb> remoteDbs = EnumExtensions.ToArray<RemoteDb>();
+        IEnumerable<RemoteDb> remoteDbs = Enum.GetValues<RemoteDb>();
         if (!user.IsAdmin())
         {
             remoteDbs = remoteDbs.Where(rd => rd.GetNature() == Nature.Genetic);
@@ -161,7 +161,7 @@ public class ViewDataBuilder(IDbContextFactory<LibiadaDatabaseEntities> dbFactor
     /// <returns></returns>
     public IViewDataBuilder AddSequenceTypes(bool onlyGenetic = false)
     {
-        IEnumerable<SequenceType> sequenceTypes = EnumExtensions.ToArray<SequenceType>();
+        IEnumerable<SequenceType> sequenceTypes = Enum.GetValues<SequenceType>();
         if (!user.IsAdmin() || onlyGenetic)
         {
             sequenceTypes = sequenceTypes.Where(st => st.GetNature() == Nature.Genetic);
@@ -180,7 +180,7 @@ public class ViewDataBuilder(IDbContextFactory<LibiadaDatabaseEntities> dbFactor
     /// <returns></returns>
     public IViewDataBuilder AddGroups(bool onlyGenetic = false)
     {
-        IEnumerable<Group> groups = EnumExtensions.ToArray<Group>();
+        IEnumerable<Group> groups = Enum.GetValues<Group>();
         if (!user.IsAdmin() || onlyGenetic)
         {
             groups = groups.Where(g => g.GetNature() == Nature.Genetic);
@@ -196,7 +196,7 @@ public class ViewDataBuilder(IDbContextFactory<LibiadaDatabaseEntities> dbFactor
     /// <returns></returns>
     public IViewDataBuilder AddSequenceGroupTypes()
     {
-        SequenceGroupType[] sequenceGroupTypes = EnumExtensions.ToArray<SequenceGroupType>();
+        SequenceGroupType[] sequenceGroupTypes = Enum.GetValues<SequenceGroupType>();
         viewData.Add("sequenceGroupTypes", sequenceGroupTypes.ToSelectListWithNature());
         return this;
     }
@@ -207,7 +207,7 @@ public class ViewDataBuilder(IDbContextFactory<LibiadaDatabaseEntities> dbFactor
     /// <returns></returns>
     public IViewDataBuilder AddFeatures()
     {
-        IEnumerable<Feature> features = EnumExtensions.ToArray<Feature>().Where(f => f.GetNature() == Nature.Genetic);
+        IEnumerable<Feature> features = Enum.GetValues<Feature>().Where(f => f.GetNature() == Nature.Genetic);
         IEnumerable<Feature> selectedFeatures = features.Where(f => f != Feature.NonCodingSequence);
         viewData.Add("features", features.ToSelectListWithNature(selectedFeatures));
         return this;

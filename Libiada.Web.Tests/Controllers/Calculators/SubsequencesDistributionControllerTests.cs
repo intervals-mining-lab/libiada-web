@@ -1,9 +1,5 @@
 ﻿namespace Libiada.Web.Tests.Controllers.Calculators;
 
-using Libiada.Web.Controllers.Calculators;
-
-using Newtonsoft.Json;
-
 [TestFixture]
 public class SubsequencesDistributionControllerTests
 {

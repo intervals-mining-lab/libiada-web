@@ -10,8 +10,6 @@ using Libiada.Core.Extensions;
 using Libiada.Web.Models.CalculatorsData;
 using Libiada.Web.Extensions;
 
-using EnumExtensions = Core.Extensions.EnumExtensions;
-
 /// <summary>
 /// The congeneric characteristic repository.
 /// </summary>
@@ -49,9 +47,9 @@ public class CongenericCharacteristicRepository
 
         if (currentUser.IsAdmin())
         {
-            links = EnumExtensions.ToArray<Link>();
-            characteristics = EnumExtensions.ToArray<CongenericCharacteristic>();
-            arrangementTypes = EnumExtensions.ToArray<ArrangementType>();
+            links = Enum.GetValues<Link>();
+            characteristics = Enum.GetValues<CongenericCharacteristic>();
+            arrangementTypes = Enum.GetValues<ArrangementType>();
         }
         else
         {

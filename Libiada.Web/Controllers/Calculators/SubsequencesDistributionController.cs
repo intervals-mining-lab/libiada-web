@@ -19,8 +19,6 @@ using Libiada.Database.Tasks;
 
 using Bio.IO.FastA;
 
-using EnumExtensions = Core.Extensions.EnumExtensions;
-
 
 /// <summary>
 /// The subsequences distribution controller.
@@ -172,7 +170,7 @@ public class SubsequencesDistributionController : AbstractResultController
                                 { "subsequencesCharacteristicsList", subsequencesCharacteristicsList },
                                 { "sequenceCharacteristicName", sequenceCharacteristicName },
                                 { "features", features.ToSelectList(features).ToDictionary(f => f.Value) },
-                                { "attributes", EnumExtensions.ToArray<AnnotationAttribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
+                                { "attributes", Enum.GetValues<AnnotationAttribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
                                 { "attributeValues", allAttributeValues.Select(sa => new { attribute = sa.AttributeId, value = sa.Value }) }
                             };
 

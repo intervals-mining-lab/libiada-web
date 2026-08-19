@@ -1,19 +1,17 @@
 ﻿namespace Libiada.Web.Tasks;
 
 using Libiada.Core.Extensions;
-
 using Libiada.Database.Tasks;
-
-using Libiada.Web.Helpers;
 using Libiada.Web.Extensions;
+using Libiada.Web.Helpers;
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 
 using Newtonsoft.Json;
 
-using System.Security.Claims;
 using System.Runtime.CompilerServices;
+using System.Security.Claims;
 
 using SystemTask = System.Threading.Tasks.Task;
 
@@ -94,7 +92,7 @@ public class TaskManager : ITaskManager
                 taskAwaiter = SendTaskEventToClients(TaskEvent.AddTask, task.TaskData).GetAwaiter();
             }
         }
-        
+
         ManageTasks();
         taskAwaiter.OnCompleted(() => { });
         return task.TaskData.Id;
@@ -161,12 +159,12 @@ public class TaskManager : ITaskManager
                     tasks.Remove(task);
                     using var db = dbFactory.CreateDbContext();
                     CalculationTask? databaseTask = db.CalculationTasks.Find(id);
-                    if(databaseTask is not null)
+                    if (databaseTask is not null)
                     {
                         db.CalculationTasks.Remove(databaseTask);
                         db.SaveChanges();
                     }
-                    
+
                     return task.TaskData;
                 }
             }
