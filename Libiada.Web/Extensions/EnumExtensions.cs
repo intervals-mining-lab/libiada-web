@@ -2,31 +2,15 @@
 
 using Libiada.Core.Exceptions;
 using Libiada.Core.Extensions;
-using Libiada.Database.Attributes;
 using Libiada.Web.Models.CalculatorsData;
+
+using static Libiada.Database.Extensions.EnumExtensions;
 
 /// <summary>
 /// The enum helper.
 /// </summary>
 public static class EnumExtensions
 {
-    /// <summary>
-    /// Gets nature attribute value for given enum value.
-    /// </summary>
-    /// <typeparam name="T">
-    /// Enum with nature attribute.
-    /// </typeparam>
-    /// <param name="value">
-    /// Enum value.
-    /// </param>
-    /// <returns>
-    /// Nature attribute value as <see cref="Nature"/>
-    /// </returns>
-    public static Nature GetNature<T>(this T value) where T : struct, Enum
-    {
-        return value.GetAttribute<T, NatureAttribute>()?.Value ?? throw new Exception($"Nature attribute not fond on enum value {Enum.GetName(value)}");
-    }
-
     /// <summary>
     /// Converts given enum into select list.
     /// </summary>

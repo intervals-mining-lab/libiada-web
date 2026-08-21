@@ -1,16 +1,15 @@
 ﻿namespace Libiada.Web.Helpers;
 
-using System.ComponentModel;
-using System.Security.Claims;
-
 using Libiada.Core.Music;
-
+using Libiada.Database.Attributes;
+using Libiada.Database.Extensions;
+using Libiada.Database.Models.Repositories.Catalogs;
+using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Web.Extensions;
 using Libiada.Web.Models.CalculatorsData;
 
-using Libiada.Database.Models.Repositories.Catalogs;
-using Libiada.Database.Models.Repositories.Sequences;
-using Libiada.Database.Attributes;
+using System.ComponentModel;
+using System.Security.Claims;
 
 using EnumExtensions = Core.Extensions.EnumExtensions;
 
@@ -258,7 +257,7 @@ public class ViewDataBuilder(IDbContextFactory<LibiadaDatabaseEntities> dbFactor
     /// <returns></returns>
     public IViewDataBuilder AddTrajectories()
     {
-        var imageOrderExtractors = EnumExtensions.SelectAllWithAttribute<ImageOrderExtractor>(typeof(ImageOrderExtractorAttribute));
+        var imageOrderExtractors = EnumExtensions.SelectAllWithAttribute<ImageOrderExtractor, ImageOrderExtractorAttribute>();
         viewData.Add("trajectories", imageOrderExtractors.ToSelectList());
         return this;
     }

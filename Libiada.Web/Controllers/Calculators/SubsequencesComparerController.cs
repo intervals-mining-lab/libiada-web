@@ -5,6 +5,7 @@ using Libiada.Core.TimeSeries.Aggregators;
 using Libiada.Core.TimeSeries.Aligners;
 using Libiada.Core.TimeSeries.OneDimensional.Comparers;
 using Libiada.Core.TimeSeries.OneDimensional.DistanceCalculators;
+using Libiada.Database.Extensions;
 using Libiada.Database.Models.Calculators;
 using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Models.Repositories.Catalogs;

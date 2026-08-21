@@ -40,7 +40,7 @@ public class TaskManagerHub : Hub<ITaskManagerClient>
             result = new
             {
                 task.Id,
-                TaskType = task.TaskType.GetName(),
+                TaskType = Enum.GetName(task.TaskType),
                 DisplayName = task.TaskType.GetDisplayValue(),
                 Created = task.Created.ToString(OutputFormats.DateTimeFormat),
                 Started = task.Started?.ToString(OutputFormats.DateTimeFormat),
@@ -76,7 +76,7 @@ public class TaskManagerHub : Hub<ITaskManagerClient>
             .Select(task => new
             {
                 task.Id,
-                TaskType = task.TaskType.GetName(),
+                TaskType = Enum.GetName(task.TaskType),
                 DisplayName = task.TaskType.GetDisplayValue(),
                 Created = task.Created.ToString(OutputFormats.DateTimeFormat),
                 Started = task.Started?.ToString(OutputFormats.DateTimeFormat),

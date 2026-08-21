@@ -1,18 +1,17 @@
 ﻿namespace Libiada.Web.Controllers.Sequences;
 
-using System.ComponentModel;
-
 using Libiada.Core.Extensions;
-
+using Libiada.Database.Extensions;
 using Libiada.Database.Helpers;
 using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
+using Libiada.Web.Extensions;
+using Libiada.Web.Helpers;
+using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
 
-using Libiada.Web.Helpers;
-using Libiada.Web.Extensions;
-using Libiada.Web.Tasks;
+using System.ComponentModel;
 
 using FileHelper = Helpers.FileHelper;
 
@@ -157,7 +156,7 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
                         break;
                     case Nature.Literature:
                         var literatureSequenceRepository = new LiteratureSequenceRepository(dbFactory, cache);
-                        var literatureSequence = sequence.ToLiteratureSequence(); 
+                        var literatureSequence = sequence.ToLiteratureSequence();
 
                         literatureSequenceRepository.Create(literatureSequence, sequenceStream);
                         break;
@@ -178,7 +177,7 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
                         var researchObjectRepository = new ResearchObjectRepository(db, cache);
 
                         byte[] fileBytes;
-                        
+
                         fileBytes = new byte[sequenceStream.Length];
                         sequenceStream.Read(fileBytes, 0, (int)sequenceStream.Length);
 
