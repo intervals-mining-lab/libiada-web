@@ -462,7 +462,7 @@ public class TaskManager : ITaskManager
             result = new
             {
                 task.Id,
-                TaskType = task.TaskType.GetName(),
+                TaskType = Enum.GetName(task.TaskType),
                 DisplayName = task.TaskType.GetDisplayValue(),
                 Created = task.Created.ToString(OutputFormats.DateTimeFormat),
                 Started = task.Started?.ToString(OutputFormats.DateTimeFormat),

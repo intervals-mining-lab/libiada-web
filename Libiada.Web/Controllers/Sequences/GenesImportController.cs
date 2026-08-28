@@ -82,7 +82,7 @@ public class GenesImportController : AbstractResultController
             subsequenceImporter.CreateSubsequences();
 
 
-            var features = EnumExtensions.ToArray<Feature>().ToDictionary(f => (byte)f, f => f.GetDisplayValue());
+            var features = Enum.GetValues<Feature>().ToDictionary(f => (byte)f, f => f.GetDisplayValue());
             string researchObjectName = cache.ResearchObjects.Single(m => m.Id == researchObjectId).Name;
             SubsequenceData[] sequenceSubsequences = db.Subsequences
                 .Where(s => s.SequenceId == parentSequence.Id)

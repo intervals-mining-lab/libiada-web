@@ -5,6 +5,7 @@ using Libiada.Core.TimeSeries.Aggregators;
 using Libiada.Core.TimeSeries.Aligners;
 using Libiada.Core.TimeSeries.OneDimensional.Comparers;
 using Libiada.Core.TimeSeries.OneDimensional.DistanceCalculators;
+using Libiada.Database.Extensions;
 using Libiada.Database.Models.Calculators;
 using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Models.Repositories.Catalogs;
@@ -14,12 +15,11 @@ using Libiada.Web.Extensions;
 using Libiada.Web.Helpers;
 using Libiada.Web.Models.CalculatorsData;
 using Libiada.Web.Tasks;
+using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
 
 using System.Globalization;
-
-using static Libiada.Core.Extensions.EnumExtensions;
 
 /// <summary>
 /// The subsequences comparer controller.
@@ -233,11 +233,11 @@ public class SubsequencesComparerController : AbstractResultController
                 { "similarities", similarities },
                 { "filteredSimilarities", filteredSimilarities },
                 { "features", features.ToDictionary(f => (byte)f, f => f.GetDisplayValue()) },
-                { "attributes", ToArray<AnnotationAttribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
+                { "attributes", Enum.GetValues<AnnotationAttribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
                 { "maxPercentageDifferences", maxPercentageDifferences },
                 { "sequenceCharacteristicName", sequenceCharacteristicName },
                 { "nature", (byte)Nature.Genetic },
-                { "notations", ToArray<Notation>().Where(n => n.GetNature() == Nature.Genetic).ToSelectListWithNature() }
+                { "notations", Enum.GetValues<Notation>().Where(n => n.GetNature() == Nature.Genetic).ToSelectListWithNature() }
             };
 
             foreach ((string key, object value) in characteristicsTypesData)

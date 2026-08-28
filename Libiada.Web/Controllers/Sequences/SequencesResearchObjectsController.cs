@@ -1,6 +1,7 @@
 ﻿namespace Libiada.Web.Controllers.Sequences;
 
 using Libiada.Core.Extensions;
+using Libiada.Database.Extensions;
 using Libiada.Database.Helpers;
 using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;

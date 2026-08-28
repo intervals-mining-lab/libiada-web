@@ -2,7 +2,7 @@
 
 using Libiada.Core.Exceptions;
 using Libiada.Core.Extensions;
-using Libiada.Database.Attributes;
+using static Libiada.Database.Extensions.EnumExtensions;
 using Libiada.Web.Models.CalculatorsData;
 
 /// <summary>
@@ -10,23 +10,6 @@ using Libiada.Web.Models.CalculatorsData;
 /// </summary>
 public static class EnumExtensions
 {
-    /// <summary>
-    /// Gets nature attribute value for given enum value.
-    /// </summary>
-    /// <typeparam name="T">
-    /// Enum with nature attribute.
-    /// </typeparam>
-    /// <param name="value">
-    /// Enum value.
-    /// </param>
-    /// <returns>
-    /// Nature attribute value as <see cref="Nature"/>
-    /// </returns>
-    public static Nature GetNature<T>(this T value) where T : struct, IComparable, IFormattable, IConvertible
-    {
-        return value.GetAttribute<T, NatureAttribute>().Value;
-    }
-
     /// <summary>
     /// Converts given enum into select list.
     /// </summary>
@@ -44,10 +27,9 @@ public static class EnumExtensions
     /// Works only with byte enums.
     /// </remarks>
     public static IEnumerable<SelectListItem> GetSelectList<T>(bool useDisplayValueAsValue = false)
-    where T : struct, IComparable, IFormattable, IConvertible
+    where T : struct, Enum
     {
-
-        return GetSelectList(Array.Empty<T>(), useDisplayValueAsValue);
+        return GetSelectList(selectedValues: Array.Empty<T>(), useDisplayValueAsValue);
     }
 
     /// <summary>
@@ -70,9 +52,9 @@ public static class EnumExtensions
     /// Works only with byte enums.
     /// </remarks>
     public static IEnumerable<SelectListItem> GetSelectList<T>(IEnumerable<T> selectedValues, bool useDisplayValueAsValue = false)
-    where T : struct, IComparable, IFormattable, IConvertible
+    where T : struct, Enum
     {
-        T[] values = Core.Extensions.EnumExtensions.ToArray<T>();
+        T[] values = Enum.GetValues<T>();
         return values.ToSelectList(selectedValues, useDisplayValueAsValue);
     }
 
@@ -99,18 +81,11 @@ public static class EnumExtensions
     /// Works only with byte enums.
     /// </remarks>
     public static IEnumerable<SelectListItem> ToSelectList<T>(this IEnumerable<T> values, bool useDisplayValueAsValue = false)
-        where T : struct, IComparable, IFormattable, IConvertible
+        where T : struct, Enum
     {
-        Type type = typeof(T);
-
-        if (!type.IsEnum)
-        {
-            throw new TypeArgumentException("Type argument must be enum.", type);
-        }
-
         return values.Select(e => new SelectListItem
         {
-            Value = useDisplayValueAsValue ? e.GetDisplayValue() : Convert.ToByte(e).ToString(),
+            Value = useDisplayValueAsValue ? e.GetDisplayValue() : Enum.GetName(e),
             Text = e.GetDisplayValue(),
             Selected = false
         });
@@ -142,18 +117,11 @@ public static class EnumExtensions
     /// Works only with byte enums.
     /// </remarks>
     public static IEnumerable<SelectListItem> ToSelectList<T>(this IEnumerable<T> values, IEnumerable<T> selectedValues, bool useDisplayValueAsValue = false)
-        where T : struct, IComparable, IFormattable, IConvertible
+        where T : struct, Enum
     {
-        Type type = typeof(T);
-
-        if (!type.IsEnum)
-        {
-            throw new TypeArgumentException("Type argument must be enum.", type);
-        }
-
         return values.Select(e => new SelectListItem
         {
-            Value = useDisplayValueAsValue ? e.GetDisplayValue() : Convert.ToByte(e).ToString(),
+            Value = useDisplayValueAsValue ? e.GetDisplayValue() : Enum.GetName(e),
             Text = e.GetDisplayValue(),
             Selected = selectedValues.Contains(e)
         });
@@ -182,18 +150,11 @@ public static class EnumExtensions
     /// Works only with byte enums.
     /// </remarks>
     public static IEnumerable<SelectListItemWithNature> ToSelectListWithNature<T>(this IEnumerable<T> values, bool useDisplayValueAsValue = false)
-        where T : struct, IComparable, IFormattable, IConvertible
+        where T : struct, Enum
     {
-        Type type = typeof(T);
-
-        if (!type.IsEnum)
-        {
-            throw new TypeArgumentException("Type argument must be enum.", type);
-        }
-
         return values.Select(e => new SelectListItemWithNature
         {
-            Value = useDisplayValueAsValue ? e.GetDisplayValue() : Convert.ToByte(e).ToString(),
+            Value = useDisplayValueAsValue ? e.GetDisplayValue() : Enum.GetName(e),
             Text = e.GetDisplayValue(),
             Selected = false,
             Nature = (byte)e.GetNature()
@@ -226,18 +187,11 @@ public static class EnumExtensions
     /// Works only with byte enums.
     /// </remarks>
     public static IEnumerable<SelectListItemWithNature> ToSelectListWithNature<T>(this IEnumerable<T> values, IEnumerable<T> selectedValues, bool useDisplayValueAsValue = false)
-        where T : struct, IComparable, IFormattable, IConvertible
+        where T : struct, Enum
     {
-        Type type = typeof(T);
-
-        if (!type.IsEnum)
-        {
-            throw new TypeArgumentException("Type argument must be enum.", type);
-        }
-
         return values.Select(e => new SelectListItemWithNature
         {
-            Value = useDisplayValueAsValue ? e.GetDisplayValue() : Convert.ToByte(e).ToString(),
+            Value = useDisplayValueAsValue ? e.GetDisplayValue() : Enum.GetName(e),
             Text = e.GetDisplayValue(),
             Selected = selectedValues.Contains(e),
             Nature = (byte)e.GetNature()

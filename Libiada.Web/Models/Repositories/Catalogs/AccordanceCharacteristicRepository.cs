@@ -9,8 +9,6 @@ using Libiada.Web.Models.CalculatorsData;
 
 using System.Security.Claims;
 
-using EnumExtensions = Core.Extensions.EnumExtensions;
-
 
 /// <summary>
 /// The accordance characteristic repository.
@@ -49,8 +47,8 @@ public class AccordanceCharacteristicRepository
         ArrangementType arrangementType = ArrangementType.Intervals;
         if (currentUser.IsAdmin())
         {
-            links = EnumExtensions.ToArray<Link>();
-            characteristics = EnumExtensions.ToArray<AccordanceCharacteristic>();
+            links = Enum.GetValues<Link>();
+            characteristics = Enum.GetValues<AccordanceCharacteristic>();
         }
         else
         {

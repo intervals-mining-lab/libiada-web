@@ -190,7 +190,7 @@ public class SubsequencesSimilarityController : AbstractResultController
                 { "similarSubsequences", similarSubsequences },
                 { "similarity", similarity },
                 { "features", features.ToDictionary(f => (byte)f, f => f.GetDisplayValue()) },
-                { "attributes", EnumExtensions.ToArray<AnnotationAttribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
+                { "attributes", Enum.GetValues<AnnotationAttribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
                 { "firstSequenceSimilarity", firstSequenceSimilarity },
                 { "secondSequenceSimilarity", secondSequenceSimilarity },
                 { "firstSequenceSubsequences", firstSequenceSubsequences },

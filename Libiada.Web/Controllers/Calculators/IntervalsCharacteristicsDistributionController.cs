@@ -12,8 +12,6 @@ using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
 
-using EnumExtensions = Core.Extensions.EnumExtensions;
-
 /// <summary>
 /// Calculates accordance of orders by intervals distributions.
 /// </summary>
@@ -116,7 +114,7 @@ public class IntervalsCharacteristicsDistributionController : AbstractResultCont
             var index = Enumerable.Range(0, characteristicLinkIds.Length);
 
             Dictionary<string, Dictionary<IntervalsDistribution, Dictionary<int[], SequenceCharacteristics>>> resultIntervals = [];
-            foreach (Link link in EnumExtensions.ToArray<Link>())
+            foreach (Link link in Enum.GetValues<Link>())
             {
                 if (link == Link.NotApplied)
                 {

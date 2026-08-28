@@ -9,8 +9,6 @@ using Libiada.Web.Models.CalculatorsData;
 
 using System.Security.Claims;
 
-using EnumExtensions = Core.Extensions.EnumExtensions;
-
 /// <summary>
 /// The binary characteristic repository.
 /// </summary>
@@ -47,8 +45,8 @@ public class BinaryCharacteristicRepository
         ArrangementType arrangementType = ArrangementType.Intervals;
         if (currentUser.IsAdmin())
         {
-            links = EnumExtensions.ToArray<Link>();
-            characteristics = EnumExtensions.ToArray<BinaryCharacteristic>();
+            links = Enum.GetValues<Link>();
+            characteristics = Enum.GetValues<BinaryCharacteristic>();
         }
         else
         {
