@@ -1,12 +1,11 @@
 ﻿namespace Libiada.Web.Controllers.Sequences;
 
+using Libiada.Database.Helpers;
+using Libiada.Database.Models.Repositories.Sequences;
+using Libiada.Database.Tasks;
 using Libiada.Web.Extensions;
 using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
-
-using Libiada.Database.Tasks;
-using Libiada.Database.Helpers;
-using Libiada.Database.Models.Repositories.Sequences;
 
 using Newtonsoft.Json;
 
@@ -102,7 +101,7 @@ public class ResearchObjectsController : SequencesResearchObjectsController
         }
         var data = new Dictionary<string, object>
             {
-                { "natures", Extensions.EnumExtensions.GetSelectList(new[] { researchObject.Nature }) },
+                { "natures", EnumExtensions.GetSelectList(selectedValues: [researchObject.Nature]) },
                 { "groups", Enum.GetValues<Group>().ToSelectListWithNature() },
                 { "sequenceTypes", Enum.GetValues<SequenceType>().ToSelectListWithNature() },
                 { "sequencesCount", db.CombinedSequenceEntities.Count(c => c.ResearchObjectId == researchObject.Id) },
@@ -145,7 +144,7 @@ public class ResearchObjectsController : SequencesResearchObjectsController
 
         var data = new Dictionary<string, object>
             {
-                { "natures", Extensions.EnumExtensions.GetSelectList(new[] { researchObject.Nature }) },
+                { "natures", EnumExtensions.GetSelectList(selectedValues: [researchObject.Nature]) },
                 { "groups", Enum.GetValues<Group>().ToSelectListWithNature() },
                 { "sequenceTypes", Enum.GetValues<SequenceType>().ToSelectListWithNature() },
                 { "sequencesCount", db.CombinedSequenceEntities.Count(c => c.ResearchObjectId == researchObject.Id) },

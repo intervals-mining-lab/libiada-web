@@ -1,9 +1,9 @@
 ﻿namespace Libiada.Web.Controllers.Sequences;
 
-using Libiada.Database.Tasks;
 using Libiada.Database.Helpers;
 using Libiada.Database.Models.Repositories.Sequences;
-
+using Libiada.Database.Tasks;
+using Libiada.Web.Extensions;
 using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
 
@@ -93,10 +93,11 @@ public class CombinedSequencesEntityController : SequencesResearchObjectsControl
         {
             return NotFound();
         }
-        RemoteDb[] remoteDb = sequence.RemoteDb == null ? [] : [(RemoteDb)sequence.RemoteDb];
+
         ViewBag.ResearchObjectId = new SelectList(cache.ResearchObjects.ToArray(), "Id", "Name", sequence.ResearchObjectId);
-        ViewBag.Notation = Extensions.EnumExtensions.GetSelectList([sequence.Notation]);
-        ViewBag.RemoteDb = Extensions.EnumExtensions.GetSelectList(remoteDb);
+        ViewBag.Notation = EnumExtensions.GetSelectList(selectedValues: [sequence.Notation]);
+        RemoteDb[] remoteDb = sequence.RemoteDb == null ? [] : [(RemoteDb)sequence.RemoteDb];
+        ViewBag.RemoteDb = EnumExtensions.GetSelectList(selectedValues: remoteDb);
         return View(sequence);
     }
 
@@ -120,11 +121,11 @@ public class CombinedSequencesEntityController : SequencesResearchObjectsControl
             return RedirectToAction("Index");
         }
 
-        RemoteDb[] remoteDb = sequence.RemoteDb == null ? [] : [(RemoteDb)sequence.RemoteDb];
 
         ViewBag.ResearchObjectId = new SelectList(cache.ResearchObjects.ToArray(), "Id", "Name", sequence.ResearchObjectId);
-        ViewBag.Notation = Extensions.EnumExtensions.GetSelectList([sequence.Notation]);
-        ViewBag.RemoteDb = Extensions.EnumExtensions.GetSelectList(remoteDb);
+        ViewBag.Notation = EnumExtensions.GetSelectList(selectedValues: [sequence.Notation]);
+        RemoteDb[] remoteDb = sequence.RemoteDb == null ? [] : [(RemoteDb)sequence.RemoteDb];
+        ViewBag.RemoteDb = EnumExtensions.GetSelectList(selectedValues: remoteDb);
         return View(sequence);
     }
 

@@ -1,14 +1,13 @@
 ﻿namespace Libiada.Web.Models.Repositories.Catalogs;
 
-using System.Security.Claims;
-
 using Libiada.Core.Core;
 using Libiada.Core.Core.ArrangementManagers;
 using Libiada.Core.Core.Characteristics.Calculators.CongenericCalculators;
 using Libiada.Core.Extensions;
-
-using Libiada.Web.Models.CalculatorsData;
 using Libiada.Web.Extensions;
+using Libiada.Web.Models.CalculatorsData;
+
+using System.Security.Claims;
 
 /// <summary>
 /// The congeneric characteristic repository.
@@ -78,5 +77,4 @@ public class CongenericCharacteristicRepository
 
         return result;
     }
-
 }
