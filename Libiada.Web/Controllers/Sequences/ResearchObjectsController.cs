@@ -101,7 +101,7 @@ public class ResearchObjectsController : SequencesResearchObjectsController
         }
         var data = new Dictionary<string, object>
             {
-                { "natures", Extensions.EnumExtensions.GetSelectList(new[] { researchObject.Nature }) },
+                { "natures", EnumExtensions.GetSelectList(selectedValues: [researchObject.Nature]) },
                 { "groups", Enum.GetValues<Group>().ToSelectListWithNature() },
                 { "sequenceTypes", Enum.GetValues<SequenceType>().ToSelectListWithNature() },
                 { "sequencesCount", db.CombinedSequenceEntities.Count(c => c.ResearchObjectId == researchObject.Id) },
@@ -144,7 +144,7 @@ public class ResearchObjectsController : SequencesResearchObjectsController
 
         var data = new Dictionary<string, object>
             {
-                { "natures", Extensions.EnumExtensions.GetSelectList(new[] { researchObject.Nature }) },
+                { "natures", EnumExtensions.GetSelectList(selectedValues: [researchObject.Nature]) },
                 { "groups", Enum.GetValues<Group>().ToSelectListWithNature() },
                 { "sequenceTypes", Enum.GetValues<SequenceType>().ToSelectListWithNature() },
                 { "sequencesCount", db.CombinedSequenceEntities.Count(c => c.ResearchObjectId == researchObject.Id) },

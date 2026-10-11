@@ -1,12 +1,12 @@
 ﻿namespace Libiada.Web.Models;
 
 /// <summary>
-/// The select list item comparer.
+/// Comparer for <see cref="SelectListItem"/>.
 /// </summary>
 public class SelectListItemComparer : IEqualityComparer<SelectListItem>
 {
     /// <summary>
-    /// To compare the select list items.
+    /// Compares two SelectListItem objects.
     /// </summary>
     /// <param name="x">
     /// The first select list item.
@@ -19,14 +19,14 @@ public class SelectListItemComparer : IEqualityComparer<SelectListItem>
     /// </returns>
     public bool Equals(SelectListItem? x, SelectListItem? y)
     {
-        return (x == y) || (!(x == null || y == null) && (x.Text == y.Text && x.Value == y.Value));
+        return (x == y) || (!(x == null || y == null) && (x.Text == y.Text && x.Value == y.Value && x.Selected == y.Selected));
     }
 
     /// <summary>
-    /// To get hash code.
+    /// Calculates hash code based on Text, Value, and Selected flag.
     /// </summary>
     /// <param name="item">
-    /// The item.
+    /// SelectListItem object to calculatee hash code for.
     /// </param>
     /// <returns>
     /// The <see cref="int"/>.
@@ -35,6 +35,7 @@ public class SelectListItemComparer : IEqualityComparer<SelectListItem>
     {
         int hashText = item.Text == null ? 0 : item.Text.GetHashCode();
         int hashValue = item.Value == null ? 0 : item.Value.GetHashCode();
-        return hashText ^ hashValue;
+        int hashSelected = item.Selected ? 1 : 0;
+        return hashText ^ hashValue ^ hashSelected;
     }
 }

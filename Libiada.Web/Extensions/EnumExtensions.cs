@@ -13,10 +13,6 @@ public static class EnumExtensions
     /// <summary>
     /// Converts given enum into select list.
     /// </summary>
-    /// <param name="useDisplayValueAsValue">
-    /// If true all values of select list are display values of enum values.
-    /// Otherwise uses byte enum value.
-    /// </param>
     /// <typeparam name="T">
     /// Enum type.
     /// </typeparam>
@@ -26,11 +22,8 @@ public static class EnumExtensions
     /// /// <remarks>
     /// Works only with byte enums.
     /// </remarks>
-    public static IEnumerable<SelectListItem> GetSelectList<T>(bool useDisplayValueAsValue = false)
-    where T : struct, Enum
-    {
-        return GetSelectList(selectedValues: Array.Empty<T>(), useDisplayValueAsValue);
-    }
+    public static IEnumerable<SelectListItem> GetSelectList<T>()
+    where T : struct, Enum => GetSelectList(selectedValues: Array.Empty<T>());
 
     /// <summary>
     /// Converts given enum into select list.
@@ -38,10 +31,6 @@ public static class EnumExtensions
     /// <param name="selectedValues">
     /// List of enum values that sould be celected in SelectList.
     /// </param>
-    /// <param name="useDisplayValueAsValue">
-    /// If true all values of select list are display values of enum values.
-    /// Otherwise uses byte enum value.
-    /// </param>
     /// <typeparam name="T">
     /// Enum type.
     /// </typeparam>
@@ -51,22 +40,14 @@ public static class EnumExtensions
     /// /// <remarks>
     /// Works only with byte enums.
     /// </remarks>
-    public static IEnumerable<SelectListItem> GetSelectList<T>(IEnumerable<T> selectedValues, bool useDisplayValueAsValue = false)
-    where T : struct, Enum
-    {
-        T[] values = Enum.GetValues<T>();
-        return values.ToSelectList(selectedValues, useDisplayValueAsValue);
-    }
+    public static IEnumerable<SelectListItem> GetSelectList<T>(IEnumerable<T> selectedValues)
+    where T : struct, Enum => Enum.GetValues<T>().ToSelectList(selectedValues);
 
     /// <summary>
     /// Converts array of enum values into SelectList.
     /// </summary>
     /// <param name="values">
     /// The values.
-    /// </param>
-    /// <param name="useDisplayValueAsValue">
-    /// If true all values of select list are display values of enum values.
-    /// Otherwise uses byte enum value.
     /// </param>
     /// <typeparam name="T">
     /// Enum type.
@@ -80,16 +61,8 @@ public static class EnumExtensions
     /// <remarks>
     /// Works only with byte enums.
     /// </remarks>
-    public static IEnumerable<SelectListItem> ToSelectList<T>(this IEnumerable<T> values, bool useDisplayValueAsValue = false)
-        where T : struct, Enum
-    {
-        return values.Select(e => new SelectListItem
-        {
-            Value = useDisplayValueAsValue ? e.GetDisplayValue() : Enum.GetName(e),
-            Text = e.GetDisplayValue(),
-            Selected = false
-        });
-    }
+    public static IEnumerable<SelectListItem> ToSelectList<T>(this IEnumerable<T> values)
+        where T : struct, Enum => values.ToSelectList<T>([]);
 
     /// <summary>
     /// Converts array of enum values into SelectList.
@@ -100,10 +73,6 @@ public static class EnumExtensions
     /// <param name="selectedValues">
     /// The selected Values.
     /// </param>
-    /// <param name="useDisplayValueAsValue">
-    /// If true all values of select list are display values of enum values.
-    /// Otherwise uses byte enum value.
-    /// </param>
     /// <typeparam name="T">
     /// Enum type.
     /// </typeparam>
@@ -116,12 +85,12 @@ public static class EnumExtensions
     /// <remarks>
     /// Works only with byte enums.
     /// </remarks>
-    public static IEnumerable<SelectListItem> ToSelectList<T>(this IEnumerable<T> values, IEnumerable<T> selectedValues, bool useDisplayValueAsValue = false)
+    public static IEnumerable<SelectListItem> ToSelectList<T>(this IEnumerable<T> values, IEnumerable<T> selectedValues)
         where T : struct, Enum
     {
         return values.Select(e => new SelectListItem
         {
-            Value = useDisplayValueAsValue ? e.GetDisplayValue() : Enum.GetName(e),
+            Value = Convert.ToByte(e).ToString(),
             Text = e.GetDisplayValue(),
             Selected = selectedValues.Contains(e)
         });
@@ -133,10 +102,6 @@ public static class EnumExtensions
     /// <param name="values">
     /// The values.
     /// </param>
-    /// <param name="useDisplayValueAsValue">
-    /// If true all values of select list are display values of enum values.
-    /// Otherwise uses byte enum value.
-    /// </param>
     /// <typeparam name="T">
     /// Enum type.
     /// </typeparam>
@@ -149,17 +114,8 @@ public static class EnumExtensions
     /// <remarks>
     /// Works only with byte enums.
     /// </remarks>
-    public static IEnumerable<SelectListItemWithNature> ToSelectListWithNature<T>(this IEnumerable<T> values, bool useDisplayValueAsValue = false)
-        where T : struct, Enum
-    {
-        return values.Select(e => new SelectListItemWithNature
-        {
-            Value = useDisplayValueAsValue ? e.GetDisplayValue() : Enum.GetName(e),
-            Text = e.GetDisplayValue(),
-            Selected = false,
-            Nature = (byte)e.GetNature()
-        });
-    }
+    public static IEnumerable<SelectListItemWithNature> ToSelectListWithNature<T>(this IEnumerable<T> values)
+        where T : struct, Enum => values.ToSelectListWithNature<T>([]);
 
     /// <summary>
     /// Converts array of enum values into SelectListWithNature.
@@ -170,10 +126,6 @@ public static class EnumExtensions
     /// <param name="selectedValues">
     /// The selected values.
     /// </param>
-    /// <param name="useDisplayValueAsValue">
-    /// If true all values of select list are display values of enum values.
-    /// Otherwise uses byte enum value.
-    /// </param>
     /// <typeparam name="T">
     /// Enum type.
     /// </typeparam>
@@ -186,12 +138,12 @@ public static class EnumExtensions
     /// <remarks>
     /// Works only with byte enums.
     /// </remarks>
-    public static IEnumerable<SelectListItemWithNature> ToSelectListWithNature<T>(this IEnumerable<T> values, IEnumerable<T> selectedValues, bool useDisplayValueAsValue = false)
+    public static IEnumerable<SelectListItemWithNature> ToSelectListWithNature<T>(this IEnumerable<T> values, IEnumerable<T> selectedValues)
         where T : struct, Enum
     {
         return values.Select(e => new SelectListItemWithNature
         {
-            Value = useDisplayValueAsValue ? e.GetDisplayValue() : Enum.GetName(e),
+            Value = Convert.ToByte(e).ToString(),
             Text = e.GetDisplayValue(),
             Selected = selectedValues.Contains(e),
             Nature = (byte)e.GetNature()
