@@ -1,5 +1,4 @@
-import { initScopeFromServer } from "functions";
-//import * as bootstrap from "bootstrap";
+import { initScopeFromServer, InitializeBootstrapTooltips } from "functions";
 import type { Characteristic, SequenceCharacteristics, SequencesGroup } from "viewDataTypes";
 
 
@@ -23,7 +22,6 @@ interface ClusterizationResultScope extends ng.IScope, ClusterizationResultData 
     loadingScreenHeader: string;
     taskId: string;
 
-    tooltip: bootstrap.Tooltip;
     characteristicsTableTabSelected: boolean;
 }
 
@@ -39,15 +37,14 @@ class ClusterizationResultHandler {
         const clusterizationResult = async ($scope: ClusterizationResultScope, $http: ng.IHttpService): Promise<void> => {
             $scope.characteristicsTableTabSelected = false;
             
-            // initialyzing tooltips for tabs
-            const tooltipElements = $('[data-bs-toggle="tooltip"]');
-            $scope.tooltip = new bootstrap.Tooltip(tooltipElements);
-
-            initScopeFromServer<ClusterizationResultData>(
+            await initScopeFromServer<ClusterizationResultData>(
                 $http,
                 $scope,
                 "Loading cluster analysis results",
                 "Failed loading cluster analysis results");
+
+            // initialyzing tooltips for tabs
+            InitializeBootstrapTooltips();
         };
 
         // Register controller in Angular module

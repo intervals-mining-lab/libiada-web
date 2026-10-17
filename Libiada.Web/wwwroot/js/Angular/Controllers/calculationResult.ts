@@ -1,4 +1,4 @@
-import { initScopeFromServer  } from "functions";
+import { initScopeFromServer, InitializeBootstrapTooltips } from "functions";
 import type { Characteristic, SequenceCharacteristics, SequencesGroup } from "viewDataTypes";
 
 
@@ -36,15 +36,15 @@ class CalculationResultHandler {
     private ngOnInit(): void {
         const calculationResult = async ($scope: CalculationResultScope, $http: ng.IHttpService): Promise<void> => {
             $scope.characteristicsTableTabSelected = false;
-            
-            // initialyzing tooltips for tabs
-            $('[data-bs-toggle="tooltip"]').tooltip();
 
-            initScopeFromServer<CalculationResultData>(
+            await initScopeFromServer<CalculationResultData>(
                 $http,
                 $scope,
                 "Loading characteristics calculation results",
                 "Failed loading characteristics calculation results");
+            
+            // initializing tooltips for tabs
+            InitializeBootstrapTooltips();
         };
 
         // Register controller in Angular module

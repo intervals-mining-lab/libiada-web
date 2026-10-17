@@ -1,6 +1,6 @@
 ﻿@{
     Layout = "_EmptyLayout";
-    ViewBag.Title = "Libiada - Integral characterisitics calculation result";
+    ViewBag.Title = "Libiada - Integral characteristics calculation result";
 }
 
 @if (ViewBag.Error == null)
@@ -9,8 +9,12 @@
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         @* dirty hack to prevent components from loading before server data *@
         <div ng-if="loading === false">
-            <ul id='nav' class="nav nav-tabs d-flex justify-content-evenly pt-1" role="tablist">
-                <li class="nav-item" role="presentation" title="Charts">
+            <ul id='nav' class="nav nav-tabs d-flex justify-content-evenly pt-1" role="tabList">
+                <li class="nav-item" 
+                    role="presentation" 
+                    title="Data visualizations" 
+                    data-bs-toggle="tooltip" 
+                    data-bs-placement="bottom">
                     <button class="nav-link active"
                             id="charts-tab"
                             data-bs-toggle="tab"
@@ -22,7 +26,11 @@
                         Charts
                     </button>
                 </li>
-                <li class="nav-item" role="presentation" title="Data export">
+                <li class="nav-item" 
+                    role="presentation" 
+                    title="Export data to excel file" 
+                    data-bs-toggle="tooltip" 
+                    data-bs-placement="bottom">
                     <button class="nav-link"
                             id="export-tab"
                             data-bs-toggle="tab"
@@ -34,7 +42,12 @@
                         Data export
                     </button>
                 </li>
-                <li class="nav-item" role="presentation" title="Data table" ng-click="characteristicsTableTabSelected = true">
+                <li class="nav-item" 
+                    role="presentation" 
+                    title="Data table" 
+                    ng-click="characteristicsTableTabSelected = true" 
+                    data-bs-toggle="tooltip" 
+                    data-bs-placement="bottom">
                     <button class="nav-link"
                             id="data-table-tab"
                             data-bs-toggle="tab"
@@ -83,7 +96,7 @@
     </div>
 
     @section Scripts {
-    <script src="~/lib/exceljs/exceljs.min.js" asp-append-version="true"></script>
+        <script src="~/lib/exceljs/exceljs.min.js" asp-append-version="true"></script>
         <script type="module" src="~/js/Angular/Components/characteristicsTableExcelExporter.js" asp-append-version="true"></script>
         <script type="module" src="~/js/Angular/Components/characteristicsVisualizations.js" asp-append-version="true"></script>
         <script type="module" src="~/js/Angular/Components/characteristicsTable.js" asp-append-version="true"></script>

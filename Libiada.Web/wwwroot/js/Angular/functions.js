@@ -1,3 +1,4 @@
+//import * as bootstrap from "bootstrap";
 /**
  * Utility functions for LibiadaWeb Angular application
  */
@@ -94,5 +95,9 @@ export function arrayMax(array) {
 // Helper function to throw errors in ?? operator
 export function throwHelper(errorMessage) {
     throw new Error(errorMessage);
+}
+export function InitializeBootstrapTooltips() {
+    const tooltipElements = $('[data-bs-toggle="tooltip"]').toArray();
+    tooltipElements.forEach((tooltipElement) => new bootstrap.Tooltip(tooltipElement));
 }
 //# sourceMappingURL=functions.js.map

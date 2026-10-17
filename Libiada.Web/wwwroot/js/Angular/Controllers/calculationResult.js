@@ -1,4 +1,4 @@
-import { initScopeFromServer } from "functions";
+import { initScopeFromServer, InitializeBootstrapTooltips } from "functions";
 /**
  * Angular controller class for integral characteristics calculation results visualization
  */
@@ -9,9 +9,9 @@ class CalculationResultHandler {
     ngOnInit() {
         const calculationResult = async ($scope, $http) => {
             $scope.characteristicsTableTabSelected = false;
-            // initialyzing tooltips for tabs
-            $('[data-bs-toggle="tooltip"]').tooltip();
-            initScopeFromServer($http, $scope, "Loading characteristics calculation results", "Failed loading characteristics calculation results");
+            await initScopeFromServer($http, $scope, "Loading characteristics calculation results", "Failed loading characteristics calculation results");
+            // initializing tooltips for tabs
+            InitializeBootstrapTooltips();
         };
         // Register controller in Angular module
         angular.module("libiada").controller("CalculationResultCtrl", ["$scope", "$http", calculationResult]);

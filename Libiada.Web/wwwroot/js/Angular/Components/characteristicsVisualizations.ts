@@ -1,20 +1,22 @@
 ﻿import * as plotly from "plotly.js";
-import type { Characteristic, SequencesGroup,SequenceCharacteristics } from "viewDataTypes";
-import { getArrayMinMax, arrayMax, throwHelper } from "functions";
+import type {
+    Characteristic,
+    SequencesGroup,
+    SequenceCharacteristics,
+    LegendItem
+} from "viewDataTypes";
+import {
+    getArrayMinMax,
+    arrayMax,
+    throwHelper,
+    InitializeBootstrapTooltips
+} from "functions";
 
 interface Point {
     id: number;
     name: string;
     legendIndex: number;
-    legendId: number;
     characteristics: number[];
-}
-
-interface LegendItem {
-    id: number;
-    name: string | number;
-    visible: boolean;
-    color: string;
 }
 
 interface CharacteristicsVisualizationsComponentController extends ng.IController {
@@ -28,38 +30,41 @@ interface CharacteristicsVisualizationsComponentController extends ng.IControlle
     points: Point[];
     chartElement: HTMLElement;
     colorScale: d3.ScaleSequential<string>;
-    tooltip: { id: number, name: string, characteristics: number[] };
+    tooltip: { name: string, characteristics: number[] };
     tooltipVisible: boolean;
     selectedPointIndex: number;
     selectedResearchObjectIndex: number;
     layout: Partial<plotly.Layout>;
     chartData: Partial<plotly.PlotData>[];
-    
-    $onInit(): void; 
-    fillLegend(): void;
-    addCharacteristic(): void;
-    deleteCharacteristic(characteristic: Characteristic): void;
-    fillPoints(): void;
-    fillPointTooltip(d: Point): string;
-    showTooltip(selectedPoint: Point): void;
-    fillBarPlotData(): void;
-    fillScatterPlotData(): void;
-    fill3dScatterPlotData(): void;
-    fillParallelCoordinatesPlotData(): void;
-    draw(): void;
-    legendClick(legendItem: LegendItem): void;
-    legendSetVisibilityForAll(visibility: boolean): void;
-    dragbarMouseDown(): void;
+
+    $onInit: () => void;
+    fillLegend: () => void;
+    addCharacteristic: () => void;
+    deleteCharacteristic: (characteristic: Characteristic) => void;
+    fillPoints: () => void;
+    fillPointTooltip: (d: Point) => string;
+    showTooltip: (selectedPoint: Point) => void;
+    fillBarPlotData: () => void;
+    fillScatterPlotData: () => void;
+    fill3dScatterPlotData: () => void;
+    fillParallelCoordinatesPlotData: () => void;
+    draw: () => void;
+    legendClick: (legendItem: LegendItem) => void;
+    legendSetVisibilityForAll: (visibility: boolean) => void;
+    dragbarMouseDown:  () => void;
 }
 
-function CharacteristicsVisualizationsController(this: CharacteristicsVisualizationsComponentController, $scope: ng.IScope,) {
+function CharacteristicsVisualizationsController(this: CharacteristicsVisualizationsComponentController, $scope: ng.IScope) {
     const ctrl: CharacteristicsVisualizationsComponentController = this;
 
-    ctrl.$onInit = () => {
+    ctrl.$onInit = async () => {
         ctrl.fillLegend();
 
         ctrl.chartCharacteristics = [ctrl.characteristicsList[0]];
         ctrl.chartElement = document.getElementById("chart") ?? throwHelper("Chart div element not found");
+
+        // initializing tooltips for tabs
+        InitializeBootstrapTooltips();
     };
 
     ctrl.fillLegend = async () => {
@@ -104,12 +109,12 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
         ctrl.points = [];
 
         for (let i = 0; i < ctrl.characteristics.length; i++) {
-            let characteristic = ctrl.characteristics[i];
+            const characteristic = ctrl.characteristics[i];
             const legendIndex = characteristic.SequenceGroupId ? ctrl.legend.findIndex(l => l.id === characteristic.SequenceGroupId) : i;
             ctrl.points.push({
                 id: i + 1,
                 legendIndex: legendIndex,
-                legendId: characteristic.SequenceGroupId ? characteristic.SequenceGroupId : i + 1,
+                //legendId: characteristic.SequenceGroupId ? characteristic.SequenceGroupId : i + 1,
                 name: characteristic.ResearchObjectName,
                 characteristics: characteristic.Characteristics
             });
@@ -122,7 +127,7 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
         let tooltipContent = [];
         tooltipContent.push(`Name: ${d.name}`);
 
-        let pointData = ctrl.characteristics[d.id - 1].Characteristics;
+        const pointData = ctrl.characteristics[d.id - 1].Characteristics;
         let pointsCharacteristics = [];
         for (let i = 0; i < pointData.length; i++) {
             pointsCharacteristics.push(`${ctrl.characteristicsList[i].Text}: ${pointData[i]}`);
@@ -139,18 +144,17 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
 
         ctrl.tooltipVisible = true;
         ctrl.tooltip = {
-            id: selectedPoint.id,
             name: selectedPoint.name,
             characteristics: selectedPoint.characteristics
         };
-        let update = {};
+        let update: { [key: string]: any } = {};
         switch (ctrl.chartCharacteristics.length) {
             case 1:
                 break;
             case 2:
                 update = {
-                    "marker.symbol": ctrl.points.map(point => point === selectedPoint ? "diamond-wide" : "circle"),
-                    "marker.size": ctrl.points.map(point => point === selectedPoint ? 15 : 6)
+                    "marker.symbol": ctrl.points.map<string>(point => point === selectedPoint ? "diamond-wide" : "circle"),
+                    "marker.size": ctrl.points.map<number>(point => point === selectedPoint ? 15 : 6)
                 };
                 break;
             case 3:
@@ -158,18 +162,17 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
             default:
         }
 
-
         Plotly.restyle(ctrl.chartElement, update);
 
         $scope.$apply();
     }
 
 
-    ctrl.fillBarPlotData = () => {
-        let characteristicIndex = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[0]);
-        let { min, max } = getArrayMinMax(ctrl.points.map(p => p.characteristics[characteristicIndex]));
-        let range = max - min;
-        let maxNameLength = arrayMax(ctrl.points.map(p => p.name.length));
+    ctrl.fillBarPlotData = async () => {
+        const characteristicIndex: number = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[0]);
+        let { min, max } = getArrayMinMax(ctrl.points.map<number>(p => p.characteristics[characteristicIndex]));
+        const range: number = max - min;
+        const maxNameLength: number = arrayMax(ctrl.points.map(p => p.name.length));
 
         // adding margins
         min -= range * 0.05;
@@ -199,15 +202,15 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
             y: [p.characteristics[characteristicIndex]],
             marker: { color: ctrl.legend[p.legendIndex].color },
             type: "bar",
-            customdata: [p.legendId],
+            customdata: [p.legendIndex],
             name: p.name,
             visible: ctrl.legend[p.legendIndex].visible ? true : "legendonly"
         }));
     }
 
     ctrl.fillScatterPlotData = async () => {
-        let firstCharacteristicIndex = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[0]);
-        let secondCharacteristicIndex = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[1]);
+        const firstCharacteristicIndex: number = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[0]);
+        const secondCharacteristicIndex: number = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[1]);
 
         ctrl.layout = {
             margin: {
@@ -219,13 +222,13 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
             showlegend: false,
             hovermode: "closest",
             xaxis: {
-                //type: $scope.plotTypeX ? "log" : "",
+                //type: ctrl.plotTypeX ? "log" : "",
                 title: {
                     text: ctrl.characteristicNames[firstCharacteristicIndex]
                 }
             },
             yaxis: {
-                //type: $scope.plotTypeY ? "log" : "",
+                //type: ctrl.plotTypeY ? "log" : "",
                 title: {
                     text: ctrl.characteristicNames[secondCharacteristicIndex]
                 }
@@ -239,18 +242,21 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
             y: [p.characteristics[secondCharacteristicIndex]],
             text: p.name,
             mode: "markers",
-            marker: { opacity: 0.8, color: ctrl.legend[p.legendIndex].color },
+            marker: { 
+                opacity: 0.8, 
+                color: ctrl.legend[p.legendIndex].color 
+            },
             name: p.name,
-            customdata: [p.legendId],
+            customdata: [p.legendIndex],
             visible: ctrl.legend[p.legendIndex].visible
         }));
     }
 
     ctrl.fill3dScatterPlotData = async () => {
 
-        let firstCharacteristicIndex = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[0]);
-        let secondCharacteristicIndex = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[1]);
-        let thirdCharacteristicIndex = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[2]);
+        const firstCharacteristicIndex: number = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[0]);
+        const secondCharacteristicIndex: number = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[1]);
+        const thirdCharacteristicIndex: number = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[2]);
 
         ctrl.chartData = ctrl.points.map<Partial<plotly.PlotData>>(p => ({
             hoverinfo: "x+y+z+text",
@@ -259,10 +265,13 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
             z: [p.characteristics[thirdCharacteristicIndex]],
             text: p.name,
             mode: "markers",
-            marker: { opacity: 0.8, color: ctrl.legend[p.legendIndex].color },
+            marker: { 
+                opacity: 0.8, 
+                color: ctrl.legend[p.legendIndex].color 
+            },
             name: p.name,
             type: "scatter3d",
-            customdata: [p.legendId],
+            customdata: [p.legendIndex],
             visible: ctrl.legend[p.legendIndex].visible
         }));
 
@@ -276,7 +285,7 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
             showlegend: false,
             scene: {
                 xaxis: {
-                    //type: $scope.plotTypeX ? "log" : "",
+                    //type: ctrl.plotTypeX ? "log" : "",
                     title: {
                         text: ctrl.characteristicNames[firstCharacteristicIndex],
                         font: {
@@ -285,7 +294,7 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
                     },
                 },
                 yaxis: {
-                    //type: $scope.plotTypeY ? "log" : "",
+                    //type: ctrl.plotTypeY ? "log" : "",
                     title: {
                         text: ctrl.characteristicNames[secondCharacteristicIndex],
                         font: {
@@ -294,7 +303,7 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
                     }
                 },
                 zaxis: {
-                    //type: $scope.plotTypeY ? "log" : "",
+                    //type: ctrl.plotTypeZ ? "log" : "",
                     title: {
                         text: ctrl.characteristicNames[thirdCharacteristicIndex],
                         font: {
@@ -307,19 +316,19 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
     }
 
     ctrl.fillParallelCoordinatesPlotData = async () => {
-        let characteristicsIndices = ctrl.chartCharacteristics.map(c => ctrl.characteristicsList.indexOf(c));
+        const characteristicsIndices: number[] = ctrl.chartCharacteristics.map<number>(c => ctrl.characteristicsList.indexOf(c));
 
         ctrl.chartData = [{
             type: "parcoords",
             //pad: [80, 80, 80, 80],
             line: {
-                color: ctrl.points.map(p => p.legendIndex),
+                color: ctrl.points.map<number>(p => p.legendIndex),
                 //colorscale: "Turbo"
             },
-
+            //customdata: ctrl.points.map<number>(p => p.legendIndex),
             dimensions: characteristicsIndices.map(ci => ({
                 label: ctrl.characteristicNames[ci],
-                values: ctrl.points.map(p => p.characteristics[ci])
+                values: ctrl.points.map<number>(p => p.characteristics[ci])
             }))
         }];
 
@@ -353,20 +362,22 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
 
         Plotly.newPlot(ctrl.chartElement, ctrl.chartData, ctrl.layout, { responsive: true });
 
-        ctrl.chartElement.on("plotly_click", data => {
+        ctrl.chartElement.on("plotly_click", (data: any) => {
             ctrl.selectedPointIndex = data.points[0].pointNumber;
             ctrl.selectedResearchObjectIndex = data.points[0].curveNumber;
-            let selectedPoint = ctrl.points[data.points[0].curveNumber];
+            const selectedPoint = ctrl.points[data.points[0].curveNumber];
             ctrl.showTooltip(selectedPoint);
         });
     }
 
     ctrl.legendClick = async (legendItem: LegendItem) => {
-        if (ctrl.chartData && ctrl.chartData[0].customdata && ctrl.chartData[0].customdata.length > 0) {
-            let index = [];
-            let update: plotly.Data = { visible: legendItem.visible ? "legendonly" : true };
+        // if points have data on legend item they belong to
+        if (ctrl.chartData?.[0]?.customdata && ctrl.chartData[0].customdata.length > 0) {
+            let index: number[] = [];
+            const update: plotly.Data = { visible: legendItem.visible ? "legendonly" : true };
             for (let i = 0; i < ctrl.chartData.length; i++) {
-                if (ctrl.chartData[i].customdata![0] === legendItem.id) {
+                const legendId = ctrl.legend[ctrl.chartData[i].customdata![0] as number].id;
+                if (legendId === legendItem.id) {
                     index.push(i);
                 }
             }
@@ -376,22 +387,23 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
     }
 
     ctrl.legendSetVisibilityForAll = async (visibility: boolean) => {
-        if (ctrl.chartData && ctrl.chartData[0].customdata && ctrl.chartData[0].customdata.length > 0) {
-            let update: plotly.Data = { visible: visibility ? true : "legendonly" };
-            ctrl.legend.forEach(l => l.visible = visibility);
-            Plotly.restyle(ctrl.chartElement, update);
-        }
+        const update: plotly.Data = { visible: visibility ? true : "legendonly" };
+        ctrl.legend.forEach(l => l.visible = visibility);
+        Plotly.restyle(ctrl.chartElement, update);
     }
 
+    // TODO: maybe extract this into separate component
     ctrl.dragbarMouseDown = async () => {
-        //let right = document.getElementById("sidebar");
-        let bar: HTMLElement = document.getElementById("dragbar")!;
+        const right: HTMLElement = document.getElementById("sidebar") ?? throwHelper("Sidebar element not found");
+        const bar: HTMLElement = document.getElementById("dragbar") ?? throwHelper("Dragbar element not found");
 
         const drag = (e: MouseEvent) => {
             document.selection ? document.selection.empty() : window.getSelection()?.removeAllRanges();
-            ctrl.chartElement.style.width = `${e.pageX - bar.offsetWidth / 2}px`;
 
-            Plotly.relayout(ctrl.chartElement, { autosize: true });
+                ctrl.chartElement.style.width = `${e.pageX - bar.offsetWidth / 2}px`;
+            if (ctrl.chartElement.childNodes.length > 0) {
+                Plotly.relayout(ctrl.chartElement, { autosize: true });
+            }
         };
 
         bar.addEventListener("mousedown", () => {
@@ -406,7 +418,7 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
 
 angular.module("libiada").component("characteristicsVisualizations", {
     templateUrl: `/AngularTemplates/_CharacteristicsVisualizations`,
-    controller: ["$scope",CharacteristicsVisualizationsController],
+    controller: ["$scope", CharacteristicsVisualizationsController],
     bindings: {
         characteristicsList: "<",
         characteristicNames: "<",

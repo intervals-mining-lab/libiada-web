@@ -5,13 +5,16 @@
 
 @if (ViewBag.Error == null)
 {
-
-
     <div class="no-margin" ng-controller="LocalCalculationResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
-        <div ng-disabled="loading">
-            <ul id='nav' class="nav nav-tabs d-flex justify-content-evenly pt-1" role="tablist">
-                <li class="nav-item" role="presentation" title="Charts">
+        @* dirty hack to prevent components from loading before server data *@
+        <div ng-if="loading === false">
+            <ul id='nav' class="nav nav-tabs d-flex justify-content-evenly pt-1" role="tabList">
+                <li class="nav-item" 
+                    role="presentation" 
+                    title="Local characteristics visualizations" 
+                    data-bs-toggle="tooltip" 
+                    data-bs-placement="bottom">
                     <button class="nav-link active"
                             id="charts-tab"
                             data-bs-toggle="tab"
@@ -23,7 +26,12 @@
                         Charts
                     </button>
                 </li>
-                <li class="nav-item" role="presentation" title="Results" ng-click="changeCharacteristicsTableVisibility()">
+                <li class="nav-item" 
+                    role="presentation" 
+                    title="Results" 
+                    ng-click="changeCharacteristicsTableVisibility()" 
+                    data-bs-toggle="tooltip" 
+                    data-bs-placement="bottom">
                     <button class="nav-link"
                             id="results-tab"
                             data-bs-toggle="tab"
@@ -35,7 +43,11 @@
                         Results
                     </button>
                 </li>
-                <li class="nav-item" role="presentation" title="Distances calculation">
+                <li class="nav-item" 
+                    role="presentation" 
+                    title="Distances calculation" 
+                    data-bs-toggle="tooltip" 
+                    data-bs-placement="bottom">
                     <button class="nav-link"
                             id="distances-calculation-tab"
                             data-bs-toggle="tab"
@@ -56,10 +68,14 @@
                      tabindex="0">
                     <div id="container" class="d-flex" ng-disabled="loading" ng-cloack>
                         <div id="chart"></div>
-                        <div id="dragbar" class="bg-secondary" ng-mousedown="dragbarMouseDown()"></div>
+                        <div id="dragbar" class="bg-secondary" ng-mouseDown="dragbarMouseDown()"></div>
                         <div id="sidebar">
                             <ul id='plotnav' class="nav nav-tabs justify-content-evenly pt-1" role="tablist">
-                                <li class="nav-item" role="presentation" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Legend">
+                                <li class="nav-item" 
+                                    role="presentation" 
+                                    data-bs-toggle="tooltip" 
+                                    data-bs-placement="bottom" 
+                                    data-bs-title="Legend">
                                     <button class="nav-link p-1"
                                             id="legend-tab" data-bs-toggle="tab"
                                             data-bs-target="#legend-tab-pane"
@@ -70,7 +86,11 @@
                                         <i class="bi-list-ul fs-3" aria-label="Legend" role="img"></i>
                                     </button>
                                 </li>
-                                <li class="nav-item" role="presentation" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Display settings">
+                                <li class="nav-item" 
+                                    role="presentation" 
+                                    data-bs-toggle="tooltip" 
+                                    data-bs-placement="bottom" 
+                                    data-bs-title="Display settings">
                                     <button class="nav-link active p-1"
                                             id="characteristic-tab"
                                             data-bs-toggle="tab"
@@ -82,7 +102,11 @@
                                         <i class="bi-display fs-3" aria-label="Display settings" role="img"></i>
                                     </button>
                                 </li>
-                                <li class="nav-item" role="presentation" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Tooltip">
+                                <li class="nav-item" 
+                                    role="presentation" 
+                                    data-bs-toggle="tooltip" 
+                                    data-bs-placement="bottom" 
+                                    data-bs-title="Tooltip">
                                     <button class="nav-link p-1"
                                             id="tooltip-tab"
                                             data-bs-toggle="tab"
@@ -133,7 +157,7 @@
                                             <div class="col-md-12">
                                                 <select class="form-select"
                                                         title="Characteristic"
-                                                        ng-model="characteristic.value"
+                                                        ng-model="characteristic"
                                                         ng-options="c.Text for c in ::characteristicsList"
                                                         id="characteristic{{$index}}"></select>
                                             </div>

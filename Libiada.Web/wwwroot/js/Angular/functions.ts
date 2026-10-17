@@ -1,4 +1,6 @@
-﻿/**
+﻿//import * as bootstrap from "bootstrap";
+
+/**
  * Interface for the characteristic type
  */
 interface ILink {
@@ -169,4 +171,9 @@ export function arrayMax(array: number[]): number {
 // Helper function to throw errors in ?? operator
 export function throwHelper(errorMessage: string): never {
   throw new Error(errorMessage);
+}
+
+export function InitializeBootstrapTooltips(){
+    const tooltipElements: HTMLElement[] = $('[data-bs-toggle="tooltip"]').toArray();
+    tooltipElements.forEach((tooltipElement) => new bootstrap.Tooltip(tooltipElement));
 }

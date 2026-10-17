@@ -54,6 +54,12 @@ export interface Threshold extends SelectListItem { }
 
 export interface Link extends SelectListItem { }
 
+export interface Aggregator extends SelectListItem { }
+
+export interface Aligner extends SelectListItem { }
+
+export interface DistanceCalculator extends SelectListItem { }
+
 export interface ArrangementType extends SelectListItem { }
 
 export interface CharacteristicType extends SelectListItem {
@@ -86,6 +92,13 @@ export interface SequenceCharacteristics {
     ResearchObjectName: string;
     Characteristics: number[];
     SequenceGroupId?: number;
+}
+
+export interface LegendItem {
+    id: number;
+    name: string | number;
+    visible: boolean;
+    color: string;
 }
 
 export type DisplayedTable = "researchObjects" | "sequenceGroups";

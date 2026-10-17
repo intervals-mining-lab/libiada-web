@@ -1,4 +1,4 @@
-import { initScopeFromServer } from "functions";
+import { initScopeFromServer, InitializeBootstrapTooltips } from "functions";
 /**
  * Angular controller class for cluster analysis results visualization
  */
@@ -9,10 +9,9 @@ class ClusterizationResultHandler {
     ngOnInit() {
         const clusterizationResult = async ($scope, $http) => {
             $scope.characteristicsTableTabSelected = false;
+            await initScopeFromServer($http, $scope, "Loading cluster analysis results", "Failed loading cluster analysis results");
             // initialyzing tooltips for tabs
-            const tooltipElements = $('[data-bs-toggle="tooltip"]');
-            $scope.tooltip = new bootstrap.Tooltip(tooltipElements);
-            initScopeFromServer($http, $scope, "Loading cluster analysis results", "Failed loading cluster analysis results");
+            InitializeBootstrapTooltips();
         };
         // Register controller in Angular module
         angular.module("libiada").controller("ClusterizationResultCtrl", ["$scope", "$http", clusterizationResult]);
