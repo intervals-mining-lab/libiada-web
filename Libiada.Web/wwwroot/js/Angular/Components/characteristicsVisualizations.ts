@@ -1,9 +1,10 @@
-﻿import * as plotly from "plotly.js";
+﻿import type * as plotly from "plotly.js";
 import type {
     Characteristic,
     SequencesGroup,
     SequenceCharacteristics,
-    LegendItem
+    LegendItem,
+    ParallelCoordinatesPlotData
 } from "viewDataTypes";
 import {
     getArrayMinMax,
@@ -13,7 +14,6 @@ import {
 } from "functions";
 
 interface Point {
-    id: number;
     name: string;
     legendIndex: number;
     characteristics: number[];
@@ -24,34 +24,30 @@ interface CharacteristicsVisualizationsComponentController extends ng.IControlle
     characteristicNames: string[];
     characteristics: SequenceCharacteristics[];
     sequenceGroups?: SequencesGroup[];
-
-    legend: LegendItem[];
     chartCharacteristics: Characteristic[];
+    legend: LegendItem[];
     points: Point[];
     chartElement: HTMLElement;
     colorScale: d3.ScaleSequential<string>;
     tooltip: { name: string, characteristics: number[] };
     tooltipVisible: boolean;
-    selectedPointIndex: number;
-    selectedResearchObjectIndex: number;
     layout: Partial<plotly.Layout>;
-    chartData: Partial<plotly.PlotData>[];
+    chartData: Partial<ParallelCoordinatesPlotData>[];
 
-    $onInit: () => void;
-    fillLegend: () => void;
-    addCharacteristic: () => void;
-    deleteCharacteristic: (characteristic: Characteristic) => void;
-    fillPoints: () => void;
-    fillPointTooltip: (d: Point) => string;
-    showTooltip: (selectedPoint: Point) => void;
-    fillBarPlotData: () => void;
-    fillScatterPlotData: () => void;
-    fill3dScatterPlotData: () => void;
-    fillParallelCoordinatesPlotData: () => void;
-    draw: () => void;
-    legendClick: (legendItem: LegendItem) => void;
-    legendSetVisibilityForAll: (visibility: boolean) => void;
-    dragbarMouseDown:  () => void;
+    $onInit: () => Promise<void>;
+    fillLegend: () => Promise<void>;
+    addCharacteristic: () => Promise<void>;
+    deleteCharacteristic: (characteristic: Characteristic) => Promise<void>;
+    fillPoints: () => Promise<void>;
+    fillBarPlotData: () => Promise<void>;
+    fillScatterPlotData: () => Promise<void>;
+    fill3dScatterPlotData: () => Promise<void>;
+    fillParallelCoordinatesPlotData: () => Promise<void>;
+    draw: () => Promise<void>;
+    showTooltip: (selectedPoint: Point) => Promise<void>;
+    legendClick: (legendItem: LegendItem) => Promise<void>;
+    legendSetVisibilityForAll: (visibility: boolean) => Promise<void>;
+    dragbarMouseDown: () => Promise<void>;
 }
 
 function CharacteristicsVisualizationsController(this: CharacteristicsVisualizationsComponentController, $scope: ng.IScope) {
@@ -72,7 +68,7 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
         if (ctrl.sequenceGroups) {
             ctrl.colorScale = d3.scaleSequential(d3.interpolateTurbo).domain([0, ctrl.sequenceGroups.length]);
             for (let j = 0; j < ctrl.sequenceGroups.length; j++) {
-                const color = ctrl.colorScale(j + 1);
+                const color: string = ctrl.colorScale(j + 1);
                 ctrl.legend.push({
                     id: parseInt(ctrl.sequenceGroups[j].Value),
                     name: ctrl.sequenceGroups[j].Text,
@@ -86,7 +82,7 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
         } else {
             ctrl.colorScale = d3.scaleSequential(d3.interpolateTurbo).domain([0, ctrl.characteristics.length]);
             for (let k = 0; k < ctrl.characteristics.length; k++) {
-                const color = ctrl.colorScale(k + 1);
+                const color: string = ctrl.colorScale(k + 1);
                 ctrl.legend.push({
                     id: k + 1,
                     name: ctrl.characteristics[k].ResearchObjectName,
@@ -98,79 +94,38 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
                 document.styleSheets[0].insertRule(`.legend${k + 1}:after { background:${color} }`);
             }
         }
-    }
+    };
 
-    ctrl.addCharacteristic = () => ctrl.chartCharacteristics.push(ctrl.characteristicsList.find(cl => ctrl.chartCharacteristics.every(cc => cc !== cl))!);
+    ctrl.addCharacteristic = async () => {
+        // searching for the characteristic that is not already in the chartCharacteristics array 
+        const newSelectedCharacteristic: Characteristic = ctrl.characteristicsList.find(
+            (cl: Characteristic) => ctrl.chartCharacteristics.every((cc: Characteristic) => cc !== cl))!
+        ctrl.chartCharacteristics.push(newSelectedCharacteristic);
+    };
 
-    ctrl.deleteCharacteristic = characteristic => ctrl.chartCharacteristics.splice(ctrl.chartCharacteristics.indexOf(characteristic), 1);
+
+    ctrl.deleteCharacteristic = async (characteristic: Characteristic) => {
+        ctrl.chartCharacteristics.splice(ctrl.chartCharacteristics.indexOf(characteristic), 1);
+    };
 
     // initializes data for chart
     ctrl.fillPoints = async () => {
         ctrl.points = [];
 
         for (let i = 0; i < ctrl.characteristics.length; i++) {
-            const characteristic = ctrl.characteristics[i];
-            const legendIndex = characteristic.SequenceGroupId ? ctrl.legend.findIndex(l => l.id === characteristic.SequenceGroupId) : i;
+            const characteristic: SequenceCharacteristics = ctrl.characteristics[i];
+            const legendIndex: number = characteristic.SequenceGroupId ? ctrl.legend.findIndex(l => l.id === characteristic.SequenceGroupId) : i;
             ctrl.points.push({
-                id: i + 1,
                 legendIndex: legendIndex,
-                //legendId: characteristic.SequenceGroupId ? characteristic.SequenceGroupId : i + 1,
                 name: characteristic.ResearchObjectName,
                 characteristics: characteristic.Characteristics
             });
         }
-    }
-
-
-    // constructs string representing tooltip text (inner html)
-    ctrl.fillPointTooltip = (d: Point) => {
-        let tooltipContent = [];
-        tooltipContent.push(`Name: ${d.name}`);
-
-        const pointData = ctrl.characteristics[d.id - 1].Characteristics;
-        let pointsCharacteristics = [];
-        for (let i = 0; i < pointData.length; i++) {
-            pointsCharacteristics.push(`${ctrl.characteristicsList[i].Text}: ${pointData[i]}`);
-        }
-
-        tooltipContent.push(pointsCharacteristics.join("<br/>"));
-
-        return tooltipContent.join("</br>");
-    }
-
-    // shows tooltip for dot or group of dots
-    ctrl.showTooltip = async (selectedPoint: Point) => {
-        $("button[data-bs-target='#tooltip-tab-pane']").tab("show");
-
-        ctrl.tooltipVisible = true;
-        ctrl.tooltip = {
-            name: selectedPoint.name,
-            characteristics: selectedPoint.characteristics
-        };
-        let update: { [key: string]: any } = {};
-        switch (ctrl.chartCharacteristics.length) {
-            case 1:
-                break;
-            case 2:
-                update = {
-                    "marker.symbol": ctrl.points.map<string>(point => point === selectedPoint ? "diamond-wide" : "circle"),
-                    "marker.size": ctrl.points.map<number>(point => point === selectedPoint ? 15 : 6)
-                };
-                break;
-            case 3:
-                break;
-            default:
-        }
-
-        Plotly.restyle(ctrl.chartElement, update);
-
-        $scope.$apply();
-    }
-
+    };
 
     ctrl.fillBarPlotData = async () => {
         const characteristicIndex: number = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[0]);
-        let { min, max } = getArrayMinMax(ctrl.points.map<number>(p => p.characteristics[characteristicIndex]));
+        let { min, max }: { min: number; max: number } = getArrayMinMax(ctrl.points.map<number>(p => p.characteristics[characteristicIndex]));
         const range: number = max - min;
         const maxNameLength: number = arrayMax(ctrl.points.map(p => p.name.length));
 
@@ -196,7 +151,7 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
             }
         };
 
-        ctrl.chartData = ctrl.points.map<Partial<plotly.PlotData>>(p => ({
+        ctrl.chartData = ctrl.points.map<Partial<plotly.PlotData>>((p: Point) => ({
             hoverinfo: "x+y+text",
             x: [p.name],
             y: [p.characteristics[characteristicIndex]],
@@ -206,7 +161,7 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
             name: p.name,
             visible: ctrl.legend[p.legendIndex].visible ? true : "legendonly"
         }));
-    }
+    };
 
     ctrl.fillScatterPlotData = async () => {
         const firstCharacteristicIndex: number = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[0]);
@@ -242,18 +197,17 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
             y: [p.characteristics[secondCharacteristicIndex]],
             text: p.name,
             mode: "markers",
-            marker: { 
-                opacity: 0.8, 
-                color: ctrl.legend[p.legendIndex].color 
+            marker: {
+                opacity: 0.8,
+                color: ctrl.legend[p.legendIndex].color
             },
             name: p.name,
             customdata: [p.legendIndex],
             visible: ctrl.legend[p.legendIndex].visible
         }));
-    }
+    };
 
     ctrl.fill3dScatterPlotData = async () => {
-
         const firstCharacteristicIndex: number = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[0]);
         const secondCharacteristicIndex: number = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[1]);
         const thirdCharacteristicIndex: number = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[2]);
@@ -265,9 +219,9 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
             z: [p.characteristics[thirdCharacteristicIndex]],
             text: p.name,
             mode: "markers",
-            marker: { 
-                opacity: 0.8, 
-                color: ctrl.legend[p.legendIndex].color 
+            marker: {
+                opacity: 0.8,
+                color: ctrl.legend[p.legendIndex].color
             },
             name: p.name,
             type: "scatter3d",
@@ -313,22 +267,22 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
                 }
             }
         };
-    }
+    };
 
     ctrl.fillParallelCoordinatesPlotData = async () => {
-        const characteristicsIndices: number[] = ctrl.chartCharacteristics.map<number>(c => ctrl.characteristicsList.indexOf(c));
+        const characteristicsIndices: number[] = ctrl.chartCharacteristics.map<number>((c: Characteristic) => ctrl.characteristicsList.indexOf(c));
 
         ctrl.chartData = [{
             type: "parcoords",
             //pad: [80, 80, 80, 80],
             line: {
-                color: ctrl.points.map<number>(p => p.legendIndex),
+                color: ctrl.points.map<number>((p: Point) => p.legendIndex),
                 //colorscale: "Turbo"
             },
-            //customdata: ctrl.points.map<number>(p => p.legendIndex),
-            dimensions: characteristicsIndices.map(ci => ({
+            //customdata: ctrl.points.map<number>((p: Point) => p.legendIndex),
+            dimensions: characteristicsIndices.map((ci: number) => ({
                 label: ctrl.characteristicNames[ci],
-                values: ctrl.points.map<number>(p => p.characteristics[ci])
+                values: ctrl.points.map<number>((p: Point) => p.characteristics[ci])
             }))
         }];
 
@@ -341,7 +295,7 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
             },
             showlegend: false
         };
-    }
+    };
 
     ctrl.draw = async () => {
         ctrl.fillPoints();
@@ -362,13 +316,40 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
 
         Plotly.newPlot(ctrl.chartElement, ctrl.chartData, ctrl.layout, { responsive: true });
 
-        ctrl.chartElement.on("plotly_click", (data: any) => {
-            ctrl.selectedPointIndex = data.points[0].pointNumber;
-            ctrl.selectedResearchObjectIndex = data.points[0].curveNumber;
-            const selectedPoint = ctrl.points[data.points[0].curveNumber];
+        ctrl.chartElement.on("plotly_click", (data: plotly.PlotMouseEvent) => {
+            const selectedPoint: Point = ctrl.points[data.points[0].curveNumber];
             ctrl.showTooltip(selectedPoint);
         });
-    }
+    };
+
+    ctrl.showTooltip = async (selectedPoint: Point) => {
+        $("button[data-bs-target='#tooltip-tab-pane']").tab("show");
+
+        ctrl.tooltipVisible = true;
+        ctrl.tooltip = {
+            name: selectedPoint.name,
+            characteristics: selectedPoint.characteristics
+        };
+        let update: plotly.Data = {};
+        switch (ctrl.chartCharacteristics.length) {
+            case 1:
+                break;
+            case 2:
+                update = {
+                    "marker.symbol": ctrl.points.map<string>(point => point === selectedPoint ? "diamond-wide" : "circle"),
+                    "marker.size": ctrl.points.map<number>(point => point === selectedPoint ? 15 : 6)
+                };
+                break;
+            case 3:
+                break;
+            default:
+        }
+
+        Plotly.restyle(ctrl.chartElement, update);
+
+        // method called outside of angular's digest cycle, so we need to call $apply() manually
+        $scope.$apply();
+    };
 
     ctrl.legendClick = async (legendItem: LegendItem) => {
         // if points have data on legend item they belong to
@@ -376,7 +357,7 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
             let index: number[] = [];
             const update: plotly.Data = { visible: legendItem.visible ? "legendonly" : true };
             for (let i = 0; i < ctrl.chartData.length; i++) {
-                const legendId = ctrl.legend[ctrl.chartData[i].customdata![0] as number].id;
+                const legendId: number = ctrl.legend[ctrl.chartData[i].customdata![0] as number].id;
                 if (legendId === legendItem.id) {
                     index.push(i);
                 }
@@ -384,23 +365,23 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
 
             Plotly.restyle(ctrl.chartElement, update, index);
         }
-    }
+    };
 
     ctrl.legendSetVisibilityForAll = async (visibility: boolean) => {
         const update: plotly.Data = { visible: visibility ? true : "legendonly" };
-        ctrl.legend.forEach(l => l.visible = visibility);
+        ctrl.legend.forEach((l: LegendItem) => l.visible = visibility);
         Plotly.restyle(ctrl.chartElement, update);
-    }
+    };
 
     // TODO: maybe extract this into separate component
     ctrl.dragbarMouseDown = async () => {
         const right: HTMLElement = document.getElementById("sidebar") ?? throwHelper("Sidebar element not found");
         const bar: HTMLElement = document.getElementById("dragbar") ?? throwHelper("Dragbar element not found");
 
-        const drag = (e: MouseEvent) => {
+        const drag = async (e: MouseEvent) => {
             document.selection ? document.selection.empty() : window.getSelection()?.removeAllRanges();
 
-                ctrl.chartElement.style.width = `${e.pageX - bar.offsetWidth / 2}px`;
+            ctrl.chartElement.style.width = `${e.pageX - bar.offsetWidth / 2}px`;
             if (ctrl.chartElement.childNodes.length > 0) {
                 Plotly.relayout(ctrl.chartElement, { autosize: true });
             }
@@ -413,7 +394,7 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
         bar.addEventListener("mouseup", () => {
             document.removeEventListener("mousemove", drag);
         });
-    }
+    };
 }
 
 angular.module("libiada").component("characteristicsVisualizations", {

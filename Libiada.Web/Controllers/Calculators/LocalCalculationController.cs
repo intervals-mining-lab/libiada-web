@@ -144,7 +144,6 @@ public class LocalCalculationController : AbstractResultController
         return CreateTask(() =>
         {
             string[] characteristicNames = new string[characteristicLinkIds.Length];
-            var partNames = new List<string>[researchObjectIds.Length];
             var starts = new List<int>[researchObjectIds.Length];
             var lengthes = new List<int>[researchObjectIds.Length];
             var sequences = new ComposedSequence[researchObjectIds.Length];
@@ -188,7 +187,6 @@ public class LocalCalculationController : AbstractResultController
                 CutRuleIterator iterator = cutRule.GetIterator();
 
                 List<ComposedSequence> fragments = [];
-                partNames[i] = [];
                 starts[i] = [];
                 lengthes[i] = [];
 
@@ -205,7 +203,6 @@ public class LocalCalculationController : AbstractResultController
 
                     fragments.Add(new ComposedSequence(fragment));
 
-                    partNames[i].Add(fragment.ToString());
                     starts[i].Add(iterator.GetStartPosition());
                     lengthes[i].Add(fragment.Count);
                 }
@@ -270,10 +267,8 @@ public class LocalCalculationController : AbstractResultController
                 { "characteristics", researchObjectsCharacteristics },
                 { "notationName", notation.GetDisplayValue() },
                 { "starts", starts },
-                { "partNames", partNames },
                 { "lengthes", lengthes },
                 { "characteristicNames", characteristicNames },
-                { "researchObjectIds", researchObjectIds },
                 { "characteristicsList", characteristicsList },
                 { "aligners", Extensions.EnumExtensions.GetSelectList<Aligner>() },
                 { "distanceCalculators", Extensions.EnumExtensions.GetSelectList<DistanceCalculator>() },

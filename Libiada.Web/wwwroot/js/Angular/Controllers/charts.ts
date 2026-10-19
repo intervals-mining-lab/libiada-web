@@ -1,6 +1,7 @@
 ﻿/*import * as d3 from "d3";*/
-//import Plotly from "plotly.js";
+import * as plotly from "plotly.js";
 import { getArrayMinMax, arrayMax, throwHelper } from "functions";
+import { LegendItem } from "viewDataTypes";  
 
 /**
  * Interface for characteristic data
@@ -17,16 +18,6 @@ interface IChartsCharacteristic {
 interface IChartsCharacteristicListItem {
     Value: number | string;
     Text: string;
-}
-
-/**
- * Interface for legend item
- */
-interface IChartsLegendItem {
-    id: number;
-    name: string;
-    visible: boolean;
-    color: string;
 }
 
 /**
@@ -50,14 +41,6 @@ interface IChartsTooltip {
 }
 
 /**
- * Interface for chart characteristic selection
- */
-interface IChartsCharacteristicSelection {
-    id: number;
-    value: IChartsCharacteristicListItem;
-}
-
-/**
  * Interface for the angular controller's scope
  */
 interface IChartsScope extends ng.IScope {
@@ -66,11 +49,10 @@ interface IChartsScope extends ng.IScope {
     characteristicsList: IChartsCharacteristicListItem[];
     characteristicNames: string[];
     sequencesName: string;
-    chartCharacteristics: IChartsCharacteristicSelection[];
-    chartsCharacterisrticsCount: number;
-    chartData: any[];
-    layout: any;
-    legend: IChartsLegendItem[];
+    chartCharacteristics: IChartsCharacteristicListItem[];
+    layout: Partial<plotly.Layout>;
+    chartData: Partial<plotly.PlotData>[];
+    legend: LegendItem[];
     points: IChartsPointData[];
     colorScale: d3.ScaleSequential<string>;
     chartElement: HTMLElement;
@@ -101,10 +83,10 @@ interface IChartsScope extends ng.IScope {
     fillPointTooltip: (d: IChartsPointData) => string;
     showTooltip: (selectedPoint: IChartsPointData) => void;
     fillLegend: () => void;
-    legendClick: (legendItem: IChartsLegendItem) => void;
+    legendClick: (legendItem: LegendItem) => void;
     legendSetVisibilityForAll: (visibility: boolean) => void;
     addCharacteristic: () => void;
-    deleteCharacteristic: (characteristic: IChartsCharacteristicSelection) => void;
+    deleteCharacteristic: (characteristic: IChartsCharacteristicListItem) => void;
 }
 
 /**
@@ -156,10 +138,7 @@ class ChartsControllerHandler {
                     }
                     $scope.characteristicsList = characteristics.map((c, i) => ({ Value: i + 1, Text: c }));
                     $scope.characteristicNames = characteristics.map(c => c);
-                    $scope.chartCharacteristics = [{
-                        id: $scope.chartsCharacterisrticsCount++,
-                        value: $scope.characteristicsList[0]
-                    }];
+                    $scope.chartCharacteristics = [$scope.characteristicsList[0]];
                     $scope.fillLegend();
 
                     rows.forEach(thisRow => {
@@ -270,12 +249,12 @@ class ChartsControllerHandler {
              * Handles legend item click
              * @param legendItem Legend item that was clicked
              */
-            function legendClick(legendItem: IChartsLegendItem): void {
-                if ($scope.chartData && $scope.chartData[0].customdata) {
+            function legendClick(legendItem: LegendItem): void {
+               if ($scope.chartData?.[0]?.customdata && $scope.chartData?.[0]?.customdata?.length > 0)  {
                     let index: number[] = [];
                     let update = { visible: legendItem.visible ? "legendonly" : true };
                     for (let i = 0; i < $scope.chartData.length; i++) {
-                        if ($scope.chartData[i].customdata.legendId === legendItem.id) {
+                        if ($scope.chartData[i].customdata![0] === legendItem.id) {
                             index.push(i);
                         }
                     }
@@ -289,31 +268,14 @@ class ChartsControllerHandler {
              * @param visibility Whether items should be visible
              */
             function legendSetVisibilityForAll(visibility: boolean): void {
-                if ($scope.chartData && $scope.chartData[0].customdata) {
-                    let update = { visible: visibility ? true : "legendonly" };
-                    $scope.legend.forEach(l => l.visible = visibility);
-                    Plotly.restyle($scope.chartElement, update);
-                }
+                let update = { visible: visibility ? true : "legendonly" };
+                $scope.legend.forEach(l => l.visible = visibility);
+                Plotly.restyle($scope.chartElement, update);
             }
 
-            /**
-             * Add a characteristic to chart
-             */
-            $scope.addCharacteristic = (): void => {
-                $scope.chartCharacteristics.push({
-                    id: $scope.chartsCharacterisrticsCount++,
-                    value: $scope.characteristicsList.find(cl =>
-                        $scope.chartCharacteristics.every(cc => cc.value !== cl)) as IChartsCharacteristicListItem
-                });
-            };
+            $scope.addCharacteristic = () => $scope.chartCharacteristics.push($scope.characteristicsList.find(cl => $scope.chartCharacteristics.every(cc => cc !== cl))!);
 
-            /**
-             * Delete a characteristic from chart
-             * @param characteristic Characteristic to delete
-             */
-            $scope.deleteCharacteristic = (characteristic: IChartsCharacteristicSelection): void => {
-                $scope.chartCharacteristics.splice($scope.chartCharacteristics.indexOf(characteristic), 1);
-            };
+            $scope.deleteCharacteristic = characteristic => $scope.chartCharacteristics.splice($scope.chartCharacteristics.indexOf(characteristic), 1);
 
             /**
              * Handle text changes in data paste box
@@ -369,7 +331,7 @@ class ChartsControllerHandler {
              * Fill data for bar plot visualization
              */
             function fillBarPlotData(): void {
-                let characteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
+                let characteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0]);
                 let { min, max } = getArrayMinMax($scope.points.map(p => p.characteristics[characteristicIndex]));
                 let range = Math.abs(max - min);
                 let maxNameLength = arrayMax($scope.points.map(p => p.name.length));
@@ -396,12 +358,12 @@ class ChartsControllerHandler {
                 };
 
                 $scope.chartData = $scope.points.map(p => ({
-                    hoverinfo: "text+x+y",
+                    hoverinfo: "x+y+text",
                     x: [p.name],
                     y: [p.characteristics[characteristicIndex]],
                     marker: { color: $scope.legend[p.legendIndex].color },
                     type: "bar",
-                    customdata: { legendId: p.legendId },
+                    customdata: [p.legendId],
                     name: p.name,
                     visible: $scope.legend[p.legendIndex].visible ? true : "legendonly"
                 }));
@@ -411,8 +373,8 @@ class ChartsControllerHandler {
              * Fill data for scatter plot visualization
              */
             function fillScatterPlotData(): void {
-                let firstCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
-                let secondCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1].value);
+                let firstCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0]);
+                let secondCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1]);
 
                 $scope.layout = {
                     margin: {
@@ -438,7 +400,7 @@ class ChartsControllerHandler {
                 };
 
                 $scope.chartData = $scope.points.map(p => ({
-                    hoverinfo: "text+x+y",
+                    hoverinfo: "x+y+text",
                     type: "scattergl",
                     x: [p.characteristics[firstCharacteristicIndex]],
                     y: [p.characteristics[secondCharacteristicIndex]],
@@ -446,7 +408,7 @@ class ChartsControllerHandler {
                     mode: "markers",
                     marker: { opacity: 0.8, color: $scope.legend[p.legendIndex].color },
                     name: p.name,
-                    customdata: { legendId: p.legendId },
+                    customdata: [p.legendId],
                     visible: $scope.legend[p.legendIndex].visible
                 }));
             }
@@ -455,12 +417,12 @@ class ChartsControllerHandler {
              * Fill data for 3D scatter plot visualization
              */
             function fill3dScatterPlotData(): void {
-                let firstCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
-                let secondCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1].value);
-                let thirdCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[2].value);
+                let firstCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0]);
+                let secondCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1]);
+                let thirdCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[2]);
 
                 $scope.chartData = $scope.points.map(p => ({
-                    hoverinfo: "text+x+y+z",
+                    hoverinfo: "x+y+z+text",
                     x: [p.characteristics[firstCharacteristicIndex]],
                     y: [p.characteristics[secondCharacteristicIndex]],
                     z: [p.characteristics[thirdCharacteristicIndex]],
@@ -469,7 +431,7 @@ class ChartsControllerHandler {
                     marker: { opacity: 0.8, color: $scope.legend[p.legendIndex].color },
                     name: p.name,
                     type: "scatter3d",
-                    customdata: { legendId: p.legendId },
+                    customdata: [p.legendId],
                     visible: $scope.legend[p.legendIndex].visible
                 }));
 
@@ -517,14 +479,13 @@ class ChartsControllerHandler {
              * Fill data for parallel coordinates plot visualization
              */
             function fillParallelCoordinatesPlotData(): void {
-                let characteristicsIndices = $scope.chartCharacteristics.map(c =>
-                    $scope.characteristicsList.indexOf(c.value));
+                let characteristicsIndices: number[] = $scope.chartCharacteristics.map(c => $scope.characteristicsList.indexOf(c));
 
                 $scope.chartData = [{
                     type: "parcoords",
                     line: {
                         color: $scope.points.map(p => p.legendIndex),
-                        colorscale: "Turbo"
+                        //colorscale: "Turbo"
                     },
                     dimensions: characteristicsIndices.map(ci => ({
                         label: $scope.characteristicNames[ci],
@@ -590,7 +551,6 @@ class ChartsControllerHandler {
             $scope.legendSetVisibilityForAll = legendSetVisibilityForAll;
 
             // Initialize scope variables
-            $scope.chartsCharacterisrticsCount = 1;
             $scope.chartElement = document.getElementById("chart") as HTMLElement;
             $scope.keyCodes = {
                 C: 67,

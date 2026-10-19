@@ -1,4 +1,6 @@
-﻿interface SelectListItem {
+﻿import type * as plotly from "plotly.js";
+
+interface SelectListItem {
     Value: string;
     Text: string;
     Selected: boolean;
@@ -99,6 +101,29 @@ export interface LegendItem {
     name: string | number;
     visible: boolean;
     color: string;
+}
+
+export interface FragmentData {
+    Characteristics: number[];
+    Length: number;
+    Name: string;
+    Start: number;
+}
+
+export interface LocalCharacteristicsData {
+    AutocorrelationData: number[][];
+    DifferenceData: number[][];
+    FourierData: number[][];
+    FragmentsData: FragmentData[];
+    ResearchObjectName: string;
+}
+
+// extension for plotly.js PlotData type to take into account parallel coordinates plot data
+export interface ParallelCoordinatesPlotData extends plotly.PlotData {
+    dimensions: {
+        label: string;
+        values: number[];
+    }[]
 }
 
 export type DisplayedTable = "researchObjects" | "sequenceGroups";
