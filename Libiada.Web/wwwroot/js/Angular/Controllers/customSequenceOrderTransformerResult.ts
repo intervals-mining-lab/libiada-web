@@ -1,4 +1,5 @@
 import { initScopeFromServer } from "functions";
+import { ResultsLoadingScreenData } from "viewDataTypes";
 
 /**
  * Interface for sequence data in custom sequence order transformer
@@ -20,10 +21,8 @@ interface CustomSequenceOrderTransformerResultData {
 /**
  * Interface for the angular controller's scope
  */
-interface CustomSequenceOrderTransformerResultScope extends ng.IScope, CustomSequenceOrderTransformerResultData {
-    loading: boolean;
-    loadingScreenHeader: string;
-    taskId: string;
+interface CustomSequenceOrderTransformerResultScope 
+    extends ng.IScope, CustomSequenceOrderTransformerResultData, ResultsLoadingScreenData {
 }
 
 /**

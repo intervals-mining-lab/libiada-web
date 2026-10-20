@@ -126,4 +126,10 @@ export interface ParallelCoordinatesPlotData extends plotly.PlotData {
     }[]
 }
 
+export interface ResultsLoadingScreenData {
+    loadingScreenHeader: string;
+    loading: boolean;
+    taskId: string;
+}
+
 export type DisplayedTable = "researchObjects" | "sequenceGroups";

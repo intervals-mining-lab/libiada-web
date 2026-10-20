@@ -1,5 +1,5 @@
 import { initScopeFromServer  } from "functions";
-import type { Characteristic, SequenceCharacteristics } from "viewDataTypes";
+import type { Characteristic, ResultsLoadingScreenData, SequenceCharacteristics } from "viewDataTypes";
 
 
 /**
@@ -16,11 +16,8 @@ interface OrderTransformationCalculationResultData {
 /**
  * Interface for the controller's scope
  */
-interface OrderTransformationCalculationResultScope extends ng.IScope, OrderTransformationCalculationResultData {
-    loading: boolean;
-    loadingScreenHeader: string;
-    taskId: string;
-
+interface OrderTransformationCalculationResultScope 
+    extends ng.IScope, OrderTransformationCalculationResultData, ResultsLoadingScreenData {
     characteristicsTableTabSelected: boolean;
 }
 
@@ -39,7 +36,7 @@ class OrderTransformationCalculationResultHandler {
         const orderTransformationCalculationResult = async ($scope: OrderTransformationCalculationResultScope, $http: ng.IHttpService): Promise<void> => {
             $scope.characteristicsTableTabSelected = false;
             
-            // initialyzing tooltips for tabs
+            // initializing tooltips for tabs
             $('[data-bs-toggle="tooltip"]').tooltip();
 
             initScopeFromServer<OrderTransformationCalculationResultData>(

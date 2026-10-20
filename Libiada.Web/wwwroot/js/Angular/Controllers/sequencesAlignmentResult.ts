@@ -1,4 +1,5 @@
 ﻿import { MapModelFromJson } from "functions";
+import type { ResultsLoadingScreenData } from "viewDataTypes";
 
 /**
  * Interface for the data object fetched from the server
@@ -18,10 +19,7 @@ interface SequencesAlignmentResultData {
 /**
  * Interface for the angular controller's scope
  */
-interface SequencesAlignmentResultScope extends angular.IScope, SequencesAlignmentResultData {
-    loadingScreenHeader: string;
-    loading: boolean;
-    taskId: string;
+interface SequencesAlignmentResultScope extends ng.IScope, SequencesAlignmentResultData, ResultsLoadingScreenData {
 }
 
 /**

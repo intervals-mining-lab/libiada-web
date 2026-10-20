@@ -32,7 +32,7 @@ interface RelationCalculationData {
 /**
  * Interface for the controller's scope
  */
-interface RelationCalculationScope extends angular.IScope, RelationCalculationData {
+interface RelationCalculationScope extends ng.IScope, RelationCalculationData {
     nature: string;
     selectedResearchObjectsCount: number;
     showFilters: boolean;

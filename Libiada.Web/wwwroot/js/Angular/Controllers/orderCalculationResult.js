@@ -12,7 +12,7 @@ class OrderCalculationResultHandler {
     ngOnInit() {
         const orderCalculationResult = ($scope, $http) => {
             $scope.characteristicsTableTabSelected = false;
-            // initialyzing tooltips for tabs
+            // initializing tooltips for tabs
             $('[data-bs-toggle="tooltip"]').tooltip();
             initScopeFromServer($http, $scope, "Loading order calculation results", "Failed loading order calculation results");
         };

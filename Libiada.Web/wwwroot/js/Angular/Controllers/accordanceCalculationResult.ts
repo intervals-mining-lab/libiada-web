@@ -1,4 +1,5 @@
-﻿import { MapModelFromJson } from "functions";
+﻿import { initScopeFromServer } from "functions";
+import type { ResultsLoadingScreenData } from "viewDataTypes";
 
 /**
  * Interface for the data object fetched from the server
@@ -16,10 +17,7 @@ interface AccordanceCalculationResultData {
 /**
  * Interface for the angular controller's scope
  */
-interface AccordanceCalculationResultScope extends angular.IScope, AccordanceCalculationResultData {
-    loadingScreenHeader: string;
-    loading: boolean;
-    taskId: string;
+interface AccordanceCalculationResultScope extends ng.IScope, AccordanceCalculationResultData, ResultsLoadingScreenData {
 }
 
 /**
@@ -40,22 +38,8 @@ class AccordanceCalculationResultHandler {
      */
     private ngOnInit(): void {
         const accordanceCalculationResult = ($scope: AccordanceCalculationResultScope, $http: ng.IHttpService): void => {
-            $scope.loadingScreenHeader = "Loading accordance data";
-
-            let location = window.location.href.split("/");
-            $scope.taskId = location[location.length - 1];
-
-            $scope.loading = true;
-
-            $http.get<AccordanceCalculationResultData>(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
-                .then(function (data) {
-                    MapModelFromJson($scope, data.data);
-                    $scope.loading = false;
-                })
-                .catch(function () {
-                    alert("Failed loading accordance data");
-                    $scope.loading = false;
-                });
+            initScopeFromServer<AccordanceCalculationResultData>(
+                $http, $scope, "Loading accordance data", "Failed loading accordance data");
         };
 
         // Register controller in Angular module

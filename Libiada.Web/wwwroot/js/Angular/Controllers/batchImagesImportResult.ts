@@ -1,5 +1,5 @@
 ﻿import { initScopeFromServer } from "functions";
-import type { SequenceImportResult } from "viewDataTypes";
+import type { ResultsLoadingScreenData, SequenceImportResult } from "viewDataTypes";
 
 /**
  * Interface for the data object fetched from the server
@@ -11,10 +11,7 @@ interface BatchImagesImportResultData {
 /**
  * Interface for the angular controller's scope
  */
-interface BatchImagesImportResultScope extends ng.IScope, BatchImagesImportResultData {
-    loadingScreenHeader: string;
-    loading: boolean;
-    taskId: string;
+interface BatchImagesImportResultScope extends ng.IScope, BatchImagesImportResultData, ResultsLoadingScreenData {
 }
 
 class BatchImagesImportResultHandler {

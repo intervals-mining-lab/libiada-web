@@ -1,4 +1,4 @@
-﻿//import * as bootstrap from "bootstrap";
+﻿//import type * as bootstrap from "bootstrap";
 
 /**
  * Interface for the characteristic type
@@ -39,7 +39,7 @@ export interface ICharacteristic {
 /**
  * Interface for the scope in Angular controllers
  */
-export interface AngularScope extends angular.IScope {
+export interface AngularScope extends ng.IScope {
     [key: string]: any;
 }
 /**

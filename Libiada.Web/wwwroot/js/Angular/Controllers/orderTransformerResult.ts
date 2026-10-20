@@ -1,4 +1,5 @@
 ﻿import { initScopeFromServer } from "functions";
+import type { ResultsLoadingScreenData } from "viewDataTypes";
 
 
 /**
@@ -13,10 +14,7 @@ interface OrderTransformerResultData {
 /**
  * Interface for the angular controller's scope
  */
-interface OrderTransformerResultScope extends ng.IScope, OrderTransformerResultData {
-    loading: boolean;
-    loadingScreenHeader: string;
-    taskId: string;
+interface OrderTransformerResultScope extends ng.IScope, OrderTransformerResultData, ResultsLoadingScreenData {
 }
 
 /**

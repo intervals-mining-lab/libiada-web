@@ -1,4 +1,5 @@
 ﻿import { initScopeFromServer } from "functions";
+import type { ResultsLoadingScreenData } from "viewDataTypes";
 
 /**
  * Interface for the data object fetched from the server
@@ -25,10 +26,7 @@ interface ResearchObjectCreateResultData {
 /**
  * Interface for the angular controller's scope
  */
-interface ResearchObjectCreateResultScope extends ng.IScope, ResearchObjectCreateResultData {
-    loadingScreenHeader: string;
-    loading: boolean;
-    taskId: string;
+interface ResearchObjectCreateResultScope extends ng.IScope, ResearchObjectCreateResultData, ResultsLoadingScreenData {
 }
 
 /**

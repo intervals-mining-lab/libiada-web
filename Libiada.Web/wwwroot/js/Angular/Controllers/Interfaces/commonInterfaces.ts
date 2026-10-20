@@ -5,10 +5,3 @@
     colorId?: number;   // Идентификатор цвета
     featureVisible?: boolean; // Видимость на графике
 }
-
-export interface ITransformationVisibility {
-    id: number;
-    name: string;
-    visible: boolean;
-   
-}

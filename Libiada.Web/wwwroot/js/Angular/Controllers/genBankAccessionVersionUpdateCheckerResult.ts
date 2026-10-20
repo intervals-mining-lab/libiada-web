@@ -1,4 +1,5 @@
 ﻿import { initScopeFromServer } from "functions";
+import type { ResultsLoadingScreenData } from "viewDataTypes";
 
 interface GenBankSearchResult {
     Updated: boolean;
@@ -23,11 +24,8 @@ interface GenBankAccessionVersionUpdateCheckerResultData {
 /**
  * Interface for the controller's scope
  */
-interface GenBankAccessionVersionUpdateCheckerResultScope extends ng.IScope, GenBankAccessionVersionUpdateCheckerResultData {
-    loadingScreenHeader: string;
-    loading: boolean;
-    taskId: string;
-
+interface GenBankAccessionVersionUpdateCheckerResultScope 
+    extends ng.IScope, GenBankAccessionVersionUpdateCheckerResultData, ResultsLoadingScreenData {
     calculateStatusClass(result: GenBankSearchResult): string;
 }
 

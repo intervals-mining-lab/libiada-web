@@ -1,6 +1,7 @@
 ﻿//import d3 from "d3";
 import { MapModelFromJson } from "functions";
-import { IBasePoint } from "./Interfaces/commonInterfaces";
+import type { IBasePoint } from "./Interfaces/commonInterfaces";
+import type { ResultsLoadingScreenData } from "viewDataTypes";
 
 interface IPoint extends IBasePoint {
     value: number; // Value (order identifier)
@@ -69,9 +70,8 @@ interface IOrderTransformationVisualizationData {
 /**
  * Interface for the angular controller's scope
  */
-interface IOrderTransformationVisualizationScope extends ng.IScope, IOrderTransformationVisualizationData {
-
-
+interface IOrderTransformationVisualizationScope 
+    extends ng.IScope, IOrderTransformationVisualizationData, ResultsLoadingScreenData {
     // Chart settings
     width: number;
     height: number;
@@ -89,11 +89,6 @@ interface IOrderTransformationVisualizationScope extends ng.IScope, IOrderTransf
     initialOrder: IOrderId;
     transformationType: ITransformationType;
     counterIteration: number;
-
-    // Properties for loading data
-    taskId: string;
-    loadingScreenHeader: string;
-    loading: boolean;
 
     // Chart functions
     xMap: (d: IPoint) => number;

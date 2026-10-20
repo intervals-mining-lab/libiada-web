@@ -1,5 +1,5 @@
 import { initScopeFromServer } from "functions";
-import type { Characteristic, SequenceCharacteristics } from "viewDataTypes";
+import type { Characteristic, ResultsLoadingScreenData, SequenceCharacteristics } from "viewDataTypes";
 
 /**
  * Interface for the data object fetched from the server
@@ -13,11 +13,7 @@ interface CustomSequenceCalculationResultData {
 /**
  * Interface for the angular controller's scope
  */
-interface CustomSequenceCalculationResultScope extends ng.IScope, CustomSequenceCalculationResultData {
-    loading: boolean;
-    loadingScreenHeader: string;
-    taskId: string;
-
+interface CustomSequenceCalculationResultScope extends ng.IScope, CustomSequenceCalculationResultData, ResultsLoadingScreenData {
     characteristicsTableTabSelected: boolean;
 }
 
@@ -36,7 +32,7 @@ class CustomSequenceCalculationResultHandler {
         const customSequenceCalculationResult = ($scope: CustomSequenceCalculationResultScope, $http: ng.IHttpService): void => {
             $scope.characteristicsTableTabSelected = false;
 
-            // initialyzing tooltips for tabs
+            // initializing tooltips for tabs
             $('[data-bs-toggle="tooltip"]').tooltip();
 
             initScopeFromServer<CustomSequenceCalculationResultData>(

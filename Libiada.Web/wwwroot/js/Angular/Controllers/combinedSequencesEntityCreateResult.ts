@@ -1,4 +1,5 @@
 ﻿import { initScopeFromServer } from "functions";
+import type { ResultsLoadingScreenData } from "viewDataTypes";
 
 /**
  * Interface for the data object fetched from the server
@@ -25,10 +26,8 @@ interface CombinedSequencesEntityCreateResultData {
 /**
  * Interface for the angular controller's scope
  */
-interface CombinedSequencesEntityCreateResultScope extends ng.IScope, CombinedSequencesEntityCreateResultData {
-    loadingScreenHeader: string;
-    loading: boolean;
-    taskId: string;
+interface CombinedSequencesEntityCreateResultScope 
+    extends ng.IScope, CombinedSequencesEntityCreateResultData, ResultsLoadingScreenData {
 }
 
 /**

@@ -1,6 +1,7 @@
 ﻿/*import d3 from "d3";*/
 import { MapModelFromJson } from "functions";
 import { IBasePoint } from "./Interfaces/commonInterfaces.js"; 
+import type { ResultsLoadingScreenData } from "viewDataTypes";
 /// <reference path="./Interfaces/commonInterfaces.d.ts" />
 
 // Interface for distribution interval data
@@ -53,7 +54,7 @@ interface ID3Tooltip extends d3.Selection<HTMLDivElement, unknown, HTMLElement, 
 /**
  * Interface for the angular controller's scope
  */
-interface IIntervalsCharacteristicsDistributionResultScope extends ng.IScope {
+interface IIntervalsCharacteristicsDistributionResultScope extends ng.IScope, ResultsLoadingScreenData {
     // Chart data and settings
     result: ILinkResult[];
     points: IDistributionIntervalsCharacteristicsPoint[];
@@ -63,11 +64,6 @@ interface IIntervalsCharacteristicsDistributionResultScope extends ng.IScope {
     height: number;
     dotRadius: number;
     selectedDotRadius: number;
-
-    // Data loading properties
-    taskId: string;
-    loadingScreenHeader: string;
-    loading: boolean;
 
     // Chart functions
     draw: () => void;

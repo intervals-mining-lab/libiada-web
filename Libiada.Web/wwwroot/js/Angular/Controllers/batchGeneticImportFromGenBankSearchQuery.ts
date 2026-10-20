@@ -1,7 +1,7 @@
 /**
  * Interface for the angular controller's scope
  */
-interface BatchGeneticImportFromGenBankSearchQueryScope extends angular.IScope {
+interface BatchGeneticImportFromGenBankSearchQueryScope extends ng.IScope {
     searchQuery: string;
     filterMinLength: boolean;
     filterMaxLength: boolean;

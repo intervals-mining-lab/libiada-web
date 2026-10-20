@@ -12,7 +12,7 @@ class CustomSequenceOrderTransformationCalculationResultHandler {
     ngOnInit() {
         const customSequenceOrderTransformationCalculationResult = ($scope, $http) => {
             $scope.characteristicsTableTabSelected = false;
-            // initialyzing tooltips for tabs
+            // initializing tooltips for tabs
             $('[data-bs-toggle="tooltip"]').tooltip();
             initScopeFromServer($http, $scope, "Loading custom sequence order transformation calculation results", "Failed loading custom sequence order transformation calculation results");
         };

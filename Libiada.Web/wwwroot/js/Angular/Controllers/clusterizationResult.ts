@@ -1,5 +1,5 @@
 import { initScopeFromServer, InitializeBootstrapTooltips } from "functions";
-import type { Characteristic, SequenceCharacteristics, SequencesGroup } from "viewDataTypes";
+import type { Characteristic, ResultsLoadingScreenData, SequenceCharacteristics, SequencesGroup } from "viewDataTypes";
 
 
 /**
@@ -17,11 +17,7 @@ interface ClusterizationResultData {
 /**
  * Interface for the angular controller's scope
  */
-interface ClusterizationResultScope extends ng.IScope, ClusterizationResultData {
-    loading: boolean;
-    loadingScreenHeader: string;
-    taskId: string;
-
+interface ClusterizationResultScope extends ng.IScope, ClusterizationResultData, ResultsLoadingScreenData {
     characteristicsTableTabSelected: boolean;
 }
 
@@ -43,7 +39,7 @@ class ClusterizationResultHandler {
                 "Loading cluster analysis results",
                 "Failed loading cluster analysis results");
 
-            // initialyzing tooltips for tabs
+            // initializing tooltips for tabs
             InitializeBootstrapTooltips();
         };
 

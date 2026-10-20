@@ -1,5 +1,5 @@
 ﻿import { initScopeFromServer } from "functions";
-import type { SequenceImportResult } from "viewDataTypes";
+import type { ResultsLoadingScreenData, SequenceImportResult } from "viewDataTypes";
 
 /**
  * Interface for the data object fetched from the server
@@ -11,11 +11,8 @@ interface BatchGeneticImportFromGenBankSearchFileResultData {
 /**
  * Interface for the angular controller's scope
  */
-interface BatchGeneticImportFromGenBankSearchFileResultScope extends ng.IScope, BatchGeneticImportFromGenBankSearchFileResultData {
-
-    loadingScreenHeader: string;
-    loading: boolean;
-    taskId: string;
+interface BatchGeneticImportFromGenBankSearchFileResultScope
+    extends ng.IScope, BatchGeneticImportFromGenBankSearchFileResultData, ResultsLoadingScreenData {
 }
 
 class BatchGeneticImportFromGenBankSearchFileResultHandler {

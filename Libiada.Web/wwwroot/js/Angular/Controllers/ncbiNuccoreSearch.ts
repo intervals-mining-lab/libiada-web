@@ -1,7 +1,7 @@
 /**
  * Interface for the controller's scope
  */
-interface NCBINuclorSearchScope extends angular.IScope {
+interface NCBINuclorSearchScope extends ng.IScope {
     searchQuery: string;
     filterMinLength: boolean;
     filterMaxLength: boolean;

@@ -1,6 +1,5 @@
 import { initScopeFromServer, InitializeBootstrapTooltips } from "functions";
-import type { Characteristic, SequenceCharacteristics, SequencesGroup } from "viewDataTypes";
-
+import type { Characteristic, ResultsLoadingScreenData, SequenceCharacteristics, SequencesGroup } from "viewDataTypes";
 
 /**
  * Interface for the data object fetched from the server
@@ -17,11 +16,7 @@ interface CalculationResultData {
 /**
  * Interface for the angular controller's scope
  */
-interface CalculationResultScope extends ng.IScope, CalculationResultData {
-    loading: boolean;
-    loadingScreenHeader: string;
-    taskId: string;
-
+interface CalculationResultScope extends ng.IScope, CalculationResultData, ResultsLoadingScreenData {
     characteristicsTableTabSelected: boolean;
 }
 

@@ -10,10 +10,8 @@ interface BatchGeneticImportFromGenBankSearchFileData {
  * Interface for the angular controller's scope
  */
 interface BatchGeneticImportFromGenBankSearchFileScope extends ng.IScope {
-    // File status properties
     fileSelected: {value : boolean};
 
-    // Methods
     fileChanged: (filePath: HTMLInputElement) => void;
 }
 

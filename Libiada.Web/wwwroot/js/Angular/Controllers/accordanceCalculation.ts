@@ -34,7 +34,7 @@ interface AccordanceCalculationData {
 /**
  * Interface for the angular controller's scope
  */
-interface AccordanceCalculationScope extends angular.IScope, AccordanceCalculationData {
+interface AccordanceCalculationScope extends ng.IScope, AccordanceCalculationData {
     nature: string;
     selectedResearchObjectsCount: number;
 }

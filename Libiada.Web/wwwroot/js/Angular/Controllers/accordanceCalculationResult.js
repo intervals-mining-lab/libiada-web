@@ -1,4 +1,4 @@
-import { MapModelFromJson } from "functions";
+import { initScopeFromServer } from "functions";
 /**
  * Controller for accordance functionality
  */
@@ -16,19 +16,7 @@ class AccordanceCalculationResultHandler {
      */
     ngOnInit() {
         const accordanceCalculationResult = ($scope, $http) => {
-            $scope.loadingScreenHeader = "Loading accordance data";
-            let location = window.location.href.split("/");
-            $scope.taskId = location[location.length - 1];
-            $scope.loading = true;
-            $http.get(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
-                .then(function (data) {
-                MapModelFromJson($scope, data.data);
-                $scope.loading = false;
-            })
-                .catch(function () {
-                alert("Failed loading accordance data");
-                $scope.loading = false;
-            });
+            initScopeFromServer($http, $scope, "Loading accordance data", "Failed loading accordance data");
         };
         // Register controller in Angular module
         angular.module("libiada").controller("AccordanceCalculationResultCtrl", ["$scope", "$http", accordanceCalculationResult]);

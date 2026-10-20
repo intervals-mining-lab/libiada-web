@@ -1,7 +1,7 @@
 /**
  * Interface for the angular controller's scope
  */
-interface BatchImagesImportScope extends angular.IScope {
+interface BatchImagesImportScope extends ng.IScope {
     fileSelected: { value: boolean; };
     fileChanged: (filePath: HTMLInputElement) => void;
 }

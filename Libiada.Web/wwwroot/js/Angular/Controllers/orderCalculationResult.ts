@@ -1,5 +1,5 @@
 import { initScopeFromServer } from "functions";
-import type { Characteristic, SequenceCharacteristics } from "viewDataTypes";
+import type { Characteristic, ResultsLoadingScreenData, SequenceCharacteristics } from "viewDataTypes";
 
 /**
  * Interface for the data object fetched from the server
@@ -13,11 +13,7 @@ interface OrderCalculationResultData {
 /**
  * Interface for the angular controller's scope
  */
-interface OrderCalculationResultScope extends ng.IScope, OrderCalculationResultData {
-    loading: boolean;
-    loadingScreenHeader: string;
-    taskId: string;
-
+interface OrderCalculationResultScope extends ng.IScope, OrderCalculationResultData, ResultsLoadingScreenData {
     characteristicsTableTabSelected: boolean;
 }
 
@@ -37,7 +33,7 @@ class OrderCalculationResultHandler {
 
             $scope.characteristicsTableTabSelected = false;
 
-            // initialyzing tooltips for tabs
+            // initializing tooltips for tabs
             $('[data-bs-toggle="tooltip"]').tooltip();
 
             initScopeFromServer<OrderCalculationResultData>(

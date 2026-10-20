@@ -34,7 +34,7 @@ interface OrderTransformationCharacteristicsDynamicVisualizationData {
 /**
  * Interface for the controller's scope
  */
-interface OrderTransformationCharacteristicsDynamicVisualizationScope extends angular.IScope, OrderTransformationCharacteristicsDynamicVisualizationData {
+interface OrderTransformationCharacteristicsDynamicVisualizationScope extends ng.IScope, OrderTransformationCharacteristicsDynamicVisualizationData {
     nature: string;
     selectedResearchObjectsCount: number;
 }

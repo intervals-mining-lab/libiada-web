@@ -1,6 +1,7 @@
 //import d3 from "d3";
 import { MapModelFromJson } from "functions";
-import { IBasePoint } from "./Interfaces/commonInterfaces";
+import type { IBasePoint } from "./Interfaces/commonInterfaces";
+import type { ResultsLoadingScreenData } from "viewDataTypes";
 
 // Interface for accordance level data
 interface IAccordanceLevel {
@@ -36,9 +37,8 @@ interface ISequencesOrderDistributionData {
 /**
  * Interface for the angular controller's scope
  */
-interface ISequencesOrderDistributionScope extends ng.IScope {
+interface ISequencesOrderDistributionScope extends ng.IScope, ISequencesOrderDistributionData, ResultsLoadingScreenData {
     // Chart data
-    result: ISequence[];
     points: IDistributionPoint[];
     accordanceLevels: IAccordanceLevel[];
     maxLevel: number;
@@ -48,11 +48,6 @@ interface ISequencesOrderDistributionScope extends ng.IScope {
     height: number;
     dotRadius: number;
     selectedDotRadius: number;
-
-    // Data loading properties
-    taskId: string;
-    loadingScreenHeader: string;
-    loading: boolean;
 
     // Chart functions
     xMap: (d: IDistributionPoint) => number;

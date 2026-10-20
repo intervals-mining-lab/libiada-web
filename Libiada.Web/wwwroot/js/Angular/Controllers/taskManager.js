@@ -1,4 +1,3 @@
-//import { HubConnection, HubConnectionBuilder } from "signalr";
 // Controller class for task manager
 class TaskManagerControllerHandler {
     constructor() {

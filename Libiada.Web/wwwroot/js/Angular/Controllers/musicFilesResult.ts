@@ -1,4 +1,5 @@
 ﻿import { MapModelFromJson } from "functions";
+import type { ResultsLoadingScreenData } from "viewDataTypes";
 
 /**
  * Interface for the data object fetched from the server
@@ -10,11 +11,7 @@ interface IMusicFilesResultData {
 /**
  * Interface for the angular controller's scope
  */
-interface IMusicFilesResultScope extends ng.IScope {
-    // Task identifier for loading data
-    taskId: string;
-
-
+interface IMusicFilesResultScope extends ng.IScope, IMusicFilesResultData, ResultsLoadingScreenData {
 }
 
 /**
@@ -38,7 +35,7 @@ class MusicFilesResultHandler {
             $scope.taskId = location[location.length - 1];
 
             // Load data from the API
-            $http.get < any > (`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
+            $http.get<IMusicFilesResultData>(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
                 .then(function (data) {
                     MapModelFromJson($scope, data.data);
                 })

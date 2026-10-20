@@ -10,7 +10,7 @@ class ClusterizationResultHandler {
         const clusterizationResult = async ($scope, $http) => {
             $scope.characteristicsTableTabSelected = false;
             await initScopeFromServer($http, $scope, "Loading cluster analysis results", "Failed loading cluster analysis results");
-            // initialyzing tooltips for tabs
+            // initializing tooltips for tabs
             InitializeBootstrapTooltips();
         };
         // Register controller in Angular module

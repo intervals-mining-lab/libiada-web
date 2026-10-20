@@ -1,4 +1,5 @@
 import { initScopeFromServer } from "functions";
+import type { ResultsLoadingScreenData } from "viewDataTypes";
 
 /**
  * Interface for sequence data in custom sequence segmentation
@@ -18,10 +19,7 @@ interface CustomSequenceSegmentationResultData {
 /**
  * Interface for the controller's scope
  */
-interface CustomSequenceSegmentationResultScope extends ng.IScope, CustomSequenceSegmentationResultData {
-    loading: boolean;
-    loadingScreenHeader: string;
-    taskId: string;
+interface CustomSequenceSegmentationResultScope extends ng.IScope, CustomSequenceSegmentationResultData, ResultsLoadingScreenData {
 }
 
 /**

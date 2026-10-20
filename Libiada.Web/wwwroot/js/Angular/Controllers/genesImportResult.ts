@@ -1,4 +1,5 @@
 ﻿import { initScopeFromServer } from "functions";
+import type { ResultsLoadingScreenData } from "viewDataTypes";
 interface SubsequenceData {
     Id: number;
     Starts: number[];
@@ -20,11 +21,7 @@ interface GenesImportResultData {
 /**
  * Interface for the controller's scope
  */
-interface GenesImportResultScope extends ng.IScope, GenesImportResultData {
-
-    loadingScreenHeader: string;
-    loading: boolean;
-    taskId: string;
+interface GenesImportResultScope extends ng.IScope, GenesImportResultData, ResultsLoadingScreenData {
 }
 
 class GenesImportResultHandler {

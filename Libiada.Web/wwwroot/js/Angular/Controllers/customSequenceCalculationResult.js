@@ -12,7 +12,7 @@ class CustomSequenceCalculationResultHandler {
     ngOnInit() {
         const customSequenceCalculationResult = ($scope, $http) => {
             $scope.characteristicsTableTabSelected = false;
-            // initialyzing tooltips for tabs
+            // initializing tooltips for tabs
             $('[data-bs-toggle="tooltip"]').tooltip();
             initScopeFromServer($http, $scope, "Loading custom sequence calculation results", "Failed loading custom sequence calculation results");
         };

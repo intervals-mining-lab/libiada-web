@@ -1,5 +1,6 @@
 ﻿/*import d3 from "d3";*/
 import { MapModelFromJson } from "functions";
+import type { ResultsLoadingScreenData } from "viewDataTypes";
 
 /**
  * Interface for distribution interval data
@@ -70,7 +71,7 @@ interface ID3Tooltip extends d3.Selection<HTMLDivElement, unknown, HTMLElement, 
 /**
  * Interface for the angular controller's scope
  */
-interface IOrdersIntervalsDistributionsAccordanceResultScope extends ng.IScope {
+interface IOrdersIntervalsDistributionsAccordanceResultScope extends ng.IScope, ResultsLoadingScreenData {
     // Chart data and settings
     result: ILinkResult[];
     points: IAccordancePoint[];
@@ -82,11 +83,6 @@ interface IOrdersIntervalsDistributionsAccordanceResultScope extends ng.IScope {
     selectedDotRadius: number;
     accordanceLevels: IAccordanceLevel[];
     maxLevel: number;
-
-    // Data loading properties
-    taskId: string;
-    loadingScreenHeader: string;
-    loading: boolean;
 
     // Chart functions
     draw: () => void;

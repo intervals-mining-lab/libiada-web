@@ -1,4 +1,5 @@
 import { initScopeFromServer } from "functions";
+import type { ResultsLoadingScreenData } from "viewDataTypes";
 
 /**
  * Interface for the data object fetched from the server
@@ -15,10 +16,8 @@ interface OrderTransformationConvergenceResultData {
 /**
  * Interface for the angular controller's scope
  */
-interface OrderTransformationConvergenceResultScope extends ng.IScope, OrderTransformationConvergenceResultData {
-    loading: boolean;
-    loadingScreenHeader: string;
-    taskId: string;
+interface OrderTransformationConvergenceResultScope 
+    extends ng.IScope, OrderTransformationConvergenceResultData, ResultsLoadingScreenData {
 }
 
 /**

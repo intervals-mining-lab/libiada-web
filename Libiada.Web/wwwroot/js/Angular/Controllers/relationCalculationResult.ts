@@ -1,4 +1,5 @@
 ﻿import { MapModelFromJson } from "functions";
+import type { ResultsLoadingScreenData } from "viewDataTypes";
 
 /**
  * Interface for the data object fetched from the server
@@ -19,10 +20,7 @@ interface RelationCalculationResultData {
 /**
  * Interface for the angular controller's scope
  */
-interface RelationCalculationResultScope extends angular.IScope, RelationCalculationResultData {
-    loadingScreenHeader: string;
-    loading: boolean;
-    taskId: string;
+interface RelationCalculationResultScope extends ng.IScope, RelationCalculationResultData, ResultsLoadingScreenData {
 }
 
 /**

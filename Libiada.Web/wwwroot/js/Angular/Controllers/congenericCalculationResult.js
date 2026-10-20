@@ -9,7 +9,7 @@ class CongenericCalculationResultHandler {
     ngOnInit() {
         const congenericCalculationResult = async ($scope, $http) => {
             $scope.characteristicsTableTabSelected = false;
-            // initialyzing tooltips for tabs
+            // initializing tooltips for tabs
             $('[data-bs-toggle="tooltip"]').tooltip();
             initScopeFromServer($http, $scope, "Loading characteristics calculation results", "Failed loading characteristics calculation results");
         };

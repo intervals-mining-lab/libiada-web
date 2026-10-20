@@ -1,4 +1,5 @@
 ﻿import { MapModelFromJson } from "functions";
+import type { ResultsLoadingScreenData } from "viewDataTypes";
 
 /**
  * Interface for the data object fetched from the server
@@ -13,12 +14,7 @@ interface SequenceCheckResultData {
 /**
  * Interface for the controller's scope
  */
-interface SequenceCheckResultScope extends ng.IScope, SequenceCheckResultData {
-
-    loadingScreenHeader: string;
-    loading: boolean;
-    taskId: string;
-
+interface SequenceCheckResultScope extends ng.IScope, SequenceCheckResultData, ResultsLoadingScreenData {
     calculateStatusClass: (status: string) => string;
 }
 

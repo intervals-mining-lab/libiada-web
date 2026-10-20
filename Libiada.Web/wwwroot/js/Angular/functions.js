@@ -1,4 +1,4 @@
-//import * as bootstrap from "bootstrap";
+//import type * as bootstrap from "bootstrap";
 /**
  * Utility functions for LibiadaWeb Angular application
  */

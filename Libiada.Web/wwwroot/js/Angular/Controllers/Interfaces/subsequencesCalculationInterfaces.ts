@@ -1,4 +1,5 @@
-﻿import { IBasePoint } from "./commonInterfaces";
+﻿import type { ResultsLoadingScreenData } from "viewDataTypes";
+import type { IBasePoint } from "./commonInterfaces";
 
 // Интерфейс для характеристики
 export interface IChartCharacteristic {
@@ -99,25 +100,19 @@ export interface ISubsequencesCalculationResultData {
 /**
  * Interface for the angular controller's scope
  */
-export interface ISubsequencesCalculationResultScope extends ng.IScope {
+export interface ISubsequencesCalculationResultScope extends ng.IScope, ISubsequencesCalculationResultData, ResultsLoadingScreenData {
     // Данные графика
-    sequencesData: ISequenceData[];
     points: ISubsequencesCalculationPoint[];
     legend: ILegendItem[];
     visiblePoints: ISubsequencePoint[];
     chartCharacteristics: IChartCharacteristic[];
     chartsCharacterisrticsCount: number;
-    characteristicsList: string[];
-    characteristicNames: string[];
     tooltipElements: ITooltipElement[];
     characteristicComparers: any[];
 
     // Элементы управления и состояния
     chartElement: HTMLElement;
     colorScale: d3.ScaleSequential<string>;
-    features: { Value: number; Text: string }[];
-    attributes: string[];
-    attributeValues: IAttributeValue[];
     productFilter: string;
     selectedPointIndex: number;
     selectedResearchObjectIndex: number;
@@ -130,9 +125,6 @@ export interface ISubsequencesCalculationResultScope extends ng.IScope {
     pointsSimilarity: { same: number; similar: number; different: number };
 
     // Состояния загрузки
-    loadingScreenHeader: string;
-    loading: boolean;
-    taskId: string;
     characteristicsTableRendering: { rendered: boolean };
 
     // Методы

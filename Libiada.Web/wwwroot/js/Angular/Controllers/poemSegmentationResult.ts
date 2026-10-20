@@ -1,4 +1,5 @@
 import { initScopeFromServer } from "functions";
+import type { ResultsLoadingScreenData } from "viewDataTypes";
 
 /**
  * Interface for the data object fetched from the server
@@ -13,10 +14,7 @@ interface PoemSegmentationResultData  {
 /**
  * Interface for the controller's scope
  */
-interface PoemSegmentationResultScope extends ng.IScope, PoemSegmentationResultData {
-    loading: boolean;
-    loadingScreenHeader: string;
-    taskId: string;
+interface PoemSegmentationResultScope extends ng.IScope, PoemSegmentationResultData, ResultsLoadingScreenData {
 }
 
 /**

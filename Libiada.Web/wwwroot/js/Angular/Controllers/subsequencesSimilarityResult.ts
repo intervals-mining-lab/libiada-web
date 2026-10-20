@@ -1,4 +1,5 @@
 ﻿import { MapModelFromJson } from "functions";
+import type { ResultsLoadingScreenData } from "viewDataTypes";
 
 /**
  * Interface for the data object fetched from the server
@@ -34,10 +35,8 @@ interface SubsequencesSimilarityResultData {
 /**
  * Interface for the controller's scope
  */
-interface SubsequencesSimilarityResultScope extends ng.IScope, SubsequencesSimilarityResultData {
-    loading: boolean;
-    loadingScreenHeader: string;
-    taskId: string;
+interface SubsequencesSimilarityResultScope 
+    extends ng.IScope, SubsequencesSimilarityResultData, ResultsLoadingScreenData {
 }
 
 // Controller for subsequences similarity result visualization

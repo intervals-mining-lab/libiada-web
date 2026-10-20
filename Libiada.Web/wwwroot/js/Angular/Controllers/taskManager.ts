@@ -1,4 +1,4 @@
-﻿//import { HubConnection, HubConnectionBuilder } from "signalr";
+﻿import type { HubConnection, HubConnectionBuilder } from "signalr";
 
 
 // Interface for task data
@@ -22,14 +22,14 @@ type TaskState = "InQueue" | "InProgress" | "Completed" | "Error";
 /**
  * Interface for the angular controller's scope
  */
-interface TaskManagerScope extends angular.IScope {
+interface TaskManagerScope extends ng.IScope {
     // Tasks and loading state
     tasks: Task[];
     loading: boolean;
     loadingScreenHeader: string;
 
     // SignalR hub connection
-    tasksHub: signalR.HubConnection;
+    tasksHub: HubConnection;
     flags: { reconnecting: boolean };
 
     // Redirection settings

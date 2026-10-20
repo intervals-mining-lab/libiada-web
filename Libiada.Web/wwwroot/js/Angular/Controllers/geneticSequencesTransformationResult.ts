@@ -1,5 +1,5 @@
 ﻿import { initScopeFromServer } from "functions";
-import type { SequenceImportResult } from "viewDataTypes";
+import type { ResultsLoadingScreenData, SequenceImportResult } from "viewDataTypes";
 
 /**
  * Interface for the data object passed from the server
@@ -11,10 +11,8 @@ interface GeneticSequencesTransformationResultData {
 /**
  * Interface for the controller's scope
  */
-interface GeneticSequencesTransformationResultScope extends ng.IScope, GeneticSequencesTransformationResultData {
-    loadingScreenHeader: string;
-    loading: boolean;
-    taskId: string;
+interface GeneticSequencesTransformationResultScope 
+    extends ng.IScope, GeneticSequencesTransformationResultData, ResultsLoadingScreenData {
 }
 
 class GeneticSequencesTransformationResultHandler {

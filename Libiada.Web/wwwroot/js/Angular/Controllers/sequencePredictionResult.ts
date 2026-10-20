@@ -1,13 +1,10 @@
 ﻿import { MapModelFromJson } from "functions";
+import type { ResultsLoadingScreenData } from "viewDataTypes";
 
 /**
  * Interface for the angular controller's scope
  */
-interface ISequencePredictionResultScope extends ng.IScope {
-    // Loading data
-    loading: boolean;
-    loadingScreenHeader: string;
-    taskId: string;
+interface ISequencePredictionResultScope extends ng.IScope, ResultsLoadingScreenData {
 
     // Sequence prediction results
     originSequence?: string;

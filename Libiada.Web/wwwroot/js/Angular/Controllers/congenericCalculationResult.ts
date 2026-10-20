@@ -1,5 +1,5 @@
 import { initScopeFromServer  } from "functions";
-import type { Characteristic, SequenceCharacteristics, SequencesGroup } from "viewDataTypes";
+import type { Characteristic, ResultsLoadingScreenData, SequenceCharacteristics, SequencesGroup } from "viewDataTypes";
 
 
 /**
@@ -18,11 +18,7 @@ interface CongenericCalculationResultData {
 /**
  * Interface for the angular controller's scope
  */
-interface CongenericCalculationResultScope extends ng.IScope, CongenericCalculationResultData {
-    loading: boolean;
-    loadingScreenHeader: string;
-    taskId: string;
-
+interface CongenericCalculationResultScope extends ng.IScope, CongenericCalculationResultData, ResultsLoadingScreenData {
     characteristicsTableTabSelected: boolean;
 }
 
@@ -38,7 +34,7 @@ class CongenericCalculationResultHandler {
         const congenericCalculationResult = async ($scope: CongenericCalculationResultScope, $http: ng.IHttpService): Promise<void> => {
             $scope.characteristicsTableTabSelected = false;
             
-            // initialyzing tooltips for tabs
+            // initializing tooltips for tabs
             $('[data-bs-toggle="tooltip"]').tooltip();
 
             initScopeFromServer<CongenericCalculationResultData>(

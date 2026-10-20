@@ -31,7 +31,7 @@ interface OrderTransformationConvergenceData {
 /**
  * Interface for the controller's scope
  */
-interface OrderTransformationConvergenceScope extends angular.IScope, OrderTransformationConvergenceData {
+interface OrderTransformationConvergenceScope extends ng.IScope, OrderTransformationConvergenceData {
     nature: string;
     selectedResearchObjectsCount: number;
 }

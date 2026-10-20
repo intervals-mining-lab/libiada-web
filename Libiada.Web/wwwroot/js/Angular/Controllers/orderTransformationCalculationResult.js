@@ -12,7 +12,7 @@ class OrderTransformationCalculationResultHandler {
     ngOnInit() {
         const orderTransformationCalculationResult = async ($scope, $http) => {
             $scope.characteristicsTableTabSelected = false;
-            // initialyzing tooltips for tabs
+            // initializing tooltips for tabs
             $('[data-bs-toggle="tooltip"]').tooltip();
             initScopeFromServer($http, $scope, "Loading order transformation characteristics", "Failed loading order transformation characteristics");
         };

@@ -1,7 +1,7 @@
 ﻿//import d3 from "d3";
 import { MapModelFromJson } from "functions";
-import { IBasePoint } from "./Interfaces/commonInterfaces";
-/// <reference path="./Interfaces/commonInterfaces.d.ts" />
+import type { IBasePoint } from "./Interfaces/commonInterfaces";
+import type { ResultsLoadingScreenData } from "viewDataTypes";
 
 /**
  * Interface for the data object fetched from the server
@@ -39,11 +39,9 @@ interface ID3Tooltip extends d3.Selection<HTMLDivElement, unknown, HTMLElement, 
 /**
  * Interface for the angular controller's scope
  */
-interface IOrderTransformationCharacteristicsDynamicScope extends ng.IScope {
+interface IOrderTransformationCharacteristicsDynamicScope 
+    extends ng.IScope, IOrderTransformationCharacteristicsDynamicData, ResultsLoadingScreenData {
     // Chart data
-    characteristics: ICharacteristicData[];
-    characteristicName: string;
-    transformationsList: string[];
     points: IOrderTransformationPoint[];
     legend: ITransformationLegendItem[];
 
@@ -53,11 +51,6 @@ interface IOrderTransformationCharacteristicsDynamicScope extends ng.IScope {
     dotRadius: number;
     selectedDotRadius: number;
     legendHeight: number;
-
-    // Data loading properties
-    taskId: string;
-    loadingScreenHeader: string;
-    loading: boolean;
 
     // Chart functions
     draw: () => void;
