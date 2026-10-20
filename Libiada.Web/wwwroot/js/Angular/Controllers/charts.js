@@ -419,7 +419,7 @@ class ChartsControllerHandler {
             $scope.legendClick = legendClick;
             $scope.legendSetVisibilityForAll = legendSetVisibilityForAll;
             // Initialize scope variables
-            $scope.chartElement = document.getElementById("chart");
+            $scope.chartElement = document.getElementById("chart") ?? throwHelper("Chart div element not found");
             $scope.keyCodes = {
                 C: 67,
                 V: 86

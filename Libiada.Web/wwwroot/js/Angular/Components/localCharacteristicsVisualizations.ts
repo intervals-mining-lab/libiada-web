@@ -35,7 +35,7 @@ interface LocalCharacteristicsVisualizationsComponentController extends ng.ICont
     points: Point[];
     lineChart: boolean;
     pointSize: number;
-    chartElement: HTMLElement;
+    chartElement: plotly.PlotlyHTMLElement;
     colorScale: d3.ScaleSequential<string>;
     tooltip: { name: string; fragmentName: string; characteristics: number[] };
     tooltipVisible: boolean;
@@ -65,7 +65,7 @@ function LocalCharacteristicsVisualizationsController(this: LocalCharacteristics
         ctrl.fillLegend();
 
         ctrl.chartCharacteristics = [ctrl.characteristicsList[0]];
-        ctrl.chartElement = document.getElementById("chart") ?? throwHelper("Chart div element not found");
+        ctrl.chartElement = document.getElementById("chart") as plotly.PlotlyHTMLElement ?? throwHelper("Chart div element not found");
 
         // initializing bootstrap tooltips for tabs
         InitializeBootstrapTooltips();
@@ -316,9 +316,9 @@ function LocalCharacteristicsVisualizationsController(this: LocalCharacteristics
             },
             dimensions: characteristicsIndices.map((ci: number) => ({
                 label: ctrl.characteristicNames[ci],
-                values: ctrl.points.map<number[]>((p: Point) => 
+                values: ctrl.points.map<number[]>((p: Point) =>
                     p.fragmentsData.map<number>((fd: PointsFragmentData) => fd.characteristics[ci]))
-                .flat()
+                    .flat()
             }))
         }];
 
@@ -394,12 +394,13 @@ function LocalCharacteristicsVisualizationsController(this: LocalCharacteristics
         // if points have data on legend item they belong to
         if (ctrl.chartData?.[0]?.customdata && ctrl.chartData[0].customdata.length > 0) {
             let index: number[] = [];
-            const update: plotly.Data = { 
-                visible: legendItem.visible ? "legendonly" : true, 
-                line: ctrl.chartCharacteristics.length == 1 ?  {
+            const update: plotly.Data = {
+                visible: legendItem.visible ? "legendonly" : true,
+                line: ctrl.chartCharacteristics.length == 1 ? {
                     color: legendItem.color,
                     width: 0.75
-                } : {} };
+                } : {}
+            };
             for (let i = 0; i < ctrl.chartData.length; i++) {
                 const legendId: number = ctrl.legend[ctrl.chartData[i].customdata![0] as number].id;
                 if (legendId === legendItem.id) {
@@ -423,8 +424,12 @@ function LocalCharacteristicsVisualizationsController(this: LocalCharacteristics
         const bar: HTMLElement = document.getElementById("dragbar") ?? throwHelper("Dragbar element not found");
 
         const drag = async (e: MouseEvent) => {
-            document.selection ? document.selection.empty() : window.getSelection()?.removeAllRanges();
-
+            const selection: Selection | null = window.getSelection();
+            if (selection) {
+                selection.empty();
+                selection.removeAllRanges();
+            }
+            
             ctrl.chartElement.style.width = `${e.pageX - bar.offsetWidth / 2}px`;
             if (ctrl.chartElement.childNodes.length > 0) {
                 Plotly.relayout(ctrl.chartElement, { autosize: true });

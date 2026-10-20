@@ -327,7 +327,11 @@ function LocalCharacteristicsVisualizationsController($scope) {
         const right = document.getElementById("sidebar") ?? throwHelper("Sidebar element not found");
         const bar = document.getElementById("dragbar") ?? throwHelper("Dragbar element not found");
         const drag = async (e) => {
-            document.selection ? document.selection.empty() : window.getSelection()?.removeAllRanges();
+            const selection = window.getSelection();
+            if (selection) {
+                selection.empty();
+                selection.removeAllRanges();
+            }
             ctrl.chartElement.style.width = `${e.pageX - bar.offsetWidth / 2}px`;
             if (ctrl.chartElement.childNodes.length > 0) {
                 Plotly.relayout(ctrl.chartElement, { autosize: true });

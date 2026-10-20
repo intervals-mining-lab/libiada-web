@@ -9,7 +9,7 @@ class LocalCalculationResultHandler {
     ngOnInit() {
         const localCalculationResult = async ($scope, $http) => {
             $scope.calculateLocalCharacteristicsSimilarityMatrix = async () => {
-                const result = await $http.get("/api/LocalCalculationApi/CalculateLocalCharacteristicsSimilarityMatrix", {
+                const response = await $http.get("/api/LocalCalculationApi/CalculateLocalCharacteristicsSimilarityMatrix", {
                     params: {
                         taskId: $scope.taskId,
                         aligner: $scope.aligner.Value,
@@ -17,12 +17,12 @@ class LocalCalculationResultHandler {
                         aggregator: $scope.aggregator.Value
                     }
                 });
-                const response = result.data;
-                $scope.comparisonMatrix = response.result;
+                const result = response.data;
+                $scope.comparisonMatrix = result.result;
                 // TODO: fill this data from response
-                $scope.usedAligner = $scope.aligners[response.aligner - 1].Text;
-                $scope.usedDistanceCalculator = $scope.distanceCalculators[response.distanceCalculator - 1].Text;
-                $scope.usedAggregator = $scope.aggregators[response.aggregator - 1].Text;
+                $scope.usedAligner = $scope.aligners[result.aligner - 1].Text;
+                $scope.usedDistanceCalculator = $scope.distanceCalculators[result.distanceCalculator - 1].Text;
+                $scope.usedAggregator = $scope.aggregators[result.aggregator - 1].Text;
             };
             $scope.isCharacteristicsTableVisible = false;
             await initScopeFromServer($http, $scope, "Loading local characteristics calculation results", "Failed loading local characteristics data");

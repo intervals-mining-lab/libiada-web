@@ -27,7 +27,7 @@ interface CharacteristicsVisualizationsComponentController extends ng.IControlle
     chartCharacteristics: Characteristic[];
     legend: LegendItem[];
     points: Point[];
-    chartElement: HTMLElement;
+    chartElement: plotly.PlotlyHTMLElement;
     colorScale: d3.ScaleSequential<string>;
     tooltip: { name: string, characteristics: number[] };
     tooltipVisible: boolean;
@@ -57,7 +57,7 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
         ctrl.fillLegend();
 
         ctrl.chartCharacteristics = [ctrl.characteristicsList[0]];
-        ctrl.chartElement = document.getElementById("chart") ?? throwHelper("Chart div element not found");
+        ctrl.chartElement = document.getElementById("chart") as plotly.PlotlyHTMLElement ?? throwHelper("Chart div element not found");
 
         // initializing tooltips for tabs
         InitializeBootstrapTooltips();
@@ -379,7 +379,11 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
         const bar: HTMLElement = document.getElementById("dragbar") ?? throwHelper("Dragbar element not found");
 
         const drag = async (e: MouseEvent) => {
-            document.selection ? document.selection.empty() : window.getSelection()?.removeAllRanges();
+            const selection: Selection | null = window.getSelection();
+            if (selection) {
+                selection.empty();
+                selection.removeAllRanges();
+            }
 
             ctrl.chartElement.style.width = `${e.pageX - bar.offsetWidth / 2}px`;
             if (ctrl.chartElement.childNodes.length > 0) {

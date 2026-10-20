@@ -7,7 +7,7 @@ import type {
     Aligner,
     Characteristic,
     DistanceCalculator,
-    FragmentData,
+    ResultsLoadingScreenData,
     LocalCharacteristicsData
 } from "viewDataTypes";
 
@@ -41,11 +41,7 @@ interface LocalCharacteristicsSimilarityMatrixResponse {
 /**
  * Interface for the angular controller's scope
  */
-interface LocalCalculationResultScope extends ng.IScope, LocalCalculationResultData {
-    loadingScreenHeader: string;
-    loading: boolean;
-    taskId: string;
-
+interface LocalCalculationResultScope extends ng.IScope, LocalCalculationResultData, ResultsLoadingScreenData {
     // UI state
     isCharacteristicsTableVisible: boolean;
 

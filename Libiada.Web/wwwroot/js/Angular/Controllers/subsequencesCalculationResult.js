@@ -389,7 +389,11 @@ class SubsequencesCalculationResultHandler {
                 let right = document.getElementById("sidebar");
                 let bar = document.getElementById("dragbar");
                 const drag = (e) => {
-                    document.selection ? document.selection.empty() : window.getSelection()?.removeAllRanges();
+                    const selection = window.getSelection();
+                    if (selection) {
+                        selection.empty();
+                        selection.removeAllRanges();
+                    }
                     $scope.chartElement.style.width = `${e.pageX - bar.offsetWidth / 2}px`;
                     Plotly.relayout($scope.chartElement, { autosize: true });
                 };

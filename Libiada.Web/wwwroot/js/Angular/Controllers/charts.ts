@@ -1,7 +1,7 @@
 ﻿/*import * as d3 from "d3";*/
 import * as plotly from "plotly.js";
 import { getArrayMinMax, arrayMax, throwHelper } from "functions";
-import { LegendItem } from "viewDataTypes";  
+import { LegendItem, ParallelCoordinatesPlotData } from "viewDataTypes";  
 
 /**
  * Interface for characteristic data
@@ -9,7 +9,6 @@ import { LegendItem } from "viewDataTypes";
 interface IChartsCharacteristic {
     ResearchObjectName: string;
     Characteristics: number[];
-    SequenceGroupId?: number;
 }
 
 /**
@@ -23,7 +22,7 @@ interface IChartsCharacteristicListItem {
 /**
  * Interface for point data
  */
-interface IChartsPointData {
+interface Point {
     id: number;
     legendIndex: number;
     legendId: number;
@@ -51,11 +50,11 @@ interface IChartsScope extends ng.IScope {
     sequencesName: string;
     chartCharacteristics: IChartsCharacteristicListItem[];
     layout: Partial<plotly.Layout>;
-    chartData: Partial<plotly.PlotData>[];
+    chartData: Partial<ParallelCoordinatesPlotData>[];
     legend: LegendItem[];
-    points: IChartsPointData[];
+    points: Point[];
     colorScale: d3.ScaleSequential<string>;
-    chartElement: HTMLElement;
+    chartElement: plotly.PlotlyHTMLElement;
     sequenceGroups?: any[];
 
     // UI state
@@ -80,8 +79,8 @@ interface IChartsScope extends ng.IScope {
     fillParallelCoordinatesPlotData: () => void;
     draw: () => void;
     fillPoints: () => void;
-    fillPointTooltip: (d: IChartsPointData) => string;
-    showTooltip: (selectedPoint: IChartsPointData) => void;
+    fillPointTooltip: (d: Point) => string;
+    showTooltip: (selectedPoint: Point) => void;
     fillLegend: () => void;
     legendClick: (legendItem: LegendItem) => void;
     legendSetVisibilityForAll: (visibility: boolean) => void;
@@ -198,7 +197,7 @@ class ChartsControllerHandler {
              * @param d Point data to show in tooltip
              * @returns HTML string for tooltip
              */
-            function fillPointTooltip(d: IChartsPointData): string {
+            function fillPointTooltip(d: Point): string {
                 let tooltipContent: string[] = [];
                 tooltipContent.push(`Name: ${d.name}`);
 
@@ -217,7 +216,7 @@ class ChartsControllerHandler {
              * Shows tooltip for selected point
              * @param selectedPoint Point to show tooltip for
              */
-            function showTooltip(selectedPoint: IChartsPointData): void {
+            function showTooltip(selectedPoint: Point): void {
                 $("button[data-bs-target='#tooltip-tab-pane']").tab("show");
 
                 $scope.tooltipVisible = true;
@@ -551,7 +550,7 @@ class ChartsControllerHandler {
             $scope.legendSetVisibilityForAll = legendSetVisibilityForAll;
 
             // Initialize scope variables
-            $scope.chartElement = document.getElementById("chart") as HTMLElement;
+            $scope.chartElement = document.getElementById("chart") as plotly.PlotlyHTMLElement ?? throwHelper("Chart div element not found");
             $scope.keyCodes = {
                 C: 67,
                 V: 86
