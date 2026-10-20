@@ -303,7 +303,7 @@ function CharacteristicsVisualizationsController($scope) {
         bar.addEventListener("mousedown", () => {
             document.addEventListener("mousemove", drag);
         });
-        bar.addEventListener("mouseup", () => {
+        window.addEventListener("mouseup", () => {
             document.removeEventListener("mousemove", drag);
         });
     };
