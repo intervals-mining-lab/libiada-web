@@ -1,65 +1,71 @@
 ﻿/*import d3 from "d3";*/
-import { MapModelFromJson } from "functions";
-import { IBasePoint } from "./Interfaces/commonInterfaces.js"; 
-import type { ResultsLoadingScreenData } from "viewDataTypes";
-/// <reference path="./Interfaces/commonInterfaces.d.ts" />
+import { initScopeFromServer } from "functions";
+import type { ResultsLoadingScreenData, Characteristic, Link } from "viewDataTypes";
 
-// Interface for distribution interval data
-interface IDistributionInterval {
-    interval: number;
+interface Point {
+    colorId: number;
+    featureVisible: boolean;
+    distributionIntervals: DistributionIntervals[];
+    order: number[];
+    id: number;
+    x: number;
+    y: number;
+}
+
+interface SVGElementSelection extends d3.Selection<SVGGElement, Point, HTMLElement, null> { }
+
+interface TooltipElementDatum {
+    hideTooltip: boolean;
+    selectedDots: d3.Selection<SVGGElement, Point, SVGGElement, Point>;
+}
+
+// Interface for d3-tooltip element with additional properties
+interface TooltipElement extends TooltipElementDatum, d3.Selection<HTMLDivElement, TooltipElementDatum, HTMLElement, null> {
+}
+
+interface Characteristics {
+    ResearchObjectName: string;
+    SequenceGroupId: number;
+    Characteristics: number[]
+}
+
+interface Order {
+    characteristics: Characteristics;
+    order: number[];
+}
+
+interface DistributionIntervals {
     count: number;
+    interval: number
 }
 
-// Interface for order data
-interface IOrder {
-    order: string;
-    characteristics: {
-        Characteristics: number[];
-    };
+interface Accordance {
+    distributionIntervals: DistributionIntervals[]
+    orders: Order[]
 }
 
-// Interface for accordance data
-interface IAccordance {
-    distributionIntervals: IDistributionInterval[];
-    orders: IOrder[];
-}
-
-// Interface for link result data
-interface ILinkResult {
+interface Result {
+    accordance: Accordance[];
     link: string;
-    accordance: IAccordance[];
 }
 
-// Interface for point data to display on chart
-//IDistributionIntervalsCharacteristicsPoint
-interface IDistributionIntervalsCharacteristicsPoint extends IBasePoint  {
- 
-    distributionIntervals?: IDistributionInterval[];
-    order?: string;
-    
+interface IntervalsCharacteristicsDistributionResultData {
+    characteristicNames: string[];
+    characteristicsIndex: number[];
+    characteristicsList: Characteristic[];
+    linkList: Link[];
+    result: Result[];
 }
 
-// Interface for characteristic data
-interface ICharacteristic {
-    Text: string;
-    Value: number;
-}
-
-// Interface for d3-tooltip with additional properties
-interface ID3Tooltip extends d3.Selection<HTMLDivElement, unknown, HTMLElement, any> {
-    hideTooltip?: boolean;
-    selectedDots?: any;
-}
 
 /**
  * Interface for the angular controller's scope
  */
-interface IIntervalsCharacteristicsDistributionResultScope extends ng.IScope, ResultsLoadingScreenData {
-    // Chart data and settings
-    result: ILinkResult[];
-    points: IDistributionIntervalsCharacteristicsPoint[];
-    characteristic: ICharacteristic;
-    characteristicsList: ICharacteristic[];
+interface IntervalsCharacteristicsDistributionResultScope
+    extends ng.IScope, IntervalsCharacteristicsDistributionResultData, ResultsLoadingScreenData {
+
+    points: Point[];
+    characteristic: Characteristic;
     width: number;
     height: number;
     dotRadius: number;
@@ -68,13 +74,17 @@ interface IIntervalsCharacteristicsDistributionResultScope extends ng.IScope, Re
     // Chart functions
     draw: () => void;
     fillPoints: () => void;
-    fillPointTooltip: (d: IDistributionIntervalsCharacteristicsPoint) => string;
-    showTooltip: (event: MouseEvent, d: IDistributionIntervalsCharacteristicsPoint, tooltip: ID3Tooltip, svg: any) => void;
-    clearTooltip: (tooltip: ID3Tooltip) => void;
-    xValue: (d: IDistributionIntervalsCharacteristicsPoint) => number;
-    yValue: (d: IDistributionIntervalsCharacteristicsPoint) => number;
-    xMap?: (d: IDistributionIntervalsCharacteristicsPoint) => number;
-    yMap?: (d: IDistributionIntervalsCharacteristicsPoint) => number;
+    fillPointTooltip: (d: Point) => string;
+    showTooltip: (
+        event: MouseEvent,
+        d: Point,
+        tooltip: TooltipElement,
+        svg: SVGElementSelection) => void;
+    clearTooltip: (tooltip: TooltipElement) => void;
+    xValue: (d: Point) => number;
+    yValue: (d: Point) => number;
+    xMap: (d: Point) => number;
+    yMap: (d: Point) => number;
 }
 
 /**
@@ -86,7 +96,9 @@ class IntervalsCharacteristicsDistributionResultHandler {
     }
 
     private ngOnInit(): void {
-        const intervalsCharacteristicsDistributionResult = ($scope: IIntervalsCharacteristicsDistributionResultScope, $http: ng.IHttpService): void => {
+        const intervalsCharacteristicsDistributionResult = async (
+            $scope: IntervalsCharacteristicsDistributionResultScope,
+            $http: ng.IHttpService): Promise<void> => {
 
             /**
              * Initializes data for chart visualization
@@ -110,9 +122,9 @@ class IntervalsCharacteristicsDistributionResultHandler {
                                     order: orders[k].order,
                                     x: j + 1,
                                     y: orders[k].characteristics.Characteristics[ch],
-                                    colorId: i,    
+                                    colorId: i,
                                     featureVisible: true,
-          
+
                                 });
                             }
                         }
@@ -124,10 +136,10 @@ class IntervalsCharacteristicsDistributionResultHandler {
              * Constructs tooltip content text as HTML
              * @param d The point data to display in tooltip
              */
-            function fillPointTooltip(d: IDistributionIntervalsCharacteristicsPoint): string {
+            function fillPointTooltip(d: Point): string {
                 const tooltipContent: string[] = [];
 
-                const pointsOrder: string[] = [];
+                const pointsOrder: number[][] = [];
                 pointsOrder.push(d.order);
 
                 tooltipContent.push(pointsOrder.join("<br/>"));
@@ -142,7 +154,12 @@ class IntervalsCharacteristicsDistributionResultHandler {
              * @param tooltip The tooltip element
              * @param svg The SVG container element
              */
-            function showTooltip(event: MouseEvent, d: IDistributionIntervalsCharacteristicsPoint, tooltip: ID3Tooltip, svg: any): void {
+            function showTooltip(
+                event: MouseEvent,
+                d: Point,
+                tooltip: TooltipElement,
+                svg: SVGElementSelection): void {
+
                 $scope.clearTooltip(tooltip);
 
                 tooltip.style("opacity", 0.9);
@@ -159,8 +176,11 @@ class IntervalsCharacteristicsDistributionResultHandler {
                 }
                 tooltipHtml.push("Orders: ");
 
-                tooltip.selectedDots = svg.selectAll(".dot")
-                    .filter((dot: IDistributionIntervalsCharacteristicsPoint) => {
+                // Hack for ts types recognition 
+                // without intermediate variable ts compiler does not recognize Point type in filter function
+                const selection: d3.Selection<SVGGElement, Point, SVGGElement, Point> = svg.selectAll(".dot");
+                tooltip.selectedDots = selection
+                    .filter((dot: Point) => {
                         if (dot.x === d.x && dot.y === d.y) {
                             tooltipHtml.push($scope.fillPointTooltip(dot));
                             return true;
@@ -183,7 +203,7 @@ class IntervalsCharacteristicsDistributionResultHandler {
              * Clears tooltip and unselects dots
              * @param tooltip The tooltip element to clear
              */
-            function clearTooltip(tooltip: ID3Tooltip): void {
+            function clearTooltip(tooltip: TooltipElement): void {
                 if (tooltip) {
                     if (tooltip.hideTooltip) {
                         tooltip.html("").style("opacity", 0);
@@ -201,14 +221,14 @@ class IntervalsCharacteristicsDistributionResultHandler {
             /**
              * Returns x value for a data point
              */
-            function xValue(d: IDistributionIntervalsCharacteristicsPoint): number {
+            function xValue(d: Point): number {
                 return d.x;
             }
 
             /**
              * Returns y value for a data point
              */
-            function yValue(d: IDistributionIntervalsCharacteristicsPoint): number {
+            function yValue(d: Point): number {
                 return d.y;
             }
 
@@ -248,7 +268,7 @@ class IntervalsCharacteristicsDistributionResultHandler {
                         .tickSizeOuter(0)
                         .tickPadding(10);
 
-                $scope.xMap = (d: IDistributionIntervalsCharacteristicsPoint) => xScale($scope.xValue(d));
+                $scope.xMap = (d: Point) => xScale($scope.xValue(d));
 
                 // Setup y-axis
                 // Calculate margins for points
@@ -276,23 +296,23 @@ class IntervalsCharacteristicsDistributionResultHandler {
                         .tickSizeOuter(0)
                         .tickPadding(10);
 
-                $scope.yMap = (d: IDistributionIntervalsCharacteristicsPoint) => yScale($scope.yValue(d));
+                $scope.yMap = (d: Point) => yScale($scope.yValue(d));
 
                 // Setup fill color
                 const color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.points.length]);
 
                 // Add the chart canvas to the page
-                const svg = d3.select("#chart").append("svg")
+                const svg: SVGElementSelection = d3.select("#chart").append("svg")
                     .attr("width", $scope.width)
                     .attr("height", $scope.height)
                     .attr("class", "chart-svg")
                     .append("g")
-                    .attr("transform", `translate(${margin.left},${margin.top})`);
+                    .attr("transform", `translate(${margin.left},${margin.top})`) as SVGElementSelection;
 
                 // Add the tooltip area to the page
-                const tooltip = d3.select("#chart").append("div")
+                const tooltip: TooltipElement = d3.select("#chart").append("div")
                     .attr("class", "chart-tooltip position-absolute bg-light font-monospace small lh-sm p-1 rounded")
-                    .style("opacity", 0) as ID3Tooltip;
+                    .style("opacity", 0) as TooltipElement;
 
                 // Prevent tooltip from hiding when clicked
                 tooltip.on("click", () => { tooltip.hideTooltip = false; });
@@ -341,9 +361,9 @@ class IntervalsCharacteristicsDistributionResultHandler {
                     .attr("cx", $scope.xMap)
                     .attr("cy", $scope.yMap)
                     .style("fill-opacity", 0.6)
-                    .style("fill", (d: IDistributionIntervalsCharacteristicsPoint) => color(d.id))
-                    .style("stroke", (d: IDistributionIntervalsCharacteristicsPoint) => color(d.id))
-                    .on("click", (event: MouseEvent, d: IDistributionIntervalsCharacteristicsPoint) => $scope.showTooltip(event, d, tooltip, svg));
+                    .style("fill", (d: Point) => color(d.id))
+                    .style("stroke", (d: Point) => color(d.id))
+                    .on("click", (event: MouseEvent, d: Point) => $scope.showTooltip(event, d, tooltip, svg));
             }
 
             // Register functions in $scope
@@ -361,24 +381,11 @@ class IntervalsCharacteristicsDistributionResultHandler {
             $scope.dotRadius = 4;
             $scope.selectedDotRadius = $scope.dotRadius * 2;
 
-            $scope.loadingScreenHeader = "Loading Data";
-            $scope.loading = true;
+            await initScopeFromServer<IntervalsCharacteristicsDistributionResultData>(
+                $http, $scope, "Loading sequences order distribution data", "Failed loading sequences order distribution data");
 
-            // Get task ID from URL
-            const location = window.location.href.split("/");
-            $scope.taskId = location[location.length - 1];
-
-            // Load data from server
-            $http.get<any>(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
-                .then(function (data) {
-                    MapModelFromJson($scope, data.data);
-                    $scope.characteristic = $scope.characteristicsList[0];
-                    $scope.loading = false;
-                })
-                .catch(function () {
-                    alert("Failed loading sequences order distribution data");
-                    $scope.loading = false;
-                });
+            $scope.characteristic = $scope.characteristicsList[0];
+            $scope.$apply();
         };
 
         // Register controller in Angular module

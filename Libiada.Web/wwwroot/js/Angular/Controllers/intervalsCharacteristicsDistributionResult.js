@@ -1,5 +1,5 @@
 /*import d3 from "d3";*/
-import { MapModelFromJson } from "functions";
+import { initScopeFromServer } from "functions";
 /**
  * Controller for displaying interval characteristics distribution results
  */
@@ -8,7 +8,7 @@ class IntervalsCharacteristicsDistributionResultHandler {
         this.ngOnInit();
     }
     ngOnInit() {
-        const intervalsCharacteristicsDistributionResult = ($scope, $http) => {
+        const intervalsCharacteristicsDistributionResult = async ($scope, $http) => {
             /**
              * Initializes data for chart visualization
              */
@@ -68,7 +68,10 @@ class IntervalsCharacteristicsDistributionResultHandler {
                     tooltipHtml.push(intervals[i].join("|"));
                 }
                 tooltipHtml.push("Orders: ");
-                tooltip.selectedDots = svg.selectAll(".dot")
+                // Hack for ts types recognition 
+                // without intermediate variable ts compiler does not recognize Point type in filter function
+                const selection = svg.selectAll(".dot");
+                tooltip.selectedDots = selection
                     .filter((dot) => {
                     if (dot.x === d.x && dot.y === d.y) {
                         tooltipHtml.push($scope.fillPointTooltip(dot));
@@ -238,22 +241,9 @@ class IntervalsCharacteristicsDistributionResultHandler {
             $scope.height = 600;
             $scope.dotRadius = 4;
             $scope.selectedDotRadius = $scope.dotRadius * 2;
-            $scope.loadingScreenHeader = "Loading Data";
-            $scope.loading = true;
-            // Get task ID from URL
-            const location = window.location.href.split("/");
-            $scope.taskId = location[location.length - 1];
-            // Load data from server
-            $http.get(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
-                .then(function (data) {
-                MapModelFromJson($scope, data.data);
-                $scope.characteristic = $scope.characteristicsList[0];
-                $scope.loading = false;
-            })
-                .catch(function () {
-                alert("Failed loading sequences order distribution data");
-                $scope.loading = false;
-            });
+            await initScopeFromServer($http, $scope, "Loading sequences order distribution data", "Failed loading sequences order distribution data");
+            $scope.characteristic = $scope.characteristicsList[0];
+            $scope.$apply();
         };
         // Register controller in Angular module
         angular.module("libiada").controller("IntervalsCharacteristicsDistributionResultCtrl", ["$scope", "$http", intervalsCharacteristicsDistributionResult]);

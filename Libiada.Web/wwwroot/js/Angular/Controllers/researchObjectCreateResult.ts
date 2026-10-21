@@ -41,7 +41,8 @@ class ResearchObjectCreateResultHandler {
     private ngOnInit(): void {
         const researchObjectCreateResult = ($scope: ResearchObjectCreateResultScope, $http: ng.IHttpService): void => {
 
-            initScopeFromServer<ResearchObjectCreateResultData>($http, $scope, "Loading sequence creation results", "Failed loading sequence creation results");
+            initScopeFromServer<ResearchObjectCreateResultData>(
+                $http, $scope, "Loading sequence creation results", "Failed loading sequence creation results");
         };
 
         // Register controller in Angular module
