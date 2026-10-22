@@ -1,4 +1,4 @@
-﻿import { MapModelFromJson } from "functions";
+﻿import { initScopeFromServer } from "functions";
 import type { ResultsLoadingScreenData } from "viewDataTypes";
 
 /**
@@ -19,7 +19,6 @@ interface SequenceCheckResultScope extends ng.IScope, SequenceCheckResultData, R
 }
 
 class SequenceCheckResultHandler {
-
     constructor() {
         this.ngOnInit();
     }
@@ -32,23 +31,8 @@ class SequenceCheckResultHandler {
             }
 
             $scope.calculateStatusClass = calculateStatusClass;
-
-            // loading import results from the server
-            $scope.loadingScreenHeader = "Loading import results";
-            $scope.loading = true;
-
-            let location = window.location.href.split("/");
-            $scope.taskId = location[location.length - 1];
-
-            $http.get<SequenceCheckResultData>(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
-                .then(function (data) {
-                    MapModelFromJson($scope, data.data);
-                    $scope.loading = false;
-                })
-                .catch(function () {
-                    alert("Failed loading import results");
-                    $scope.loading = false;
-                });
+            initScopeFromServer<SequenceCheckResultData>(
+                $http, $scope, "Loading sequence check results", "Failed loading sequence check results");
         };
 
         // Register controller in Angular module

@@ -1,4 +1,4 @@
-import { MapModelFromJson } from "functions";
+import { initScopeFromServer } from "functions";
 /**
  * Controller for displaying music files processing results
  */
@@ -14,17 +14,7 @@ class MusicFilesResultHandler {
      */
     ngOnInit() {
         const musicFilesResult = ($scope, $http) => {
-            // Extract task ID from the URL
-            const location = window.location.href.split("/");
-            $scope.taskId = location[location.length - 1];
-            // Load data from the API
-            $http.get(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
-                .then(function (data) {
-                MapModelFromJson($scope, data.data);
-            })
-                .catch(function () {
-                alert("Failed loading characteristic data");
-            });
+            initScopeFromServer($http, $scope, "Loading music files data", "Failed loading music files data");
         };
         // Register controller in Angular module
         angular.module("libiada").controller("MusicFilesResultCtrl", ["$scope", "$http", musicFilesResult]);

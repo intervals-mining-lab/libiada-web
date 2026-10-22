@@ -1,17 +1,23 @@
-﻿import { MapModelFromJson } from "functions";
+﻿import { initScopeFromServer, MapModelFromJson } from "functions";
 import type { ResultsLoadingScreenData } from "viewDataTypes";
 
 /**
  * Interface for the data object fetched from the server
  */
-interface IMusicFilesResultData {
-
+interface MusicFilesResultData {
+    data: {
+        name: string;
+        sampleRate: number;
+        channels: number;
+        audioFormat: number;
+        sampleSize: number;
+    }[]
 }
 
 /**
  * Interface for the angular controller's scope
  */
-interface IMusicFilesResultScope extends ng.IScope, IMusicFilesResultData, ResultsLoadingScreenData {
+interface MusicFilesResultScope extends ng.IScope, MusicFilesResultData, ResultsLoadingScreenData {
 }
 
 /**
@@ -29,19 +35,9 @@ class MusicFilesResultHandler {
      * Initializes the Angular controller
      */
     private ngOnInit(): void {
-        const musicFilesResult = ($scope: IMusicFilesResultScope, $http: ng.IHttpService): void => {
-            // Extract task ID from the URL
-            const location = window.location.href.split("/");
-            $scope.taskId = location[location.length - 1];
-
-            // Load data from the API
-            $http.get<IMusicFilesResultData>(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
-                .then(function (data) {
-                    MapModelFromJson($scope, data.data);
-                })
-                .catch(function () {
-                    alert("Failed loading characteristic data");
-                });
+        const musicFilesResult = ($scope: MusicFilesResultScope, $http: ng.IHttpService): void => {
+            initScopeFromServer<MusicFilesResultData>(
+                $http, $scope, "Loading music files data", "Failed loading music files data");
         };
 
         // Register controller in Angular module

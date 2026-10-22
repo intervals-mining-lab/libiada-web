@@ -1,4 +1,4 @@
-﻿import { MapModelFromJson } from "functions";
+﻿import { initScopeFromServer } from "functions";
 import type { ResultsLoadingScreenData } from "viewDataTypes";
 
 /**
@@ -39,22 +39,8 @@ class RelationCalculationResultHandler {
      */
     private ngOnInit(): void {
         const relationCalculationResult = ($scope: RelationCalculationResultScope, $http: ng.IHttpService): void => {
-            $scope.loadingScreenHeader = "Loading data";
-
-            let location = window.location.href.split("/");
-            $scope.taskId = location[location.length - 1];
-
-            $scope.loading = true;
-
-            $http.get<RelationCalculationResultData>(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
-                .then(function (data) {
-                    MapModelFromJson($scope, data.data);
-                    $scope.loading = false;
-                })
-                .catch(function () {
-                    alert("Failed loading import results");
-                    $scope.loading = false;
-                });
+            initScopeFromServer<RelationCalculationResultData>(
+                $http, $scope, "Loading calculation results", "Failed loading calculation results");
         };
 
         // Register controller in Angular module

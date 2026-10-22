@@ -30,7 +30,8 @@ class PoemSegmentationResultHandler {
      */
     private ngOnInit(): void {
         const poemSegmentationResult = ($scope: PoemSegmentationResultScope, $http: ng.IHttpService): void => {
-            initScopeFromServer<PoemSegmentationResultData>($http, $scope, "Loading segmentation results", "Failed loading segmentation results");
+            initScopeFromServer<PoemSegmentationResultData>(
+                $http, $scope, "Loading segmentation results", "Failed loading segmentation results");
         };
 
         // Register controller in Angular module

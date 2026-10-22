@@ -1,4 +1,4 @@
-import { MapModelFromJson } from "functions";
+import { initScopeFromServer } from "functions";
 class SequenceCheckResultHandler {
     constructor() {
         this.ngOnInit();
@@ -10,20 +10,7 @@ class SequenceCheckResultHandler {
                 return status === "Success" ? "text-success" : "text-danger";
             }
             $scope.calculateStatusClass = calculateStatusClass;
-            // loading import results from the server
-            $scope.loadingScreenHeader = "Loading import results";
-            $scope.loading = true;
-            let location = window.location.href.split("/");
-            $scope.taskId = location[location.length - 1];
-            $http.get(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
-                .then(function (data) {
-                MapModelFromJson($scope, data.data);
-                $scope.loading = false;
-            })
-                .catch(function () {
-                alert("Failed loading import results");
-                $scope.loading = false;
-            });
+            initScopeFromServer($http, $scope, "Loading sequence check results", "Failed loading sequence check results");
         };
         // Register controller in Angular module
         angular.module("libiada").controller("SequenceCheckResultCtrl", ["$scope", "$http", sequenceCheckResult]);
