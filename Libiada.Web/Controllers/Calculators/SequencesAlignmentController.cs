@@ -8,6 +8,7 @@ using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Tasks;
 using Libiada.Web.Helpers;
+using Libiada.Web.Math;
 using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
@@ -18,14 +19,12 @@ using Newtonsoft.Json;
 [Authorize(Roles = "Admin")]
 public class SequencesAlignmentController : AbstractResultController
 {
-    /// <summary>
-    /// The characteristic type repository.
-    /// </summary>
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
     private readonly ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator;
     private readonly IResearchObjectsCache cache;
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IViewDataBuilder viewDataBuilder;
+    private readonly IArrayAligner arrayAligner;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SequencesAlignmentController"/> class.
@@ -35,7 +34,8 @@ public class SequencesAlignmentController : AbstractResultController
                                         ITaskManager taskManager,
                                         IFullCharacteristicRepository characteristicTypeLinkRepository,
                                         ISubsequencesCharacteristicsCalculator subsequencesCharacteristicsCalculator,
-                                        IResearchObjectsCache cache)
+                                        IResearchObjectsCache cache,
+                                        IArrayAligner arrayAligner)
         : base(TaskType.SequencesAlignment, taskManager)
     {
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
@@ -43,6 +43,7 @@ public class SequencesAlignmentController : AbstractResultController
         this.cache = cache;
         this.dbFactory = dbFactory;
         this.viewDataBuilder = viewDataBuilder;
+        this.arrayAligner = arrayAligner;
     }
 
     /// <summary>
@@ -110,26 +111,23 @@ public class SequencesAlignmentController : AbstractResultController
         {
             if (researchObjectIds.Length != 2)
             {
-                throw new ArgumentException("Nuber of selected research objects must be 2.", nameof(researchObjectIds));
+                throw new ArgumentException("Number of selected research objects must be 2.", nameof(researchObjectIds));
             }
-
-            string firstResearchObjectName;
-            string secondResearchObjectName;
-            long firstParentId;
-            long secondParentId;
 
             using var db = dbFactory.CreateDbContext();
 
             long firstResearchObjectId = researchObjectIds[0];
-            firstResearchObjectName = cache.ResearchObjects.Single(m => m.Id == firstResearchObjectId).Name;
-            firstParentId = db.CombinedSequenceEntities.Single(c => c.ResearchObjectId == firstResearchObjectId && c.Notation == notation).Id;
+            string firstResearchObjectName = cache.ResearchObjects.Single(m => m.Id == firstResearchObjectId).Name;
+            long firstParentId = db.CombinedSequenceEntities.Single(c => c.ResearchObjectId == firstResearchObjectId && c.Notation == notation).Id;
 
             long secondResearchObjectId = researchObjectIds[1];
-            secondResearchObjectName = cache.ResearchObjects.Single(m => m.Id == secondResearchObjectId).Name;
-            secondParentId = db.CombinedSequenceEntities.Single(c => c.ResearchObjectId == secondResearchObjectId && c.Notation == notation).Id;
+            string secondResearchObjectName = cache.ResearchObjects.Single(m => m.Id == secondResearchObjectId).Name;
+            long secondParentId = db.CombinedSequenceEntities.Single(c => c.ResearchObjectId == secondResearchObjectId && c.Notation == notation).Id;
 
-            double[] firstSequenceCharacteristics = subsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(firstParentId, characteristicLinkId, features);
-            double[] secondSequenceCharacteristics = subsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(secondParentId, characteristicLinkId, features);
+            double[] firstSequenceCharacteristics = subsequencesCharacteristicsCalculator
+                .CalculateSubsequencesCharacteristics(firstParentId, characteristicLinkId, features);
+            double[] secondSequenceCharacteristics = subsequencesCharacteristicsCalculator
+                .CalculateSubsequencesCharacteristics(secondParentId, characteristicLinkId, features);
 
             if (sort)
             {
@@ -159,9 +157,8 @@ public class SequencesAlignmentController : AbstractResultController
                 }
             }
 
-            var distanceCalculator = GetDistanceCalculator(validationType);
-            List<double> distances = [];
-            int optimalRotation = CalculateMeasureForRotation(longer, shorter, distances, distanceCalculator);
+            var distanceCalculator = arrayAligner.GetDistanceCalculator(validationType);
+            (double[] distances, int optimalRotation) = arrayAligner.CalculateMeasureForAllRotations(longer, shorter, distanceCalculator);
 
             string characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
 
@@ -172,7 +169,7 @@ public class SequencesAlignmentController : AbstractResultController
                 { "characteristicName", characteristicName },
                 { "features", features.ConvertAll(p => p.GetDisplayValue()) },
                 { "optimalRotation", optimalRotation },
-                { "distances", distances.Select(el => new {Value = el}) },
+                { "distances", distances.Select(el => new { Value = el }) },
                 { "validationType", validationType },
                 { "cyclicShift", cyclicShift },
                 { "sort", sort }
@@ -180,118 +177,5 @@ public class SequencesAlignmentController : AbstractResultController
 
             return new Dictionary<string, string> { { "data", JsonConvert.SerializeObject(result) } };
         });
-    }
-
-    /// <summary>
-    /// The get distance calculator.
-    /// </summary>
-    /// <param name="validationType">
-    /// The validation type.
-    /// </param>
-    /// <returns>
-    /// The <see cref="Func{double, double, double}"/>.
-    /// </returns>
-    /// <exception cref="ArgumentException">
-    /// Thrown if validation type is unknown.
-    /// </exception>
-    [NonAction]
-    private Func<double, double, double> GetDistanceCalculator(string validationType)
-    {
-        return validationType switch
-        {
-            "Similarity" => (first, second) => System.Math.Abs(System.Math.Min(first, second)),
-            "Difference" => (first, second) => -System.Math.Abs(first - second),
-            "NormalizedDifference" => (first, second) => -System.Math.Abs((first - second) / (first + second)),
-            "Equality" => (first, second) => System.Math.Abs(first - second) < (System.Math.Abs(first + second) / 20) ? 1 : 0,
-            _ => throw new ArgumentException("unknown validation type", nameof(validationType)),
-        };
-    }
-
-    /// <summary>
-    /// Calculates measure for given rotation.
-    /// </summary>
-    /// <param name="first">
-    /// The first.
-    /// </param>
-    /// <param name="second">
-    /// The second.
-    /// </param>
-    /// <param name="distances">
-    /// The distances.
-    /// </param>
-    /// <param name="measure">
-    /// The measure.
-    /// </param>
-    /// <returns>
-    /// The <see cref="int"/>.
-    /// </returns>
-    [NonAction]
-    private int CalculateMeasureForRotation(List<double> first, List<double> second, List<double> distances, Func<double, double, double> measure)
-    {
-        int optimalRotation = 0;
-        double maximumEquality = 0;
-        for (int i = 0; i < first.Count; i++)
-        {
-            double distance = Measure(first, second, measure);
-            if (maximumEquality < distance)
-            {
-                optimalRotation = i;
-                maximumEquality = distance;
-            }
-
-            distances.Add(distance);
-            first = Rotate(first);
-        }
-
-        return optimalRotation;
-    }
-
-    /// <summary>
-    /// The rotate.
-    /// </summary>
-    /// <param name="list">
-    /// The list.
-    /// </param>
-    /// <returns>
-    /// The <see cref="List{double}"/>.
-    /// </returns>
-
-    [NonAction]
-    private List<double> Rotate(List<double> list)
-    {
-        double first = list[0];
-        list.RemoveAt(0);
-        list.Add(first);
-        return list;
-    }
-
-    /// <summary>
-    /// The measure.
-    /// </summary>
-    /// <param name="first">
-    /// The first.
-    /// </param>
-    /// <param name="second">
-    /// The second.
-    /// </param>
-    /// <param name="measure">
-    /// The measurer.
-    /// </param>
-    /// <returns>
-    /// The <see cref="double"/>.
-    /// </returns>
-    [NonAction]
-    private double Measure(List<double> first, List<double> second, Func<double, double, double> measure)
-    {
-        double result = 0;
-        for (int i = 0; i < second.Count; i++)
-        {
-            if ((first[i] * second[i]) > 0)
-            {
-                result += measure(first[i], second[i]);
-            }
-        }
-
-        return result;
     }
 }

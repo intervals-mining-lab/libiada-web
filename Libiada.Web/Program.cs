@@ -5,6 +5,7 @@ using Libiada.Database.Models.Repositories.Sequences;
 
 using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
+using Libiada.Web.Math;
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Razor;
@@ -79,6 +80,7 @@ builder.Services.AddSingleton<IViewDataBuilderFactory, ViewDataBuilderFactory>()
 builder.Services.AddScoped<ISequencesCharacteristicsCalculator, SequencesCharacteristicsCalculator>();
 builder.Services.AddScoped<ICongenericSequencesCharacteristicsCalculator, CongenericSequencesCharacteristicsCalculator>();
 builder.Services.AddScoped<ISubsequencesCharacteristicsCalculator, SubsequencesCharacteristicsCalculator>();
+builder.Services.AddScoped<IArrayAligner, ArrayAligner>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient(provider => ((provider.GetService<IHttpContextAccessor>() ?? throw new Exception($"IHttpContextAccessor is not found."))
