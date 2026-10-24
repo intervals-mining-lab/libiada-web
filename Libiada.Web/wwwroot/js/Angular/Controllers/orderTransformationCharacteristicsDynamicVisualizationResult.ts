@@ -1,5 +1,5 @@
 ﻿//import d3 from "d3";
-import { MapModelFromJson } from "functions";
+import { initScopeFromServer } from "functions";
 import type { IBasePoint } from "./Interfaces/commonInterfaces";
 import type { ResultsLoadingScreenData } from "viewDataTypes";
 
@@ -39,7 +39,7 @@ interface ID3Tooltip extends d3.Selection<HTMLDivElement, unknown, HTMLElement, 
 /**
  * Interface for the angular controller's scope
  */
-interface IOrderTransformationCharacteristicsDynamicScope 
+interface IOrderTransformationCharacteristicsDynamicScope
     extends ng.IScope, IOrderTransformationCharacteristicsDynamicData, ResultsLoadingScreenData {
     // Chart data
     points: IOrderTransformationPoint[];
@@ -79,8 +79,8 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
     /**
      * Initializes the Angular controller
      */
-    private ngOnInit(): void {
-        const orderTransformationCharacteristicsDynamicVisualizationResult = ($scope: IOrderTransformationCharacteristicsDynamicScope, $http: ng.IHttpService): void => {
+    private async ngOnInit(): Promise<void> {
+        const orderTransformationCharacteristicsDynamicVisualizationResult = async ($scope: IOrderTransformationCharacteristicsDynamicScope, $http: ng.IHttpService): Promise<void> => {
             /**
              * Initializes legend data
              */
@@ -356,29 +356,17 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
             $scope.dotRadius = 4;
             $scope.selectedDotRadius = $scope.dotRadius * 2;
 
-            $scope.loadingScreenHeader = "Loading data";
+            await initScopeFromServer<IOrderTransformationCharacteristicsDynamicData>(
+                $http,
+                $scope,
+                "Loading order transformation characteristics data",
+                "Failed loading order transformation characteristics data");
 
-            let location = window.location.href.split("/");
-            $scope.taskId = location[location.length - 1];
+            $scope.fillLegend();
 
-            $scope.loading = true;
-
-            // Load data from server
-            $http.get < IOrderTransformationCharacteristicsDynamicData > (`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
-                .then(function (data) {
-                    MapModelFromJson($scope, data.data);
-
-                    $scope.fillLegend();
-
-                    $scope.legendHeight = $scope.legend.length * 20;
-                    $scope.height = 800 + $scope.legendHeight;
-
-                    $scope.loading = false;
-                })
-                .catch(function () {
-                    alert("Failed loading characteristic data");
-                    $scope.loading = false;
-                });
+            $scope.legendHeight = $scope.legend.length * 20;
+            $scope.height = 800 + $scope.legendHeight;
+            $scope.$apply();
         };
 
         // Register controller in Angular module

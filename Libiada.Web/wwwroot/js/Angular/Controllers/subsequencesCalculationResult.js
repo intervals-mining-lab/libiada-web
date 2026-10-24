@@ -1,6 +1,4 @@
-//import d3 from "d3";
-//import Plotly from "plotly.js";
-import { MapModelFromJson, getArrayMinMax } from "functions";
+import { getArrayMinMax, initScopeFromServer, throwHelper } from "functions";
 /// <reference path="./Interfaces/commonInterfaces.d.ts" />
 /// <reference path="../../typings/bootstrap-jquery-extensions.d.ts" />
 /// <reference path="../../typings/plotly-extensions.d.ts" />
@@ -17,8 +15,8 @@ class SubsequencesCalculationResultHandler {
     /**
      * Initializes the Angular controller
      */
-    ngOnInit() {
-        const subsequencesCalculationResult = ($scope, $http, $sce) => {
+    async ngOnInit() {
+        const subsequencesCalculationResult = async ($scope, $http, $sce) => {
             function fillLegend() {
                 $scope.legend = [];
                 $scope.colorScale = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.sequencesData.length]);
@@ -35,7 +33,7 @@ class SubsequencesCalculationResultHandler {
                 }
             }
             $scope.addCharacteristic = () => $scope.chartCharacteristics.push({
-                id: $scope.chartsCharacterisrticsCount++,
+                id: $scope.chartsCharacteristicsCount++,
                 value: $scope.characteristicsList.find(cl => $scope.chartCharacteristics.every(cc => cc.value !== cl))
             });
             $scope.deleteCharacteristic = (characteristic) => $scope.chartCharacteristics.splice($scope.chartCharacteristics.indexOf(characteristic), 1);
@@ -201,9 +199,10 @@ class SubsequencesCalculationResultHandler {
                 };
                 $scope.pointSize = 3;
                 $scope.chartData = $scope.points.map((p, i) => ({
-                    hoverinfo: "text+x+y",
+                    hoverinfo: "x+y+text",
                     x: ranks[i].x,
                     y: ranks[i].y,
+                    text: p.researchObjectName,
                     marker: {
                         color: $scope.legend[p.legendIndex].color,
                         size: $scope.pointSize,
@@ -243,7 +242,7 @@ class SubsequencesCalculationResultHandler {
                 };
                 $scope.pointSize = 5;
                 $scope.chartData = $scope.points.map(p => ({
-                    hoverinfo: "text+x+y",
+                    hoverinfo: "x+y+text",
                     type: "scattergl",
                     x: p.subsequencesData.map(sd => sd.characteristics[firstCharacteristicIndex]),
                     y: p.subsequencesData.map(sd => sd.characteristics[secondCharacteristicIndex]),
@@ -265,7 +264,7 @@ class SubsequencesCalculationResultHandler {
                 let thirdCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[2].value);
                 $scope.pointSize = 5;
                 $scope.chartData = $scope.points.map(p => ({
-                    hoverinfo: "text+x+y+z",
+                    hoverinfo: "x+y+z+text",
                     x: p.subsequencesData.map(sd => sd.characteristics[firstCharacteristicIndex]),
                     y: p.subsequencesData.map(sd => sd.characteristics[secondCharacteristicIndex]),
                     z: p.subsequencesData.map(sd => sd.characteristics[thirdCharacteristicIndex]),
@@ -326,7 +325,7 @@ class SubsequencesCalculationResultHandler {
                         type: "parcoords",
                         line: {
                             color: $scope.points.map(p => p.subsequencesData.map(sd => sd.legendIndex)).flat(),
-                            colorscale: "Turbo"
+                            //colorscale: "Turbo"
                         },
                         dimensions: characteristicsIndices.map(ci => ({
                             label: $scope.characteristicNames[ci],
@@ -473,11 +472,11 @@ class SubsequencesCalculationResultHandler {
             }
             // Функция-заглушка для dotVisible
             function dotVisible(d) {
-                return true;
+                // TODO: implement or remove calls to this function 
             }
             // Функция-заглушка для fillVisiblePoints
             function fillVisiblePoints() {
-                // Реализация отсутствует в исходном коде
+                // TODO: implement or remove calls to this function 
             }
             $scope.fillLinePlotData = fillLinePlotData;
             $scope.fillScatterPlotData = fillScatterPlotData;
@@ -499,29 +498,18 @@ class SubsequencesCalculationResultHandler {
             $scope.getAttributeIdByName = getAttributeIdByName;
             $scope.isAttributeEqual = isAttributeEqual;
             $scope.fillPointTooltip = fillPointTooltip;
-            $scope.chartElement = document.getElementById("chart");
+            $scope.chartElement = document.getElementById("chart") ?? throwHelper("Chart div element not found");
             $scope.characteristicsTableRendering = { rendered: false };
-            $scope.chartsCharacterisrticsCount = 1;
+            $scope.chartsCharacteristicsCount = 1;
             $scope.tooltipElements = [];
             $scope.visiblePoints = [];
             $scope.characteristicComparers = [];
             $scope.productFilter = "";
             $scope.pointsSimilarity = Object.freeze({ "same": 0, "similar": 1, "different": 2 });
-            $scope.loadingScreenHeader = "Loading subsequences characteristics";
-            $scope.loading = true;
-            let location = window.location.href.split("/");
-            $scope.taskId = location[location.length - 1];
-            $http.get(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
-                .then(function (data) {
-                MapModelFromJson($scope, data.data);
-                $scope.fillLegend();
-                $scope.chartCharacteristics = [{ id: $scope.chartsCharacterisrticsCount++, value: $scope.characteristicsList[0] }];
-                $scope.loading = false;
-            })
-                .catch(function () {
-                alert("Failed loading subsequences characteristics");
-                $scope.loading = false;
-            });
+            await initScopeFromServer($http, $scope, "Loading subsequences characteristics", "Failed loading subsequences characteristics");
+            $scope.fillLegend();
+            $scope.chartCharacteristics = [{ id: $scope.chartsCharacteristicsCount++, value: $scope.characteristicsList[0] }];
+            $scope.$apply();
         };
         // Register controller in Angular module
         angular.module("libiada").controller("SubsequencesCalculationResultCtrl", ["$scope", "$http", "$sce", subsequencesCalculationResult]);

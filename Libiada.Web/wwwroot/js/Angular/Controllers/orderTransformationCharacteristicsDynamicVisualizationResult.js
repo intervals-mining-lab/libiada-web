@@ -1,5 +1,5 @@
 //import d3 from "d3";
-import { MapModelFromJson } from "functions";
+import { initScopeFromServer } from "functions";
 /**
  * Controller for order transformation characteristics dynamic visualization
  */
@@ -13,8 +13,8 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
     /**
      * Initializes the Angular controller
      */
-    ngOnInit() {
-        const orderTransformationCharacteristicsDynamicVisualizationResult = ($scope, $http) => {
+    async ngOnInit() {
+        const orderTransformationCharacteristicsDynamicVisualizationResult = async ($scope, $http) => {
             /**
              * Initializes legend data
              */
@@ -249,23 +249,11 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
             $scope.width = 800;
             $scope.dotRadius = 4;
             $scope.selectedDotRadius = $scope.dotRadius * 2;
-            $scope.loadingScreenHeader = "Loading data";
-            let location = window.location.href.split("/");
-            $scope.taskId = location[location.length - 1];
-            $scope.loading = true;
-            // Load data from server
-            $http.get(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
-                .then(function (data) {
-                MapModelFromJson($scope, data.data);
-                $scope.fillLegend();
-                $scope.legendHeight = $scope.legend.length * 20;
-                $scope.height = 800 + $scope.legendHeight;
-                $scope.loading = false;
-            })
-                .catch(function () {
-                alert("Failed loading characteristic data");
-                $scope.loading = false;
-            });
+            await initScopeFromServer($http, $scope, "Loading order transformation characteristics data", "Failed loading order transformation characteristics data");
+            $scope.fillLegend();
+            $scope.legendHeight = $scope.legend.length * 20;
+            $scope.height = 800 + $scope.legendHeight;
+            $scope.$apply();
         };
         // Register controller in Angular module
         angular.module("libiada").controller("OrderTransformationCharacteristicsDynamicVisualizationResultCtrl", ["$scope", "$http", orderTransformationCharacteristicsDynamicVisualizationResult]);

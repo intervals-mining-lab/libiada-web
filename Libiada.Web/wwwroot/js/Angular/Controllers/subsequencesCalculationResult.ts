@@ -1,6 +1,6 @@
 ﻿//import d3 from "d3";
-//import Plotly from "plotly.js";
-import { MapModelFromJson, getArrayMinMax } from "functions";
+import type * as plotly from "plotly.js";
+import { getArrayMinMax, initScopeFromServer, throwHelper } from "functions";
 import {
     ISubsequencesCalculationResultScope,
     IChartCharacteristic,
@@ -29,8 +29,8 @@ class SubsequencesCalculationResultHandler {
     /**
      * Initializes the Angular controller
      */
-    private ngOnInit(): void {
-        const subsequencesCalculationResult = ($scope: ISubsequencesCalculationResultScope, $http: ng.IHttpService, $sce: ng.ISCEService): void => {
+    private async ngOnInit(): Promise<void> {
+        const subsequencesCalculationResult = async ($scope: ISubsequencesCalculationResultScope, $http: ng.IHttpService, $sce: ng.ISCEService): Promise<void> => {
             function fillLegend(): void {
                 $scope.legend = [];
 
@@ -50,7 +50,7 @@ class SubsequencesCalculationResultHandler {
             }
 
             $scope.addCharacteristic = (): number => $scope.chartCharacteristics.push({
-                id: $scope.chartsCharacterisrticsCount++,
+                id: $scope.chartsCharacteristicsCount++,
                 value: $scope.characteristicsList.find(cl => $scope.chartCharacteristics.every(cc => cc.value !== cl)) as string
             });
 
@@ -233,10 +233,11 @@ class SubsequencesCalculationResultHandler {
                 };
 
                 $scope.pointSize = 3;
-                $scope.chartData = $scope.points.map((p, i) => ({
-                    hoverinfo: "text+x+y",
+                $scope.chartData = $scope.points.map<Partial<plotly.PlotData>>((p, i) => ({
+                    hoverinfo: "x+y+text",
                     x: ranks[i].x,
                     y: ranks[i].y,
+                    text: p.researchObjectName,
                     marker: {
                         color: $scope.legend[p.legendIndex].color,
                         size: $scope.pointSize,
@@ -278,8 +279,8 @@ class SubsequencesCalculationResultHandler {
                 };
 
                 $scope.pointSize = 5;
-                $scope.chartData = $scope.points.map(p => ({
-                    hoverinfo: "text+x+y",
+                $scope.chartData = $scope.points.map<Partial<plotly.PlotData>>(p => ({
+                    hoverinfo: "x+y+text",
                     type: "scattergl",
                     x: p.subsequencesData.map(sd => sd.characteristics[firstCharacteristicIndex]),
                     y: p.subsequencesData.map(sd => sd.characteristics[secondCharacteristicIndex]),
@@ -302,8 +303,8 @@ class SubsequencesCalculationResultHandler {
                 let thirdCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[2].value);
 
                 $scope.pointSize = 5;
-                $scope.chartData = $scope.points.map(p => ({
-                    hoverinfo: "text+x+y+z",
+                $scope.chartData = $scope.points.map<Partial<plotly.PlotData>>(p => ({
+                    hoverinfo: "x+y+z+text",
                     x: p.subsequencesData.map(sd => sd.characteristics[firstCharacteristicIndex]),
                     y: p.subsequencesData.map(sd => sd.characteristics[secondCharacteristicIndex]),
                     z: p.subsequencesData.map(sd => sd.characteristics[thirdCharacteristicIndex]),
@@ -367,7 +368,7 @@ class SubsequencesCalculationResultHandler {
                     type: "parcoords",
                     line: {
                         color: $scope.points.map(p => p.subsequencesData.map(sd => sd.legendIndex)).flat(),
-                        colorscale: "Turbo"
+                        //colorscale: "Turbo"
                     },
 
                     dimensions: characteristicsIndices.map(ci => ({
@@ -542,12 +543,12 @@ class SubsequencesCalculationResultHandler {
 
             // Функция-заглушка для dotVisible
             function dotVisible(d: ISubsequencePoint): boolean {
-                return true;
+                // TODO: implement or remove calls to this function 
             }
 
             // Функция-заглушка для fillVisiblePoints
             function fillVisiblePoints(): void {
-                // Реализация отсутствует в исходном коде
+                // TODO: implement or remove calls to this function 
             }
 
             $scope.fillLinePlotData = fillLinePlotData;
@@ -572,9 +573,9 @@ class SubsequencesCalculationResultHandler {
             $scope.isAttributeEqual = isAttributeEqual;
             $scope.fillPointTooltip = fillPointTooltip;
 
-            $scope.chartElement = document.getElementById("chart") as HTMLElement;
+            $scope.chartElement = document.getElementById("chart")  as plotly.PlotlyHTMLElement ?? throwHelper("Chart div element not found");
             $scope.characteristicsTableRendering = { rendered: false };
-            $scope.chartsCharacterisrticsCount = 1;
+            $scope.chartsCharacteristicsCount = 1;
 
             $scope.tooltipElements = [];
             $scope.visiblePoints = [];
@@ -582,26 +583,12 @@ class SubsequencesCalculationResultHandler {
             $scope.productFilter = "";
             $scope.pointsSimilarity = Object.freeze({ "same": 0, "similar": 1, "different": 2 });
 
-            $scope.loadingScreenHeader = "Loading subsequences characteristics";
-            $scope.loading = true;
+            await initScopeFromServer<ISubsequencesCalculationResultData>(
+                $http, $scope, "Loading subsequences characteristics", "Failed loading subsequences characteristics");
+            $scope.fillLegend();
 
-            let location = window.location.href.split("/");
-            $scope.taskId = location[location.length - 1];
-
-            $http.get<ISubsequencesCalculationResultData>(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
-                .then(function (data) {
-                    MapModelFromJson($scope, data.data);
-
-                    $scope.fillLegend();
-
-                    $scope.chartCharacteristics = [{ id: $scope.chartsCharacterisrticsCount++, value: $scope.characteristicsList[0] }];
-
-                    $scope.loading = false;
-                })
-                .catch(function () {
-                    alert("Failed loading subsequences characteristics");
-                    $scope.loading = false;
-                });
+            $scope.chartCharacteristics = [{ id: $scope.chartsCharacteristicsCount++, value: $scope.characteristicsList[0] }];
+            $scope.$apply();
         };
 
         // Register controller in Angular module

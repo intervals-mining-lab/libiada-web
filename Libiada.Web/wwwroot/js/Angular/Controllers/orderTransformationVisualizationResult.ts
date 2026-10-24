@@ -1,5 +1,5 @@
 ﻿//import d3 from "d3";
-import { MapModelFromJson } from "functions";
+import { initScopeFromServer } from "functions";
 import type { IBasePoint } from "./Interfaces/commonInterfaces";
 import type { ResultsLoadingScreenData } from "viewDataTypes";
 
@@ -70,7 +70,7 @@ interface IOrderTransformationVisualizationData {
 /**
  * Interface for the angular controller's scope
  */
-interface IOrderTransformationVisualizationScope 
+interface IOrderTransformationVisualizationScope
     extends ng.IScope, IOrderTransformationVisualizationData, ResultsLoadingScreenData {
     // Chart settings
     width: number;
@@ -121,8 +121,8 @@ class OrderTransformationVisualizationResultHandler {
         this.ngOnInit();
     }
 
-    private ngOnInit(): void {
-        const orderTransformationVisualizationResult = ($scope: IOrderTransformationVisualizationScope, $http: ng.IHttpService): void => {
+    private async ngOnInit(): Promise<void> {
+        const orderTransformationVisualizationResult = async ($scope: IOrderTransformationVisualizationScope, $http: ng.IHttpService): Promise<void> => {
 
             /**
             * Initializes the data for the legend
@@ -635,13 +635,18 @@ class OrderTransformationVisualizationResultHandler {
             $scope.clearTooltip = clearTooltip;
             $scope.yValue = yValue;
             $scope.xValue = xValue;
+            $scope.fillLegend = fillLegend;
 
             // Initialize $scope properties 
             $scope.width = 800;
             $scope.dotRadius = 4;
             $scope.selectedDotRadius = $scope.dotRadius * 2;
 
-            $scope.fillLegend = fillLegend;
+            await initScopeFromServer<IOrderTransformationVisualizationData>(
+                $http,
+                $scope,
+                "Loading order transformation data",
+                "Failed loading order transformation data");
 
             $scope.loadingScreenHeader = "Loading data";
 
@@ -649,30 +654,17 @@ class OrderTransformationVisualizationResultHandler {
             let location = window.location.href.split("/");
             $scope.taskId = location[location.length - 1];
 
-            $scope.loading = true;
+            $scope.ordersIds = [];
+            for (let i = 0; i < $scope.orders.length; i++) {
+                $scope.ordersIds.push({ id: i });
+            }
 
-            // Loading data from the server 
-            $http.get<IOrderTransformationVisualizationData>(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
-                .then(function (data) {
-                    MapModelFromJson($scope, data.data);
-
-                    $scope.ordersIds = [];
-                    for (let i = 0; i < $scope.orders.length; i++) {
-                        $scope.ordersIds.push({ id: i });
-                    }
-
-                    $scope.fillLegend();
-                    $scope.legendHeight = $scope.legend.length * 20;
-                    $scope.height = 800 + $scope.legendHeight;
-                    $scope.initialOrder = $scope.ordersIds[0];
-                    $scope.transformationType = $scope.transformationsList[0];
-
-                    $scope.loading = false;
-                })
-                .catch(function () {
-                    alert("Failed loading characteristic data");
-                    $scope.loading = false;
-                });
+            $scope.fillLegend();
+            $scope.legendHeight = $scope.legend.length * 20;
+            $scope.height = 800 + $scope.legendHeight;
+            $scope.initialOrder = $scope.ordersIds[0];
+            $scope.transformationType = $scope.transformationsList[0];
+            $scope.$apply();
         };
 
         // Register the controller in the Angular module

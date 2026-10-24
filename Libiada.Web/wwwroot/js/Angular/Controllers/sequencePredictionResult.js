@@ -1,4 +1,4 @@
-import { MapModelFromJson } from "functions";
+import { initScopeFromServer } from "functions";
 /**
 * Controller for sequence prediction results
 */
@@ -14,31 +14,7 @@ class SequencePredictionResultHandler {
     */
     ngOnInit() {
         const sequencePredictionResult = ($scope, $http) => {
-            // Initialize the loading screen header
-            $scope.loadingScreenHeader = "Loading data";
-            // Get the task ID from the URL
-            const location = window.location.href.split("/");
-            $scope.taskId = location[location.length - 1];
-            // Set the loading status
-            $scope.loading = true;
-            // Load task data
-            $http.get(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
-                .then(function (data) {
-                // Map data to the model
-                MapModelFromJson($scope, data.data);
-                // Set parameters for the legend and graph, if any
-                if ($scope.legend) {
-                    $scope.legendHeight = $scope.legend.length *
-                        20;
-                    $scope.height = 800 + $scope.legendHeight;
-                }
-                // Reset loading status
-                $scope.loading = false;
-            })
-                .catch(function () {
-                alert("Failed loading characteristic data");
-                $scope.loading = false;
-            });
+            initScopeFromServer($http, $scope, "Loading sequence prediction data", "Failed loading sequence prediction data");
         };
         // Register the controller in Angular
         angular.module("libiada").controller("SequencePredictionResultCtrl", ["$scope", "$http", sequencePredictionResult]);

@@ -1,4 +1,5 @@
-﻿import type { ResultsLoadingScreenData } from "viewDataTypes";
+﻿import type * as plotly from "plotly.js";
+import type { ResultsLoadingScreenData } from "viewDataTypes";
 import type { IBasePoint } from "./commonInterfaces";
 
 // Интерфейс для характеристики
@@ -106,12 +107,12 @@ export interface ISubsequencesCalculationResultScope extends ng.IScope, ISubsequ
     legend: ILegendItem[];
     visiblePoints: ISubsequencePoint[];
     chartCharacteristics: IChartCharacteristic[];
-    chartsCharacterisrticsCount: number;
+    chartsCharacteristicsCount: number;
     tooltipElements: ITooltipElement[];
     characteristicComparers: any[];
 
     // Элементы управления и состояния
-    chartElement: HTMLElement;
+    chartElement: plotly.PlotlyHTMLElement;
     colorScale: d3.ScaleSequential<string>;
     productFilter: string;
     selectedPointIndex: number;
@@ -119,7 +120,7 @@ export interface ISubsequencesCalculationResultScope extends ng.IScope, ISubsequ
     lineChart?: boolean;
 
     // Настройки графика
-    chartData: any[];
+    chartData: Partial<plotly.PlotData>[];
     layout: any;
     pointSize: number;
     pointsSimilarity: { same: number; similar: number; different: number };

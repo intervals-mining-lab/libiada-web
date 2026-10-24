@@ -1,21 +1,24 @@
-﻿import { MapModelFromJson } from "functions";
+﻿import { initScopeFromServer } from "functions";
 import type { ResultsLoadingScreenData } from "viewDataTypes";
+
+interface PredictionResult {
+    ActualCharacteristic: number;
+    Fragment: string;
+    Predicted: string;
+    TheoreticalCharacteristic: number;
+
+}
+
+interface SequencePredictionResultData {
+    matching: number;
+    researchObjectName: string;
+    result: PredictionResult[];
+}
 
 /**
  * Interface for the angular controller's scope
  */
-interface ISequencePredictionResultScope extends ng.IScope, ResultsLoadingScreenData {
-
-    // Sequence prediction results
-    originSequence?: string;
-    predictedSequence?: string;
-    predictionSequence?: string;
-    predictionAccuracy?: number;
-
-    // Graph settings
-    legend?: { id: number, name: string, visible: boolean }[];
-    legendHeight?: number;
-    height?: number;
+interface SequencePredictionResultScope extends ng.IScope, SequencePredictionResultData, ResultsLoadingScreenData {
 }
 
 /**
@@ -33,37 +36,9 @@ class SequencePredictionResultHandler {
     * Initializes the Angular controller
     */
     private ngOnInit(): void {
-        const sequencePredictionResult = ($scope: ISequencePredictionResultScope, $http: ng.IHttpService): void => {
-            // Initialize the loading screen header
-            $scope.loadingScreenHeader = "Loading data";
-
-            // Get the task ID from the URL
-            const location = window.location.href.split("/");
-            $scope.taskId = location[location.length - 1];
-
-            // Set the loading status
-            $scope.loading = true;
-
-            // Load task data
-            $http.get < any > (`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
-                .then(function (data) {
-                    // Map data to the model
-                    MapModelFromJson($scope, data.data);
-
-                    // Set parameters for the legend and graph, if any
-                    if ($scope.legend) {
-                        $scope.legendHeight = $scope.legend.length *
-                            20;
-                        $scope.height = 800 + $scope.legendHeight;
-                    }
-
-                    // Reset loading status
-                    $scope.loading = false;
-                })
-                .catch(function () {
-                    alert("Failed loading characteristic data");
-                    $scope.loading = false;
-                });
+        const sequencePredictionResult = ($scope: SequencePredictionResultScope, $http: ng.IHttpService): void => {
+            initScopeFromServer<SequencePredictionResultData>(
+                $http, $scope, "Loading sequence prediction data", "Failed loading sequence prediction data");
         };
 
         // Register the controller in Angular

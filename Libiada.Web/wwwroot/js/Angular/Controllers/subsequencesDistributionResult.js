@@ -1,7 +1,7 @@
-import { MapModelFromJson } from "functions";
+import { initScopeFromServer } from "functions";
 export default function SubsequencesDistributionResultController() {
     function subsequencesDistributionResult($scope, $http) {
-        function onInit() {
+        async function onInit() {
             $scope.dotRadius = 4;
             $scope.selectedDotRadius = $scope.dotRadius * 3;
             $scope.points = [];
@@ -27,26 +27,16 @@ export default function SubsequencesDistributionResultController() {
                     }
                 }
             }, false);
-            $scope.loadingScreenHeader = "Loading genes map data";
-            $scope.loading = true;
-            let location = window.location.href.split("/");
-            $scope.taskId = location[location.length - 1];
-            $http.get(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
-                .then((data) => {
-                MapModelFromJson($scope, data.data);
-                $scope.plot = document.getElementById("chart");
-                $scope.subsequenceCharacteristic = $scope.subsequencesCharacteristicsList[0];
-                $scope.fillPoints();
-                let comparer = (first, second) => first.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value] - second.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value];
-                $scope.points = $scope.points.map(points => points.sort(comparer));
-                $scope.visiblePoints = $scope.visiblePoints.map(points => points.sort(comparer));
-                $scope.addCharacteristicComparer();
-                $scope.redrawGenesMap();
-                $scope.loading = false;
-            }, () => {
-                alert("Failed loading genes map data");
-                $scope.loading = false;
-            });
+            await initScopeFromServer($http, $scope, "Loading genes map data", "Failed loading genes map data");
+            $scope.plot = document.getElementById("chart");
+            $scope.subsequenceCharacteristic = $scope.subsequencesCharacteristicsList[0];
+            $scope.fillPoints();
+            let comparer = (first, second) => first.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value] - second.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value];
+            $scope.points = $scope.points.map(points => points.sort(comparer));
+            $scope.visiblePoints = $scope.visiblePoints.map(points => points.sort(comparer));
+            $scope.addCharacteristicComparer();
+            $scope.redrawGenesMap();
+            $scope.$apply();
         }
         // initializes data for genes map
         function fillPoints() {
@@ -339,7 +329,7 @@ export default function SubsequencesDistributionResultController() {
                 }
             };
             let data = $scope.visiblePoints.map((points, index) => ({
-                hoverinfo: 'text+x+y',
+                hoverinfo: 'x+y+text',
                 type: 'scattergl',
                 x: points.map(p => $scope.numericXAxis ? p.numericX : p.x),
                 y: points.map(p => p.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value]),
@@ -393,7 +383,7 @@ export default function SubsequencesDistributionResultController() {
             bar.addEventListener('mousedown', () => {
                 document.addEventListener('mousemove', drag);
             });
-            bar.addEventListener('mouseup', () => {
+            window.addEventListener('mouseup', () => {
                 document.removeEventListener('mousemove', drag);
             });
         }

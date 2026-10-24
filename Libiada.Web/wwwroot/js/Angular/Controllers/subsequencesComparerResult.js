@@ -1,7 +1,7 @@
-﻿import { MapModelFromJson } from "functions";
+﻿import { initScopeFromServer } from "functions";
 
 export default function SubsequencesComparerResultController() {
-    function subsequencesComparerResult($scope, $http) {
+    async function subsequencesComparerResult($scope, $http) {
 
         // adds and applies new filter
         function addFilter(newFilter) {
@@ -376,25 +376,20 @@ export default function SubsequencesComparerResultController() {
         $scope.characteristic = {};
         $scope.flags = { displayFiltered: false };
 
-        let location = window.location.href.split("/");
-        $scope.taskId = location[location.length - 1];
-        $scope.loading = true;
-        $http.get(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
-            .then(data => {
-                MapModelFromJson($scope, data.data);
+        await initScopeFromServer(
+            $http,
+            $scope,
+            "Loading subsequences comparison data",
+            "Failed loading subsequences comparison data");
 
-                $scope.equalElements = new Array($scope.researchObjectsNames.length);
 
-                for (let i = 0; i < $scope.researchObjectsNames.length; i++) {
-                    $scope.equalElements[i] = new Array($scope.researchObjectsNames.length);
-                }
+        $scope.equalElements = new Array($scope.researchObjectsNames.length);
 
-                $scope.loading = false;
-            }, () => {
-                alert("Failed loading characteristic data");
-
-                $scope.loading = false;
-            });
+        for (let i = 0; i < $scope.researchObjectsNames.length; i++) {
+            $scope.equalElements[i] = new Array($scope.researchObjectsNames.length);
+        }
+        
+        $scope.$apply();
     }
 
     function makePositive() {

@@ -1,5 +1,5 @@
 ﻿/*import d3 from "d3";*/
-import { MapModelFromJson } from "functions";
+import { initScopeFromServer } from "functions";
 import type { ResultsLoadingScreenData } from "viewDataTypes";
 
 /**
@@ -68,10 +68,14 @@ interface ID3Tooltip extends d3.Selection<HTMLDivElement, unknown, HTMLElement, 
     selectedDots?: any;
 }
 
+interface IOrdersIntervalsDistributionsAccordanceResultData {
+
+}
+
 /**
  * Interface for the angular controller's scope
  */
-interface IOrdersIntervalsDistributionsAccordanceResultScope extends ng.IScope, ResultsLoadingScreenData {
+interface IOrdersIntervalsDistributionsAccordanceResultScope extends ng.IScope, IOrdersIntervalsDistributionsAccordanceResultData, ResultsLoadingScreenData {
     // Chart data and settings
     result: ILinkResult[];
     points: IAccordancePoint[];
@@ -111,9 +115,12 @@ class OrdersIntervalsDistributionsAccordanceResultHandler {
     /**
      * Initializes the Angular controller
      */
-    private ngOnInit(): void {
-        const ordersIntervalsDistributionsAccordanceResult = ($scope: IOrdersIntervalsDistributionsAccordanceResultScope, $http: ng.IHttpService): void => {
-            // initializes data for chart
+    private async ngOnInit(): Promise<void> {
+        const ordersIntervalsDistributionsAccordanceResult = async (
+            $scope: IOrdersIntervalsDistributionsAccordanceResultScope, 
+            $http: ng.IHttpService): Promise<void> => {
+            
+                // initializes data for chart
             function fillPoints(): void {
                 $scope.points = [];
                 $scope.maxLevel = 1;
@@ -324,7 +331,7 @@ class OrdersIntervalsDistributionsAccordanceResultHandler {
                     .attr("class", "label")
                     .attr("transform", `translate(${width / 2} ,${height + margin.top})`)
                     .style("text-anchor", "middle")
-                    .text(`Intervals distributon link ${$scope.linkType.Text}`)
+                    .text(`Intervals distribution link ${$scope.linkType.Text}`)
                     .style("font-size", "12pt");
 
                 // y-axis
@@ -375,25 +382,18 @@ class OrdersIntervalsDistributionsAccordanceResultHandler {
             $scope.accordanceLevels = [];
             $scope.maxLevel = 1;
 
-            $scope.loadingScreenHeader = "Loading Data";
-            $scope.loading = true;
-
-            let location = window.location.href.split("/");
-            $scope.taskId = location[location.length - 1];
-
-            $http.get < any > (`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
-                .then(function (data) {
-                    MapModelFromJson($scope, data.data);
-                    $scope.linkType = $scope.linkList[0];
-                    $scope.loading = false;
-                })
-                .catch(function () {
-                    alert("Failed loading sequences order distribution data");
-                    $scope.loading = false;
-                });
+            await initScopeFromServer<IOrdersIntervalsDistributionsAccordanceResultData>(
+                $http,
+                $scope,
+                "Loading intervals distribution accordance data",
+                "Failed loading intervals distribution accordance data");
+            
+                $scope.linkType = $scope.linkList[0];
+                $scope.$apply();
         };
 
-        angular.module("libiada").controller("OrdersIntervalsDistributionsAccordanceResultCtrl", ["$scope", "$http", ordersIntervalsDistributionsAccordanceResult]);
+        angular.module("libiada").controller("OrdersIntervalsDistributionsAccordanceResultCtrl", 
+            ["$scope", "$http", ordersIntervalsDistributionsAccordanceResult]);
     }
 }
 

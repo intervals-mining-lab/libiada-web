@@ -1,5 +1,5 @@
 //import d3 from "d3";
-import { MapModelFromJson } from "functions";
+import { initScopeFromServer } from "functions";
 // Methods in IOrderTransformationVisualizationScope interface
 /**
 * Controller for visualizing order transformation results
@@ -8,8 +8,8 @@ class OrderTransformationVisualizationResultHandler {
     constructor() {
         this.ngOnInit();
     }
-    ngOnInit() {
-        const orderTransformationVisualizationResult = ($scope, $http) => {
+    async ngOnInit() {
+        const orderTransformationVisualizationResult = async ($scope, $http) => {
             /**
             * Initializes the data for the legend
             */
@@ -451,35 +451,26 @@ class OrderTransformationVisualizationResultHandler {
             $scope.clearTooltip = clearTooltip;
             $scope.yValue = yValue;
             $scope.xValue = xValue;
+            $scope.fillLegend = fillLegend;
             // Initialize $scope properties 
             $scope.width = 800;
             $scope.dotRadius = 4;
             $scope.selectedDotRadius = $scope.dotRadius * 2;
-            $scope.fillLegend = fillLegend;
+            await initScopeFromServer($http, $scope, "Loading order transformation data", "Failed loading order transformation data");
             $scope.loadingScreenHeader = "Loading data";
             // Get task ID from URL 
             let location = window.location.href.split("/");
             $scope.taskId = location[location.length - 1];
-            $scope.loading = true;
-            // Loading data from the server 
-            $http.get(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
-                .then(function (data) {
-                MapModelFromJson($scope, data.data);
-                $scope.ordersIds = [];
-                for (let i = 0; i < $scope.orders.length; i++) {
-                    $scope.ordersIds.push({ id: i });
-                }
-                $scope.fillLegend();
-                $scope.legendHeight = $scope.legend.length * 20;
-                $scope.height = 800 + $scope.legendHeight;
-                $scope.initialOrder = $scope.ordersIds[0];
-                $scope.transformationType = $scope.transformationsList[0];
-                $scope.loading = false;
-            })
-                .catch(function () {
-                alert("Failed loading characteristic data");
-                $scope.loading = false;
-            });
+            $scope.ordersIds = [];
+            for (let i = 0; i < $scope.orders.length; i++) {
+                $scope.ordersIds.push({ id: i });
+            }
+            $scope.fillLegend();
+            $scope.legendHeight = $scope.legend.length * 20;
+            $scope.height = 800 + $scope.legendHeight;
+            $scope.initialOrder = $scope.ordersIds[0];
+            $scope.transformationType = $scope.transformationsList[0];
+            $scope.$apply();
         };
         // Register the controller in the Angular module
         angular.module("libiada").controller("OrderTransformationVisualizationResultCtrl", ["$scope", "$http", orderTransformationVisualizationResult]);

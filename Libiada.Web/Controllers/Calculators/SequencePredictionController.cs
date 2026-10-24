@@ -229,17 +229,17 @@ public class SequencePredictionController : AbstractResultController
         List<SequencePredictionData> sequencePredictionResult = [];
 
         int wordPositionStart = initialLength;
-        ComposedSequence currentPredicion = null;
+        ComposedSequence currentPrediction = null;
         ComposedSequence predicted = Copy(sequence, new ComposedSequence(initialLength));
         for (int i = initialLength; i < sequence.Length; i++)
         {
-            currentPredicion = Copy(predicted, new ComposedSequence(i + 1));
+            currentPrediction = Copy(predicted, new ComposedSequence(i + 1));
             Dictionary<double, ContenderValue> contenderValues = [];
             bool isFound = false;
             foreach (IBaseObject element in alphabet)
             {
-                currentPredicion.Set(element, wordPositionStart);
-                double currentAvgRemoteness = averageRemotenessCalc.Calculate(currentPredicion, Link.Start);
+                currentPrediction.Set(element, wordPositionStart);
+                double currentAvgRemoteness = averageRemotenessCalc.Calculate(currentPrediction, Link.Start);
                 double delta = System.Math.Abs(currentAvgRemoteness - averageRemoteness);
 
                 if (delta < accuracy)
@@ -247,7 +247,7 @@ public class SequencePredictionController : AbstractResultController
                     contenderValues.Add(delta, new ContenderValue
                     {
                         CurrentAverageRemoteness = currentAvgRemoteness,
-                        PredictedWord = SubSequence(currentPredicion, wordPositionStart, i)
+                        PredictedWord = SubSequence(currentPrediction, wordPositionStart, i)
                     });
                     isFound = true;
                 }
@@ -262,7 +262,7 @@ public class SequencePredictionController : AbstractResultController
                     Predicted = contenderValue.PredictedWord.ToString(),
                     ActualCharacteristic = contenderValue.CurrentAverageRemoteness,
                     TheoreticalCharacteristic = averageRemotenessCalc.Calculate(SubSequence(sequence, 0, i), Link.Start)
-                    //PercentageOfMatched = FindPercentageOfMatching(sequence, currentPredicion)
+                    //PercentageOfMatched = FindPercentageOfMatching(sequence, currentPrediction)
                 });
 
                 predicted = Concat(predicted, contenderValue.PredictedWord, wordPositionStart);
@@ -272,11 +272,11 @@ public class SequencePredictionController : AbstractResultController
             else
             {
                 throw new Exception($"Couldn't predict with given accuracy. Position: {i}");
-                //currentPredicion = IncrementNextCharacter(currentPredicion, wordPositionStart, alphabet);
+                //currentPrediction = IncrementNextCharacter(currentPrediction, wordPositionStart, alphabet);
             }
         }
 
-        return (sequencePredictionResult, currentPredicion);
+        return (sequencePredictionResult, currentPrediction);
     }
 
     // todo fix throwing exception

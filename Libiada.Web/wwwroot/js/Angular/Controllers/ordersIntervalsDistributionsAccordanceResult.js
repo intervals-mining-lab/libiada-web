@@ -1,5 +1,5 @@
 /*import d3 from "d3";*/
-import { MapModelFromJson } from "functions";
+import { initScopeFromServer } from "functions";
 /**
  * Controller for displaying orders intervals distributions accordance results
  */
@@ -13,8 +13,8 @@ class OrdersIntervalsDistributionsAccordanceResultHandler {
     /**
      * Initializes the Angular controller
      */
-    ngOnInit() {
-        const ordersIntervalsDistributionsAccordanceResult = ($scope, $http) => {
+    async ngOnInit() {
+        const ordersIntervalsDistributionsAccordanceResult = async ($scope, $http) => {
             // initializes data for chart
             function fillPoints() {
                 $scope.points = [];
@@ -193,7 +193,7 @@ class OrdersIntervalsDistributionsAccordanceResultHandler {
                     .attr("class", "label")
                     .attr("transform", `translate(${width / 2} ,${height + margin.top})`)
                     .style("text-anchor", "middle")
-                    .text(`Intervals distributon link ${$scope.linkType.Text}`)
+                    .text(`Intervals distribution link ${$scope.linkType.Text}`)
                     .style("font-size", "12pt");
                 // y-axis
                 svg.append("g")
@@ -237,20 +237,9 @@ class OrdersIntervalsDistributionsAccordanceResultHandler {
             $scope.fillAccordanceLevels = fillAccordanceLevels;
             $scope.accordanceLevels = [];
             $scope.maxLevel = 1;
-            $scope.loadingScreenHeader = "Loading Data";
-            $scope.loading = true;
-            let location = window.location.href.split("/");
-            $scope.taskId = location[location.length - 1];
-            $http.get(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
-                .then(function (data) {
-                MapModelFromJson($scope, data.data);
-                $scope.linkType = $scope.linkList[0];
-                $scope.loading = false;
-            })
-                .catch(function () {
-                alert("Failed loading sequences order distribution data");
-                $scope.loading = false;
-            });
+            await initScopeFromServer($http, $scope, "Loading intervals distribution accordance data", "Failed loading intervals distribution accordance data");
+            $scope.linkType = $scope.linkList[0];
+            $scope.$apply();
         };
         angular.module("libiada").controller("OrdersIntervalsDistributionsAccordanceResultCtrl", ["$scope", "$http", ordersIntervalsDistributionsAccordanceResult]);
     }

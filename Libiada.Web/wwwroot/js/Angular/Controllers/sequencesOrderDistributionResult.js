@@ -1,5 +1,5 @@
 //import d3 from "d3";
-import { MapModelFromJson } from "functions";
+import { initScopeFromServer } from "functions";
 /**
  * Controller for sequences order distribution results
  */
@@ -259,22 +259,7 @@ class SequencesOrderDistributionResultHandler {
             // Initialize accordance levels
             $scope.accordanceLevels = [];
             $scope.maxLevel = 1;
-            // Initialize loading screen
-            $scope.loadingScreenHeader = "Loading Data";
-            $scope.loading = true;
-            // Get task ID from URL
-            const location = window.location.href.split("/");
-            $scope.taskId = location[location.length - 1];
-            // Fetch data from API
-            $http.get(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`)
-                .then(function (data) {
-                MapModelFromJson($scope, data.data);
-                $scope.loading = false;
-            })
-                .catch(function () {
-                alert("Failed loading sequences order distribution data");
-                $scope.loading = false;
-            });
+            initScopeFromServer($http, $scope, "Loading orders distribution data", "Failed orders distribution data");
         };
         // Register the controller in Angular
         angular.module("libiada").controller("SequencesOrderDistributionResultCtrl", ["$scope", "$http", sequencesOrderDistributionResult]);
