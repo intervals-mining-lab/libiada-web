@@ -133,7 +133,7 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
                         Bio.ISequence bioSequence = NcbiHelper.GetFastaSequence(sequenceStream);
                         using (var geneticSequenceRepository = new GeneticSequenceRepository(dbFactory, cache))
                         {
-                            var geneticSequence = sequence.ToGeneticSequence();
+                            var geneticSequence = GeneticSequence.FromCombinedSequence(sequence);
 
                             geneticSequenceRepository.Create(geneticSequence, bioSequence);
                         }
@@ -141,14 +141,14 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
                         break;
                     case Nature.Music:
                         var musicSequenceRepository = new MusicSequenceRepository(dbFactory, cache);
-                        var musicSequence = sequence.ToMusicSequence();
+                        var musicSequence = MusicSequence.FromCombinedSequence(sequence);
 
                         // TODO: deside if this method should create only one music sequence type or all of them 
                         musicSequenceRepository.Create(musicSequence, sequenceStream);
                         break;
                     case Nature.Literature:
                         var literatureSequenceRepository = new LiteratureSequenceRepository(dbFactory, cache);
-                        var literatureSequence = sequence.ToLiteratureSequence();
+                        var literatureSequence = LiteratureSequence.FromCombinedSequence(sequence);
 
                         literatureSequenceRepository.Create(literatureSequence, sequenceStream);
                         break;

@@ -49,6 +49,7 @@ class CustomSequenceSegmentationOperator {
 }
 
 // Wrapper function for backwards compatibility
-export default function CustomSequenceSegmentationController(data: CustomSequenceSegmentationData): CustomSequenceSegmentationOperator {
+export default function CustomSequenceSegmentationController(
+    data: CustomSequenceSegmentationData): CustomSequenceSegmentationOperator {
     return new CustomSequenceSegmentationOperator(data);
 }

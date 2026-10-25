@@ -10,11 +10,11 @@ class CustomSequenceOrderTransformerResultHandler {
      * Initializes the Angular controller
      */
     ngOnInit() {
-        const customSequenceOrderTransformerResult = ($scope, $http) => {
+        const customSequenceOrderTransformerResult = async ($scope, $http) => {
             initScopeFromServer($http, $scope, "Loading order transformation results", "Failed loading order transformation results");
         };
         // Register controller in Angular module
-        angular.module("libiada").controller("CustomSequenceOrderTransformerCtrl", ["$scope", "$http", customSequenceOrderTransformerResult]);
+        angular.module("libiada").controller("CustomSequenceOrderTransformerResultCtrl", ["$scope", "$http", customSequenceOrderTransformerResult]);
     }
 }
 /**

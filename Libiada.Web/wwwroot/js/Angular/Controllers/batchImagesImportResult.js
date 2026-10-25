@@ -5,7 +5,7 @@ class BatchImagesImportResultHandler {
     }
     ngOnInit() {
         const batchImagesImportResult = ($scope, $http) => {
-            initScopeFromServer($http, $scope, "Loading import results", "Failed loading images import results");
+            initScopeFromServer($http, $scope, "Loading images import results", "Failed loading images import results");
         };
         // Register controller in Angular module
         angular.module("libiada").controller("BatchImagesImportResultCtrl", ["$scope", "$http", batchImagesImportResult]);

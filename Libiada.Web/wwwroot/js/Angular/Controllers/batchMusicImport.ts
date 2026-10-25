@@ -1,26 +1,9 @@
-﻿import { MapModelFromJson } from "functions";
-
-/**
- * Interface for object with boolean value
- */
-interface IBooleanValue {
-    value: boolean;
-}
-
-/**
- * Interface for the data object passed from the server
- */
-interface IBatchMusicImportData {
-}
-
-/**
+﻿/**
  * Interface for the angular controller's scope
  */
-interface IBatchMusicImportScope extends ng.IScope {
-    // File status properties
-    fileSelected: IBooleanValue;
+interface BatchMusicImportScope extends ng.IScope {
+    fileSelected: { value: boolean; };
 
-    // Methods
     fileChanged: (filePath: HTMLInputElement) => void;
 }
 
@@ -28,23 +11,17 @@ interface IBatchMusicImportScope extends ng.IScope {
  * Controller for batch music import
  */
 class BatchMusicImportHandler {
-    /**
-     * Creates a new controller instance
-     * @param data Data for controller initialization
-     */
-    constructor(data: IBatchMusicImportData) {
-        this.ngOnInit(data);
+    constructor() {
+        this.ngOnInit();
     }
 
     /**
      * Initializes Angular controller
-     * @param data Data for controller initialization
      */
-    private ngOnInit(data: IBatchMusicImportData): void {
-        const batchMusicImport = ($scope: IBatchMusicImportScope): void => {
-            MapModelFromJson($scope, data);
+    private ngOnInit(): void {
+        const batchMusicImport = ($scope: BatchMusicImportScope): void => {
 
-            function fileChanged(filePath: HTMLInputElement): void {
+            $scope.fileChanged = function (filePath: HTMLInputElement): void {
                 if (filePath.value) {
                     $scope.fileSelected.value = true;
                 } else {
@@ -52,8 +29,6 @@ class BatchMusicImportHandler {
                 }
                 $scope.$apply();
             }
-
-            $scope.fileChanged = fileChanged;
 
             $scope.fileSelected = { value: false };
         };
@@ -65,9 +40,8 @@ class BatchMusicImportHandler {
 
 /**
  * Wrapper function for backward compatibility
- * @param data Data for controller initialization
  * @returns Instance of batch music import handler
  */
-export default function BatchMusicImportController(data: IBatchMusicImportData): BatchMusicImportHandler {
-    return new BatchMusicImportHandler(data);
+export default function BatchMusicImportController(): BatchMusicImportHandler {
+    return new BatchMusicImportHandler();
 }

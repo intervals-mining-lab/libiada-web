@@ -36,7 +36,7 @@ interface CombinedSequencesEntityCreateScope extends ng.IScope, CombinedSequence
     nature: string;
     languageId: string;
     translatorId: string;
-    trajectorId: string;
+    trajectoryId: string;
     notation: string;
     notationsFiltered: Notation[];
     remoteDbId: number;

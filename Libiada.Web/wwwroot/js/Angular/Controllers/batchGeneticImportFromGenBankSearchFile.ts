@@ -1,16 +1,8 @@
-﻿import { MapModelFromJson } from "functions";
-
-/**
- * Interface for the data object passed from the server
- */
-interface BatchGeneticImportFromGenBankSearchFileData {
-}
-
-/**
+﻿/**
  * Interface for the angular controller's scope
  */
 interface BatchGeneticImportFromGenBankSearchFileScope extends ng.IScope {
-    fileSelected: {value : boolean};
+    fileSelected: { value: boolean };
 
     fileChanged: (filePath: HTMLInputElement) => void;
 }
@@ -23,19 +15,18 @@ class BatchGeneticImportFromGenBankSearchFileHandler {
      * Creates a new controller instance
      * @param data Data for controller initialization
      */
-    constructor(data: BatchGeneticImportFromGenBankSearchFileData) {
-        this.ngOnInit(data);
+    constructor() {
+        this.ngOnInit();
     }
 
     /**
      * Initializes Angular controller
      * @param data Data for controller initialization
      */
-    private ngOnInit(data: BatchGeneticImportFromGenBankSearchFileData): void {
+    private ngOnInit(): void {
         const batchGeneticImportFromGenBankSearchFile = ($scope: BatchGeneticImportFromGenBankSearchFileScope): void => {
-            MapModelFromJson($scope, data);
 
-            function fileChanged(filePath: HTMLInputElement): void {
+            $scope.fileChanged = function (filePath: HTMLInputElement): void {
                 if (filePath.value) {
                     $scope.fileSelected.value = true;
                 } else {
@@ -43,8 +34,6 @@ class BatchGeneticImportFromGenBankSearchFileHandler {
                 }
                 $scope.$apply();
             }
-
-            $scope.fileChanged = fileChanged;
 
             $scope.fileSelected = { value: false };
         };
@@ -60,8 +49,6 @@ class BatchGeneticImportFromGenBankSearchFileHandler {
  * @param data Data for controller initialization
  * @returns Instance of batch genetic import from GenBank search file handler
  */
-export default function BatchGeneticImportFromGenBankSearchFileController(
-    data: BatchGeneticImportFromGenBankSearchFileData
-): BatchGeneticImportFromGenBankSearchFileHandler {
-    return new BatchGeneticImportFromGenBankSearchFileHandler(data);
+export default function BatchGeneticImportFromGenBankSearchFileController(): BatchGeneticImportFromGenBankSearchFileHandler {
+    return new BatchGeneticImportFromGenBankSearchFileHandler();
 }

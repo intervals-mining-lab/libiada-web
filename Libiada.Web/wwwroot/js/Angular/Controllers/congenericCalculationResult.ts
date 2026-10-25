@@ -1,4 +1,4 @@
-import { initScopeFromServer  } from "functions";
+import { initScopeFromServer } from "functions";
 import type { Characteristic, ResultsLoadingScreenData, SequenceCharacteristics, SequencesGroup } from "viewDataTypes";
 
 
@@ -31,17 +31,19 @@ class CongenericCalculationResultHandler {
     }
 
     private ngOnInit(): void {
-        const congenericCalculationResult = async ($scope: CongenericCalculationResultScope, $http: ng.IHttpService): Promise<void> => {
-            $scope.characteristicsTableTabSelected = false;
+        const congenericCalculationResult = async (
+            $scope: CongenericCalculationResultScope, $http: ng.IHttpService): Promise<void> => {
             
-            // initializing tooltips for tabs
-            $('[data-bs-toggle="tooltip"]').tooltip();
+                $scope.characteristicsTableTabSelected = false;
 
-            initScopeFromServer<CongenericCalculationResultData>(
+            await initScopeFromServer<CongenericCalculationResultData>(
                 $http,
                 $scope,
                 "Loading characteristics calculation results",
                 "Failed loading characteristics calculation results");
+
+            // initializing tooltips for tabs
+            $('[data-bs-toggle="tooltip"]').tooltip();
         };
 
         // Register controller in Angular module

@@ -29,17 +29,19 @@ class CustomSequenceCalculationResultHandler {
      * Initializes the Angular controller
      */
     private ngOnInit(): void {
-        const customSequenceCalculationResult = ($scope: CustomSequenceCalculationResultScope, $http: ng.IHttpService): void => {
+        const customSequenceCalculationResult = async (
+            $scope: CustomSequenceCalculationResultScope, $http: ng.IHttpService): Promise<void> => {
+
             $scope.characteristicsTableTabSelected = false;
 
-            // initializing tooltips for tabs
-            $('[data-bs-toggle="tooltip"]').tooltip();
-
-            initScopeFromServer<CustomSequenceCalculationResultData>(
+            await initScopeFromServer<CustomSequenceCalculationResultData>(
                 $http,
                 $scope,
                 "Loading custom sequence calculation results",
                 "Failed loading custom sequence calculation results");
+
+            // initializing tooltips for tabs
+            $('[data-bs-toggle="tooltip"]').tooltip();
         };
 
         // Register controller in Angular module

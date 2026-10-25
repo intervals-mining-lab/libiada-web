@@ -10,7 +10,7 @@ class BatchImagesImportHandler {
      */
     ngOnInit() {
         const batchImagesImport = ($scope) => {
-            function fileChanged(filePath) {
+            $scope.fileChanged = function (filePath) {
                 if (filePath.value) {
                     $scope.fileSelected.value = true;
                 }
@@ -18,8 +18,7 @@ class BatchImagesImportHandler {
                     $scope.fileSelected.value = false;
                 }
                 $scope.$apply();
-            }
-            $scope.fileChanged = fileChanged;
+            };
             $scope.fileSelected = { value: false };
         };
         // Register controller in Angular module

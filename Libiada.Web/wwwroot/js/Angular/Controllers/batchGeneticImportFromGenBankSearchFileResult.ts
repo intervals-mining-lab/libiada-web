@@ -22,12 +22,17 @@ class BatchGeneticImportFromGenBankSearchFileResultHandler {
     }
 
     private ngOnInit(): void {
-        const batchGeneticImportFromGenBankSearchFileResult = ($scope: BatchGeneticImportFromGenBankSearchFileResultScope, $http: ng.IHttpService): void => {
-            initScopeFromServer<BatchGeneticImportFromGenBankSearchFileResultData>($http, $scope, "Loading import results", "Failed loading import results");
+        const batchGeneticImportFromGenBankSearchFileResult = (
+            $scope: BatchGeneticImportFromGenBankSearchFileResultScope,
+            $http: ng.IHttpService): void => {
+
+            initScopeFromServer<BatchGeneticImportFromGenBankSearchFileResultData>(
+                $http, $scope, "Loading import results", "Failed loading import results");
         };
 
         // Register controller in Angular module
-        angular.module("libiada").controller("BatchGeneticImportFromGenBankSearchFileResultCtrl", ["$scope", "$http", batchGeneticImportFromGenBankSearchFileResult]);
+        angular.module("libiada").controller("BatchGeneticImportFromGenBankSearchFileResultCtrl", 
+            ["$scope", "$http", batchGeneticImportFromGenBankSearchFileResult]);
     }
 }
 

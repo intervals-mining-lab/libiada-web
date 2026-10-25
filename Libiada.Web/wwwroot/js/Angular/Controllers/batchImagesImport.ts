@@ -20,7 +20,7 @@ class BatchImagesImportHandler {
     private ngOnInit(): void {
         const batchImagesImport = ($scope: BatchImagesImportScope): void => {
 
-            function fileChanged(filePath: HTMLInputElement): void {
+            $scope.fileChanged = function (filePath: HTMLInputElement): void {
                 if (filePath.value) {
                     $scope.fileSelected.value = true;
                 } else {
@@ -28,8 +28,6 @@ class BatchImagesImportHandler {
                 }
                 $scope.$apply();
             }
-
-            $scope.fileChanged = fileChanged;
 
             $scope.fileSelected = { value: false };
         };

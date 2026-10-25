@@ -33,11 +33,13 @@ class CustomSequenceOrderTransformationCalculationOperator {
             MapModelFromJson($scope, data);
         };
 
-        angular.module("libiada").controller("CustomSequenceOrderTransformationCalculationCtrl", ["$scope", customSequenceOrderTransformationCalculation]);
+        angular.module("libiada").controller("CustomSequenceOrderTransformationCalculationCtrl", 
+            ["$scope", customSequenceOrderTransformationCalculation]);
     }
 }
 
 // Wrapper function for backwards compatibility
-export default function CustomSequenceOrderTransformationCalculationController(data: CustomSequenceOrderTransformationCalculationData): CustomSequenceOrderTransformationCalculationOperator {
+export default function CustomSequenceOrderTransformationCalculationController(
+    data: CustomSequenceOrderTransformationCalculationData): CustomSequenceOrderTransformationCalculationOperator {
     return new CustomSequenceOrderTransformationCalculationOperator(data);
 }

@@ -23,7 +23,8 @@ class BatchSequenceImportResultHandler {
     private ngOnInit(): void {
         const batchSequenceImportResult = ($scope: BatchSequenceImportResultScope, $http: ng.IHttpService): void => {
 
-            initScopeFromServer<BatchSequenceImportResultData>($http, $scope, "Loading import results", "Failed loading import results");
+            initScopeFromServer<BatchSequenceImportResultData>(
+                $http, $scope, "Loading import results", "Failed loading import results");
         };
 
         // Register controller in Angular module

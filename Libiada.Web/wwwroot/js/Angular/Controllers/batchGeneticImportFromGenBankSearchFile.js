@@ -1,4 +1,3 @@
-import { MapModelFromJson } from "functions";
 /**
  * Controller for batch genetic import from GenBank search file
  */
@@ -7,17 +6,16 @@ class BatchGeneticImportFromGenBankSearchFileHandler {
      * Creates a new controller instance
      * @param data Data for controller initialization
      */
-    constructor(data) {
-        this.ngOnInit(data);
+    constructor() {
+        this.ngOnInit();
     }
     /**
      * Initializes Angular controller
      * @param data Data for controller initialization
      */
-    ngOnInit(data) {
+    ngOnInit() {
         const batchGeneticImportFromGenBankSearchFile = ($scope) => {
-            MapModelFromJson($scope, data);
-            function fileChanged(filePath) {
+            $scope.fileChanged = function (filePath) {
                 if (filePath.value) {
                     $scope.fileSelected.value = true;
                 }
@@ -25,8 +23,7 @@ class BatchGeneticImportFromGenBankSearchFileHandler {
                     $scope.fileSelected.value = false;
                 }
                 $scope.$apply();
-            }
-            $scope.fileChanged = fileChanged;
+            };
             $scope.fileSelected = { value: false };
         };
         // Register controller in Angular module
@@ -38,7 +35,7 @@ class BatchGeneticImportFromGenBankSearchFileHandler {
  * @param data Data for controller initialization
  * @returns Instance of batch genetic import from GenBank search file handler
  */
-export default function BatchGeneticImportFromGenBankSearchFileController(data) {
-    return new BatchGeneticImportFromGenBankSearchFileHandler(data);
+export default function BatchGeneticImportFromGenBankSearchFileController() {
+    return new BatchGeneticImportFromGenBankSearchFileHandler();
 }
 //# sourceMappingURL=batchGeneticImportFromGenBankSearchFile.js.map

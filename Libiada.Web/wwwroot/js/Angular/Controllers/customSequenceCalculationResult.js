@@ -10,11 +10,11 @@ class CustomSequenceCalculationResultHandler {
      * Initializes the Angular controller
      */
     ngOnInit() {
-        const customSequenceCalculationResult = ($scope, $http) => {
+        const customSequenceCalculationResult = async ($scope, $http) => {
             $scope.characteristicsTableTabSelected = false;
+            await initScopeFromServer($http, $scope, "Loading custom sequence calculation results", "Failed loading custom sequence calculation results");
             // initializing tooltips for tabs
             $('[data-bs-toggle="tooltip"]').tooltip();
-            initScopeFromServer($http, $scope, "Loading custom sequence calculation results", "Failed loading custom sequence calculation results");
         };
         // Register controller in Angular module
         angular.module("libiada").controller("CustomSequenceCalculationResultCtrl", ["$scope", "$http", customSequenceCalculationResult]);

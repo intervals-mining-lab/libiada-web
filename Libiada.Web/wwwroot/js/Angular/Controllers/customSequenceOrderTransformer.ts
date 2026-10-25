@@ -34,6 +34,7 @@ class CustomSequenceOrderTransformerOperator {
 }
 
 // Wrapper function for backwards compatibility
-export default function CustomSequenceOrderTransformerController(data: CustomSequenceOrderTransformerData): CustomSequenceOrderTransformerOperator {
+export default function CustomSequenceOrderTransformerController(
+    data: CustomSequenceOrderTransformerData): CustomSequenceOrderTransformerOperator {
     return new CustomSequenceOrderTransformerOperator(data);
 }

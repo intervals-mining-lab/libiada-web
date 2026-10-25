@@ -1,41 +1,20 @@
 ﻿import { MapModelFromJson } from "functions";
-
-/**
- * Interface for object with boolean value
- */
-interface IBooleanValue {
-    value: boolean;
-}
-
-/**
- * Interface for notation
- */
-interface INotation {
-    id: number;
-    name: string;
-    // Possible additional notation properties
-}
+import type { Notation } from "viewDataTypes";
 
 /**
  * Interface for the data object passed from the server
  */
-interface IBatchPoemsImportData {
-    notations: INotation[];
-    // Other possible initial data properties
+interface BatchPoemsImportData {
+    notations: Notation[];
 }
 
 /**
  * Interface for the angular controller's scope
  */
-interface IBatchPoemsImportScope extends ng.IScope {
-    // File status properties
-    fileSelected: IBooleanValue;
+interface BatchPoemsImportScope extends ng.IScope, BatchPoemsImportData {
+    notation: Notation;
+    fileSelected: { value: boolean; };
 
-    // Notation properties
-    notations: INotation[];
-    notation: INotation;
-
-    // Methods
     fileChanged: (filePath: HTMLInputElement) => void;
 }
 
@@ -43,11 +22,7 @@ interface IBatchPoemsImportScope extends ng.IScope {
  * Controller for batch poems import
  */
 class BatchPoemsImportHandler {
-    /**
-     * Creates a new controller instance
-     * @param data Data for controller initialization
-     */
-    constructor(data: IBatchPoemsImportData) {
+    constructor(data: BatchPoemsImportData) {
         this.ngOnInit(data);
     }
 
@@ -55,11 +30,11 @@ class BatchPoemsImportHandler {
      * Initializes Angular controller
      * @param data Data for controller initialization
      */
-    private ngOnInit(data: IBatchPoemsImportData): void {
-        const batchPoemsImport = ($scope: IBatchPoemsImportScope): void => {
+    private ngOnInit(data: BatchPoemsImportData): void {
+        const batchPoemsImport = ($scope: BatchPoemsImportScope): void => {
             MapModelFromJson($scope, data);
 
-            function fileChanged(filePath: HTMLInputElement): void {
+            $scope.fileChanged = function (filePath: HTMLInputElement): void {
                 if (filePath.value) {
                     $scope.fileSelected.value = true;
                 } else {
@@ -67,8 +42,6 @@ class BatchPoemsImportHandler {
                 }
                 $scope.$apply();
             }
-
-            $scope.fileChanged = fileChanged;
 
             $scope.fileSelected = { value: false };
             $scope.notation = $scope.notations[0];
@@ -84,6 +57,6 @@ class BatchPoemsImportHandler {
  * @param data Data for controller initialization
  * @returns Instance of batch poems import handler
  */
-export default function BatchPoemsImportController(data: IBatchPoemsImportData): BatchPoemsImportHandler {
+export default function BatchPoemsImportController(data: BatchPoemsImportData): BatchPoemsImportHandler {
     return new BatchPoemsImportHandler(data);
 }

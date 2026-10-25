@@ -1,23 +1,16 @@
-import { MapModelFromJson } from "functions";
 /**
  * Controller for batch music import
  */
 class BatchMusicImportHandler {
-    /**
-     * Creates a new controller instance
-     * @param data Data for controller initialization
-     */
-    constructor(data) {
-        this.ngOnInit(data);
+    constructor() {
+        this.ngOnInit();
     }
     /**
      * Initializes Angular controller
-     * @param data Data for controller initialization
      */
-    ngOnInit(data) {
+    ngOnInit() {
         const batchMusicImport = ($scope) => {
-            MapModelFromJson($scope, data);
-            function fileChanged(filePath) {
+            $scope.fileChanged = function (filePath) {
                 if (filePath.value) {
                     $scope.fileSelected.value = true;
                 }
@@ -25,8 +18,7 @@ class BatchMusicImportHandler {
                     $scope.fileSelected.value = false;
                 }
                 $scope.$apply();
-            }
-            $scope.fileChanged = fileChanged;
+            };
             $scope.fileSelected = { value: false };
         };
         // Register controller in Angular module
@@ -35,10 +27,9 @@ class BatchMusicImportHandler {
 }
 /**
  * Wrapper function for backward compatibility
- * @param data Data for controller initialization
  * @returns Instance of batch music import handler
  */
-export default function BatchMusicImportController(data) {
-    return new BatchMusicImportHandler(data);
+export default function BatchMusicImportController() {
+    return new BatchMusicImportHandler();
 }
 //# sourceMappingURL=batchMusicImport.js.map

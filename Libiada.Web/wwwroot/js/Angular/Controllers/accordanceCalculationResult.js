@@ -1,6 +1,6 @@
 import { initScopeFromServer } from "functions";
 /**
- * Controller for accordance functionality
+ * Angular controller class
  */
 class AccordanceCalculationResultHandler {
     /**

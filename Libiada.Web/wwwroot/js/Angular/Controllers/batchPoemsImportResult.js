@@ -1,11 +1,12 @@
 import { initScopeFromServer } from "functions";
+// Angular controller class
 class BatchPoemsImportResultHandler {
     constructor() {
         this.ngOnInit();
     }
     ngOnInit() {
         const batchPoemsImportResult = ($scope, $http) => {
-            initScopeFromServer($http, $scope, "Loading import results", "Failed loading import results");
+            initScopeFromServer($http, $scope, "Loading poems import results", "Failed loading import results");
         };
         // Register controller in Angular module
         angular.module("libiada").controller("BatchPoemsImportResultCtrl", ["$scope", "$http", batchPoemsImportResult]);

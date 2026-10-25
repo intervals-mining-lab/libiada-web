@@ -14,6 +14,7 @@ interface BatchPoemsImportResultData {
 interface BatchPoemsImportResultScope extends ng.IScope, BatchPoemsImportResultData, ResultsLoadingScreenData {
 }
 
+// Angular controller class
 class BatchPoemsImportResultHandler {
 
     constructor() {
@@ -23,7 +24,8 @@ class BatchPoemsImportResultHandler {
     private ngOnInit(): void {
         const batchPoemsImportResult = ($scope: BatchPoemsImportResultScope, $http: ng.IHttpService): void => {
 
-            initScopeFromServer<BatchPoemsImportResultData>($http, $scope, "Loading import results", "Failed loading import results");
+            initScopeFromServer<BatchPoemsImportResultData>(
+                $http, $scope, "Loading poems import results", "Failed loading import results");
         };
 
         // Register controller in Angular module

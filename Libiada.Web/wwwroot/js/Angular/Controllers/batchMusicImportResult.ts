@@ -23,7 +23,8 @@ class BatchMusicImportResultHandler {
     private ngOnInit(): void {
         const batchMusicImportResult = ($scope: BatchMusicImportResultScope, $http: ng.IHttpService): void => {
 
-            initScopeFromServer<BatchMusicImportResultData>($http, $scope, "Loading import results", "Failed loading import results");
+            initScopeFromServer<BatchMusicImportResultData>(
+                $http, $scope, "Loading import results", "Failed loading import results");
         };
 
         // Register controller in Angular module

@@ -15,8 +15,8 @@ interface CustomSequenceOrderTransformationCalculationResultData {
 /**
  * Interface for the angular controller's scope
  */
-interface CustomSequenceOrderTransformationCalculationResultScope 
-extends ng.IScope, CustomSequenceOrderTransformationCalculationResultData, ResultsLoadingScreenData {
+interface CustomSequenceOrderTransformationCalculationResultScope
+    extends ng.IScope, CustomSequenceOrderTransformationCalculationResultData, ResultsLoadingScreenData {
     characteristicsTableTabSelected: boolean;
 }
 
@@ -32,18 +32,20 @@ class CustomSequenceOrderTransformationCalculationResultHandler {
      * Initializes the Angular controller
      */
     private ngOnInit(): void {
-        const customSequenceOrderTransformationCalculationResult = ($scope: CustomSequenceOrderTransformationCalculationResultScope, $http: ng.IHttpService): void => {
+        const customSequenceOrderTransformationCalculationResult = async (
+            $scope: CustomSequenceOrderTransformationCalculationResultScope, $http: ng.IHttpService): Promise<void> => {
+
             $scope.characteristicsTableTabSelected = false;
 
-            // initializing tooltips for tabs
-            $('[data-bs-toggle="tooltip"]').tooltip();
-
-            initScopeFromServer<CustomSequenceOrderTransformationCalculationResultData>(
+            await initScopeFromServer<CustomSequenceOrderTransformationCalculationResultData>(
                 $http,
                 $scope,
                 "Loading custom sequence order transformation calculation results",
                 "Failed loading custom sequence order transformation calculation results");
-        };       
+
+            // initializing tooltips for tabs
+            $('[data-bs-toggle="tooltip"]').tooltip();
+        };
 
         // Register controller in Angular module
         angular.module("libiada").controller("CustomSequenceOrderTransformationCalculationResultCtrl",

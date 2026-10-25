@@ -35,6 +35,7 @@ class CustomSequenceCalculationOperator {
 }
 
 // Wrapper function for backwards compatibility
-export default function CustomSequenceCalculationController(data: CustomSequenceCalculationData): CustomSequenceCalculationOperator {
+export default function CustomSequenceCalculationController(
+    data: CustomSequenceCalculationData): CustomSequenceCalculationOperator {
     return new CustomSequenceCalculationOperator(data);
 }

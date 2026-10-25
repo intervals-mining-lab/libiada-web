@@ -30,7 +30,8 @@ class BatchGeneticImportFromGenBankSearchQueryHandler {
         };
 
         // Register controller in Angular module
-        angular.module("libiada").controller("BatchGeneticImportFromGenBankSearchQueryCtrl", ["$scope", batchGeneticImportFromGenBankSearchQuery]);
+        angular.module("libiada").controller("BatchGeneticImportFromGenBankSearchQueryCtrl",
+            ["$scope", batchGeneticImportFromGenBankSearchQuery]);
     }
 }
 

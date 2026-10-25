@@ -3,10 +3,6 @@ import { MapModelFromJson } from "functions";
  * Controller for batch poems import
  */
 class BatchPoemsImportHandler {
-    /**
-     * Creates a new controller instance
-     * @param data Data for controller initialization
-     */
     constructor(data) {
         this.ngOnInit(data);
     }
@@ -17,7 +13,7 @@ class BatchPoemsImportHandler {
     ngOnInit(data) {
         const batchPoemsImport = ($scope) => {
             MapModelFromJson($scope, data);
-            function fileChanged(filePath) {
+            $scope.fileChanged = function (filePath) {
                 if (filePath.value) {
                     $scope.fileSelected.value = true;
                 }
@@ -25,8 +21,7 @@ class BatchPoemsImportHandler {
                     $scope.fileSelected.value = false;
                 }
                 $scope.$apply();
-            }
-            $scope.fileChanged = fileChanged;
+            };
             $scope.fileSelected = { value: false };
             $scope.notation = $scope.notations[0];
         };

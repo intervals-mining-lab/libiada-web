@@ -9,9 +9,9 @@ class CongenericCalculationResultHandler {
     ngOnInit() {
         const congenericCalculationResult = async ($scope, $http) => {
             $scope.characteristicsTableTabSelected = false;
+            await initScopeFromServer($http, $scope, "Loading characteristics calculation results", "Failed loading characteristics calculation results");
             // initializing tooltips for tabs
             $('[data-bs-toggle="tooltip"]').tooltip();
-            initScopeFromServer($http, $scope, "Loading characteristics calculation results", "Failed loading characteristics calculation results");
         };
         // Register controller in Angular module
         angular.module("libiada").controller("CongenericCalculationResultCtrl", ["$scope", "$http", congenericCalculationResult]);

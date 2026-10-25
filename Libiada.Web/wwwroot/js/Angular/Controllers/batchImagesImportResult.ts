@@ -23,7 +23,8 @@ class BatchImagesImportResultHandler {
     private ngOnInit(): void {
         const batchImagesImportResult = ($scope: BatchImagesImportResultScope, $http: ng.IHttpService): void => {
 
-            initScopeFromServer<BatchImagesImportResultData>($http, $scope, "Loading import results", "Failed loading images import results");
+            initScopeFromServer<BatchImagesImportResultData>(
+                $http, $scope, "Loading images import results", "Failed loading images import results");
         };
 
         // Register controller in Angular module

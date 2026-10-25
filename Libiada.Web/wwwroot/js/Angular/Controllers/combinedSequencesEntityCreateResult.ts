@@ -40,13 +40,16 @@ class CombinedSequencesEntityCreateResultHandler {
     }
 
     private ngOnInit(): void {
-        const combinedSequencesEntityCreateResult = ($scope: CombinedSequencesEntityCreateResultScope, $http: ng.IHttpService): void => {
+        const combinedSequencesEntityCreateResult = (
+            $scope: CombinedSequencesEntityCreateResultScope, $http: ng.IHttpService): void => {
 
-            initScopeFromServer<CombinedSequencesEntityCreateResultData>($http, $scope, "Loading results", "Failed loading results");
+            initScopeFromServer<CombinedSequencesEntityCreateResultData>(
+                $http, $scope, "Loading results", "Failed loading results");
         };
 
         // Register controller in Angular module
-        angular.module("libiada").controller("CombinedSequencesEntityCreateResultCtrl", ["$scope", "$http", combinedSequencesEntityCreateResult]);
+        angular.module("libiada").controller("CombinedSequencesEntityCreateResultCtrl", 
+            ["$scope", "$http", combinedSequencesEntityCreateResult]);
     }
 }
 

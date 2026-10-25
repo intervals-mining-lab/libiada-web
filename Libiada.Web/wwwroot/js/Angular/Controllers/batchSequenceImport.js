@@ -1,23 +1,16 @@
-import { MapModelFromJson } from "functions";
 /**
- * Контроллер для пакетного импорта последовательностей
+ * Angular controller class
  */
 class BatchSequenceImportHandler {
-    /**
-     * Создает новый экземпляр контроллера
-     * @param data Данные для инициализации контроллера
-     */
-    constructor(data) {
-        this.ngOnInit(data);
+    constructor() {
+        this.ngOnInit();
     }
     /**
-     * Инициализирует Angular контроллер
-     * @param data Данные для инициализации контроллера
+     * Initializes Angular controller
      */
-    ngOnInit(data) {
+    ngOnInit() {
         const batchSequenceImport = ($scope) => {
-            MapModelFromJson($scope, data);
-            function parseIds() {
+            $scope.parseIds = function () {
                 let splitted = $scope.accessionsField.split(/[^\w.]/);
                 for (let i = 0; i < splitted.length; i++) {
                     if (splitted[i]) {
@@ -25,12 +18,10 @@ class BatchSequenceImportHandler {
                     }
                 }
                 $scope.accessionsField = "";
-            }
-            function deleteId(accession) {
+            };
+            $scope.deleteId = function (accession) {
                 $scope.accessions.splice($scope.accessions.indexOf(accession), 1);
-            }
-            $scope.parseIds = parseIds;
-            $scope.deleteId = deleteId;
+            };
             $scope.accessions = [];
         };
         // Register controller in Angular module
@@ -39,10 +30,9 @@ class BatchSequenceImportHandler {
 }
 /**
  * Wrapper function for backward compatibility
- * @param data Данные для инициализации контроллера
  * @returns Instance of batch sequence import handler
  */
-export default function BatchSequenceImportController(data) {
-    return new BatchSequenceImportHandler(data);
+export default function BatchSequenceImportController() {
+    return new BatchSequenceImportHandler();
 }
 //# sourceMappingURL=batchSequenceImport.js.map

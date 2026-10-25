@@ -36,7 +36,7 @@ public class FmotifsDictionaryController : AbstractResultController
         var musicSequences = db.CombinedSequenceEntities
                                .Where(m => m.Notation == Notation.FormalMotifs)
                                .Include(m => m.ResearchObject)
-                               .Select(s => s.ToMusicSequence());
+                               .Select(s => MusicSequence.FromCombinedSequence(s));
         return View(await musicSequences.ToListAsync());
 
     }
@@ -67,7 +67,7 @@ public class FmotifsDictionaryController : AbstractResultController
             return NotFound();
         }
 
-        var musicSequence = dbSequence.ToMusicSequence();
+        var musicSequence = MusicSequence.FromCombinedSequence(dbSequence);
 
         var musicSequenceAlphabet = musicSequence.Alphabet
                                                  .Select(el => db.Fmotifs.Single(f => f.Id == el))
@@ -149,7 +149,7 @@ public class FmotifsDictionaryController : AbstractResultController
             return NotFound("Ошибка БД: не найдена подходящая запись.");
         }
 
-        var musicSequence = dbSequence.ToMusicSequence();
+        var musicSequence = MusicSequence.FromCombinedSequence(dbSequence);
 
         var musicSequenceAlphabet = musicSequence.Alphabet
                                                  .Select(el => db.Measures.Single(f => f.Id == el))

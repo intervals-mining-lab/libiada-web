@@ -10,11 +10,11 @@ class CustomSequenceOrderTransformationCalculationResultHandler {
      * Initializes the Angular controller
      */
     ngOnInit() {
-        const customSequenceOrderTransformationCalculationResult = ($scope, $http) => {
+        const customSequenceOrderTransformationCalculationResult = async ($scope, $http) => {
             $scope.characteristicsTableTabSelected = false;
+            await initScopeFromServer($http, $scope, "Loading custom sequence order transformation calculation results", "Failed loading custom sequence order transformation calculation results");
             // initializing tooltips for tabs
             $('[data-bs-toggle="tooltip"]').tooltip();
-            initScopeFromServer($http, $scope, "Loading custom sequence order transformation calculation results", "Failed loading custom sequence order transformation calculation results");
         };
         // Register controller in Angular module
         angular.module("libiada").controller("CustomSequenceOrderTransformationCalculationResultCtrl", ["$scope", "$http", customSequenceOrderTransformationCalculationResult]);

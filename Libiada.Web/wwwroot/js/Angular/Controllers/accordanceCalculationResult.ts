@@ -1,27 +1,32 @@
 ﻿import { initScopeFromServer } from "functions";
 import type { ResultsLoadingScreenData } from "viewDataTypes";
 
+interface AccordanceCalculationCompareAllResultData {
+    firstAlphabet: string[];
+    secondAlphabet: string[];
+}
+
+interface AccordanceCalculationCompareEqualResultData {
+    alphabet: string[];
+}
+
 /**
  * Interface for the data object fetched from the server
  */
-interface AccordanceCalculationResultData {
-    alphabet?: string[];
+type AccordanceCalculationResultData = {
     calculationType: string;
     characteristicName: string;
     characteristics: number[][];
     researchObjectNames: number[];
-    firstAlphabet?: string[];
-    secondAlphabet?: string[];
-}
+} & AccordanceCalculationCompareAllResultData | AccordanceCalculationCompareEqualResultData;
 
 /**
  * Interface for the angular controller's scope
  */
-interface AccordanceCalculationResultScope extends ng.IScope, AccordanceCalculationResultData, ResultsLoadingScreenData {
-}
+type AccordanceCalculationResultScope = ng.IScope & AccordanceCalculationResultData & ResultsLoadingScreenData;
 
 /**
- * Controller for accordance functionality
+ * Angular controller class
  */
 class AccordanceCalculationResultHandler {
     /**

@@ -75,14 +75,7 @@ export interface ResearchObject extends SelectListItemWithNature {
 }
 
 export interface SequenceImportResult {
-    Matter: string;
-    Name: string;
-    Nature: string;
-    Status: string;
-    ErrorMessage?: string;
-}
-
-export interface ImportResult {
+    AllNames?: string;
     Status: string;
     ResearchObjectName: string;
     Result: string;

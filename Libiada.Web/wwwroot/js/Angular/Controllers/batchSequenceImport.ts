@@ -1,70 +1,45 @@
-﻿import { MapModelFromJson } from "functions";
-
-/**
- * Интерфейс для элемента списка идентификаторов последовательностей
- */
-interface IAccession {
+﻿interface Accession {
     value: string;
-}
-
-/**
- * Interface for the data object passed from the server
- */
-interface IBatchSequenceImportData {
-
-    matters?: { id: number; value: string }[];
-    natures?: { id: number; value: string }[];
-
 }
 
 /**
  * Interface for the angular controller's scope
  */
-interface IBatchSequenceImportScope extends ng.IScope, IBatchSequenceImportData {
-
+interface BatchSequenceImportScope extends ng.IScope {
     accessionsField: string;
-    accessions: IAccession[];
+    accessions: Accession[];
 
     parseIds: () => void;
-    deleteId: (accession: IAccession) => void;
+    deleteId: (accession: Accession) => void;
 }
 
 /**
- * Контроллер для пакетного импорта последовательностей
+ * Angular controller class
  */
 class BatchSequenceImportHandler {
-    /**
-     * Создает новый экземпляр контроллера
-     * @param data Данные для инициализации контроллера
-     */
-    constructor(data: IBatchSequenceImportData) {
-        this.ngOnInit(data);
+    constructor() {
+        this.ngOnInit();
     }
 
     /**
-     * Инициализирует Angular контроллер
-     * @param data Данные для инициализации контроллера
+     * Initializes Angular controller
      */
-    private ngOnInit(data: IBatchSequenceImportData): void {
-        const batchSequenceImport = ($scope: IBatchSequenceImportScope): void => {
-            MapModelFromJson($scope, data);
-
-            function parseIds(): void {
-                let splitted = $scope.accessionsField.split(/[^\w.]/);
+    private ngOnInit(): void {
+        const batchSequenceImport = ($scope: BatchSequenceImportScope): void => {
+            $scope.parseIds = function (): void {
+                let splitted: string[] = $scope.accessionsField.split(/[^\w.]/);
                 for (let i = 0; i < splitted.length; i++) {
                     if (splitted[i]) {
                         $scope.accessions.push({ value: splitted[i] });
                     }
                 }
+
                 $scope.accessionsField = "";
             }
 
-            function deleteId(accession: IAccession): void {
+            $scope.deleteId = function (accession: Accession): void {
                 $scope.accessions.splice($scope.accessions.indexOf(accession), 1);
             }
-
-            $scope.parseIds = parseIds;
-            $scope.deleteId = deleteId;
 
             $scope.accessions = [];
         };
@@ -76,9 +51,8 @@ class BatchSequenceImportHandler {
 
 /**
  * Wrapper function for backward compatibility
- * @param data Данные для инициализации контроллера
  * @returns Instance of batch sequence import handler
  */
-export default function BatchSequenceImportController(data: IBatchSequenceImportData): BatchSequenceImportHandler {
-    return new BatchSequenceImportHandler(data);
+export default function BatchSequenceImportController(): BatchSequenceImportHandler {
+    return new BatchSequenceImportHandler();
 }
