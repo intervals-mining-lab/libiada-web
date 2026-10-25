@@ -80,18 +80,6 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
     /// <param name="file">
     /// Sequence file as <see cref="IFormFile"/>.
     /// </param>
-    /// <param name="language">
-    /// The language id.
-    /// </param>
-    /// <param name="original">
-    /// The original.
-    /// </param>
-    /// <param name="translator">
-    /// The translator id.
-    /// </param>
-    /// <param name="partial">
-    /// The partial.
-    /// </param>
     /// <param name="precision">
     /// Precision of data sequence.
     /// </param>
@@ -104,10 +92,14 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
         int userId = User.GetUserId();
         sequence.CreatorId = userId;
         sequence.ModifierId = userId;
+        Stream? sequenceStream = null;
+        if ((sequence.Notation.GetNature() != Nature.Genetic || localFile) && file is not null)
+        {
+            sequenceStream = FileHelper.GetFileStream(file);
+        }
 
         return CreateTask(() =>
         {
-            Stream? sequenceStream = null;
             try
             {
                 // Remove alphabet and order from validation 
@@ -128,9 +120,9 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
                 {
                     sequenceStream = ncbiHelper.GetFastaFileStream(sequence.RemoteId ?? throw new Exception("No remote id is provided for genetic sequence to import"));
                 }
-                else
+                else if (sequenceStream is null)
                 {
-                    sequenceStream = FileHelper.GetFileStream(file ?? throw new Exception("No file with sequence is provided for import"));
+                    throw new Exception("No file with sequence is provided for import");
                 }
 
                 using var db = dbFactory.CreateDbContext();
@@ -141,7 +133,7 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
                         Bio.ISequence bioSequence = NcbiHelper.GetFastaSequence(sequenceStream);
                         using (var geneticSequenceRepository = new GeneticSequenceRepository(dbFactory, cache))
                         {
-                            var geneticSequence = sequence.ToGeneticSequence();
+                            var geneticSequence = GeneticSequence.FromCombinedSequence(sequence);
 
                             geneticSequenceRepository.Create(geneticSequence, bioSequence);
                         }
@@ -149,14 +141,14 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
                         break;
                     case Nature.Music:
                         var musicSequenceRepository = new MusicSequenceRepository(dbFactory, cache);
-                        var musicSequence = sequence.ToMusicSequence();
+                        var musicSequence = MusicSequence.FromCombinedSequence(sequence);
 
                         // TODO: deside if this method should create only one music sequence type or all of them 
                         musicSequenceRepository.Create(musicSequence, sequenceStream);
                         break;
                     case Nature.Literature:
                         var literatureSequenceRepository = new LiteratureSequenceRepository(dbFactory, cache);
-                        var literatureSequence = sequence.ToLiteratureSequence();
+                        var literatureSequence = LiteratureSequence.FromCombinedSequence(sequence);
 
                         literatureSequenceRepository.Create(literatureSequence, sequenceStream);
                         break;
@@ -274,7 +266,7 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
         public readonly string? Language;
 
         /// <summary>
-        /// The original.
+        /// Flag indicating if sequence is in original language.
         /// </summary>
         public readonly bool? Original;
 
@@ -284,7 +276,7 @@ public abstract class SequencesResearchObjectsController : AbstractResultControl
         public readonly string? Translator;
 
         /// <summary>
-        /// The partial.
+        /// Flag indicating if sequence is partial.
         /// </summary>
         public readonly bool? Partial;
 

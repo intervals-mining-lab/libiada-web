@@ -86,7 +86,7 @@ public class BatchGenesImportController : AbstractResultController
             GeneticSequence[] parentSequences = db.CombinedSequenceEntities
                                                 .Where(s => researchObjectIds.Contains(s.ResearchObjectId) && s.Notation == Notation.Nucleotides)
                                                 .OrderBy(s => s.ResearchObjectId)
-                                                .Select(s => s.ToGeneticSequence())
+                                                .Select(s => GeneticSequence.FromCombinedSequence(s))
                                                 .ToArray();
 
             for (int i = 0; i < parentSequences.Length; i++)

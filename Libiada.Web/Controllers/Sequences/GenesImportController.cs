@@ -1,12 +1,10 @@
 ﻿namespace Libiada.Web.Controllers.Sequences;
 
 using Libiada.Core.Extensions;
-
-using Libiada.Database.Models.CalculatorsData;
-using Libiada.Database.Tasks;
 using Libiada.Database.Helpers;
+using Libiada.Database.Models.CalculatorsData;
 using Libiada.Database.Models.Repositories.Sequences;
-
+using Libiada.Database.Tasks;
 using Libiada.Web.Helpers;
 using Libiada.Web.Tasks;
 
@@ -79,7 +77,8 @@ public class GenesImportController : AbstractResultController
         {
             Dictionary<string, object> result;
             using var db = dbFactory.CreateDbContext();
-            GeneticSequence parentSequence = db.CombinedSequenceEntities.Single(d => d.ResearchObjectId == researchObjectId).ToGeneticSequence();
+            CombinedSequenceEntity combinedSequence = db.CombinedSequenceEntities.Single(d => d.ResearchObjectId == researchObjectId);
+            GeneticSequence parentSequence = GeneticSequence.FromCombinedSequence(combinedSequence);
             var subsequenceImporter = new SubsequenceImporter(db, ncbiHelper, cache, parentSequence);
             subsequenceImporter.CreateSubsequences();
 
