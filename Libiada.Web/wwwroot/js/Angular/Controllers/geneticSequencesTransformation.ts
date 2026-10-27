@@ -35,7 +35,8 @@ class GeneticSequencesTransformationOperator {
             MapModelFromJson($scope, data);
         };
 
-        angular.module("libiada").controller("GeneticSequencesTransformationCtrl", ["$scope", geneticSequencesTransformation]);
+        angular.module("libiada").controller("GeneticSequencesTransformationCtrl", 
+            ["$scope", geneticSequencesTransformation]);
     }
 }
 

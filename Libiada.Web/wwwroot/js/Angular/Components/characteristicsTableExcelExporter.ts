@@ -1,4 +1,4 @@
-﻿//import type ExcelJS from "../../../lib/exceljs/exceljs.js";
+﻿import type * as ExcelJSTypes from "excelJS";
 import type { SequenceCharacteristics, SequencesGroup } from "viewDataTypes";
 
 interface ExcelRow {
@@ -17,22 +17,27 @@ interface CharacteristicsTableExcelExporterComponentController extends ng.IContr
     exportToExcel: () => void;
 }
 
+
+// placeholder until it'll be possible to import esm version of library using libman (or other way)
+declare const ExcelJS: typeof ExcelJSTypes;
+
 function CharacteristicsTableExcelExporterController(this: CharacteristicsTableExcelExporterComponentController) {
     const ctrl: CharacteristicsTableExcelExporterComponentController = this;
 
     ctrl.exportToExcel = async function exportToExcel() {
-        const workbook = new ExcelJS.Workbook();
-        const worksheet = workbook.addWorksheet("My Sheet");
+        const workbook: ExcelJSTypes.Workbook = new ExcelJS.Workbook();
+        const worksheet: ExcelJSTypes.Worksheet = workbook.addWorksheet("My Sheet");
         const font = { name: "Courier New" };
-        const border = { top: { style: "thin" }, left: { style: "thin" }, bottom: { style: "thin" }, right: { style: "thin" } }
-        let columns = [
+        const border: Partial<ExcelJSTypes.Borders> = { top: { style: "thin" }, left: { style: "thin" }, bottom: { style: "thin" }, right: { style: "thin" } }
+        let columns: Partial<ExcelJSTypes.Column>[] = [
             { header: "№", key: "id", width: 10, style: { font: font, border: border } },
             { header: "Sequence name", key: "name", width: 32, style: { font: font, border: border } }
         ];
 
         if (ctrl.sequenceGroups) columns.push({ header: "Sequences group", key: "sequenceGroup", width: 10, style: { font: font, border: border } });
 
-        columns = columns.concat(ctrl.characteristicNames.map(cn => ({ header: cn, key: cn, width: 20, style: { font: font, border: border } })));
+        columns = columns.concat(ctrl.characteristicNames.map<Partial<ExcelJSTypes.Column>>(cn => 
+            ({ header: cn, key: cn, width: 20, style: { font: font, border: border } })));
 
         worksheet.columns = columns;
 
@@ -53,7 +58,7 @@ function CharacteristicsTableExcelExporterController(this: CharacteristicsTableE
         let saveBlobAsFile = function (blob: Blob) {
             let a: HTMLAnchorElement = document.createElement("a");
             document.body.appendChild(a);
-            a.style = "display: none";
+            a.style.display = "none";
             let url: string = window.URL.createObjectURL(blob);
             a.href = url;
             a.download = ctrl.excelFileName ?? "Results";

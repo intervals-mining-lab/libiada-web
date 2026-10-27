@@ -1,7 +1,7 @@
-﻿import type { ImportResult } from "viewDataTypes";
+﻿import type { SequenceImportResult } from "viewDataTypes";
 
 interface ImportResultsTableComponentController extends ng.IController {
-    result: ImportResult[];
+    result: SequenceImportResult[];
     hasGroupAndSequenceType: boolean;
     calculateStatusClass: (status: string) => string;
 }

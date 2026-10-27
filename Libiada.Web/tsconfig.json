@@ -3,6 +3,7 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
+    "moduleResolution": "bundler",
     "strict": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
@@ -22,17 +23,17 @@
     "allowJs": true,
     "checkJs": true,
     //"declaration": true,
-    //"types": [ "angular" ],
+    "types": [ "angular", "plotly.js", "d3", "bootstrap", "jquery" ],
     "typeRoots": [
       "wwwroot/lib/microsoft",
       "wwwroot/lib/@types"
     ],
-    "types": [ "*" ],
     "paths": {
       //"/lib/*": [ "/wwwroot/lib/*" ],
       "functions": [ "./wwwroot/js/Angular/functions.ts" ],
       "viewDataTypes": [ "./wwwroot/js/Angular/viewDataTypes.ts" ],
-      "bootstrap": [ "./wwwroot/lib/twitter-bootstrap/js/bootstrap.esm.js" ]
+      "bootstrap": [ "./wwwroot/lib/twitter-bootstrap/js/bootstrap.esm.js" ],
+      "excelJS": ["./wwwroot/lib/exceljs"]
     }
     // "noEmitOnError": true
 

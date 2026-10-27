@@ -17,7 +17,8 @@ class GenBankAccessionVersionUpdateCheckerHandler {
         };
 
         // Register controller in Angular module
-        angular.module("libiada").controller("GenBankAccessionVersionUpdateCheckerCtrl", [genBankAccessionVersionUpdateChecker]);
+        angular.module("libiada").controller("GenBankAccessionVersionUpdateCheckerCtrl",
+            [genBankAccessionVersionUpdateChecker]);
     }
 }
 

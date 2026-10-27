@@ -1,5 +1,5 @@
-﻿import type { HubConnection, HubConnectionBuilder } from "signalr";
-
+﻿//import type { HubConnection, HubConnectionBuilder } from "signalr";
+import type * as signalr from "signalr";
 
 // Interface for task data
 interface Task {
@@ -29,7 +29,7 @@ interface TaskManagerScope extends ng.IScope {
     loadingScreenHeader: string;
 
     // SignalR hub connection
-    tasksHub: HubConnection;
+    tasksHub: signalr.HubConnection;
     flags: { reconnecting: boolean };
 
     // Redirection settings
@@ -60,6 +60,8 @@ declare const alertify: {
     error(message: string, timeout?: number): void;
     confirm(title: string, message: string, onok: () => void, oncancel: () => void): void;
 };
+
+declare const signalR: typeof signalr;
 
 // Controller class for task manager
 class TaskManagerControllerHandler {

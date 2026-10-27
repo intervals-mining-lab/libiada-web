@@ -27,53 +27,54 @@ interface MIDI {
 
 declare const MIDI: MIDI;
 
-/**
- * Interface for pitch data
- */
-interface IFmotifsPitch {
+interface Pitch {
+    Alter: number;
+    Instrument: number;
     MidiNumber: number;
     Octave: number;
     Step: number;
 }
 
-/**
- * Interface for duration data
- */
-interface IFmotifsDuration {
-    Value: number;
+interface NoteDuration {
     Denominator: number;
+    Numerator:number;
+    OriginalDenominator: number;
+    OriginalNumerator: number;
+    OriginalValue: number;
+    Value: number;
 }
 
-/**
- * Interface for note data
- */
-interface IFmotifsNote {
-    Pitches: IFmotifsPitch[];
-    Duration: IFmotifsDuration;
+interface Note {
+    Id: number;
+    Priority: number;
+    Tie: number;
+    Triplet: boolean;
+    Pitches: Pitch[];
+    Duration: NoteDuration;
 }
 
-/**
- * Interface for fmotif data
- */
-interface IFmotif {
+interface Fmotif {
     Id: string;
-    NoteList: IFmotifsNote[];
+    NoteList: Note[];
+    Type: number;
 }
 
 /**
  * Interface for the data object passed from the server
  */
-interface IFmotifsDictionaryData {
-    fmotifs: IFmotif[];
-    sequentialTransfer: boolean;
+interface FmotifsDictionaryData {
+    data:{
+        fmotifs: Fmotif[];
+        fmotifsfmotifsCounts: number[];
+        sequentialTransfer: boolean;
+    }
 }
 
 /**
  * Interface for the angular controller's scope
  */
-interface IFmotifsDictionaryScope extends ng.IScope {
+interface IFmotifsDictionaryScope extends ng.IScope, FmotifsDictionaryData {
     // Data properties
-    data: IFmotifsDictionaryData;
     isPlaying: boolean;
     margin: number;
     verticalInterval: number;
@@ -86,7 +87,7 @@ interface IFmotifsDictionaryScope extends ng.IScope {
 /**
  * Result of getLine function
  */
-interface ILineResult {
+interface Line {
     line: number;
     alter: number;
     note: string;
@@ -95,7 +96,7 @@ interface ILineResult {
 /**
  * Controller for FmotifsDictionary
  */
-export default function FmotifsDictionaryController(data: IFmotifsDictionaryData): void {
+export default function FmotifsDictionaryController(data: FmotifsDictionaryData): void {
     function fmotifsDictionary($scope: IFmotifsDictionaryScope): void {
         MapModelFromJson($scope, data);
 
@@ -127,7 +128,7 @@ export default function FmotifsDictionaryController(data: IFmotifsDictionaryData
             barDuration: 8,
             timeline: 0,
             velocity: 127,
-            play: function (note: IFmotifsNote, minOctave: number, moveTime: boolean, event: number): void {
+            play: function (note: Note, minOctave: number, moveTime: boolean, event: number): void {
                 const chord: number[] = [];
                 const duration: number = note.Duration.Value;
                 for (let i: number = 0; i < note.Pitches.length; i++) {
@@ -150,9 +151,9 @@ export default function FmotifsDictionaryController(data: IFmotifsDictionaryData
             move: function (duration: number): void {
                 this.timeline += this.barDuration * duration;
             },
-            keyOn: function (event: number, note: IFmotifsNote, min: number): void {
+            keyOn: function (event: number, note: Note, min: number): void {
                 for (let i: number = 0; i < note.Pitches.length; i++) {
-                    const pitch: IFmotifsPitch = note.Pitches[i];
+                    const pitch: Pitch = note.Pitches[i];
                     const step: number = pitch.MidiNumber % 12;
                     const currentOctave: number = pitch.Octave > min ? 1 : 0;
                     const key: d3.Selection<any, any, any, any> = d3.select(`#visualization_${$scope.data.fmotifs[event].Id}`)
@@ -175,7 +176,7 @@ export default function FmotifsDictionaryController(data: IFmotifsDictionaryData
                 }
             },
             noteOn: function (event: number): void {
-                const chord: d3.Selection<any, any, any, any> = d3.select(`#notation_${$scope.data.fmotifs[event].Id}`)
+                const chord: d3.Selection<SVGSVGElement, any, HTMLElement, any> = d3.select(`#notation_${$scope.data.fmotifs[event].Id}`)
                     .select(`.chord_${chordIndex}`);
                 chord.selectAll("ellipse")
                     .style("fill", "blue");
@@ -191,7 +192,7 @@ export default function FmotifsDictionaryController(data: IFmotifsDictionaryData
                     .style("stroke", "black");
             },
             noteOff: function (event: number): void {
-                const chord: d3.Selection<any, any, any, any> = d3.select(`#notation_${$scope.data.fmotifs[event].Id}`)
+                const chord: d3.Selection<SVGSVGElement, any, HTMLElement, any> = d3.select(`#notation_${$scope.data.fmotifs[event].Id}`)
                     .select(`.chord_${chordIndex}`);
                 chord.selectAll("ellipse")
                     .style("fill", "black");
@@ -212,7 +213,7 @@ export default function FmotifsDictionaryController(data: IFmotifsDictionaryData
             $scope.isPlaying = true;
             MIDI.setVolume(0, 80);
             player.timeline = 0;
-            const notes: IFmotifsNote[] = $scope.data.fmotifs[event].NoteList;
+            const notes: Note[] = $scope.data.fmotifs[event].NoteList;
             let min: number = 9;
             chordIndex = 0;
             for (let i: number = 0; i < notes.length; i++) {
@@ -234,7 +235,7 @@ export default function FmotifsDictionaryController(data: IFmotifsDictionaryData
         };
 
         // gets note's line and alter
-        function getLine(step: number): ILineResult {
+        function getLine(step: number): Line {
             switch (step) {
                 case 0: return { line: 0, alter: 0, note: "C" };
                 case 1: return { line: 0, alter: 1, note: "C#" };
@@ -253,7 +254,7 @@ export default function FmotifsDictionaryController(data: IFmotifsDictionaryData
         }
 
         // calculates interval between chords
-        function getHorizontalInterval(fmotif: IFmotif): number {
+        function getHorizontalInterval(fmotif: Fmotif): number {
             return 450 / (fmotif.NoteList.length + 1);
         }
 
@@ -321,7 +322,7 @@ export default function FmotifsDictionaryController(data: IFmotifsDictionaryData
         // draws note
         function drawNote(
             group: d3.Selection<SVGGElement, unknown, HTMLElement, any>,
-            note: IFmotifsNote,
+            note: Note,
             octave: number,
             iterator: number,
             x: number,
@@ -405,7 +406,7 @@ export default function FmotifsDictionaryController(data: IFmotifsDictionaryData
         // draws pause
         function drawPause(
             group: d3.Selection<SVGGElement, unknown, HTMLElement, any>,
-            note: IFmotifsNote,
+            note: Note,
             x: number
         ): void {
             switch (note.Duration.Denominator) {
@@ -492,7 +493,7 @@ export default function FmotifsDictionaryController(data: IFmotifsDictionaryData
         // draws everything
         $(function (): void {
             for (let i: number = 0; i < $scope.data.fmotifs.length; i++) {
-                let fmotif: IFmotif = $scope.data.fmotifs[i];
+                let fmotif: Fmotif = $scope.data.fmotifs[i];
                 let horizontalInterval: number = getHorizontalInterval(fmotif);
                 notation = d3.select(`#notation_${fmotif.Id}`)
                     .append("svg")
@@ -510,14 +511,14 @@ export default function FmotifsDictionaryController(data: IFmotifsDictionaryData
                 drawStaff();
                 let min: number = 9;
                 for (let j: number = 0; j < fmotif.NoteList.length; j++) {
-                    let note: IFmotifsNote = fmotif.NoteList[j];
+                    let note: Note = fmotif.NoteList[j];
                     for (let k: number = 0; k < note.Pitches.length; k++) {
-                        let pitch: IFmotifsPitch = note.Pitches[k];
+                        let pitch: Pitch = note.Pitches[k];
                         min = pitch.Octave < min ? pitch.Octave : min;
                     }
                 }
                 for (let j: number = 0; j < fmotif.NoteList.length; j++) {
-                    let note: IFmotifsNote = fmotif.NoteList[j];
+                    let note: Note = fmotif.NoteList[j];
                     let chord: d3.Selection<SVGGElement, unknown, HTMLElement, any> = notation.append("g")
                         .attr("class", `chord_${j}`);
                     let x: number = (j + 1) * horizontalInterval;
@@ -529,9 +530,9 @@ export default function FmotifsDictionaryController(data: IFmotifsDictionaryData
                         let miny: number = 1000;
                         let maxy: number = -1000;
                         for (let k: number = 0; k < note.Pitches.length; k++) {
-                            let pitch: IFmotifsPitch = note.Pitches[k];
+                            let pitch: Pitch = note.Pitches[k];
                             let currentOctave: number = pitch.Octave > min ? 1 : 0;
-                            let step: ILineResult = getLine(pitch.Step);
+                            let step: Line = getLine(pitch.Step);
                             let y: number = $scope.margin + (13 - (step.line + 7 * currentOctave)) * $scope.verticalInterval;
                             if (currentOctave === 0 && pitch.Step < 10) {
                                 lineUp = true;

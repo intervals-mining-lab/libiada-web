@@ -36,16 +36,19 @@ class GenBankAccessionVersionUpdateCheckerResultHandler {
     }
 
     private ngOnInit(): void {
-        const genBankAccessionVersionUpdateCheckerResult = ($scope: GenBankAccessionVersionUpdateCheckerResultScope, $http: ng.IHttpService): void => {
+        const genBankAccessionVersionUpdateCheckerResult = (
+            $scope: GenBankAccessionVersionUpdateCheckerResultScope, $http: ng.IHttpService): void => {
             $scope.calculateStatusClass = (result: GenBankSearchResult): string => {
                 return result.Updated ? result.NameUpdated ? "table-warning" : "table-danger" : result.NameUpdated ? "" : "table-info";
             };
 
-            initScopeFromServer<GenBankAccessionVersionUpdateCheckerResultData>($http, $scope, "Loading import results", "Failed loading import results");
+            initScopeFromServer<GenBankAccessionVersionUpdateCheckerResultData>(
+                $http, $scope, "Loading import results", "Failed loading import results");
         };
 
         // Register controller in Angular module
-        angular.module("libiada").controller("GenBankAccessionVersionUpdateCheckerResultCtrl", ["$scope", "$http", genBankAccessionVersionUpdateCheckerResult]);
+        angular.module("libiada").controller("GenBankAccessionVersionUpdateCheckerResultCtrl", 
+            ["$scope", "$http", genBankAccessionVersionUpdateCheckerResult]);
     }
 
     

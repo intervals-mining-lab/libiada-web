@@ -22,13 +22,16 @@ class GeneticSequencesTransformationResultHandler {
     }
 
     private ngOnInit(): void {
-        const geneticSequencesTransformationResult = ($scope: GeneticSequencesTransformationResultScope, $http: ng.IHttpService): void => {
+        const geneticSequencesTransformationResult = (
+            $scope: GeneticSequencesTransformationResultScope, $http: ng.IHttpService): void => {
 
-            initScopeFromServer<GeneticSequencesTransformationResultData>($http, $scope, "Loading import results", "Failed loading import results");
+            initScopeFromServer<GeneticSequencesTransformationResultData>(
+                $http, $scope, "Loading import results", "Failed loading import results");
         };
 
         // Register controller in Angular module
-        angular.module("libiada").controller("GeneticSequencesTransformationResultCtrl", ["$scope", "$http", geneticSequencesTransformationResult]);
+        angular.module("libiada").controller("GeneticSequencesTransformationResultCtrl", 
+            ["$scope", "$http", geneticSequencesTransformationResult]);
     }
 }
 

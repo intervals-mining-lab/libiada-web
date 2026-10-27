@@ -54,6 +54,7 @@
       "destination": "wwwroot/lib/bootstrap-icons/"
     },
     {
+      "provider":"jsdelivr",
       "library": "exceljs@4.4.0",
       "destination": "wwwroot/lib/exceljs/"
     },

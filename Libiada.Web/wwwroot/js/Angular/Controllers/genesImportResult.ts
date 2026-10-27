@@ -32,7 +32,8 @@ class GenesImportResultHandler {
 
     private ngOnInit(): void {
         const genesImportResult = ($scope: GenesImportResultScope, $http: ng.IHttpService): void => {
-            initScopeFromServer<GenesImportResultData>($http, $scope, "Loading genes import results", "Failed loading genes import results");
+            initScopeFromServer<GenesImportResultData>(
+                $http, $scope, "Loading genes import results", "Failed loading genes import results");
         };
 
         // Register controller in Angular module

@@ -32,7 +32,8 @@ class IntervalsCharacteristicsDistributionHandler {
             MapModelFromJson($scope, data);
         };
 
-        angular.module("libiada").controller("IntervalsCharacteristicsDistributionCtrl", ["$scope", intervalsCharacteristicsDistribution]);
+        angular.module("libiada").controller("IntervalsCharacteristicsDistributionCtrl", 
+            ["$scope", intervalsCharacteristicsDistribution]);
     }
 }
 
@@ -41,6 +42,7 @@ class IntervalsCharacteristicsDistributionHandler {
  * @param data Data for controller initialization
  * @returns Instance of IntervalsCharacteristicsDistributionHandler
  */
-export default function IntervalsCharacteristicsDistributionController(data: IIntervalsCharacteristicsDistributionData): IntervalsCharacteristicsDistributionHandler {
+export default function IntervalsCharacteristicsDistributionController(
+    data: IIntervalsCharacteristicsDistributionData): IntervalsCharacteristicsDistributionHandler {
     return new IntervalsCharacteristicsDistributionHandler(data);
 }
