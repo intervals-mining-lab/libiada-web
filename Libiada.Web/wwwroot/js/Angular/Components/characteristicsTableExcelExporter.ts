@@ -1,11 +1,12 @@
 ﻿import type * as ExcelJSTypes from "excelJS";
 import type { SequenceCharacteristics, SequencesGroup } from "viewDataTypes";
+import { throwHelper } from "functions";
 
 interface ExcelRow {
     id: number;
     name: string;
     sequenceGroup?: number;
-    [key: string]: string | number | undefined;
+    [key: string]: string | number;
 }
 
 interface CharacteristicsTableExcelExporterComponentController extends ng.IController {
@@ -27,24 +28,38 @@ function CharacteristicsTableExcelExporterController(this: CharacteristicsTableE
     ctrl.exportToExcel = async function exportToExcel() {
         const workbook: ExcelJSTypes.Workbook = new ExcelJS.Workbook();
         const worksheet: ExcelJSTypes.Worksheet = workbook.addWorksheet("My Sheet");
-        const font = { name: "Courier New" };
-        const border: Partial<ExcelJSTypes.Borders> = { top: { style: "thin" }, left: { style: "thin" }, bottom: { style: "thin" }, right: { style: "thin" } }
+        const font: Partial<ExcelJSTypes.Font> = { name: "Courier New" };
+        const border: Partial<ExcelJSTypes.Borders> = { 
+            top: { style: "thin" }, 
+            left: { style: "thin" }, 
+            bottom: { style: "thin" }, 
+            right: { style: "thin" } 
+        };
         let columns: Partial<ExcelJSTypes.Column>[] = [
             { header: "№", key: "id", width: 10, style: { font: font, border: border } },
             { header: "Sequence name", key: "name", width: 32, style: { font: font, border: border } }
         ];
 
-        if (ctrl.sequenceGroups) columns.push({ header: "Sequences group", key: "sequenceGroup", width: 10, style: { font: font, border: border } });
+        if (ctrl.sequenceGroups) columns.push({ 
+            header: "Sequences group", 
+            key: "sequenceGroup", 
+            width: 10, 
+            style: { font: font, border: border } 
+        });
 
-        columns = columns.concat(ctrl.characteristicNames.map<Partial<ExcelJSTypes.Column>>(cn => 
-            ({ header: cn, key: cn, width: 20, style: { font: font, border: border } })));
+        columns = columns.concat(ctrl.characteristicNames.map<Partial<ExcelJSTypes.Column>>(cn => ({ 
+            header: cn, 
+            key: cn, 
+            width: 20, 
+            style: { font: font, border: border } 
+        })));
 
         worksheet.columns = columns;
 
         for (let i = 0; i < ctrl.characteristics.length; i++) {
             let row: ExcelRow = { id: i + 1, name: ctrl.characteristics[i].ResearchObjectName };
 
-            if (ctrl.sequenceGroups) row.sequenceGroup = ctrl.characteristics[i].SequenceGroupId!;
+            if (ctrl.sequenceGroups) row.sequenceGroup = ctrl.characteristics[i].SequenceGroupId ?? throwHelper("No characteristic group is provided.");
 
             ctrl.characteristics[i].Characteristics.forEach((cv, j) => row[ctrl.characteristicNames[j]] = cv);
             worksheet.addRow(row).commit();
