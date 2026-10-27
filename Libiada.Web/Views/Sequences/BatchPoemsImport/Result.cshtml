@@ -6,8 +6,6 @@
 
 @if (ViewBag.Error == null)
 {
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchPoemsImportResult");
-
     <div ng-controller="BatchPoemsImportResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <div ng-disabled="loading">
@@ -17,5 +15,8 @@
 
     @section Scripts {
         <script type="module" src="~/js/Angular/Components/importResultsTable.js" asp-append-version="true"></script>
+        @{
+            await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchPoemsImportResult");
+        }
     }
 }

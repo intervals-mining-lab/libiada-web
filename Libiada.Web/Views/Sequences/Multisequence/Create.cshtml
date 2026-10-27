@@ -48,11 +48,11 @@
 }
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_AngularControllerInitializer", "MultisequenceCreate");
-    }
     <partial name="_ValidationScriptsPartial" />
     <script type="module" src="~/js/Angular/Components/natureSelect.js" asp-append-version="true"></script>
     <script type="module" src="~/js/Angular/Components/researchObjectsTable.js" asp-append-version="true"></script>
     <script type="module" src="~/js/Angular/Components/researchObjectsSubmit.js" asp-append-version="true"></script>
+    @{
+        await Html.RenderPartialAsync("_AngularControllerInitializer", "MultisequenceCreate");
+    }
 }

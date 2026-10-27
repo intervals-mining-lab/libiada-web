@@ -6,8 +6,6 @@
 
 @if (ViewBag.Error == null)
 {
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "SubsequencesSimilarityResult");
-
     <div ng-controller="SubsequencesSimilarityResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <h4>{{::firstSequenceName}} and {{::secondSequenceName}} using {{::characteristicName}}</h4>
@@ -72,5 +70,8 @@
     </div>
 
     @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_AngularControllerInitializer", "SubsequencesSimilarityResult");
+        }
     }
 }

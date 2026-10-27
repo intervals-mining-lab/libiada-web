@@ -5,7 +5,6 @@
 <h2>@ViewBag.Title</h2>
 @if (ViewBag.Error == null)
 {
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "PoemSegmentationResult");
     <div ng-controller="PoemSegmentationResultCtrl">
         <h3>{{poemName}}</h3>
         <table class="table table-bordered table-hover" ng-cloak>
@@ -34,5 +33,8 @@
     </div>
 
     @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_AngularControllerInitializer", "PoemSegmentationResult");
+        }
     }
 }

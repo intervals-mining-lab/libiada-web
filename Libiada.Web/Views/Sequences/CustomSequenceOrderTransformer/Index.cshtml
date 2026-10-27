@@ -24,5 +24,7 @@
 @section Scripts {
     <script type="module" src="~/js/Angular/Components/orderTransformations.js" asp-append-version="true"></script>
     <script type="module" src="~/js/Angular/Components/customSequences.js" asp-append-version="true"></script>
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "CustomSequenceOrderTransformer");
+    @{
+        await Html.RenderPartialAsync("_AngularControllerInitializer", "CustomSequenceOrderTransformer");
+    }
 }

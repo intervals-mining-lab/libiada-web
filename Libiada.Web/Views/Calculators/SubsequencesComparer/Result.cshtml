@@ -182,10 +182,10 @@
     </div>
 
     @section Scripts {
+        <script type="module" src="~/js/Angular/Components/characteristic.js" asp-append-version="true"></script>
+        <script type="module" src="~/js/Angular/Components/filters.js" asp-append-version="true"></script>
         @{
             await Html.RenderPartialAsync("_AngularControllerInitializer", "SubsequencesComparerResult");
         }
-        <script type="module" src="~/js/Angular/Components/characteristic.js" asp-append-version="true"></script>
-        <script type="module" src="~/js/Angular/Components/filters.js" asp-append-version="true"></script>
     }
 }

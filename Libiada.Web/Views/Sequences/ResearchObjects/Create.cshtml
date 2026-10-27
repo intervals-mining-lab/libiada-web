@@ -215,9 +215,9 @@
 </div>
 
 @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="module" src="~/js/Angular/Components/localFile.js" asp-append-version="true"></script>
     @{
         await Html.RenderPartialAsync("_AngularControllerInitializer", "ResearchObjectCreate");
     }
-    <partial name="_ValidationScriptsPartial" />
-    <script type="module" src="~/js/Angular/Components/localFile.js" asp-append-version="true"></script>
 }

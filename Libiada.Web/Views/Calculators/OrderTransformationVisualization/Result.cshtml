@@ -6,8 +6,6 @@
 
 @if (ViewBag.Error == null)
 {
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "OrderTransformationVisualizationResult");
-
     <div ng-controller="OrderTransformationVisualizationResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
         <div ng-disabled="loading">
@@ -66,5 +64,8 @@
     </div>
 
     @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_AngularControllerInitializer", "OrderTransformationVisualizationResult");
+        }
     }
 }

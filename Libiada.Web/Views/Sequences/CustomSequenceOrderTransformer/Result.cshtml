@@ -42,7 +42,8 @@
     </div>
 
     @section Scripts {
-        await Html.RenderPartialAsync("_AngularControllerInitializer", "CustomSequenceOrderTransformerResult");
-
+        @{
+            await Html.RenderPartialAsync("_AngularControllerInitializer", "CustomSequenceOrderTransformerResult");
+        }
     }
 }
