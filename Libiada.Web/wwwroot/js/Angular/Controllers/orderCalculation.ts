@@ -1,15 +1,18 @@
 ﻿import { MapModelFromJson } from "functions";
+import { CharacteristicType } from "viewDataTypes";
 
 /**
  * Interface for the data object passed from the server
  */
-interface IOrderCalculationData {
+interface OrderCalculationData {
+    characteristicTypes: CharacteristicType[];
+    characteristicsDictionary: { [key: string]: number };
 }
 
 /**
  * Interface for the angular controller's scope
  */
-interface IOrderCalculationScope extends ng.IScope {
+interface OrderCalculationScope extends ng.IScope, OrderCalculationData {
 
 }
 
@@ -17,19 +20,15 @@ interface IOrderCalculationScope extends ng.IScope {
  * Controller for order calculations
  */
 class OrderCalculationHandler {
-    /**
-     * Creates a new instance of the controller
-     * @param data Data for controller initialization
-     */
-    constructor(data: IOrderCalculationData) {
+    constructor(data: OrderCalculationData) {
         this.ngOnInit(data);
     }
 
     /**
      * Initializes the Angular controller
      */
-    private ngOnInit(data: IOrderCalculationData): void {
-        const orderCalculation = ($scope: IOrderCalculationScope): void => {
+    private ngOnInit(data: OrderCalculationData): void {
+        const orderCalculation = ($scope: OrderCalculationScope): void => {
             MapModelFromJson($scope, data);
         };
 
@@ -42,6 +41,6 @@ class OrderCalculationHandler {
  * @param data Data for controller initialization
  * @returns Instance of OrderCalculationHandler
  */
-export default function OrderCalculationController(data: IOrderCalculationData): OrderCalculationHandler {
+export default function OrderCalculationController(data: OrderCalculationData): OrderCalculationHandler {
     return new OrderCalculationHandler(data);
 }

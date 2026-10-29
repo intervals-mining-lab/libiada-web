@@ -5,7 +5,7 @@ import type { ResultsLoadingScreenData, SequenceImportResult } from "viewDataTyp
  * Interface for the data object fetched from the server
  */
 interface NcbiNuccoreSearchResultData {
-    Results: SequenceImportResult[];
+    result: SequenceImportResult[];
     accessions: string[];
 }
 
@@ -24,7 +24,8 @@ class NcbiNuccoreSearchResultHandler {
     private ngOnInit(): void {
         const ncbiNuccoreSearchResult = ($scope: NcbiNuccoreSearchResultScope, $http: ng.IHttpService): void => {
 
-            initScopeFromServer<NcbiNuccoreSearchResultData>($http, $scope, "Loading import results", "Failed loading import results");
+            initScopeFromServer<NcbiNuccoreSearchResultData>(
+                $http, $scope, "Loading import results", "Failed loading import results");
         };
 
         // Register controller in Angular module

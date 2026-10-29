@@ -42,10 +42,6 @@ interface OrderTransformationCalculationScope extends ng.IScope, OrderTransforma
 * Angular controller class
 */
 class OrderTransformationCalculationHandler {
-    /**
-    * Creates an instance of the order transformation calculation controller
-    * @param data Data for initializing the controller
-    */
     constructor(data: OrderTransformationCalculationData) {
         this.ngOnInit(data);
     }
@@ -55,7 +51,6 @@ class OrderTransformationCalculationHandler {
     */
     private ngOnInit(data: OrderTransformationCalculationData): void {
         const orderTransformationCalculation = ($scope: OrderTransformationCalculationScope): void => {
-            // Initialize scope with data from the parameter
             MapModelFromJson($scope, data);
         };
 
@@ -68,6 +63,7 @@ class OrderTransformationCalculationHandler {
 * @param data Data for controller initialization
 * @returns Order transformation calculation controller instance
 */
-export default function OrderTransformationCalculationController(data: OrderTransformationCalculationData): OrderTransformationCalculationHandler {
+export default function OrderTransformationCalculationController(data: OrderTransformationCalculationData): 
+    OrderTransformationCalculationHandler {
     return new OrderTransformationCalculationHandler(data);
 }

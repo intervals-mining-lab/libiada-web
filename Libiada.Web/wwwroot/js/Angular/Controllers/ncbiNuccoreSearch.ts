@@ -21,7 +21,6 @@ class NCBINuclorSearchHandler {
      */
     private ngOnInit(): void {
         const ncbiNuccoreSearch = ($scope: NCBINuclorSearchScope): void => {
-
             $scope.searchQuery = "";
             $scope.filterMinLength = false;
             $scope.filterMaxLength = false;

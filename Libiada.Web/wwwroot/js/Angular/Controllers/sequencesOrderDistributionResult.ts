@@ -58,7 +58,7 @@ interface ISequencesOrderDistributionScope extends ng.IScope, ISequencesOrderDis
     fillPoints: () => void;
     fillAccordanceLevels: () => void;
     fillPointTooltip: (d: IDistributionPoint) => string;
-    showTooltip: (event: MouseEvent, d: IDistributionPoint, tooltip: ID3Tooltip, svg: any) => void;
+    showTooltip: (event: MouseEvent, d: IDistributionPoint, tooltip: ID3Tooltip, svg: d3.Selection<SVGGElement, IDistributionPoint, HTMLElement, null>) => void;
     clearTooltip: (tooltip: ID3Tooltip) => void;
     xValue: (d: IDistributionPoint) => number;
     yValue: (d: IDistributionPoint) => number;
@@ -147,12 +147,12 @@ class SequencesOrderDistributionResultHandler {
              * @param tooltip Tooltip element
              * @param svg SVG element
              */
-            function showTooltip(event: MouseEvent, d: IDistributionPoint, tooltip: ID3Tooltip, svg: any): void {
+            function showTooltip(event: MouseEvent, d: IDistributionPoint, tooltip: ID3Tooltip, svg: d3.Selection<SVGGElement, IDistributionPoint, HTMLElement, null>): void {
                 $scope.clearTooltip(tooltip);
                 tooltip.style("opacity", 0.9);
                 const tooltipHtml: string[] = [];
-
-                tooltip.selectedDots = svg.selectAll(".dot")
+                const selection: d3.Selection<SVGGElement, IDistributionPoint, SVGGElement, IDistributionPoint> = svg.selectAll(".dot");
+                tooltip.selectedDots = selection
                     .filter((dot: IDistributionPoint) => {
                         if (dot.x === d.x && dot.y === d.y) {
                             tooltipHtml.push($scope.fillPointTooltip(dot));

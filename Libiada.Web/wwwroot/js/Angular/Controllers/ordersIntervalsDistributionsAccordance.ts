@@ -1,17 +1,7 @@
-﻿import { MapModelFromJson } from "functions";
-
-/**
- * Interface for the data object passed from the server
- */
-interface IOrdersIntervalsDistributionsAccordanceData {
-
-}
-
-/**
+﻿/**
  * Interface for the angular controller's scope
  */
-interface IOrdersIntervalsDistributionsAccordanceScope extends ng.IScope {
-
+interface OrdersIntervalsDistributionsAccordanceScope extends ng.IScope {
 }
 
 /**
@@ -22,19 +12,19 @@ class OrdersIntervalsDistributionsAccordanceHandler {
     * Creates a new controller instance
     * @param data Data for initializing the controller
     */
-    constructor(data: IOrdersIntervalsDistributionsAccordanceData) {
-        this.ngOnInit(data);
+    constructor() {
+        this.ngOnInit();
     }
 
     /** 
     * Initializes the Angular controller 
     */
-    private ngOnInit(data: IOrdersIntervalsDistributionsAccordanceData): void {
-        const ordersIntervalsDistributionsAccordance = ($scope: IOrdersIntervalsDistributionsAccordanceScope): void => {
-            MapModelFromJson($scope, data);
+    private ngOnInit(): void {
+        const ordersIntervalsDistributionsAccordance = ($scope: OrdersIntervalsDistributionsAccordanceScope): void => {
         };
 
-        angular.module("libiada").controller("OrdersIntervalsDistributionsAccordanceCtrl", ["$scope", ordersIntervalsDistributionsAccordance]);
+        angular.module("libiada").controller(
+            "OrdersIntervalsDistributionsAccordanceCtrl", ["$scope", ordersIntervalsDistributionsAccordance]);
     }
 }
 
@@ -43,6 +33,6 @@ class OrdersIntervalsDistributionsAccordanceHandler {
 * @param data Data for controller initialization
 * @returns OrdersIntervalsDistributionsAccordanceHandler instance
 */
-export default function OrdersIntervalsDistributionsAccordanceController(data: IOrdersIntervalsDistributionsAccordanceData): OrdersIntervalsDistributionsAccordanceHandler {
-    return new OrdersIntervalsDistributionsAccordanceHandler(data);
+export default function OrdersIntervalsDistributionsAccordanceController(): OrdersIntervalsDistributionsAccordanceHandler {
+    return new OrdersIntervalsDistributionsAccordanceHandler();
 }

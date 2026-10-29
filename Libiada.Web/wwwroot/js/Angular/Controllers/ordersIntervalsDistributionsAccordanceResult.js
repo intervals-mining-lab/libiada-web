@@ -4,9 +4,6 @@ import { initScopeFromServer } from "functions";
  * Controller for displaying orders intervals distributions accordance results
  */
 class OrdersIntervalsDistributionsAccordanceResultHandler {
-    /**
-     * Creates a new instance of the controller
-     */
     constructor() {
         this.ngOnInit();
     }
@@ -78,7 +75,8 @@ class OrdersIntervalsDistributionsAccordanceResultHandler {
                 $scope.clearTooltip(tooltip);
                 tooltip.style("opacity", 0.9);
                 let tooltipHtml = [];
-                tooltip.selectedDots = svg.selectAll(".dot")
+                const selection = svg.selectAll(".dot");
+                tooltip.selectedDots = selection
                     .filter((dot) => {
                     if (dot.x === d.x && dot.y === d.y) {
                         tooltipHtml.push($scope.fillPointTooltip(dot));

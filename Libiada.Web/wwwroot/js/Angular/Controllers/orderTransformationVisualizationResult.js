@@ -204,7 +204,8 @@ class OrderTransformationVisualizationResultHandler {
                 let color = d3.scaleOrdinal(d3.schemeCategory10);
                 tooltip.style("opacity", 0.9);
                 let tooltipHtml = [];
-                tooltip.selectedDots = svg.selectAll(".dot")
+                const selection = svg.selectAll(".dot");
+                tooltip.selectedDots = selection
                     .filter((dot) => {
                     if (dot.x === d.x && dot.y === d.y) {
                         tooltipHtml.push($scope.fillPointTooltip(dot));

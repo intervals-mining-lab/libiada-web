@@ -3,10 +3,6 @@ import { MapModelFromJson } from "functions";
 * Angular controller class
 */
 class OrderTransformationCalculationHandler {
-    /**
-    * Creates an instance of the order transformation calculation controller
-    * @param data Data for initializing the controller
-    */
     constructor(data) {
         this.ngOnInit(data);
     }
@@ -15,7 +11,6 @@ class OrderTransformationCalculationHandler {
     */
     ngOnInit(data) {
         const orderTransformationCalculation = ($scope) => {
-            // Initialize scope with data from the parameter
             MapModelFromJson($scope, data);
         };
         angular.module("libiada").controller("OrderTransformationCalculationCtrl", ["$scope", orderTransformationCalculation]);

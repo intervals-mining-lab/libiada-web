@@ -99,7 +99,7 @@ interface IOrderTransformationVisualizationScope
     fillPointsAndLines: () => void;
     fillLegend: () => void;
     fillPointTooltip: (d: IPoint) => string;
-    showTooltip: (event: MouseEvent, d: IPoint, tooltip: any, svg: any) => void;
+    showTooltip: (event: MouseEvent, d: IPoint, tooltip: any, svg: d3.Selection<SVGGElement, IPoint, HTMLElement, null>) => void;
     clearTooltip: (tooltip: any) => void;
     xValue: (d: IPoint) => number;
     yValue: (d: IPoint) => number;
@@ -339,7 +339,7 @@ class OrderTransformationVisualizationResultHandler {
             * @param tooltip Tooltip element
             * @param svg SVG element
             */
-            function showTooltip(event: MouseEvent, d: IPoint, tooltip: ID3Tooltip, svg: any): void {
+            function showTooltip(event: MouseEvent, d: IPoint, tooltip: ID3Tooltip, svg: d3.Selection<SVGGElement, IPoint, HTMLElement, null>): void {
                 $scope.clearTooltip(tooltip);
                 let color = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -347,7 +347,8 @@ class OrderTransformationVisualizationResultHandler {
 
                 let tooltipHtml: string[] = [];
 
-                tooltip.selectedDots = svg.selectAll(".dot")
+                const selection: d3.Selection<SVGGElement, IPoint, SVGGElement, IPoint> = svg.selectAll(".dot");
+                tooltip.selectedDots = selection
                     .filter((dot: IPoint) => {
                         if (dot.x === d.x && dot.y === d.y) {
                             tooltipHtml.push($scope.fillPointTooltip(dot));

@@ -1,4 +1,3 @@
-import { MapModelFromJson } from "functions";
 /**
 * Controller for displaying order interval distribution correspondence
 */
@@ -7,15 +6,14 @@ class OrdersIntervalsDistributionsAccordanceHandler {
     * Creates a new controller instance
     * @param data Data for initializing the controller
     */
-    constructor(data) {
-        this.ngOnInit(data);
+    constructor() {
+        this.ngOnInit();
     }
     /**
     * Initializes the Angular controller
     */
-    ngOnInit(data) {
+    ngOnInit() {
         const ordersIntervalsDistributionsAccordance = ($scope) => {
-            MapModelFromJson($scope, data);
         };
         angular.module("libiada").controller("OrdersIntervalsDistributionsAccordanceCtrl", ["$scope", ordersIntervalsDistributionsAccordance]);
     }
@@ -25,7 +23,7 @@ class OrdersIntervalsDistributionsAccordanceHandler {
 * @param data Data for controller initialization
 * @returns OrdersIntervalsDistributionsAccordanceHandler instance
 */
-export default function OrdersIntervalsDistributionsAccordanceController(data) {
-    return new OrdersIntervalsDistributionsAccordanceHandler(data);
+export default function OrdersIntervalsDistributionsAccordanceController() {
+    return new OrdersIntervalsDistributionsAccordanceHandler();
 }
 //# sourceMappingURL=ordersIntervalsDistributionsAccordance.js.map

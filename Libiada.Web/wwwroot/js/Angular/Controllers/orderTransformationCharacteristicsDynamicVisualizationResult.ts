@@ -57,7 +57,7 @@ interface IOrderTransformationCharacteristicsDynamicScope
     fillPoints: () => void;
     fillLegend: () => void;
     fillPointTooltip: (d: IOrderTransformationPoint) => string;
-    showTooltip: (event: MouseEvent, d: IOrderTransformationPoint, tooltip: ID3Tooltip, svg: any) => void;
+    showTooltip: (event: MouseEvent, d: IOrderTransformationPoint, tooltip: ID3Tooltip, svg: d3.Selection<SVGGElement, IOrderTransformationPoint, HTMLElement, null>) => void;
     clearTooltip: (tooltip: ID3Tooltip) => void;
     xValue: (d: IOrderTransformationPoint) => number;
     yValue: (d: IOrderTransformationPoint) => number;
@@ -129,14 +129,14 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
              * @param tooltip The tooltip element
              * @param svg The SVG container element
              */
-            function showTooltip(event: MouseEvent, d: IOrderTransformationPoint, tooltip: ID3Tooltip, svg: any): void {
+            function showTooltip(event: MouseEvent, d: IOrderTransformationPoint, tooltip: ID3Tooltip, svg: d3.Selection<SVGGElement, IOrderTransformationPoint, HTMLElement, null>): void {
                 $scope.clearTooltip(tooltip);
 
                 tooltip.style("opacity", 0.9);
 
                 let tooltipHtml: string[] = [];
-
-                tooltip.selectedDots = svg.selectAll(".dot")
+                const selection: d3.Selection<SVGGElement, IOrderTransformationPoint, SVGGElement, IOrderTransformationPoint> = svg.selectAll(".dot");
+                tooltip.selectedDots = selection
                     .filter((dot: IOrderTransformationPoint) => {
                         if (dot.x === d.x && dot.y === d.y) {
                             tooltipHtml.push($scope.fillPointTooltip(dot));
