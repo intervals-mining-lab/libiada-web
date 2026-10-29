@@ -1,40 +1,4 @@
-﻿//import type * as bootstrap from "bootstrap";
-
-/**
- * Interface for the characteristic type
- */
-interface ILink {
-    id: number;
-    name: string;
-}
-
-/**
- * Interface for arrangement type
- */
-interface IArrangementType {
-    id: number;
-    name: string;
-}
-
-/**
- * Interface for the characteristic type
- */
-export interface ICharacteristicType {
-    id: number;
-    name: string;
-    description?: string;
-    Links: ILink[];
-    ArrangementTypes: IArrangementType[];
-}
-
-/**
- * Interface for the characteristic
- */
-export interface ICharacteristic {
-    characteristicType: ICharacteristicType;
-    link?: ILink;
-    arrangementType?: IArrangementType;
-}
+﻿import type { SelectedCharacteristic } from "viewDataTypes";
 
 /**
  * Interface for the scope in Angular controllers
@@ -77,7 +41,7 @@ class LibiadaWebUtils {
      * Selects the first link and arrangement type for a characteristic
      * @param characteristic - The characteristic object to modify
      */
-    public static SelectLink(characteristic: ICharacteristic): void {
+    public static SelectLink(characteristic: SelectedCharacteristic): void {
         characteristic.link = characteristic.characteristicType.Links[0];
         characteristic.arrangementType = characteristic.characteristicType.ArrangementTypes[0];
     }
@@ -93,10 +57,10 @@ export function MapModelFromJson($scope: AngularScope, data: DataObject): void {
  * Initializes angular controller's scope using data from server
  * @param $http
  * @param $scope scope to initialize
- * @param loadingScreenHeader displayed maeesage of loading screen
+ * @param loadingScreenHeader displayed message of loading screen
  * @param errorMessage displayed message in case of error
  */
-export async function initScopeFromServer<ResponceType extends DataObject>(
+export async function initScopeFromServer<ResponseType extends DataObject>(
     $http: ng.IHttpService,
     $scope: ResultScope,
     loadingScreenHeader: string,
@@ -111,21 +75,21 @@ export async function initScopeFromServer<ResponceType extends DataObject>(
         $scope.taskId = location[location.length - 1];
 
         // Fetch data from server
-        const result: { data: ResponceType } = await $http.get<ResponceType>(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`);
+        const result: { data: ResponseType } = await $http.get<ResponseType>(`/api/TaskManagerApi/GetTaskData/${$scope.taskId}`);
 
         MapModelFromJson($scope, result.data);
 
-    } catch(error) {
+    } catch (error) {
         //TODO: change it to alertify
         alert(errorMessage);
-            
+
     } finally {
         $scope.loading = false;
         $scope.$apply();
     }
 }
 
-export function SelectLink(characteristic: ICharacteristic): void {
+export function SelectLink(characteristic: SelectedCharacteristic): void {
     LibiadaWebUtils.SelectLink(characteristic);
 }
 
@@ -170,10 +134,10 @@ export function arrayMax(array: number[]): number {
 
 // Helper function to throw errors in ?? operator
 export function throwHelper(errorMessage: string): never {
-  throw new Error(errorMessage);
+    throw new Error(errorMessage);
 }
 
-export function InitializeBootstrapTooltips(){
+export function InitializeBootstrapTooltips() {
     const tooltipElements: HTMLElement[] = $('[data-bs-toggle="tooltip"]').toArray();
     tooltipElements.forEach((tooltipElement) => new bootstrap.Tooltip(tooltipElement));
 }

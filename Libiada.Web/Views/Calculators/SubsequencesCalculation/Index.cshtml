@@ -2,10 +2,6 @@
     ViewBag.Title = "Subsequences characteristics calculation";
 }
 
-@{
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "SubsequencesCalculation");
-}
-
 <h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm())
@@ -49,4 +45,7 @@
     <script type="module" src="~/js/Angular/Components/researchObjectsSubmit.js" asp-append-version="true"></script>
     <script type="module" src="~/js/Angular/Components/featuresSelect.js" asp-append-version="true"></script>
     <script type="module" src="~/js/Angular/Components/filters.js" asp-append-version="true"></script>
+    @{
+        await Html.RenderPartialAsync("_AngularControllerInitializer", "SubsequencesCalculation");
+    }
 }

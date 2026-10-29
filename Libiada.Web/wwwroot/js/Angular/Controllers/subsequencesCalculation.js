@@ -15,19 +15,9 @@ class SubsequencesCalculationHandler {
     */
     ngOnInit(data) {
         const subsequencesCalculation = ($scope) => {
-            // Initialize scope with data from parameter
+            // Initialize scope with data from server
             MapModelFromJson($scope, data);
-            /**
-            * Apply filter to data
-            * @param filter Filter to apply
-            */
-            function applyFilter(filter) {
-                // Implementation of filter application method
-                // Empty function, as in original JavaScript code
-            }
-            // Assign methods to $scope
-            $scope.applyFilter = applyFilter;
-            // Initialize default properties
+            // Initialize default properties values
             $scope.filters = [];
             $scope.hideNotation = true;
         };

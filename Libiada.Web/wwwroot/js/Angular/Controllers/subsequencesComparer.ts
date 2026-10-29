@@ -19,7 +19,7 @@ interface SubsequencesComparerData {
     nature: string;
     notations: Notation[];
     sequenceTypes: SequenceType[];
-    percentageDifferenseNeeded: boolean;
+    percentageDifferenceNeeded: boolean;
     features: Feature[];
 }
 

@@ -12,6 +12,17 @@ export interface SelectListItemWithNature extends SelectListItem {
     Nature: number;
 }
 
+export interface CharacteristicType extends SelectListItem  {
+    Links: Link[];
+    ArrangementTypes: ArrangementType[];
+}
+
+export interface SelectedCharacteristic {
+    characteristicType: CharacteristicType;
+    link: Link;
+    arrangementType: ArrangementType;
+}
+
 export interface Characteristic extends SelectListItem { }
 
 export interface SequencesGroup extends SelectListItem { }
@@ -63,11 +74,6 @@ export interface Aligner extends SelectListItem { }
 export interface DistanceCalculator extends SelectListItem { }
 
 export interface ArrangementType extends SelectListItem { }
-
-export interface CharacteristicType extends SelectListItem {
-    ArrangementTypes: ArrangementType[];
-    Links: Link[];
-}
 
 export interface ResearchObject extends SelectListItemWithNature {
     Group: string;

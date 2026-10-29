@@ -1,44 +1,28 @@
-﻿import type { Feature } from "viewDataTypes";
-import { MapModelFromJson, ICharacteristicType, ICharacteristic } from "functions";
+﻿import type { Feature, CharacteristicType, Group, Notation, SequenceType } from "viewDataTypes";
+import { MapModelFromJson } from "functions";
 
 /**
  * Interface for the data object passed from the server
  */
 interface SubsequencesCalculationData {
-    // Basic data properties
-    features?: Feature[];
-    attributeTypes?: string[];
-    characteristicTypes?: ICharacteristicType[];
-
-    // Pre-selected values ​​(optional)
-    selectedResearchObjects?: number[];
-    selectedCharacteristics?: ICharacteristic[];
-    featureId?: number;
+    characteristicTypes: CharacteristicType[];
+    characteristicsDictionary: { [key: string]: number };
+    features: Feature[];
+    groups: Group[];
+    maximumSelectedResearchObjects: number;
+    minimumSelectedResearchObjects: number;
+    nature: string;
+    notations: Notation[];
+    sequenceTypes: SequenceType[];
 }
 
 /**
  * Interface for the controller's scope
  */
-interface SubsequencesCalculationScope extends ng.IScope {
-    // Filtering parameters
-    filters: any[];
+interface SubsequencesCalculationScope extends ng.IScope, SubsequencesCalculationData {
+    selectedResearchObjectsCount: number;
+    filters: string[];
     hideNotation: boolean;
-
-    // Data for working with sequences (may be absent in the simplified controller)
-    features?: Feature[];
-    attributeTypes?: string[];
-    characteristicTypes?: ICharacteristicType[];
-
-    // Selected values
-    featureId?: number;
-    selectedResearchObjects?: number[];
-    selectedCharacteristics?: ICharacteristic[];
-    selectedAttributes?: string[];
-
-    // Methods
-    applyFilter: (filter: any) => void;
-    addCharacteristic?: () => void;
-    deleteCharacteristic?: (index: number) => void;
 }
 
 /**
@@ -59,22 +43,10 @@ class SubsequencesCalculationHandler {
     */
     private ngOnInit(data: SubsequencesCalculationData): void {
         const subsequencesCalculation = ($scope: SubsequencesCalculationScope): void => {
-            // Initialize scope with data from parameter
+            // Initialize scope with data from server
             MapModelFromJson($scope, data);
 
-            /**
-            * Apply filter to data
-            * @param filter Filter to apply
-            */
-            function applyFilter(filter: any): void {
-                // Implementation of filter application method
-                // Empty function, as in original JavaScript code
-            }
-
-            // Assign methods to $scope
-            $scope.applyFilter = applyFilter;
-
-            // Initialize default properties
+            // Initialize default properties values
             $scope.filters = [];
             $scope.hideNotation = true;
         };

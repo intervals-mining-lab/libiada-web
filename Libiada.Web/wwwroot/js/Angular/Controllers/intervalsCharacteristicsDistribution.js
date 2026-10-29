@@ -3,10 +3,6 @@ import { MapModelFromJson } from "functions";
  * Controller for intervals characteristics distribution
  */
 class IntervalsCharacteristicsDistributionHandler {
-    /**
-     * Creates a new instance of the controller
-     * @param data Data for controller initialization
-     */
     constructor(data) {
         this.ngOnInit(data);
     }

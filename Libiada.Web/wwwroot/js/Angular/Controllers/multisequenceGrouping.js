@@ -13,43 +13,44 @@ class MultisequenceGroupingHandler {
      * Initializes Angular controller
      */
     ngOnInit() {
-        const multisequenceGrouping = ($scope, $http) => {
+        const multisequenceGrouping = async ($scope, $http) => {
             /**
              * Removes a research object from a multisequence and adds it to ungrouped list
              * @param multiSequence The multisequence to remove from
              * @param researchObjectId The ID of the research object to remove
              */
-            function unbindResearchObject(multiSequence, researchObjectId) {
+            $scope.unbindResearchObject = function (multiSequence, researchObjectId) {
                 multiSequence.researchObjectIds.splice(multiSequence.researchObjectIds.indexOf(researchObjectId), 1);
                 $scope.ungroupedResearchObjects.push({
                     Id: researchObjectId,
                     Name: $scope.researchObjects[researchObjectId]
                 });
-            }
+            };
             /**
              * Adds a research object to a multisequence
              * @param multiSequence The multisequence to add to
              * @param index The index of the research object in ungrouped list
              */
-            function bindResearchObject(multiSequence, index) {
+            $scope.bindResearchObject = function (multiSequence, index) {
                 let researchObject = $scope.ungroupedResearchObjects[index];
                 $scope.researchObjects[researchObject.Id] = researchObject.Name;
                 multiSequence.researchObjectIds.push(researchObject.Id);
                 $scope.ungroupedResearchObjects.splice(index, 1);
-            }
-            $scope.bindResearchObject = bindResearchObject;
-            $scope.unbindResearchObject = unbindResearchObject;
+            };
             $scope.loadingScreenHeader = "Loading grouping results";
             $scope.loading = true;
-            $http.get(`/Multisequence/GroupResearchObjectsIntoMultisequences/`)
-                .then(function (data) {
-                MapModelFromJson($scope, data.data);
-                $scope.loading = false;
-            })
-                .catch(function () {
+            try {
+                const response = await $http.get(`/Multisequence/GroupResearchObjectsIntoMultisequences/`);
+                MapModelFromJson($scope, response.data);
+            }
+            catch (error) {
+                //TODO: change it to alertify
                 alert("Failed loading grouping results");
+            }
+            finally {
                 $scope.loading = false;
-            });
+                $scope.$apply();
+            }
         };
         // Register controller in Angular module
         angular.module("libiada").controller("MultisequenceGroupingCtrl", ["$scope", "$http", multisequenceGrouping]);

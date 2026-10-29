@@ -8,30 +8,35 @@ interface IMultisequenceGroupingResearchObject {
     Name: string;
 }
 
-/**
- * Interface for multisequence
- */
-interface IMultisequence {
+
+interface Multisequence {
     name: string;
     researchObjectIds: number[];
+
+}
+
+interface MultisequenceGroupingData{
+    researchObjects: {
+        [key:number]: string;
+    };
+    result: Multisequence[];
+    ungroupedResearchObjects: {
+        Id: number;
+        Name: string;
+    }[];
 }
 
 /**
  * Interface for the angular controller's scope
  */
-interface IMultisequenceGroupingScope extends ng.IScope {
-    // Properties
-    result: IMultisequence[];
-    researchObjects: { [id: number]: string };
-    ungroupedResearchObjects: IMultisequenceGroupingResearchObject[];
-
+interface IMultisequenceGroupingScope extends ng.IScope, MultisequenceGroupingData {
     // Loading state
     loadingScreenHeader: string;
     loading: boolean;
 
     // Methods
-    bindResearchObject: (multiSequence: IMultisequence, index: number) => void;
-    unbindResearchObject: (multiSequence: IMultisequence, researchObjectId: number) => void;
+    bindResearchObject: (multiSequence: Multisequence, index: number) => void;
+    unbindResearchObject: (multiSequence: Multisequence, researchObjectId: number) => void;
 }
 
 /**
@@ -49,13 +54,13 @@ class MultisequenceGroupingHandler {
      * Initializes Angular controller
      */
     private ngOnInit(): void {
-        const multisequenceGrouping = ($scope: IMultisequenceGroupingScope, $http: ng.IHttpService): void => {
+        const multisequenceGrouping = async ($scope: IMultisequenceGroupingScope, $http: ng.IHttpService): Promise<void> => {
             /**
              * Removes a research object from a multisequence and adds it to ungrouped list
              * @param multiSequence The multisequence to remove from
              * @param researchObjectId The ID of the research object to remove
              */
-            function unbindResearchObject(multiSequence: IMultisequence, researchObjectId: number): void {
+            $scope.unbindResearchObject = function (multiSequence: Multisequence, researchObjectId: number): void {
                 multiSequence.researchObjectIds.splice(multiSequence.researchObjectIds.indexOf(researchObjectId), 1);
                 $scope.ungroupedResearchObjects.push({
                     Id: researchObjectId,
@@ -68,28 +73,25 @@ class MultisequenceGroupingHandler {
              * @param multiSequence The multisequence to add to
              * @param index The index of the research object in ungrouped list
              */
-            function bindResearchObject(multiSequence: IMultisequence, index: number): void {
+            $scope.bindResearchObject = function (multiSequence: Multisequence, index: number): void {
                 let researchObject = $scope.ungroupedResearchObjects[index];
                 $scope.researchObjects[researchObject.Id] = researchObject.Name;
                 multiSequence.researchObjectIds.push(researchObject.Id);
                 $scope.ungroupedResearchObjects.splice(index, 1);
             }
 
-            $scope.bindResearchObject = bindResearchObject;
-            $scope.unbindResearchObject = unbindResearchObject;
-
             $scope.loadingScreenHeader = "Loading grouping results";
             $scope.loading = true;
-
-            $http.get<any>(`/Multisequence/GroupResearchObjectsIntoMultisequences/`)
-                .then(function (data) {
-                    MapModelFromJson($scope, data.data);
-                    $scope.loading = false;
-                })
-                .catch(function () {
-                    alert("Failed loading grouping results");
-                    $scope.loading = false;
-                });
+            try {
+                const response = await $http.get<MultisequenceGroupingData>(`/Multisequence/GroupResearchObjectsIntoMultisequences/`);
+                MapModelFromJson($scope, response.data);
+            } catch(error) {
+                //TODO: change it to alertify
+                alert("Failed loading grouping results");
+            } finally {
+                $scope.loading = false;
+                $scope.$apply();
+            }
         };
 
         // Register controller in Angular module

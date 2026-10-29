@@ -1,4 +1,4 @@
-﻿import { initScopeFromServer, MapModelFromJson } from "functions";
+﻿import { initScopeFromServer } from "functions";
 import type { ResultsLoadingScreenData } from "viewDataTypes";
 
 /**

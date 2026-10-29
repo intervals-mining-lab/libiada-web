@@ -1,34 +1,33 @@
 ﻿import { MapModelFromJson } from "functions";
+import { CharacteristicType } from "viewDataTypes";
 
 /**
  * Interface for the data object passed from the server
  */
-interface IIntervalsCharacteristicsDistributionData {
+interface IntervalsCharacteristicsDistributionData {
+    characteristicTypes: CharacteristicType[];
+    characteristicsDictionary: { [key: string]: number };
 }
 
 /**
  * Interface for the angular controller's scope
  */
-interface IIntervalsCharacteristicsDistributionScope extends ng.IScope {
+interface IntervalsCharacteristicsDistributionScope extends ng.IScope, IntervalsCharacteristicsDistributionData {
 }
 
 /**
  * Controller for intervals characteristics distribution
  */
 class IntervalsCharacteristicsDistributionHandler {
-    /**
-     * Creates a new instance of the controller
-     * @param data Data for controller initialization
-     */
-    constructor(data: IIntervalsCharacteristicsDistributionData) {
+    constructor(data: IntervalsCharacteristicsDistributionData) {
         this.ngOnInit(data);
     }
 
     /**
      * Initializes the Angular controller
      */
-    private ngOnInit(data: IIntervalsCharacteristicsDistributionData): void {
-        const intervalsCharacteristicsDistribution = ($scope: IIntervalsCharacteristicsDistributionScope): void => {
+    private ngOnInit(data: IntervalsCharacteristicsDistributionData): void {
+        const intervalsCharacteristicsDistribution = ($scope: IntervalsCharacteristicsDistributionScope): void => {
             MapModelFromJson($scope, data);
         };
 
@@ -43,6 +42,6 @@ class IntervalsCharacteristicsDistributionHandler {
  * @returns Instance of IntervalsCharacteristicsDistributionHandler
  */
 export default function IntervalsCharacteristicsDistributionController(
-    data: IIntervalsCharacteristicsDistributionData): IntervalsCharacteristicsDistributionHandler {
+    data: IntervalsCharacteristicsDistributionData): IntervalsCharacteristicsDistributionHandler {
     return new IntervalsCharacteristicsDistributionHandler(data);
 }

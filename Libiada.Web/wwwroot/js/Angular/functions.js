@@ -1,4 +1,3 @@
-//import type * as bootstrap from "bootstrap";
 /**
  * Utility functions for LibiadaWeb Angular application
  */
@@ -34,7 +33,7 @@ export function MapModelFromJson($scope, data) {
  * Initializes angular controller's scope using data from server
  * @param $http
  * @param $scope scope to initialize
- * @param loadingScreenHeader displayed maeesage of loading screen
+ * @param loadingScreenHeader displayed message of loading screen
  * @param errorMessage displayed message in case of error
  */
 export async function initScopeFromServer($http, $scope, loadingScreenHeader, errorMessage = "Failed loading data from server") {

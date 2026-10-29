@@ -55,12 +55,12 @@ angular.module("libiada").component("characteristics", {
         nature: "<",
         notations: "<",
         characteristicsDictionary: "<",
-        percentageDifferenseNeeded: "<?",
+        percentageDifferenceNeeded: "<?",
         hideNotation: "@",
         languages: "<?",
         translators: "<?",
         pauseTreatments: "<?",
-        trajectories: "<?"
-            percentageDifferenceNeeded: "<",
+        trajectories: "<?",
+        percentageDifferenceNeeded: "<",
     }
 });

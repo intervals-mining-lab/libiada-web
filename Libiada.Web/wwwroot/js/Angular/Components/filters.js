@@ -3,6 +3,8 @@
 
     ctrl.$onInit = () => {
         ctrl.filters ??= [];
+        ctrl.addFilter ??= () => { };
+        ctrl.deleteFilter ??= () => { };
     };
 
     ctrl.onAddingFilter = () => {
@@ -26,8 +28,8 @@ angular.module("libiada").component("filters", {
     controller: FiltersController,
     bindings: {
         filters: "=?",
-        addFilter: "&",
-        deleteFilter: "&"
+        addFilter: "&?",
+        deleteFilter: "&?"
     }
 });
 
