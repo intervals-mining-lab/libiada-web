@@ -188,7 +188,7 @@ public class CustomSequenceCalculationController : AbstractResultController
                 }
             }
 
-            CustomSequencesCharacterisitcsCalculator calculator = new(characteristicTypeLinkRepository, characteristicLinkIds);
+            CustomSequencesCharacteristicsCalculator calculator = new(characteristicTypeLinkRepository, characteristicLinkIds);
             var characteristics = calculator.Calculate(sequences).ToList();
             List<SequenceCharacteristics> sequencesCharacteristics = [];
             for (int i = 0; i < sequences.Length; i++)

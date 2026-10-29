@@ -61,5 +61,6 @@ angular.module("libiada").component("characteristics", {
         translators: "<?",
         pauseTreatments: "<?",
         trajectories: "<?"
+            percentageDifferenceNeeded: "<",
     }
 });
