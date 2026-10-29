@@ -318,7 +318,7 @@ public class ViewDataBuilder(IDbContextFactory<LibiadaDatabaseEntities> dbFactor
     /// <returns></returns>
     public IViewDataBuilder AddMaxPercentageDifferenceRequiredFlag()
     {
-        viewData.Add("percentageDifferenseNeeded", true);
+        viewData.Add("percentageDifferenceNeeded", true);
         return this;
     }
     /// <summary>

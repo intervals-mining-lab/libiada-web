@@ -62,7 +62,7 @@
             pauseTreatments: "<?",
             trajectories: "<?",
             characteristicsDictionary: "<",
-            percentageDifferenseNeeded: "<",
+            percentageDifferenceNeeded: "<",
             hideNotation: "@"
         }
     });

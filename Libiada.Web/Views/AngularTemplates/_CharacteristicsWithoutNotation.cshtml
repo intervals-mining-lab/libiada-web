@@ -2,14 +2,14 @@
 @using Libiada.Web.Helpers
 <div ng-repeat="characteristic in $ctrl.characteristics">
     <div class="row mb-2">
-        <label class="col-form-label col-md-2" for="characterisitc{{$index}}">Characteristic:</label>
+        <label class="col-form-label col-md-2" for="characteristics{{$index}}">Characteristic:</label>
         <div class="col-md-10">
             <select class="form-select"
                     title="Characteristic"
                     ng-model="characteristic.characteristicType"
                     ng-options="c.Text for c in $ctrl.characteristicTypes"
                     ng-change="$ctrl.selectLink(characteristic)"
-                    id="characterisitc{{$index}}"></select>
+                    id="characteristics{{$index}}"></select>
         </div>
     </div>
     <div class="row mb-2" ng-show="characteristic.characteristicType.Links.length > 1">
