@@ -1,15 +1,18 @@
 ﻿//import d3 from "d3";
 import { initScopeFromServer } from "functions";
-import type { IBasePoint } from "./Interfaces/commonInterfaces";
-import type { ResultsLoadingScreenData } from "viewDataTypes";
+import type { ResultsLoadingScreenData, OrderTransformation } from "viewDataTypes";
 
-interface IPoint extends IBasePoint {
-    value: number; // Value (order identifier)
-    transformationVisibility: ITransformationVisibility[];
+interface Point {
+    id: number;
+    x: number;
+    y: number;
+    colorId: number;
+    value: number;
+    transformationVisibility: TransformationVisibility[];
 }
 
 // Interface for the line between points
-interface ILine {
+interface Line {
     id: number;
     value: string;
     arrowType: number;
@@ -22,96 +25,83 @@ interface ILine {
     colorId: number;
 }
 
-// Interface for the legend item
-interface IOrderTransformationLegendItem {
+interface LegendItem {
     id: number;
     name: string;
     visible: boolean;
 }
 
-//Interface for the visibility of the transformation
-interface ITransformationVisibility {
+interface TransformationVisibility {
     id: number;
     name: string;
     visible: boolean;
 }
 
-// Interface for the order ID
-interface IOrderId {
+interface OrderId {
     id: number;
 }
 
-// Interface for the transformation type
-interface ITransformationType {
-    Text: string;
-    Value?: number;
+interface TransformationData {
+    ResultTransformation: ResultTransformation[];
+    UniqueFinalOrdersCount: number;
 }
 
-// Interface for the transformation data
-interface ITransformationData {
-    ResultTransformation: IResultTransformation[];
-}
-
-// Interface for the transformation result
-interface IResultTransformation {
+interface ResultTransformation {
     Transformation: string;
     OrderId: number;
 }
 
+interface Tooltip extends d3.Selection<HTMLDivElement, Point, HTMLElement, any> {
+    hideTooltip?: boolean;
+    selectedDots?: d3.Selection<SVGGElement, Point, SVGGElement, Point>;
+}
+
+
 /**
  * Interface for the data object fetched from the server
  */
-interface IOrderTransformationVisualizationData {
-    orders: string[];
-    transformationsData: { [key: number]: ITransformationData };
-    transformationsList: ITransformationType[];
+interface OrderTransformationVisualizationResultData {
+    orders: number[][];
+    transformationsData: TransformationData[];
+    transformationsList: OrderTransformation[];
 }
 
 /**
  * Interface for the angular controller's scope
  */
-interface IOrderTransformationVisualizationScope
-    extends ng.IScope, IOrderTransformationVisualizationData, ResultsLoadingScreenData {
-    // Chart settings
+interface OrderTransformationVisualizationResultScope
+    extends ng.IScope, OrderTransformationVisualizationResultData, ResultsLoadingScreenData {
+    transformationType: OrderTransformation;
     width: number;
     height: number;
     dotRadius: number;
     selectedDotRadius: number;
     legendHeight: number;
+    points: Point[];
 
-    // Chart elements
-    points: IPoint[];
-    lines: ILine[];
-    legend: IOrderTransformationLegendItem[];
-    ordersIds: IOrderId[];
+    lines: Line[];
+    legend: LegendItem[];
+    ordersIds: OrderId[];
 
-    // Current settings
-    initialOrder: IOrderId;
-    transformationType: ITransformationType;
+
+    initialOrder: OrderId;
     counterIteration: number;
 
     // Chart functions
-    xMap: (d: IPoint) => number;
-    yMap: (d: IPoint) => number;
+    xMap: (d: Point) => number;
+    yMap: (d: Point) => number;
 
     // Methods
     draw: () => void;
     fillPointsAndLines: () => void;
     fillLegend: () => void;
-    fillPointTooltip: (d: IPoint) => string;
-    showTooltip: (event: MouseEvent, d: IPoint, tooltip: any, svg: d3.Selection<SVGGElement, IPoint, HTMLElement, null>) => void;
-    clearTooltip: (tooltip: any) => void;
-    xValue: (d: IPoint) => number;
-    yValue: (d: IPoint) => number;
+    fillPointTooltip: (d: Point) => string;
+    showTooltip: (event: MouseEvent, d: Point, tooltip: Tooltip, svg: d3.Selection<SVGGElement, Point, HTMLElement, null>) => void;
+    clearTooltip: (tooltip: Tooltip) => void;
+    xValue: (d: Point) => number;
+    yValue: (d: Point) => number;
 }
 
-// Interface definition for tooltip with additional properties
-interface ID3Tooltip extends d3.Selection<HTMLDivElement, unknown, HTMLElement, any> {
-    hideTooltip?: boolean;
-    selectedDots?: any;
-}
-
-// Methods in IOrderTransformationVisualizationScope interface
 
 /**
 * Controller for visualizing order transformation results
@@ -122,7 +112,8 @@ class OrderTransformationVisualizationResultHandler {
     }
 
     private async ngOnInit(): Promise<void> {
-        const orderTransformationVisualizationResult = async ($scope: IOrderTransformationVisualizationScope, $http: ng.IHttpService): Promise<void> => {
+        const orderTransformationVisualizationResult = async (
+            $scope: OrderTransformationVisualizationResultScope, $http: ng.IHttpService): Promise<void> => {
 
             /**
             * Initializes the data for the legend
@@ -141,7 +132,7 @@ class OrderTransformationVisualizationResultHandler {
                 let initialOrder = $scope.initialOrder.id;
                 let checkedOrders = [initialOrder];
                 let ordersForChecking = [initialOrder];
-                let transformationVisibility: ITransformationVisibility[] = [];
+                let transformationVisibility: TransformationVisibility[] = [];
 
                 for (let l = 0; l < $scope.legend.length; l++) {
                     transformationVisibility.push({
@@ -172,7 +163,8 @@ class OrderTransformationVisualizationResultHandler {
                         for (let j = 0; j < resultTransformations.length; j++) {
                             let resultTransformation = resultTransformations[j];
 
-                            if ($scope.transformationType.Text === "All" || resultTransformation.Transformation === $scope.transformationType.Text) {
+                            if ($scope.transformationType.Text === "All"
+                                || resultTransformation.Transformation === $scope.transformationType.Text) {
                                 let pointExist = false;
                                 let orderId = resultTransformation.OrderId;
 
@@ -212,7 +204,7 @@ class OrderTransformationVisualizationResultHandler {
             * Initializes data for graph lines 
             */
             function fillLines(): void {
-                let counterIdLines = 0;
+                let counterIdLines: number = 0;
 
                 for (let i = 0; i < $scope.points.length; i++) {
                     let resultTransformation = $scope.transformationsData[$scope.points[i].value].ResultTransformation;
@@ -221,7 +213,7 @@ class OrderTransformationVisualizationResultHandler {
                         let transformationType = resultTransformation[j].Transformation;
 
                         if ($scope.transformationType.Text === "All" || transformationType === $scope.transformationType.Text) {
-                            let colorId = $scope.legend.find(d => d.name === transformationType).id;
+                            let colorId = $scope.legend.find(d => d.name === transformationType)!.id;
                             let childOrder = resultTransformation[j].OrderId;
 
                             let line = {
@@ -325,7 +317,7 @@ class OrderTransformationVisualizationResultHandler {
             * Generates tooltip text
             * @param d Point for which tooltip is generated
             */
-            function fillPointTooltip(d: IPoint): string {
+            function fillPointTooltip(d: Point): string {
                 let tooltipContent: string[] = [];
                 tooltipContent.push(`Order ID: ${d.value}`);
                 tooltipContent.push(`Order: ${$scope.orders[d.value]}`);
@@ -339,7 +331,11 @@ class OrderTransformationVisualizationResultHandler {
             * @param tooltip Tooltip element
             * @param svg SVG element
             */
-            function showTooltip(event: MouseEvent, d: IPoint, tooltip: ID3Tooltip, svg: d3.Selection<SVGGElement, IPoint, HTMLElement, null>): void {
+            function showTooltip(
+                event: MouseEvent,
+                d: Point,
+                tooltip: Tooltip,
+                svg: d3.Selection<SVGGElement, Point, HTMLElement, null>): void {
                 $scope.clearTooltip(tooltip);
                 let color = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -347,9 +343,9 @@ class OrderTransformationVisualizationResultHandler {
 
                 let tooltipHtml: string[] = [];
 
-                const selection: d3.Selection<SVGGElement, IPoint, SVGGElement, IPoint> = svg.selectAll(".dot");
+                const selection: d3.Selection<SVGGElement, Point, SVGGElement, Point> = svg.selectAll(".dot");
                 tooltip.selectedDots = selection
-                    .filter((dot: IPoint) => {
+                    .filter((dot: Point) => {
                         if (dot.x === d.x && dot.y === d.y) {
                             tooltipHtml.push($scope.fillPointTooltip(dot));
                             return true;
@@ -372,19 +368,19 @@ class OrderTransformationVisualizationResultHandler {
                     .enter()
                     .append("g")
                     .attr("class", "dotlegend")
-                    .attr("transform", (vt: ITransformationVisibility, i: number) => `translate(0,${i * 20})`)
+                    .attr("transform", (vt: TransformationVisibility, i: number) => `translate(0,${i * 20})`)
                     .append("rect")
                     .attr("width", 15)
                     .attr("height", 15)
-                    .style("fill", (vt: ITransformationVisibility) => color(vt.name))
-                    .style("stroke", (vt: ITransformationVisibility) => color(vt.name))
+                    .style("fill", (vt: TransformationVisibility) => color(vt.name))
+                    .style("stroke", (vt: TransformationVisibility) => color(vt.name))
                     .style("stroke-width", 4)
-                    .style("fill-opacity", (vt: ITransformationVisibility) => vt.visible ? 1 : 0)
-                    .on("click", function (event: MouseEvent, vt: ITransformationVisibility) {
+                    .style("fill-opacity", (vt: TransformationVisibility) => vt.visible ? 1 : 0)
+                    .on("click", function (event: MouseEvent, vt: TransformationVisibility) {
                         vt.visible = !vt.visible;
                         d3.select(event.currentTarget as Element).style("fill-opacity", () => vt.visible ? 1 : 0);
-                        svg.selectAll(".transform-line")
-                            .filter((line: ILine) => line.startOrderId === d.value && line.value === vt.name)
+                        svg.selectAll<SVGGElement, Line>(".transform-line")
+                            .filter((line: Line) => line.startOrderId === d.value && line.value === vt.name)
                             .attr("visibility", () => vt.visible ? "visible" : "hidden");
                     });
 
@@ -398,7 +394,7 @@ class OrderTransformationVisualizationResultHandler {
             * Clears the tooltip
             * @param tooltip Tooltip element
             */
-            function clearTooltip(tooltip: ID3Tooltip): void {
+            function clearTooltip(tooltip: Tooltip): void {
                 if (tooltip) {
                     if (tooltip.hideTooltip) {
                         tooltip.html("").style("opacity", 0);
@@ -417,7 +413,7 @@ class OrderTransformationVisualizationResultHandler {
             * Returns the X value of the point
             * @param d Data point
             */
-            function xValue(d: IPoint): number {
+            function xValue(d: Point): number {
                 return d.x;
             }
 
@@ -425,7 +421,7 @@ class OrderTransformationVisualizationResultHandler {
             * Returns the Y value of the point
             * @param d Data point
             */
-            function yValue(d: IPoint): number {
+            function yValue(d: Point): number {
                 return d.y;
             }
 
@@ -460,7 +456,7 @@ class OrderTransformationVisualizationResultHandler {
                     .tickSizeOuter(0)
                     .tickPadding(10);
 
-                $scope.xMap = (d: IPoint) => xScale($scope.xValue(d));
+                $scope.xMap = (d: Point) => xScale($scope.xValue(d));
 
                 // Setting up the Y axis 
                 // Calculate indents for points 
@@ -480,7 +476,7 @@ class OrderTransformationVisualizationResultHandler {
                     .tickSizeOuter(0)
                     .tickPadding(10);
 
-                $scope.yMap = (d: IPoint) => yScale($scope.yValue(d));
+                $scope.yMap = (d: Point) => yScale($scope.yValue(d));
 
                 // Set the fill color
                 let color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.legend.length]);
@@ -491,7 +487,7 @@ class OrderTransformationVisualizationResultHandler {
                     .attr("height", $scope.height)
                     .attr("class", "chart-svg");
 
-                let g = svg.append("g")
+                let g: d3.Selection<SVGGElement, unknown, HTMLElement, any> = svg.append("g")
                     .attr("transform", `translate(${margin.left},${margin.top})`);
 
                 // Add definitions for line ends
@@ -511,12 +507,12 @@ class OrderTransformationVisualizationResultHandler {
                 }
 
                 // Add a tooltip area to the page 
-                let tooltip = d3.select("#chart").append("div")
+                let tooltip: Tooltip = d3.select<HTMLElement, Point>("#chart").append("div")
                     .attr("class", "chart-tooltip position-absolute bg-light font-monospace small lh-sm p-1 rounded")
                     .style("opacity", 0);
 
                 // Prevent tooltip from hiding when clicked
-                tooltip.on("click", () => { (tooltip as any).hideTooltip = false; });
+                tooltip.on("click", () => { tooltip.hideTooltip = false; });
 
                 // Hide tooltip when clicked outside elements
                 d3.select("#chart").on("click", () => { $scope.clearTooltip(tooltip); });
@@ -555,23 +551,23 @@ class OrderTransformationVisualizationResultHandler {
                     .enter()
                     .append("line")
                     .attr("class", "transform-line")
-                    .attr("x1", (d: ILine) => xScale(d.x1))
-                    .attr("y1", (d: ILine) => yScale(d.y1))
-                    .attr("x2", (d: ILine) => xScale(d.x2))
-                    .attr("y2", (d: ILine) => yScale(d.y2))
-                    .attr("marker-end", (d: ILine) => `url(#arrow${d.arrowType})`)
-                    .style("stroke", (d: ILine) => color(d.colorId))
+                    .attr("x1", (d: Line) => xScale(d.x1))
+                    .attr("y1", (d: Line) => yScale(d.y1))
+                    .attr("x2", (d: Line) => xScale(d.x2))
+                    .attr("y2", (d: Line) => yScale(d.y2))
+                    .attr("marker-end", (d: Line) => `url(#arrow${d.arrowType})`)
+                    .style("stroke", (d: Line) => color(d.colorId))
                     .style("stroke-width", "2")
                     .attr("visibility", "visible");
 
                 // Draw the legend 
-                let legend = g.selectAll(".legend")
+                let legend: d3.Selection<SVGGElement, LegendItem, SVGElement, Point> = g.selectAll(".legend")
                     .data($scope.legend)
                     .enter()
                     .append("g")
                     .attr("class", "legend")
-                    .attr("transform", (d: IOrderTransformationLegendItem, i: number) => `translate(0,${i * 20})`)
-                    .on("click", function (event: MouseEvent, d: IOrderTransformationLegendItem) {
+                    .attr("transform", (_: LegendItem, i: number) => `translate(0,${i * 20})`)
+                    .on("click", function (event: MouseEvent, d: LegendItem) {
                         d.visible = !d.visible;
                         let legendEntry = d3.select(event.currentTarget as Element);
 
@@ -581,8 +577,8 @@ class OrderTransformationVisualizationResultHandler {
                         legendEntry.select("rect")
                             .style("fill-opacity", () => d.visible ? 1 : 0);
 
-                        svg.selectAll(".transform-line")
-                            .filter((line: ILine) => line.value === d.name)
+                        svg.selectAll<SVGGElement, Line>(".transform-line")
+                            .filter((line: Line) => line.value === d.name)
                             .attr("visibility", () => d.visible ? "visible" : "hidden");
 
                         for (let k = 0; k < $scope.points.length; k++) {
@@ -607,14 +603,14 @@ class OrderTransformationVisualizationResultHandler {
                     .style("fill-opacity", 0.6)
                     .style("fill", "black")
                     .style("stroke", "black")
-                    .on("click", (event: MouseEvent, d: IPoint) => $scope.showTooltip(event, d, tooltip, g));
+                    .on("click", (event: MouseEvent, d: Point) => $scope.showTooltip(event, d, tooltip, g));
 
                 // Drawing colored rectangles of the legend
                 legend.append("rect")
                     .attr("width", 15)
                     .attr("height", 15)
-                    .style("fill", (d: IOrderTransformationLegendItem) => color(d.id))
-                    .style("stroke", (d: IOrderTransformationLegendItem) => color(d.id))
+                    .style("fill", (d: LegendItem) => color(d.id))
+                    .style("stroke", (d: LegendItem) => color(d.id))
                     .style("stroke-width", 4)
                     .attr("transform", `translate(0, -${$scope.legendHeight})`);
 
@@ -624,7 +620,7 @@ class OrderTransformationVisualizationResultHandler {
                     .attr("y", 9)
                     .attr("dy", ".35em")
                     .attr("transform", `translate(0, -${$scope.legendHeight})`)
-                    .text((d: IOrderTransformationLegendItem) => d.name)
+                    .text((d: LegendItem) => d.name)
                     .style("font-size", "9pt");
             }
 
@@ -643,7 +639,7 @@ class OrderTransformationVisualizationResultHandler {
             $scope.dotRadius = 4;
             $scope.selectedDotRadius = $scope.dotRadius * 2;
 
-            await initScopeFromServer<IOrderTransformationVisualizationData>(
+            await initScopeFromServer<OrderTransformationVisualizationResultData>(
                 $http,
                 $scope,
                 "Loading order transformation data",
@@ -669,7 +665,8 @@ class OrderTransformationVisualizationResultHandler {
         };
 
         // Register the controller in the Angular module
-        angular.module("libiada").controller("OrderTransformationVisualizationResultCtrl", ["$scope", "$http", orderTransformationVisualizationResult]);
+        angular.module("libiada").controller("OrderTransformationVisualizationResultCtrl",
+            ["$scope", "$http", orderTransformationVisualizationResult]);
     }
 }
 

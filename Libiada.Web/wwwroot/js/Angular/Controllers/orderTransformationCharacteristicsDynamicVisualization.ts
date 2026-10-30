@@ -34,7 +34,8 @@ interface OrderTransformationCharacteristicsDynamicVisualizationData {
 /**
  * Interface for the controller's scope
  */
-interface OrderTransformationCharacteristicsDynamicVisualizationScope extends ng.IScope, OrderTransformationCharacteristicsDynamicVisualizationData {
+interface OrderTransformationCharacteristicsDynamicVisualizationScope 
+    extends ng.IScope, OrderTransformationCharacteristicsDynamicVisualizationData {
     nature: string;
     selectedResearchObjectsCount: number;
 }
@@ -43,10 +44,6 @@ interface OrderTransformationCharacteristicsDynamicVisualizationScope extends ng
  * Controller for order transformation characteristics dynamic visualization
  */
 class OrderTransformationCharacteristicsDynamicVisualizationHandler {
-    /**
-     * Creates a new controller instance
-     * @param data Data for controller initialization
-     */
     constructor(data: OrderTransformationCharacteristicsDynamicVisualizationData) {
         this.ngOnInit(data);
     }
@@ -56,7 +53,8 @@ class OrderTransformationCharacteristicsDynamicVisualizationHandler {
      * @param data Data for controller initialization
      */
     private ngOnInit(data: OrderTransformationCharacteristicsDynamicVisualizationData): void {
-        const orderTransformationCharacteristicsDynamicVisualization = ($scope: OrderTransformationCharacteristicsDynamicVisualizationScope): void => {
+        const orderTransformationCharacteristicsDynamicVisualization = (
+            $scope: OrderTransformationCharacteristicsDynamicVisualizationScope): void => {
             MapModelFromJson($scope, data);
         };
 

@@ -3,10 +3,6 @@ import { MapModelFromJson } from "functions";
  * Controller for order transformation characteristics dynamic visualization
  */
 class OrderTransformationCharacteristicsDynamicVisualizationHandler {
-    /**
-     * Creates a new controller instance
-     * @param data Data for controller initialization
-     */
     constructor(data) {
         this.ngOnInit(data);
     }

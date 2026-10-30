@@ -1,6 +1,5 @@
 //import d3 from "d3";
 import { initScopeFromServer } from "functions";
-// Methods in IOrderTransformationVisualizationScope interface
 /**
 * Controller for visualizing order transformation results
 */
@@ -50,7 +49,8 @@ class OrderTransformationVisualizationResultHandler {
                         let resultTransformations = $scope.transformationsData[ordersForChecking[i]].ResultTransformation;
                         for (let j = 0; j < resultTransformations.length; j++) {
                             let resultTransformation = resultTransformations[j];
-                            if ($scope.transformationType.Text === "All" || resultTransformation.Transformation === $scope.transformationType.Text) {
+                            if ($scope.transformationType.Text === "All"
+                                || resultTransformation.Transformation === $scope.transformationType.Text) {
                                 let pointExist = false;
                                 let orderId = resultTransformation.OrderId;
                                 for (let k = 0; k < $scope.points.length; k++) {
@@ -394,7 +394,7 @@ class OrderTransformationVisualizationResultHandler {
                     .enter()
                     .append("g")
                     .attr("class", "legend")
-                    .attr("transform", (d, i) => `translate(0,${i * 20})`)
+                    .attr("transform", (_, i) => `translate(0,${i * 20})`)
                     .on("click", function (event, d) {
                     d.visible = !d.visible;
                     let legendEntry = d3.select(event.currentTarget);

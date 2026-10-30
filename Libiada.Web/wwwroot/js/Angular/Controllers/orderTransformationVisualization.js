@@ -1,4 +1,3 @@
-import { MapModelFromJson } from "functions";
 /**
 * Controller for visualizing order transformation
 */
@@ -7,15 +6,14 @@ class OrderTransformationVisualizationHandler {
     * Creates an instance of the order transformation visualization controller
     * @param data Data for initializing the controller
     */
-    constructor(data) {
-        this.ngOnInit(data);
+    constructor() {
+        this.ngOnInit();
     }
     /**
     * Initializes the Angular controller
     */
-    ngOnInit(data) {
+    ngOnInit() {
         const orderTransformationVisualization = ($scope) => {
-            MapModelFromJson($scope, data);
         };
         // Register the controller in Angular
         angular.module("libiada").controller("OrderTransformationVisualizationCtrl", ["$scope", orderTransformationVisualization]);
@@ -26,7 +24,7 @@ class OrderTransformationVisualizationHandler {
 * @param data Data for controller initialization
 * @returns Order transformation visualization controller instance
 */
-export default function OrderTransformationVisualizationController(data) {
-    return new OrderTransformationVisualizationHandler(data);
+export default function OrderTransformationVisualizationController() {
+    return new OrderTransformationVisualizationHandler();
 }
 //# sourceMappingURL=orderTransformationVisualization.js.map
