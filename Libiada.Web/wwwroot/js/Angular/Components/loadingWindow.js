@@ -1,12 +1,9 @@
-﻿function LoadingWindowController() {
+"use strict";
+function LoadingWindowController() {
     const ctrl = this;
-
     ctrl.loadingWindow = new bootstrap.Modal("#loadingDialog");
-
-    ctrl.$onInit = () => { };
-
-    ctrl.$onChanges = async changes => {
-        if (changes.loading) {
+    ctrl.$onChanges = (changes) => {
+        if (changes["loading"]) {
             if (ctrl.loading) {
                 ctrl.loadingWindow.show();
             }
@@ -16,7 +13,6 @@
         }
     };
 }
-
 angular.module("libiada").component("loadingWindow", {
     templateUrl: `/AngularTemplates/_LoadingWindow`,
     controller: LoadingWindowController,
@@ -25,3 +21,4 @@ angular.module("libiada").component("loadingWindow", {
         loadingScreenHeader: "<"
     }
 });
+//# sourceMappingURL=loadingWindow.js.map

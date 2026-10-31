@@ -1,22 +1,23 @@
-﻿function FeaturesSelectController() {
+function FeaturesSelectController() {
     const ctrl = this;
-
-    ctrl.$onInit = () => { };
-
+    ctrl.$onInit = () => {
+        ctrl.additionalAction ??= () => { };
+    };
     ctrl.setCheckBoxesState = (state) => {
         // TODO: optimize this
-        angular.forEach(ctrl.features, item => {
+        angular.forEach(ctrl.features, (item) => {
             item.Selected = state;
             ctrl.additionalAction({ feature: item });
         });
     };
 }
-
 angular.module("libiada").component("featuresSelect", {
     templateUrl: `/AngularTemplates/_FeaturesSelect`,
     controller: FeaturesSelectController,
     bindings: {
         features: "<",
-        additionalAction: "&"
+        additionalAction: "&?"
     }
 });
+export {};
+//# sourceMappingURL=featuresSelect.js.map

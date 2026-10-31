@@ -1,23 +1,18 @@
-﻿function CustomSequencesController() {
+function CustomSequencesController() {
     const ctrl = this;
-
     ctrl.$onInit = () => {
         ctrl.fileType = "genetic";
         ctrl.customSequences = [];
-
         ctrl.addSequence();
     };
-
     ctrl.addSequence = () => {
-        ctrl.customSequences.push({});
+        ctrl.customSequences.push({ sequence: "" });
     };
-
     ctrl.deleteSequence = (customSequence) => {
         const customSequenceIndex = ctrl.customSequences.indexOf(customSequence);
         ctrl.customSequences.splice(customSequenceIndex, 1);
     };
 }
-
 angular.module("libiada").component("customSequences", {
     templateUrl: `/AngularTemplates/_CustomSequences`,
     controller: CustomSequencesController,
@@ -25,3 +20,5 @@ angular.module("libiada").component("customSequences", {
         imageTransformers: "<"
     }
 });
+export {};
+//# sourceMappingURL=customSequences.js.map

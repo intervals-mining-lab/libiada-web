@@ -5,10 +5,8 @@ interface CharacteristicsTableComponentController extends ng.IController {
     characteristics: SequenceCharacteristics[];
     characteristicNames: string[];
     characteristicsTableTabSelected: boolean;
-
     characteristicsTableRendered: boolean;
 
-    $onInit(): void; 
     renderResultsTable(): Promise<void>;
     $onChanges(changes: ng.IOnChangesObject): void;
 }

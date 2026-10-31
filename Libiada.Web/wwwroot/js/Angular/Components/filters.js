@@ -1,12 +1,12 @@
-﻿function FiltersController() {
+"use strict";
+function FiltersController() {
     const ctrl = this;
-
     ctrl.$onInit = () => {
         ctrl.filters ??= [];
+        ctrl.newFilter ??= "";
         ctrl.addFilter ??= () => { };
         ctrl.deleteFilter ??= () => { };
     };
-
     ctrl.onAddingFilter = () => {
         if (ctrl.newFilter.length > 0) {
             ctrl.filters.push({ value: ctrl.newFilter });
@@ -15,14 +15,12 @@
         }
         // todo: add error message if filter is empty
     };
-
     ctrl.onDeletingFilter = (filter) => {
         const filterIndex = ctrl.filters.indexOf(filter);
-        ctrl.deleteFilter({ filter: filter, filterIndex: filterIndex });
+        ctrl.deleteFilter({ filter, filterIndex });
         ctrl.filters.splice(filterIndex, 1);
-    }
+    };
 }
-
 angular.module("libiada").component("filters", {
     templateUrl: `/AngularTemplates/_Filters`,
     controller: FiltersController,
@@ -32,4 +30,4 @@ angular.module("libiada").component("filters", {
         deleteFilter: "&?"
     }
 });
-
+//# sourceMappingURL=filters.js.map
