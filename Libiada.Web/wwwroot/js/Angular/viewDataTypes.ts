@@ -23,6 +23,17 @@ export interface SelectedCharacteristic {
     arrangementType: ArrangementType;
 }
 
+export interface SelectedNatureParams {
+    notation: Notation | undefined;
+    language: Language | undefined;
+    translator: Translator | undefined;
+    pauseTreatment: PauseTreatment | undefined;
+    sequentialTransfer: boolean;
+    trajectory: Trajectory | undefined;
+}
+
+export interface CharacteristicWithNatureParams extends SelectedCharacteristic, SelectedNatureParams { }
+
 export interface Characteristic extends SelectListItem { }
 
 export interface SequencesGroup extends SelectListItem { }

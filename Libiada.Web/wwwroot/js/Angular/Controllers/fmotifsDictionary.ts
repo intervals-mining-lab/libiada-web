@@ -73,7 +73,7 @@ interface FmotifsDictionaryData {
 /**
  * Interface for the angular controller's scope
  */
-interface IFmotifsDictionaryScope extends ng.IScope, FmotifsDictionaryData {
+interface FmotifsDictionaryScope extends ng.IScope, FmotifsDictionaryData {
     // Data properties
     isPlaying: boolean;
     margin: number;
@@ -97,7 +97,7 @@ interface Line {
  * Controller for FmotifsDictionary
  */
 export default function FmotifsDictionaryController(data: FmotifsDictionaryData): void {
-    function fmotifsDictionary($scope: IFmotifsDictionaryScope): void {
+    function fmotifsDictionary($scope: FmotifsDictionaryScope): void {
         MapModelFromJson($scope, data);
 
         // MIDI player variables

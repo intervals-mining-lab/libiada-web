@@ -18,18 +18,6 @@ interface OrderTransformerResultScope extends ng.IScope, OrderTransformerResultD
 }
 
 /**
- * Interface for the order transformation result scope
- */
-interface OrderTransformerResultScope extends ng.IScope {
-    // Loading state
-    loading: boolean;
-    loadingScreenHeader: string;
-    
-    // Task data
-    taskId: string;
-}
-
-/**
  * Controller for order transformation result visualization
  */
 class OrderTransformerResultHandler {

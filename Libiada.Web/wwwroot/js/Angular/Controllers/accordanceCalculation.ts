@@ -20,7 +20,6 @@ interface AccordanceCalculationData {
     minimumSelectedResearchObjects: number;
     characteristicTypes: CharacteristicType[];
     characteristicsDictionary: { [key: string]: number };
-    features: Feature[];
     groups: Group[];
     natures: Nature[];
     notations: Notation[];

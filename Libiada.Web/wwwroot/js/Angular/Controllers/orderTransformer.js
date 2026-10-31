@@ -3,10 +3,6 @@ import { MapModelFromJson } from "functions";
 * Angular controller class
 */
 class OrderTransformerHandler {
-    /**
-    * Creates an instance of the order transformation controller
-    * @param data Data for initializing the controller
-    */
     constructor(data) {
         this.ngOnInit(data);
     }
