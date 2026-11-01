@@ -1,19 +1,21 @@
 ﻿import type { SequenceImportResult } from "viewDataTypes";
 
+type Status = "Success" | "Exists" | "Error" | "";
+
 interface ImportResultsTableComponentController extends ng.IController {
     result: SequenceImportResult[];
     hasGroupAndSequenceType: boolean;
-    calculateStatusClass: (status: string) => string;
+
+    calculateStatusClass: (status: Status) => string;
 }
 
 function ImportResultsTableController(this: ImportResultsTableComponentController) {
     const ctrl: ImportResultsTableComponentController = this;
 
-    ctrl.calculateStatusClass = (status: string): string => {
-        return status === "Success" ? "table-success"
-             : status === "Exists" ? "table-info"
-             : status === "Error" ? "table-danger" : "";
-    };
+    ctrl.calculateStatusClass = (status: Status): string =>
+        status === "Success" ? "table-success" :
+            status === "Exists" ? "table-info" :
+                status === "Error" ? "table-danger" : "";
 }
 
 angular.module("libiada").component("importResultsTable", {

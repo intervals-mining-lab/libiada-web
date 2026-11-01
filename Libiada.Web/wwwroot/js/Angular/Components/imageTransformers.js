@@ -1,18 +1,16 @@
-﻿function ImageTransformersController() {
+function ImageTransformersController() {
     const ctrl = this;
-
     ctrl.$onInit = () => {
         ctrl.selectedImageTransformers = [];
     };
-
-    ctrl.addImageTransformation = () => ctrl.selectedImageTransformers.push(ctrl.imageTransformers[0]);
-
+    ctrl.addImageTransformation = () => {
+        ctrl.selectedImageTransformers.push(ctrl.imageTransformers[0]);
+    };
     ctrl.deleteImageTransformation = (transformation) => {
         const transformationIndex = ctrl.selectedImageTransformers.indexOf(transformation);
         ctrl.selectedImageTransformers.splice(transformationIndex, 1);
     };
 }
-
 angular.module("libiada").component("imageTransformers", {
     templateUrl: `/AngularTemplates/_ImageTransformers`,
     controller: ImageTransformersController,
@@ -21,3 +19,5 @@ angular.module("libiada").component("imageTransformers", {
         fileType: "<"
     }
 });
+export {};
+//# sourceMappingURL=imageTransformers.js.map

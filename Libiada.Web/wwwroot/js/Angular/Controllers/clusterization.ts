@@ -9,7 +9,8 @@ import type {
     Translator,
     Group,
     CharacteristicType,
-    ClusterizatorType
+    ClusterizatorType,
+    CharacteristicsDictionary
 } from "viewDataTypes";
 
 /**
@@ -17,7 +18,7 @@ import type {
  */
 interface ClusterizationData {
     characteristicTypes: CharacteristicType[];
-    characteristicsDictionary: { [key: string]: number };
+    characteristicsDictionary: CharacteristicsDictionary;
     groups: Group[];
     languages: Language[];
     maximumSelectedResearchObjects: number;

@@ -8,8 +8,8 @@ import type {
     Trajectory,
     Translator,
     Group,
-    Feature,
-    CharacteristicType
+    CharacteristicType,
+    CharacteristicsDictionary
 } from "viewDataTypes";
 
 /**
@@ -19,7 +19,7 @@ interface AccordanceCalculationData {
     maximumSelectedResearchObjects: number;
     minimumSelectedResearchObjects: number;
     characteristicTypes: CharacteristicType[];
-    characteristicsDictionary: { [key: string]: number };
+    characteristicsDictionary: CharacteristicsDictionary;
     groups: Group[];
     natures: Nature[];
     notations: Notation[];

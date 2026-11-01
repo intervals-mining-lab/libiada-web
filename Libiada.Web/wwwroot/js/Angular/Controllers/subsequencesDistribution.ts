@@ -5,7 +5,8 @@ import type {
     Notation,
     Group,
     Feature,
-    CharacteristicType
+    CharacteristicType,
+    CharacteristicsDictionary
 } from "viewDataTypes";
 
 /**
@@ -16,7 +17,7 @@ interface SubsequencesDistributionData {
     maximumSelectedResearchObjects: number;
     minimumSelectedResearchObjects: number;
     characteristicTypes: CharacteristicType[];
-    characteristicsDictionary: { [key: string]: number };
+    characteristicsDictionary: CharacteristicsDictionary;
     features: Feature[];
     groups: Group[];
     nature: string;

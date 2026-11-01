@@ -9,6 +9,7 @@ import type {
     Translator,
     Group,
     CharacteristicType,
+    CharacteristicsDictionary
 } from "viewDataTypes";
 
 /**
@@ -16,7 +17,7 @@ import type {
  */
 interface SequencePredictionData {
     characteristicTypes: CharacteristicType[];
-    characteristicsDictionary: { [key: string]: number };
+    characteristicsDictionary: CharacteristicsDictionary;
     groups: Group[];
     languages: Language[];
     maximumSelectedResearchObjects: number;

@@ -228,7 +228,7 @@ class OrderTransformationVisualizationResultHandler {
                     .enter()
                     .append("g")
                     .attr("class", "dotlegend")
-                    .attr("transform", (vt, i) => `translate(0,${i * 20})`)
+                    .attr("transform", (_vt, i) => `translate(0,${i * 20})`)
                     .append("rect")
                     .attr("width", 15)
                     .attr("height", 15)

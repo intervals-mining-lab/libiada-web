@@ -1,11 +1,12 @@
 import type {
     CharacteristicType,
-    SelectedCharacteristic
+    SelectedCharacteristic,
+    CharacteristicsDictionary
 } from "viewDataTypes";
 
 interface CharacteristicsWithoutNotationController extends ng.IController {
     characteristicTypes: CharacteristicType[];
-    characteristicsDictionary: Record<string, number>;
+    characteristicsDictionary: CharacteristicsDictionary;
     characteristics: SelectedCharacteristic[];
 
     $onInit(): void;

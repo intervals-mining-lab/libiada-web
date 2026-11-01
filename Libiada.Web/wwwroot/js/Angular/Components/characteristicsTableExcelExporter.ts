@@ -18,7 +18,6 @@ interface CharacteristicsTableExcelExporterComponentController extends ng.IContr
     exportToExcel: () => void;
 }
 
-
 // placeholder until it'll be possible to import esm version of library using libman (or other way)
 declare const ExcelJS: typeof ExcelJSTypes;
 

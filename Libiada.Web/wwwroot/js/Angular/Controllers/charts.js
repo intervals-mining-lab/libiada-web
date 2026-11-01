@@ -184,9 +184,8 @@ class ChartsControllerHandler {
             /**
              * Handle key down events for copy/paste
              * @param e Key event
-             * @param args Additional arguments
              */
-            function handleKeyDown(e, args) {
+            function handleKeyDown(e) {
                 if (!$scope.inFocus && e.which === $scope.keyCodes.V && (e.ctrlKey || e.metaKey)) { // CTRL + V
                     //reset value of our box
                     $("#dataPasteBox").val("");

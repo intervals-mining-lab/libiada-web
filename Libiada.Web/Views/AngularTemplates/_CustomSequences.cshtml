@@ -73,12 +73,19 @@
         <div class="row mb-2">
             <div class="col-md-12">
                 <label class="form-label" for="customSequence{{$index}}">Sequence:</label>
-                <textarea class="form-control" rows="1" id="customSequence{{$index}}" ng-model="customSequence.sequence" name="customSequences"></textarea>
+                <textarea class="form-control" 
+                          rows="1" id="customSequence{{$index}}" 
+                          ng-model="customSequence.sequence" 
+                          name="customSequences">
+                </textarea>
             </div>
         </div>
         <div class="row mb-2">
             <div class="col-md-10">
-                <button type="button" class="btn btn-danger" ng-click="$ctrl.deleteSequence(customSequence)" ng-disabled="$ctrl.customSequences.length <= 1">
+                <button type="button" 
+                        class="btn btn-danger" 
+                        ng-click="$ctrl.deleteSequence(customSequence)" 
+                        ng-disabled="$ctrl.customSequences.length <= 1">
                     Delete sequence
                 </button>
             </div>

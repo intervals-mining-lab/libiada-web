@@ -91,6 +91,8 @@ export interface ResearchObject extends SelectListItemWithNature {
     SequenceType: string;
 }
 
+export interface CharacteristicsDictionary { [key: string]: number }
+
 export interface SequenceImportResult {
     AllNames?: string;
     Status: string;

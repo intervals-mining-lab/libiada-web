@@ -2,7 +2,8 @@ import { MapModelFromJson } from "functions";
 import type {
     CharacteristicType,
     ImageTransformer,
-    OrderTransformation
+    OrderTransformation,
+    CharacteristicsDictionary
 } from "viewDataTypes";
 
 /**
@@ -10,7 +11,7 @@ import type {
  */
 interface CustomSequenceOrderTransformationCalculationData {
     characteristicTypes: CharacteristicType[];
-    characteristicsDictionary: { [key: string]: number };
+    characteristicsDictionary: CharacteristicsDictionary;
     imageTransformers: ImageTransformer[];
     transformations: OrderTransformation[];
 }

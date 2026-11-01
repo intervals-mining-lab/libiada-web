@@ -1,10 +1,8 @@
 function ImportResultsTableController() {
     const ctrl = this;
-    ctrl.calculateStatusClass = (status) => {
-        return status === "Success" ? "table-success"
-            : status === "Exists" ? "table-info"
-                : status === "Error" ? "table-danger" : "";
-    };
+    ctrl.calculateStatusClass = (status) => status === "Success" ? "table-success" :
+        status === "Exists" ? "table-info" :
+            status === "Error" ? "table-danger" : "";
 }
 angular.module("libiada").component("importResultsTable", {
     templateUrl: `/AngularTemplates/_ImportResultsTable`,

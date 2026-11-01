@@ -10,7 +10,8 @@ import type {
     Group,
     SequenceGroup,
     CharacteristicType,
-    DisplayedTable
+    DisplayedTable,
+    CharacteristicsDictionary
 } from "viewDataTypes";
 
 /**
@@ -18,7 +19,7 @@ import type {
  */
 interface CalculationData {
     characteristicTypes: CharacteristicType[];
-    characteristicsDictionary: { [key: string]: number };
+    characteristicsDictionary: CharacteristicsDictionary;
     groups: Group[];
     languages: Language[];
     maximumSelectedResearchObjects: number;

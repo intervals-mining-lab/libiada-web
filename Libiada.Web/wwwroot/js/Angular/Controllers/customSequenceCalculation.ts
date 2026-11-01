@@ -1,7 +1,8 @@
 import { MapModelFromJson } from "functions";
 import type {
     CharacteristicType,
-    ImageTransformer
+    ImageTransformer,
+    CharacteristicsDictionary
 } from "viewDataTypes";
 
 /**
@@ -9,7 +10,7 @@ import type {
  */
 interface CustomSequenceCalculationData {
     characteristicTypes: CharacteristicType[];
-    characteristicsDictionary: { [key: string]: number };
+    characteristicsDictionary: CharacteristicsDictionary;
     imageTransformers: ImageTransformer[];
 }
 

@@ -4,7 +4,8 @@ import type {
     Group,
     SequenceType,
     CharacteristicType,
-    Feature
+    Feature,
+    CharacteristicsDictionary
 } from "viewDataTypes";
 
 /**
@@ -12,7 +13,7 @@ import type {
  */
 interface SubsequencesSimilarityData {
     characteristicTypes: CharacteristicType[];
-    characteristicsDictionary: { [key: string]: number };
+    characteristicsDictionary: CharacteristicsDictionary;
     groups: Group[];
     maximumSelectedResearchObjects: number;
     minimumSelectedResearchObjects: number;

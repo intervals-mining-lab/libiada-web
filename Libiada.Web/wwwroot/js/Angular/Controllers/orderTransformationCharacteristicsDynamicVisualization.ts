@@ -9,7 +9,8 @@ import type {
     OrderTransformation,
     SequenceType,
     Group,
-    CharacteristicType
+    CharacteristicType,
+    CharacteristicsDictionary
 } from "viewDataTypes";
 
 /**
@@ -17,7 +18,7 @@ import type {
  */
 interface OrderTransformationCharacteristicsDynamicVisualizationData {
     characteristicTypes: CharacteristicType[];
-    characteristicsDictionary: { [key: string]: number };
+    characteristicsDictionary: CharacteristicsDictionary;
     groups: Group[];
     languages: Language[];
     maximumSelectedResearchObjects: number;

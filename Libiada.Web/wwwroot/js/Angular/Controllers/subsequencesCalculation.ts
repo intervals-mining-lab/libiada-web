@@ -1,4 +1,4 @@
-﻿import type { Feature, CharacteristicType, Group, Notation, SequenceType } from "viewDataTypes";
+﻿import type { Feature, CharacteristicType, Group, Notation, SequenceType, CharacteristicsDictionary } from "viewDataTypes";
 import { MapModelFromJson } from "functions";
 
 /**
@@ -6,7 +6,7 @@ import { MapModelFromJson } from "functions";
  */
 interface SubsequencesCalculationData {
     characteristicTypes: CharacteristicType[];
-    characteristicsDictionary: { [key: string]: number };
+    characteristicsDictionary: CharacteristicsDictionary;
     features: Feature[];
     groups: Group[];
     maximumSelectedResearchObjects: number;

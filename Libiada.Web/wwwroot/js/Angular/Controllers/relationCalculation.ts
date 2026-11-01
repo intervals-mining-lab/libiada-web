@@ -8,7 +8,8 @@ import type {
     Trajectory,
     SequenceType,
     Group,
-    CharacteristicType
+    CharacteristicType,
+    CharacteristicsDictionary
 } from "viewDataTypes";
 
 /**
@@ -16,7 +17,7 @@ import type {
  */
 interface RelationCalculationData {
     characteristicTypes: CharacteristicType[];
-    characteristicsDictionary: { [key: string]: number };
+    characteristicsDictionary: CharacteristicsDictionary;
     groups: Group[];
     languages: Language[];
     maximumSelectedResearchObjects: number;

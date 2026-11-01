@@ -21,6 +21,7 @@ function FiltersController(this: FiltersController): void {
     ctrl.$onInit = (): void => {
         ctrl.filters ??= [];
         ctrl.newFilter ??= "";
+        
         ctrl.addFilter ??= (): void => { };
         ctrl.deleteFilter ??= (): void => { };
     };

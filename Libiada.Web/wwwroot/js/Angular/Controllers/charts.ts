@@ -1,15 +1,11 @@
 ﻿/*import * as d3 from "d3";*/
-import * as plotly from "plotly.js";
+import type * as plotly from "plotly.js";
 import { getArrayMinMax, arrayMax, throwHelper } from "functions";
-import { LegendItem, ParallelCoordinatesPlotData } from "viewDataTypes";  
+import type { LegendItem, ParallelCoordinatesPlotData, SequenceCharacteristics } from "viewDataTypes";
 
-/**
- * Interface for characteristic data
- */
-interface IChartsCharacteristic {
-    ResearchObjectName: string;
-    Characteristics: number[];
-}
+type ChartsPlotData = Partial<plotly.PlotData> & {
+    dimensions?: ParallelCoordinatesPlotData["dimensions"];
+};
 
 /**
  * Interface for characteristic list item
@@ -44,13 +40,13 @@ interface IChartsTooltip {
  */
 interface IChartsScope extends ng.IScope {
     // Chart data and settings
-    characteristics: IChartsCharacteristic[];
+    characteristics: SequenceCharacteristics[];
     characteristicsList: IChartsCharacteristicListItem[];
     characteristicNames: string[];
     sequencesName: string;
     chartCharacteristics: IChartsCharacteristicListItem[];
     layout: Partial<plotly.Layout>;
-    chartData: Partial<ParallelCoordinatesPlotData>[];
+    chartData: ChartsPlotData[];
     legend: LegendItem[];
     points: Point[];
     colorScale: d3.ScaleSequential<string>;
@@ -72,7 +68,7 @@ interface IChartsScope extends ng.IScope {
     // Functions
     parseTabularData: (text: string) => string[][] | null;
     textChanged: () => void;
-    handleKeyDown: (e: JQuery.KeyDownEvent, args: any) => void;
+    handleKeyDown: (e: JQuery.KeyDownEvent) => void;
     fillBarPlotData: () => void;
     fillScatterPlotData: () => void;
     fill3dScatterPlotData: () => void;
@@ -225,7 +221,7 @@ class ChartsControllerHandler {
                     name: selectedPoint.name,
                     characteristics: selectedPoint.characteristics
                 };
-                let update: Record<string, any> = {};
+                let update: plotly.Data = {};
                 switch ($scope.chartCharacteristics.length) {
                     case 1:
                         break;
@@ -251,7 +247,7 @@ class ChartsControllerHandler {
             function legendClick(legendItem: LegendItem): void {
                if ($scope.chartData?.[0]?.customdata && $scope.chartData?.[0]?.customdata?.length > 0)  {
                     let index: number[] = [];
-                    let update = { visible: legendItem.visible ? "legendonly" : true };
+                    let update: plotly.Data = { visible: legendItem.visible ? "legendonly" : true };
                     for (let i = 0; i < $scope.chartData.length; i++) {
                         if ($scope.chartData[i].customdata![0] === legendItem.id) {
                             index.push(i);
@@ -267,7 +263,7 @@ class ChartsControllerHandler {
              * @param visibility Whether items should be visible
              */
             function legendSetVisibilityForAll(visibility: boolean): void {
-                let update = { visible: visibility ? true : "legendonly" };
+                let update: plotly.Data = { visible: visibility ? true : "legendonly" };
                 $scope.legend.forEach(l => l.visible = visibility);
                 Plotly.restyle($scope.chartElement, update);
             }
@@ -294,9 +290,8 @@ class ChartsControllerHandler {
             /**
              * Handle key down events for copy/paste
              * @param e Key event
-             * @param args Additional arguments
              */
-            function handleKeyDown(e: JQuery.KeyDownEvent, args: any): void {
+            function handleKeyDown(e: JQuery.KeyDownEvent): void {
                 if (!$scope.inFocus && e.which === $scope.keyCodes.V && (e.ctrlKey || e.metaKey)) { // CTRL + V
                     //reset value of our box
                     $("#dataPasteBox").val("");

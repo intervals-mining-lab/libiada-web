@@ -1,12 +1,12 @@
 ﻿import { MapModelFromJson } from "functions";
-import { CharacteristicType } from "viewDataTypes";
+import { CharacteristicType,CharacteristicsDictionary } from "viewDataTypes";
 
 /**
  * Interface for the data object passed from the server
  */
 interface OrderCalculationData {
     characteristicTypes: CharacteristicType[];
-    characteristicsDictionary: { [key: string]: number };
+    characteristicsDictionary: CharacteristicsDictionary;
 }
 
 /**

@@ -7,12 +7,13 @@ import type {
     SelectedCharacteristic,
     Trajectory,
     Translator,
-    CharacteristicWithNatureParams
+    CharacteristicWithNatureParams,
+    CharacteristicsDictionary
 } from "viewDataTypes";
 
 interface CharacteristicComponentController extends ng.IController {
     characteristicTypes: CharacteristicType[];
-    characteristicsDictionary: { [key: string]: number };
+    characteristicsDictionary: CharacteristicsDictionary;
     nature: number;
     notations: Notation[];
     characteristic?: CharacteristicWithNatureParams;

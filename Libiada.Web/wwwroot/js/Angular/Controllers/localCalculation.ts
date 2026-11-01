@@ -8,7 +8,8 @@ import type {
     Trajectory,
     Translator,
     Group,
-    CharacteristicType
+    CharacteristicType,
+    CharacteristicsDictionary
 } from "viewDataTypes";
 
 /**
@@ -16,7 +17,7 @@ import type {
  */
 interface LocalCalculationData {
     characteristicTypes: CharacteristicType[];
-    characteristicsDictionary: { [key: string]: number };
+    characteristicsDictionary: CharacteristicsDictionary;
     groups: Group[];
     languages: Language[];
     maximumSelectedResearchObjects: number;
