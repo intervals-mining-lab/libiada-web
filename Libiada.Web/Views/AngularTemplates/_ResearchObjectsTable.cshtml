@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<ResearchObject>
 <br />
-<div class="form-check my-2" ng-init="$ctrl.geneticNature = @((byte)Nature.Genetic)" ng-show="$ctrl.nature == $ctrl.geneticNature">
+<div class="form-check my-2" ng-init="$ctrl.geneticNature = '@((byte)Nature.Genetic)'" ng-show="$ctrl.nature === $ctrl.geneticNature">
     <input type="checkbox"
            class="form-check-input"
            name="showRefSeqOnly"

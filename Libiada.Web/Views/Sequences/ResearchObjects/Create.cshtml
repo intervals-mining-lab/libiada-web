@@ -1,5 +1,4 @@
 ﻿@using Libiada.Web.Extensions
-@using Libiada.Web.Helpers
 @model CombinedSequenceEntity
 
 @{
@@ -30,7 +29,7 @@
                     @Html.ValidationMessageFor(model => model.ResearchObject.Nature, "", new { @class = "text-danger" })
                 </div>
             </div>
-            <div class="row mb-1" ng-hide="nature == @((byte)Nature.Music)">
+            <div class="row mb-1" ng-hide="nature === '@((byte)Nature.Music)'">
                 @Html.LabelFor(model => model.Notation, new { @class = "col-form-label col-md-2" })
                 <div class="col-md-10">
                     <select class="form-select"
@@ -116,7 +115,7 @@
             </div>
         </div>
         <local-file></local-file>
-        <div ng-show="nature == @((byte)Nature.Genetic)">
+        <div ng-show="nature === '@((byte)Nature.Genetic)'">
             <div class="row mb-1">
                 @Html.LabelFor(model => model.RemoteDb, new { @class = "col-form-label col-md-2" })
                 <div class="col-md-10">

@@ -112,7 +112,7 @@ public class ViewDataBuilder(IDbContextFactory<LibiadaDatabaseEntities> dbFactor
     public IViewDataBuilder SetNature(Nature nature)
     {
         //TODO: check if conversion to string is necessary
-        viewData.Add("nature", ((byte)nature).ToString());
+        viewData.Add("nature", nature.ToString("d"));
         return this;
     }
 
@@ -223,7 +223,7 @@ public class ViewDataBuilder(IDbContextFactory<LibiadaDatabaseEntities> dbFactor
                                                       {
                                                           Value = ms.Id.ToString(),
                                                           Text = ms.Name,
-                                                          Nature = (byte)ms.Nature
+                                                          Nature = ms.Nature.ToString("d")
                                                       })
                                                       .ToArray();
 

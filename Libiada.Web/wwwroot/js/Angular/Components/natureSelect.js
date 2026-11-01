@@ -1,13 +1,11 @@
-﻿function NatureSelectController() {
+function NatureSelectController() {
     const ctrl = this;
-
     ctrl.$onInit = () => {
         ctrl.nature ??= ctrl.natures[0].Value;
         ctrl.filterByNature ??= () => { };
         ctrl.filterByNature();
     };
 }
-
 angular.module("libiada").component("natureSelect", {
     templateUrl: `/AngularTemplates/_NatureSelect`,
     controller: NatureSelectController,
@@ -17,3 +15,5 @@ angular.module("libiada").component("natureSelect", {
         filterByNature: "&?"
     }
 });
+export {};
+//# sourceMappingURL=natureSelect.js.map

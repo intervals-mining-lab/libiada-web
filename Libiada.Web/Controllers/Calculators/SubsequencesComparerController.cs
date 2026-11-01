@@ -15,7 +15,6 @@ using Libiada.Web.Extensions;
 using Libiada.Web.Helpers;
 using Libiada.Web.Models.CalculatorsData;
 using Libiada.Web.Tasks;
-using Libiada.Web.Tasks;
 
 using Newtonsoft.Json;
 
@@ -236,7 +235,7 @@ public class SubsequencesComparerController : AbstractResultController
                 { "attributes", Enum.GetValues<AnnotationAttribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
                 { "maxPercentageDifferences", maxPercentageDifferences },
                 { "sequenceCharacteristicName", sequenceCharacteristicName },
-                { "nature", (byte)Nature.Genetic },
+                { "nature", Nature.Genetic.ToString("d") },
                 { "notations", Enum.GetValues<Notation>().Where(n => n.GetNature() == Nature.Genetic).ToSelectListWithNature() }
             };
 

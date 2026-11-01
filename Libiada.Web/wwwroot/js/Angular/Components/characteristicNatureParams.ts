@@ -9,7 +9,7 @@ import type {
 
 interface CharacteristicNatureParamsController extends ng.IController {
     characteristic?: SelectedNatureParams;
-    nature: number | string;
+    nature: string;
     notations: Notation[];
     languages?: Language[];
     translators?: Translator[];

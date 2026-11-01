@@ -30,10 +30,7 @@ interface SequenceMixerData {
  * Interface for the angular controller's scope
  */
 interface SequenceMixerScope extends ng.IScope, SequenceMixerData {
-    // Selected nature (value)
-    nature: number;
-    // Selected notation
-    notation: { Nature: number; Value: string; Text: string };
+    nature: string;
 }
 
 /**

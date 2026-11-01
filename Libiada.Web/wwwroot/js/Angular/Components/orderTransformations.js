@@ -1,24 +1,19 @@
-﻿function OrderTransformationsController() {
+function OrderTransformationsController() {
     const ctrl = this;
-
     ctrl.$onInit = () => {
         ctrl.transformationsSequence = [];
-
-        ctrl.addTransformation()
+        ctrl.addTransformation();
     };
-
     ctrl.addTransformation = () => {
         ctrl.transformationsSequence.push({
             transformation: ctrl.transformations[0]
         });
     };
-
-    ctrl.deleteTransformation = transformation => {
+    ctrl.deleteTransformation = (transformation) => {
         const transformationIndex = ctrl.transformationsSequence.indexOf(transformation);
         ctrl.transformationsSequence.splice(transformationIndex, 1);
     };
 }
-
 angular.module("libiada").component("orderTransformations", {
     templateUrl: `/AngularTemplates/_OrderTransformations`,
     controller: OrderTransformationsController,
@@ -26,3 +21,5 @@ angular.module("libiada").component("orderTransformations", {
         transformations: "<"
     }
 });
+export {};
+//# sourceMappingURL=orderTransformations.js.map

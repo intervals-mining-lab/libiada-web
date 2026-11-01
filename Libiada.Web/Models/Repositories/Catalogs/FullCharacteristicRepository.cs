@@ -9,8 +9,6 @@ using Libiada.Web.Models.CalculatorsData;
 
 using System.Security.Claims;
 
-using System.Security.Claims;
-
 /// <summary>
 /// The full characteristic repository.
 /// </summary>
@@ -65,12 +63,12 @@ public class FullCharacteristicRepository
         {
             List<SelectListItem> linkSelectListItems = characteristicsLinks
                 .Where(cl => cl.FullCharacteristic == characteristic && links.Contains(cl.Link))
-                .Select(cl => new SelectListItem { Value = ((byte)cl.Link).ToString(), Text = cl.Link.GetDisplayValue() })
+                .Select(cl => new SelectListItem { Value = cl.Link.ToString("d"), Text = cl.Link.GetDisplayValue() })
                 .Distinct(new SelectListItemComparer())
                 .ToList();
             List<SelectListItem> arrangementTypeSelectListItems = characteristicsLinks
                 .Where(cl => cl.FullCharacteristic == characteristic && arrangementTypes.Contains(cl.ArrangementType))
-                .Select(cl => new SelectListItem { Value = ((byte)cl.ArrangementType).ToString(), Text = cl.ArrangementType.GetDisplayValue() })
+                .Select(cl => new SelectListItem { Value = cl.ArrangementType.ToString("d"), Text = cl.ArrangementType.GetDisplayValue() })
                 .Distinct(new SelectListItemComparer())
                 .ToList();
 

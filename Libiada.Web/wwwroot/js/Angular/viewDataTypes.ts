@@ -9,7 +9,7 @@ interface SelectListItem {
 }
 
 export interface SelectListItemWithNature extends SelectListItem {
-    Nature: number;
+    Nature: string;
 }
 
 export interface CharacteristicType extends SelectListItem  {

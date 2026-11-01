@@ -3,6 +3,8 @@
 using Libiada.Core.Extensions;
 using Libiada.Database.Models;
 
+using System.Diagnostics.CodeAnalysis;
+
 /// <summary>
 /// The research object table row.
 /// </summary>
@@ -28,12 +30,13 @@ public class ResearchObjectTableRow : SelectListItemWithNature
     /// <param name="selected">
     /// Flag indicating if row is selected.
     /// </param>
+    [SetsRequiredMembersAttribute]
     public ResearchObjectTableRow(ResearchObject researchObject, bool selected)
     {
         Value = researchObject.Id.ToString();
         Text = researchObject.Name;
         Selected = selected;
-        Nature = (byte)researchObject.Nature;
+        Nature = researchObject.Nature.ToString("d");
         SequenceType = researchObject.SequenceType.GetDisplayValue();
         Group = researchObject.Group.GetDisplayValue();
     }
@@ -48,12 +51,13 @@ public class ResearchObjectTableRow : SelectListItemWithNature
     /// <param name="selected">
     /// Flag indicating if row is selected.
     /// </param>
+    [SetsRequiredMembersAttribute]
     public ResearchObjectTableRow(SequenceGroup sequenceGroup, bool selected)
     {
         Value = sequenceGroup.Id.ToString();
         Text = sequenceGroup.Name;
         Selected = selected;
-        Nature = (byte)sequenceGroup.Nature;
+        Nature = sequenceGroup.Nature.ToString("d");
         SequenceType = sequenceGroup.SequenceType.GetDisplayValue();
         Group = sequenceGroup.Group.GetDisplayValue();
     }

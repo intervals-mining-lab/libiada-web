@@ -56,7 +56,7 @@
             </div>
         </div>
         <local-file></local-file>
-        <div ng-show="nature == @((byte)Nature.Genetic)">
+        <div ng-show="nature === '@((byte)Nature.Genetic)'">
             <div class="row mb-1">
                 @Html.LabelFor(model => model.RemoteDb, new { @class = "col-form-label col-md-2" })
                 <div class="col-md-10">

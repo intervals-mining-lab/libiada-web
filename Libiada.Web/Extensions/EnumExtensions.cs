@@ -2,8 +2,9 @@
 
 using Libiada.Core.Exceptions;
 using Libiada.Core.Extensions;
-using static Libiada.Database.Extensions.EnumExtensions;
 using Libiada.Web.Models.CalculatorsData;
+
+using static Libiada.Database.Extensions.EnumExtensions;
 
 /// <summary>
 /// The enum helper.
@@ -146,7 +147,7 @@ public static class EnumExtensions
             Value = Convert.ToByte(e).ToString(),
             Text = e.GetDisplayValue(),
             Selected = selectedValues.Contains(e),
-            Nature = (byte)e.GetNature()
+            Nature = e.GetNature().ToString("d")
         });
     }
 }

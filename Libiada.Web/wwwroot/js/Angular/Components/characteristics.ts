@@ -13,7 +13,7 @@ import type {
 
 interface CharacteristicsComponentController extends ng.IController {
     characteristicTypes: CharacteristicType[];
-    nature: number;
+    nature: string;
     notations: Notation[];
     characteristicsDictionary: CharacteristicsDictionary;
     percentageDifferenceNeeded?: boolean;

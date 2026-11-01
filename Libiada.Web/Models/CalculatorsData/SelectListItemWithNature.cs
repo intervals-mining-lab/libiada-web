@@ -8,5 +8,5 @@ public class SelectListItemWithNature : SelectListItem
     /// <summary>
     /// Gets or sets the nature param.
     /// </summary>
-    public byte Nature { get; set; }
+    public required string Nature { get; set; }
 }

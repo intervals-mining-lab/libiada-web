@@ -42,6 +42,6 @@ public class SelectListItemWithNatureComparer : IEqualityComparer<SelectListItem
         int hashText = item.Text == null ? 0 : item.Text.GetHashCode();
         int hashValue = item.Value == null ? 0 : item.Value.GetHashCode();
         int hashSelected = item.Selected ? 1 : 0;
-        return hashText ^ hashValue ^ hashSelected ^ item.Nature;
+        return hashText ^ hashValue ^ hashSelected ^ byte.Parse(item.Nature).GetHashCode();
     }
 }

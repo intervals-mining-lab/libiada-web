@@ -14,7 +14,7 @@ import type {
 interface CharacteristicComponentController extends ng.IController {
     characteristicTypes: CharacteristicType[];
     characteristicsDictionary: CharacteristicsDictionary;
-    nature: number;
+    nature: string;
     notations: Notation[];
     characteristic?: CharacteristicWithNatureParams;
     languages?: Language[];

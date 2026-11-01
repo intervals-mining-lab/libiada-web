@@ -59,7 +59,7 @@
         </characteristics>
         @if (User.IsAdmin())
         {
-            <div class="form-check" ng-if="nature==@((byte)Nature.Genetic)">
+            <div class="form-check" ng-if="nature === '@((byte)Nature.Genetic)'">
                 <input type="checkbox"
                        class="form-check-input"
                        name="complementary"

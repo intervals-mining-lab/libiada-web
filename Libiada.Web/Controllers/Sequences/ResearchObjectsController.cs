@@ -107,9 +107,9 @@ public class ResearchObjectsController : SequencesResearchObjectsController
                 { "sequencesCount", db.CombinedSequenceEntities.Count(c => c.ResearchObjectId == researchObject.Id) },
                 { "researchObject", researchObject },
                 { "multisequences", db.Multisequences.ToList() },
-                { "nature", ((byte)researchObject.Nature).ToString() },
-                { "group", ((byte)researchObject.Group).ToString() },
-                { "sequenceType", ((byte)researchObject.SequenceType).ToString() }
+                { "nature",researchObject.Nature.ToString("d") },
+                { "group", researchObject.Group.ToString("d") },
+                { "sequenceType", researchObject.SequenceType.ToString("d") }
             };
 
         ViewBag.data = JsonConvert.SerializeObject(data, new JsonSerializerSettings()
@@ -150,9 +150,9 @@ public class ResearchObjectsController : SequencesResearchObjectsController
                 { "sequencesCount", db.CombinedSequenceEntities.Count(c => c.ResearchObjectId == researchObject.Id) },
                 { "researchObject", researchObject },
                 { "multisequences", db.Multisequences.ToList() },
-                { "nature", ((byte)researchObject.Nature).ToString() },
-                { "group", ((byte)researchObject.Group).ToString() },
-                { "sequenceType", ((byte)researchObject.SequenceType).ToString() }
+                { "nature", researchObject.Nature.ToString("d") },
+                { "group", researchObject.Group.ToString("d") },
+                { "sequenceType", researchObject.SequenceType.ToString("d") }
             };
 
         ViewBag.data = JsonConvert.SerializeObject(data);

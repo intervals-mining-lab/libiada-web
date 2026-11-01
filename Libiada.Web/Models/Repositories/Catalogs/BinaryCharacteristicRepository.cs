@@ -60,12 +60,16 @@ public class BinaryCharacteristicRepository
         {
             List<SelectListItem> linkSelectListItems = characteristicsLinks
                 .Where(cl => cl.BinaryCharacteristic == characteristic && links.Contains(cl.Link))
-                .Select(cl => new SelectListItem { Value = ((byte)cl.Link).ToString(), Text = cl.Link.GetDisplayValue() })
+                .Select(cl => new SelectListItem { Value = cl.Link.ToString("d"), Text = cl.Link.GetDisplayValue() })
                 .ToList();
             List<SelectListItem> arrangementTypeSelectListItems =
-                                                     [
-                                                         new() { Value = ((byte)arrangementType).ToString(), Text = arrangementType.GetDisplayValue() }
-                                                     ];
+                [
+                    new()
+                    {
+                        Value = arrangementType.ToString("d"),
+                        Text = arrangementType.GetDisplayValue()
+                    }
+                ];
             result.Add(new CharacteristicSelectListItem((byte)characteristic, characteristic.GetDisplayValue(), linkSelectListItems, arrangementTypeSelectListItems));
         }
 

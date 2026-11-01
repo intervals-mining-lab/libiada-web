@@ -1,14 +1,13 @@
-﻿function ResearchObjectsSubmitController() {
+"use strict";
+function ResearchObjectsSubmitController() {
     const ctrl = this;
-
     ctrl.$onInit = () => {
         ctrl.submitName ??= "Calculate";
-        ctrl.minimumSelectedResearchObjects = ctrl.minimumSelectedResearchObjects ? parseInt(ctrl.minimumSelectedResearchObjects) : 0;
+        ctrl.minimumSelectedResearchObjects = ctrl.minimumSelectedResearchObjects ? parseInt(String(ctrl.minimumSelectedResearchObjects)) : 0;
         ctrl.selectedSequenceGroupsCount ??= 0;
         ctrl.selectedResearchObjectsCount ??= 0;
     };
 }
-
 angular.module("libiada").component("researchObjectsSubmit", {
     templateUrl: `/AngularTemplates/_ResearchObjectsSubmit`,
     controller: ResearchObjectsSubmitController,
@@ -19,3 +18,4 @@ angular.module("libiada").component("researchObjectsSubmit", {
         selectedSequenceGroupsCount: "<?"
     }
 });
+//# sourceMappingURL=researchObjectsSubmit.js.map

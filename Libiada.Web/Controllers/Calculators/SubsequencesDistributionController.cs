@@ -166,7 +166,7 @@ public class SubsequencesDistributionController : AbstractResultController
                                 { "subsequencesCharacteristicsNames", subsequencesCharacteristicsNames },
                                 { "subsequencesCharacteristicsList", subsequencesCharacteristicsList },
                                 { "sequenceCharacteristicName", sequenceCharacteristicName },
-                                { "features", features.ToSelectList(features).ToDictionary(f => f.Value) },
+                                { "features", features.ToSelectListWithNature(features).ToDictionary(f => f.Value) },
                                 { "attributes", Enum.GetValues<AnnotationAttribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
                                 { "attributeValues", allAttributeValues.Select(sa => new { attribute = sa.AttributeId, value = sa.Value }) }
                             };
