@@ -36,7 +36,7 @@ interface ResearchObjectCreateScope extends ng.IScope, ResearchObjectCreateData 
     nature: string;
     languageId: string;
     translatorId: string;
-    trajectorId: string;
+    trajectoryId: string;
     notation: string;
     notationsFiltered: Notation[];
     remoteDbId: number;

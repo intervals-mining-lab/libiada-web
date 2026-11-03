@@ -124,10 +124,6 @@
       "destination": "wwwroot/lib/@types/jquery/"
     },
     {
-      "library": "sizzle@2.3.10",
-      "destination": "wwwroot/lib/sizzle/"
-    },
-    {
       "provider": "jsdelivr",
       "library": "@types/plotly.js@2.29.0",
       "destination": "wwwroot/lib/@types/plotly.js/"
@@ -136,6 +132,6 @@
       "provider": "jsdelivr",
       "library": "@types/bootstrap@5.2.3",
       "destination": "wwwroot/lib/@types/bootstrap/"
-    }    
+    }
   ]
 }

@@ -1,40 +1,42 @@
-﻿function ScrollJumperController() {
+"use strict";
+function ScrollJumperController() {
     const ctrl = this;
-
     ctrl.$onInit = () => {
         ctrl.scrolledUp = false;
         ctrl.scrolledDown = false;
         ctrl.savedPosition = 0;
     };
-
-    ctrl.isScrollable = () => window.innerHeight < $("html").height();
-
+    ctrl.isScrollable = () => {
+        const documentHeight = $("html").height();
+        return documentHeight !== undefined && window.innerHeight < documentHeight;
+    };
     ctrl.scrollDown = () => {
         if (ctrl.scrolledDown) {
             $("html, body").animate({ scrollTop: ctrl.savedPosition }, 400);
             ctrl.scrolledDown = false;
             ctrl.scrolledUp = false;
-        } else {
+        }
+        else {
             ctrl.savedPosition = window.scrollY || document.documentElement.scrollTop;
             $("html, body").animate({ scrollTop: $("body").height() }, 400);
             ctrl.scrolledDown = true;
         }
     };
-
     ctrl.scrollUp = () => {
         if (ctrl.scrolledUp) {
             $("html, body").animate({ scrollTop: ctrl.savedPosition }, 400);
             ctrl.scrolledDown = false;
             ctrl.scrolledUp = false;
-        } else {
+        }
+        else {
             ctrl.savedPosition = window.scrollY || document.documentElement.scrollTop;
             $("html, body").animate({ scrollTop: "0px" }, 400);
             ctrl.scrolledUp = true;
         }
     };
 }
-
 angular.module("libiada").component("scrollJumper", {
     templateUrl: `/AngularTemplates/_ScrollJumper`,
     controller: ScrollJumperController
 });
+//# sourceMappingURL=scrollJumper.js.map

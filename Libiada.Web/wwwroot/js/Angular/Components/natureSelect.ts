@@ -3,9 +3,10 @@
 interface NatureSelectComponentController extends ng.IController {
     natures: Nature[];
     nature: string;
-    filterByNature?: (() => void);
-
     $onInit(): void;
+
+    // optional callback passed from the parent
+    filterByNature?: (() => void);
 }
 
 function NatureSelectController(this: NatureSelectComponentController): void {

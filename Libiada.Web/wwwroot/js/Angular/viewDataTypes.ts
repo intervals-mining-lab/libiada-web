@@ -89,6 +89,7 @@ export interface ArrangementType extends SelectListItem { }
 export interface ResearchObject extends SelectListItemWithNature {
     Group: string;
     SequenceType: string;
+    Visible: boolean;
 }
 
 export interface CharacteristicsDictionary { [key: string]: number }

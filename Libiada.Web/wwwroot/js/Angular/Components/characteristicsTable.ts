@@ -7,8 +7,8 @@ interface CharacteristicsTableComponentController extends ng.IController {
     characteristicsTableTabSelected: boolean;
     characteristicsTableRendered: boolean;
 
-    renderResultsTable(): Promise<void>;
     $onChanges(changes: ng.IOnChangesObject): void;
+    renderResultsTable(): Promise<void>;
 }
 
 function CharacteristicsTableController(this: CharacteristicsTableComponentController) {

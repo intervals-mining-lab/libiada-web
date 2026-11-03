@@ -64,7 +64,7 @@ function CharacteristicsTableExcelExporterController(this: CharacteristicsTableE
             worksheet.addRow(row).commit();
         }
 
-        const buffer = await workbook.xlsx.writeBuffer();
+        const buffer: ExcelJSTypes.Buffer = await workbook.xlsx.writeBuffer();
 
         const blob: Blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8" });
 

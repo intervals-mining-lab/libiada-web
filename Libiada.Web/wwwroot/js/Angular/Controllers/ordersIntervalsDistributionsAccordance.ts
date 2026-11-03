@@ -20,7 +20,7 @@ class OrdersIntervalsDistributionsAccordanceHandler {
     * Initializes the Angular controller 
     */
     private ngOnInit(): void {
-        const ordersIntervalsDistributionsAccordance = ($scope: OrdersIntervalsDistributionsAccordanceScope): void => {
+        const ordersIntervalsDistributionsAccordance = (_$scope: OrdersIntervalsDistributionsAccordanceScope): void => {
         };
 
         angular.module("libiada").controller(

@@ -13,7 +13,7 @@ class OrderTransformationVisualizationHandler {
     * Initializes the Angular controller
     */
     ngOnInit() {
-        const orderTransformationVisualization = ($scope) => {
+        const orderTransformationVisualization = (_$scope) => {
         };
         // Register the controller in Angular
         angular.module("libiada").controller("OrderTransformationVisualizationCtrl", ["$scope", orderTransformationVisualization]);

@@ -139,9 +139,9 @@ public class EnumExtensionsTests
         // Test with all enum values
         List<TestEnum> input = [TestEnum.First, TestEnum.Second, TestEnum.Third];
         List<SelectListItemWithNature> expected = [
-            new() { Text = "First", Value = "1", Nature = (byte)Nature.Literature  },
-            new() { Text = "Second", Value = "2", Nature = (byte)Nature.Music },
-            new() { Text = "Third", Value = "3", Nature = (byte)Nature.Image }
+            new() { Text = "First", Value = "1", Nature = Nature.Literature.ToString("d")  },
+            new() { Text = "Second", Value = "2", Nature = Nature.Music.ToString("d") },
+            new() { Text = "Third", Value = "3", Nature = Nature.Image.ToString("d") }
         ];
         var result = input.ToSelectListWithNature();
         Assert.That(result, Is.EquivalentTo(expected).Using(new SelectListItemWithNatureComparer()));
@@ -149,7 +149,7 @@ public class EnumExtensionsTests
         // Test with a single enum value
         input = [TestEnum.First];
         expected = [
-           new() { Text = "First", Value = "1", Nature = (byte)Nature.Literature }
+           new() { Text = "First", Value = "1", Nature = Nature.Literature.ToString("d") }
        ];
         result = input.ToSelectListWithNature();
         Assert.That(result, Is.EquivalentTo(expected).Using(new SelectListItemWithNatureComparer()));
@@ -167,9 +167,9 @@ public class EnumExtensionsTests
         // Test with all enum values and one selected
         List<TestEnum> input = [TestEnum.First, TestEnum.Second, TestEnum.Third];
         List<SelectListItemWithNature> expected = [
-            new() { Text = "First", Value = "1", Nature = (byte)Nature.Literature },
-            new() { Text = "Second", Value = "2", Selected = true, Nature = (byte)Nature.Music },
-            new() { Text = "Third", Value = "3", Nature = (byte)Nature.Image }
+            new() { Text = "First", Value = "1", Nature = Nature.Literature.ToString("d") },
+            new() { Text = "Second", Value = "2", Selected = true, Nature = Nature.Music.ToString("d") },
+            new() { Text = "Third", Value = "3", Nature = Nature.Image.ToString("d") }
         ];
         var result = input.ToSelectListWithNature([TestEnum.Second]);
         Assert.That(result, Is.EquivalentTo(expected).Using(new SelectListItemWithNatureComparer()));
@@ -177,9 +177,9 @@ public class EnumExtensionsTests
         // Test with all enum values and several selected
         input = [TestEnum.First, TestEnum.Second, TestEnum.Third];
         expected = [
-            new() { Text = "First", Value = "1", Selected = true, Nature = (byte)Nature.Literature },
-            new() { Text = "Second", Value = "2", Nature = (byte)Nature.Music },
-            new() { Text = "Third", Value = "3", Selected = true, Nature = (byte)Nature.Image }
+            new() { Text = "First", Value = "1", Selected = true, Nature = Nature.Literature.ToString("d") },
+            new() { Text = "Second", Value = "2", Nature = Nature.Music.ToString("d") },
+            new() { Text = "Third", Value = "3", Selected = true, Nature = Nature.Image.ToString("d") }
         ];
         result = input.ToSelectListWithNature([TestEnum.First, TestEnum.Third]);
         Assert.That(result, Is.EquivalentTo(expected).Using(new SelectListItemWithNatureComparer()));
@@ -187,7 +187,7 @@ public class EnumExtensionsTests
         // Test with a single enum value that is selected
         input = [TestEnum.Third];
         expected = [
-           new() { Text = "Third", Value = "3", Selected = true, Nature = (byte)Nature.Image }
+           new() { Text = "Third", Value = "3", Selected = true, Nature = Nature.Image.ToString("d") }
        ];
         result = input.ToSelectListWithNature([TestEnum.Third]);
         Assert.That(result, Is.EquivalentTo(expected).Using(new SelectListItemWithNatureComparer()));

@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<ResearchObject>
+
 <br />
 <div class="form-check my-2" ng-init="$ctrl.geneticNature = '@((byte)Nature.Genetic)'" ng-show="$ctrl.nature === $ctrl.geneticNature">
     <input type="checkbox"
@@ -12,7 +13,10 @@
         Show only reference sequences
     </label>
 </div>
-<div class="mb-1 mt-2 btn-group" ng-if="::($ctrl.checkboxes && !$ctrl.displayMultisequenceNumber)" role="group" aria-label="Select / unselect vsible sequences">
+<div class="mb-1 mt-2 btn-group" 
+     ng-if="::($ctrl.checkboxes && !$ctrl.displayMultisequenceNumber)" 
+     role="group" 
+     aria-label="Select / unselect visible sequences">
     <input type="button" class="btn btn-success" ng-click="$ctrl.selectAllVisibleResearchObjects()" value="Select all visible sequences" />
     <input type="button" class="btn btn-secondary" ng-click="$ctrl.unselectAllResearchObjects()" value="Clear selection" />
 </div>
@@ -32,7 +36,10 @@
                                ng-change="$ctrl.toggleResearchObjectsVisibility(false)" />
                     </div>
                     <div class="col" ng-show="!$ctrl.searchResearchObjectText && $ctrl.group && $ctrl.sequenceType">
-                        or <input type="button" class="btn btn-outline-secondary" ng-click="$ctrl.toggleResearchObjectsVisibility(false, true)" value="show all" />
+                        or <input type="button" 
+                                  class="btn btn-outline-secondary" 
+                                  ng-click="$ctrl.toggleResearchObjectsVisibility(false, true)" 
+                                  value="show all" />
                     </div>
                 </div>
             </th>

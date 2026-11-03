@@ -20,7 +20,7 @@ class OrderTransformationVisualizationHandler {
     * Initializes the Angular controller
     */
     private ngOnInit(): void {
-        const orderTransformationVisualization = ($scope: OrderTransformationVisualizationScope): void => {
+        const orderTransformationVisualization = (_$scope: OrderTransformationVisualizationScope): void => {
         };
 
         // Register the controller in Angular
