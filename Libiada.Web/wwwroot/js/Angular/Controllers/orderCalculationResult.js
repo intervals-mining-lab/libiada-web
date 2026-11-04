@@ -1,4 +1,4 @@
-import { initScopeFromServer } from "functions";
+import { InitializeBootstrapTooltips, initScopeFromServer } from "functions";
 /**
  * Controller for order calculation result visualization
  */
@@ -12,8 +12,7 @@ class OrderCalculationResultHandler {
     ngOnInit() {
         const orderCalculationResult = ($scope, $http) => {
             $scope.characteristicsTableTabSelected = false;
-            // initializing tooltips for tabs
-            $('[data-bs-toggle="tooltip"]').tooltip();
+            InitializeBootstrapTooltips();
             initScopeFromServer($http, $scope, "Loading order calculation results", "Failed loading order calculation results");
         };
         // Register controller in Angular module

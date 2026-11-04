@@ -1,4 +1,4 @@
-import { initScopeFromServer  } from "functions";
+import { InitializeBootstrapTooltips, initScopeFromServer  } from "functions";
 import type { Characteristic, ResultsLoadingScreenData, SequenceCharacteristics } from "viewDataTypes";
 
 
@@ -35,9 +35,7 @@ class OrderTransformationCalculationResultHandler {
     private ngOnInit(): void {
         const orderTransformationCalculationResult = async ($scope: OrderTransformationCalculationResultScope, $http: ng.IHttpService): Promise<void> => {
             $scope.characteristicsTableTabSelected = false;
-            
-            // initializing tooltips for tabs
-            $('[data-bs-toggle="tooltip"]').tooltip();
+            InitializeBootstrapTooltips();
 
             initScopeFromServer<OrderTransformationCalculationResultData>(
                 $http,

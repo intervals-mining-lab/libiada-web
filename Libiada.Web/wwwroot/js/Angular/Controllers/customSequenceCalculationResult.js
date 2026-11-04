@@ -1,4 +1,4 @@
-import { initScopeFromServer } from "functions";
+import { InitializeBootstrapTooltips, initScopeFromServer } from "functions";
 /**
  * Controller for custom sequence calculation result visualization
  */
@@ -13,8 +13,7 @@ class CustomSequenceCalculationResultHandler {
         const customSequenceCalculationResult = async ($scope, $http) => {
             $scope.characteristicsTableTabSelected = false;
             await initScopeFromServer($http, $scope, "Loading custom sequence calculation results", "Failed loading custom sequence calculation results");
-            // initializing tooltips for tabs
-            $('[data-bs-toggle="tooltip"]').tooltip();
+            InitializeBootstrapTooltips();
         };
         // Register controller in Angular module
         angular.module("libiada").controller("CustomSequenceCalculationResultCtrl", ["$scope", "$http", customSequenceCalculationResult]);

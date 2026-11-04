@@ -1,14 +1,14 @@
 /**
  * Interface for the controller's scope
  */
-interface NCBINuclorSearchScope extends ng.IScope {
+interface NCBINuccoreSearchScope extends ng.IScope {
     searchQuery: string;
     filterMinLength: boolean;
     filterMaxLength: boolean;
 }
 
 // Angular controller class
-class NCBINuclorSearchHandler {
+class NCBINuccoreSearchHandler {
     /**
      * Creates a new controller instance
      */
@@ -20,7 +20,7 @@ class NCBINuclorSearchHandler {
      * Initializes Angular controller
      */
     private ngOnInit(): void {
-        const ncbiNuccoreSearch = ($scope: NCBINuclorSearchScope): void => {
+        const ncbiNuccoreSearch = ($scope: NCBINuccoreSearchScope): void => {
             $scope.searchQuery = "";
             $scope.filterMinLength = false;
             $scope.filterMaxLength = false;
@@ -35,6 +35,6 @@ class NCBINuclorSearchHandler {
  * Wrapper function for backward compatibility
  * @returns Instance of NCBI Nuccore search handler
  */
-export default function NcbiNuccoreSearchController(): NCBINuclorSearchHandler {
-    return new NCBINuclorSearchHandler();
+export default function NcbiNuccoreSearchController(): NCBINuccoreSearchHandler {
+    return new NCBINuccoreSearchHandler();
 }

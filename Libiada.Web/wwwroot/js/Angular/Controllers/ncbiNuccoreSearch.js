@@ -1,5 +1,5 @@
 // Angular controller class
-class NCBINuclorSearchHandler {
+class NCBINuccoreSearchHandler {
     /**
      * Creates a new controller instance
      */
@@ -24,6 +24,6 @@ class NCBINuclorSearchHandler {
  * @returns Instance of NCBI Nuccore search handler
  */
 export default function NcbiNuccoreSearchController() {
-    return new NCBINuclorSearchHandler();
+    return new NCBINuccoreSearchHandler();
 }
 //# sourceMappingURL=ncbiNuccoreSearch.js.map

@@ -60,7 +60,9 @@ class OrderTransformationCharacteristicsDynamicVisualizationHandler {
         };
 
         // Register controller in Angular module
-        angular.module("libiada").controller("OrderTransformationCharacteristicsDynamicVisualizationCtrl", ["$scope", orderTransformationCharacteristicsDynamicVisualization]);
+        angular.module("libiada").controller(
+            "OrderTransformationCharacteristicsDynamicVisualizationCtrl", 
+            ["$scope", orderTransformationCharacteristicsDynamicVisualization]);
     }
 }
 
@@ -69,6 +71,7 @@ class OrderTransformationCharacteristicsDynamicVisualizationHandler {
  * @param data Data for controller initialization
  * @returns Instance of order transformation characteristics dynamic visualization handler
  */
-export default function OrderTransformationCharacteristicsDynamicVisualizationController(data: OrderTransformationCharacteristicsDynamicVisualizationData): OrderTransformationCharacteristicsDynamicVisualizationHandler {
+export default function OrderTransformationCharacteristicsDynamicVisualizationController(
+    data: OrderTransformationCharacteristicsDynamicVisualizationData): OrderTransformationCharacteristicsDynamicVisualizationHandler {
     return new OrderTransformationCharacteristicsDynamicVisualizationHandler(data);
 }

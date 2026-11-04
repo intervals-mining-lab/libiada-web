@@ -1,4 +1,4 @@
-import { initScopeFromServer } from "functions";
+import { InitializeBootstrapTooltips, initScopeFromServer } from "functions";
 import type { Characteristic, SequenceCharacteristics, ResultsLoadingScreenData } from "viewDataTypes";
 
 /**
@@ -43,8 +43,7 @@ class CustomSequenceOrderTransformationCalculationResultHandler {
                 "Loading custom sequence order transformation calculation results",
                 "Failed loading custom sequence order transformation calculation results");
 
-            // initializing tooltips for tabs
-            $('[data-bs-toggle="tooltip"]').tooltip();
+                InitializeBootstrapTooltips();
         };
 
         // Register controller in Angular module

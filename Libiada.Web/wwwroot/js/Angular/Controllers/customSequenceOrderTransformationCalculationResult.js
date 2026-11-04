@@ -1,4 +1,4 @@
-import { initScopeFromServer } from "functions";
+import { InitializeBootstrapTooltips, initScopeFromServer } from "functions";
 /**
  * Controller for custom sequence order transformation calculation result visualization
  */
@@ -13,8 +13,7 @@ class CustomSequenceOrderTransformationCalculationResultHandler {
         const customSequenceOrderTransformationCalculationResult = async ($scope, $http) => {
             $scope.characteristicsTableTabSelected = false;
             await initScopeFromServer($http, $scope, "Loading custom sequence order transformation calculation results", "Failed loading custom sequence order transformation calculation results");
-            // initializing tooltips for tabs
-            $('[data-bs-toggle="tooltip"]').tooltip();
+            InitializeBootstrapTooltips();
         };
         // Register controller in Angular module
         angular.module("libiada").controller("CustomSequenceOrderTransformationCalculationResultCtrl", ["$scope", "$http", customSequenceOrderTransformationCalculationResult]);

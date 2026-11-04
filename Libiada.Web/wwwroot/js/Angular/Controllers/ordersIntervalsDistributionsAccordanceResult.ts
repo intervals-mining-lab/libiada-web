@@ -34,12 +34,13 @@ interface AccordanceLevel {
     distributionsCount: number;
 }
 
-/**
- * Interface for d3-tooltip with additional properties
- */
-interface D3Tooltip extends d3.Selection<HTMLDivElement, unknown, HTMLElement, any> {
+interface SVGSelection extends d3.Selection<SVGGElement, null, HTMLElement, null> { }
+
+interface DotSelection extends d3.Selection<SVGGElement, AccordancePoint, SVGGElement, null> {}
+
+interface TooltipSelection extends d3.Selection<HTMLDivElement, null, HTMLElement, null> {
     hideTooltip?: boolean;
-    selectedDots?: any;
+    selectedDots?: DotSelection;
 }
 
 // interface for the data object fetched from the server
@@ -51,7 +52,7 @@ interface OrdersIntervalsDistributionsAccordanceResultData {
 /**
  * Interface for the angular controller's scope
  */
-interface IOrdersIntervalsDistributionsAccordanceResultScope extends 
+interface OrdersIntervalsDistributionsAccordanceResultScope extends
     ng.IScope, OrdersIntervalsDistributionsAccordanceResultData, ResultsLoadingScreenData {
     linkType: Link;
     accordanceLevels: AccordanceLevel[];
@@ -61,13 +62,13 @@ interface IOrdersIntervalsDistributionsAccordanceResultScope extends
     dotRadius: number;
     selectedDotRadius: number;
     points: AccordancePoint[];
-    
+
     draw: () => void;
     fillPoints: () => void;
     fillAccordanceLevels: () => void;
     fillPointTooltip: (d: AccordancePoint) => string;
-    showTooltip: (event: MouseEvent, d: AccordancePoint, tooltip: D3Tooltip, svg: d3.Selection<SVGGElement, AccordancePoint, HTMLElement, null>) => void;
-    clearTooltip: (tooltip: D3Tooltip) => void;
+    showTooltip: (event: MouseEvent, d: AccordancePoint, tooltip: TooltipSelection, svg: SVGSelection) => void;
+    clearTooltip: (tooltip: TooltipSelection) => void;
     xValue: (d: AccordancePoint) => number;
     yValue: (d: AccordancePoint) => number;
     xMap?: (d: AccordancePoint) => number;
@@ -87,10 +88,10 @@ class OrdersIntervalsDistributionsAccordanceResultHandler {
      */
     private async ngOnInit(): Promise<void> {
         const ordersIntervalsDistributionsAccordanceResult = async (
-            $scope: IOrdersIntervalsDistributionsAccordanceResultScope, 
+            $scope: OrdersIntervalsDistributionsAccordanceResultScope,
             $http: ng.IHttpService): Promise<void> => {
-            
-                // initializes data for chart
+
+            // initializes data for chart
             function fillPoints(): void {
                 $scope.points = [];
                 $scope.maxLevel = 1;
@@ -155,14 +156,14 @@ class OrdersIntervalsDistributionsAccordanceResultHandler {
             }
 
             // shows tooltip for dot or group of dots
-            function showTooltip(event: MouseEvent, d: AccordancePoint, tooltip: D3Tooltip, svg: d3.Selection<SVGGElement, AccordancePoint, HTMLElement, null>): void {
+            function showTooltip(event: MouseEvent, d: AccordancePoint, tooltip: TooltipSelection, svg: SVGSelection): void {
                 $scope.clearTooltip(tooltip);
 
                 tooltip.style("opacity", 0.9);
 
                 let tooltipHtml: string[] = [];
-                const selection: d3.Selection<SVGGElement, AccordancePoint, SVGGElement, AccordancePoint> = svg.selectAll(".dot");
-                tooltip.selectedDots =selection
+                const selection: DotSelection = svg.selectAll(".dot");
+                tooltip.selectedDots = selection
                     .filter((dot: AccordancePoint) => {
                         if (dot.x === d.x && dot.y === d.y) {
                             tooltipHtml.push($scope.fillPointTooltip(dot));
@@ -183,7 +184,7 @@ class OrdersIntervalsDistributionsAccordanceResultHandler {
             }
 
             // clears tooltip and unselects dots
-            function clearTooltip(tooltip: D3Tooltip): void {
+            function clearTooltip(tooltip: TooltipSelection): void {
                 if (tooltip) {
                     if (tooltip.hideTooltip) {
                         tooltip.html("").style("opacity", 0);
@@ -273,7 +274,7 @@ class OrdersIntervalsDistributionsAccordanceResultHandler {
                 let color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.points.length]);
 
                 // add the graph canvas to the body of the webpage
-                let svg: d3.Selection<SVGGElement, AccordancePoint, HTMLElement, null> = d3.select<SVGGElement, AccordancePoint>("#chart").append("svg")
+                let svg: SVGSelection = d3.select<SVGGElement, null>("#chart").append("svg")
                     .attr("width", $scope.width)
                     .attr("height", $scope.height)
                     .attr("class", "chart-svg")
@@ -281,9 +282,9 @@ class OrdersIntervalsDistributionsAccordanceResultHandler {
                     .attr("transform", `translate(${margin.left},${margin.top})`);
 
                 // add the tooltip area to the webpage
-                let tooltip = d3.select("#chart").append("div")
+                let tooltip: TooltipSelection = d3.select<HTMLDivElement, null>("#chart").append("div")
                     .attr("class", "chart-tooltip position-absolute bg-light font-monospace small lh-sm p-1 rounded")
-                    .style("opacity", 0) as D3Tooltip;
+                    .style("opacity", 0);
 
                 // preventing tooltip hiding if dot clicked
                 tooltip.on("click", () => { tooltip.hideTooltip = false; });
@@ -357,12 +358,12 @@ class OrdersIntervalsDistributionsAccordanceResultHandler {
                 $scope,
                 "Loading intervals distribution accordance data",
                 "Failed loading intervals distribution accordance data");
-            
-                $scope.linkType = $scope.linkList[0];
-                $scope.$apply();
+
+            $scope.linkType = $scope.linkList[0];
+            $scope.$apply();
         };
 
-        angular.module("libiada").controller("OrdersIntervalsDistributionsAccordanceResultCtrl", 
+        angular.module("libiada").controller("OrdersIntervalsDistributionsAccordanceResultCtrl",
             ["$scope", "$http", ordersIntervalsDistributionsAccordanceResult]);
     }
 }

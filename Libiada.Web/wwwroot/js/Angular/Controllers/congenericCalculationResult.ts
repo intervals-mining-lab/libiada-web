@@ -1,4 +1,4 @@
-import { initScopeFromServer } from "functions";
+import { InitializeBootstrapTooltips, initScopeFromServer } from "functions";
 import type { Characteristic, ResultsLoadingScreenData, SequenceCharacteristics, SequencesGroup } from "viewDataTypes";
 
 
@@ -42,8 +42,7 @@ class CongenericCalculationResultHandler {
                 "Loading characteristics calculation results",
                 "Failed loading characteristics calculation results");
 
-            // initializing tooltips for tabs
-            $('[data-bs-toggle="tooltip"]').tooltip();
+                InitializeBootstrapTooltips();
         };
 
         // Register controller in Angular module
