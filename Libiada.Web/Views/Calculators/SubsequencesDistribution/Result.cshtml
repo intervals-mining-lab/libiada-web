@@ -6,9 +6,9 @@
 {
     <div class="no-margin" ng-controller="SubsequencesDistributionResultCtrl">
         <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
-        <div id="container" class="d-flex" ng-disabled="loading" ng-cloack>
+        <div id="container" class="d-flex" ng-disabled="loading" ng-cloak>
             <div id="chart"></div>
-            <div id="dragbar" class="bg-secondary" ng-mousedown="dragbarMouseDown()"></div>
+            <div id="drag-bar" class="bg-secondary" ng-mouseDown="dragBarMouseDown()"></div>
             <div id="sidebar">
                 <ul id='nav' class="nav nav-tabs d-flex justify-content-evenly pt-1" role="tablist">
                     <li class="nav-item" role="presentation" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Legend">

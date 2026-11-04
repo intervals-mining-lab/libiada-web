@@ -56,7 +56,7 @@ interface LocalCharacteristicsVisualizationsComponentController extends ng.ICont
     showTooltip: (selectedTrace: Point, selectedFragmentIndex: number) => Promise<void>;
     legendClick: (legendItem: LegendItem) => Promise<void>;
     legendSetVisibilityForAll: (visibility: boolean) => Promise<void>;
-    dragbarMouseDown: () => Promise<void>;
+    dragBarMouseDown: () => Promise<void>;
 }
 
 function LocalCharacteristicsVisualizationsController(this: LocalCharacteristicsVisualizationsComponentController, $scope: ng.IScope) {
@@ -419,9 +419,9 @@ function LocalCharacteristicsVisualizationsController(this: LocalCharacteristics
     };
 
     // TODO: maybe extract this into separate component
-    ctrl.dragbarMouseDown = async () => {
+    ctrl.dragBarMouseDown = async () => {
         const right: HTMLElement = document.getElementById("sidebar") ?? throwHelper("Sidebar element not found");
-        const bar: HTMLElement = document.getElementById("dragbar") ?? throwHelper("Dragbar element not found");
+        const bar: HTMLElement = document.getElementById("drag-bar") ?? throwHelper("Drag bar element not found");
 
         const drag = async (e: MouseEvent) => {
             const selection: Selection | null = window.getSelection();

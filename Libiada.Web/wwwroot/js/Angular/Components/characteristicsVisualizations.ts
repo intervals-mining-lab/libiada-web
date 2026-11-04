@@ -47,7 +47,7 @@ interface CharacteristicsVisualizationsComponentController extends ng.IControlle
     showTooltip: (selectedPoint: Point) => Promise<void>;
     legendClick: (legendItem: LegendItem) => Promise<void>;
     legendSetVisibilityForAll: (visibility: boolean) => Promise<void>;
-    dragbarMouseDown: () => Promise<void>;
+    dragBarMouseDown: () => Promise<void>;
 }
 
 function CharacteristicsVisualizationsController(this: CharacteristicsVisualizationsComponentController, $scope: ng.IScope) {
@@ -374,9 +374,9 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
     };
 
     // TODO: maybe extract this into separate component
-    ctrl.dragbarMouseDown = async () => {
+    ctrl.dragBarMouseDown = async () => {
         const right: HTMLElement = document.getElementById("sidebar") ?? throwHelper("Sidebar element not found");
-        const bar: HTMLElement = document.getElementById("dragbar") ?? throwHelper("Dragbar element not found");
+        const bar: HTMLElement = document.getElementById("drag-bar") ?? throwHelper("Drag bar element not found");
 
         const drag = async (e: MouseEvent) => {
             const selection: Selection | null = window.getSelection();

@@ -1,6 +1,6 @@
 ﻿@{
     Layout = "_EmptyLayout";
-    ViewBag.Title = "Libiada - Subsequences characterisitics calculation result";
+    ViewBag.Title = "Libiada - Subsequences characteristics calculation result";
 }
 
 @if (ViewBag.Error == null)
@@ -40,9 +40,9 @@
                      role="tabpanel"
                      aria-labelledby="charts-tab"
                      tabindex="0">
-                    <div id="container" class="d-flex" ng-disabled="loading" ng-cloack>
+                    <div id="container" class="d-flex" ng-disabled="loading" ng-cloak>
                         <div id="chart"></div>
-                        <div id="dragbar" class="bg-secondary" ng-mousedown="dragbarMouseDown()"></div>
+                        <div id="drag-bar" class="bg-secondary" ng-mouseDown="dragBarMouseDown()"></div>
                         <div id="sidebar">
                             <ul id='plotnav' class="nav nav-tabs justify-content-evenly pt-1" role="tablist">
                                 <li class="nav-item" role="presentation" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Legend">
@@ -81,7 +81,7 @@
                                     </button>
                                 </li>
                             </ul>
-                            <div class="tab-content subtab-content-full-height px-2 pt-2">
+                            <div class="tab-content sub-tab-content-full-height px-2 pt-2">
                                 <div id="legend-tab-pane" class="tab-pane fade" role="tabpanel" aria-labelledby="legend-tab" tabindex="0">
                                     <div class="row">
                                         <div class="col-md-12 mb-2 btn-group" role="group" aria-label="Legend control buttons">

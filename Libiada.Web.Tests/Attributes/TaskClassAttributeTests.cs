@@ -30,6 +30,6 @@ public class TaskClassAttributeTests
     public void TaskClassAttributeValueTest()
     {
         TaskClassAttribute attribute = new(typeof(CalculationController));
-        Assert.That(typeof(CalculationController), Is.EqualTo(attribute.Value));
+        Assert.That(attribute.Value, Is.EqualTo(typeof(CalculationController)));
     }
 }

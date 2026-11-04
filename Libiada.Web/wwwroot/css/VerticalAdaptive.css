@@ -5,7 +5,7 @@
     min-height: 300px;
 }
 
-#dragbar {
+#drag-bar {
     width: 3px;
     cursor: col-resize;
     margin-left: 1px;
@@ -22,7 +22,7 @@
     height: calc(100vh - 56px);
 }
 
-.subtab-content-full-height {
+.sub-tab-content-full-height {
     overflow-y: auto;
     height: calc(100vh - 112px);
 }

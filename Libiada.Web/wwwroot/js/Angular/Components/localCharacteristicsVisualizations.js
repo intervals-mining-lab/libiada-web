@@ -323,9 +323,9 @@ function LocalCharacteristicsVisualizationsController($scope) {
         Plotly.restyle(ctrl.chartElement, update);
     };
     // TODO: maybe extract this into separate component
-    ctrl.dragbarMouseDown = async () => {
+    ctrl.dragBarMouseDown = async () => {
         const right = document.getElementById("sidebar") ?? throwHelper("Sidebar element not found");
-        const bar = document.getElementById("dragbar") ?? throwHelper("Dragbar element not found");
+        const bar = document.getElementById("drag-bar") ?? throwHelper("Drag bar element not found");
         const drag = async (e) => {
             const selection = window.getSelection();
             if (selection) {

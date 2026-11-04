@@ -437,9 +437,9 @@ class SubsequencesCalculationResultHandler {
                 }
             }
 
-            function dragbarMouseDown(): void {
+            function dragBarMouseDown(): void {
                 let right = document.getElementById("sidebar");
-                let bar = document.getElementById("dragbar")!;
+                let bar = document.getElementById("drag-bar")!;
 
                 const drag = (e: MouseEvent): void => {
                     const selection: Selection | null = window.getSelection();
@@ -560,7 +560,7 @@ class SubsequencesCalculationResultHandler {
             $scope.fillLegend = fillLegend;
             $scope.legendClick = legendClick;
             $scope.legendSetVisibilityForAll = legendSetVisibilityForAll;
-            $scope.dragbarMouseDown = dragbarMouseDown;
+            $scope.dragBarMouseDown = dragBarMouseDown;
             $scope.showTooltip = showTooltip;
             $scope.dotVisible = dotVisible;
             $scope.fillVisiblePoints = fillVisiblePoints;

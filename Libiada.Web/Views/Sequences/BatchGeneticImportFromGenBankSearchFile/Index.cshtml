@@ -14,7 +14,7 @@
         <div class="row mb-1">
             <label class="col-form-label col-md-2" for="file">GenBank search results file:</label>
             <div class="col-md-10">
-                <input type="file" name="file" id="file" onchange="angular.element(this).scope().fileChanged(this)" />
+                <input type="file" name="file" id="file" onChange="angular.element(this).scope().fileChanged(this)" />
                 @Html.ValidationMessage("file", "", new { @class = "text-danger" })
             </div>
         </div>

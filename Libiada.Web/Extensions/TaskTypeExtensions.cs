@@ -17,6 +17,6 @@ public static class TaskTypeExtensions
     /// </returns>
     public static Type GetTaskClass(this TaskType value)
     {
-        return value.GetAttribute<TaskType, TaskClassAttribute>().Value;
+        return value.GetAttribute<TaskType, TaskClassAttribute>()?.Value ?? throw new InvalidOperationException($"Task type {value} does not have {nameof(TaskClassAttribute)}");
     }
 }

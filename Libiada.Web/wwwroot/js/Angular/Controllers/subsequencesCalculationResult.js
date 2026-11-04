@@ -384,9 +384,9 @@ class SubsequencesCalculationResultHandler {
                     Plotly.restyle($scope.chartElement, update);
                 }
             }
-            function dragbarMouseDown() {
+            function dragBarMouseDown() {
                 let right = document.getElementById("sidebar");
-                let bar = document.getElementById("dragbar");
+                let bar = document.getElementById("drag-bar");
                 const drag = (e) => {
                     const selection = window.getSelection();
                     if (selection) {
@@ -487,7 +487,7 @@ class SubsequencesCalculationResultHandler {
             $scope.fillLegend = fillLegend;
             $scope.legendClick = legendClick;
             $scope.legendSetVisibilityForAll = legendSetVisibilityForAll;
-            $scope.dragbarMouseDown = dragbarMouseDown;
+            $scope.dragBarMouseDown = dragBarMouseDown;
             $scope.showTooltip = showTooltip;
             $scope.dotVisible = dotVisible;
             $scope.fillVisiblePoints = fillVisiblePoints;

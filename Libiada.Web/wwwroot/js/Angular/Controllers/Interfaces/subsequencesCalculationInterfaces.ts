@@ -142,7 +142,7 @@ export interface ISubsequencesCalculationResultScope extends ng.IScope, ISubsequ
     fillLegend: () => void;
     legendClick: (legendItem: ILegendItem) => void;
     legendSetVisibilityForAll: (visibility: boolean) => void;
-    dragbarMouseDown: () => void;
+    dragBarMouseDown: () => void;
     getAttributesText: (attributes: number[]) => string[];
     getAttributeIdByName: (dot: ISubsequencePoint, attributeName: string) => number | undefined;
     isAttributeEqual: (dot: ISubsequencePoint, attributeName: string, expectedValue: string) => boolean;

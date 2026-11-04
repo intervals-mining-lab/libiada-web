@@ -28,7 +28,7 @@
                         id="groupSelect"
                         ng-model="$ctrl.group"
                         ng-options="g.Text for g in $ctrl.groups | filter:{ Nature: $ctrl.nature }"
-                        ng-change="$ctrl.toggleSequenceGroupsVisibility(flase)">
+                        ng-change="$ctrl.toggleSequenceGroupsVisibility(false)">
                     <option value="">-- All groups --</option>
                 </select>
                 <input type="hidden" name="Group" ng-value="$ctrl.group.Value" />
@@ -38,7 +38,7 @@
                         id="sequenceTypeSelect"
                         ng-model="$ctrl.sequenceType"
                         ng-options="s.Text for s in $ctrl.sequenceTypes | filter:{ Nature: $ctrl.nature }"
-                        ng-change="$ctrl.toggleSequenceGroupsVisibility(flase)">
+                        ng-change="$ctrl.toggleSequenceGroupsVisibility(false)">
                     <option value="">-- All sequence types --</option>
                 </select>
                 <input type="hidden" name="SequenceType" ng-value="$ctrl.sequenceType.Value" />

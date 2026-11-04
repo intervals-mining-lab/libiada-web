@@ -15,14 +15,14 @@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="row mb-1">
-            <label class="col-form-label col-md-2" for="length">Generated sequnces length:</label>
+            <label class="col-form-label col-md-2" for="length">Generated sequences length:</label>
             <div class="col-md-10">
                 <input class="form-control" name="length" type="number" value="4" min="0" id="length" />
                 @Html.ValidationMessage("length", "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="row mb-1">
-            <label class="col-form-label col-md-2" for="alphabetCardinality">Generated sequnces alphabet cardinality:</label>
+            <label class="col-form-label col-md-2" for="alphabetCardinality">Generated sequences alphabet cardinality:</label>
             <div class="col-md-10">
                 <input class="form-control" name="alphabetCardinality" type="number" value="4" min="0" id="alphabetCardinality" />
                 @Html.ValidationMessage("alphabetCardinality", "", new { @class = "text-danger" })
