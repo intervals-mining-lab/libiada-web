@@ -1,26 +1,21 @@
-﻿function SequenceGroupsTableController($scope, filterFilter) {
+function SequenceGroupsTableController($scope) {
     const ctrl = this;
-
     ctrl.$onInit = () => {
         ctrl.searchSequenceGroupText = "";
-
         const selectedSequenceGroups = ctrl.sequenceGroups.filter(sg => sg.Selected);
         ctrl.selectedSequenceGroupsCount = selectedSequenceGroups.length;
         ctrl.visibleSequenceGroups = selectedSequenceGroups;
         ctrl.visibleSequenceGroups.forEach(vsg => vsg.Visible = true);
-        ctrl.toogleSequenceGroupsVisibility(false);
-
-        // returning clear selection function to controller for callbacks
+        ctrl.toggleSequenceGroupsVisibility(false);
+        // returning clearing selection function to controller for callbacks
         ctrl.setUnselectAllSequenceGroupsFunction({ func: ctrl.unselectAllSequenceGroups });
     };
-
-    ctrl.$onChanges = changes => {
-        if (changes.nature && !changes.nature.isFirstChange()) {
-            ctrl.toogleSequenceGroupsVisibility(true);
+    ctrl.$onChanges = (changes) => {
+        if (changes["nature"] && !changes["nature"].isFirstChange()) {
+            ctrl.toggleSequenceGroupsVisibility(true);
         }
     };
-
-    ctrl.toogleSequenceGroupsVisibility = (resetSelection, ignoreSearch) => {
+    ctrl.toggleSequenceGroupsVisibility = (resetSelection, ignoreSearch) => {
         if (resetSelection) {
             ctrl.sequenceGroups.forEach(sg => {
                 sg.Selected = false;
@@ -28,20 +23,17 @@
             });
             ctrl.selectedSequenceGroupsCount = 0;
         }
-
-        // Updating mattrs visibility flag
+        // Updating sequence groups visibility flag
         ctrl.sequenceGroups.forEach(sg => sg.Visible = ignoreSearch ? ctrl.isSequenceGroupVisibleWithoutSearch(sg) : ctrl.isSequenceGroupVisible(sg));
         const sequenceGroupsToHide = ctrl.visibleSequenceGroups.filter(sg => !sg.Visible);
         const newVisibleSequenceGroups = ctrl.sequenceGroups.filter(sg => sg.Visible);
-        const sequenceGroupsToShow = newVisibleSequenceGroups.filter(sg => !ctrl.visibleSequenceGroups.some(sg2 => sg2.Value === sg.Value));
+        const sequenceGroupsToShow = newVisibleSequenceGroups
+            .filter(sg => !ctrl.visibleSequenceGroups.some(sg2 => sg2.Value === sg.Value));
         ctrl.visibleSequenceGroups = newVisibleSequenceGroups;
-
         // removing not visible sequence groups from table 
         $(sequenceGroupsToHide.map(sg => `#sequenceGroupRow${sg.Value}`).join(",")).remove();
-
         //adding newly visible sequence groups to table
-        $("#sequenceGroupsSelectList").append(sequenceGroupsToShow.map(sg =>
-            `<tr id="sequenceGroupRow${sg.Value}">
+        $("#sequenceGroupsSelectList").append(sequenceGroupsToShow.map(sg => `<tr id="sequenceGroupRow${sg.Value}">
                     <td>
                         <div class="form-check">
                             <input type="checkbox"
@@ -56,29 +48,22 @@
                     <td>${sg.Group}</td>
                     <td>${sg.SequenceType}</td>
                 </tr>`).join());
-
         // binding checkbox state change event
-        sequenceGroupsToShow.forEach(sg => $(`#sequenceGroup${sg.Value}`).change(
-            () => {
-                ctrl.toggleSequenceGroupSelection(sg);
-                $scope.$apply();
-            }
-        ));
+        sequenceGroupsToShow.forEach(sg => $(`#sequenceGroup${sg.Value}`).change(() => {
+            ctrl.toggleSequenceGroupSelection(sg);
+            $scope.$apply();
+        }));
     };
-
-    ctrl.isSequenceGroupVisibleWithoutSearch = sequenceGroup => sequenceGroup.Selected || ctrl.checkSequenceGroupVisibilitty(sequenceGroup);
-
-    ctrl.isSequenceGroupVisible = sequenceGroup => sequenceGroup.Selected ||
+    ctrl.isSequenceGroupVisibleWithoutSearch = (sequenceGroup) => sequenceGroup.Selected || ctrl.checkSequenceGroupVisibility(sequenceGroup);
+    ctrl.isSequenceGroupVisible = (sequenceGroup) => sequenceGroup.Selected ||
         (ctrl.searchSequenceGroupText.length >= 4
-            && ctrl.checkSequenceGroupVisibilitty(sequenceGroup)
+            && ctrl.checkSequenceGroupVisibility(sequenceGroup)
             && sequenceGroup.Text.toUpperCase().includes(ctrl.searchSequenceGroupText.toUpperCase()));
-
-    ctrl.checkSequenceGroupVisibilitty = sequenceGroup => sequenceGroup.Nature == ctrl.nature
+    ctrl.checkSequenceGroupVisibility = (sequenceGroup) => sequenceGroup.Nature == ctrl.nature
         && (!ctrl.group || sequenceGroup.Group.includes(ctrl.group.Text))
         && (!ctrl.sequenceType || sequenceGroup.SequenceType.includes(ctrl.sequenceType.Text));
-
     ctrl.selectAllVisibleSequenceGroups = () => {
-        ctrl.getVisibleSequenceGroups().forEach(sg => {
+        ctrl.visibleSequenceGroups.forEach(sg => {
             if (!sg.Selected) {
                 $(`#sequenceGroup${sg.Value}`).prop("checked", true);
                 sg.Selected = true;
@@ -86,23 +71,21 @@
             }
         });
     };
-
-    ctrl.unselectAllSequenceGroups = () => ctrl.toogleSequenceGroupsVisibility(true);
-
-    ctrl.toggleSequenceGroupSelection = sequenceGroup => {
+    ctrl.unselectAllSequenceGroups = () => ctrl.toggleSequenceGroupsVisibility(true);
+    ctrl.toggleSequenceGroupSelection = (sequenceGroup) => {
         if (sequenceGroup.Selected) {
             sequenceGroup.Selected = false;
             ctrl.selectedSequenceGroupsCount--;
-        } else {
+        }
+        else {
             sequenceGroup.Selected = true;
             ctrl.selectedSequenceGroupsCount++;
         }
     };
 }
-
 angular.module("libiada").component("sequenceGroupsTable", {
     templateUrl: `/AngularTemplates/_SequenceGroupsTable`,
-    controller: ["$scope", "filterFilter", SequenceGroupsTableController],
+    controller: ["$scope", SequenceGroupsTableController],
     bindings: {
         selectedSequenceGroupsCount: "=",
         sequenceGroups: "<",
@@ -112,3 +95,5 @@ angular.module("libiada").component("sequenceGroupsTable", {
         setUnselectAllSequenceGroupsFunction: "&"
     }
 });
+export {};
+//# sourceMappingURL=sequenceGroupsTable.js.map

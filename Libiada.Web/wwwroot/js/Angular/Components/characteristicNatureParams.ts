@@ -7,7 +7,7 @@ import type {
     SelectedNatureParams
 } from "viewDataTypes";
 
-interface CharacteristicNatureParamsController extends ng.IController {
+interface CharacteristicNatureParamsComponentController extends ng.IController {
     characteristic?: SelectedNatureParams;
     nature: string;
     notations: Notation[];
@@ -22,10 +22,10 @@ interface CharacteristicNatureParamsController extends ng.IController {
 }
 
 function CharacteristicNatureParamsController(
-    this: CharacteristicNatureParamsController,
+    this: CharacteristicNatureParamsComponentController,
     filterFilter: ng.IFilterFilter
 ): void {
-    const ctrl: CharacteristicNatureParamsController = this;
+    const ctrl: CharacteristicNatureParamsComponentController = this;
 
     ctrl.$onInit = (): void => {
         ctrl.characteristic ??= {

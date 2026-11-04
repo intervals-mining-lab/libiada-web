@@ -1,11 +1,11 @@
-interface LocalFileController extends ng.IController {
+interface LocalFileComponentController extends ng.IController {
     localFile: boolean;
 
     $onInit(): void;
 }
 
-function LocalFileController(this: LocalFileController): void {
-    const ctrl: LocalFileController = this;
+function LocalFileController(this: LocalFileComponentController): void {
+    const ctrl: LocalFileComponentController = this;
 
     ctrl.$onInit = (): void => {
         ctrl.localFile = false;

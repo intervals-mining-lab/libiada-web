@@ -66,8 +66,6 @@ export interface OrderTransformation extends SelectListItem { }
 
 export interface SequenceGroupType extends SelectListItemWithNature { }
 
-export interface SequenceGroup extends SelectListItemWithNature { }
-
 export interface Multisequence extends SelectListItemWithNature { }
 
 export interface DeviationCalculationMethod extends SelectListItem { }
@@ -91,6 +89,12 @@ export interface ResearchObject extends SelectListItemWithNature {
     SequenceType: string;
     Visible: boolean;
 }
+
+export interface SequenceGroup extends SelectListItemWithNature {
+    Group: string;
+    SequenceType: string;
+    Visible: boolean;
+ }
 
 export interface CharacteristicsDictionary { [key: string]: number }
 

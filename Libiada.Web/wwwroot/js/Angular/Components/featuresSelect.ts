@@ -1,6 +1,6 @@
 import type { Feature } from "viewDataTypes";
 
-interface FeaturesSelectController extends ng.IController {
+interface FeaturesSelectComponentController extends ng.IController {
     features: Feature[];
 
     $onInit(): void;
@@ -10,8 +10,8 @@ interface FeaturesSelectController extends ng.IController {
     additionalAction: (dataWrapper: { feature: Feature }) => void;
 }
 
-function FeaturesSelectController(this: FeaturesSelectController): void {
-    const ctrl: FeaturesSelectController = this;
+function FeaturesSelectController(this: FeaturesSelectComponentController): void {
+    const ctrl: FeaturesSelectComponentController = this;
 
     ctrl.$onInit = (): void => {
         ctrl.additionalAction ??= () => { };

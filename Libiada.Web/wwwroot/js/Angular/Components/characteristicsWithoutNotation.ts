@@ -4,7 +4,7 @@ import type {
     CharacteristicsDictionary
 } from "viewDataTypes";
 
-interface CharacteristicsWithoutNotationController extends ng.IController {
+interface CharacteristicsWithoutNotationComponentController extends ng.IController {
     characteristicTypes: CharacteristicType[];
     characteristicsDictionary: CharacteristicsDictionary;
     characteristics: SelectedCharacteristic[];
@@ -17,9 +17,9 @@ interface CharacteristicsWithoutNotationController extends ng.IController {
 }
 
 function CharacteristicsWithoutNotationController(
-    this: CharacteristicsWithoutNotationController
+    this: CharacteristicsWithoutNotationComponentController
 ): void {
-    const ctrl: CharacteristicsWithoutNotationController = this;
+    const ctrl: CharacteristicsWithoutNotationComponentController = this;
 
     ctrl.$onInit = (): void => {
         ctrl.characteristics = [];

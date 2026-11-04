@@ -176,7 +176,6 @@ function ResearchObjectsTableController(
                 m.Visible = ignoreSearch ? ctrl.isResearchObjectVisibleWithoutSearch(m) : ctrl.isResearchObjectVisible(m));
 
             researchObjectsToHide = ctrl.visibleResearchObjects.filter(m => !m.Visible);
-
         } else {
             if (ignoreSearch || ctrl.searchResearchObjectText.length > 3) {
                 const requestParams = ctrl.FillResearchObjectsSearchParams();

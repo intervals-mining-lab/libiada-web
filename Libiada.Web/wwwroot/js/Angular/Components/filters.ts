@@ -2,7 +2,7 @@
     value: string;
 }
 
-interface FiltersController extends ng.IController {
+interface FiltersComponentController extends ng.IController {
     filters: Filter[];
     newFilter: string;
 
@@ -15,8 +15,8 @@ interface FiltersController extends ng.IController {
     deleteFilter: (dataWrapper: { filter: Filter; filterIndex: number }) => void;
 }
 
-function FiltersController(this: FiltersController): void {
-    const ctrl: FiltersController = this;
+function FiltersController(this: FiltersComponentController): void {
+    const ctrl: FiltersComponentController = this;
 
     ctrl.$onInit = (): void => {
         ctrl.filters ??= [];

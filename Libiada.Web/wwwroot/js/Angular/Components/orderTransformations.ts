@@ -4,7 +4,7 @@ interface SelectedOrderTransformation {
     transformation: OrderTransformation;
 }
 
-interface OrderTransformationsController extends ng.IController {
+interface OrderTransformationsComponentController extends ng.IController {
     transformations: OrderTransformation[];
     transformationsSequence: SelectedOrderTransformation[];
     
@@ -13,8 +13,8 @@ interface OrderTransformationsController extends ng.IController {
     deleteTransformation: (transformation: SelectedOrderTransformation) => void;
 }
 
-function OrderTransformationsController(this: OrderTransformationsController): void {
-    const ctrl: OrderTransformationsController = this;
+function OrderTransformationsController(this: OrderTransformationsComponentController): void {
+    const ctrl: OrderTransformationsComponentController = this;
 
     ctrl.$onInit = (): void => {
         ctrl.transformationsSequence = [];

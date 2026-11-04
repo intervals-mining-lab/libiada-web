@@ -46,8 +46,8 @@ interface CalculationScope extends ng.IScope, CalculationData {
 
     // Methods 
     clearSelection: () => void;
-    setUnselectAllResearchObjectsFunction: (func: Function) => void;
-    setUnselectAllSequenceGroupsFunction: (func: Function) => void;
+    setUnselectAllResearchObjectsFunction: (func: () => Promise<void>) => void;
+    setUnselectAllSequenceGroupsFunction: (func: () => Promise<void>) => void;
     unselectAllResearchObjects: Function;
     unselectAllSequenceGroups: Function;
 }
@@ -64,11 +64,11 @@ class CalculationOperator {
         const calculation = ($scope: CalculationScope): void => {
             MapModelFromJson($scope, data);
 
-            function setUnselectAllResearchObjectsFunction(func: Function): void {
+            function setUnselectAllResearchObjectsFunction(func: () => Promise<void>): void {
                 $scope.unselectAllResearchObjects = func;
             }
 
-            function setUnselectAllSequenceGroupsFunction(func: Function): void {
+            function setUnselectAllSequenceGroupsFunction(func: () => Promise<void>): void {
                 $scope.unselectAllSequenceGroups = func;
             }
 

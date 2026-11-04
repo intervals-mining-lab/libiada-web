@@ -19,8 +19,9 @@ function ResearchObjectsTableController($scope, $http) {
             ctrl.researchObjectsInputName = "researchObjectId";
             ctrl.researchObjectsInputType = "radio";
         }
-        ctrl.researchObjectsProvided = typeof ctrl.researchObjects !== 'undefined';
-        ctrl.selectedResearchObjectsCount = ctrl.researchObjectsProvided ? ctrl.researchObjects?.filter(m => m.Selected).length ?? 0 : 0;
+        ctrl.researchObjectsProvided = ctrl.researchObjects !== undefined;
+        ctrl.researchObjects ??= [];
+        ctrl.selectedResearchObjectsCount = ctrl.researchObjectsProvided ? ctrl.researchObjects.filter(m => m.Selected).length : 0;
         ctrl.visibleResearchObjects = [];
         ctrl.toggleResearchObjectsVisibility(false);
         // returning clear selection function to controller for callbacks
@@ -79,9 +80,8 @@ function ResearchObjectsTableController($scope, $http) {
         }
     };
     ctrl.toggleResearchObjectsVisibility = async (resetSelection, ignoreSearch) => {
-        let researchObjects = ctrl.researchObjects ?? [];
         if (resetSelection) {
-            ctrl.visibleResearchObjects.forEach(m => {
+            ctrl.visibleResearchObjects.forEach((m) => {
                 m.Selected = false;
                 $(`#researchObject${m.Value}`).prop("checked", false);
             });
@@ -90,25 +90,23 @@ function ResearchObjectsTableController($scope, $http) {
         let researchObjectsToHide;
         if (ctrl.researchObjectsProvided) {
             // Updating research objects visibility flag
-            researchObjects.forEach(m => m.Visible = ignoreSearch ? ctrl.isResearchObjectVisibleWithoutSearch(m) : ctrl.isResearchObjectVisible(m));
+            ctrl.researchObjects.forEach(m => m.Visible = ignoreSearch ? ctrl.isResearchObjectVisibleWithoutSearch(m) : ctrl.isResearchObjectVisible(m));
             researchObjectsToHide = ctrl.visibleResearchObjects.filter(m => !m.Visible);
         }
         else {
             if (ignoreSearch || ctrl.searchResearchObjectText.length > 3) {
                 const requestParams = ctrl.FillResearchObjectsSearchParams();
                 const result = await $http.get(`/api/ResearchObjectApi/${ctrl.researchObjectsEndpoint}`, { params: requestParams });
-                researchObjects = result.data;
-                ctrl.researchObjects = researchObjects;
-                researchObjects.forEach(m => m.Visible = true);
+                ctrl.researchObjects = result.data;
+                ctrl.researchObjects.forEach(m => m.Visible = true);
             }
             else {
-                researchObjects = [];
-                ctrl.researchObjects = researchObjects;
+                ctrl.researchObjects = [];
             }
             researchObjectsToHide = ctrl.visibleResearchObjects
-                .filter(m => !m.Selected && !researchObjects.some(m2 => m2.Value === m.Value));
+                .filter(m => !m.Selected && !ctrl.researchObjects.some(m2 => m2.Value === m.Value));
         }
-        const researchObjectsToShow = researchObjects
+        const researchObjectsToShow = ctrl.researchObjects
             .filter(m => m.Visible && !ctrl.visibleResearchObjects.some(m2 => m2.Value === m.Value));
         ctrl.visibleResearchObjects = ctrl.visibleResearchObjects
             .filter(m => !researchObjectsToHide.some(m2 => m2.Value === m.Value))
@@ -116,7 +114,7 @@ function ResearchObjectsTableController($scope, $http) {
         // removing not visible research objects from table
         $(researchObjectsToHide.map(m => `#researchObjectRow${m.Value}`).join(",")).remove();
         //adding newly visible research objects to table
-        $("#researchObjectsSelectList").append(researchObjectsToShow.map(m => `<tr id="researchObjectRow${m.Value}">
+        $("#researchObjectsSelectList").append(researchObjectsToShow.map((m) => `<tr id="researchObjectRow${m.Value}">
                 ${ctrl.displayMultisequenceNumber ?
             `<td id="multisequenceNumberCell${m.Value}">
                     </td>` : ``}
@@ -135,7 +133,8 @@ function ResearchObjectsTableController($scope, $http) {
                     <td>${m.SequenceType}</td>
                 </tr>`).join());
         // binding checkbox state change event
-        researchObjectsToShow.forEach(m => $(`#researchObject${m.Value}`).change(() => {
+        researchObjectsToShow.forEach((m) => $(`#researchObject${m.Value}`)
+            .change(() => {
             ctrl.toggleResearchObjectSelection(m);
             $scope.$apply();
         }));
@@ -208,12 +207,12 @@ angular.module("libiada").component("researchObjectsTable", {
         sequenceTypes: "<",
         maximumSelectedResearchObjects: "<",
         displayMultisequenceNumber: "<",
-        multisequenceNumbers: "<",
+        multisequenceNumbers: "<?",
         initialSequenceTypeIndex: "<?",
         initialGroupIndex: "<?",
         groupAndTypeRequired: "<",
         setUnselectAllResearchObjectsFunction: "&",
-        researchObjectsEndpoint: "@"
+        researchObjectsEndpoint: "@?"
     }
 });
 export {};

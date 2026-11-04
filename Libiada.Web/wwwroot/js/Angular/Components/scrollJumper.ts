@@ -1,4 +1,4 @@
-interface ScrollJumperController extends ng.IController {
+interface ScrollJumperComponentController extends ng.IController {
     scrolledUp: boolean;
     scrolledDown: boolean;
     savedPosition: number;
@@ -9,8 +9,8 @@ interface ScrollJumperController extends ng.IController {
     scrollUp: () => void;
 }
 
-function ScrollJumperController(this: ScrollJumperController): void {
-    const ctrl: ScrollJumperController = this;
+function ScrollJumperController(this: ScrollJumperComponentController): void {
+    const ctrl: ScrollJumperComponentController = this;
 
     ctrl.$onInit = (): void => {
         ctrl.scrolledUp = false;
