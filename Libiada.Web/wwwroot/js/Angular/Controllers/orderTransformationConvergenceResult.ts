@@ -16,7 +16,7 @@ interface OrderTransformationConvergenceResultData {
 /**
  * Interface for the angular controller's scope
  */
-interface OrderTransformationConvergenceResultScope 
+interface OrderTransformationConvergenceResultScope
     extends ng.IScope, OrderTransformationConvergenceResultData, ResultsLoadingScreenData {
 }
 
@@ -32,8 +32,14 @@ class OrderTransformationConvergenceResultHandler {
      * Initializes the Angular controller
      */
     private ngOnInit(): void {
-        const orderTransformationConvergenceResult = ($scope: OrderTransformationConvergenceResultScope, $http: ng.IHttpService): void => {
-            initScopeFromServer<OrderTransformationConvergenceResultData>($http, $scope, "Loading order transformation convergence results", "Failed loading order transformation convergence results");
+        const orderTransformationConvergenceResult = (
+            $scope: OrderTransformationConvergenceResultScope,
+            $http: ng.IHttpService): void => {
+            initScopeFromServer<OrderTransformationConvergenceResultData>(
+                $http,
+                $scope,
+                "Loading order transformation convergence results",
+                "Failed loading order transformation convergence results");
         };
 
         // Register controller in Angular module

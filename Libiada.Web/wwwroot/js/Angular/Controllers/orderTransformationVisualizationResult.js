@@ -92,12 +92,12 @@ class OrderTransformationVisualizationResultHandler {
                         let transformationType = resultTransformation[j].Transformation;
                         if ($scope.transformationType.Text === "All" || transformationType === $scope.transformationType.Text) {
                             let colorId = $scope.legend.find(d => d.name === transformationType).id;
-                            let childOrder = resultTransformation[j].OrderId;
+                            let childOrderId = resultTransformation[j].OrderId;
                             let line = {
                                 x1: $scope.points[i].x,
                                 y1: $scope.points[i].y,
                                 x2: $scope.points[i].x + 1,
-                                y2: childOrder,
+                                y2: childOrderId,
                                 value: transformationType,
                                 startOrderId: $scope.points[i].value,
                                 colorId: colorId
@@ -105,30 +105,30 @@ class OrderTransformationVisualizationResultHandler {
                             let orderExist = false;
                             for (let k = 0; k < $scope.points.length; k++) {
                                 if ($scope.points[k].x === $scope.points[i].x + 1 &&
-                                    $scope.points[k].y === childOrder) {
+                                    $scope.points[k].y === childOrderId) {
                                     orderExist = true;
                                     break;
                                 }
                             }
                             if (orderExist) {
-                                let lineExist = false;
+                                let lineExists = false;
                                 let lineIterator = 0;
                                 for (let m = 0; m < $scope.lines.length; m++) {
                                     if ($scope.lines[m].x1 === line.x1 &&
                                         $scope.lines[m].y1 === line.y1 &&
                                         $scope.lines[m].x2 === line.x2 &&
                                         $scope.lines[m].y2 === line.y2) {
-                                        lineExist = true;
+                                        lineExists = true;
                                         lineIterator = ++$scope.lines[m].iterator;
                                         break;
                                     }
                                 }
-                                if (lineExist) {
-                                    let cyline = (line.y1 + line.y2) / 2.0;
-                                    let cxline = (line.x1 + line.x2) / 2.0;
+                                if (lineExists) {
+                                    let cyLine = (line.y1 + line.y2) / 2.0;
+                                    let cxLine = (line.x1 + line.x2) / 2.0;
                                     let yAmplitude = line.y2 - line.y1;
-                                    let shifty = 0.2 * lineIterator;
-                                    let shiftx = 0.05 * lineIterator * Math.abs(yAmplitude) / $scope.ordersIds.length;
+                                    let shiftY = 0.2 * lineIterator;
+                                    let shiftX = 0.05 * lineIterator * Math.abs(yAmplitude) / $scope.ordersIds.length;
                                     $scope.lines.push({
                                         id: counterIdLines++,
                                         value: line.value,
@@ -136,8 +136,8 @@ class OrderTransformationVisualizationResultHandler {
                                         iterator: 0,
                                         x1: line.x1,
                                         y1: line.y1,
-                                        x2: cxline + shiftx,
-                                        y2: cyline + shifty,
+                                        x2: cxLine + shiftX,
+                                        y2: cyLine + shiftY,
                                         startOrderId: line.startOrderId,
                                         colorId: line.colorId
                                     });
@@ -146,8 +146,8 @@ class OrderTransformationVisualizationResultHandler {
                                         value: line.value,
                                         arrowType: j,
                                         iterator: 0,
-                                        x1: cxline + shiftx,
-                                        y1: cyline + shifty,
+                                        x1: cxLine + shiftX,
+                                        y1: cyLine + shiftY,
                                         x2: line.x2,
                                         y2: line.y2,
                                         startOrderId: line.startOrderId,
@@ -199,12 +199,12 @@ class OrderTransformationVisualizationResultHandler {
             * @param tooltip Tooltip element
             * @param svg SVG element
             */
-            function showTooltip(event, d, tooltip, svg) {
+            function showTooltip(event, d, tooltip, g) {
                 $scope.clearTooltip(tooltip);
                 let color = d3.scaleOrdinal(d3.schemeCategory10);
                 tooltip.style("opacity", 0.9);
                 let tooltipHtml = [];
-                const selection = svg.selectAll(".dot");
+                const selection = g.selectAll(".dot");
                 tooltip.selectedDots = selection
                     .filter((dot) => {
                     if (dot.x === d.x && dot.y === d.y) {
@@ -238,8 +238,9 @@ class OrderTransformationVisualizationResultHandler {
                     .style("fill-opacity", (vt) => vt.visible ? 1 : 0)
                     .on("click", function (event, vt) {
                     vt.visible = !vt.visible;
-                    d3.select(event.currentTarget).style("fill-opacity", () => vt.visible ? 1 : 0);
-                    svg.selectAll(".transform-line")
+                    d3.select(event.currentTarget)
+                        .style("fill-opacity", () => vt.visible ? 1 : 0);
+                    g.selectAll(".transform-line")
                         .filter((line) => line.startOrderId === d.value && line.value === vt.name)
                         .attr("visibility", () => vt.visible ? "visible" : "hidden");
                 });
@@ -394,7 +395,7 @@ class OrderTransformationVisualizationResultHandler {
                     .enter()
                     .append("g")
                     .attr("class", "legend")
-                    .attr("transform", (_, i) => `translate(0,${i * 20})`)
+                    .attr("transform", (_l, i) => `translate(0,${i * 20})`)
                     .on("click", function (event, d) {
                     d.visible = !d.visible;
                     let legendEntry = d3.select(event.currentTarget);
@@ -458,10 +459,6 @@ class OrderTransformationVisualizationResultHandler {
             $scope.dotRadius = 4;
             $scope.selectedDotRadius = $scope.dotRadius * 2;
             await initScopeFromServer($http, $scope, "Loading order transformation data", "Failed loading order transformation data");
-            $scope.loadingScreenHeader = "Loading data";
-            // Get task ID from URL 
-            let location = window.location.href.split("/");
-            $scope.taskId = location[location.length - 1];
             $scope.ordersIds = [];
             for (let i = 0; i < $scope.orders.length; i++) {
                 $scope.ordersIds.push({ id: i });

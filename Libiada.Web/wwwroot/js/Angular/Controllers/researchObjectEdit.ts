@@ -1,139 +1,76 @@
 ﻿import { MapModelFromJson } from "functions";
+import { Group, Nature, SequenceType } from "viewDataTypes";
+
+interface Multisequence {
+    Id: number;
+    Name: string;
+    Nature: string;
+    ResearchObjects: ResearchObject[];
+}
+
+interface ResearchObject {
+    Id: number;
+    Name: string;
+    Description?: string;
+    Nature: number;
+    Group: number;
+    SequenceType: number;
+    Multisequence: Multisequence | null;
+    MultisequenceId: number | null;
+    MultisequenceNumber: number | null;
+    Created: string;
+    Modified: string;
+    CollectionCountry: string | null;
+    CollectionDate: string | null;
+    CollectionLocation: string | null;
+}
 
 /**
  * Interface for the data object passed from the server
  */
-interface IResearchObjectEditData {
-    nature: number;
-    natures: INature[];
-    groups: IGroup[];
-    sequenceTypes: ISequenceType[];
-    multisequences?: IMultisequence[];
-    researchObject?: IResearchObject;
-    sequencesCount?: number;
+interface ResearchObjectEditData {
+    group: string;
+    sequenceType: string;
+    groups: Group[];
+    multisequences: Multisequence[];
+    nature: string;
+    natures: Nature[];
+    researchObject: ResearchObject;
+    sequenceTypes: SequenceType[];
+    sequencesCount: number;
 }
 
 /**
  * Interface for the angular controller's scope
  */
-interface IResearchObjectEditScope extends ng.IScope {
-    nature: string;
-    natures: INature[];
-    group: number;
-    groups: IGroup[];
-    groupsFiltered: IGroup[];
-    sequenceType: number;
-    sequenceTypes: ISequenceType[];
-    sequenceTypesFiltered: ISequenceType[];
-    multisequences?: IMultisequence[];
-    researchObject?: IResearchObject;
-    sequencesCount?: number;
+interface ResearchObjectEditScope extends ng.IScope, ResearchObjectEditData {
+    groupsFiltered: Group[];
+    sequenceTypesFiltered: SequenceType[];
+
     filterByNature: () => void;
-    [key: string]: any; // For any additional properties
 }
 
-// Auxiliary interfaces
-interface INature {
-    Value: number;
-    Text: string;
-    Nature: number;
-    Group: number;
-    Disabled: boolean;
-    Selected: boolean;
-}
-
-interface IGroup {
-    Value: number;
-    Text: string;
-    Nature: number;
-    Group: number;
-    Disabled: boolean;
-    Selected: boolean;
-}
-
-interface ISequenceType {
-    Value: number;
-    Text: string;
-    Nature: number;
-    Group: number;
-    Disabled: boolean;
-    Selected: boolean;
-}
-
-interface IMultisequence {
-    Id: number;
-    Name: string;
-    Nature: number;
-    
-}
-
-
-interface IResearchObject {
-    // Basic identifiers
-    Id?: number;
-    Name?: string;
-    Description?: string;
-
-    // Object classification
-    Nature: number;
-    Group: number;
-    SequenceType: number;
-
-    // Multisequence information
-    Multisequence: any | null;
-    MultisequenceId: number | null;
-    MultisequenceNumber: number | null;
-
-    // Metadata
-    Created: string;
-    Modified: string;
-
-    // Location information
-    CollectionCountry: string | null;
-    CollectionDate: string | null;
-    CollectionLocation: string | null;
-
-    // Related sources
-    Source: string | null;
-
-    // Related collections
-    Groups: IGroup[]; // Array of groups the object belongs to
-    Sequences: any[]; // Array of related sequences
-    ImageSequences: any[]; // Array of related sequence images
-
-    // Parameters for organizing the interface (can be used in components)
-    Selected?: boolean; // Flag of selection in the list of objects
-    Visible?: boolean; // Flag of visibility in the list of objects
-    Value?: number; // Value for use in form components
-    Text?: string; // Text representation for form components    
-}
-
-
-// Updated controller class
+// Angular controller class
 class ResearchObjectEditor {
-    constructor(data: IResearchObjectEditData) {
+    constructor(data: ResearchObjectEditData) {
         this.ngOnInit(data);
     }
 
-    private ngOnInit(data: IResearchObjectEditData): void {
-        const researchObjectEdit = ($scope: IResearchObjectEditScope, filterFilter: ng.IFilterFilter): void => {
+    private ngOnInit(data: ResearchObjectEditData): void {
+        const researchObjectEdit = ($scope: ResearchObjectEditScope, filterFilter: ng.IFilterFilter): void => {
             MapModelFromJson($scope, data);
-           
+
             function filterByNature(): void {
                 const arraysForFiltration: string[] = ["groups", "sequenceTypes"];
 
-                arraysForFiltration.forEach((arrayName: string) => {
-                    if (angular.isDefined($scope[arrayName])) {
-                        $scope[`${arrayName}Filtered`] = filterFilter($scope[arrayName], { Nature: $scope.nature });
-
-                       
-                    }
-                });
-
-                $scope.group = $scope.groupsFiltered[0].Value;
-                $scope.sequenceType = $scope.sequenceTypesFiltered[0].Value;
-
-             
+                if (angular.isDefined($scope.groups)) {
+                    $scope.groupsFiltered = filterFilter($scope.groups, { Nature: $scope.nature });
+                     $scope.group = $scope.groupsFiltered[0].Value;
+                }
+                if (angular.isDefined($scope.sequenceTypes)) {
+                    $scope.sequenceTypesFiltered = filterFilter($scope.sequenceTypes, { Nature: $scope.nature });
+                    $scope.sequenceType = $scope.sequenceTypesFiltered[0].Value;
+                }
             }
 
             $scope.filterByNature = filterByNature;
@@ -145,6 +82,6 @@ class ResearchObjectEditor {
 }
 
 // Wrapper function for backwards compatibility
-export default function ResearchObjectEditController(data: IResearchObjectEditData): ResearchObjectEditor   {
-    return new ResearchObjectEditor  (data);
+export default function ResearchObjectEditController(data: ResearchObjectEditData): ResearchObjectEditor {
+    return new ResearchObjectEditor(data);
 }

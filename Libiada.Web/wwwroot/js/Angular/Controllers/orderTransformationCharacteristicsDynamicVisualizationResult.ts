@@ -1,68 +1,68 @@
 ﻿//import d3 from "d3";
 import { initScopeFromServer } from "functions";
-import type { IBasePoint } from "./Interfaces/commonInterfaces";
 import type { ResultsLoadingScreenData } from "viewDataTypes";
 
-/**
- * Interface for the data object fetched from the server
- */
-interface ICharacteristicData {
+interface CharacteristicData {
     researchObjectName: string;
     characteristics: number[];
 }
 
-// Interface for data received from API
-interface IOrderTransformationCharacteristicsDynamicData {
-    characteristics: ICharacteristicData[];
-    characteristicName: string;
-    transformationsList: string[];
-}
-
-// Interface for legend item
-interface ITransformationLegendItem {
+interface LegendItem {
     id: number;
     name: string;
     visible: boolean;
 }
 
-// Interface for point in chart, inheriting from IBasePoint
-interface IOrderTransformationPoint extends IBasePoint {
+interface Point {
+    id: number;
     name: string;
+    x: number;
+    y: number;
+
 }
 
-// Interface for D3 tooltip with additional properties
-interface ID3Tooltip extends d3.Selection<HTMLDivElement, unknown, HTMLElement, any> {
+interface SVGSelection extends d3.Selection<SVGGElement, null, HTMLElement, null> { }
+
+interface DotSelection extends d3.Selection<SVGEllipseElement, Point, SVGGElement, null> { }
+
+interface LegendSelection extends d3.Selection<SVGGElement, LegendItem, SVGGElement, null> { }
+
+interface LegendEntry extends d3.Selection<SVGGElement, LegendItem, null, undefined> { }
+
+interface TooltipSelection extends d3.Selection<HTMLDivElement, null, HTMLElement, null> {
     hideTooltip?: boolean;
-    selectedDots?: any;
+    selectedDots?: DotSelection;
+}
+
+// Interface for data fetched from the server
+interface OrderTransformationCharacteristicsDynamicData {
+    characteristics: CharacteristicData[];
+    characteristicName: string;
+    transformationsList: string[];
+    iterationsCount: number;
 }
 
 /**
  * Interface for the angular controller's scope
  */
-interface IOrderTransformationCharacteristicsDynamicScope
-    extends ng.IScope, IOrderTransformationCharacteristicsDynamicData, ResultsLoadingScreenData {
-    // Chart data
-    points: IOrderTransformationPoint[];
-    legend: ITransformationLegendItem[];
-
-    // Chart dimensions and settings
+interface OrderTransformationCharacteristicsDynamicScope
+    extends ng.IScope, OrderTransformationCharacteristicsDynamicData, ResultsLoadingScreenData {
+    points: Point[];
+    legend: LegendItem[];
     width: number;
     height: number;
     dotRadius: number;
     selectedDotRadius: number;
     legendHeight: number;
 
-    // Chart functions
     draw: () => void;
     fillPoints: () => void;
     fillLegend: () => void;
-    fillPointTooltip: (d: IOrderTransformationPoint) => string;
-    showTooltip: (event: MouseEvent, d: IOrderTransformationPoint, tooltip: ID3Tooltip, svg: d3.Selection<SVGGElement, IOrderTransformationPoint, HTMLElement, null>) => void;
-    clearTooltip: (tooltip: ID3Tooltip) => void;
-    xValue: (d: IOrderTransformationPoint) => number;
-    yValue: (d: IOrderTransformationPoint) => number;
-    xMap?: (d: IOrderTransformationPoint) => number;
-    yMap?: (d: IOrderTransformationPoint) => number;
+    fillPointTooltip: (d: Point) => string;
+    showTooltip: (event: MouseEvent, d: Point, tooltip: TooltipSelection, svg: SVGSelection) => void;
+    clearTooltip: (tooltip: TooltipSelection) => void;
+    xValue: (d: Point) => number;
+    yValue: (d: Point) => number;
 }
 
 /**
@@ -80,7 +80,10 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
      * Initializes the Angular controller
      */
     private async ngOnInit(): Promise<void> {
-        const orderTransformationCharacteristicsDynamicVisualizationResult = async ($scope: IOrderTransformationCharacteristicsDynamicScope, $http: ng.IHttpService): Promise<void> => {
+        const orderTransformationCharacteristicsDynamicVisualizationResult = async (
+            $scope: OrderTransformationCharacteristicsDynamicScope,
+            $http: ng.IHttpService): Promise<void> => {
+            
             /**
              * Initializes legend data
              */
@@ -98,7 +101,7 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
                 $scope.points = [];
 
                 for (let i = 0; i < $scope.characteristics.length; i++) {
-                    let characteristic = $scope.characteristics[i].characteristics;
+                    let characteristic: number[] = $scope.characteristics[i].characteristics;
                     for (let j = 0; j < characteristic.length; j++) {
                         $scope.points.push({
                             id: i,
@@ -114,7 +117,7 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
              * Constructs string representing tooltip text (inner html)
              * @param d The point data to display in tooltip
              */
-            function fillPointTooltip(d: IOrderTransformationPoint): string {
+            function fillPointTooltip(d: Point): string {
                 let tooltipContent: string[] = [];
                 tooltipContent.push(`Name: ${d.name}`);
                 tooltipContent.push(`${$scope.characteristicName}: ${$scope.characteristics[d.id].characteristics[d.x]}`);
@@ -129,15 +132,14 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
              * @param tooltip The tooltip element
              * @param svg The SVG container element
              */
-            function showTooltip(event: MouseEvent, d: IOrderTransformationPoint, tooltip: ID3Tooltip, svg: d3.Selection<SVGGElement, IOrderTransformationPoint, HTMLElement, null>): void {
+            function showTooltip(event: MouseEvent, d: Point, tooltip: TooltipSelection, svg: SVGSelection): void {
                 $scope.clearTooltip(tooltip);
 
                 tooltip.style("opacity", 0.9);
 
                 let tooltipHtml: string[] = [];
-                const selection: d3.Selection<SVGGElement, IOrderTransformationPoint, SVGGElement, IOrderTransformationPoint> = svg.selectAll(".dot");
-                tooltip.selectedDots = selection
-                    .filter((dot: IOrderTransformationPoint) => {
+                tooltip.selectedDots = svg.selectAll<SVGEllipseElement, Point>(".dot")
+                    .filter((dot:Point) => {
                         if (dot.x === d.x && dot.y === d.y) {
                             tooltipHtml.push($scope.fillPointTooltip(dot));
                             return true;
@@ -160,7 +162,7 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
              * Clears tooltip and unselects dots
              * @param tooltip The tooltip element to clear
              */
-            function clearTooltip(tooltip: ID3Tooltip): void {
+            function clearTooltip(tooltip: TooltipSelection): void {
                 if (tooltip) {
                     if (tooltip.hideTooltip) {
                         tooltip.html("").style("opacity", 0);
@@ -178,14 +180,14 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
             /**
              * Returns x value for a data point
              */
-            function xValue(d: IOrderTransformationPoint): number {
+            function xValue(d: Point): number {
                 return d.x;
             }
 
             /**
              * Returns y value for a data point
              */
-            function yValue(d: IOrderTransformationPoint): number {
+            function yValue(d: Point): number {
                 return d.y;
             }
 
@@ -201,46 +203,46 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
 
                 // Chart size and margin settings
                 let margin = { top: 30 + $scope.legendHeight, right: 30, bottom: 30, left: 60 };
-                let width = $scope.width - margin.left - margin.right;
-                let height = $scope.height - margin.top - margin.bottom;
+                let width: number = $scope.width - margin.left - margin.right;
+                let height: number = $scope.height - margin.top - margin.bottom;
 
                 // Setup x-axis
                 // Calculate margins for points
-                let xMin = d3.min($scope.points, $scope.xValue) || 0;
-                let xMax = d3.max($scope.points, $scope.xValue) || 0;
-                let xMargin = (xMax - xMin) * 0.05;
+                let xMin: number = d3.min($scope.points, $scope.xValue) || 0;
+                let xMax: number = d3.max($scope.points, $scope.xValue) || 0;
+                let xMargin: number = (xMax - xMin) * 0.05;
 
-                let xScale = d3.scaleLinear()
+                let xScale: d3.ScaleLinear<number, number> = d3.scaleLinear()
                     .domain([xMin - xMargin, xMax + xMargin])
                     .range([0, width]);
-                let xAxis = d3.axisBottom(xScale)
+                let xAxis: d3.Axis<d3.NumberValue> = d3.axisBottom(xScale)
                     .tickSizeInner(-height)
                     .tickSizeOuter(0)
                     .tickPadding(10);
 
-                $scope.xMap = (d: IOrderTransformationPoint) => xScale($scope.xValue(d));
+                const xMap = (d: Point): number => xScale($scope.xValue(d));
 
                 // Setup y-axis
                 // Calculate margins for points
-                let yMax = d3.max($scope.points, $scope.yValue) || 0;
-                let yMin = d3.min($scope.points, $scope.yValue) || 0;
-                let yMargin = (yMax - yMin) * 0.05;
+                let yMax: number = d3.max($scope.points, $scope.yValue) || 0;
+                let yMin: number = d3.min($scope.points, $scope.yValue) || 0;
+                let yMargin: number = (yMax - yMin) * 0.05;
 
-                let yScale = d3.scaleLinear()
+                let yScale: d3.ScaleLinear<number, number> = d3.scaleLinear()
                     .domain([yMin - yMargin, yMax + yMargin])
                     .range([height, 0]);
-                let yAxis = d3.axisLeft(yScale)
+                let yAxis: d3.Axis<d3.NumberValue> = d3.axisLeft(yScale)
                     .tickSizeInner(-width)
                     .tickSizeOuter(0)
                     .tickPadding(10);
 
-                $scope.yMap = (d: IOrderTransformationPoint) => yScale($scope.yValue(d));
+                const yMap = (d: Point): number => yScale($scope.yValue(d));
 
                 // Setup fill color
-                let color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.legend.length]);
+                let color: d3.ScaleSequential<string> = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.legend.length]);
 
                 // Add the chart canvas to the page
-                let svg = d3.select("#chart").append("svg")
+                let svg: SVGSelection = d3.select<SVGGElement, null>("#chart").append("svg")
                     .attr("width", $scope.width)
                     .attr("height", $scope.height)
                     .attr("class", "chart-svg")
@@ -248,9 +250,9 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
                     .attr("transform", `translate(${margin.left},${margin.top})`);
 
                 // Add the tooltip area to the page
-                let tooltip = d3.select("#chart").append("div")
+                let tooltip: TooltipSelection = d3.select<HTMLDivElement, null>("#chart").append("div")
                     .attr("class", "chart-tooltip position-absolute bg-light font-monospace small lh-sm p-1 rounded")
-                    .style("opacity", 0) as ID3Tooltip;
+                    .style("opacity", 0);
 
                 // Prevent tooltip from hiding when clicked
                 tooltip.on("click", () => { tooltip.hideTooltip = false; });
@@ -295,30 +297,30 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
                     .attr("class", "dot")
                     .attr("rx", $scope.dotRadius)
                     .attr("ry", $scope.dotRadius)
-                    .attr("cx", $scope.xMap)
-                    .attr("cy", $scope.yMap)
+                    .attr("cx", xMap)
+                    .attr("cy", yMap)
                     .style("fill-opacity", 0.6)
-                    .style("fill", (d: IOrderTransformationPoint) => color(d.id))
-                    .style("stroke", (d: IOrderTransformationPoint) => color(d.id))
-                    .on("click", (event: MouseEvent, d: IOrderTransformationPoint) => $scope.showTooltip(event, d, tooltip, svg));
+                    .style("fill", (d: Point) => color(d.id))
+                    .style("stroke", (d: Point) => color(d.id))
+                    .on("click", (event: MouseEvent, d: Point) => $scope.showTooltip(event, d, tooltip, svg));
 
                 // Draw legend
-                let legend = svg.selectAll(".legend")
+                let legend: LegendSelection = svg.selectAll<SVGGElement, LegendItem>(".legend")
                     .data($scope.legend)
                     .enter()
                     .append("g")
                     .attr("class", "legend")
-                    .attr("transform", (_d: any, i: number) => `translate(0,${i * 20})`)
-                    .on("click", function (event: MouseEvent, d: ITransformationLegendItem) {
+                    .attr("transform", (_d:LegendItem, i: number) => `translate(0,${i * 20})`)
+                    .on("click", function (event: MouseEvent, d: LegendItem) {
                         d.visible = !d.visible;
-                        let legendEntry = d3.select(event.currentTarget as SVGGElement);
+                        let legendEntry: LegendEntry = d3.select<SVGGElement, LegendItem>(event.currentTarget as SVGGElement);
                         legendEntry.select("text")
                             .style("opacity", () => d.visible ? 1 : 0.5);
                         legendEntry.select("rect")
                             .style("fill-opacity", () => d.visible ? 1 : 0);
 
-                        svg.selectAll(".dot")
-                            .filter((dot: IOrderTransformationPoint) => dot.name === d.name)
+                        svg.selectAll<SVGEllipseElement, Point>(".dot")
+                            .filter((dot: Point) => dot.name === d.name)
                             .attr("visibility", () => d.visible ? "visible" : "hidden");
                     });
 
@@ -326,8 +328,8 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
                 legend.append("rect")
                     .attr("width", 15)
                     .attr("height", 15)
-                    .style("fill", (d: ITransformationLegendItem) => color(d.id))
-                    .style("stroke", (d: ITransformationLegendItem) => color(d.id))
+                    .style("fill", (d: LegendItem) => color(d.id))
+                    .style("stroke", (d: LegendItem) => color(d.id))
                     .style("stroke-width", 4)
                     .attr("transform", `translate(0, -${$scope.legendHeight})`);
 
@@ -337,7 +339,7 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
                     .attr("y", 9)
                     .attr("dy", ".35em")
                     .attr("transform", `translate(0, -${$scope.legendHeight})`)
-                    .text((d: ITransformationLegendItem) => d.name)
+                    .text((d: LegendItem) => d.name)
                     .style("font-size", "9pt");
             }
 
@@ -356,7 +358,7 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
             $scope.dotRadius = 4;
             $scope.selectedDotRadius = $scope.dotRadius * 2;
 
-            await initScopeFromServer<IOrderTransformationCharacteristicsDynamicData>(
+            await initScopeFromServer<OrderTransformationCharacteristicsDynamicData>(
                 $http,
                 $scope,
                 "Loading order transformation characteristics data",

@@ -56,7 +56,9 @@ class OrderTransformationConvergenceHandler {
         };
 
         // Register controller in Angular module
-        angular.module("libiada").controller("OrderTransformationConvergenceCtrl", ["$scope", orderTransformationConvergence]);
+        angular.module("libiada").controller(
+            "OrderTransformationConvergenceCtrl",
+            ["$scope", orderTransformationConvergence]);
     }
 }
 
@@ -65,6 +67,7 @@ class OrderTransformationConvergenceHandler {
  * @param data Data for controller initialization
  * @returns Instance of order transformation convergence handler
  */
-export default function OrderTransformationConvergenceController(data: OrderTransformationConvergenceData): OrderTransformationConvergenceHandler {
+export default function OrderTransformationConvergenceController(
+    data: OrderTransformationConvergenceData): OrderTransformationConvergenceHandler {
     return new OrderTransformationConvergenceHandler(data);
 }

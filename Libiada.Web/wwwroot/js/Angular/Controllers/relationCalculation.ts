@@ -41,10 +41,6 @@ interface RelationCalculationScope extends ng.IScope, RelationCalculationData {
 }
 
 class RelationCalculationHandler {
-    /**
-     * Creates a new controller instance
-     * @param data Data for controller initialization
-     */
     constructor(data: RelationCalculationData) {
         this.ngOnInit(data);
     }

@@ -51,11 +51,22 @@ interface ResultTransformation {
     OrderId: number;
 }
 
-interface Tooltip extends d3.Selection<HTMLDivElement, Point, HTMLElement, any> {
-    hideTooltip?: boolean;
-    selectedDots?: d3.Selection<SVGGElement, Point, SVGGElement, Point>;
-}
+interface GroupSelection extends d3.Selection<SVGGElement, null, HTMLElement, null> { }
 
+interface SVGSelection extends d3.Selection<SVGSVGElement, null, HTMLElement, null> { }
+
+interface DotSelection extends d3.Selection<SVGEllipseElement, Point, SVGGElement, null> { }
+
+interface LegendSelection extends d3.Selection<SVGGElement, LegendItem, SVGGElement, null> { }
+
+interface LegendEntry extends d3.Selection<SVGGElement, LegendItem, null, undefined> { }
+
+interface DefsSelection extends d3.Selection<SVGDefsElement, null, HTMLElement, null> { }
+
+interface TooltipSelection extends d3.Selection<HTMLDivElement, null, HTMLElement, null> {
+    hideTooltip?: boolean;
+    selectedDots?: DotSelection;
+}
 
 /**
  * Interface for the data object fetched from the server
@@ -78,26 +89,20 @@ interface OrderTransformationVisualizationResultScope
     selectedDotRadius: number;
     legendHeight: number;
     points: Point[];
-
     lines: Line[];
     legend: LegendItem[];
     ordersIds: OrderId[];
-
-
     initialOrder: OrderId;
     counterIteration: number;
 
-    // Chart functions
     xMap: (d: Point) => number;
     yMap: (d: Point) => number;
-
-    // Methods
     draw: () => void;
     fillPointsAndLines: () => void;
     fillLegend: () => void;
     fillPointTooltip: (d: Point) => string;
-    showTooltip: (event: MouseEvent, d: Point, tooltip: Tooltip, svg: d3.Selection<SVGGElement, Point, HTMLElement, null>) => void;
-    clearTooltip: (tooltip: Tooltip) => void;
+    showTooltip: (event: MouseEvent, d: Point, tooltip: TooltipSelection, g: GroupSelection) => void;
+    clearTooltip: (tooltip: TooltipSelection) => void;
     xValue: (d: Point) => number;
     yValue: (d: Point) => number;
 }
@@ -129,9 +134,9 @@ class OrderTransformationVisualizationResultHandler {
             * Initializes the data for the chart points
             */
             function fillPoints(): void {
-                let initialOrder = $scope.initialOrder.id;
+                let initialOrder: number = $scope.initialOrder.id;
                 let checkedOrders = [initialOrder];
-                let ordersForChecking = [initialOrder];
+                let ordersForChecking: number[] = [initialOrder];
                 let transformationVisibility: TransformationVisibility[] = [];
 
                 for (let l = 0; l < $scope.legend.length; l++) {
@@ -151,22 +156,22 @@ class OrderTransformationVisualizationResultHandler {
                     colorId: 0
                 });
 
-                let counterIdPoints = 1;
+                let counterIdPoints: number = 1;
                 $scope.counterIteration = 1;
 
                 while (ordersForChecking.length > 0) {
                     let newOrdersForChecking: number[] = [];
 
                     for (let i = 0; i < ordersForChecking.length; i++) {
-                        let resultTransformations = $scope.transformationsData[ordersForChecking[i]].ResultTransformation;
+                        let resultTransformations: ResultTransformation[] = $scope.transformationsData[ordersForChecking[i]].ResultTransformation;
 
                         for (let j = 0; j < resultTransformations.length; j++) {
-                            let resultTransformation = resultTransformations[j];
+                            let resultTransformation: ResultTransformation = resultTransformations[j];
 
                             if ($scope.transformationType.Text === "All"
                                 || resultTransformation.Transformation === $scope.transformationType.Text) {
-                                let pointExist = false;
-                                let orderId = resultTransformation.OrderId;
+                                let pointExist: boolean = false;
+                                let orderId: number = resultTransformation.OrderId;
 
                                 for (let k = 0; k < $scope.points.length; k++) {
                                     if ($scope.points[k].x === $scope.counterIteration &&
@@ -207,56 +212,57 @@ class OrderTransformationVisualizationResultHandler {
                 let counterIdLines: number = 0;
 
                 for (let i = 0; i < $scope.points.length; i++) {
-                    let resultTransformation = $scope.transformationsData[$scope.points[i].value].ResultTransformation;
+                    let resultTransformation: ResultTransformation[] = 
+                        $scope.transformationsData[$scope.points[i].value].ResultTransformation;
 
                     for (let j = 0; j < resultTransformation.length; j++) {
-                        let transformationType = resultTransformation[j].Transformation;
+                        let transformationType: string = resultTransformation[j].Transformation;
 
                         if ($scope.transformationType.Text === "All" || transformationType === $scope.transformationType.Text) {
-                            let colorId = $scope.legend.find(d => d.name === transformationType)!.id;
-                            let childOrder = resultTransformation[j].OrderId;
+                            let colorId: number = $scope.legend.find(d => d.name === transformationType)!.id;
+                            let childOrderId: number = resultTransformation[j].OrderId;
 
                             let line = {
                                 x1: $scope.points[i].x,
                                 y1: $scope.points[i].y,
                                 x2: $scope.points[i].x + 1,
-                                y2: childOrder,
+                                y2: childOrderId,
                                 value: transformationType,
                                 startOrderId: $scope.points[i].value,
                                 colorId: colorId
                             };
 
-                            let orderExist = false;
+                            let orderExist: boolean = false;
 
                             for (let k = 0; k < $scope.points.length; k++) {
                                 if ($scope.points[k].x === $scope.points[i].x + 1 &&
-                                    $scope.points[k].y === childOrder) {
+                                    $scope.points[k].y === childOrderId) {
                                     orderExist = true;
                                     break;
                                 }
                             }
 
                             if (orderExist) {
-                                let lineExist = false;
-                                let lineIterator = 0;
+                                let lineExists: boolean = false;
+                                let lineIterator: number = 0;
 
                                 for (let m = 0; m < $scope.lines.length; m++) {
                                     if ($scope.lines[m].x1 === line.x1 &&
                                         $scope.lines[m].y1 === line.y1 &&
                                         $scope.lines[m].x2 === line.x2 &&
                                         $scope.lines[m].y2 === line.y2) {
-                                        lineExist = true;
+                                        lineExists = true;
                                         lineIterator = ++$scope.lines[m].iterator;
                                         break;
                                     }
                                 }
 
-                                if (lineExist) {
-                                    let cyline = (line.y1 + line.y2) / 2.0;
-                                    let cxline = (line.x1 + line.x2) / 2.0;
-                                    let yAmplitude = line.y2 - line.y1;
-                                    let shifty = 0.2 * lineIterator;
-                                    let shiftx = 0.05 * lineIterator * Math.abs(yAmplitude) / $scope.ordersIds.length;
+                                if (lineExists) {
+                                    let cyLine: number = (line.y1 + line.y2) / 2.0;
+                                    let cxLine: number = (line.x1 + line.x2) / 2.0;
+                                    let yAmplitude: number = line.y2 - line.y1;
+                                    let shiftY: number = 0.2 * lineIterator;
+                                    let shiftX: number = 0.05 * lineIterator * Math.abs(yAmplitude) / $scope.ordersIds.length;
 
                                     $scope.lines.push({
                                         id: counterIdLines++,
@@ -265,8 +271,8 @@ class OrderTransformationVisualizationResultHandler {
                                         iterator: 0,
                                         x1: line.x1,
                                         y1: line.y1,
-                                        x2: cxline + shiftx,
-                                        y2: cyline + shifty,
+                                        x2: cxLine + shiftX,
+                                        y2: cyLine + shiftY,
                                         startOrderId: line.startOrderId,
                                         colorId: line.colorId
                                     });
@@ -276,8 +282,8 @@ class OrderTransformationVisualizationResultHandler {
                                         value: line.value,
                                         arrowType: j,
                                         iterator: 0,
-                                        x1: cxline + shiftx,
-                                        y1: cyline + shifty,
+                                        x1: cxLine + shiftX,
+                                        y1: cyLine + shiftY,
                                         x2: line.x2,
                                         y2: line.y2,
                                         startOrderId: line.startOrderId,
@@ -334,16 +340,16 @@ class OrderTransformationVisualizationResultHandler {
             function showTooltip(
                 event: MouseEvent,
                 d: Point,
-                tooltip: Tooltip,
-                svg: d3.Selection<SVGGElement, Point, HTMLElement, null>): void {
+                tooltip: TooltipSelection,
+                g: GroupSelection): void {
                 $scope.clearTooltip(tooltip);
-                let color = d3.scaleOrdinal(d3.schemeCategory10);
+                let color: d3.ScaleOrdinal<string, string> = d3.scaleOrdinal(d3.schemeCategory10);
 
                 tooltip.style("opacity", 0.9);
 
                 let tooltipHtml: string[] = [];
 
-                const selection: d3.Selection<SVGGElement, Point, SVGGElement, Point> = svg.selectAll(".dot");
+                const selection: DotSelection = g.selectAll<SVGEllipseElement, Point>(".dot");
                 tooltip.selectedDots = selection
                     .filter((dot: Point) => {
                         if (dot.x === d.x && dot.y === d.y) {
@@ -368,7 +374,7 @@ class OrderTransformationVisualizationResultHandler {
                     .enter()
                     .append("g")
                     .attr("class", "dotlegend")
-                    .attr("transform", (vt: TransformationVisibility, i: number) => `translate(0,${i * 20})`)
+                    .attr("transform", (_vt: TransformationVisibility, i:number) => `translate(0,${i * 20})`)
                     .append("rect")
                     .attr("width", 15)
                     .attr("height", 15)
@@ -378,8 +384,9 @@ class OrderTransformationVisualizationResultHandler {
                     .style("fill-opacity", (vt: TransformationVisibility) => vt.visible ? 1 : 0)
                     .on("click", function (event: MouseEvent, vt: TransformationVisibility) {
                         vt.visible = !vt.visible;
-                        d3.select(event.currentTarget as Element).style("fill-opacity", () => vt.visible ? 1 : 0);
-                        svg.selectAll<SVGGElement, Line>(".transform-line")
+                        d3.select<SVGGElement, Point>(event.currentTarget as SVGGElement)
+                            .style("fill-opacity", () => vt.visible ? 1 : 0);
+                        g.selectAll<SVGGElement, Line>(".transform-line")
                             .filter((line: Line) => line.startOrderId === d.value && line.value === vt.name)
                             .attr("visibility", () => vt.visible ? "visible" : "hidden");
                     });
@@ -394,7 +401,7 @@ class OrderTransformationVisualizationResultHandler {
             * Clears the tooltip
             * @param tooltip Tooltip element
             */
-            function clearTooltip(tooltip: Tooltip): void {
+            function clearTooltip(tooltip: TooltipSelection): void {
                 if (tooltip) {
                     if (tooltip.hideTooltip) {
                         tooltip.html("").style("opacity", 0);
@@ -437,20 +444,20 @@ class OrderTransformationVisualizationResultHandler {
 
                 // Chart size and margin settings
                 let margin = { top: 30 + $scope.legendHeight, right: 30, bottom: 30, left: 60 };
-                let width = $scope.width - margin.left - margin.right;
-                let height = $scope.height - margin.top - margin.bottom;
+                let width: number = $scope.width - margin.left - margin.right;
+                let height: number = $scope.height - margin.top - margin.bottom;
 
                 // Set up the X axis 
                 // Calculate indents for points 
-                let xMin = d3.min($scope.points, $scope.xValue) || 0;
-                let xMax = d3.max($scope.points, $scope.xValue) || 0;
-                let xMargin = (xMax - xMin) * 0.05;
+                let xMin: number = d3.min($scope.points, $scope.xValue) || 0;
+                let xMax: number = d3.max($scope.points, $scope.xValue) || 0;
+                let xMargin: number = (xMax - xMin) * 0.05;
 
-                let xScale = d3.scaleLinear()
+                let xScale: d3.ScaleLinear<number, number> = d3.scaleLinear()
                     .domain([xMin - xMargin, xMax + xMargin])
                     .range([0, width]);
 
-                let xAxis = d3.axisBottom(xScale)
+                let xAxis: d3.Axis<d3.NumberValue>  = d3.axisBottom(xScale)
                     .ticks($scope.counterIteration)
                     .tickSizeInner(-height)
                     .tickSizeOuter(0)
@@ -460,17 +467,17 @@ class OrderTransformationVisualizationResultHandler {
 
                 // Setting up the Y axis 
                 // Calculate indents for points 
-                let yMax = d3.max($scope.points, $scope.yValue) || 0;
-                let yMin = d3.min($scope.points, $scope.yValue) || 0;
-                let yMargin = (yMax - yMin) * 0.05;
+                let yMax: number = d3.max($scope.points, $scope.yValue) || 0;
+                let yMin: number = d3.min($scope.points, $scope.yValue) || 0;
+                let yMargin: number = (yMax - yMin) * 0.05;
 
-                let yAmplitude = yMax - yMin;
+                let yAmplitude: number = yMax - yMin;
 
-                let yScale = d3.scaleLinear()
+                let yScale: d3.ScaleLinear<number, number> = d3.scaleLinear()
                     .domain([yMin - yMargin, yMax + yMargin])
                     .range([height, 0]);
 
-                let yAxis = d3.axisLeft(yScale)
+                let yAxis: d3.Axis<d3.NumberValue> = d3.axisLeft(yScale)
                     .ticks(yAmplitude > 20 ? yAmplitude / 10 : yAmplitude)
                     .tickSizeInner(-width)
                     .tickSizeOuter(0)
@@ -479,19 +486,19 @@ class OrderTransformationVisualizationResultHandler {
                 $scope.yMap = (d: Point) => yScale($scope.yValue(d));
 
                 // Set the fill color
-                let color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.legend.length]);
+                let color: d3.ScaleSequential<string> = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.legend.length]);
 
                 // Add the chart canvas to the page
-                let svg = d3.select("#chart").append("svg")
+                let svg: SVGSelection = d3.select<SVGGElement, null>("#chart").append("svg")
                     .attr("width", $scope.width)
                     .attr("height", $scope.height)
                     .attr("class", "chart-svg");
 
-                let g: d3.Selection<SVGGElement, unknown, HTMLElement, any> = svg.append("g")
+                let g: GroupSelection = svg.append("g")
                     .attr("transform", `translate(${margin.left},${margin.top})`);
 
                 // Add definitions for line ends
-                let defs = svg.append("defs");
+                let defs: DefsSelection = svg.append("defs");
                 for (let i = 0; i < $scope.legend.length; i++) {
                     defs.append("marker")
                         .attr("id", `arrow${i}`)
@@ -507,7 +514,7 @@ class OrderTransformationVisualizationResultHandler {
                 }
 
                 // Add a tooltip area to the page 
-                let tooltip: Tooltip = d3.select<HTMLElement, Point>("#chart").append("div")
+                let tooltip: TooltipSelection = d3.select<HTMLDivElement, null>("#chart").append("div")
                     .attr("class", "chart-tooltip position-absolute bg-light font-monospace small lh-sm p-1 rounded")
                     .style("opacity", 0);
 
@@ -561,15 +568,15 @@ class OrderTransformationVisualizationResultHandler {
                     .attr("visibility", "visible");
 
                 // Draw the legend 
-                let legend: d3.Selection<SVGGElement, LegendItem, SVGElement, Point> = g.selectAll(".legend")
+                let legend: LegendSelection = g.selectAll<SVGGElement, LegendItem>(".legend")
                     .data($scope.legend)
                     .enter()
                     .append("g")
                     .attr("class", "legend")
-                    .attr("transform", (_: LegendItem, i: number) => `translate(0,${i * 20})`)
+                    .attr("transform", (_l: LegendItem, i: number) => `translate(0,${i * 20})`)
                     .on("click", function (event: MouseEvent, d: LegendItem) {
                         d.visible = !d.visible;
-                        let legendEntry = d3.select(event.currentTarget as Element);
+                        let legendEntry: LegendEntry = d3.select<SVGGElement, LegendItem>(event.currentTarget as SVGGElement);
 
                         legendEntry.select("text")
                             .style("opacity", () => d.visible ? 1 : 0.5);
@@ -644,12 +651,6 @@ class OrderTransformationVisualizationResultHandler {
                 $scope,
                 "Loading order transformation data",
                 "Failed loading order transformation data");
-
-            $scope.loadingScreenHeader = "Loading data";
-
-            // Get task ID from URL 
-            let location = window.location.href.split("/");
-            $scope.taskId = location[location.length - 1];
 
             $scope.ordersIds = [];
             for (let i = 0; i < $scope.orders.length; i++) {

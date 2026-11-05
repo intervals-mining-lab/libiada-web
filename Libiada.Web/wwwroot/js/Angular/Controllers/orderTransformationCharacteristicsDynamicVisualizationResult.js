@@ -63,8 +63,7 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
                 $scope.clearTooltip(tooltip);
                 tooltip.style("opacity", 0.9);
                 let tooltipHtml = [];
-                const selection = svg.selectAll(".dot");
-                tooltip.selectedDots = selection
+                tooltip.selectedDots = svg.selectAll(".dot")
                     .filter((dot) => {
                     if (dot.x === d.x && dot.y === d.y) {
                         tooltipHtml.push($scope.fillPointTooltip(dot));
@@ -133,7 +132,7 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
                     .tickSizeInner(-height)
                     .tickSizeOuter(0)
                     .tickPadding(10);
-                $scope.xMap = (d) => xScale($scope.xValue(d));
+                const xMap = (d) => xScale($scope.xValue(d));
                 // Setup y-axis
                 // Calculate margins for points
                 let yMax = d3.max($scope.points, $scope.yValue) || 0;
@@ -146,7 +145,7 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
                     .tickSizeInner(-width)
                     .tickSizeOuter(0)
                     .tickPadding(10);
-                $scope.yMap = (d) => yScale($scope.yValue(d));
+                const yMap = (d) => yScale($scope.yValue(d));
                 // Setup fill color
                 let color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.legend.length]);
                 // Add the chart canvas to the page
@@ -196,8 +195,8 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
                     .attr("class", "dot")
                     .attr("rx", $scope.dotRadius)
                     .attr("ry", $scope.dotRadius)
-                    .attr("cx", $scope.xMap)
-                    .attr("cy", $scope.yMap)
+                    .attr("cx", xMap)
+                    .attr("cy", yMap)
                     .style("fill-opacity", 0.6)
                     .style("fill", (d) => color(d.id))
                     .style("stroke", (d) => color(d.id))

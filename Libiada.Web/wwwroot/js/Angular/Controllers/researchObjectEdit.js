@@ -1,5 +1,5 @@
 import { MapModelFromJson } from "functions";
-// Updated controller class
+// Angular controller class
 class ResearchObjectEditor {
     constructor(data) {
         this.ngOnInit(data);
@@ -9,13 +9,14 @@ class ResearchObjectEditor {
             MapModelFromJson($scope, data);
             function filterByNature() {
                 const arraysForFiltration = ["groups", "sequenceTypes"];
-                arraysForFiltration.forEach((arrayName) => {
-                    if (angular.isDefined($scope[arrayName])) {
-                        $scope[`${arrayName}Filtered`] = filterFilter($scope[arrayName], { Nature: $scope.nature });
-                    }
-                });
-                $scope.group = $scope.groupsFiltered[0].Value;
-                $scope.sequenceType = $scope.sequenceTypesFiltered[0].Value;
+                if (angular.isDefined($scope.groups)) {
+                    $scope.groupsFiltered = filterFilter($scope.groups, { Nature: $scope.nature });
+                    $scope.group = $scope.groupsFiltered[0].Value;
+                }
+                if (angular.isDefined($scope.sequenceTypes)) {
+                    $scope.sequenceTypesFiltered = filterFilter($scope.sequenceTypes, { Nature: $scope.nature });
+                    $scope.sequenceType = $scope.sequenceTypesFiltered[0].Value;
+                }
             }
             $scope.filterByNature = filterByNature;
         };

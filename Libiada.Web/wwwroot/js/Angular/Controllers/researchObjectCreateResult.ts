@@ -33,7 +33,6 @@ interface ResearchObjectCreateResultScope extends ng.IScope, ResearchObjectCreat
  * Angular controller class for research object creation result view
  */
 class ResearchObjectCreateResultHandler {
-
     constructor() {
         this.ngOnInit();
     }
