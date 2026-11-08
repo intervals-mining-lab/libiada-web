@@ -16,11 +16,13 @@
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>
+                    <th>Shift</th>
                     <th>Distances</th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="distance in ::distances">
+                    <td ng-bind="::$index" />
                     <td ng-bind="::distance.Value" />
                 </tr>
             </tbody>

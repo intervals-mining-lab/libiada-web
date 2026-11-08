@@ -26,7 +26,8 @@ interface ResearchObjectCreateResultData {
 /**
  * Interface for the angular controller's scope
  */
-interface ResearchObjectCreateResultScope extends ng.IScope, ResearchObjectCreateResultData, ResultsLoadingScreenData {
+interface ResearchObjectCreateResultScope extends 
+    ng.IScope, ResearchObjectCreateResultData, ResultsLoadingScreenData {
 }
 
 /**
@@ -38,14 +39,18 @@ class ResearchObjectCreateResultHandler {
     }
 
     private ngOnInit(): void {
-        const researchObjectCreateResult = ($scope: ResearchObjectCreateResultScope, $http: ng.IHttpService): void => {
+        const researchObjectCreateResult = (
+            $scope: ResearchObjectCreateResultScope, 
+            $http: ng.IHttpService): void => {
 
             initScopeFromServer<ResearchObjectCreateResultData>(
                 $http, $scope, "Loading sequence creation results", "Failed loading sequence creation results");
         };
 
         // Register controller in Angular module
-        angular.module("libiada").controller("ResearchObjectCreateResultCtrl", ["$scope", "$http", researchObjectCreateResult]);
+        angular.module("libiada").controller(
+            "ResearchObjectCreateResultCtrl", 
+            ["$scope", "$http", researchObjectCreateResult]);
     }
 }
 

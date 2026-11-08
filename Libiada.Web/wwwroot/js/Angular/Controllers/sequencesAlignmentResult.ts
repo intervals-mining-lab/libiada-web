@@ -7,12 +7,12 @@ import type { ResultsLoadingScreenData } from "viewDataTypes";
 interface SequencesAlignmentResultData {
     characteristicName: string;
     cyclicShift: boolean;
+    sort: boolean;
     distances: { Value: number }[];
     features: string[];
     firstSequenceName: string;
     secondSequenceName: string;
     optimalRotation: number;
-    sort: boolean;
     validationType: string;
 }
 
@@ -23,12 +23,9 @@ interface SequencesAlignmentResultScope extends ng.IScope, SequencesAlignmentRes
 }
 
 /**
- * Controller for sequences alignment result view
+ * Angular controller for sequences alignment result view
  */
 class SequencesAlignmentResultHandler {
-    /**
-     * Creates a new controller instance
-     */
     constructor() {
         this.ngOnInit();
     }
@@ -37,7 +34,9 @@ class SequencesAlignmentResultHandler {
      * Initializes Angular controller
      */
     private ngOnInit(): void {
-        const sequencesAlignmentResult = async ($scope: SequencesAlignmentResultScope, $http: ng.IHttpService): Promise<void> => {
+        const sequencesAlignmentResult = async (
+            $scope: SequencesAlignmentResultScope, 
+            $http: ng.IHttpService): Promise<void> => {
             await initScopeFromServer<SequencesAlignmentResultData>(
                 $http,
                 $scope,

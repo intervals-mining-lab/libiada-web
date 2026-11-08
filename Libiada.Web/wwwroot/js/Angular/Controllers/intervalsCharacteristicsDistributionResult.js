@@ -68,10 +68,7 @@ class IntervalsCharacteristicsDistributionResultHandler {
                     tooltipHtml.push(intervals[i].join("|"));
                 }
                 tooltipHtml.push("Orders: ");
-                // Hack for ts types recognition 
-                // without intermediate variable ts compiler does not recognize Point type in filter function
-                const selection = svg.selectAll(".dot");
-                tooltip.selectedDots = selection
+                tooltip.selectedDots = svg.selectAll(".dot")
                     .filter((dot) => {
                     if (dot.x === d.x && dot.y === d.y) {
                         tooltipHtml.push($scope.fillPointTooltip(dot));

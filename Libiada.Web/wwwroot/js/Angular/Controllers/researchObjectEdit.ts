@@ -61,8 +61,6 @@ class ResearchObjectEditor {
             MapModelFromJson($scope, data);
 
             function filterByNature(): void {
-                const arraysForFiltration: string[] = ["groups", "sequenceTypes"];
-
                 if (angular.isDefined($scope.groups)) {
                     $scope.groupsFiltered = filterFilter($scope.groups, { Nature: $scope.nature });
                      $scope.group = $scope.groupsFiltered[0].Value;

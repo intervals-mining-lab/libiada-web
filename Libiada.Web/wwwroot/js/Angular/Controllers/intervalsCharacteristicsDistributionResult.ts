@@ -12,11 +12,11 @@ interface Point {
     y: number;
 }
 
-interface SVGElementSelection extends d3.Selection<SVGGElement, Point, HTMLElement, null> { }
+interface SVGElementSelection extends d3.Selection<SVGGElement, null, HTMLElement, null> { }
 
 interface TooltipElementDatum {
     hideTooltip: boolean;
-    selectedDots: d3.Selection<SVGGElement, Point, SVGGElement, Point>;
+    selectedDots: d3.Selection<SVGGElement, Point, SVGGElement, null>;
 }
 
 // Interface for d3-tooltip element with additional properties
@@ -176,10 +176,7 @@ class IntervalsCharacteristicsDistributionResultHandler {
                 }
                 tooltipHtml.push("Orders: ");
 
-                // Hack for ts types recognition 
-                // without intermediate variable ts compiler does not recognize Point type in filter function
-                const selection: d3.Selection<SVGGElement, Point, SVGGElement, Point> = svg.selectAll(".dot");
-                tooltip.selectedDots = selection
+                tooltip.selectedDots = svg.selectAll<SVGGElement, Point>(".dot")
                     .filter((dot: Point) => {
                         if (dot.x === d.x && dot.y === d.y) {
                             tooltipHtml.push($scope.fillPointTooltip(dot));
@@ -302,12 +299,12 @@ class IntervalsCharacteristicsDistributionResultHandler {
                 const color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.points.length]);
 
                 // Add the chart canvas to the page
-                const svg: SVGElementSelection = d3.select("#chart").append("svg")
+                const svg: SVGElementSelection = d3.select<SVGGElement, null>("#chart").append("svg")
                     .attr("width", $scope.width)
                     .attr("height", $scope.height)
                     .attr("class", "chart-svg")
                     .append("g")
-                    .attr("transform", `translate(${margin.left},${margin.top})`) as SVGElementSelection;
+                    .attr("transform", `translate(${margin.left},${margin.top})`);
 
                 // Add the tooltip area to the page
                 const tooltip: TooltipElement = d3.select("#chart").append("div")

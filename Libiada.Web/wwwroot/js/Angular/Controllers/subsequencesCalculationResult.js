@@ -1,14 +1,8 @@
 import { getArrayMinMax, initScopeFromServer, throwHelper } from "functions";
-/// <reference path="./Interfaces/commonInterfaces.d.ts" />
-/// <reference path="../../typings/bootstrap-jquery-extensions.d.ts" />
-/// <reference path="../../typings/plotly-extensions.d.ts" />
 /**
  * Controller for displaying subsequences calculation results
  */
 class SubsequencesCalculationResultHandler {
-    /**
-     * Creates a new instance of the controller
-     */
     constructor() {
         this.ngOnInit();
     }
@@ -16,7 +10,7 @@ class SubsequencesCalculationResultHandler {
      * Initializes the Angular controller
      */
     async ngOnInit() {
-        const subsequencesCalculationResult = async ($scope, $http, $sce) => {
+        const subsequencesCalculationResult = async ($scope, $http) => {
             function fillLegend() {
                 $scope.legend = [];
                 $scope.colorScale = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.sequencesData.length]);
@@ -32,17 +26,19 @@ class SubsequencesCalculationResultHandler {
                     document.styleSheets[0].insertRule(`.legend${k + 1}:after { background:${color} }`);
                 }
             }
-            $scope.addCharacteristic = () => $scope.chartCharacteristics.push({
-                id: $scope.chartsCharacteristicsCount++,
-                value: $scope.characteristicsList.find(cl => $scope.chartCharacteristics.every(cc => cc.value !== cl))
-            });
-            $scope.deleteCharacteristic = (characteristic) => $scope.chartCharacteristics.splice($scope.chartCharacteristics.indexOf(characteristic), 1);
+            $scope.addCharacteristic = () => {
+                // searching for the characteristic that is not already in the chartCharacteristics array
+                const newSelectedCharacteristic = $scope.characteristicsList.find((cl) => $scope.chartCharacteristics.every((cc) => cc !== cl));
+                $scope.chartCharacteristics.push(newSelectedCharacteristic);
+            };
+            $scope.deleteCharacteristic = (characteristic) => {
+                $scope.chartCharacteristics.splice($scope.chartCharacteristics.indexOf(characteristic), 1);
+            };
             // initializes data for chart
             function fillPoints() {
                 $scope.points = [];
                 for (let i = 0; i < $scope.sequencesData.length; i++) {
                     let sequenceData = $scope.sequencesData[i];
-                    const legendIndex = i;
                     $scope.points.push({
                         legendIndex: i,
                         legendId: i + 1,
@@ -80,14 +76,13 @@ class SubsequencesCalculationResultHandler {
                 $("button[data-bs-target='#tooltip-tab-pane']").tab("show");
                 let selectedPoint = selectedTrace.subsequencesData[$scope.selectedPointIndex];
                 $scope.tooltipElements.length = 0;
-                let researchObjectName = selectedTrace.researchObjectName;
-                $scope.tooltipElements.push(fillPointTooltip(selectedPoint, researchObjectName, $scope.pointsSimilarity.same));
+                $scope.tooltipElements.push(fillPointTooltip(selectedTrace, selectedPoint, $scope.pointsSimilarity.same));
                 let similarPoints = [];
                 for (let i = 0; i < $scope.points.length; i++) {
                     for (let j = 0; j < $scope.points[i].subsequencesData.length; j++) {
                         if (selectedPoint !== $scope.points[i].subsequencesData[j]) {
                             let similar = $scope.chartCharacteristics.every(filter => {
-                                let characteristicIndex = $scope.characteristicsList.indexOf(filter.value);
+                                let characteristicIndex = $scope.characteristicsList.indexOf(filter);
                                 let selectedPointValue = selectedPoint.characteristics[characteristicIndex];
                                 let anotherPointValue = $scope.points[i].subsequencesData[j].characteristics[characteristicIndex];
                                 return selectedPointValue == anotherPointValue;
@@ -95,8 +90,7 @@ class SubsequencesCalculationResultHandler {
                             if (similar) {
                                 let point = $scope.points[i].subsequencesData[j];
                                 similarPoints.push(point);
-                                researchObjectName = $scope.points[i].researchObjectName;
-                                $scope.tooltipElements.push(fillPointTooltip(point, researchObjectName, true));
+                                $scope.tooltipElements.push(fillPointTooltip($scope.points[i], point, $scope.pointsSimilarity.similar));
                             }
                         }
                     }
@@ -118,14 +112,14 @@ class SubsequencesCalculationResultHandler {
                 $scope.$apply();
             }
             // constructs string representing tooltip text (inner html)
-            function fillPointTooltip(point, researchObjectName, similarity) {
+            function fillPointTooltip(trace, point, similarity) {
                 let color = similarity === $scope.pointsSimilarity.same ? "default"
                     : similarity === $scope.pointsSimilarity.similar ? "success"
                         : similarity === $scope.pointsSimilarity.different ? "danger" : "danger";
                 let tooltipElement = {
                     id: point.id,
-                    name: researchObjectName,
-                    sequenceRemoteId: point.sequenceRemoteId,
+                    name: trace.researchObjectName,
+                    sequenceRemoteId: trace.sequenceRemoteId,
                     feature: $scope.features[point.featureId].Text,
                     attributes: $scope.getAttributesText(point.attributes),
                     partial: point.partial,
@@ -154,7 +148,7 @@ class SubsequencesCalculationResultHandler {
                 return tooltipElement;
             }
             function fillLinePlotData() {
-                let characteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
+                let characteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0]);
                 let characteristicsValues = $scope.points.map((p => p.subsequencesData.map(fd => fd.characteristics[characteristicIndex]))).flat();
                 let { min, max } = getArrayMinMax(characteristicsValues);
                 let range = Math.abs(max - min);
@@ -210,14 +204,14 @@ class SubsequencesCalculationResultHandler {
                     },
                     type: "scatter",
                     mode: "markers",
-                    customdata: { legendId: p.legendId },
+                    customdata: [p.legendIndex],
                     name: p.researchObjectName,
                     visible: $scope.legend[p.legendIndex].visible ? true : "legendonly"
                 }));
             }
             function fillScatterPlotData() {
-                let firstCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
-                let secondCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1].value);
+                let firstCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0]);
+                let secondCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1]);
                 $scope.layout = {
                     margin: {
                         l: 50,
@@ -254,14 +248,14 @@ class SubsequencesCalculationResultHandler {
                         size: $scope.pointSize
                     },
                     name: p.name,
-                    customdata: { legendId: p.legendId },
+                    customdata: [p.legendIndex],
                     visible: $scope.legend[p.legendIndex].visible
                 }));
             }
             function fill3dScatterPlotData() {
-                let firstCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
-                let secondCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1].value);
-                let thirdCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[2].value);
+                let firstCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0]);
+                let secondCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1]);
+                let thirdCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[2]);
                 $scope.pointSize = 5;
                 $scope.chartData = $scope.points.map(p => ({
                     hoverinfo: "x+y+z+text",
@@ -277,7 +271,7 @@ class SubsequencesCalculationResultHandler {
                     },
                     name: p.name,
                     type: "scatter3d",
-                    customdata: { legendId: p.legendId },
+                    customdata: [p.legendIndex],
                     visible: $scope.legend[p.legendIndex].visible
                 }));
                 $scope.layout = {
@@ -320,7 +314,7 @@ class SubsequencesCalculationResultHandler {
                 };
             }
             function fillParallelCoordinatesPlotData() {
-                let characteristicsIndices = $scope.chartCharacteristics.map(c => $scope.characteristicsList.indexOf(c.value));
+                let characteristicsIndices = $scope.chartCharacteristics.map(c => $scope.characteristicsList.indexOf(c));
                 $scope.chartData = [{
                         type: "parcoords",
                         line: {
@@ -366,11 +360,12 @@ class SubsequencesCalculationResultHandler {
                 });
             }
             function legendClick(legendItem) {
-                if ($scope.chartData && $scope.chartData[0].customdata) {
+                if ($scope.chartData?.[0]?.customdata && $scope.chartData[0].customdata.length > 0) {
                     let index = [];
                     let update = { visible: legendItem.visible ? "legendonly" : true };
+                    const legendIndex = $scope.legend.findIndex((l) => l.id === legendItem.id);
                     for (let i = 0; i < $scope.chartData.length; i++) {
-                        if ($scope.chartData[i].customdata.legendId === legendItem.id) {
+                        if ($scope.chartData[i].customdata[0] === legendIndex) {
                             index.push(i);
                         }
                     }
@@ -438,11 +433,11 @@ class SubsequencesCalculationResultHandler {
                 $scope.fillVisiblePoints();
             }
             // removes given filter
-            function deleteFilter(filter, filterIndex) {
+            function deleteFilter(_filter, filterIndex) {
                 d3.selectAll(".dot")
                     .attr("visibility", (d) => {
-                    if (d.FiltersVisible) {
-                        d.FiltersVisible.splice(filterIndex, 1);
+                    if (d.filtersVisible) {
+                        d.filtersVisible.splice(filterIndex, 1);
                     }
                     return $scope.dotVisible(d) ? "visible" : "hidden";
                 });
@@ -470,13 +465,13 @@ class SubsequencesCalculationResultHandler {
                 }
                 return true;
             }
-            // Функция-заглушка для dotVisible
-            function dotVisible(d) {
-                // TODO: implement or remove calls to this function 
+            function dotVisible(_d) {
+                // TODO: implement this function
+                throw new Error("Not implemented.");
             }
-            // Функция-заглушка для fillVisiblePoints
             function fillVisiblePoints() {
-                // TODO: implement or remove calls to this function 
+                // TODO: implement this function
+                throw new Error("Not implemented.");
             }
             $scope.fillLinePlotData = fillLinePlotData;
             $scope.fillScatterPlotData = fillScatterPlotData;
@@ -504,11 +499,10 @@ class SubsequencesCalculationResultHandler {
             $scope.tooltipElements = [];
             $scope.visiblePoints = [];
             $scope.characteristicComparers = [];
-            $scope.productFilter = "";
             $scope.pointsSimilarity = Object.freeze({ "same": 0, "similar": 1, "different": 2 });
             await initScopeFromServer($http, $scope, "Loading subsequences characteristics", "Failed loading subsequences characteristics");
             $scope.fillLegend();
-            $scope.chartCharacteristics = [{ id: $scope.chartsCharacteristicsCount++, value: $scope.characteristicsList[0] }];
+            $scope.chartCharacteristics = [$scope.characteristicsList[0]];
             $scope.$apply();
         };
         // Register controller in Angular module

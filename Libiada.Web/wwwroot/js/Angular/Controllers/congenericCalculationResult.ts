@@ -6,10 +6,8 @@ import type { Characteristic, ResultsLoadingScreenData, SequenceCharacteristics,
  * Interface for the data object fetched from the server
  */
 interface CongenericCalculationResultData {
-    transformationsList: string[];
-    iterationsCount: number;
-    characteristics: SequenceCharacteristics[];
     characteristicNames: string[];
+    characteristics: SequenceCharacteristics[];
     characteristicsList: Characteristic[];
     theoreticalRanks: number[][][];
     sequenceGroups?: SequencesGroup[]
@@ -33,8 +31,7 @@ class CongenericCalculationResultHandler {
     private ngOnInit(): void {
         const congenericCalculationResult = async (
             $scope: CongenericCalculationResultScope, $http: ng.IHttpService): Promise<void> => {
-            
-                $scope.characteristicsTableTabSelected = false;
+            $scope.characteristicsTableTabSelected = false;
 
             await initScopeFromServer<CongenericCalculationResultData>(
                 $http,
@@ -42,7 +39,7 @@ class CongenericCalculationResultHandler {
                 "Loading characteristics calculation results",
                 "Failed loading characteristics calculation results");
 
-                InitializeBootstrapTooltips();
+            InitializeBootstrapTooltips();
         };
 
         // Register controller in Angular module

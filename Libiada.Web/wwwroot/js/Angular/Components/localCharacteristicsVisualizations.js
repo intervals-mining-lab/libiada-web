@@ -308,9 +308,9 @@ function LocalCharacteristicsVisualizationsController($scope) {
                     width: 0.75
                 } : {}
             };
+            const legendIndex = ctrl.legend.findIndex((l) => l.id === legendItem.id);
             for (let i = 0; i < ctrl.chartData.length; i++) {
-                const legendId = ctrl.legend[ctrl.chartData[i].customdata[0]].id;
-                if (legendId === legendItem.id) {
+                if (ctrl.chartData[i].customdata[0] === legendIndex) {
                     index.push(i);
                 }
             }

@@ -35,7 +35,7 @@ interface SubsequencesSimilarityResultData {
 /**
  * Interface for the controller's scope
  */
-interface SubsequencesSimilarityResultScope 
+interface SubsequencesSimilarityResultScope
     extends ng.IScope, SubsequencesSimilarityResultData, ResultsLoadingScreenData {
 }
 

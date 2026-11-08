@@ -149,4 +149,15 @@ export interface ResultsLoadingScreenData {
     taskId: string;
 }
 
+export interface CharacteristicComparer {
+    characteristic: Characteristic;
+    precision: number;
+}
+
+export interface Rank { x: number[], y: number[] }
+
+export type ColorClass = "default" | "success" | "danger";
+
 export type DisplayedTable = "researchObjects" | "sequenceGroups";
+
+export type PointsSimilarity = 0 | 1 | 2;

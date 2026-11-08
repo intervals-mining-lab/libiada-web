@@ -15,9 +15,6 @@ class SequencesOrderDistributionResultHandler {
      */
     ngOnInit() {
         const sequencesOrderDistributionResult = ($scope, $http) => {
-            /**
-             * Initializes data for chart
-             */
             function fillPoints() {
                 $scope.points = [];
                 $scope.maxLevel = 1;
@@ -36,9 +33,6 @@ class SequencesOrderDistributionResultHandler {
                     });
                 }
             }
-            /**
-             * Initializes data for accordance levels
-             */
             function fillAccordanceLevels() {
                 $scope.accordanceLevels = [];
                 for (let i = 0; i <= $scope.maxLevel; i++) {
@@ -188,7 +182,8 @@ class SequencesOrderDistributionResultHandler {
                         .tickPadding(10);
                 $scope.yMap = (d) => yScale($scope.yValue(d));
                 // setup fill color
-                const color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.points.length]);
+                const color = d3.scaleSequential(d3.interpolateTurbo)
+                    .domain([0, $scope.points.length]);
                 // add the graph canvas to the body of the webpage
                 const svg = d3.select("#chart").append("svg")
                     .attr("width", $scope.width)

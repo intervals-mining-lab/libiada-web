@@ -1,22 +1,15 @@
-import { MapModelFromJson } from "functions";
 /**
 * Controller for sequence order distribution
 */
 class SequencesOrderDistributionHandler {
-    /**
-    * Creates an instance of the order distribution controller
-    * @param data Data to initialize the controller
-    */
-    constructor(data) {
-        this.ngOnInit(data);
+    constructor() {
+        this.ngOnInit();
     }
     /**
     * Initializes the Angular controller
     */
-    ngOnInit(data) {
-        const sequencesOrderDistribution = ($scope) => {
-            // Initialize scope with data from the parameter
-            MapModelFromJson($scope, data);
+    ngOnInit() {
+        const sequencesOrderDistribution = (_$scope) => {
         };
         // Register the controller in Angular
         angular.module("libiada").controller("SequencesOrderDistributionCtrl", ["$scope", sequencesOrderDistribution]);
@@ -24,10 +17,9 @@ class SequencesOrderDistributionHandler {
 }
 /**
 * Wrapper function for backward compatibility
-* @param data Data to initialize the controller
 * @returns Order distribution controller instance
 */
-export default function SequencesOrderDistributionController(data) {
-    return new SequencesOrderDistributionHandler(data);
+export default function SequencesOrderDistributionController() {
+    return new SequencesOrderDistributionHandler();
 }
 //# sourceMappingURL=sequencesOrderDistribution.js.map

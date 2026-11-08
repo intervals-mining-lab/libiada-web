@@ -6,7 +6,6 @@ import type { ResultsLoadingScreenData } from "viewDataTypes";
  */
 interface PoemSegmentationResultData  {
     segmentedString: { [key: string]: number };
-    segmentedText: string;
     poemSequence: string;
     poemName: string;
 }
@@ -35,7 +34,9 @@ class PoemSegmentationResultHandler {
         };
 
         // Register controller in Angular module
-        angular.module("libiada").controller("PoemSegmentationResultCtrl", ["$scope", "$http", poemSegmentationResult]);
+        angular.module("libiada").controller(
+            "PoemSegmentationResultCtrl", 
+            ["$scope", "$http", poemSegmentationResult]);
     }
 }
 

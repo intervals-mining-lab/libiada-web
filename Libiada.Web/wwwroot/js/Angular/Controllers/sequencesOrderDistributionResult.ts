@@ -1,67 +1,63 @@
 //import d3 from "d3";
 import { initScopeFromServer } from "functions";
-import type { IBasePoint } from "./Interfaces/commonInterfaces";
 import type { ResultsLoadingScreenData } from "viewDataTypes";
 
-// Interface for accordance level data
-interface IAccordanceLevel {
+interface AccordanceLevel {
     level: number;
     distributionsCount: number;
 }
 
-// Interface for sequence data
-interface ISequence {
-    order: string;
+interface Sequence {
+    order: number[];
     sequences: string[];
 }
 
-// Interface for point in chart, inheriting from IBasePoint
-interface IDistributionPoint extends IBasePoint {
-    order: string;
+interface Point {
+    id: number;
+    x: number;
+    y: number;
+    order: number[];
     sequences: string[];
 }
 
-// Interface for D3 tooltip with additional properties
-interface ID3Tooltip extends d3.Selection<HTMLDivElement, unknown, HTMLElement, any> {
+interface SVGSelection extends d3.Selection<SVGGElement, null, HTMLElement, null> { }
+
+interface DotSelection extends d3.Selection<SVGEllipseElement, Point, SVGGElement, null> { }
+
+interface TooltipSelection extends d3.Selection<HTMLDivElement, null, HTMLElement, null> {
     hideTooltip?: boolean;
-    selectedDots?: any;
+    selectedDots?: DotSelection;
 }
 
 /**
  * Interface for the data object fetched from the server
  */
-interface ISequencesOrderDistributionData {
-    result: ISequence[];
+interface SequencesOrderDistributionData {
+    result: Sequence[];
 }
 
 /**
  * Interface for the angular controller's scope
  */
-interface ISequencesOrderDistributionScope extends ng.IScope, ISequencesOrderDistributionData, ResultsLoadingScreenData {
-    // Chart data
-    points: IDistributionPoint[];
-    accordanceLevels: IAccordanceLevel[];
+interface ISequencesOrderDistributionScope extends ng.IScope, SequencesOrderDistributionData, ResultsLoadingScreenData {
+    points: Point[];
+    accordanceLevels: AccordanceLevel[];
     maxLevel: number;
-
-    // Chart dimensions and settings
     width: number;
     height: number;
     dotRadius: number;
     selectedDotRadius: number;
 
-    // Chart functions
-    xMap: (d: IDistributionPoint) => number;
-    yMap: (d: IDistributionPoint) => number;
-
-    // Methods
+    xMap: (d: Point) => number;
+    yMap: (d: Point) => number;
     draw: () => void;
     fillPoints: () => void;
     fillAccordanceLevels: () => void;
-    fillPointTooltip: (d: IDistributionPoint) => string;
-    showTooltip: (event: MouseEvent, d: IDistributionPoint, tooltip: ID3Tooltip, svg: d3.Selection<SVGGElement, IDistributionPoint, HTMLElement, null>) => void;
-    clearTooltip: (tooltip: ID3Tooltip) => void;
-    xValue: (d: IDistributionPoint) => number;
-    yValue: (d: IDistributionPoint) => number;
+    fillPointTooltip: (d: Point) => string;
+    showTooltip: (event: MouseEvent, d: Point, tooltip: TooltipSelection, svg: SVGSelection) => void;
+    clearTooltip: (tooltip: TooltipSelection) => void;
+    xValue: (d: Point) => number;
+    yValue: (d: Point) => number;
 }
 
 /**
@@ -79,16 +75,16 @@ class SequencesOrderDistributionResultHandler {
      * Initializes the Angular controller
      */
     private ngOnInit(): void {
-        const sequencesOrderDistributionResult = ($scope: ISequencesOrderDistributionScope, $http: ng.IHttpService): void => {
-            /**
-             * Initializes data for chart
-             */
+        const sequencesOrderDistributionResult = (
+            $scope: ISequencesOrderDistributionScope, 
+            $http: ng.IHttpService): void => {
+ 
             function fillPoints(): void {
                 $scope.points = [];
                 $scope.maxLevel = 1;
                 for (let i = 0; i < $scope.result.length; i++) {
-                    const order = $scope.result[i].order;
-                    const sequences = $scope.result[i].sequences;
+                    const order: number[] = $scope.result[i].order;
+                    const sequences: string[] = $scope.result[i].sequences;
                     if (sequences.length > $scope.maxLevel) {
                         $scope.maxLevel = sequences.length;
                     }
@@ -102,13 +98,10 @@ class SequencesOrderDistributionResultHandler {
                 }
             }
 
-            /**
-             * Initializes data for accordance levels
-             */
             function fillAccordanceLevels(): void {
                 $scope.accordanceLevels = [];
                 for (let i = 0; i <= $scope.maxLevel; i++) {
-                    let count = 0;
+                    let count: number = 0;
                     for (let j = 0; j < $scope.points.length; j++) {
                         if ($scope.points[j].y === i) {
                             count++;
@@ -127,7 +120,7 @@ class SequencesOrderDistributionResultHandler {
              * Constructs string representing tooltip text (inner html)
              * @param d Point data to include in tooltip
              */
-            function fillPointTooltip(d: IDistributionPoint): string {
+            function fillPointTooltip(d: Point): string {
                 const tooltipContent: string[] = [];
                 tooltipContent.push(`Order: ${d.order}`);
                 tooltipContent.push(`Count of sequences: ${d.sequences.length}`);
@@ -147,13 +140,13 @@ class SequencesOrderDistributionResultHandler {
              * @param tooltip Tooltip element
              * @param svg SVG element
              */
-            function showTooltip(event: MouseEvent, d: IDistributionPoint, tooltip: ID3Tooltip, svg: d3.Selection<SVGGElement, IDistributionPoint, HTMLElement, null>): void {
+            function showTooltip(event: MouseEvent, d: Point, tooltip: TooltipSelection, svg: SVGSelection): void {
                 $scope.clearTooltip(tooltip);
                 tooltip.style("opacity", 0.9);
                 const tooltipHtml: string[] = [];
-                const selection: d3.Selection<SVGGElement, IDistributionPoint, SVGGElement, IDistributionPoint> = svg.selectAll(".dot");
+                const selection: DotSelection = svg.selectAll(".dot");
                 tooltip.selectedDots = selection
-                    .filter((dot: IDistributionPoint) => {
+                    .filter((dot: Point) => {
                         if (dot.x === d.x && dot.y === d.y) {
                             tooltipHtml.push($scope.fillPointTooltip(dot));
                             return true;
@@ -175,7 +168,7 @@ class SequencesOrderDistributionResultHandler {
              * Clears tooltip and unselects dots
              * @param tooltip Tooltip element
              */
-            function clearTooltip(tooltip: ID3Tooltip): void {
+            function clearTooltip(tooltip: TooltipSelection): void {
                 if (tooltip) {
                     if (tooltip.hideTooltip) {
                         tooltip.html("").style("opacity", 0);
@@ -192,7 +185,7 @@ class SequencesOrderDistributionResultHandler {
              * Returns x value for a point
              * @param d Point data
              */
-            function xValue(d: IDistributionPoint): number {
+            function xValue(d: Point): number {
                 return d.x;
             }
 
@@ -200,7 +193,7 @@ class SequencesOrderDistributionResultHandler {
              * Returns y value for a point
              * @param d Point data
              */
-            function yValue(d: IDistributionPoint): number {
+            function yValue(d: Point): number {
                 return d.y;
             }
 
@@ -217,20 +210,20 @@ class SequencesOrderDistributionResultHandler {
 
                 // chart size and margin settings
                 const margin = { top: 30, right: 30, bottom: 30, left: 60 };
-                const width = $scope.width - margin.left - margin.right;
-                const height = $scope.height - margin.top - margin.bottom;
+                const width: number = $scope.width - margin.left - margin.right;
+                const height: number = $scope.height - margin.top - margin.bottom;
 
                 // setup x
                 // calculating margins for dots
-                const xMin = d3.min($scope.points, $scope.xValue) || 0;
-                const xMax = d3.max($scope.points, $scope.xValue) || 0;
-                const xMargin = (xMax - xMin) * 0.05;
+                const xMin: number = d3.min($scope.points, $scope.xValue) || 0;
+                const xMax: number = d3.max($scope.points, $scope.xValue) || 0;
+                const xMargin: number = (xMax - xMin) * 0.05;
 
-                const xScale = d3.scaleLinear()
+                const xScale: d3.ScaleLinear<number, number> = d3.scaleLinear()
                     .domain([xMin - xMargin, xMax + xMargin])
                     .range([0, width]);
 
-                const xAxis = $scope.points.length > 10 ?
+                const xAxis: d3.Axis<d3.NumberValue> = $scope.points.length > 10 ?
                     d3.axisBottom(xScale)
                         .tickSizeInner(-height)
                         .tickSizeOuter(0)
@@ -241,15 +234,15 @@ class SequencesOrderDistributionResultHandler {
                         .tickSizeOuter(0)
                         .tickPadding(10);
 
-                $scope.xMap = (d: IDistributionPoint) => xScale($scope.xValue(d));
+                $scope.xMap = (d: Point) => xScale($scope.xValue(d));
 
                 // setup y
                 // calculating margins for dots
-                const yMax = d3.max($scope.points, $scope.yValue) || 0;
-                const yMin = d3.min($scope.points, $scope.yValue) || 0;
-                const yMargin = (yMax - yMin) * 0.05;
+                const yMax: number = d3.max($scope.points, $scope.yValue) || 0;
+                const yMin: number = d3.min($scope.points, $scope.yValue) || 0;
+                const yMargin: number = (yMax - yMin) * 0.05;
 
-                const yScale = yMax - yMin < 100 ?
+                const yScale: d3.ScaleLinear<number, number> = yMax - yMin < 100 ?
                     d3.scaleLinear()
                         .domain([yMin - yMargin, yMax + yMargin])
                         .range([height, 0]) :
@@ -258,7 +251,7 @@ class SequencesOrderDistributionResultHandler {
                         .domain([1, Math.pow(10, Math.ceil(Math.log10(yMax)))])
                         .range([height, 0]);
 
-                const yAxis = yMax - yMin < 100 ?
+                const yAxis: d3.Axis<d3.NumberValue> = yMax - yMin < 100 ?
                     d3.axisLeft(yScale)
                         .tickSizeInner(-width)
                         .tickSizeOuter(0)
@@ -269,13 +262,14 @@ class SequencesOrderDistributionResultHandler {
                         .tickSizeOuter(0)
                         .tickPadding(10);
 
-                $scope.yMap = (d: IDistributionPoint) => yScale($scope.yValue(d));
+                $scope.yMap = (d: Point) => yScale($scope.yValue(d));
 
                 // setup fill color
-                const color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.points.length]);
+                const color: d3.ScaleSequential<string> = d3.scaleSequential(d3.interpolateTurbo)
+                    .domain([0, $scope.points.length]);
 
                 // add the graph canvas to the body of the webpage
-                const svg = d3.select("#chart").append("svg")
+                const svg: SVGSelection = d3.select<SVGGElement, null>("#chart").append("svg")
                     .attr("width", $scope.width)
                     .attr("height", $scope.height)
                     .attr("class", "chart-svg")
@@ -283,9 +277,9 @@ class SequencesOrderDistributionResultHandler {
                     .attr("transform", `translate(${margin.left},${margin.top})`);
 
                 // add the tooltip area to the webpage
-                const tooltip = d3.select("#chart").append("div")
+                const tooltip: TooltipSelection = d3.select<HTMLDivElement, null>("#chart").append("div")
                     .attr("class", "chart-tooltip position-absolute bg-light font-monospace small lh-sm p-1 rounded")
-                    .style("opacity", 0) as ID3Tooltip;
+                    .style("opacity", 0);
 
                 // preventing tooltip hiding if dot clicked
                 tooltip.on("click", () => { tooltip.hideTooltip = false; });
@@ -332,9 +326,9 @@ class SequencesOrderDistributionResultHandler {
                     .attr("cx", $scope.xMap)
                     .attr("cy", $scope.yMap)
                     .style("fill-opacity", 0.6)
-                    .style("fill", (d: IDistributionPoint) => color(d.id))
-                    .style("stroke", (d: IDistributionPoint) => color(d.id))
-                    .on("click", (event: MouseEvent, d: IDistributionPoint) => $scope.showTooltip(event, d, tooltip, svg));
+                    .style("fill", (d: Point) => color(d.id))
+                    .style("stroke", (d: Point) => color(d.id))
+                    .on("click", (event: MouseEvent, d: Point) => $scope.showTooltip(event, d, tooltip, svg));
             }
 
             // Assign methods to $scope
@@ -357,7 +351,7 @@ class SequencesOrderDistributionResultHandler {
             $scope.accordanceLevels = [];
             $scope.maxLevel = 1;
 
-            initScopeFromServer<ISequencesOrderDistributionData>(
+            initScopeFromServer<SequencesOrderDistributionData>(
                 $http, $scope, "Loading orders distribution data", "Failed orders distribution data");
         };
 

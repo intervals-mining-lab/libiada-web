@@ -2,26 +2,148 @@
 import type * as plotly from "plotly.js";
 import { getArrayMinMax, initScopeFromServer, throwHelper } from "functions";
 import {
-    ISubsequencesCalculationResultScope,
-    IChartCharacteristic,
-    ISubsequencesCalculationPoint,
-    ISubsequencePoint,
-    ITooltipElement,
-    ILegendItem,
-    ISubsequencesCalculationResultData
-} from "./Interfaces/subsequencesCalculationInterfaces";
-/// <reference path="./Interfaces/commonInterfaces.d.ts" />
+    Characteristic,
+    Feature,
+    ParallelCoordinatesPlotData,
+    ResultsLoadingScreenData,
+    PointsSimilarity,
+    LegendItem,
+    CharacteristicComparer,
+    ColorClass,
+    Rank
+} from "viewDataTypes";
 
-/// <reference path="../../typings/bootstrap-jquery-extensions.d.ts" />
-/// <reference path="../../typings/plotly-extensions.d.ts" />
+interface TooltipData {
+    id: number;
+    name: string;
+    sequenceRemoteId: string | undefined;
+    feature: string;
+    attributes: string[];
+    partial: boolean;
+    color: ColorClass;
+    characteristics: number[];
+    similarity: number;
+    selectedForAlignment: boolean;
+    remoteId?: string;
+    position: string;
+    length: number;
+    positions: number[];
+    lengths: number[];
+}
+
+interface Point {
+    legendIndex: number;
+    legendId: number;
+    researchObjectName: string;
+    name: string;
+    researchObjectId: number;
+    sequenceRemoteId: string | undefined;
+    subsequencesData: SubsequencePoint[];
+    id: number;
+}
+
+interface SubsequencePoint {
+    id: number;
+    legendIndex: number;
+    name: string;
+    attributes: number[];
+    partial: boolean;
+    featureId: number;
+    positions: number[];
+    lengths: number[];
+    subsequenceRemoteId: string | undefined;
+    rank: number;
+    characteristics: number[];
+    featureVisible: boolean;
+    legendVisible: boolean;
+    filtersVisible: boolean[];
+}
+
+interface SequenceData {
+    Characteristic: number
+    ResearchObjectName: string;
+    ResearchObjectId: number;
+    RemoteId?: string;
+    SubsequencesData: SubsequenceData[];
+}
+
+interface SubsequenceData {
+    Id: number;
+    Attributes: number[];
+    Partial: boolean;
+    FeatureId: number;
+    Starts: number[];
+    Lengths: number[];
+    RemoteId?: string;
+    CharacteristicsValues: number[];
+}
+
+interface AttributeValue {
+    attribute: number;
+    value: string;
+}
+
+// Interface for the data object fetched from the server
+interface SubsequencesCalculationResultData {
+    attributeValues: AttributeValue[];
+    attributes: { [key: number]: string };
+    characteristicNames: string[];
+    characteristicsList: Characteristic[];
+    features: { [key: number]: Feature };
+    sequencesData: SequenceData[];
+}
+
+/**
+ * Interface for the angular controller's scope
+ */
+interface SubsequencesCalculationResultScope extends
+    ng.IScope, SubsequencesCalculationResultData, ResultsLoadingScreenData {
+    points: Point[];
+    legend: LegendItem[];
+    visiblePoints: SubsequencePoint[];
+    chartCharacteristics: Characteristic[];
+    chartsCharacteristicsCount: number;
+    tooltipElements: TooltipData[];
+    characteristicComparers: CharacteristicComparer[];
+    chartElement: plotly.PlotlyHTMLElement;
+    colorScale: d3.ScaleSequential<string>;
+    selectedPointIndex: number;
+    selectedResearchObjectIndex: number;
+    lineChart?: boolean;
+    chartData: Partial<ParallelCoordinatesPlotData>[];
+    layout: Partial<plotly.Layout>;
+    pointSize: number;
+    pointsSimilarity: { same: 0; similar: 1; different: 2 };
+    characteristicsTableRendering: { rendered: boolean };
+
+    addCharacteristic: () => void;
+    deleteCharacteristic: (characteristic: Characteristic) => void;
+    fillPoints: () => void;
+    showTooltip: (selectedTrace: Point) => void;
+    fillPointTooltip: (trace: Point, point: SubsequencePoint, similarity: PointsSimilarity) => TooltipData;
+    fillLinePlotData: () => void;
+    fillScatterPlotData: () => void;
+    fill3dScatterPlotData: () => void;
+    fillParallelCoordinatesPlotData: () => void;
+    draw: () => void;
+    fillLegend: () => void;
+    legendClick: (legendItem: LegendItem) => void;
+    legendSetVisibilityForAll: (visibility: boolean) => void;
+    dragBarMouseDown: () => void;
+    getAttributesText: (attributes: number[]) => string[];
+    getAttributeIdByName: (dot: SubsequencePoint, attributeName: string) => number | undefined;
+    isAttributeEqual: (dot: SubsequencePoint, attributeName: string, expectedValue: string) => boolean;
+    addFilter: (newFilter: string) => void;
+    deleteFilter: (filter: string, filterIndex: number) => void;
+    dotsSimilar: (d: SubsequencePoint, dot: SubsequencePoint) => boolean;
+    dotVisible: (d: SubsequencePoint) => boolean;
+    fillVisiblePoints: () => void;
+}
 
 /**
  * Controller for displaying subsequences calculation results
  */
 class SubsequencesCalculationResultHandler {
-    /**
-     * Creates a new instance of the controller
-     */
     constructor() {
         this.ngOnInit();
     }
@@ -30,13 +152,15 @@ class SubsequencesCalculationResultHandler {
      * Initializes the Angular controller
      */
     private async ngOnInit(): Promise<void> {
-        const subsequencesCalculationResult = async ($scope: ISubsequencesCalculationResultScope, $http: ng.IHttpService, $sce: ng.ISCEService): Promise<void> => {
+        const subsequencesCalculationResult = async (
+            $scope: SubsequencesCalculationResultScope,
+            $http: ng.IHttpService): Promise<void> => {
             function fillLegend(): void {
                 $scope.legend = [];
 
                 $scope.colorScale = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.sequencesData.length]);
                 for (let k = 0; k < $scope.sequencesData.length; k++) {
-                    const color = $scope.colorScale(k + 1);
+                    const color: string = $scope.colorScale(k + 1);
                     $scope.legend.push({
                         id: k + 1,
                         name: $scope.sequencesData[k].ResearchObjectName,
@@ -49,20 +173,22 @@ class SubsequencesCalculationResultHandler {
                 }
             }
 
-            $scope.addCharacteristic = (): number => $scope.chartCharacteristics.push({
-                id: $scope.chartsCharacteristicsCount++,
-                value: $scope.characteristicsList.find(cl => $scope.chartCharacteristics.every(cc => cc.value !== cl)) as string
-            });
+            $scope.addCharacteristic = () => {
+                // searching for the characteristic that is not already in the chartCharacteristics array
+                const newSelectedCharacteristic: Characteristic = $scope.characteristicsList.find(
+                    (cl: Characteristic) => $scope.chartCharacteristics.every((cc: Characteristic) => cc !== cl))!
+                $scope.chartCharacteristics.push(newSelectedCharacteristic);
+            };
 
-            $scope.deleteCharacteristic = (characteristic: IChartCharacteristic): IChartCharacteristic[] =>
+            $scope.deleteCharacteristic = (characteristic: Characteristic): void => {
                 $scope.chartCharacteristics.splice($scope.chartCharacteristics.indexOf(characteristic), 1);
+            };
 
             // initializes data for chart
             function fillPoints(): void {
                 $scope.points = [];
                 for (let i = 0; i < $scope.sequencesData.length; i++) {
-                    let sequenceData = $scope.sequencesData[i];
-                    const legendIndex = i;
+                    let sequenceData: SequenceData = $scope.sequencesData[i];
                     $scope.points.push({
                         legendIndex: i,
                         legendId: i + 1,
@@ -74,8 +200,8 @@ class SubsequencesCalculationResultHandler {
                         id: i
                     });
                     for (let j = 0; j < sequenceData.SubsequencesData.length; j++) {
-                        let subsequenceData = sequenceData.SubsequencesData[j];
-                        let point: ISubsequencePoint = {
+                        let subsequenceData: SubsequenceData = sequenceData.SubsequencesData[j];
+                        let point: SubsequencePoint = {
                             id: subsequenceData.Id,
                             legendIndex: i,
                             name: sequenceData.ResearchObjectName,
@@ -97,35 +223,33 @@ class SubsequencesCalculationResultHandler {
             }
 
             // shows tooltip for dot or group of dots
-            function showTooltip(selectedTrace: ISubsequencesCalculationPoint): void {
+            function showTooltip(selectedTrace: Point): void {
                 $("button[data-bs-target='#tooltip-tab-pane']").tab("show");
-                let selectedPoint = selectedTrace.subsequencesData[$scope.selectedPointIndex];
+                let selectedPoint: SubsequencePoint = selectedTrace.subsequencesData[$scope.selectedPointIndex];
                 $scope.tooltipElements.length = 0;
-                let researchObjectName = selectedTrace.researchObjectName;
-                $scope.tooltipElements.push(fillPointTooltip(selectedPoint, researchObjectName, $scope.pointsSimilarity.same));
-                let similarPoints: ISubsequencePoint[] = [];
+                $scope.tooltipElements.push(fillPointTooltip(selectedTrace, selectedPoint, $scope.pointsSimilarity.same));
+                let similarPoints: SubsequencePoint[] = [];
 
                 for (let i = 0; i < $scope.points.length; i++) {
                     for (let j = 0; j < $scope.points[i].subsequencesData.length; j++) {
                         if (selectedPoint !== $scope.points[i].subsequencesData[j]) {
-                            let similar = $scope.chartCharacteristics.every(filter => {
-                                let characteristicIndex = $scope.characteristicsList.indexOf(filter.value);
-                                let selectedPointValue = selectedPoint.characteristics[characteristicIndex];
-                                let anotherPointValue = $scope.points[i].subsequencesData[j].characteristics[characteristicIndex];
+                            let similar: boolean = $scope.chartCharacteristics.every(filter => {
+                                let characteristicIndex: number = $scope.characteristicsList.indexOf(filter);
+                                let selectedPointValue: number = selectedPoint.characteristics[characteristicIndex];
+                                let anotherPointValue: number = $scope.points[i].subsequencesData[j].characteristics[characteristicIndex];
                                 return selectedPointValue == anotherPointValue;
                             });
 
                             if (similar) {
-                                let point = $scope.points[i].subsequencesData[j];
+                                let point: SubsequencePoint = $scope.points[i].subsequencesData[j];
                                 similarPoints.push(point);
-                                researchObjectName = $scope.points[i].researchObjectName;
-                                $scope.tooltipElements.push(fillPointTooltip(point, researchObjectName, true as any));
+                                $scope.tooltipElements.push(fillPointTooltip($scope.points[i], point, $scope.pointsSimilarity.similar));
                             }
                         }
                     }
                 }
 
-                let update: any = {};
+                let update: plotly.Data = {};
                 switch ($scope.chartCharacteristics.length) {
                     case 1:
                     case 2:
@@ -145,15 +269,15 @@ class SubsequencesCalculationResultHandler {
             }
 
             // constructs string representing tooltip text (inner html)
-            function fillPointTooltip(point: ISubsequencePoint, researchObjectName: string, similarity: number): ITooltipElement {
-                let color = similarity === $scope.pointsSimilarity.same ? "default"
+            function fillPointTooltip(trace: Point, point: SubsequencePoint, similarity: PointsSimilarity): TooltipData {
+                let color: ColorClass = similarity === $scope.pointsSimilarity.same ? "default"
                     : similarity === $scope.pointsSimilarity.similar ? "success"
                         : similarity === $scope.pointsSimilarity.different ? "danger" : "danger";
 
-                let tooltipElement: ITooltipElement = {
+                let tooltipElement: TooltipData = {
                     id: point.id,
-                    name: researchObjectName,
-                    sequenceRemoteId: point.sequenceRemoteId,
+                    name: trace.researchObjectName,
+                    sequenceRemoteId: trace.sequenceRemoteId,
                     feature: $scope.features[point.featureId].Text,
                     attributes: $scope.getAttributesText(point.attributes),
                     partial: point.partial,
@@ -187,18 +311,18 @@ class SubsequencesCalculationResultHandler {
             }
 
             function fillLinePlotData(): void {
-                let characteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
-                let characteristicsValues = $scope.points.map((p => p.subsequencesData.map(fd => fd.characteristics[characteristicIndex]))).flat();
-                let { min, max } = getArrayMinMax(characteristicsValues);
-                let range = Math.abs(max - min);
+                let characteristicIndex: number = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0]);
+                let characteristicsValues: number[] = $scope.points.map((p => p.subsequencesData.map(fd => fd.characteristics[characteristicIndex]))).flat();
+                let { min, max }: { min: number; max: number } = getArrayMinMax(characteristicsValues);
+                let range: number = Math.abs(max - min);
                 // adding margins
                 min -= Math.abs(range * 0.05);
                 max += Math.abs(range * 0.05);
 
-                let ranks: Array<{ x: number[], y: number[] }> = [];
+                let ranks: Rank[] = [];
                 if ($scope.lineChart) {
                     for (let i = 0; i < $scope.points.length; i++) {
-                        let y = $scope.points[i].subsequencesData.map(sd => sd.characteristics[characteristicIndex]);
+                        let y: number[] = $scope.points[i].subsequencesData.map(sd => sd.characteristics[characteristicIndex]);
                         y.sort((first, second) => second - first);
                         ranks.push({
                             //x is range from 1 to subsequencesData length
@@ -245,15 +369,15 @@ class SubsequencesCalculationResultHandler {
                     },
                     type: "scatter",
                     mode: "markers",
-                    customdata: { legendId: p.legendId },
+                    customdata: [p.legendIndex],
                     name: p.researchObjectName,
                     visible: $scope.legend[p.legendIndex].visible ? true : "legendonly"
                 }));
             }
 
             function fillScatterPlotData(): void {
-                let firstCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
-                let secondCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1].value);
+                let firstCharacteristicIndex: number = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0]);
+                let secondCharacteristicIndex: number = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1]);
 
                 $scope.layout = {
                     margin: {
@@ -292,15 +416,15 @@ class SubsequencesCalculationResultHandler {
                         size: $scope.pointSize
                     },
                     name: p.name,
-                    customdata: { legendId: p.legendId },
+                    customdata: [p.legendIndex],
                     visible: $scope.legend[p.legendIndex].visible
                 }));
             }
 
             function fill3dScatterPlotData(): void {
-                let firstCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0].value);
-                let secondCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1].value);
-                let thirdCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[2].value);
+                let firstCharacteristicIndex: number = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0]);
+                let secondCharacteristicIndex: number = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1]);
+                let thirdCharacteristicIndex: number = $scope.characteristicsList.indexOf($scope.chartCharacteristics[2]);
 
                 $scope.pointSize = 5;
                 $scope.chartData = $scope.points.map<Partial<plotly.PlotData>>(p => ({
@@ -317,7 +441,7 @@ class SubsequencesCalculationResultHandler {
                     },
                     name: p.name,
                     type: "scatter3d",
-                    customdata: { legendId: p.legendId },
+                    customdata: [p.legendIndex],
                     visible: $scope.legend[p.legendIndex].visible
                 }));
 
@@ -362,7 +486,7 @@ class SubsequencesCalculationResultHandler {
             }
 
             function fillParallelCoordinatesPlotData(): void {
-                let characteristicsIndices = $scope.chartCharacteristics.map(c => $scope.characteristicsList.indexOf(c.value));
+                let characteristicsIndices: number[] = $scope.chartCharacteristics.map(c => $scope.characteristicsList.indexOf(c));
 
                 $scope.chartData = [{
                     type: "parcoords",
@@ -407,7 +531,7 @@ class SubsequencesCalculationResultHandler {
 
                 Plotly.newPlot($scope.chartElement, $scope.chartData, $scope.layout, { responsive: true });
 
-                $scope.chartElement.on("plotly_click", (data: any) => {
+                $scope.chartElement.on("plotly_click", (data: plotly.PlotMouseEvent) => {
                     $scope.selectedPointIndex = data.points[0].pointNumber;
                     $scope.selectedResearchObjectIndex = data.points[0].curveNumber;
                     let selectedTrace = $scope.points[data.points[0].curveNumber];
@@ -415,12 +539,13 @@ class SubsequencesCalculationResultHandler {
                 });
             }
 
-            function legendClick(legendItem: ILegendItem): void {
-                if ($scope.chartData && $scope.chartData[0].customdata) {
+            function legendClick(legendItem: LegendItem): void {
+                if ($scope.chartData?.[0]?.customdata && $scope.chartData[0].customdata.length > 0) {
                     let index: number[] = [];
-                    let update = { visible: legendItem.visible ? "legendonly" : true };
+                    let update: plotly.Data = { visible: legendItem.visible ? "legendonly" : true };
+                    const legendIndex = $scope.legend.findIndex((l: LegendItem) => l.id === legendItem.id);
                     for (let i = 0; i < $scope.chartData.length; i++) {
-                        if ($scope.chartData[i].customdata.legendId === legendItem.id) {
+                        if ($scope.chartData[i].customdata![0] === legendIndex) {
                             index.push(i);
                         }
                     }
@@ -431,15 +556,15 @@ class SubsequencesCalculationResultHandler {
 
             function legendSetVisibilityForAll(visibility: boolean): void {
                 if ($scope.chartData && $scope.chartData[0].customdata) {
-                    let update = { visible: visibility ? true : "legendonly" };
+                    let update: plotly.Data = { visible: visibility ? true : "legendonly" };
                     $scope.legend.forEach(l => l.visible = visibility);
                     Plotly.restyle($scope.chartElement, update);
                 }
             }
 
             function dragBarMouseDown(): void {
-                let right = document.getElementById("sidebar");
-                let bar = document.getElementById("drag-bar")!;
+                let right: HTMLElement | null = document.getElementById("sidebar");
+                let bar: HTMLElement | null = document.getElementById("drag-bar")!;
 
                 const drag = (e: MouseEvent): void => {
                     const selection: Selection | null = window.getSelection();
@@ -466,7 +591,7 @@ class SubsequencesCalculationResultHandler {
             function getAttributesText(attributes: number[]): string[] {
                 let attributesText: string[] = [];
                 for (let i = 0; i < attributes.length; i++) {
-                    let attributeValue = $scope.attributeValues[attributes[i]];
+                    let attributeValue: AttributeValue = $scope.attributeValues[attributes[i]];
                     attributesText.push($scope.attributes[attributeValue.attribute] + (attributeValue.value === "" ? "" : ` = ${attributeValue.value}`));
                 }
 
@@ -474,15 +599,15 @@ class SubsequencesCalculationResultHandler {
             }
 
             // returns attribute index by its name if any
-            function getAttributeIdByName(dot: ISubsequencePoint, attributeName: string): number | undefined {
+            function getAttributeIdByName(dot: SubsequencePoint, attributeName: string): number | undefined {
                 return dot.attributes.find(a => $scope.attributes[$scope.attributeValues[a].attribute] === attributeName);
             }
 
             // returns true if dot has given attribute and its value equal to the given value
-            function isAttributeEqual(dot: ISubsequencePoint, attributeName: string, expectedValue: string): boolean {
-                let attributeId = $scope.getAttributeIdByName(dot, attributeName);
+            function isAttributeEqual(dot: SubsequencePoint, attributeName: string, expectedValue: string): boolean {
+                let attributeId: number | undefined = $scope.getAttributeIdByName(dot, attributeName);
                 if (attributeId !== undefined) {
-                    let product = $scope.attributeValues[attributeId].value.toUpperCase();
+                    let product: string = $scope.attributeValues[attributeId].value.toUpperCase();
                     return product.indexOf(expectedValue) !== -1;
                 }
 
@@ -491,8 +616,8 @@ class SubsequencesCalculationResultHandler {
 
             // applies new filter
             function addFilter(newFilter: string): void {
-                d3.selectAll(".dot")
-                    .attr("visibility", (d: ISubsequencePoint) => {
+                d3.selectAll<SVGGElement, SubsequencePoint>(".dot")
+                    .attr("visibility", (d: SubsequencePoint) => {
                         let filterValue = newFilter.toUpperCase();
                         let visible = $scope.isAttributeEqual(d, "product", filterValue);
                         visible = visible || $scope.isAttributeEqual(d, "locus_tag", filterValue);
@@ -504,11 +629,11 @@ class SubsequencesCalculationResultHandler {
             }
 
             // removes given filter
-            function deleteFilter(filter: string, filterIndex: number): void {
-                d3.selectAll(".dot")
-                    .attr("visibility", (d: any) => {
-                        if (d.FiltersVisible) {
-                            d.FiltersVisible.splice(filterIndex, 1);
+            function deleteFilter(_filter: string, filterIndex: number): void {
+                d3.selectAll<SVGGElement, SubsequencePoint>(".dot")
+                    .attr("visibility", (d: SubsequencePoint) => {
+                        if (d.filtersVisible) {
+                            d.filtersVisible.splice(filterIndex, 1);
                         }
                         return $scope.dotVisible(d) ? "visible" : "hidden";
                     });
@@ -517,7 +642,7 @@ class SubsequencesCalculationResultHandler {
             }
 
             // determines if dots are similar by product
-            function dotsSimilar(d: ISubsequencePoint, dot: ISubsequencePoint): boolean {
+            function dotsSimilar(d: SubsequencePoint, dot: SubsequencePoint): boolean {
                 if (d.featureId !== dot.featureId) {
                     return false;
                 }
@@ -526,8 +651,8 @@ class SubsequencesCalculationResultHandler {
                     case 1: // CDS
                     case 2: // RRNA
                     case 3: // TRNA
-                        const firstProductId = $scope.getAttributeIdByName(d, "product");
-                        const secondProductId = $scope.getAttributeIdByName(dot, "product");
+                        const firstProductId: number | undefined = $scope.getAttributeIdByName(d, "product");
+                        const secondProductId: number | undefined = $scope.getAttributeIdByName(dot, "product");
                         if (firstProductId !== undefined && secondProductId !== undefined) {
                             const firstAttributeValue = $scope.attributeValues[firstProductId].value.toUpperCase();
                             const secondAttributeValue = $scope.attributeValues[secondProductId].value.toUpperCase();
@@ -541,14 +666,14 @@ class SubsequencesCalculationResultHandler {
                 return true;
             }
 
-            // Функция-заглушка для dotVisible
-            function dotVisible(d: ISubsequencePoint): boolean {
-                // TODO: implement or remove calls to this function 
+            function dotVisible(_d: SubsequencePoint): boolean {
+                // TODO: implement this function
+                throw new Error("Not implemented.");
             }
 
-            // Функция-заглушка для fillVisiblePoints
             function fillVisiblePoints(): void {
-                // TODO: implement or remove calls to this function 
+                // TODO: implement this function
+                throw new Error("Not implemented.");
             }
 
             $scope.fillLinePlotData = fillLinePlotData;
@@ -573,21 +698,20 @@ class SubsequencesCalculationResultHandler {
             $scope.isAttributeEqual = isAttributeEqual;
             $scope.fillPointTooltip = fillPointTooltip;
 
-            $scope.chartElement = document.getElementById("chart")  as plotly.PlotlyHTMLElement ?? throwHelper("Chart div element not found");
+            $scope.chartElement = document.getElementById("chart") as plotly.PlotlyHTMLElement ?? throwHelper("Chart div element not found");
             $scope.characteristicsTableRendering = { rendered: false };
             $scope.chartsCharacteristicsCount = 1;
 
             $scope.tooltipElements = [];
             $scope.visiblePoints = [];
             $scope.characteristicComparers = [];
-            $scope.productFilter = "";
             $scope.pointsSimilarity = Object.freeze({ "same": 0, "similar": 1, "different": 2 });
 
-            await initScopeFromServer<ISubsequencesCalculationResultData>(
+            await initScopeFromServer<SubsequencesCalculationResultData>(
                 $http, $scope, "Loading subsequences characteristics", "Failed loading subsequences characteristics");
             $scope.fillLegend();
 
-            $scope.chartCharacteristics = [{ id: $scope.chartsCharacteristicsCount++, value: $scope.characteristicsList[0] }];
+            $scope.chartCharacteristics = [$scope.characteristicsList[0]];
             $scope.$apply();
         };
 

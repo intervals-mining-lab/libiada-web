@@ -4,7 +4,8 @@ import type {
     LegendItem,
     ParallelCoordinatesPlotData,
     FragmentData,
-    LocalCharacteristicsData
+    LocalCharacteristicsData,
+    Rank
 } from "viewDataTypes";
 import {
     getArrayMinMax,
@@ -23,8 +24,6 @@ interface PointsFragmentData {
     rank: number;
     name: string;
 }
-
-interface Rank { x: number[], y: number[] }
 
 interface LocalCharacteristicsVisualizationsComponentController extends ng.IController {
     characteristicsList: Characteristic[];
@@ -129,7 +128,7 @@ function LocalCharacteristicsVisualizationsController(this: LocalCharacteristics
             .map<number[]>((p) => p.fragmentsData
                 .map<number>((fd) => fd.characteristics[characteristicIndex]))
             .flat();
-        let { min, max } = getArrayMinMax(characteristicValues);
+        let { min, max }: { min: number; max: number } = getArrayMinMax(characteristicValues);
         const range: number = max - min;
 
         // adding margins
@@ -401,9 +400,9 @@ function LocalCharacteristicsVisualizationsController(this: LocalCharacteristics
                     width: 0.75
                 } : {}
             };
+            const legendIndex: number = ctrl.legend.findIndex((l: LegendItem) => l.id === legendItem.id);
             for (let i = 0; i < ctrl.chartData.length; i++) {
-                const legendId: number = ctrl.legend[ctrl.chartData[i].customdata![0] as number].id;
-                if (legendId === legendItem.id) {
+                if (ctrl.chartData[i].customdata![0] as number === legendIndex) {
                     index.push(i);
                 }
             }

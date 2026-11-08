@@ -356,9 +356,9 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
         if (ctrl.chartData?.[0]?.customdata && ctrl.chartData[0].customdata.length > 0) {
             let index: number[] = [];
             const update: plotly.Data = { visible: legendItem.visible ? "legendonly" : true };
+             const legendIndex: number = ctrl.legend.findIndex((l: LegendItem) => l.id === legendItem.id);
             for (let i = 0; i < ctrl.chartData.length; i++) {
-                const legendId: number = ctrl.legend[ctrl.chartData[i].customdata![0] as number].id;
-                if (legendId === legendItem.id) {
+                if (ctrl.chartData[i].customdata![0] as number === legendIndex) {
                     index.push(i);
                 }
             }

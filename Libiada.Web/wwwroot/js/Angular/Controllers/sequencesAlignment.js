@@ -1,12 +1,8 @@
 import { MapModelFromJson } from "functions";
 /**
-* Sequence alignment controller
+* Sequence alignment angular controller
 */
 class SequencesAlignmentHandler {
-    /**
-    * Creates an instance of the sequence alignment controller
-    * @param data Data for initializing the controller
-    */
     constructor(data) {
         this.ngOnInit(data);
     }

@@ -1,11 +1,8 @@
 import { initScopeFromServer } from "functions";
 /**
- * Controller for sequences alignment result view
+ * Angular controller for sequences alignment result view
  */
 class SequencesAlignmentResultHandler {
-    /**
-     * Creates a new controller instance
-     */
     constructor() {
         this.ngOnInit();
     }

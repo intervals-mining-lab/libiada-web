@@ -20,7 +20,8 @@ interface RelationCalculationResultData {
 /**
  * Interface for the angular controller's scope
  */
-interface RelationCalculationResultScope extends ng.IScope, RelationCalculationResultData, ResultsLoadingScreenData {
+interface RelationCalculationResultScope extends 
+    ng.IScope, RelationCalculationResultData, ResultsLoadingScreenData {
 }
 
 /**
@@ -38,7 +39,9 @@ class RelationCalculationResultHandler {
      * Initializes Angular controller
      */
     private ngOnInit(): void {
-        const relationCalculationResult = ($scope: RelationCalculationResultScope, $http: ng.IHttpService): void => {
+        const relationCalculationResult = (
+            $scope: RelationCalculationResultScope, 
+            $http: ng.IHttpService): void => {
             initScopeFromServer<RelationCalculationResultData>(
                 $http, $scope, "Loading calculation results", "Failed loading calculation results");
         };

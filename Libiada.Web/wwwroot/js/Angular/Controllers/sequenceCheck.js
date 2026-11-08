@@ -3,10 +3,6 @@ import { MapModelFromJson } from "functions";
  * Controller for sequence check
  */
 class SequenceCheckOperator {
-    /**
-     * Creates a new controller instance
-     * @param data Data for controller initialization
-     */
     constructor(data) {
         this.ngOnInit(data);
     }

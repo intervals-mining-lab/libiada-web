@@ -271,9 +271,9 @@ function CharacteristicsVisualizationsController($scope) {
         if (ctrl.chartData?.[0]?.customdata && ctrl.chartData[0].customdata.length > 0) {
             let index = [];
             const update = { visible: legendItem.visible ? "legendonly" : true };
+            const legendIndex = ctrl.legend.findIndex((l) => l.id === legendItem.id);
             for (let i = 0; i < ctrl.chartData.length; i++) {
-                const legendId = ctrl.legend[ctrl.chartData[i].customdata[0]].id;
-                if (legendId === legendItem.id) {
+                if (ctrl.chartData[i].customdata[0] === legendIndex) {
                     index.push(i);
                 }
             }

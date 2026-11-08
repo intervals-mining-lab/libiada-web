@@ -8,34 +8,24 @@ interface SequenceCheckData {
     nature: string;
     groups: Group[];
     sequenceTypes: SequenceType[];
-
     minimumSelectedResearchObjects: number;
     maximumSelectedResearchObjects: number;
 }
 
 /**
- * Interface for the controller's scope
+ * Interface for the angular controller's scope
  */
 interface SequenceCheckScope extends ng.IScope, SequenceCheckData {
-    // Research objects selection
     selectedResearchObjectsCount: number;
-
-    // File status
     fileSelected: { value: boolean };
 
-    // Methods
     fileChanged: (filePath: HTMLInputElement) => void;
-
 }
 
 /**
  * Controller for sequence check
  */
 class SequenceCheckOperator {
-    /**
-     * Creates a new controller instance
-     * @param data Data for controller initialization
-     */
     constructor(data: SequenceCheckData) {
         this.ngOnInit(data);
     }

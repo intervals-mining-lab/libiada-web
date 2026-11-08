@@ -119,7 +119,7 @@
                                             <div class="col-md-12">
                                                 <select class="form-select"
                                                         title="Characteristic"
-                                                        ng-model="characteristic.value"
+                                                        ng-model="characteristic"
                                                         ng-options="c.Text for c in ::characteristicsList"
                                                         id="characteristic{{$index}}"></select>
                                             </div>
@@ -219,7 +219,7 @@
                                                 </div>
                                                 <div class="card-collapse collapse" id="subsequenceCharacteristics{{$index + 1}}">
                                                     <table class="table table-bordered table-sm fs-6 small" ng-class="::'table-'+tooltipElement.color">
-                                                        <thead ng-repeat="value in ::tooltipElement.characteristics">
+                                                        <thead ng-repeat="value in ::tooltipElement.characteristics track by $index">
                                                             <tr>
                                                                 <td align=center scope="col" ng-bind="::characteristicNames[$index]" />
                                                                 <td scope="col" ng-bind="::value" />
