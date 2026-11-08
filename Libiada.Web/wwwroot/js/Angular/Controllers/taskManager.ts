@@ -46,14 +46,14 @@ interface TaskManagerScope extends ng.IScope {
     getStatusIcon: (status: TaskState) => string;
     getTaskCountWithStatus: (state: TaskState) => number;
 
-    // Operations with tasks 
+    // Operations with tasks
     deleteAllTasks: () => void;
     deleteTasksWithStatus: (taskStatus: TaskState) => void;
     deleteTask: (id: number) => void;
     tryRedirectToResult: (task: Task) => void;
 }
 
-//TODO: try to figure out why DefenitlyTyped has wrong types for this library
+//TODO: try to figure out why DefinitelyTyped has wrong types for this library
 // Definition for alertify
 declare const alertify: {
     success(message: string, timeout?: number): void;

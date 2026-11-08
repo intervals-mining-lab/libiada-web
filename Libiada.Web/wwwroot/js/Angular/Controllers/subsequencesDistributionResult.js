@@ -1,4 +1,4 @@
-import { initScopeFromServer } from "functions";
+import { InitializeBootstrapTooltips, initScopeFromServer, throwHelper } from "functions";
 export default function SubsequencesDistributionResultController() {
     function subsequencesDistributionResult($scope, $http) {
         async function onInit() {
@@ -9,15 +9,13 @@ export default function SubsequencesDistributionResultController() {
             $scope.researchObjects = [];
             $scope.legend = [];
             $scope.characteristicComparers = [];
-            $scope.plotTypeX = "";
-            $scope.plotTypeY = "";
-            $scope.productFilter = "";
+            //$scope.plotTypeX = "";
+            //$scope.plotTypeY = "";
             $scope.tooltipVisible = false;
             $scope.tooltipElements = [];
             $scope.alignmentInProcess = false;
             $scope.pointsSimilarity = Object.freeze({ "same": 0, "similar": 1, "different": 2 });
-            // initializing tooltips for tabs
-            $('[data-bs-toggle="tooltip"]').tooltip();
+            InitializeBootstrapTooltips();
             // preventing scroll in key up and key down
             window.addEventListener("keydown", e => {
                 if (e.key === "ArrowDown" || e.key === "ArrowUp") {
@@ -28,21 +26,28 @@ export default function SubsequencesDistributionResultController() {
                 }
             }, false);
             await initScopeFromServer($http, $scope, "Loading genes map data", "Failed loading genes map data");
-            $scope.plot = document.getElementById("chart");
+            $scope.chartElement = document.getElementById("chart")
+                ?? throwHelper("Chart div element not found");
             $scope.subsequenceCharacteristic = $scope.subsequencesCharacteristicsList[0];
             $scope.fillPoints();
-            let comparer = (first, second) => first.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value] - second.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value];
-            $scope.points = $scope.points.map(points => points.sort(comparer));
-            $scope.visiblePoints = $scope.visiblePoints.map(points => points.sort(comparer));
             $scope.addCharacteristicComparer();
-            $scope.redrawGenesMap();
+            $scope.redrawGenesMap(true);
             $scope.$apply();
         }
+        $scope.pointsComparer = (first, second) => {
+            const characteristicIndex = parseInt($scope.subsequenceCharacteristic.Value);
+            return first.subsequenceCharacteristics[characteristicIndex] - second.subsequenceCharacteristics[characteristicIndex];
+        };
         // initializes data for genes map
         function fillPoints() {
             for (let i = 0; i < $scope.result.length; i++) {
                 let sequenceData = $scope.result[i];
-                $scope.researchObjects.push({ id: sequenceData.ResearchObjectId, name: sequenceData.ResearchObjectName, visible: true, index: i, color: $scope.colorScale(i) });
+                $scope.researchObjects.push({
+                    id: sequenceData.ResearchObjectId,
+                    name: sequenceData.ResearchObjectName,
+                    visible: true,
+                    color: $scope.colorScale(i)
+                });
                 // hack for legend dot color
                 document.styleSheets[0].insertRule(`.legend${sequenceData.ResearchObjectId}:after { background:${$scope.colorScale(i)} }`);
                 $scope.points.push([]);
@@ -93,7 +98,7 @@ export default function SubsequencesDistributionResultController() {
         }
         // returns attribute index by its name if any
         function getAttributeIdByName(dot, attributeName) {
-            return dot.attributes.find(a => $scope.attributes[$scope.attributeValues[a].attribute] === attributeName);
+            return dot.attributes.find(a => $scope.attributes[$scope.attributeValues[a].attribute] === attributeName) ?? throwHelper(`Attribute with name ${attributeName} not found.`);
         }
         // returns true if dot has given attribute and its value equal to the given value
         function isAttributeEqual(dot, attributeName, expectedValue) {
@@ -116,10 +121,10 @@ export default function SubsequencesDistributionResultController() {
                     point.visible = $scope.dotVisible(point);
                 }
             }
-            $scope.redrawGenesMap();
+            $scope.redrawGenesMap(false);
         }
         // deletes given filter
-        function deleteFilter(filter, filterIndex) {
+        function deleteFilter(_filter, filterIndex) {
             for (let i = 0; i < $scope.points.length; i++) {
                 for (let j = 0; j < $scope.points[i].length; j++) {
                     let point = $scope.points[i][j];
@@ -127,7 +132,7 @@ export default function SubsequencesDistributionResultController() {
                     point.visible = $scope.dotVisible(point);
                 }
             }
-            $scope.redrawGenesMap();
+            $scope.redrawGenesMap(false);
         }
         // filters dots by subsequences feature
         function filterByFeature(feature) {
@@ -140,7 +145,7 @@ export default function SubsequencesDistributionResultController() {
                     }
                 }
             }
-            $scope.redrawGenesMap();
+            $scope.redrawGenesMap(false);
         }
         // checks if dot is visible
         function dotVisible(dot) {
@@ -150,15 +155,17 @@ export default function SubsequencesDistributionResultController() {
         // determines if dots are similar by product
         function dotsSimilar(d, dot) {
             if (d.featureId !== dot.featureId) {
-                return false;
+                return $scope.pointsSimilarity.different;
             }
             switch (d.featureId) {
                 case 1: // CDS
                 case 2: // RRNA
                 case 3: // TRNA
-                    let firstProductId = $scope.getAttributeIdByName(d, "product");
-                    let secondProductId = $scope.getAttributeIdByName(dot, "product");
-                    if ($scope.attributeValues[firstProductId].value.toUpperCase() !== $scope.attributeValues[secondProductId].value.toUpperCase()) {
+                    const firstProductId = $scope.getAttributeIdByName(d, "product");
+                    const secondProductId = $scope.getAttributeIdByName(dot, "product");
+                    const firstProduct = $scope.attributeValues[firstProductId].value.toUpperCase();
+                    const secondProduct = $scope.attributeValues[secondProductId].value.toUpperCase();
+                    if (firstProduct !== secondProduct) {
                         return $scope.pointsSimilarity.different;
                     }
                     break;
@@ -179,15 +186,16 @@ export default function SubsequencesDistributionResultController() {
             $("button[data-bs-target='#tooltip-tab-pane']").tab("show");
             $scope.tooltipVisible = true;
             $scope.tooltipElements.length = 0;
-            let researchObjectName = $scope.researchObjects.find(value => value.id === selectedPoint.researchObjectId).name;
+            let researchObjectName = $scope.researchObjects.find(ro => ro.id === selectedPoint.researchObjectId).name;
             $scope.tooltipElements.push(fillPointTooltip(selectedPoint, researchObjectName, $scope.pointsSimilarity.same));
             let similarPoints = [];
             for (let i = 0; i < $scope.visiblePoints.length; i++) {
                 for (let j = 0; j < $scope.visiblePoints[i].length; j++) {
                     if (selectedPoint !== $scope.visiblePoints[i][j] && $scope.highlight) {
                         let similar = $scope.characteristicComparers.every(filter => {
-                            let selectedPointValue = selectedPoint.subsequenceCharacteristics[filter.characteristic.Value];
-                            let anotherPointValue = $scope.visiblePoints[i][j].subsequenceCharacteristics[filter.characteristic.Value];
+                            let characteristicIndex = parseInt(filter.characteristic.Value);
+                            let selectedPointValue = selectedPoint.subsequenceCharacteristics[characteristicIndex];
+                            let anotherPointValue = $scope.visiblePoints[i][j].subsequenceCharacteristics[characteristicIndex];
                             return Math.abs(selectedPointValue - anotherPointValue) <= filter.precision;
                         });
                         if (similar) {
@@ -220,7 +228,7 @@ export default function SubsequencesDistributionResultController() {
                 "marker.symbol": $scope.visiblePoints.map(points => points.map(point => point === selectedPoint || similarPoints.includes(point) ? "diamond-wide" : "circle-open")),
                 "marker.size": $scope.visiblePoints.map(points => points.map(point => point === selectedPoint || similarPoints.includes(point) ? 15 : 6))
             };
-            Plotly.restyle($scope.plot, update);
+            Plotly.restyle($scope.chartElement, update);
             $scope.$apply();
         }
         // constructs string representing tooltip text (inner html)
@@ -238,15 +246,12 @@ export default function SubsequencesDistributionResultController() {
                 color: color,
                 characteristics: point.subsequenceCharacteristics,
                 similarity: similarity,
-                selectedForAlignment: false
+                selectedForAlignment: false,
+                position: "(",
+                length: 0,
+                positions: point.positions,
+                lengths: point.lengths
             };
-            if (point.subsequenceRemoteId) {
-                tooltipElement.remoteId = point.subsequenceRemoteId;
-            }
-            tooltipElement.position = "(";
-            tooltipElement.length = 0;
-            tooltipElement.positions = point.positions;
-            tooltipElement.lengths = point.lengths;
             for (let i = 0; i < point.positions.length; i++) {
                 tooltipElement.position += point.positions[i] + 1;
                 tooltipElement.position += "..";
@@ -257,23 +262,25 @@ export default function SubsequencesDistributionResultController() {
                 }
             }
             tooltipElement.position += ")";
+            if (point.subsequenceRemoteId) {
+                tooltipElement.remoteId = point.subsequenceRemoteId;
+            }
             return tooltipElement;
         }
         function cText(points, index) {
             return points.map(() => $scope.researchObjects[index].name);
         }
-        // selects nearest diffieret point of the same organism when "up" or "down" key pressed 
+        // selects nearest different point of the same organism when "up" or "down" key pressed
         function keyUpDownPress(key) {
             let nextPointIndex = -1;
             let visibleResearchObjectsPoints = $scope.visiblePoints[$scope.selectedResearchObjectIndex];
             if ($scope.selectedPointIndex >= 0) {
-                let characteristic;
+                let characteristic = parseInt($scope.subsequenceCharacteristic.Value);
                 let firstPointCharacteristic;
                 let secondPointCharacteristic;
                 switch (key) {
                     case "ArrowUp":
                         for (let i = $scope.selectedPointIndex + 1; i < visibleResearchObjectsPoints.length; i++) {
-                            characteristic = $scope.subsequenceCharacteristic.Value;
                             firstPointCharacteristic = visibleResearchObjectsPoints[$scope.selectedPointIndex].subsequenceCharacteristics[characteristic];
                             secondPointCharacteristic = visibleResearchObjectsPoints[i].subsequenceCharacteristics[characteristic];
                             if (firstPointCharacteristic !== secondPointCharacteristic) {
@@ -284,7 +291,6 @@ export default function SubsequencesDistributionResultController() {
                         break;
                     case "ArrowDown":
                         for (let j = $scope.selectedPointIndex - 1; j >= 0; j--) {
-                            characteristic = $scope.subsequenceCharacteristic.Value;
                             firstPointCharacteristic = visibleResearchObjectsPoints[$scope.selectedPointIndex].subsequenceCharacteristics[characteristic];
                             secondPointCharacteristic = visibleResearchObjectsPoints[j].subsequenceCharacteristics[characteristic];
                             if (firstPointCharacteristic !== secondPointCharacteristic) {
@@ -301,45 +307,50 @@ export default function SubsequencesDistributionResultController() {
             }
         }
         // main drawing method
-        function redrawGenesMap() {
+        function redrawGenesMap(sortPoints = false) {
             $scope.fillVisiblePoints();
             $scope.selectedPointIndex = -1;
+            if (sortPoints) {
+                $scope.points = $scope.points.map(points => points.sort($scope.pointsComparer));
+                $scope.visiblePoints = $scope.visiblePoints.map(points => points.sort($scope.pointsComparer));
+            }
             $scope.layout = {
                 showlegend: false,
                 hovermode: "closest",
                 xaxis: {
-                    type: $scope.plotTypeX ? 'log' : '',
+                    type: $scope.plotTypeX ? "log" : "linear",
                     title: {
                         text: $scope.sequenceCharacteristicName,
                         font: {
-                            family: 'Courier New, monospace',
+                            family: "Courier New, monospace",
                             size: 12
                         }
                     }
                 },
                 yaxis: {
-                    type: $scope.plotTypeY ? 'log' : '',
+                    type: $scope.plotTypeY ? "log" : "linear",
                     title: {
                         text: $scope.subsequenceCharacteristic.Text,
                         font: {
-                            family: 'Courier New, monospace',
+                            family: "Courier New, monospace",
                             size: 12
                         }
                     }
                 }
             };
+            const characteristicIndex = parseInt($scope.subsequenceCharacteristic.Value);
             let data = $scope.visiblePoints.map((points, index) => ({
-                hoverinfo: 'x+y+text',
-                type: 'scattergl',
+                hoverinfo: "x+y+text",
+                type: "scattergl",
                 x: points.map(p => $scope.numericXAxis ? p.numericX : p.x),
-                y: points.map(p => p.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value]),
+                y: points.map(p => p.subsequenceCharacteristics[characteristicIndex]),
                 text: cText(points, index),
                 mode: "markers",
                 marker: { opacity: 0.5, symbol: "circle-open", color: $scope.colorScale(index) },
                 name: $scope.researchObjects[index].name,
             }));
-            Plotly.newPlot($scope.plot, data, $scope.layout, { responsive: true });
-            $scope.plot.on("plotly_click", data => {
+            Plotly.newPlot($scope.chartElement, data, $scope.layout, { responsive: true });
+            $scope.chartElement.on("plotly_click", (data) => {
                 $scope.selectedPointIndex = data.points[0].pointNumber;
                 $scope.selectedResearchObjectIndex = data.points[0].curveNumber;
                 let selectedPoint = $scope.visiblePoints[data.points[0].curveNumber][data.points[0].pointNumber];
@@ -348,43 +359,42 @@ export default function SubsequencesDistributionResultController() {
         }
         // hides or shows selected organism on genes map
         function legendClick(legendItem) {
-            for (let j = 0; j < $scope.points[legendItem.index].length; j++) {
-                let point = $scope.points[legendItem.index][j];
+            const legendIndex = $scope.researchObjects.findIndex((l) => l.id === legendItem.id);
+            for (let j = 0; j < $scope.points[legendIndex].length; j++) {
+                let point = $scope.points[legendIndex][j];
                 point.legendVisible = !point.legendVisible;
             }
-            $scope.redrawGenesMap();
+            $scope.redrawGenesMap(false);
         }
         function legendSetVisibilityForAll(visibility) {
             for (let i = 0; i < $scope.researchObjects.length; i++) {
-                let index = $scope.researchObjects[i].index;
-                for (let j = 0; j < $scope.points[index].length; j++) {
-                    $scope.points[index][j].legendVisible = visibility;
+                for (let j = 0; j < $scope.points[i].length; j++) {
+                    $scope.points[i][j].legendVisible = visibility;
                 }
             }
             for (let k = 0; k < $scope.researchObjects.length; k++) {
                 $scope.researchObjects[k].visible = visibility;
             }
-            $scope.redrawGenesMap();
+            $scope.redrawGenesMap(false);
         }
-        // dragbar
-        function dragbarMouseDown() {
-            let chart = document.getElementById('chart');
-            let right = document.getElementById('sidebar');
-            let bar = document.getElementById('dragbar');
+        // Drag event handler
+        function dragBarMouseDown() {
+            let bar = document.getElementById("drag-bar") ?? throwHelper("Drag bar element not found");
+            let right = document.getElementById('sidebar') ?? throwHelper("Sidebar element not found");
             const drag = (e) => {
                 const selection = window.getSelection();
                 if (selection) {
                     selection.empty();
                     selection.removeAllRanges();
                 }
-                let chart_width = chart.style.width = (e.pageX - bar.offsetWidth / 2) + 'px';
-                Plotly.relayout('chart', { autosize: true });
+                $scope.chartElement.style.width = (e.pageX - bar.offsetWidth / 2) + "px";
+                Plotly.relayout("chart", { autosize: true });
             };
-            bar.addEventListener('mousedown', () => {
-                document.addEventListener('mousemove', drag);
+            bar.addEventListener("mousedown", () => {
+                document.addEventListener("mousemove", drag);
             });
-            window.addEventListener('mouseup', () => {
-                document.removeEventListener('mousemove', drag);
+            window.addEventListener("mouseup", () => {
+                document.removeEventListener("mousemove", drag);
             });
         }
         // opens alignment of given subsequences with clustal on new tab
@@ -415,10 +425,10 @@ export default function SubsequencesDistributionResultController() {
                 $scope.alignmentInProcess = false;
                 let result = response.data;
                 if (result.Status === "Success") {
-                    window.open(`https://www.ebi.ac.uk/jdispatcher/msa/clustalo/summary?jobId=${result.Result}`, '_blank');
+                    window.open(`https://www.ebi.ac.uk/jdispatcher/msa/clustalo/summary?jobId=${result.Result}`, "_blank");
                 }
                 else {
-                    alert("Failed to create alignment task", result.Message);
+                    alert(`Failed to create alignment task. Error: ${result.Message}`);
                     console.log(result.Message);
                 }
             }, () => {
@@ -456,7 +466,7 @@ export default function SubsequencesDistributionResultController() {
         $scope.deleteFilter = deleteFilter;
         $scope.getAttributeIdByName = getAttributeIdByName;
         $scope.isAttributeEqual = isAttributeEqual;
-        $scope.dragbarMouseDown = dragbarMouseDown;
+        $scope.dragBarMouseDown = dragBarMouseDown;
         $scope.keyUpDownPress = keyUpDownPress;
         $scope.alignWithClustal = alignWithClustal;
         $scope.alignAllWithClustal = alignAllWithClustal;

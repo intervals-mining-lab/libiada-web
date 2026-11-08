@@ -10,26 +10,10 @@ import {
     LegendItem,
     CharacteristicComparer,
     ColorClass,
-    Rank
+    Rank,
+    SubsequenceTooltip,
+    SubsequenceData
 } from "viewDataTypes";
-
-interface TooltipData {
-    id: number;
-    name: string;
-    sequenceRemoteId: string | undefined;
-    feature: string;
-    attributes: string[];
-    partial: boolean;
-    color: ColorClass;
-    characteristics: number[];
-    similarity: number;
-    selectedForAlignment: boolean;
-    remoteId?: string;
-    position: string;
-    length: number;
-    positions: number[];
-    lengths: number[];
-}
 
 interface Point {
     legendIndex: number;
@@ -60,22 +44,11 @@ interface SubsequencePoint {
 }
 
 interface SequenceData {
-    Characteristic: number
-    ResearchObjectName: string;
     ResearchObjectId: number;
-    RemoteId?: string;
+    ResearchObjectName: string;
+    Characteristic: number
+    RemoteId: string | undefined;
     SubsequencesData: SubsequenceData[];
-}
-
-interface SubsequenceData {
-    Id: number;
-    Attributes: number[];
-    Partial: boolean;
-    FeatureId: number;
-    Starts: number[];
-    Lengths: number[];
-    RemoteId?: string;
-    CharacteristicsValues: number[];
 }
 
 interface AttributeValue {
@@ -103,7 +76,7 @@ interface SubsequencesCalculationResultScope extends
     visiblePoints: SubsequencePoint[];
     chartCharacteristics: Characteristic[];
     chartsCharacteristicsCount: number;
-    tooltipElements: TooltipData[];
+    tooltipElements: SubsequenceTooltip[];
     characteristicComparers: CharacteristicComparer[];
     chartElement: plotly.PlotlyHTMLElement;
     colorScale: d3.ScaleSequential<string>;
@@ -120,7 +93,7 @@ interface SubsequencesCalculationResultScope extends
     deleteCharacteristic: (characteristic: Characteristic) => void;
     fillPoints: () => void;
     showTooltip: (selectedTrace: Point) => void;
-    fillPointTooltip: (trace: Point, point: SubsequencePoint, similarity: PointsSimilarity) => TooltipData;
+    fillPointTooltip: (trace: Point, point: SubsequencePoint, similarity: PointsSimilarity) => SubsequenceTooltip;
     fillLinePlotData: () => void;
     fillScatterPlotData: () => void;
     fill3dScatterPlotData: () => void;
@@ -269,12 +242,12 @@ class SubsequencesCalculationResultHandler {
             }
 
             // constructs string representing tooltip text (inner html)
-            function fillPointTooltip(trace: Point, point: SubsequencePoint, similarity: PointsSimilarity): TooltipData {
+            function fillPointTooltip(trace: Point, point: SubsequencePoint, similarity: PointsSimilarity): SubsequenceTooltip {
                 let color: ColorClass = similarity === $scope.pointsSimilarity.same ? "default"
-                    : similarity === $scope.pointsSimilarity.similar ? "success"
+                        : similarity === $scope.pointsSimilarity.similar ? "success"
                         : similarity === $scope.pointsSimilarity.different ? "danger" : "danger";
 
-                let tooltipElement: TooltipData = {
+                let tooltipElement: SubsequenceTooltip = {
                     id: point.id,
                     name: trace.researchObjectName,
                     sequenceRemoteId: trace.sequenceRemoteId,
@@ -543,7 +516,7 @@ class SubsequencesCalculationResultHandler {
                 if ($scope.chartData?.[0]?.customdata && $scope.chartData[0].customdata.length > 0) {
                     let index: number[] = [];
                     let update: plotly.Data = { visible: legendItem.visible ? "legendonly" : true };
-                    const legendIndex = $scope.legend.findIndex((l: LegendItem) => l.id === legendItem.id);
+                    const legendIndex: number = $scope.legend.findIndex((l: LegendItem) => l.id === legendItem.id);
                     for (let i = 0; i < $scope.chartData.length; i++) {
                         if ($scope.chartData[i].customdata![0] === legendIndex) {
                             index.push(i);

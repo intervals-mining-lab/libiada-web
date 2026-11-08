@@ -1,19 +1,6 @@
 ﻿import { initScopeFromServer } from "functions";
-import type { ResultsLoadingScreenData } from "viewDataTypes";
+import type { ResultsLoadingScreenData, SubsequenceData } from "viewDataTypes";
 
-/**
- * Interface for the data object fetched from the server
- */
-interface SubsequenceData {
-    Attributes: number[],
-    CharacteristicsValues: number[],
-    FeatureId: number,
-    Id: number,
-    Lengths: number[],
-    Starts: number[],
-    Partial: boolean,
-    RemoteId?: string,
-}
 
 // Interface for data passed to the controller from server on page load
 interface SubsequencesSimilarityResultData {

@@ -13,7 +13,6 @@ import type {
  * Interface for the data object passed from the server
  */
 interface SubsequencesDistributionData {
-
     maximumSelectedResearchObjects: number;
     minimumSelectedResearchObjects: number;
     characteristicTypes: CharacteristicType[];

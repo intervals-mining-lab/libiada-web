@@ -115,7 +115,7 @@ export interface SequenceCharacteristics {
 
 export interface LegendItem {
     id: number;
-    name: string | number;
+    name: string;
     visible: boolean;
     color: string;
 }
@@ -152,6 +152,48 @@ export interface ResultsLoadingScreenData {
 export interface CharacteristicComparer {
     characteristic: Characteristic;
     precision: number;
+}
+
+export interface SubsequenceTooltip {
+    id: number;
+    name: string;
+    sequenceRemoteId: string | undefined;
+    feature: string;
+    attributes: string[];
+    partial: boolean;
+    color: ColorClass;
+    characteristics: number[];
+    similarity: PointsSimilarity;
+    selectedForAlignment: boolean;
+    remoteId?: string;
+    position: string;
+    length: number;
+    positions: number[];
+    lengths: number[];
+}
+
+export interface SequenceData {
+    ResearchObjectId: number;
+    ResearchObjectName: string;
+    Characteristic: number
+    RemoteId: string | undefined;
+    SubsequencesData: SubsequenceData[];
+}
+
+export interface SubsequenceData {
+    Id: number;
+    Attributes: number[];
+    Partial: boolean;
+    FeatureId: number;
+    Starts: number[];
+    Lengths: number[];
+    RemoteId: string | undefined;
+    CharacteristicsValues: number[];
+}
+
+export interface AttributeValue {
+    attribute: number;
+    value: string;
 }
 
 export interface Rank { x: number[], y: number[] }
