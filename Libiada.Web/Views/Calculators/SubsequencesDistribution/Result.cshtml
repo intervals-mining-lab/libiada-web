@@ -123,7 +123,7 @@
                                         title="Subsequence characteristic"
                                         ng-model="subsequenceCharacteristic"
                                         ng-options="c.Text for c in ::subsequencesCharacteristicsList"
-                                        ng-change="redrawGenesMap()"
+                                        ng-change="redrawGenesMap(true)"
                                         id="subsequenceCharacteristic"></select>
                             </div>
                         </div>
@@ -133,7 +133,7 @@
                                    name="numericXAxis"
                                    id="numericXAxis"
                                    ng-model="numericXAxis"
-                                   ng-change="redrawGenesMap()"
+                                   ng-change="redrawGenesMap(false)"
                                    value="false" />
                             <label class="form-check-label" for="numericXAxis">
                                 Numeric X axis
@@ -145,7 +145,7 @@
                                    name="LogX"
                                    id="LogX"
                                    ng-model="plotTypeX"
-                                   ng-change="redrawGenesMap()"
+                                   ng-change="redrawGenesMap(false)"
                                    value="false" />
                             <label class="form-check-label" for="LogX">
                                 Logarithmic scale for X axis
@@ -157,7 +157,7 @@
                                    name="LogY"
                                    id="LogY"
                                    ng-model="plotTypeY"
-                                   ng-change="redrawGenesMap()"
+                                   ng-change="redrawGenesMap(false)"
                                    value="false" />
                             <label class="form-check-label" for="LogY">
                                 Logarithmic scale for Y axis
@@ -311,7 +311,7 @@
                                     <table class="table table-bordered table-sm fs-6 small" ng-class="::'table-'+tooltipElement.color">
                                         <thead ng-repeat="value in ::tooltipElement.characteristics track by $index">
                                             <tr>
-                                                <td align=center scope="col" ng-bind="::subsequencesCharacteristicsNames[$index]" />
+                                                <td align=center scope="col" ng-bind="::subsequencesCharacteristicsList[$index].Text" />
                                                 <td scope="col" ng-bind="::value" />
                                             </tr>
                                         </thead>

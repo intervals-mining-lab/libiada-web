@@ -82,7 +82,7 @@ public class SubsequencesCalculationController : AbstractResultController
             using var db = dbFactory.CreateDbContext();
             long[] parentSequenceIds;
             string[] researchObjectNames = new string[researchObjectIds.Length];
-            string[] remoteIds = new string[researchObjectIds.Length];
+            string?[] remoteIds = new string[researchObjectIds.Length];
 
             var parentSequences = db.CombinedSequenceEntities.Include(s => s.ResearchObject)
                                     .Where(s => s.Notation == Notation.Nucleotides && researchObjectIds.Contains(s.ResearchObjectId))

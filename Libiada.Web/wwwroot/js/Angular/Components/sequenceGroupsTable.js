@@ -40,7 +40,7 @@ function SequenceGroupsTableController($scope) {
                                    class="form-check-input"
                                    name="sequenceGroupIds"
                                    id="sequenceGroup${sg.Value}"
-                                   value="${sg.Value}" 
+                                   value="${sg.Value}"
                                    ${sg.Selected ? `checked` : ``} />
                             <label class="form-check-label" for="sequenceGroup${sg.Value}">${sg.Text}</label>
                         </div>

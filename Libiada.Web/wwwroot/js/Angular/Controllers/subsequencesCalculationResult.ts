@@ -12,18 +12,19 @@ import {
     ColorClass,
     Rank,
     SubsequenceTooltip,
-    SubsequenceData
+    SubsequenceData,
+    SequenceData,
+    AttributeValue
 } from "viewDataTypes";
 
 interface Point {
+    id: number;
     legendIndex: number;
-    legendId: number;
     researchObjectName: string;
     name: string;
     researchObjectId: number;
     sequenceRemoteId: string | undefined;
     subsequencesData: SubsequencePoint[];
-    id: number;
 }
 
 interface SubsequencePoint {
@@ -41,19 +42,6 @@ interface SubsequencePoint {
     featureVisible: boolean;
     legendVisible: boolean;
     filtersVisible: boolean[];
-}
-
-interface SequenceData {
-    ResearchObjectId: number;
-    ResearchObjectName: string;
-    Characteristic: number
-    RemoteId: string | undefined;
-    SubsequencesData: SubsequenceData[];
-}
-
-interface AttributeValue {
-    attribute: number;
-    value: string;
 }
 
 // Interface for the data object fetched from the server
@@ -164,7 +152,6 @@ class SubsequencesCalculationResultHandler {
                     let sequenceData: SequenceData = $scope.sequencesData[i];
                     $scope.points.push({
                         legendIndex: i,
-                        legendId: i + 1,
                         researchObjectName: sequenceData.ResearchObjectName,
                         name: sequenceData.ResearchObjectName,
                         researchObjectId: sequenceData.ResearchObjectId,

@@ -57,7 +57,7 @@ function SequenceGroupsTableController(this: SequenceGroupsTableComponentControl
         }
 
         // Updating sequence groups visibility flag
-        ctrl.sequenceGroups.forEach(sg => 
+        ctrl.sequenceGroups.forEach(sg =>
             sg.Visible = ignoreSearch ? ctrl.isSequenceGroupVisibleWithoutSearch(sg) : ctrl.isSequenceGroupVisible(sg));
         const sequenceGroupsToHide: SequenceGroup[] = ctrl.visibleSequenceGroups.filter(sg => !sg.Visible);
         const newVisibleSequenceGroups: SequenceGroup[] = ctrl.sequenceGroups.filter(sg => sg.Visible);
@@ -77,7 +77,7 @@ function SequenceGroupsTableController(this: SequenceGroupsTableComponentControl
                                    class="form-check-input"
                                    name="sequenceGroupIds"
                                    id="sequenceGroup${sg.Value}"
-                                   value="${sg.Value}" 
+                                   value="${sg.Value}"
                                    ${sg.Selected ? `checked` : ``} />
                             <label class="form-check-label" for="sequenceGroup${sg.Value}">${sg.Text}</label>
                         </div>
@@ -95,7 +95,7 @@ function SequenceGroupsTableController(this: SequenceGroupsTableComponentControl
         ));
     };
 
-    ctrl.isSequenceGroupVisibleWithoutSearch = (sequenceGroup: SequenceGroup): boolean => 
+    ctrl.isSequenceGroupVisibleWithoutSearch = (sequenceGroup: SequenceGroup): boolean =>
         sequenceGroup.Selected || ctrl.checkSequenceGroupVisibility(sequenceGroup);
 
     ctrl.isSequenceGroupVisible = (sequenceGroup: SequenceGroup): boolean => sequenceGroup.Selected ||

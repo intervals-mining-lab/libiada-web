@@ -41,7 +41,6 @@ class SubsequencesCalculationResultHandler {
                     let sequenceData = $scope.sequencesData[i];
                     $scope.points.push({
                         legendIndex: i,
-                        legendId: i + 1,
                         researchObjectName: sequenceData.ResearchObjectName,
                         name: sequenceData.ResearchObjectName,
                         researchObjectId: sequenceData.ResearchObjectId,

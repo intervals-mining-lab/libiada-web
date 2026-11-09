@@ -109,7 +109,6 @@ public class SubsequencesDistributionController : AbstractResultController
             using var db = dbFactory.CreateDbContext();
             var researchObjectNames = new string[researchObjectIds.Length];
             var remoteIds = new string?[researchObjectIds.Length];
-            var subsequencesCharacteristicsNames = new string[characteristicLinkIds.Length];
             var subsequencesCharacteristicsList = new SelectListItem[characteristicLinkIds.Length];
             var attributeValuesCache = new AttributeValueCacheManager(db);
             long[] sequenceIds;
@@ -132,11 +131,10 @@ public class SubsequencesDistributionController : AbstractResultController
 
             for (int k = 0; k < characteristicLinkIds.Length; k++)
             {
-                subsequencesCharacteristicsNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[k]);
                 subsequencesCharacteristicsList[k] = new SelectListItem
                 {
                     Value = k.ToString(),
-                    Text = subsequencesCharacteristicsNames[k],
+                    Text = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[k]),
                     Selected = false
                 };
             }
@@ -163,7 +161,6 @@ public class SubsequencesDistributionController : AbstractResultController
             var result = new Dictionary<string, object>(7)
                             {
                                 { "result", sequencesData },
-                                { "subsequencesCharacteristicsNames", subsequencesCharacteristicsNames },
                                 { "subsequencesCharacteristicsList", subsequencesCharacteristicsList },
                                 { "sequenceCharacteristicName", sequenceCharacteristicName },
                                 { "features", features.ToSelectListWithNature(features).ToDictionary(f => f.Value) },
