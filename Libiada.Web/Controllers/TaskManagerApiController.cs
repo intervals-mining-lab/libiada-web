@@ -76,7 +76,7 @@ public class TaskManagerApiController(LibiadaDatabaseEntities db, IConfiguration
     {
         try
         {
-            // TOOD: check if GetTaskData returns json with error
+            // TODO: check if GetTaskData returns json with error
             string taskData = GetTaskData(taskId, filtered ? "filteredSimilarityMatrix" : "similarityMatrix");
 
             var similarityMatrix = JsonConvert.DeserializeObject<List<(int firstSubsequenceIndex, int secondSubsequenceIndex, double difference)>[,]>(taskData);
@@ -120,7 +120,7 @@ public class TaskManagerApiController(LibiadaDatabaseEntities db, IConfiguration
     }
 
     /// <summary>
-    /// Unsubscribes a divice to not receive push notifications.
+    /// Unsubscribes a device to not receive push notifications.
     /// </summary>
     /// <param name="Unsubscribe">
     /// Endpoint of the user device.
@@ -140,7 +140,7 @@ public class TaskManagerApiController(LibiadaDatabaseEntities db, IConfiguration
     {
         try
         {
-            var response = new { applicationServerKey = configuration["PublicVapidKey"] ?? throw new Exception($"PublicVapidKey is not found in confiuguration.") };
+            var response = new { applicationServerKey = configuration["PublicVapidKey"] ?? throw new Exception($"PublicVapidKey is not found in configuration.") };
             return JsonConvert.SerializeObject(response);
         }
         catch (Exception ex)

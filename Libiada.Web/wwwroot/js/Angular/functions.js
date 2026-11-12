@@ -62,32 +62,31 @@ export function SelectLink(characteristic) {
 }
 // Finds minimum and maximum values in the array of numbers
 export function getArrayMinMax(array) {
-    let min = array[0];
-    let max = array[0];
-    let length = array.length;
-    for (let i = 1; i < length; i++) {
-        if (array[i] < min)
-            min = array[i];
-        else if (array[i] > max)
-            max = array[i];
+    let min = array[0] || 0;
+    let max = array[0] || 0;
+    for (let element of array) {
+        if (element < min)
+            min = element;
+        else if (element > max)
+            max = element;
     }
     return { min, max };
 }
 // Finds minimum value in the array of numbers
 export function arrayMin(array) {
-    let min = array[0];
-    let length = array.length;
-    for (let i = 1; i < length; i++) {
-        min = array[i] < min ? array[i] : min;
+    let min = array[0] || 0;
+    for (let element of array) {
+        if (element < min)
+            min = element;
     }
     return min;
 }
 // Finds maximum value in the array of numbers
 export function arrayMax(array) {
-    let max = array[0];
-    let length = array.length;
-    for (let i = 1; i < length; i++) {
-        max = array[i] > max ? array[i] : max;
+    let max = array[0] || 0;
+    for (let element of array) {
+        if (element > max)
+            max = element;
     }
     return max;
 }

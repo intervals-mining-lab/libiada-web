@@ -1,20 +1,8 @@
-/// <reference lib="webworker" />
-
 interface PushNotificationData {
     title?: string;
     body?: string;
     icon?: string;
     tag?: string;
-}
-
-interface WorkerGlobalScopeEventMap {
-    push: PushEvent;
-    notificationclick: NotificationEvent;
-}
-
-interface WorkerGlobalScope {
-    readonly registration: ServiceWorkerRegistration;
-    readonly clients: Clients;
 }
 
 self.addEventListener("push", (event: PushEvent): void => {

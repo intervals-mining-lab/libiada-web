@@ -95,13 +95,12 @@ export function SelectLink(characteristic: SelectedCharacteristic): void {
 
 // Finds minimum and maximum values in the array of numbers
 export function getArrayMinMax(array: number[]): { min: number, max: number } {
-    let min: number = array[0];
-    let max: number = array[0];
-    let length: number = array.length;
+    let min: number = array[0] || 0;
+    let max: number = array[0] || 0;
 
-    for (let i: number = 1; i < length; i++) {
-        if (array[i] < min) min = array[i];
-        else if (array[i] > max) max = array[i];
+    for (let element of array) {
+        if (element < min) min = element;
+        else if (element > max) max = element;
     }
 
     return { min, max };
@@ -109,11 +108,10 @@ export function getArrayMinMax(array: number[]): { min: number, max: number } {
 
 // Finds minimum value in the array of numbers
 export function arrayMin(array: number[]): number {
-    let min: number = array[0];
-    let length: number = array.length;
+    let min: number = array[0] || 0;
 
-    for (let i: number = 1; i < length; i++) {
-        min = array[i] < min ? array[i] : min;
+    for (let element of array) {
+        if (element < min) min = element;
     }
 
     return min;
@@ -122,11 +120,10 @@ export function arrayMin(array: number[]): number {
 
 // Finds maximum value in the array of numbers
 export function arrayMax(array: number[]): number {
-    let max: number = array[0];
-    let length: number = array.length;
+    let max: number = array[0] || 0;
 
-    for (let i: number = 1; i < length; i++) {
-        max = array[i] > max ? array[i] : max;
+    for (let element of array) {
+        if (element > max) max = element;
     }
 
     return max;

@@ -2,7 +2,6 @@
 import type * as plotly from "plotly.js";
 import type {
     Characteristic,
-    Feature,
     ResultsLoadingScreenData,
     PointsSimilarity,
     CharacteristicComparer,
@@ -11,7 +10,8 @@ import type {
     SubsequenceData,
     LegendItem,
     SequenceData,
-    AttributeValue
+    AttributeValue,
+    FeaturesDictionary
 } from "viewDataTypes";
 
 interface ClustalResponse {
@@ -42,7 +42,7 @@ interface Point {
 interface SubsequencesDistributionResultData {
     attributeValues: AttributeValue[];
     attributes: { [key: number]: string };
-    features: { [key: number]: Feature };
+    features: FeaturesDictionary;
     result: SequenceData[];
     subsequencesCharacteristicsList: Characteristic[];
     sequenceCharacteristicName: string;

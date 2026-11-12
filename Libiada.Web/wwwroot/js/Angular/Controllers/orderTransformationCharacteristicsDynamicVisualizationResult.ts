@@ -1,5 +1,5 @@
 ﻿//import d3 from "d3";
-import { initScopeFromServer } from "functions";
+import { getArrayMinMax, initScopeFromServer } from "functions";
 import type { ResultsLoadingScreenData } from "viewDataTypes";
 
 interface CharacteristicData {
@@ -208,8 +208,7 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
 
                 // Setup x-axis
                 // Calculate margins for points
-                let xMin: number = d3.min($scope.points, $scope.xValue) || 0;
-                let xMax: number = d3.max($scope.points, $scope.xValue) || 0;
+                const { min: xMin, max: xMax } = getArrayMinMax($scope.points.map(p => p.x));
                 let xMargin: number = (xMax - xMin) * 0.05;
 
                 let xScale: d3.ScaleLinear<number, number> = d3.scaleLinear()
@@ -224,8 +223,7 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
 
                 // Setup y-axis
                 // Calculate margins for points
-                let yMax: number = d3.max($scope.points, $scope.yValue) || 0;
-                let yMin: number = d3.min($scope.points, $scope.yValue) || 0;
+                const { min: yMin, max: yMax } = getArrayMinMax($scope.points.map(p => p.y));
                 let yMargin: number = (yMax - yMin) * 0.05;
 
                 let yScale: d3.ScaleLinear<number, number> = d3.scaleLinear()

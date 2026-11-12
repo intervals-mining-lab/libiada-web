@@ -1,5 +1,5 @@
 //import d3 from "d3";
-import { initScopeFromServer } from "functions";
+import { getArrayMinMax, initScopeFromServer } from "functions";
 /**
  * Controller for order transformation characteristics dynamic visualization
  */
@@ -122,8 +122,7 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
                 let height = $scope.height - margin.top - margin.bottom;
                 // Setup x-axis
                 // Calculate margins for points
-                let xMin = d3.min($scope.points, $scope.xValue) || 0;
-                let xMax = d3.max($scope.points, $scope.xValue) || 0;
+                const { min: xMin, max: xMax } = getArrayMinMax($scope.points.map(p => p.x));
                 let xMargin = (xMax - xMin) * 0.05;
                 let xScale = d3.scaleLinear()
                     .domain([xMin - xMargin, xMax + xMargin])
@@ -135,8 +134,7 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
                 const xMap = (d) => xScale($scope.xValue(d));
                 // Setup y-axis
                 // Calculate margins for points
-                let yMax = d3.max($scope.points, $scope.yValue) || 0;
-                let yMin = d3.min($scope.points, $scope.yValue) || 0;
+                const { min: yMin, max: yMax } = getArrayMinMax($scope.points.map(p => p.y));
                 let yMargin = (yMax - yMin) * 0.05;
                 let yScale = d3.scaleLinear()
                     .domain([yMin - yMargin, yMax + yMargin])

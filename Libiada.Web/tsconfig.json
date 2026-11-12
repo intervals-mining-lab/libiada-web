@@ -23,7 +23,7 @@
     "allowJs": true,
     "checkJs": true,
     //"declaration": true,
-    "types": [ "angular", "plotly.js", "d3", "bootstrap", "jquery" ],
+    "types": [ "angular", "plotly.js", "d3", "bootstrap", "jquery", "serviceWorker" ],
     "typeRoots": [
       "wwwroot/lib/microsoft",
       "wwwroot/lib/@types"
@@ -39,13 +39,8 @@
 
   },
   "include": [
-    "wwwroot/js/**/*.ts"
+    "wwwroot/js/**/*.ts",
+    "wwwroot/sw-push-notification.ts"
   ],
-  "exclude": [
-    //"wwwroot/lib/twitter-bootstrap"
-    //"node_modules",
-    //"wwwroot/lib",
-    //"wwwroot/lib/!([@types]/**)"
-
-  ]
+  "exclude": []
 }

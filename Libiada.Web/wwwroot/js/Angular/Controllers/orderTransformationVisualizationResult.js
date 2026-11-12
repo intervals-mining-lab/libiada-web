@@ -1,5 +1,5 @@
 //import d3 from "d3";
-import { initScopeFromServer } from "functions";
+import { getArrayMinMax, initScopeFromServer } from "functions";
 /**
 * Controller for visualizing order transformation results
 */
@@ -290,10 +290,9 @@ class OrderTransformationVisualizationResultHandler {
                 let margin = { top: 30 + $scope.legendHeight, right: 30, bottom: 30, left: 60 };
                 let width = $scope.width - margin.left - margin.right;
                 let height = $scope.height - margin.top - margin.bottom;
-                // Set up the X axis 
-                // Calculate indents for points 
-                let xMin = d3.min($scope.points, $scope.xValue) || 0;
-                let xMax = d3.max($scope.points, $scope.xValue) || 0;
+                // Set up the X axis
+                // Calculate indents for points
+                const { min: xMin, max: xMax } = getArrayMinMax($scope.points.map(p => p.x));
                 let xMargin = (xMax - xMin) * 0.05;
                 let xScale = d3.scaleLinear()
                     .domain([xMin - xMargin, xMax + xMargin])
@@ -304,10 +303,9 @@ class OrderTransformationVisualizationResultHandler {
                     .tickSizeOuter(0)
                     .tickPadding(10);
                 $scope.xMap = (d) => xScale($scope.xValue(d));
-                // Setting up the Y axis 
-                // Calculate indents for points 
-                let yMax = d3.max($scope.points, $scope.yValue) || 0;
-                let yMin = d3.min($scope.points, $scope.yValue) || 0;
+                // Setting up the Y axis
+                // Calculate indents for points
+                const { min: yMin, max: yMax } = getArrayMinMax($scope.points.map(p => p.y));
                 let yMargin = (yMax - yMin) * 0.05;
                 let yAmplitude = yMax - yMin;
                 let yScale = d3.scaleLinear()

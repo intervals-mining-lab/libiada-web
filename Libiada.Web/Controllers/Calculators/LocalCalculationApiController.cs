@@ -118,7 +118,7 @@ public class LocalCalculationApiController : ControllerBase
 
         // Using array of arrays instead of 2d array 
         // because json serializer does not support
-        // multidimentional arrays serialization
+        // multidimensional arrays serialization
         // TODO: try to fix this
         double[][] result = new double[series.Length][];
         for (int i = 0; i < series.Length; i++)

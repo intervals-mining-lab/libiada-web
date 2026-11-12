@@ -1,6 +1,4 @@
-﻿interface Filter {
-    value: string;
-}
+﻿import type { Filter } from "viewDataTypes";
 
 interface FiltersComponentController extends ng.IController {
     filters: Filter[];
@@ -21,7 +19,7 @@ function FiltersController(this: FiltersComponentController): void {
     ctrl.$onInit = (): void => {
         ctrl.filters ??= [];
         ctrl.newFilter ??= "";
-        
+
         ctrl.addFilter ??= (): void => { };
         ctrl.deleteFilter ??= (): void => { };
     };

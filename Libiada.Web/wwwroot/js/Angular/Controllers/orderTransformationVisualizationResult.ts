@@ -1,5 +1,5 @@
 ﻿//import d3 from "d3";
-import { initScopeFromServer } from "functions";
+import { getArrayMinMax, initScopeFromServer } from "functions";
 import type { ResultsLoadingScreenData, OrderTransformation } from "viewDataTypes";
 
 interface Point {
@@ -212,7 +212,7 @@ class OrderTransformationVisualizationResultHandler {
                 let counterIdLines: number = 0;
 
                 for (let i = 0; i < $scope.points.length; i++) {
-                    let resultTransformation: ResultTransformation[] = 
+                    let resultTransformation: ResultTransformation[] =
                         $scope.transformationsData[$scope.points[i].value].ResultTransformation;
 
                     for (let j = 0; j < resultTransformation.length; j++) {
@@ -374,7 +374,7 @@ class OrderTransformationVisualizationResultHandler {
                     .enter()
                     .append("g")
                     .attr("class", "dotlegend")
-                    .attr("transform", (_vt: TransformationVisibility, i:number) => `translate(0,${i * 20})`)
+                    .attr("transform", (_vt: TransformationVisibility, i: number) => `translate(0,${i * 20})`)
                     .append("rect")
                     .attr("width", 15)
                     .attr("height", 15)
@@ -447,17 +447,16 @@ class OrderTransformationVisualizationResultHandler {
                 let width: number = $scope.width - margin.left - margin.right;
                 let height: number = $scope.height - margin.top - margin.bottom;
 
-                // Set up the X axis 
-                // Calculate indents for points 
-                let xMin: number = d3.min($scope.points, $scope.xValue) || 0;
-                let xMax: number = d3.max($scope.points, $scope.xValue) || 0;
+                // Set up the X axis
+                // Calculate indents for points
+                const { min: xMin, max: xMax } = getArrayMinMax($scope.points.map(p => p.x));
                 let xMargin: number = (xMax - xMin) * 0.05;
 
                 let xScale: d3.ScaleLinear<number, number> = d3.scaleLinear()
                     .domain([xMin - xMargin, xMax + xMargin])
                     .range([0, width]);
 
-                let xAxis: d3.Axis<d3.NumberValue>  = d3.axisBottom(xScale)
+                let xAxis: d3.Axis<d3.NumberValue> = d3.axisBottom(xScale)
                     .ticks($scope.counterIteration)
                     .tickSizeInner(-height)
                     .tickSizeOuter(0)
@@ -465,10 +464,9 @@ class OrderTransformationVisualizationResultHandler {
 
                 $scope.xMap = (d: Point) => xScale($scope.xValue(d));
 
-                // Setting up the Y axis 
-                // Calculate indents for points 
-                let yMax: number = d3.max($scope.points, $scope.yValue) || 0;
-                let yMin: number = d3.min($scope.points, $scope.yValue) || 0;
+                // Setting up the Y axis
+                // Calculate indents for points
+                const { min: yMin, max: yMax } = getArrayMinMax($scope.points.map(p => p.y));
                 let yMargin: number = (yMax - yMin) * 0.05;
 
                 let yAmplitude: number = yMax - yMin;

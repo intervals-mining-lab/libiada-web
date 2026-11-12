@@ -3,7 +3,6 @@ import type * as plotly from "plotly.js";
 import { getArrayMinMax, initScopeFromServer, throwHelper } from "functions";
 import {
     Characteristic,
-    Feature,
     ParallelCoordinatesPlotData,
     ResultsLoadingScreenData,
     PointsSimilarity,
@@ -14,7 +13,8 @@ import {
     SubsequenceTooltip,
     SubsequenceData,
     SequenceData,
-    AttributeValue
+    AttributeValue,
+    FeaturesDictionary
 } from "viewDataTypes";
 
 interface Point {
@@ -50,7 +50,7 @@ interface SubsequencesCalculationResultData {
     attributes: { [key: number]: string };
     characteristicNames: string[];
     characteristicsList: Characteristic[];
-    features: { [key: number]: Feature };
+    features: FeaturesDictionary;
     sequencesData: SequenceData[];
 }
 

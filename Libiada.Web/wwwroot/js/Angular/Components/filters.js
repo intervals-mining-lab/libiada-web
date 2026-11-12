@@ -1,4 +1,3 @@
-"use strict";
 function FiltersController() {
     const ctrl = this;
     ctrl.$onInit = () => {
@@ -30,4 +29,5 @@ angular.module("libiada").component("filters", {
         deleteFilter: "&?"
     }
 });
+export {};
 //# sourceMappingURL=filters.js.map

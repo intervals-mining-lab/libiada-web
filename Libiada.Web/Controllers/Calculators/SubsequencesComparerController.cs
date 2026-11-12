@@ -160,16 +160,9 @@ public class SubsequencesComparerController : AbstractResultController
 
             string sequenceCharacteristicName = fullCharacteristicRepository.GetCharacteristicName(characteristicLinkId);
             string[] characteristicNames = new string[characteristicLinkIds.Length];
-            var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
             for (int k = 0; k < characteristicLinkIds.Length; k++)
             {
                 characteristicNames[k] = fullCharacteristicRepository.GetCharacteristicName(characteristicLinkIds[k]);
-                characteristicsList[k] = new SelectListItem
-                {
-                    Value = k.ToString(),
-                    Text = characteristicNames[k],
-                    Selected = false
-                };
             }
             var characteristicValueSubsequences = new Dictionary<double, List<(int researchObjectIndex, int subsequenceIndex, double[] additionalCharacteristics)>>();
 
@@ -187,7 +180,7 @@ public class SubsequencesComparerController : AbstractResultController
 
                 for (int j = 0; j < subsequencesData.Length; j++)
                 {
-                    double value = subsequencesData[j].CharacteristicsValues[0]; // Получаем значения характеристик?
+                    double value = subsequencesData[j].CharacteristicsValues[0];
                     if (characteristicValueSubsequences.TryGetValue(value, out List<(int researchObjectIndex, int subsequenceIndex, double[] additionalCharacteristics)> researchObjectAndSubsequenceIdsList))
                     {
                         researchObjectAndSubsequenceIdsList.Add((i, j, subsequencesData[j].CharacteristicsValues.Skip(1).ToArray()));
@@ -197,7 +190,7 @@ public class SubsequencesComparerController : AbstractResultController
                         researchObjectAndSubsequenceIdsList =
                         [
                             (researchObjectIndex: i, subsequenceIndex: j, additionalCharacterisctics: subsequencesData[j].CharacteristicsValues.Skip(1).ToArray())
-                        ]; // добавить в кортеж все характеристики кроме 0
+                        ];
                         characteristicValueSubsequences.Add(value, researchObjectAndSubsequenceIdsList);
                     }
                 }
@@ -225,7 +218,7 @@ public class SubsequencesComparerController : AbstractResultController
 
             List<AttributeValue> allAttributeValues = attributeValuesCache.AllAttributeValues;
 
-            var result = new Dictionary<string, object>
+            var result = new Dictionary<string, object?>
             {
                 { "researchObjectsNames", researchObjectNames },
                 { "characteristicNames", characteristicNames },

@@ -1,5 +1,5 @@
 //import d3 from "d3";
-import { initScopeFromServer } from "functions";
+import { getArrayMinMax, initScopeFromServer } from "functions";
 import type { ResultsLoadingScreenData } from "viewDataTypes";
 
 interface AccordanceLevel {
@@ -215,8 +215,7 @@ class SequencesOrderDistributionResultHandler {
 
                 // setup x
                 // calculating margins for dots
-                const xMin: number = d3.min($scope.points, $scope.xValue) || 0;
-                const xMax: number = d3.max($scope.points, $scope.xValue) || 0;
+                const { min: xMin, max: xMax } = getArrayMinMax($scope.points.map(p => p.x));
                 const xMargin: number = (xMax - xMin) * 0.05;
 
                 const xScale: d3.ScaleLinear<number, number> = d3.scaleLinear()
@@ -238,8 +237,7 @@ class SequencesOrderDistributionResultHandler {
 
                 // setup y
                 // calculating margins for dots
-                const yMax: number = d3.max($scope.points, $scope.yValue) || 0;
-                const yMin: number = d3.min($scope.points, $scope.yValue) || 0;
+                const { min: yMin, max: yMax } = getArrayMinMax($scope.points.map(p => p.y));
                 const yMargin: number = (yMax - yMin) * 0.05;
 
                 const yScale: d3.ScaleLinear<number, number> = yMax - yMin < 100 ?

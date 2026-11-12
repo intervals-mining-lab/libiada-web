@@ -196,6 +196,12 @@ export interface AttributeValue {
     value: string;
 }
 
+ export interface Filter {
+    value: string;
+}
+
+export interface FeaturesDictionary { [key: number]: Feature }
+
 export interface Rank { x: number[], y: number[] }
 
 export type ColorClass = "default" | "success" | "danger";

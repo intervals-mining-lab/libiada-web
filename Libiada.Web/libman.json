@@ -80,6 +80,11 @@
     },
     {
       "provider": "jsdelivr",
+      "library": "@types/d3-shape@3.1.0",
+      "destination": "wwwroot/lib/@types/d3-shape/"
+    },
+    {
+      "provider": "jsdelivr",
       "library": "@types/d3-axis@3.0.5",
       "destination": "wwwroot/lib/@types/d3-axis/"
     },
@@ -132,6 +137,11 @@
       "provider": "jsdelivr",
       "library": "@types/bootstrap@5.2.3",
       "destination": "wwwroot/lib/@types/bootstrap/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "@types/serviceworker@0.0.204",
+      "destination": "wwwroot/lib/@types/serviceWorker/"
     }
   ]
 }

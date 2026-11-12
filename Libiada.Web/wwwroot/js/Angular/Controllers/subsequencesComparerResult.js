@@ -1,4 +1,4 @@
-import { initScopeFromServer, throwHelper } from "functions";
+import { getArrayMinMax, initScopeFromServer } from "functions";
 export default function SubsequencesComparerResultController() {
     async function subsequencesComparerResult($scope, $http) {
         // adds and applies new filter
@@ -14,7 +14,7 @@ export default function SubsequencesComparerResultController() {
         }
         // checks if element is visible
         function elementVisible(element) {
-            return (element.filtersVisible?.length ?? 0) === 0 || element.filtersVisible?.some(e => e) === true;
+            return element.filtersVisible.length === 0 || element.filtersVisible.some(e => e);
         }
         // deletes given filter
         function deleteFilter(_filter, filterIndex) {
@@ -23,7 +23,7 @@ export default function SubsequencesComparerResultController() {
                     const elements = $scope.equalElements[i][j];
                     if (elements) {
                         for (let k = 0; k < elements.length; k++) {
-                            elements[k].filtersVisible?.splice(filterIndex, 1);
+                            elements[k].filtersVisible.splice(filterIndex, 1);
                         }
                     }
                 }
@@ -32,36 +32,28 @@ export default function SubsequencesComparerResultController() {
         // applies filters
         function applyFilters(elements) {
             for (let i = 0; i < elements.length; i++) {
-                const element = elements[i] ?? throwHelper("Equal subsequence pair is not available");
-                const filtersVisible = [];
-                element.filtersVisible = filtersVisible;
+                elements[i].filtersVisible = [];
                 for (let j = 0; j < $scope.filters.length; j++) {
                     let filterValue = $scope.filters[j].value.toUpperCase();
-                    let firstSubsequenceIndex = element.Item1;
+                    let firstSubsequenceIndex = elements[i].Item1;
                     let firstVisible = $scope.isAttributeEqual($scope.firstResearchObjectIndex, firstSubsequenceIndex, "product", filterValue);
                     firstVisible = firstVisible || $scope.isAttributeEqual($scope.firstResearchObjectIndex, firstSubsequenceIndex, "locus_tag", filterValue);
-                    let secondSubsequenceIndex = element.Item2;
+                    let secondSubsequenceIndex = elements[i].Item2;
                     let secondVisible = $scope.isAttributeEqual($scope.secondResearchObjectIndex, secondSubsequenceIndex, "product", filterValue);
                     secondVisible = secondVisible || $scope.isAttributeEqual($scope.secondResearchObjectIndex, secondSubsequenceIndex, "locus_tag", filterValue);
-                    filtersVisible.push(firstVisible || secondVisible);
+                    elements[i].filtersVisible.push(firstVisible || secondVisible);
                 }
             }
         }
         // returns attribute index by its name if any
         function getAttributeIdByName(researchObjectIndex, subsequenceIndex, attributeName) {
-            const subsequence = $scope.characteristics?.[researchObjectIndex]?.[subsequenceIndex]
-                ?? throwHelper("Subsequence characteristics have not been loaded");
-            const attributeValues = $scope.attributeValues
-                ?? throwHelper("Subsequence attribute values have not been loaded");
-            return subsequence.Attributes.find(a => $scope.attributes[attributeValues[a].attribute] === attributeName);
+            return $scope.characteristics[researchObjectIndex][subsequenceIndex].Attributes.find(a => $scope.attributes[$scope.attributeValues[a].attribute] === attributeName);
         }
         // returns true if dot has given attribute and its value equal to the given value
         function isAttributeEqual(researchObjectIndex, subsequenceIndex, attributeName, expectedValue) {
             let attributeId = $scope.getAttributeIdByName(researchObjectIndex, subsequenceIndex, attributeName);
-            if (attributeId !== undefined) {
-                const attributeValues = $scope.attributeValues
-                    ?? throwHelper("Subsequence attribute values have not been loaded");
-                let product = attributeValues[attributeId].value.toUpperCase();
+            if (attributeId) {
+                let product = $scope.attributeValues[attributeId].value.toUpperCase();
                 return product.indexOf(expectedValue) !== -1;
             }
             return false;
@@ -74,12 +66,11 @@ export default function SubsequencesComparerResultController() {
             $scope.secondResearchObjectIndex = secondIndex;
             $scope.similarityValue = similarityValue;
             $scope.similarityValueSelected = true;
-            const selectedRow = $scope.equalElements[firstIndex]
-                ?? throwHelper("Selected research object pair is not available");
-            const cachedElements = selectedRow[secondIndex];
-            if (cachedElements) {
-                $scope.equalElementsToShow = cachedElements;
+            if ($scope.equalElements[firstIndex][secondIndex]) {
+                // no need to load elements, they are already in cache
+                $scope.equalElementsToShow = $scope.equalElements[firstIndex][secondIndex];
                 $scope.loading = false;
+                return;
             }
             else {
                 $http.get("/api/TaskManagerApi/GetSubsequencesComparerDataElement", {
@@ -94,7 +85,7 @@ export default function SubsequencesComparerResultController() {
                     if (!Array.isArray(response.data)) {
                         throw new Error(response.data.Message);
                     }
-                    selectedRow[secondIndex] = response.data;
+                    $scope.equalElements[firstIndex][secondIndex] = response.data;
                 })
                     .then(() => $http.get("/api/TaskManagerApi/GetTaskDataByKey", {
                     params: {
@@ -121,10 +112,9 @@ export default function SubsequencesComparerResultController() {
                     $scope.attributeValues = response.data;
                 })
                     .then(() => {
-                    const elements = selectedRow[secondIndex]
-                        ?? throwHelper("Equal subsequences were not returned");
-                    $scope.applyFilters(elements);
-                    $scope.equalElementsToShow = elements;
+                    const equalElements = $scope.equalElements[firstIndex][secondIndex];
+                    $scope.applyFilters(equalElements);
+                    $scope.equalElementsToShow = equalElements;
                     $scope.loading = false;
                 })
                     .catch(error => {
@@ -143,16 +133,12 @@ export default function SubsequencesComparerResultController() {
         }
         // calculates and displays local characteristics for given subsequences
         function calculateLocalCharacteristics(firstSubsequenceId, secondSubsequenceId, index) {
-            $scope.loading = true;
             $scope.loadingScreenHeader = "Loading local characteristics...";
-            let characteristicType = $scope.characteristic.characteristicType?.Value
-                ?? throwHelper("Characteristic type has not been selected");
-            let link = $scope.characteristic.link?.Value
-                ?? throwHelper("Characteristic link has not been selected");
-            let arrangementType = $scope.characteristic.arrangementType?.Value
-                ?? throwHelper("Characteristic arrangement type has not been selected");
-            let characteristicId = $scope.characteristicsDictionary[`(${characteristicType}, ${link}, ${arrangementType})`]
-                ?? throwHelper("Selected characteristic was not found");
+            $scope.loading = true;
+            let characteristicType = $scope.characteristic.characteristicType.Value;
+            let link = $scope.characteristic.link.Value;
+            let arrangementType = $scope.characteristic.arrangementType.Value;
+            let characteristicId = $scope.characteristicsDictionary[`(${characteristicType}, ${link}, ${arrangementType})`];
             $http.get("/api/LocalCalculationApi/GetSubsequenceCharacteristic", {
                 params: {
                     subsequenceId: firstSubsequenceId,
@@ -184,28 +170,22 @@ export default function SubsequencesComparerResultController() {
         }
         // draws local characteristics line-chart
         function drawLocalCharacteristics(firstSubsequenceId, secondSubsequenceId, index) {
-            const firstCharacteristics = $scope.firstSubsequenceLocalCharacteristics
-                ?? throwHelper("First subsequence characteristics have not been loaded");
-            const secondCharacteristics = $scope.secondSubsequenceLocalCharacteristics
-                ?? throwHelper("Second subsequence characteristics have not been loaded");
-            const characteristicType = $scope.characteristic.characteristicType
-                ?? throwHelper("Characteristic type has not been selected");
             let legendData = [
                 { id: firstSubsequenceId, name: "First", visible: true, points: [] },
                 { id: secondSubsequenceId, name: "Second", visible: true, points: [] }
             ];
-            for (let j = 0; j < firstCharacteristics.length; j++) {
+            for (let j = 0; j < $scope.firstSubsequenceLocalCharacteristics.length; j++) {
                 legendData[0].points.push({
                     id: firstSubsequenceId,
                     x: j,
-                    value: +firstCharacteristics[j]
+                    value: $scope.firstSubsequenceLocalCharacteristics[j]
                 });
             }
-            for (let k = 0; k < secondCharacteristics.length; k++) {
+            for (let k = 0; k < $scope.secondSubsequenceLocalCharacteristics.length; k++) {
                 legendData[1].points.push({
                     id: secondSubsequenceId,
                     x: k,
-                    value: +secondCharacteristics[k]
+                    value: $scope.secondSubsequenceLocalCharacteristics[k]
                 });
             }
             // removing previous chart if any
@@ -214,21 +194,10 @@ export default function SubsequencesComparerResultController() {
             let margin = { top: 30 + $scope.legendHeight, right: 30, bottom: 30, left: 60 };
             let width = $scope.width - margin.left - margin.right;
             let height = $scope.height - margin.top - margin.bottom;
-            // calculating margins for dots
-            let xMinArray = [];
-            let xMaxArray = [];
-            let yMaxArray = [];
-            let yMinArray = [];
-            legendData.forEach(data => {
-                xMinArray.push(d3.min(data.points, (d) => d.x) ?? throwHelper("No local characteristic points to plot"));
-                xMaxArray.push(d3.max(data.points, (d) => d.x) ?? throwHelper("No local characteristic points to plot"));
-                yMinArray.push(d3.min(data.points, (d) => d.value) ?? throwHelper("No local characteristic points to plot"));
-                yMaxArray.push(d3.max(data.points, (d) => d.value) ?? throwHelper("No local characteristic points to plot"));
-            });
             // setup x
             // calculating margins for dots
-            let xMin = d3.min(xMinArray) ?? throwHelper("No local characteristic points to plot");
-            let xMax = d3.max(xMaxArray) ?? throwHelper("No local characteristic points to plot");
+            const xValues = legendData.map(data => data.points.map((p) => p.x)).flat();
+            let { min: xMin, max: xMax } = getArrayMinMax(xValues);
             let xMargin = (xMax - xMin) * 0.05;
             let xScale = d3.scaleLinear()
                 .domain([xMin - xMargin, xMax + xMargin])
@@ -239,8 +208,8 @@ export default function SubsequencesComparerResultController() {
                 .tickPadding(10);
             let xMap = (d) => xScale(d.x);
             // setup y
-            let yMin = d3.min(yMinArray) ?? throwHelper("No local characteristic points to plot");
-            let yMax = d3.max(yMaxArray) ?? throwHelper("No local characteristic points to plot");
+            const yValues = legendData.map(data => data.points.map((p) => p.value)).flat();
+            let { min: yMin, max: yMax } = getArrayMinMax(yValues);
             let yMargin = (yMax - yMin) * 0.05;
             let yScale = d3.scaleLinear()
                 .domain([yMin - yMargin, yMax + yMargin])
@@ -281,11 +250,9 @@ export default function SubsequencesComparerResultController() {
                 .attr("x", 0 - (height / 2))
                 .attr("dy", ".71em")
                 .style("text-anchor", "middle")
-                .text(characteristicType.Text)
+                .text($scope.characteristic.characteristicType.Text)
                 .style("font-size", "12pt");
-            let line = d3.line()
-                .x(xMap)
-                .y(yMap);
+            let line = d3.line(xMap, yMap);
             legendData.forEach(data => {
                 // Nest the entries by symbol
                 let dataGroups = d3.group(data.points, (d) => d.id);
@@ -295,7 +262,7 @@ export default function SubsequencesComparerResultController() {
                         .datum(value)
                         .attr("class", "line")
                         .attr("d", line)
-                        .attr("stroke", (d) => color((d[0] ?? throwHelper("Local characteristic line has no points")).id))
+                        .attr("stroke", (d) => color(d[0].id))
                         .attr("stroke-width", 1)
                         .attr("fill", "none")
                         .attr("opacity", 0.6);
@@ -316,7 +283,7 @@ export default function SubsequencesComparerResultController() {
                 legendEntry.select("rect")
                     .style("fill-opacity", () => d.visible ? 1 : 0);
                 svg.selectAll(".line")
-                    .filter((line) => (line[0] ?? throwHelper("Local characteristic line has no points")).id === d.id)
+                    .filter((line) => line[0].id === d.id)
                     .attr("visibility", () => d.visible ? "visible" : "hidden");
             });
             // draw legend's colored rectangles
@@ -357,12 +324,14 @@ export default function SubsequencesComparerResultController() {
         $scope.height = 800;
         $scope.dotRadius = 4;
         $scope.selectedDotRadius = $scope.dotRadius * 2;
-        $scope.similarityValue = null;
         $scope.similarityValueSelected = false;
-        $scope.loadingScreenHeader = "Loading data";
-        $scope.characteristic = {};
         $scope.flags = { displayFiltered: false };
         await initScopeFromServer($http, $scope, "Loading subsequences comparison data", "Failed loading subsequences comparison data");
+        $scope.characteristic = {
+            characteristicType: $scope.characteristicTypes[0],
+            link: $scope.characteristicTypes[0].Links[0],
+            arrangementType: $scope.characteristicTypes[0].ArrangementTypes[0],
+        };
         $scope.equalElements = new Array($scope.researchObjectsNames.length);
         for (let i = 0; i < $scope.researchObjectsNames.length; i++) {
             $scope.equalElements[i] = new Array($scope.researchObjectsNames.length);

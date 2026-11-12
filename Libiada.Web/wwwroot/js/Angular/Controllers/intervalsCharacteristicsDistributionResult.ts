@@ -1,5 +1,5 @@
 ﻿/*import d3 from "d3";*/
-import { initScopeFromServer } from "functions";
+import { getArrayMinMax, initScopeFromServer } from "functions";
 import type { ResultsLoadingScreenData, Characteristic, Link } from "viewDataTypes";
 
 interface Point {
@@ -246,8 +246,7 @@ class IntervalsCharacteristicsDistributionResultHandler {
 
                 // Setup x-axis
                 // Calculate margins for points
-                const xMin = d3.min($scope.points, $scope.xValue) || 0;
-                const xMax = d3.max($scope.points, $scope.xValue) || 0;
+                const { min: xMin, max: xMax } = getArrayMinMax($scope.points.map(p => p.x));
                 const xMargin = (xMax - xMin) * 0.05;
 
                 const xScale = d3.scaleLinear()
@@ -269,8 +268,7 @@ class IntervalsCharacteristicsDistributionResultHandler {
 
                 // Setup y-axis
                 // Calculate margins for points
-                const yMax = d3.max($scope.points, $scope.yValue) || 0;
-                const yMin = d3.min($scope.points, $scope.yValue) || 0;
+                const { min: yMin, max: yMax } = getArrayMinMax($scope.points.map(p => p.y));
                 const yMargin = (yMax - yMin) * 0.05;
 
                 const yScale = yMax - yMin < 100 ?

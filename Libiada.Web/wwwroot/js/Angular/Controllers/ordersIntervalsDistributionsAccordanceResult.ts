@@ -1,5 +1,5 @@
 ﻿/*import d3 from "d3";*/
-import { initScopeFromServer } from "functions";
+import { getArrayMinMax, initScopeFromServer } from "functions";
 import type { Link, ResultsLoadingScreenData } from "viewDataTypes";
 
 interface DistributionInterval {
@@ -221,8 +221,7 @@ class OrdersIntervalsDistributionsAccordanceResultHandler {
 
                 // setup x
                 // calculating margins for dots
-                let xMin = d3.min($scope.points, $scope.xValue) || 0;
-                let xMax = d3.max($scope.points, $scope.xValue) || 0;
+                const { min: xMin, max: xMax } = getArrayMinMax($scope.points.map(p => p.x));
                 let xMargin = (xMax - xMin) * 0.05;
 
                 let xScale = d3.scaleLinear()
@@ -244,8 +243,7 @@ class OrdersIntervalsDistributionsAccordanceResultHandler {
 
                 // setup y
                 // calculating margins for dots
-                let yMax = d3.max($scope.points, $scope.yValue) || 0;
-                let yMin = d3.min($scope.points, $scope.yValue) || 0;
+                const { min: yMin, max: yMax } = getArrayMinMax($scope.points.map(p => p.y));
                 let yMargin = (yMax - yMin) * 0.05;
 
                 let yScale = yMax - yMin < 100 ?
