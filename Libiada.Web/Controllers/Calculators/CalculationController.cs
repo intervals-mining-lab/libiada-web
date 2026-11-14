@@ -73,14 +73,14 @@ public class CalculationController : AbstractResultController
     /// The index.
     /// </summary>
     /// <param name="tableType">
-    /// Selector between reasearch objects ids 
+    /// Selector between research objects ids
     /// and sequence groups ids.
     /// </param>
     /// <param name="researchObjectIds">
     /// The research objects ids.
     /// </param>
     /// <param name="sequenceGroupIds">
-    /// Sequence groups ids. 
+    /// Sequence groups ids.
     /// Alternative to separate research objects ids.
     /// </param>
     /// <param name="characteristicLinkIds">
@@ -144,7 +144,7 @@ public class CalculationController : AbstractResultController
                 int distinctResearchObjectsCount = researchObjectIds.Distinct().ToArray().Length;
                 if (researchObjectIds.Length != distinctResearchObjectsCount)
                 {
-                    throw new ArgumentException("Sequence groups contain intesecting sets of sequences", nameof(sequenceGroupIds));
+                    throw new ArgumentException("Sequence groups contain intersecting sets of sequences", nameof(sequenceGroupIds));
                 }
 
                 researchObjectsIdsSequenceGroupIds = sequenceGroups.SelectMany(sg => sg.ResearchObjects.Select(m => new { id = sg.Id, researchObjectId = m.Id }))

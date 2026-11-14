@@ -5,9 +5,12 @@ function CharacteristicsVisualizationsController($scope) {
         ctrl.fillLegend();
         ctrl.chartCharacteristics = [ctrl.characteristicsList[0]];
         ctrl.chartElement = document.getElementById("chart") ?? throwHelper("Chart div element not found");
-        // initializing tooltips for tabs
+        // initializing bootstrap tooltips for tabs
         InitializeBootstrapTooltips();
     };
+    /**
+     * Fills chart legend data
+     */
     ctrl.fillLegend = async () => {
         ctrl.legend = [];
         if (ctrl.sequenceGroups) {
@@ -39,20 +42,31 @@ function CharacteristicsVisualizationsController($scope) {
             }
         }
     };
+    /**
+     * Adds new characteristic to the list of selected for visualization
+     */
     ctrl.addCharacteristic = async () => {
         // searching for the characteristic that is not already in the chartCharacteristics array 
         const newSelectedCharacteristic = ctrl.characteristicsList.find((cl) => ctrl.chartCharacteristics.every((cc) => cc !== cl));
         ctrl.chartCharacteristics.push(newSelectedCharacteristic);
     };
+    /**
+     * Deletes selected characteristic from the list for visualization
+     * @param characteristic characteristic to remove from the list
+     */
     ctrl.deleteCharacteristic = async (characteristic) => {
         ctrl.chartCharacteristics.splice(ctrl.chartCharacteristics.indexOf(characteristic), 1);
     };
-    // initializes data for chart
+    /**
+     * Initialize data for chart visualization
+     */
     ctrl.fillPoints = async () => {
         ctrl.points = [];
         for (let i = 0; i < ctrl.characteristics.length; i++) {
             const characteristic = ctrl.characteristics[i];
-            const legendIndex = characteristic.SequenceGroupId ? ctrl.legend.findIndex(l => l.id === characteristic.SequenceGroupId) : i;
+            const legendIndex = characteristic.SequenceGroupId
+                ? ctrl.legend.findIndex(l => l.id === characteristic.SequenceGroupId)
+                : i;
             ctrl.points.push({
                 legendIndex: legendIndex,
                 name: characteristic.ResearchObjectName,
@@ -60,9 +74,13 @@ function CharacteristicsVisualizationsController($scope) {
             });
         }
     };
+    /**
+     * Fill data for bar plot visualization
+     */
     ctrl.fillBarPlotData = async () => {
         const characteristicIndex = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[0]);
-        let { min, max } = getArrayMinMax(ctrl.points.map(p => p.characteristics[characteristicIndex]));
+        const characteristicValues = ctrl.points.map(p => p.characteristics[characteristicIndex]);
+        let { min, max } = getArrayMinMax(characteristicValues);
         const range = max - min;
         const maxNameLength = arrayMax(ctrl.points.map(p => p.name.length));
         // adding margins
@@ -95,6 +113,9 @@ function CharacteristicsVisualizationsController($scope) {
             visible: ctrl.legend[p.legendIndex].visible ? true : "legendonly"
         }));
     };
+    /**
+     * Fill data for scatter plot visualization
+     */
     ctrl.fillScatterPlotData = async () => {
         const firstCharacteristicIndex = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[0]);
         const secondCharacteristicIndex = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[1]);
@@ -136,6 +157,9 @@ function CharacteristicsVisualizationsController($scope) {
             visible: ctrl.legend[p.legendIndex].visible
         }));
     };
+    /**
+     * Fill data for 3D scatter plot visualization
+     */
     ctrl.fill3dScatterPlotData = async () => {
         const firstCharacteristicIndex = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[0]);
         const secondCharacteristicIndex = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[1]);
@@ -195,6 +219,9 @@ function CharacteristicsVisualizationsController($scope) {
             }
         };
     };
+    /**
+     * Fill data for parallel coordinates plot visualization
+     */
     ctrl.fillParallelCoordinatesPlotData = async () => {
         const characteristicsIndices = ctrl.chartCharacteristics.map((c) => ctrl.characteristicsList.indexOf(c));
         ctrl.chartData = [{
@@ -220,6 +247,9 @@ function CharacteristicsVisualizationsController($scope) {
             showlegend: false
         };
     };
+    /**
+     * Draw the appropriate chart based on the number of selected characteristics
+     */
     ctrl.draw = async () => {
         ctrl.fillPoints();
         switch (ctrl.chartCharacteristics.length) {
@@ -241,6 +271,10 @@ function CharacteristicsVisualizationsController($scope) {
             ctrl.showTooltip(selectedPoint);
         });
     };
+    /**
+     * Shows tooltip for selected point
+     * @param selectedPoint Point to show tooltip for
+     */
     ctrl.showTooltip = async (selectedPoint) => {
         $("button[data-bs-target='#tooltip-tab-pane']").tab("show");
         ctrl.tooltipVisible = true;
@@ -266,6 +300,10 @@ function CharacteristicsVisualizationsController($scope) {
         // method called outside of angular's digest cycle, so we need to call $apply() manually
         $scope.$apply();
     };
+    /**
+     * Handles legend item click
+     * @param legendItem Legend item that was clicked
+     */
     ctrl.legendClick = async (legendItem) => {
         // if points have data on legend item they belong to
         if (ctrl.chartData?.[0]?.customdata && ctrl.chartData[0].customdata.length > 0) {
@@ -280,6 +318,10 @@ function CharacteristicsVisualizationsController($scope) {
             Plotly.restyle(ctrl.chartElement, update, index);
         }
     };
+    /**
+     * Sets visibility for all legend items
+     * @param visibility Whether items should be visible
+     */
     ctrl.legendSetVisibilityForAll = async (visibility) => {
         const update = { visible: visibility ? true : "legendonly" };
         ctrl.legend.forEach((l) => l.visible = visibility);

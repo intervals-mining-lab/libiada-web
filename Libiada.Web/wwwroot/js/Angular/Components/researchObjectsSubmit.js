@@ -3,7 +3,7 @@ function ResearchObjectsSubmitController() {
     const ctrl = this;
     ctrl.$onInit = () => {
         ctrl.submitName ??= "Calculate";
-        // because this parameter is passed as string, converting it into number, 
+        // because this parameter is passed as string, converting it into number,
         // and if it is not passed, then setting it to 0 by default
         ctrl.minimumSelectedResearchObjects = ctrl.minimumSelectedResearchObjects ? parseInt(String(ctrl.minimumSelectedResearchObjects)) : 0;
         ctrl.selectedResearchObjectsCount ??= 0;

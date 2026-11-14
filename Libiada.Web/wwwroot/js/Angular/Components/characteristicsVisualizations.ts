@@ -18,6 +18,10 @@ interface Point {
     legendIndex: number;
     characteristics: number[];
 }
+interface Tooltip {
+    name: string;
+    characteristics: number[];
+}
 
 interface CharacteristicsVisualizationsComponentController extends ng.IController {
     characteristicsList: Characteristic[];
@@ -29,7 +33,7 @@ interface CharacteristicsVisualizationsComponentController extends ng.IControlle
     points: Point[];
     chartElement: plotly.PlotlyHTMLElement;
     colorScale: d3.ScaleSequential<string>;
-    tooltip: { name: string, characteristics: number[] };
+    tooltip: Tooltip;
     tooltipVisible: boolean;
     layout: Partial<plotly.Layout>;
     chartData: Partial<ParallelCoordinatesPlotData>[];
@@ -59,10 +63,13 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
         ctrl.chartCharacteristics = [ctrl.characteristicsList[0]];
         ctrl.chartElement = document.getElementById("chart") as plotly.PlotlyHTMLElement ?? throwHelper("Chart div element not found");
 
-        // initializing tooltips for tabs
+        // initializing bootstrap tooltips for tabs
         InitializeBootstrapTooltips();
     };
 
+    /**
+     * Fills chart legend data
+     */
     ctrl.fillLegend = async () => {
         ctrl.legend = [];
         if (ctrl.sequenceGroups) {
@@ -96,6 +103,9 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
         }
     };
 
+    /**
+     * Adds new characteristic to the list of selected for visualization
+     */
     ctrl.addCharacteristic = async () => {
         // searching for the characteristic that is not already in the chartCharacteristics array 
         const newSelectedCharacteristic: Characteristic = ctrl.characteristicsList.find(
@@ -103,18 +113,25 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
         ctrl.chartCharacteristics.push(newSelectedCharacteristic);
     };
 
-
+    /**
+     * Deletes selected characteristic from the list for visualization
+     * @param characteristic characteristic to remove from the list
+     */
     ctrl.deleteCharacteristic = async (characteristic: Characteristic) => {
         ctrl.chartCharacteristics.splice(ctrl.chartCharacteristics.indexOf(characteristic), 1);
     };
 
-    // initializes data for chart
+    /**
+     * Initialize data for chart visualization
+     */
     ctrl.fillPoints = async () => {
         ctrl.points = [];
 
         for (let i = 0; i < ctrl.characteristics.length; i++) {
             const characteristic: SequenceCharacteristics = ctrl.characteristics[i];
-            const legendIndex: number = characteristic.SequenceGroupId ? ctrl.legend.findIndex(l => l.id === characteristic.SequenceGroupId) : i;
+            const legendIndex: number = characteristic.SequenceGroupId
+                ? ctrl.legend.findIndex(l => l.id === characteristic.SequenceGroupId)
+                : i;
             ctrl.points.push({
                 legendIndex: legendIndex,
                 name: characteristic.ResearchObjectName,
@@ -123,9 +140,13 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
         }
     };
 
+    /**
+     * Fill data for bar plot visualization
+     */
     ctrl.fillBarPlotData = async () => {
         const characteristicIndex: number = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[0]);
-        let { min, max }: { min: number; max: number } = getArrayMinMax(ctrl.points.map<number>(p => p.characteristics[characteristicIndex]));
+        const characteristicValues: number[] = ctrl.points.map<number>(p => p.characteristics[characteristicIndex]);
+        let { min, max }: { min: number; max: number } = getArrayMinMax(characteristicValues);
         const range: number = max - min;
         const maxNameLength: number = arrayMax(ctrl.points.map(p => p.name.length));
 
@@ -163,6 +184,9 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
         }));
     };
 
+    /**
+     * Fill data for scatter plot visualization
+     */
     ctrl.fillScatterPlotData = async () => {
         const firstCharacteristicIndex: number = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[0]);
         const secondCharacteristicIndex: number = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[1]);
@@ -207,6 +231,9 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
         }));
     };
 
+    /**
+     * Fill data for 3D scatter plot visualization
+     */
     ctrl.fill3dScatterPlotData = async () => {
         const firstCharacteristicIndex: number = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[0]);
         const secondCharacteristicIndex: number = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[1]);
@@ -269,6 +296,9 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
         };
     };
 
+    /**
+     * Fill data for parallel coordinates plot visualization
+     */
     ctrl.fillParallelCoordinatesPlotData = async () => {
         const characteristicsIndices: number[] = ctrl.chartCharacteristics.map<number>((c: Characteristic) => ctrl.characteristicsList.indexOf(c));
 
@@ -297,6 +327,9 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
         };
     };
 
+    /**
+     * Draw the appropriate chart based on the number of selected characteristics
+     */
     ctrl.draw = async () => {
         ctrl.fillPoints();
 
@@ -322,6 +355,10 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
         });
     };
 
+    /**
+     * Shows tooltip for selected point
+     * @param selectedPoint Point to show tooltip for
+     */
     ctrl.showTooltip = async (selectedPoint: Point) => {
         $("button[data-bs-target='#tooltip-tab-pane']").tab("show");
 
@@ -351,12 +388,16 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
         $scope.$apply();
     };
 
+    /**
+     * Handles legend item click
+     * @param legendItem Legend item that was clicked
+     */
     ctrl.legendClick = async (legendItem: LegendItem) => {
         // if points have data on legend item they belong to
         if (ctrl.chartData?.[0]?.customdata && ctrl.chartData[0].customdata.length > 0) {
             let index: number[] = [];
             const update: plotly.Data = { visible: legendItem.visible ? "legendonly" : true };
-             const legendIndex: number = ctrl.legend.findIndex((l: LegendItem) => l.id === legendItem.id);
+            const legendIndex: number = ctrl.legend.findIndex((l: LegendItem) => l.id === legendItem.id);
             for (let i = 0; i < ctrl.chartData.length; i++) {
                 if (ctrl.chartData[i].customdata![0] as number === legendIndex) {
                     index.push(i);
@@ -367,6 +408,10 @@ function CharacteristicsVisualizationsController(this: CharacteristicsVisualizat
         }
     };
 
+    /**
+     * Sets visibility for all legend items
+     * @param visibility Whether items should be visible
+     */
     ctrl.legendSetVisibilityForAll = async (visibility: boolean) => {
         const update: plotly.Data = { visible: visibility ? true : "legendonly" };
         ctrl.legend.forEach((l: LegendItem) => l.visible = visibility);

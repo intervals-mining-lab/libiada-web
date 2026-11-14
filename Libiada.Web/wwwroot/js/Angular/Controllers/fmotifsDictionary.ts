@@ -37,7 +37,7 @@ interface Pitch {
 
 interface NoteDuration {
     Denominator: number;
-    Numerator:number;
+    Numerator: number;
     OriginalDenominator: number;
     OriginalNumerator: number;
     OriginalValue: number;
@@ -63,7 +63,7 @@ interface Fmotif {
  * Interface for the data object passed from the server
  */
 interface FmotifsDictionaryData {
-    data:{
+    data: {
         fmotifs: Fmotif[];
         fmotifsfmotifsCounts: number[];
         sequentialTransfer: boolean;

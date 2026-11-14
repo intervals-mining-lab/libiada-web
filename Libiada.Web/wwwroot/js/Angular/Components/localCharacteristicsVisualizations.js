@@ -8,6 +8,9 @@ function LocalCharacteristicsVisualizationsController($scope) {
         // initializing bootstrap tooltips for tabs
         InitializeBootstrapTooltips();
     };
+    /**
+     * Fills chart legend data
+     */
     ctrl.fillLegend = async () => {
         ctrl.legend = [];
         ctrl.colorScale = d3.scaleSequential(d3.interpolateTurbo).domain([0, ctrl.characteristics.length]);
@@ -23,15 +26,24 @@ function LocalCharacteristicsVisualizationsController($scope) {
             document.styleSheets[0].insertRule(`.legend${k + 1}:after { background:${color} }`);
         }
     };
+    /**
+     * Adds new characteristic to the list of selected for visualization
+     */
     ctrl.addCharacteristic = async () => {
         // searching for the characteristic that is not already in the chartCharacteristics array 
         const newSelectedCharacteristic = ctrl.characteristicsList.find((cl) => ctrl.chartCharacteristics.every((cc) => cc !== cl));
         ctrl.chartCharacteristics.push(newSelectedCharacteristic);
     };
+    /**
+     * Deletes selected characteristic from the list for visualization
+     * @param characteristic characteristic to remove from the list
+     */
     ctrl.deleteCharacteristic = async (characteristic) => {
         ctrl.chartCharacteristics.splice(ctrl.chartCharacteristics.indexOf(characteristic), 1);
     };
-    // initializes data for chart
+    /**
+     * Initialize data for chart visualization
+     */
     ctrl.fillPoints = async () => {
         ctrl.points = [];
         for (let i = 0; i < ctrl.characteristics.length; i++) {
@@ -51,6 +63,9 @@ function LocalCharacteristicsVisualizationsController($scope) {
             }
         }
     };
+    /**
+     * Fill data for line chart visualization
+     */
     ctrl.fillLinePlotData = async () => {
         const characteristicIndex = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[0]);
         const characteristicValues = ctrl.points
@@ -120,6 +135,9 @@ function LocalCharacteristicsVisualizationsController($scope) {
             visible: ctrl.legend[p.legendIndex].visible ? true : "legendonly"
         }));
     };
+    /**
+     * Fill data for scatter plot visualization
+     */
     ctrl.fillScatterPlotData = async () => {
         const firstCharacteristicIndex = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[0]);
         const secondCharacteristicIndex = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[1]);
@@ -163,6 +181,9 @@ function LocalCharacteristicsVisualizationsController($scope) {
             visible: ctrl.legend[p.legendIndex].visible
         }));
     };
+    /**
+     * Fill data for 3D scatter plot visualization
+     */
     ctrl.fill3dScatterPlotData = async () => {
         const firstCharacteristicIndex = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[0]);
         const secondCharacteristicIndex = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[1]);
@@ -224,6 +245,9 @@ function LocalCharacteristicsVisualizationsController($scope) {
             }
         };
     };
+    /**
+     * Fill data for parallel coordinates plot visualization
+     */
     ctrl.fillParallelCoordinatesPlotData = async () => {
         const characteristicsIndices = ctrl.chartCharacteristics.map((c) => ctrl.characteristicsList.indexOf(c));
         ctrl.chartData = [{
@@ -249,6 +273,9 @@ function LocalCharacteristicsVisualizationsController($scope) {
             showlegend: false
         };
     };
+    /**
+     * Draw the appropriate chart based on the number of selected characteristics
+     */
     ctrl.draw = async () => {
         ctrl.fillPoints();
         switch (ctrl.chartCharacteristics.length) {
@@ -271,6 +298,10 @@ function LocalCharacteristicsVisualizationsController($scope) {
             ctrl.showTooltip(selectedPoint, selectedFragmentIndex);
         });
     };
+    /**
+     * Shows tooltip for selected point
+     * @param selectedPoint Point to show tooltip for
+     */
     ctrl.showTooltip = async (selectedTrace, selectedFragmentIndex) => {
         $("button[data-bs-target='#tooltip-tab-pane']").tab("show");
         const selectedPoint = selectedTrace.fragmentsData[selectedFragmentIndex];
@@ -297,6 +328,10 @@ function LocalCharacteristicsVisualizationsController($scope) {
         // method called outside of angular's digest cycle, so we need to call $apply() manually
         $scope.$apply();
     };
+    /**
+     * Handles legend item click
+     * @param legendItem Legend item that was clicked
+     */
     ctrl.legendClick = async (legendItem) => {
         // if points have data on legend item they belong to
         if (ctrl.chartData?.[0]?.customdata && ctrl.chartData[0].customdata.length > 0) {
@@ -317,6 +352,10 @@ function LocalCharacteristicsVisualizationsController($scope) {
             Plotly.restyle(ctrl.chartElement, update, index);
         }
     };
+    /**
+     * Sets visibility for all legend items
+     * @param visibility Whether items should be visible
+     */
     ctrl.legendSetVisibilityForAll = async (visibility) => {
         const update = { visible: visibility ? true : "legendonly" };
         ctrl.legend.forEach((l) => l.visible = visibility);

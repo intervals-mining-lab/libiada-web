@@ -5,7 +5,7 @@ interface SelectListItem {
     Text: string;
     Selected: boolean;
     Disabled: boolean;
-    Group: string | null; // TODO: check what type it could be
+    Group?: string | null; // TODO: check what type it could be
 }
 
 export interface SelectListItemWithNature extends SelectListItem {

@@ -1,36 +1,21 @@
 ﻿/*import * as d3 from "d3";*/
 import type * as plotly from "plotly.js";
+import type {
+    Characteristic,
+    LegendItem,
+    ParallelCoordinatesPlotData,
+    SequenceCharacteristics,
+    SequencesGroup
+} from "viewDataTypes";
 import { getArrayMinMax, arrayMax, throwHelper } from "functions";
-import type { LegendItem, ParallelCoordinatesPlotData, SequenceCharacteristics } from "viewDataTypes";
 
-type ChartsPlotData = Partial<plotly.PlotData> & {
-    dimensions?: ParallelCoordinatesPlotData["dimensions"];
-};
-
-/**
- * Interface for characteristic list item
- */
-interface IChartsCharacteristicListItem {
-    Value: number | string;
-    Text: string;
-}
-
-/**
- * Interface for point data
- */
 interface Point {
-    id: number;
-    legendIndex: number;
-    legendId: number;
     name: string;
+    legendIndex: number;
     characteristics: number[];
 }
 
-/**
- * Interface for tooltip data
- */
-interface IChartsTooltip {
-    id: number;
+interface Tooltip {
     name: string;
     characteristics: number[];
 }
@@ -38,60 +23,49 @@ interface IChartsTooltip {
 /**
  * Interface for the angular controller's scope
  */
-interface IChartsScope extends ng.IScope {
-    // Chart data and settings
-    characteristics: SequenceCharacteristics[];
-    characteristicsList: IChartsCharacteristicListItem[];
+interface ChartsScope extends ng.IScope {
+    characteristicsList: Characteristic[];
     characteristicNames: string[];
-    sequencesName: string;
-    chartCharacteristics: IChartsCharacteristicListItem[];
-    layout: Partial<plotly.Layout>;
-    chartData: ChartsPlotData[];
+    characteristics: SequenceCharacteristics[];
+    sequenceGroups?: SequencesGroup[];
+    chartCharacteristics: Characteristic[];
     legend: LegendItem[];
     points: Point[];
-    colorScale: d3.ScaleSequential<string>;
     chartElement: plotly.PlotlyHTMLElement;
-    sequenceGroups?: any[];
-
-    // UI state
+    colorScale: d3.ScaleSequential<string>;
+    tooltip: Tooltip;
+    tooltipVisible: boolean;
+    layout: Partial<plotly.Layout>;
+    chartData: Partial<ParallelCoordinatesPlotData>[];
+    sequencesColumnName: string;
     rawData: string;
     parsedData: string[][];
     inFocus: boolean;
-    tooltipVisible: boolean;
-    tooltip: IChartsTooltip;
-    selectedPointIndex: number;
-    selectedResearchObjectIndex: number;
 
     //const key codes
     keyCodes: { C: 67, V: 86 };
 
-    // Functions
-    parseTabularData: (text: string) => string[][] | null;
-    textChanged: () => void;
-    handleKeyDown: (e: JQuery.KeyDownEvent) => void;
+    fillLegend: () => void;
+    addCharacteristic: () => void;
+    deleteCharacteristic: (characteristic: Characteristic) => void;
+    fillPoints: () => void;
     fillBarPlotData: () => void;
     fillScatterPlotData: () => void;
     fill3dScatterPlotData: () => void;
     fillParallelCoordinatesPlotData: () => void;
     draw: () => void;
-    fillPoints: () => void;
-    fillPointTooltip: (d: Point) => string;
     showTooltip: (selectedPoint: Point) => void;
-    fillLegend: () => void;
     legendClick: (legendItem: LegendItem) => void;
     legendSetVisibilityForAll: (visibility: boolean) => void;
-    addCharacteristic: () => void;
-    deleteCharacteristic: (characteristic: IChartsCharacteristicListItem) => void;
+    parseTabularData: (text: string) => string[][] | null;
+    textChanged: () => void;
+    handleKeyDown: (e: JQuery.KeyDownEvent) => void;
 }
 
 /**
- * Controller for charts visualization
+ * Controller for custom data charts visualization
  */
 class ChartsControllerHandler {
-    /**
-     * Creates a new instance of the controller
-     * @param data Initial data for the controller
-     */
     constructor() {
         this.ngOnInit();
     }
@@ -100,60 +74,9 @@ class ChartsControllerHandler {
      * Initializes the Angular controller
      */
     private ngOnInit(): void {
-        const charts = ($scope: IChartsScope, $document: ng.IDocumentService): void => {
-
+        const charts = ($scope: ChartsScope): void => {
             /**
-             * Parses tabular data from text
-             * @param text Text with tab-delimited data
-             * @returns Array of parsed data rows or null if parsing fails
-             */
-            function parseTabularData(text: string): string[][] | null {
-                //The array we will return
-                let result: string[][] = [];
-                try {
-                    //Pasted data split into rows
-                    let rows = text.split(/[\n\f\r]/);
-
-                    // extracting first row that contains characteristics names
-                    let row = rows.shift() ?? throwHelper("No data to parse");
-                    let characteristics = row.split("\t");
-
-                    // extracting sequence name column
-                    $scope.sequencesName = characteristics.shift() ?? throwHelper("No characteristics to parse");
-                    let rawCharacteristics = rows.map(r => r.split("\t"));
-                    $scope.characteristics = [];
-                    for (let i = 0; i < rawCharacteristics.length; i++) {
-                        $scope.characteristics[i] = {
-                            Characteristics: [],
-                            ResearchObjectName: rawCharacteristics[i][0]
-                        };
-                        for (let j = 1; j < rawCharacteristics[i].length; j++) {
-                            $scope.characteristics[i].Characteristics[j - 1] = +rawCharacteristics[i][j].replace(",", ".");
-                        }
-                    }
-                    $scope.characteristicsList = characteristics.map((c, i) => ({ Value: i + 1, Text: c }));
-                    $scope.characteristicNames = characteristics.map(c => c);
-                    $scope.chartCharacteristics = [$scope.characteristicsList[0]];
-                    $scope.fillLegend();
-
-                    rows.forEach(thisRow => {
-                        let row = thisRow.trim();
-                        if (row) {
-                            let cols = row.split("\t").map(c => c.replace(",", "."));
-                            result.push(cols);
-                        }
-                    });
-                }
-                catch (err) {
-                    console.log("error parsing as tabular data");
-                    console.log(err);
-                    return null;
-                }
-                return result;
-            }
-
-            /**
-             * Fills legend data
+             * Fills chart legend data
              */
             function fillLegend(): void {
                 $scope.legend = [];
@@ -189,116 +112,17 @@ class ChartsControllerHandler {
             }
 
             /**
-             * Constructs tooltip text content
-             * @param d Point data to show in tooltip
-             * @returns HTML string for tooltip
+             * Adds new characteristic to the list of selected for visualization
              */
-            function fillPointTooltip(d: Point): string {
-                let tooltipContent: string[] = [];
-                tooltipContent.push(`Name: ${d.name}`);
-
-                let pointData = $scope.characteristics[d.id - 1].Characteristics;
-                let pointsCharacteristics: string[] = [];
-                for (let i = 0; i < pointData.length; i++) {
-                    pointsCharacteristics.push(`${$scope.characteristicsList[i].Text}: ${pointData[i]}`);
-                }
-
-                tooltipContent.push(pointsCharacteristics.join("<br/>"));
-
-                return tooltipContent.join("</br>");
-            }
+            $scope.addCharacteristic = () =>
+                $scope.chartCharacteristics.push($scope.characteristicsList.find(cl => $scope.chartCharacteristics.every(cc => cc !== cl))!);
 
             /**
-             * Shows tooltip for selected point
-             * @param selectedPoint Point to show tooltip for
+             * Deletes selected characteristic from the list for visualization
+             * @param characteristic characteristic to remove from the list
              */
-            function showTooltip(selectedPoint: Point): void {
-                $("button[data-bs-target='#tooltip-tab-pane']").tab("show");
-
-                $scope.tooltipVisible = true;
-                $scope.tooltip = {
-                    id: selectedPoint.id,
-                    name: selectedPoint.name,
-                    characteristics: selectedPoint.characteristics
-                };
-                let update: plotly.Data = {};
-                switch ($scope.chartCharacteristics.length) {
-                    case 1:
-                        break;
-                    case 2:
-                        update = {
-                            "marker.symbol": $scope.points.map(point => point === selectedPoint ? "diamond-wide" : "circle"),
-                            "marker.size": $scope.points.map(point => point === selectedPoint ? 15 : 6)
-                        };
-                        break;
-                    case 3:
-                        break;
-                    default:
-                }
-
-                Plotly.restyle($scope.chartElement, update);
-                $scope.$apply();
-            }
-
-            /**
-             * Handles legend item click
-             * @param legendItem Legend item that was clicked
-             */
-            function legendClick(legendItem: LegendItem): void {
-               if ($scope.chartData?.[0]?.customdata && $scope.chartData?.[0]?.customdata?.length > 0)  {
-                    let index: number[] = [];
-                    let update: plotly.Data = { visible: legendItem.visible ? "legendonly" : true };
-                    for (let i = 0; i < $scope.chartData.length; i++) {
-                        if ($scope.chartData[i].customdata![0] === legendItem.id) {
-                            index.push(i);
-                        }
-                    }
-
-                    Plotly.restyle($scope.chartElement, update, index);
-                }
-            }
-
-            /**
-             * Sets visibility for all legend items
-             * @param visibility Whether items should be visible
-             */
-            function legendSetVisibilityForAll(visibility: boolean): void {
-                let update: plotly.Data = { visible: visibility ? true : "legendonly" };
-                $scope.legend.forEach(l => l.visible = visibility);
-                Plotly.restyle($scope.chartElement, update);
-            }
-
-            $scope.addCharacteristic = () => $scope.chartCharacteristics.push($scope.characteristicsList.find(cl => $scope.chartCharacteristics.every(cc => cc !== cl))!);
-
-            $scope.deleteCharacteristic = characteristic => $scope.chartCharacteristics.splice($scope.chartCharacteristics.indexOf(characteristic), 1);
-
-            /**
-             * Handle text changes in data paste box
-             */
-            function textChanged(): void {
-                let text = $("#dataPasteBox").val() as string;
-                if (text) {
-                    $scope.rawData = text;
-                    let asArray = $scope.parseTabularData(text);
-                    if (asArray) {
-                        $scope.parsedData = asArray;
-                        $scope.$apply();
-                    }
-                }
-            }
-
-            /**
-             * Handle key down events for copy/paste
-             * @param e Key event
-             */
-            function handleKeyDown(e: JQuery.KeyDownEvent): void {
-                if (!$scope.inFocus && e.which === $scope.keyCodes.V && (e.ctrlKey || e.metaKey)) { // CTRL + V
-                    //reset value of our box
-                    $("#dataPasteBox").val("");
-                    //set it in focus so that pasted text goes inside the box
-                    $("#dataPasteBox").focus();
-                }
-            }
+            $scope.deleteCharacteristic = characteristic =>
+                $scope.chartCharacteristics.splice($scope.chartCharacteristics.indexOf(characteristic), 1);
 
             /**
              * Initialize data for chart visualization
@@ -307,14 +131,12 @@ class ChartsControllerHandler {
                 $scope.points = [];
 
                 for (let i = 0; i < $scope.characteristics.length; i++) {
-                    let characteristic = $scope.characteristics[i];
-                    const legendIndex = characteristic.SequenceGroupId
+                    let characteristic: SequenceCharacteristics = $scope.characteristics[i];
+                    const legendIndex: number = characteristic.SequenceGroupId
                         ? $scope.legend.findIndex(l => l.id === characteristic.SequenceGroupId)
                         : i;
                     $scope.points.push({
-                        id: i + 1,
                         legendIndex: legendIndex,
-                        legendId: characteristic.SequenceGroupId ? characteristic.SequenceGroupId : i + 1,
                         name: characteristic.ResearchObjectName,
                         characteristics: characteristic.Characteristics
                     });
@@ -325,14 +147,14 @@ class ChartsControllerHandler {
              * Fill data for bar plot visualization
              */
             function fillBarPlotData(): void {
-                let characteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0]);
+                let characteristicIndex: number = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0]);
                 let { min, max } = getArrayMinMax($scope.points.map(p => p.characteristics[characteristicIndex]));
-                let range = Math.abs(max - min);
-                let maxNameLength = arrayMax($scope.points.map(p => p.name.length));
+                let range: number = max - min;
+                let maxNameLength: number = arrayMax($scope.points.map(p => p.name.length));
 
                 // adding margins
-                min -= Math.abs(range * 0.05);
-                max += Math.abs(range * 0.05);
+                min -= range * 0.05;
+                max += range * 0.05;
 
                 $scope.layout = {
                     margin: {
@@ -357,7 +179,7 @@ class ChartsControllerHandler {
                     y: [p.characteristics[characteristicIndex]],
                     marker: { color: $scope.legend[p.legendIndex].color },
                     type: "bar",
-                    customdata: [p.legendId],
+                    customdata: [p.legendIndex],
                     name: p.name,
                     visible: $scope.legend[p.legendIndex].visible ? true : "legendonly"
                 }));
@@ -367,8 +189,8 @@ class ChartsControllerHandler {
              * Fill data for scatter plot visualization
              */
             function fillScatterPlotData(): void {
-                let firstCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0]);
-                let secondCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1]);
+                let firstCharacteristicIndex: number = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0]);
+                let secondCharacteristicIndex: number = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1]);
 
                 $scope.layout = {
                     margin: {
@@ -400,32 +222,38 @@ class ChartsControllerHandler {
                     y: [p.characteristics[secondCharacteristicIndex]],
                     text: p.name,
                     mode: "markers",
-                    marker: { opacity: 0.8, color: $scope.legend[p.legendIndex].color },
+                    marker: {
+                        opacity: 0.8,
+                        color: $scope.legend[p.legendIndex].color
+                    },
                     name: p.name,
-                    customdata: [p.legendId],
+                    customdata: [p.legendIndex],
                     visible: $scope.legend[p.legendIndex].visible
                 }));
-            }
+            };
 
             /**
              * Fill data for 3D scatter plot visualization
              */
             function fill3dScatterPlotData(): void {
-                let firstCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0]);
-                let secondCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1]);
-                let thirdCharacteristicIndex = $scope.characteristicsList.indexOf($scope.chartCharacteristics[2]);
+                let firstCharacteristicIndex: number = $scope.characteristicsList.indexOf($scope.chartCharacteristics[0]);
+                let secondCharacteristicIndex: number = $scope.characteristicsList.indexOf($scope.chartCharacteristics[1]);
+                let thirdCharacteristicIndex: number = $scope.characteristicsList.indexOf($scope.chartCharacteristics[2]);
 
-                $scope.chartData = $scope.points.map(p => ({
+                $scope.chartData = $scope.points.map<Partial<plotly.PlotData>>(p => ({
                     hoverinfo: "x+y+z+text",
                     x: [p.characteristics[firstCharacteristicIndex]],
                     y: [p.characteristics[secondCharacteristicIndex]],
                     z: [p.characteristics[thirdCharacteristicIndex]],
                     text: p.name,
                     mode: "markers",
-                    marker: { opacity: 0.8, color: $scope.legend[p.legendIndex].color },
+                    marker: {
+                        opacity: 0.8,
+                        color: $scope.legend[p.legendIndex].color
+                    },
                     name: p.name,
                     type: "scatter3d",
-                    customdata: [p.legendId],
+                    customdata: [p.legendIndex],
                     visible: $scope.legend[p.legendIndex].visible
                 }));
 
@@ -457,7 +285,7 @@ class ChartsControllerHandler {
                             }
                         },
                         zaxis: {
-                            //type: $scope.plotTypeY ? "log" : "",
+                            //type: $scope.plotTypeZ ? "log" : "",
                             title: {
                                 text: $scope.characteristicNames[thirdCharacteristicIndex],
                                 font: {
@@ -496,10 +324,10 @@ class ChartsControllerHandler {
                     },
                     showlegend: false
                 };
-            }
+            };
 
             /**
-             * Draw the appropriate chart based on selected characteristics
+             * Draw the appropriate chart based on the number of selected characteristics
              */
             function draw(): void {
                 $scope.fillPoints();
@@ -520,12 +348,153 @@ class ChartsControllerHandler {
 
                 Plotly.newPlot($scope.chartElement, $scope.chartData, $scope.layout, { responsive: true });
 
-                $scope.chartElement.on("plotly_click", (data: any) => {
-                    $scope.selectedPointIndex = data.points[0].pointNumber;
-                    $scope.selectedResearchObjectIndex = data.points[0].curveNumber;
-                    let selectedPoint = $scope.points[data.points[0].curveNumber];
+                $scope.chartElement.on("plotly_click", (data: plotly.PlotMouseEvent) => {
+                    const selectedPoint: Point = $scope.points[data.points[0].curveNumber];
                     $scope.showTooltip(selectedPoint);
                 });
+            }
+
+            /**
+             * Shows tooltip for selected point
+             * @param selectedPoint Point to show tooltip for
+             */
+            function showTooltip(selectedPoint: Point): void {
+                $("button[data-bs-target='#tooltip-tab-pane']").tab("show");
+
+                $scope.tooltipVisible = true;
+                $scope.tooltip = {
+                    name: selectedPoint.name,
+                    characteristics: selectedPoint.characteristics
+                };
+                let update: plotly.Data = {};
+                switch ($scope.chartCharacteristics.length) {
+                    case 1:
+                        break;
+                    case 2:
+                        update = {
+                            "marker.symbol": $scope.points.map<string>(point => point === selectedPoint ? "diamond-wide" : "circle"),
+                            "marker.size": $scope.points.map<number>(point => point === selectedPoint ? 15 : 6)
+                        };
+                        break;
+                    case 3:
+                        break;
+                    default:
+                }
+
+                Plotly.restyle($scope.chartElement, update);
+                $scope.$apply();
+            }
+
+            /**
+             * Handles legend item click
+             * @param legendItem Legend item that was clicked
+             */
+            function legendClick(legendItem: LegendItem): void {
+                if ($scope.chartData?.[0]?.customdata && $scope.chartData?.[0]?.customdata?.length > 0) {
+                    let index: number[] = [];
+                    let update: plotly.Data = { visible: legendItem.visible ? "legendonly" : true };
+                    const legendIndex: number = $scope.legend.findIndex((l: LegendItem) => l.id === legendItem.id);
+                    for (let i = 0; i < $scope.chartData.length; i++) {
+                        if ($scope.chartData[i].customdata![0] as number === legendIndex) {
+                            index.push(i);
+                        }
+                    }
+
+                    Plotly.restyle($scope.chartElement, update, index);
+                }
+            }
+
+            /**
+             * Sets visibility for all legend items
+             * @param visibility Whether items should be visible
+             */
+            function legendSetVisibilityForAll(visibility: boolean): void {
+                let update: plotly.Data = { visible: visibility ? true : "legendonly" };
+                $scope.legend.forEach(l => l.visible = visibility);
+                Plotly.restyle($scope.chartElement, update);
+            }
+
+            /**
+             * Parses tabular data from text
+             * @param text Text with tab-delimited data
+             * @returns Array of parsed data rows or null if parsing fails
+             */
+            function parseTabularData(text: string): string[][] | null {
+                //The array we will return
+                let result: string[][] = [];
+                try {
+                    //Pasted data split into rows
+                    let rows: string[] = text.split(/[\n\f\r]/);
+
+                    // extracting first row that contains characteristics names
+                    let row: string = rows.shift() ?? throwHelper("No data to parse");
+                    let characteristics: string[] = row.split("\t");
+
+                    // extracting sequence name column
+                    $scope.sequencesColumnName = characteristics.shift() ?? throwHelper("No characteristics to parse");
+                    let rawCharacteristics: string[][] = rows.map<string[]>(r => r.split("\t"));
+                    $scope.characteristics = [];
+                    for (let i = 0; i < rawCharacteristics.length; i++) {
+                        $scope.characteristics[i] = {
+                            Characteristics: [],
+                            ResearchObjectName: rawCharacteristics[i][0]
+                        };
+                        for (let j = 1; j < rawCharacteristics[i].length; j++) {
+                            $scope.characteristics[i].Characteristics[j - 1] = +rawCharacteristics[i][j].replace(",", ".");
+                        }
+                    }
+                    $scope.characteristicsList = characteristics.map<Characteristic>((c, i) => ({
+                        Value: i.toString(),
+                        Text: c,
+                        Selected: false,
+                        Disabled: false
+                     }));
+                    $scope.characteristicNames = characteristics.map<string>(c => c);
+                    $scope.chartCharacteristics = [$scope.characteristicsList[0]];
+                    $scope.fillLegend();
+
+                    rows.forEach(thisRow => {
+                        let row: string = thisRow.trim();
+                        if (row) {
+                            let cols = row.split("\t").map(c => c.replace(",", "."));
+                            result.push(cols);
+                        }
+                    });
+                }
+                catch (err) {
+                    console.log("error parsing as tabular data");
+                    console.log(err);
+                    return null;
+                }
+                return result;
+            }
+
+            /**
+             * Handle text changes in data paste box
+             */
+            function textChanged(): void {
+                let text: string = $("#dataPasteBox").val() as string;
+                if (text) {
+                    $scope.rawData = text;
+                    let parsedDataAsArray: string[][] | null = $scope.parseTabularData(text);
+                    if (parsedDataAsArray) {
+                        $scope.parsedData = parsedDataAsArray;
+                        $scope.$apply();
+                    }
+                }
+            }
+
+            /**
+             * Handle key down events for copy/paste
+             * @param e Key event
+             */
+            function handleKeyDown(e: JQuery.KeyDownEvent): void {
+                if (!$scope.inFocus && e.which === $scope.keyCodes.V && (e.ctrlKey || e.metaKey)) { // CTRL + V
+                    //reset value of our box
+                    $("#dataPasteBox").val("");
+                    //set it in focus so that pasted text goes inside the box
+                    $("#dataPasteBox").trigger("focus");
+                }
             }
 
             // Assign functions to scope
@@ -538,7 +507,6 @@ class ChartsControllerHandler {
             $scope.fillParallelCoordinatesPlotData = fillParallelCoordinatesPlotData;
             $scope.draw = draw;
             $scope.fillPoints = fillPoints;
-            $scope.fillPointTooltip = fillPointTooltip;
             $scope.showTooltip = showTooltip;
             $scope.fillLegend = fillLegend;
             $scope.legendClick = legendClick;
@@ -554,7 +522,7 @@ class ChartsControllerHandler {
             $scope.rawData = "";
             $scope.parsedData = [];
 
-            $document.ready(() => {
+            $(() => {
                 //Handles the Ctrl + V keys for pasting
 
                 //If this is true, we wont respond to Ctrl + V
@@ -565,15 +533,15 @@ class ChartsControllerHandler {
                 $("body").on("blur", "input, textarea", () => { $scope.inFocus = false; });
 
                 //Handle the key down event
-                $(document).keydown($scope.handleKeyDown);
+                $(document).on("keydown", $scope.handleKeyDown);
 
                 //We will respond to when the textbox value changes
-                $("#dataPasteBox").bind("input propertychange", $scope.textChanged);
+                $("#dataPasteBox").on("input propertychange", $scope.textChanged);
             });
         };
 
         // Register controller
-        angular.module("libiada").controller("ChartsCtrl", ["$scope", "$document", charts]);
+        angular.module("libiada").controller("ChartsCtrl", ["$scope", charts]);
     }
 }
 

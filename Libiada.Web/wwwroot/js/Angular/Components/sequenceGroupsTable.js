@@ -30,7 +30,7 @@ function SequenceGroupsTableController($scope) {
         const sequenceGroupsToShow = newVisibleSequenceGroups
             .filter(sg => !ctrl.visibleSequenceGroups.some(sg2 => sg2.Value === sg.Value));
         ctrl.visibleSequenceGroups = newVisibleSequenceGroups;
-        // removing not visible sequence groups from table 
+        // removing not visible sequence groups from table
         $(sequenceGroupsToHide.map(sg => `#sequenceGroupRow${sg.Value}`).join(",")).remove();
         //adding newly visible sequence groups to table
         $("#sequenceGroupsSelectList").append(sequenceGroupsToShow.map(sg => `<tr id="sequenceGroupRow${sg.Value}">
@@ -49,7 +49,8 @@ function SequenceGroupsTableController($scope) {
                     <td>${sg.SequenceType}</td>
                 </tr>`).join());
         // binding checkbox state change event
-        sequenceGroupsToShow.forEach(sg => $(`#sequenceGroup${sg.Value}`).change(() => {
+        sequenceGroupsToShow.forEach(sg => $(`#sequenceGroup${sg.Value}`)
+            .on("change", () => {
             ctrl.toggleSequenceGroupSelection(sg);
             $scope.$apply();
         }));

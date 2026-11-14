@@ -25,6 +25,12 @@ interface PointsFragmentData {
     name: string;
 }
 
+interface Tooltip {
+    name: string;
+    fragmentName: string;
+    characteristics: number[]
+}
+
 interface LocalCharacteristicsVisualizationsComponentController extends ng.IController {
     characteristicsList: Characteristic[];
     characteristicNames: string[];
@@ -36,11 +42,10 @@ interface LocalCharacteristicsVisualizationsComponentController extends ng.ICont
     pointSize: number;
     chartElement: plotly.PlotlyHTMLElement;
     colorScale: d3.ScaleSequential<string>;
-    tooltip: { name: string; fragmentName: string; characteristics: number[] };
+    tooltip: Tooltip;
     tooltipVisible: boolean;
     layout: Partial<plotly.Layout>;
     chartData: Partial<ParallelCoordinatesPlotData>[];
-    selectedFragmentIndex: number;
 
     $onInit: () => Promise<void>;
     fillLegend: () => Promise<void>;
@@ -70,6 +75,9 @@ function LocalCharacteristicsVisualizationsController(this: LocalCharacteristics
         InitializeBootstrapTooltips();
     };
 
+    /**
+     * Fills chart legend data
+     */
     ctrl.fillLegend = async () => {
         ctrl.legend = [];
 
@@ -88,6 +96,9 @@ function LocalCharacteristicsVisualizationsController(this: LocalCharacteristics
         }
     };
 
+    /**
+     * Adds new characteristic to the list of selected for visualization
+     */
     ctrl.addCharacteristic = async () => {
         // searching for the characteristic that is not already in the chartCharacteristics array 
         const newSelectedCharacteristic: Characteristic = ctrl.characteristicsList.find(
@@ -95,12 +106,18 @@ function LocalCharacteristicsVisualizationsController(this: LocalCharacteristics
         ctrl.chartCharacteristics.push(newSelectedCharacteristic);
     };
 
+    /**
+     * Deletes selected characteristic from the list for visualization
+     * @param characteristic characteristic to remove from the list
+     */
     ctrl.deleteCharacteristic = async (characteristic: Characteristic) => {
         ctrl.chartCharacteristics.splice(ctrl.chartCharacteristics.indexOf(characteristic), 1);
     };
 
 
-    // initializes data for chart
+    /**
+     * Initialize data for chart visualization
+     */
     ctrl.fillPoints = async () => {
         ctrl.points = [];
 
@@ -122,6 +139,9 @@ function LocalCharacteristicsVisualizationsController(this: LocalCharacteristics
         }
     };
 
+    /**
+     * Fill data for line chart visualization
+     */
     ctrl.fillLinePlotData = async () => {
         const characteristicIndex: number = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[0]);
         const characteristicValues: number[] = ctrl.points
@@ -194,6 +214,9 @@ function LocalCharacteristicsVisualizationsController(this: LocalCharacteristics
         }));
     };
 
+    /**
+     * Fill data for scatter plot visualization
+     */
     ctrl.fillScatterPlotData = async () => {
         const firstCharacteristicIndex: number = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[0]);
         const secondCharacteristicIndex: number = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[1]);
@@ -240,6 +263,9 @@ function LocalCharacteristicsVisualizationsController(this: LocalCharacteristics
         }));
     };
 
+    /**
+     * Fill data for 3D scatter plot visualization
+     */
     ctrl.fill3dScatterPlotData = async () => {
         const firstCharacteristicIndex: number = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[0]);
         const secondCharacteristicIndex: number = ctrl.characteristicsList.indexOf(ctrl.chartCharacteristics[1]);
@@ -304,6 +330,9 @@ function LocalCharacteristicsVisualizationsController(this: LocalCharacteristics
         };
     };
 
+    /**
+     * Fill data for parallel coordinates plot visualization
+     */
     ctrl.fillParallelCoordinatesPlotData = async () => {
         const characteristicsIndices: number[] = ctrl.chartCharacteristics.map<number>((c: Characteristic) => ctrl.characteristicsList.indexOf(c));
         ctrl.chartData = [{
@@ -332,6 +361,9 @@ function LocalCharacteristicsVisualizationsController(this: LocalCharacteristics
         };
     };
 
+    /**
+     * Draw the appropriate chart based on the number of selected characteristics
+     */
     ctrl.draw = async () => {
         ctrl.fillPoints();
 
@@ -358,6 +390,10 @@ function LocalCharacteristicsVisualizationsController(this: LocalCharacteristics
         });
     };
 
+    /**
+     * Shows tooltip for selected point
+     * @param selectedPoint Point to show tooltip for
+     */
     ctrl.showTooltip = async (selectedTrace: Point, selectedFragmentIndex: number) => {
         $("button[data-bs-target='#tooltip-tab-pane']").tab("show");
         const selectedPoint: PointsFragmentData = selectedTrace.fragmentsData[selectedFragmentIndex];
@@ -389,6 +425,10 @@ function LocalCharacteristicsVisualizationsController(this: LocalCharacteristics
         $scope.$apply();
     };
 
+    /**
+     * Handles legend item click
+     * @param legendItem Legend item that was clicked
+     */
     ctrl.legendClick = async (legendItem: LegendItem) => {
         // if points have data on legend item they belong to
         if (ctrl.chartData?.[0]?.customdata && ctrl.chartData[0].customdata.length > 0) {
@@ -411,6 +451,10 @@ function LocalCharacteristicsVisualizationsController(this: LocalCharacteristics
         }
     };
 
+    /**
+     * Sets visibility for all legend items
+     * @param visibility Whether items should be visible
+     */
     ctrl.legendSetVisibilityForAll = async (visibility: boolean) => {
         const update: plotly.Data = { visible: visibility ? true : "legendonly" };
         ctrl.legend.forEach((l: LegendItem) => l.visible = visibility);
@@ -428,7 +472,7 @@ function LocalCharacteristicsVisualizationsController(this: LocalCharacteristics
                 selection.empty();
                 selection.removeAllRanges();
             }
-            
+
             ctrl.chartElement.style.width = `${e.pageX - bar.offsetWidth / 2}px`;
             if (ctrl.chartElement.childNodes.length > 0) {
                 Plotly.relayout(ctrl.chartElement, { autosize: true });

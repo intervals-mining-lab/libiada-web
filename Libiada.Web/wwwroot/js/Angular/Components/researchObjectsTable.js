@@ -134,7 +134,7 @@ function ResearchObjectsTableController($scope, $http) {
                 </tr>`).join());
         // binding checkbox state change event
         researchObjectsToShow.forEach((m) => $(`#researchObject${m.Value}`)
-            .change(() => {
+            .on("change", () => {
             ctrl.toggleResearchObjectSelection(m);
             $scope.$apply();
         }));
@@ -161,7 +161,7 @@ function ResearchObjectsTableController($scope, $http) {
         && (!ctrl.group || researchObject.Group.includes(ctrl.group.Text))
         && (!ctrl.sequenceType || researchObject.SequenceType.includes(ctrl.sequenceType.Text))
         && (ctrl.nature !== ctrl.geneticNature || !ctrl.showRefSeqOnly || ctrl.isRefSeq(researchObject));
-    // checks if genetic sequence is reference sequence 
+    // checks if genetic sequence is reference sequence
     // (its genbank id contains "_")
     ctrl.isRefSeq = (researchObject) => researchObject.Text.split("|").slice(-1)[0].indexOf("_") !== -1;
     ctrl.selectAllVisibleResearchObjects = () => ctrl.visibleResearchObjects.forEach(researchObject => {
