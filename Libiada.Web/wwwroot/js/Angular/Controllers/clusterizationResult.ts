@@ -32,7 +32,7 @@ class ClusterizationResultHandler {
     private ngOnInit(): void {
         const clusterizationResult = async ($scope: ClusterizationResultScope, $http: ng.IHttpService): Promise<void> => {
             $scope.characteristicsTableTabSelected = false;
-            
+
             await initScopeFromServer<ClusterizationResultData>(
                 $http,
                 $scope,
@@ -51,6 +51,6 @@ class ClusterizationResultHandler {
 /**
  * Wrapper function for backward compatibility
  */
-export default function ClusterizationResultController():  ClusterizationResultHandler {
-    return new  ClusterizationResultHandler();
+export default function ClusterizationResultController(): ClusterizationResultHandler {
+    return new ClusterizationResultHandler();
 }
