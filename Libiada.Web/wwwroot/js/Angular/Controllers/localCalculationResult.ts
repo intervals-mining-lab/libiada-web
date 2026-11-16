@@ -11,8 +11,6 @@ import type {
     LocalCharacteristicsData
 } from "viewDataTypes";
 
-/// <reference types="jquery" />
-
 /**
  * Interface for the data object fetched from the server
  */
@@ -42,21 +40,15 @@ interface LocalCharacteristicsSimilarityMatrixResponse {
  * Interface for the angular controller's scope
  */
 interface LocalCalculationResultScope extends ng.IScope, LocalCalculationResultData, ResultsLoadingScreenData {
-    // UI state
     isCharacteristicsTableVisible: boolean;
-
-    // Comparison matrix data
     comparisonMatrix: number[][];
     usedAligner: string;
     usedDistanceCalculator: string;
     usedAggregator: string;
-
-    // Dropdown selections
     aligner: Aligner;
     distanceCalculator: DistanceCalculator;
     aggregator: Aggregator;
 
-    // Functions
     calculateLocalCharacteristicsSimilarityMatrix: () => Promise<void>;
 }
 

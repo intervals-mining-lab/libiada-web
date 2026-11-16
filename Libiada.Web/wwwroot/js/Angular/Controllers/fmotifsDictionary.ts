@@ -1,29 +1,5 @@
 ﻿import { MapModelFromJson } from "functions";
-/*import * as d3 from "d3";*/
-/// <reference types="jquery" />
-
-/**
- * Interface for MIDI library
- */
-interface MIDI {
-    loadPlugin(options: {
-        soundfontUrl: string;
-        instrument: string;
-        onprogress?: (state: string, progress: number) => void;
-        onsuccess?: () => void;
-    }): void;
-    setVolume(channel: number, volume: number): void;
-    chordOn(channel: number, chord: number[], velocity: number, delay?: number): void;
-    chordOff(channel: number, chord: number[], velocity: number, delay?: number): void;
-    programChange(channel: number, program: number): void;
-    GM: {
-        byName: {
-            [name: string]: {
-                program: number;
-            }
-        }
-    };
-}
+import type { MIDI } from "viewDataTypes";
 
 declare const MIDI: MIDI;
 
@@ -59,55 +35,55 @@ interface Fmotif {
     Type: number;
 }
 
-/**
- * Interface for the data object passed from the server
- */
-interface FmotifsDictionaryData {
-    data: {
-        fmotifs: Fmotif[];
-        fmotifsfmotifsCounts: number[];
-        sequentialTransfer: boolean;
-    }
-}
-
-/**
- * Interface for the angular controller's scope
- */
-interface FmotifsDictionaryScope extends ng.IScope, FmotifsDictionaryData {
-    // Data properties
-    isPlaying: boolean;
-    margin: number;
-    verticalInterval: number;
-
-    // Functions
-    onLoad: () => void;
-    play: (event: number) => void;
-}
-
-/**
- * Result of getLine function
- */
 interface Line {
     line: number;
     alter: number;
     note: string;
 }
 
+interface KeySelection extends d3.Selection<SVGRectElement, null, SVGGElement, null> { }
+
+interface NoteSelection extends d3.Selection<SVGGElement, null, HTMLElement, null> { }
+
 /**
- * Controller for FmotifsDictionary
+ * Interface for the data object passed from the server
+ */
+interface FmotifsDictionaryData {
+    data: {
+        fmotifs: Fmotif[];
+        fmotifsCounts: number[];
+        sequentialTransfer: boolean;
+    };
+}
+
+/**
+ * Interface for the angular controller's scope
+ */
+interface FmotifsDictionaryScope extends ng.IScope, FmotifsDictionaryData {
+    isPlaying: boolean;
+    margin: number;
+    verticalInterval: number;
+
+    onLoad: () => void;
+    play: (fmotifIndex: number) => void;
+    stopAll: () => void;
+}
+
+/**
+ * Angular controller for fmotifs dictionary display
  */
 export default function FmotifsDictionaryController(data: FmotifsDictionaryData): void {
     function fmotifsDictionary($scope: FmotifsDictionaryScope): void {
         MapModelFromJson($scope, data);
 
-        // MIDI player variables
-        let chordIndex: number;
-        let notation: d3.Selection<SVGSVGElement, unknown, HTMLElement, any>;
-        let visualization: d3.Selection<SVGSVGElement, unknown, HTMLElement, any>;
-
-        // Initialize scope properties
         $scope.margin = 40;
         $scope.verticalInterval = (140 - $scope.margin * 2) / 14;
+        let notation: d3.Selection<SVGSVGElement, null, HTMLElement, null>;
+        let visualization: d3.Selection<SVGSVGElement, null, HTMLElement, null>;
+
+        // MIDI player variables
+        let timeouts: ReturnType<typeof setTimeout>[] = [];
+        let chordIndex: number;
 
         // initializes MIDI player
         $scope.onLoad = (): void => {
@@ -128,7 +104,8 @@ export default function FmotifsDictionaryController(data: FmotifsDictionaryData)
             barDuration: 8,
             timeline: 0,
             velocity: 127,
-            play: function (note: Note, minOctave: number, moveTime: boolean, event: number): void {
+
+            play: function (note: Note, minOctave: number, fmotifIndex: number): void {
                 const chord: number[] = [];
                 const duration: number = note.Duration.Value;
                 for (let i: number = 0; i < note.Pitches.length; i++) {
@@ -139,35 +116,31 @@ export default function FmotifsDictionaryController(data: FmotifsDictionaryData)
                     }
                 }
                 MIDI.chordOn(0, chord, this.velocity, this.timeline);
-                setTimeout(this.keyOn, this.timeline * 1000, event, note, minOctave);
-                setTimeout(this.noteOn, this.timeline * 1000, event);
+                timeouts.push(setTimeout(() => this.keyOn(fmotifIndex, note, minOctave), this.timeline * 1000));
+                timeouts.push(setTimeout(() => this.noteOn(fmotifIndex), this.timeline * 1000));
                 MIDI.chordOff(0, chord, this.velocity, this.timeline + this.barDuration * duration);
-                setTimeout(this.keyOff, (this.timeline + this.barDuration * duration) * 900, event);
-                setTimeout(this.noteOff, (this.timeline + this.barDuration * duration) * 900, event);
-                if (typeof moveTime !== "undefined" && moveTime === true) {
-                    this.move(duration);
-                }
-            },
-            move: function (duration: number): void {
+                timeouts.push(setTimeout(() => this.keyOff(fmotifIndex), (this.timeline + this.barDuration * duration) * 900));
+                timeouts.push(setTimeout(() => this.noteOff(fmotifIndex), (this.timeline + this.barDuration * duration) * 900));
+
                 this.timeline += this.barDuration * duration;
             },
-            keyOn: function (event: number, note: Note, min: number): void {
+            keyOn: function (fmotifIndex: number, note: Note, minOctave: number): void {
                 for (let i: number = 0; i < note.Pitches.length; i++) {
                     const pitch: Pitch = note.Pitches[i];
                     const step: number = pitch.MidiNumber % 12;
-                    const currentOctave: number = pitch.Octave > min ? 1 : 0;
-                    const key: d3.Selection<any, any, any, any> = d3.select(`#visualization_${$scope.data.fmotifs[event].Id}`)
-                        .select(`.key_${step + currentOctave * 12}`)
-                        .selectAll("rect");
+                    const currentOctave: number = pitch.Octave > minOctave ? 1 : 0;
+                    const key: KeySelection = d3.select<HTMLElement, null>(`#visualization_${$scope.data.fmotifs[fmotifIndex].Id}`)
+                        .select<SVGGElement>(`.key_${step + currentOctave * 12}`)
+                        .selectAll<SVGRectElement, null>("rect");
                     key.style("fill", "blue")
                         .style("fill-opacity", 1);
                 }
             },
-            keyOff: function (event: number): void {
+            keyOff: function (fmotifIndex: number): void {
                 for (let i: number = 0; i < 24; i++) {
-                    const key: d3.Selection<any, any, any, any> = d3.select(`#visualization_${$scope.data.fmotifs[event].Id}`)
-                        .select(`.key_${i}`)
-                        .selectAll("rect");
+                    const key: KeySelection = d3.select<HTMLElement, null>(`#visualization_${$scope.data.fmotifs[fmotifIndex].Id}`)
+                        .select<SVGGElement>(`.key_${i}`)
+                        .selectAll<SVGRectElement, null>("rect");
                     if (getLine(i % 12).alter === 0) {
                         key.style("fill", "none");
                     } else if (getLine(i % 12).alter === 1) {
@@ -175,9 +148,9 @@ export default function FmotifsDictionaryController(data: FmotifsDictionaryData)
                     }
                 }
             },
-            noteOn: function (event: number): void {
-                const chord: d3.Selection<SVGSVGElement, any, HTMLElement, any> = d3.select(`#notation_${$scope.data.fmotifs[event].Id}`)
-                    .select(`.chord_${chordIndex}`);
+            noteOn: function (fmotifIndex: number): void {
+                const chord: NoteSelection = d3.select<SVGSVGElement, null>(`#notation_${$scope.data.fmotifs[fmotifIndex].Id}`)
+                    .select<SVGGElement>(`.chord_${chordIndex}`);
                 chord.selectAll("ellipse")
                     .style("fill", "blue");
                 chord.selectAll("rect")
@@ -191,9 +164,9 @@ export default function FmotifsDictionaryController(data: FmotifsDictionaryData)
                 chord.selectAll(".blackline")
                     .style("stroke", "black");
             },
-            noteOff: function (event: number): void {
-                const chord: d3.Selection<SVGSVGElement, any, HTMLElement, any> = d3.select(`#notation_${$scope.data.fmotifs[event].Id}`)
-                    .select(`.chord_${chordIndex}`);
+            noteOff: function (fmotifIndex: number): void {
+                const chord: NoteSelection = d3.select<SVGSVGElement, null>(`#notation_${$scope.data.fmotifs[fmotifIndex].Id}`)
+                    .select<SVGGElement>(`.chord_${chordIndex}`);
                 chord.selectAll("ellipse")
                     .style("fill", "black");
                 chord.selectAll("rect")
@@ -209,11 +182,11 @@ export default function FmotifsDictionaryController(data: FmotifsDictionaryData)
         };
 
         // plays Fmotifs with animation
-        $scope.play = (event: number): void => {
+        $scope.play = (fmotifIndex: number): void => {
             $scope.isPlaying = true;
             MIDI.setVolume(0, 80);
             player.timeline = 0;
-            const notes: Note[] = $scope.data.fmotifs[event].NoteList;
+            const notes: Note[] = $scope.data.fmotifs[fmotifIndex].NoteList;
             let min: number = 9;
             chordIndex = 0;
             for (let i: number = 0; i < notes.length; i++) {
@@ -225,13 +198,21 @@ export default function FmotifsDictionaryController(data: FmotifsDictionaryData)
             }
             let totalDuration: number = 0;
             for (let i: number = 0; i < notes.length; i++) {
-                player.play(notes[i], min, true, event);
+                player.play(notes[i], min, fmotifIndex);
                 totalDuration += notes[i].Duration.Value;
             }
-            setTimeout(() => {
+            timeouts.push(setTimeout(() => {
                 $scope.isPlaying = false;
                 $scope.$apply();
-            }, (totalDuration * player.barDuration) * 900, event);
+            }, (totalDuration * player.barDuration) * 900, fmotifIndex));
+        };
+
+        $scope.stopAll = (): void => {
+            console.log("Stopping all scheduled playbacks...");
+            timeouts.forEach((timeoutID: ReturnType<typeof setTimeout>): void => clearTimeout(timeoutID));
+            timeouts = [];
+            $scope.isPlaying = false;
+            $scope.$apply();
         };
 
         // gets note's line and alter
@@ -321,7 +302,7 @@ export default function FmotifsDictionaryController(data: FmotifsDictionaryData)
 
         // draws note
         function drawNote(
-            group: d3.Selection<SVGGElement, unknown, HTMLElement, any>,
+            group: d3.Selection<SVGGElement, null, HTMLElement, null>,
             note: Note,
             octave: number,
             iterator: number,
@@ -405,7 +386,7 @@ export default function FmotifsDictionaryController(data: FmotifsDictionaryData)
 
         // draws pause
         function drawPause(
-            group: d3.Selection<SVGGElement, unknown, HTMLElement, any>,
+            group: d3.Selection<SVGGElement, null, HTMLElement, null>,
             note: Note,
             x: number
         ): void {
@@ -491,17 +472,17 @@ export default function FmotifsDictionaryController(data: FmotifsDictionaryData)
         }
 
         // draws everything
-        $(function (): void {
+        $((): void => {
             for (let i: number = 0; i < $scope.data.fmotifs.length; i++) {
                 let fmotif: Fmotif = $scope.data.fmotifs[i];
                 let horizontalInterval: number = getHorizontalInterval(fmotif);
-                notation = d3.select(`#notation_${fmotif.Id}`)
+                notation = d3.select<SVGSVGElement, null>(`#notation_${fmotif.Id}`)
                     .append("svg")
                     .attr("width", 450)
                     .attr("height", 140)
                     .style("display", "block")
                     .style("margin", "auto");
-                visualization = d3.select(`#visualization_${fmotif.Id}`)
+                visualization = d3.select<SVGSVGElement, null>(`#visualization_${fmotif.Id}`)
                     .append("svg")
                     .attr("width", 350)
                     .attr("height", 100)
@@ -511,29 +492,28 @@ export default function FmotifsDictionaryController(data: FmotifsDictionaryData)
                 drawStaff();
                 let min: number = 9;
                 for (let j: number = 0; j < fmotif.NoteList.length; j++) {
-                    let note: Note = fmotif.NoteList[j];
+                    const note: Note = fmotif.NoteList[j];
                     for (let k: number = 0; k < note.Pitches.length; k++) {
-                        let pitch: Pitch = note.Pitches[k];
+                        const pitch: Pitch = note.Pitches[k];
                         min = pitch.Octave < min ? pitch.Octave : min;
                     }
                 }
                 for (let j: number = 0; j < fmotif.NoteList.length; j++) {
-                    let note: Note = fmotif.NoteList[j];
-                    let chord: d3.Selection<SVGGElement, unknown, HTMLElement, any> = notation.append("g")
+                    const note: Note = fmotif.NoteList[j];
+                    let chord: NoteSelection = notation.append("g")
                         .attr("class", `chord_${j}`);
                     let x: number = (j + 1) * horizontalInterval;
                     if (note.Pitches.length === 0) {
                         drawPause(chord, note, x);
-                    }
-                    else {
+                    } else {
                         let lineUp: boolean = false;
                         let miny: number = 1000;
                         let maxy: number = -1000;
                         for (let k: number = 0; k < note.Pitches.length; k++) {
-                            let pitch: Pitch = note.Pitches[k];
-                            let currentOctave: number = pitch.Octave > min ? 1 : 0;
-                            let step: Line = getLine(pitch.Step);
-                            let y: number = $scope.margin + (13 - (step.line + 7 * currentOctave)) * $scope.verticalInterval;
+                            const pitch: Pitch = note.Pitches[k];
+                            const currentOctave: number = pitch.Octave > min ? 1 : 0;
+                            const step: Line = getLine(pitch.Step);
+                            const y: number = $scope.margin + (13 - (step.line + 7 * currentOctave)) * $scope.verticalInterval;
                             if (currentOctave === 0 && pitch.Step < 10) {
                                 lineUp = true;
                             }
@@ -541,7 +521,8 @@ export default function FmotifsDictionaryController(data: FmotifsDictionaryData)
                             maxy = y < maxy ? maxy : y;
                             drawNote(chord, note, currentOctave, k, x, y);
                         }
-                        let flagx: number, flagy: number;
+                        let flagx: number;
+                        let flagy: number;
                         if (!lineUp && note.Duration.Denominator > 1) {
                             flagx = x - 6;
                             flagy = maxy + 48;
@@ -552,8 +533,7 @@ export default function FmotifsDictionaryController(data: FmotifsDictionaryData)
                                 .attr("y2", flagy)
                                 .style("stroke", "black")
                                 .style("stroke-width", 2);
-                        }
-                        else if (lineUp && note.Duration.Denominator > 1) {
+                        } else if (lineUp && note.Duration.Denominator > 1) {
                             flagx = x + 6;
                             flagy = miny - 48;
                             chord.append("line")
@@ -582,8 +562,7 @@ export default function FmotifsDictionaryController(data: FmotifsDictionaryData)
                                         .attr("y2", flagy + k * 4 + 2)
                                         .style("stroke", "black")
                                         .style("stroke-width", 3);
-                                }
-                                else if (!lineUp) {
+                                } else {
                                     chord.append("line")
                                         .attr("x1", flagx)
                                         .attr("y1", flagy - k * 4 - 1)

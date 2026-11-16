@@ -7,13 +7,9 @@ interface DistributionInterval {
     count: number;
 }
 
-interface Order {
-    order: number[];
-}
-
 interface Accordance {
     distributionIntervals: DistributionInterval[];
-    orders: Order[];
+    orders: number[][];
 }
 
 interface AccordanceByLinkResult {
@@ -26,7 +22,7 @@ interface AccordancePoint {
     distributionIntervals: DistributionInterval[];
     x: number;
     y: number;
-    orders: Order[];
+    orders: number[][];
 }
 
 interface AccordanceLevel {
@@ -98,8 +94,8 @@ class OrdersIntervalsDistributionsAccordanceResultHandler {
                 for (let i = 0; i < $scope.result.length; i++) {
                     if ($scope.result[i].link === $scope.linkType.Text) {
                         for (let j = 0; j < $scope.result[i].accordance.length; j++) {
-                            let distributionIntervals = $scope.result[i].accordance[j].distributionIntervals;
-                            let orders = $scope.result[i].accordance[j].orders;
+                            let distributionIntervals: DistributionInterval[] = $scope.result[i].accordance[j].distributionIntervals;
+                            let orders: number[][] = $scope.result[i].accordance[j].orders;
                             if (orders.length > $scope.maxLevel) {
                                 $scope.maxLevel = orders.length;
                             }
@@ -118,7 +114,7 @@ class OrdersIntervalsDistributionsAccordanceResultHandler {
             function fillAccordanceLevels(): void {
                 $scope.accordanceLevels = [];
                 for (let i = 0; i <= $scope.maxLevel; i++) {
-                    let count = 0;
+                    let count: number = 0;
                     for (let j = 0; j < $scope.points.length; j++) {
                         if ($scope.points[j].y === i) {
                             count++;
@@ -145,9 +141,9 @@ class OrdersIntervalsDistributionsAccordanceResultHandler {
                 tooltipContent.push(`Count of orders: ${d.orders.length}`);
                 tooltipContent.push("Orders: ");
 
-                let pointsOrders: string[] = [];
+                let pointsOrders: number[][] = [];
                 for (let i = 0; i < d.orders.length && i < 20; i++) {
-                    pointsOrders.push(d.orders[i] as any);
+                    pointsOrders.push(d.orders[i]);
                 }
 
                 tooltipContent.push(pointsOrders.join("<br/>"));
@@ -216,19 +212,19 @@ class OrdersIntervalsDistributionsAccordanceResultHandler {
 
                 // chart size and margin settings
                 let margin = { top: 30, right: 30, bottom: 30, left: 60 };
-                let width = $scope.width - margin.left - margin.right;
-                let height = $scope.height - margin.top - margin.bottom;
+                let width: number = $scope.width - margin.left - margin.right;
+                let height: number = $scope.height - margin.top - margin.bottom;
 
                 // setup x
                 // calculating margins for dots
                 const { min: xMin, max: xMax } = getArrayMinMax($scope.points.map(p => p.x));
-                let xMargin = (xMax - xMin) * 0.05;
+                let xMargin: number = (xMax - xMin) * 0.05;
 
-                let xScale = d3.scaleLinear()
+                let xScale: d3.ScaleLinear<number, number> = d3.scaleLinear()
                     .domain([xMin - xMargin, xMax + xMargin])
                     .range([0, width]);
 
-                let xAxis = $scope.points.length > 10 ?
+                let xAxis: d3.Axis<d3.NumberValue> = $scope.points.length > 10 ?
                     d3.axisBottom(xScale)
                         .tickSizeInner(-height)
                         .tickSizeOuter(0)
@@ -244,9 +240,9 @@ class OrdersIntervalsDistributionsAccordanceResultHandler {
                 // setup y
                 // calculating margins for dots
                 const { min: yMin, max: yMax } = getArrayMinMax($scope.points.map(p => p.y));
-                let yMargin = (yMax - yMin) * 0.05;
+                let yMargin: number = (yMax - yMin) * 0.05;
 
-                let yScale = yMax - yMin < 100 ?
+                let yScale: d3.ScaleLinear<number, number> = yMax - yMin < 100 ?
                     d3.scaleLinear()
                         .domain([yMin - yMargin, yMax + yMargin])
                         .range([height, 0]) :
@@ -255,7 +251,7 @@ class OrdersIntervalsDistributionsAccordanceResultHandler {
                         .domain([1, Math.pow(10, Math.ceil(Math.log10(yMax)))])
                         .range([height, 0]);
 
-                let yAxis = yMax - yMin < 10 ?
+                let yAxis: d3.Axis<d3.NumberValue> = yMax - yMin < 10 ?
                     d3.axisLeft(yScale)
                         .ticks(yMax - yMin)
                         .tickSizeInner(-width)
@@ -269,7 +265,7 @@ class OrdersIntervalsDistributionsAccordanceResultHandler {
                 $scope.yMap = (d: AccordancePoint) => yScale($scope.yValue(d));
 
                 // setup fill color
-                let color = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.points.length]);
+                let color: d3.ScaleSequential<string> = d3.scaleSequential(d3.interpolateTurbo).domain([0, $scope.points.length]);
 
                 // add the graph canvas to the body of the webpage
                 let svg: SVGSelection = d3.select<SVGGElement, null>("#chart").append("svg")

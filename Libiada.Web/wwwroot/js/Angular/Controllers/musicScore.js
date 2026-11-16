@@ -1,9 +1,17 @@
-﻿import { MapModelFromJson } from "functions";
-
+import { MapModelFromJson } from "functions";
+/**
+ * Angular controller for music sequence display
+ */
 export default function MusicScoreController(data) {
     function musicScore($scope) {
         MapModelFromJson($scope, data);
-
+        $scope.margin = 40;
+        $scope.verticalInterval = (140 - $scope.margin * 2) / 14;
+        let notation;
+        let visualization;
+        // MIDI player variables
+        let timeouts = [];
+        let chordIndex;
         // MIDI-player initialization
         $scope.onLoad = () => {
             MIDI.loadPlugin({
@@ -17,57 +25,50 @@ export default function MusicScoreController(data) {
                 }
             });
         };
-
-        let timeouts = [];
-        let chordIndex;
-        let player = {
+        const player = {
             timeline: 0,
             velocity: 127,
-
-            play: function (note, event) {
-                let chord = [];
-                let duration = note.Duration.Value;
-
+            play: function (note, minOctave) {
+                const chord = [];
+                const duration = note.Duration.Value;
                 for (let i = 0; i < note.Pitches.length; i++) {
                     chord[i] = note.Pitches[i].MidiNumber;
                 }
-
                 MIDI.chordOn(0, chord, this.velocity, this.timeline);
-                timeouts.push(setTimeout(() => this.keyOn(event, note), this.timeline * 1000));
-                timeouts.push(setTimeout(() => this.noteOn(event), this.timeline * 1000));
+                timeouts.push(setTimeout(() => this.keyOn(note, minOctave), this.timeline * 1000));
+                timeouts.push(setTimeout(() => this.noteOn(), this.timeline * 1000));
                 MIDI.chordOff(0, chord, this.velocity, this.timeline + duration);
-                timeouts.push(setTimeout(() => this.keyOff(event), (this.timeline + duration) * 900));
-                timeouts.push(setTimeout(() => this.noteOff(event), (this.timeline + duration) * 900));
-
+                timeouts.push(setTimeout(() => this.keyOff(), (this.timeline + duration) * 900));
+                timeouts.push(setTimeout(() => this.noteOff(), (this.timeline + duration) * 900));
                 this.timeline += duration;
             },
-
-            keyOn: function (event, note, min) {
+            keyOn: function (note, minOctave) {
                 for (let i = 0; i < note.Pitches.length; i++) {
-                    let pitch = note.Pitches[i];
-                    let step = pitch.MidiNumber % 12;
-                    let currentOctave = pitch.Octave > min ? 1 : 0;
-                    let key = d3.select(`#visualization`)
+                    const pitch = note.Pitches[i];
+                    const step = pitch.MidiNumber % 12;
+                    const currentOctave = pitch.Octave > minOctave ? 1 : 0;
+                    const key = d3.select(`#visualization`)
                         .select(`.key_${step + currentOctave * 12}`)
                         .selectAll("rect");
                     key.style("fill", "blue")
                         .style("fill-opacity", 1);
                 }
             },
-            keyOff: function (event) {
+            keyOff: function () {
                 for (let i = 0; i < 24; i++) {
-                    let key = d3.select(`#visualization`)
+                    const key = d3.select(`#visualization`)
                         .select(`.key_${i}`)
                         .selectAll("rect");
                     if (getLine(i % 12).alter === 0) {
                         key.style("fill", "none");
-                    } else if (getLine(i % 12).alter === 1) {
+                    }
+                    else if (getLine(i % 12).alter === 1) {
                         key.style("fill", "black");
                     }
                 }
             },
-            noteOn: function (event) {
-                let chord = d3.select(`#notation`)
+            noteOn: function () {
+                const chord = d3.select(`#notation`)
                     .select(`.chord_${chordIndex}`);
                 chord.selectAll("ellipse")
                     .style("fill", "blue");
@@ -82,8 +83,8 @@ export default function MusicScoreController(data) {
                 chord.selectAll(".blackline")
                     .style("stroke", "black");
             },
-            noteOff: function (event) {
-                let chord = d3.select(`#notation`)
+            noteOff: function () {
+                const chord = d3.select(`#notation`)
                     .select(`.chord_${chordIndex}`);
                 chord.selectAll("ellipse")
                     .style("fill", "black");
@@ -98,39 +99,29 @@ export default function MusicScoreController(data) {
                 chordIndex++;
             }
         };
-
-        
-
-        $scope.play = event => {
+        $scope.play = () => {
             $scope.isPlaying = true;
             MIDI.setVolume(0, 80);
             player.timeline = 0;
-
-            let notes = $scope.data.musicNotes;
+            const notes = $scope.data.musicNotes;
             let min = 9;
             chordIndex = 0;
-
-            let totalDuration = notes.reduce((sum, note) => sum + note.Duration.Value, 0);
-
-            notes.forEach((note, i) => {
-                player.play(note, min, true, event);
+            const totalDuration = notes.reduce((sum, note) => sum + note.Duration.Value, 0);
+            notes.forEach((note) => {
+                player.play(note, min);
             });
-
-            let stopTimeout = setTimeout(() => {
+            timeouts.push(setTimeout(() => {
                 $scope.isPlaying = false;
                 $scope.$apply();
-            }, totalDuration * 1000);
-            timeouts.push(stopTimeout);
+            }, totalDuration * 1000));
         };
-
         $scope.stopAll = () => {
             console.log("Stopping all scheduled playbacks...");
-            timeouts.forEach(timeoutID => clearTimeout(timeoutID));
+            timeouts.forEach((timeoutID) => clearTimeout(timeoutID));
             timeouts = [];
             $scope.isPlaying = false;
             $scope.$apply();
         };
-
         function getLine(step) {
             switch (step) {
                 case 0: return { line: 0, alter: 0, note: "C" };
@@ -145,10 +136,9 @@ export default function MusicScoreController(data) {
                 case 9: return { line: 5, alter: 0, note: "A" };
                 case 10: return { line: 5, alter: 1, note: "A#" };
                 case 11: return { line: 6, alter: 0, note: "B" };
-                default: return { line: -1, alter: -1, note: -1 };
+                default: return { line: -1, alter: -1, note: "-1" };
             }
         }
-
         function drawKeyboard() {
             let rectPosX = 0;
             for (let i = 0; i < 24; i++) {
@@ -179,7 +169,6 @@ export default function MusicScoreController(data) {
                 }
             }
         }
-
         // draws notation staff
         function drawStaff(yOffset) {
             for (let i = 3; i < 12; i++) {
@@ -208,10 +197,9 @@ export default function MusicScoreController(data) {
                 .style("stroke", "#000")
                 .style("stroke-width", 5);
         }
-
         // draws note
         function drawNote(group, note, octave, iterator, x, y) {
-            let step = note.Pitches[iterator].MidiNumber % 12;
+            const step = note.Pitches[iterator].MidiNumber % 12;
             if (octave === 0 && (step === 0 || step === 1)) {
                 group.append("line")
                     .attr("class", "blackline")
@@ -285,7 +273,6 @@ export default function MusicScoreController(data) {
                     .text("\u266F");
             }
         }
-
         // draws pause
         function drawPause(group, note, x, yOffset) {
             switch (note.Duration.Denominator) {
@@ -357,7 +344,6 @@ export default function MusicScoreController(data) {
                     break;
             }
         }
-
         // draws symbol from char code
         function signFromCharCode(code) {
             if (code > 0xFFFF) {
@@ -368,107 +354,85 @@ export default function MusicScoreController(data) {
                 return String.fromCharCode(code);
             }
         }
-
-        $scope.margin = 40;
-        $scope.verticalInterval = (140 - $scope.margin * 2) / 14;
-        let notation;
-        let visualization;
-
-
-        $(function () {
-            let notes = $scope.data.musicNotes;
-            let measures = $scope.data.measures;
+        // draws everything
+        $(() => {
+            const notes = $scope.data.musicNotes;
+            const measures = $scope.data.measures;
             if (!notes || notes.length === 0) {
                 console.error("No music notes found!");
                 return;
             }
-
-            let horizontalInterval = 1800 / (notes.length + 1); // Рассчитываем интервал между нотами
-            let notesPerLine = 16; // Максимальное количество нот в одной строке
-            let measuresPerLine = 4;
-            let staffWidth = 1800; // Ширина нотного стана
-            let staffHeight = 140; // Высота одной строки
-            let lineCount = Math.ceil(notes.length / notesPerLine); // Количество строк
-
+            let horizontalInterval = 1800 / (notes.length + 1); // calculating interval between notes
+            const notesPerLine = 16; // Maximum number of notes per line
+            const measuresPerLine = 4;
+            const staffWidth = 1800; // Width of the staff
+            const staffHeight = 140; // Height of one line
+            const lineCount = Math.ceil(notes.length / notesPerLine); // Number of lines
             notation = d3.select("#notation")
                 .append("svg")
                 .attr("width", 1800)
                 .attr("height", 140 * lineCount)
                 .style("display", "block")
                 .style("margin", "auto");
-
             visualization = d3.select("#visualization")
                 .append("svg")
                 .attr("width", 350)
                 .attr("height", 100)
                 .style("display", "block")
                 .style("margin", "auto");
-
             drawKeyboard();
             //drawStaff();
-
             let min = 9;
             for (let j = 0; j < notes.length; j++) {
-                let note = notes[j];
+                const note = notes[j];
                 for (let k = 0; k < note.Pitches.length; k++) {
-                    let pitch = note.Pitches[k];
+                    const pitch = note.Pitches[k];
                     min = pitch.Octave < min ? pitch.Octave : min;
                 }
             }
-
             for (let line = 0; line < lineCount; line++) {
-                let yOffset = line * staffHeight; // Смещение по Y для новой строки
-
-                drawStaff(yOffset); // Отрисовываем нотный стан для каждой строки
-
+                const yOffset = line * staffHeight; // Y offset for the new line
+                drawStaff(yOffset); // Draw the staff for each line
                 //let notesInLine = notes.slice(line * notesPerLine, (line + 1) * notesPerLine);
-                let measuresInLine = measures.slice(line * measuresPerLine, (line + 1) * measuresPerLine);
+                const measuresInLine = measures.slice(line * measuresPerLine, (line + 1) * measuresPerLine);
                 let notesInLine = 0;
-                for (let measure of measuresInLine) {
+                for (const measure of measuresInLine) {
                     notesInLine += measure.length;
                 }
                 notesInLine += measuresPerLine - 1;
-                let horizontalInterval = staffWidth / (notesInLine + 1);
+                const horizontalInterval = staffWidth / (notesInLine + 1);
                 let x = horizontalInterval;
-
                 for (let i = 0; i < measuresInLine.length; i++) {
-                    let measure = measuresInLine[i];
-
+                    const measure = measuresInLine[i];
                     for (let j = 0; j < measure.length; j++) {
-                        let note = measure[j];
-                        let chord = notation.append("g")
+                        const note = measure[j];
+                        const chord = notation.append("g")
                             .attr("class", `chord_${j}`);
-
-                        
-
                         if (note.Pitches.length === 0) {
                             drawPause(chord, note, x, yOffset);
-                        } else {
+                        }
+                        else {
                             let lineUp = false;
                             let miny = 1000;
                             let maxy = -1000;
-
                             for (let k = 0; k < note.Pitches.length; k++) {
-                                let pitch = note.Pitches[k];
-                                let currentOctave = pitch.Octave > min ? 1 : 0;
-                                let step = getLine(pitch.Step);
-                                let y = $scope.margin + (13 - (step.line + 7 * currentOctave)) * $scope.verticalInterval + (line * staffHeight);
-
+                                const pitch = note.Pitches[k];
+                                const currentOctave = pitch.Octave > min ? 1 : 0;
+                                const step = getLine(pitch.Step);
+                                const y = $scope.margin + (13 - (step.line + 7 * currentOctave)) * $scope.verticalInterval + (line * staffHeight);
                                 if (currentOctave === 0 && pitch.Step < 10) {
                                     lineUp = true;
                                 }
-
                                 miny = y < miny ? y : miny;
                                 maxy = y < maxy ? maxy : y;
                                 if (k == 0) {
                                     miny = y;
                                     maxy = y;
                                 }
-
                                 drawNote(chord, note, currentOctave, k, x, y);
                             }
-
-                            let flagx, flagy;
+                            let flagx;
+                            let flagy;
                             if (!lineUp && note.Duration.Denominator > 1) {
                                 flagx = x - 6;
                                 flagy = maxy + 48;
@@ -479,7 +443,8 @@ export default function MusicScoreController(data) {
                                     .attr("y2", flagy)
                                     .style("stroke", "black")
                                     .style("stroke-width", 2);
-                            } else if (lineUp && note.Duration.Denominator > 1) {
+                            }
+                            else if (lineUp && note.Duration.Denominator > 1) {
                                 flagx = x + 6;
                                 flagy = miny - 48;
                                 chord.append("line")
@@ -490,16 +455,24 @@ export default function MusicScoreController(data) {
                                     .style("stroke", "black")
                                     .style("stroke-width", 2);
                             }
-
                             let flags = 0;
                             switch (note.Duration.Denominator) {
-                                case 8: flags = 1; break;
-                                case 16: flags = 2; break;
-                                case 32: flags = 3; break;
-                                case 64: flags = 4; break;
-                                case 128: flags = 5; break;
+                                case 8:
+                                    flags = 1;
+                                    break;
+                                case 16:
+                                    flags = 2;
+                                    break;
+                                case 32:
+                                    flags = 3;
+                                    break;
+                                case 64:
+                                    flags = 4;
+                                    break;
+                                case 128:
+                                    flags = 5;
+                                    break;
                             }
-
                             if (flags > 0) {
                                 for (let k = 0; k < flags; k++) {
                                     if (lineUp) {
@@ -510,7 +483,8 @@ export default function MusicScoreController(data) {
                                             .attr("y2", flagy + k * 4 + 2)
                                             .style("stroke", "black")
                                             .style("stroke-width", 3);
-                                    } else {
+                                    }
+                                    else {
                                         chord.append("line")
                                             .attr("x1", flagx)
                                             .attr("y1", flagy - k * 4 - 1)
@@ -532,41 +506,35 @@ export default function MusicScoreController(data) {
                         .style("stroke", "#000")
                         .style("stroke-width", 2);
                     x = x + horizontalInterval;
-                };
-                //for (let j = 0; j < notesInLine.length; j++) {
-                //    let note = notesInLine[j];
+                }
+                ;
+                //for (let j: number = 0; j < notesInLine.length; j++) {
+                //    let note: Note = notesInLine[j];
                 //    let chord = notation.append("g")
                 //        .attr("class", `chord_${j}`);
-
-                //    let x = (j + 1) * horizontalInterval;
-
+                //    let x: number = (j + 1) * horizontalInterval;
                 //    if (note.Pitches.length === 0) {
                 //        drawPause(chord, note, x);
                 //    } else {
-                //        let lineUp = false;
-                //        let miny = 1000;
-                //        let maxy = -1000;
-
+                //        let lineUp: boolean = false;
+                //        let miny: number = 1000;
+                //        let maxy: number = -1000;
                 //        for (let k = 0; k < note.Pitches.length; k++) {
                 //            let pitch = note.Pitches[k];
                 //            let currentOctave = pitch.Octave > min ? 1 : 0;
                 //            let step = getLine(pitch.Step);
                 //            let y = $scope.margin + (13 - (step.line + 7 * currentOctave)) * $scope.verticalInterval + (line * staffHeight);
-
                 //            if (currentOctave === 0 && pitch.Step < 10) {
                 //                lineUp = true;
                 //            }
-
                 //            miny = y < miny ? y : miny;
                 //            maxy = y < maxy ? maxy : y;
                 //            if (k == 0) {
                 //                miny = y;
                 //                maxy = y;
                 //            }
-
                 //            drawNote(chord, note, currentOctave, k, x, y);
                 //        }
-
                 //        let flagx, flagy;
                 //        if (!lineUp && note.Duration.Denominator > 1) {
                 //            flagx = x - 6;
@@ -589,7 +557,6 @@ export default function MusicScoreController(data) {
                 //                .style("stroke", "black")
                 //                .style("stroke-width", 2);
                 //        }
-
                 //        let flags = 0;
                 //        switch (note.Duration.Denominator) {
                 //            case 8: flags = 1; break;
@@ -598,7 +565,6 @@ export default function MusicScoreController(data) {
                 //            case 64: flags = 4; break;
                 //            case 128: flags = 5; break;
                 //        }
-
                 //        if (flags > 0) {
                 //            for (let k = 0; k < flags; k++) {
                 //                if (lineUp) {
@@ -623,10 +589,8 @@ export default function MusicScoreController(data) {
                 //    }
                 //}
             }
-
-            
         });
     }
-
     angular.module("libiada").controller("MusicScoreCtrl", ["$scope", musicScore]);
 }
+//# sourceMappingURL=musicScore.js.map

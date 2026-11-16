@@ -12,7 +12,7 @@ export interface SelectListItemWithNature extends SelectListItem {
     Nature: string;
 }
 
-export interface CharacteristicType extends SelectListItem  {
+export interface CharacteristicType extends SelectListItem {
     Links: Link[];
     ArrangementTypes: ArrangementType[];
 }
@@ -94,7 +94,7 @@ export interface SequenceGroup extends SelectListItemWithNature {
     Group: string;
     SequenceType: string;
     Visible: boolean;
- }
+}
 
 export interface CharacteristicsDictionary { [key: string]: number }
 
@@ -196,13 +196,37 @@ export interface AttributeValue {
     value: string;
 }
 
- export interface Filter {
+export interface Filter {
     value: string;
 }
 
 export interface FeaturesDictionary { [key: number]: Feature }
 
-export interface Rank { x: number[], y: number[] }
+export interface Rank {
+    x: number[];
+    y: number[];
+}
+
+export interface MIDI {
+    loadPlugin(options: {
+        soundfontUrl: string;
+        instrument: string;
+        onprogress?: (state: string, progress: number) => void;
+        onsuccess?: () => void;
+    }): void;
+    setVolume(channel: number, volume: number): void;
+    chordOn(channel: number, chord: number[], velocity: number, delay?: number): void;
+    chordOff(channel: number, chord: number[], velocity: number, delay?: number): void;
+    Soundfont: { acoustic_grand_piano?: { [key: string]: string } };
+    // programChange(channel: number, program: number): void;
+    // GM: {
+    //     byName: {
+    //         [name: string]: {
+    //             program: number;
+    //         }
+    //     }
+    // };
+}
 
 export type ColorClass = "default" | "success" | "danger";
 

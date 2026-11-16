@@ -83,7 +83,7 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
         const orderTransformationCharacteristicsDynamicVisualizationResult = async (
             $scope: OrderTransformationCharacteristicsDynamicScope,
             $http: ng.IHttpService): Promise<void> => {
-            
+
             /**
              * Initializes legend data
              */
@@ -139,7 +139,7 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
 
                 let tooltipHtml: string[] = [];
                 tooltip.selectedDots = svg.selectAll<SVGEllipseElement, Point>(".dot")
-                    .filter((dot:Point) => {
+                    .filter((dot: Point) => {
                         if (dot.x === d.x && dot.y === d.y) {
                             tooltipHtml.push($scope.fillPointTooltip(dot));
                             return true;
@@ -308,7 +308,7 @@ class OrderTransformationCharacteristicsDynamicVisualizationResultHandler {
                     .enter()
                     .append("g")
                     .attr("class", "legend")
-                    .attr("transform", (_d:LegendItem, i: number) => `translate(0,${i * 20})`)
+                    .attr("transform", (_d: LegendItem, i: number) => `translate(0,${i * 20})`)
                     .on("click", function (event: MouseEvent, d: LegendItem) {
                         d.visible = !d.visible;
                         let legendEntry: LegendEntry = d3.select<SVGGElement, LegendItem>(event.currentTarget as SVGGElement);

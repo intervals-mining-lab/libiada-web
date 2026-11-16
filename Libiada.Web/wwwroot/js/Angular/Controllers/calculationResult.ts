@@ -37,7 +37,7 @@ class CalculationResultHandler {
                 $scope,
                 "Loading characteristics calculation results",
                 "Failed loading characteristics calculation results");
-            
+
             // initializing tooltips for tabs
             InitializeBootstrapTooltips();
         };
@@ -50,6 +50,6 @@ class CalculationResultHandler {
 /**
  * Wrapper function for backward compatibility
  */
-export default function CalculationResultController():  CalculationResultHandler {
-    return new  CalculationResultHandler();
+export default function CalculationResultController(): CalculationResultHandler {
+    return new CalculationResultHandler();
 }

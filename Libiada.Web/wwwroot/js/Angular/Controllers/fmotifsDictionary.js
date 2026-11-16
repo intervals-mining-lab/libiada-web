@@ -1,17 +1,17 @@
 import { MapModelFromJson } from "functions";
 /**
- * Controller for FmotifsDictionary
+ * Angular controller for fmotifs dictionary display
  */
 export default function FmotifsDictionaryController(data) {
     function fmotifsDictionary($scope) {
         MapModelFromJson($scope, data);
-        // MIDI player variables
-        let chordIndex;
-        let notation;
-        let visualization;
-        // Initialize scope properties
         $scope.margin = 40;
         $scope.verticalInterval = (140 - $scope.margin * 2) / 14;
+        let notation;
+        let visualization;
+        // MIDI player variables
+        let timeouts = [];
+        let chordIndex;
         // initializes MIDI player
         $scope.onLoad = () => {
             MIDI.loadPlugin({
@@ -30,7 +30,7 @@ export default function FmotifsDictionaryController(data) {
             barDuration: 8,
             timeline: 0,
             velocity: 127,
-            play: function (note, minOctave, moveTime, event) {
+            play: function (note, minOctave, fmotifIndex) {
                 const chord = [];
                 const duration = note.Duration.Value;
                 for (let i = 0; i < note.Pitches.length; i++) {
@@ -42,33 +42,28 @@ export default function FmotifsDictionaryController(data) {
                     }
                 }
                 MIDI.chordOn(0, chord, this.velocity, this.timeline);
-                setTimeout(this.keyOn, this.timeline * 1000, event, note, minOctave);
-                setTimeout(this.noteOn, this.timeline * 1000, event);
+                timeouts.push(setTimeout(() => this.keyOn(fmotifIndex, note, minOctave), this.timeline * 1000));
+                timeouts.push(setTimeout(() => this.noteOn(fmotifIndex), this.timeline * 1000));
                 MIDI.chordOff(0, chord, this.velocity, this.timeline + this.barDuration * duration);
-                setTimeout(this.keyOff, (this.timeline + this.barDuration * duration) * 900, event);
-                setTimeout(this.noteOff, (this.timeline + this.barDuration * duration) * 900, event);
-                if (typeof moveTime !== "undefined" && moveTime === true) {
-                    this.move(duration);
-                }
-            },
-            move: function (duration) {
+                timeouts.push(setTimeout(() => this.keyOff(fmotifIndex), (this.timeline + this.barDuration * duration) * 900));
+                timeouts.push(setTimeout(() => this.noteOff(fmotifIndex), (this.timeline + this.barDuration * duration) * 900));
                 this.timeline += this.barDuration * duration;
             },
-            keyOn: function (event, note, min) {
+            keyOn: function (fmotifIndex, note, minOctave) {
                 for (let i = 0; i < note.Pitches.length; i++) {
                     const pitch = note.Pitches[i];
                     const step = pitch.MidiNumber % 12;
-                    const currentOctave = pitch.Octave > min ? 1 : 0;
-                    const key = d3.select(`#visualization_${$scope.data.fmotifs[event].Id}`)
+                    const currentOctave = pitch.Octave > minOctave ? 1 : 0;
+                    const key = d3.select(`#visualization_${$scope.data.fmotifs[fmotifIndex].Id}`)
                         .select(`.key_${step + currentOctave * 12}`)
                         .selectAll("rect");
                     key.style("fill", "blue")
                         .style("fill-opacity", 1);
                 }
             },
-            keyOff: function (event) {
+            keyOff: function (fmotifIndex) {
                 for (let i = 0; i < 24; i++) {
-                    const key = d3.select(`#visualization_${$scope.data.fmotifs[event].Id}`)
+                    const key = d3.select(`#visualization_${$scope.data.fmotifs[fmotifIndex].Id}`)
                         .select(`.key_${i}`)
                         .selectAll("rect");
                     if (getLine(i % 12).alter === 0) {
@@ -79,8 +74,8 @@ export default function FmotifsDictionaryController(data) {
                     }
                 }
             },
-            noteOn: function (event) {
-                const chord = d3.select(`#notation_${$scope.data.fmotifs[event].Id}`)
+            noteOn: function (fmotifIndex) {
+                const chord = d3.select(`#notation_${$scope.data.fmotifs[fmotifIndex].Id}`)
                     .select(`.chord_${chordIndex}`);
                 chord.selectAll("ellipse")
                     .style("fill", "blue");
@@ -95,8 +90,8 @@ export default function FmotifsDictionaryController(data) {
                 chord.selectAll(".blackline")
                     .style("stroke", "black");
             },
-            noteOff: function (event) {
-                const chord = d3.select(`#notation_${$scope.data.fmotifs[event].Id}`)
+            noteOff: function (fmotifIndex) {
+                const chord = d3.select(`#notation_${$scope.data.fmotifs[fmotifIndex].Id}`)
                     .select(`.chord_${chordIndex}`);
                 chord.selectAll("ellipse")
                     .style("fill", "black");
@@ -112,11 +107,11 @@ export default function FmotifsDictionaryController(data) {
             }
         };
         // plays Fmotifs with animation
-        $scope.play = (event) => {
+        $scope.play = (fmotifIndex) => {
             $scope.isPlaying = true;
             MIDI.setVolume(0, 80);
             player.timeline = 0;
-            const notes = $scope.data.fmotifs[event].NoteList;
+            const notes = $scope.data.fmotifs[fmotifIndex].NoteList;
             let min = 9;
             chordIndex = 0;
             for (let i = 0; i < notes.length; i++) {
@@ -128,13 +123,20 @@ export default function FmotifsDictionaryController(data) {
             }
             let totalDuration = 0;
             for (let i = 0; i < notes.length; i++) {
-                player.play(notes[i], min, true, event);
+                player.play(notes[i], min, fmotifIndex);
                 totalDuration += notes[i].Duration.Value;
             }
-            setTimeout(() => {
+            timeouts.push(setTimeout(() => {
                 $scope.isPlaying = false;
                 $scope.$apply();
-            }, (totalDuration * player.barDuration) * 900, event);
+            }, (totalDuration * player.barDuration) * 900, fmotifIndex));
+        };
+        $scope.stopAll = () => {
+            console.log("Stopping all scheduled playbacks...");
+            timeouts.forEach((timeoutID) => clearTimeout(timeoutID));
+            timeouts = [];
+            $scope.isPlaying = false;
+            $scope.$apply();
         };
         // gets note's line and alter
         function getLine(step) {
@@ -375,7 +377,7 @@ export default function FmotifsDictionaryController(data) {
             }
         }
         // draws everything
-        $(function () {
+        $(() => {
             for (let i = 0; i < $scope.data.fmotifs.length; i++) {
                 let fmotif = $scope.data.fmotifs[i];
                 let horizontalInterval = getHorizontalInterval(fmotif);
@@ -395,14 +397,14 @@ export default function FmotifsDictionaryController(data) {
                 drawStaff();
                 let min = 9;
                 for (let j = 0; j < fmotif.NoteList.length; j++) {
-                    let note = fmotif.NoteList[j];
+                    const note = fmotif.NoteList[j];
                     for (let k = 0; k < note.Pitches.length; k++) {
-                        let pitch = note.Pitches[k];
+                        const pitch = note.Pitches[k];
                         min = pitch.Octave < min ? pitch.Octave : min;
                     }
                 }
                 for (let j = 0; j < fmotif.NoteList.length; j++) {
-                    let note = fmotif.NoteList[j];
+                    const note = fmotif.NoteList[j];
                     let chord = notation.append("g")
                         .attr("class", `chord_${j}`);
                     let x = (j + 1) * horizontalInterval;
@@ -414,10 +416,10 @@ export default function FmotifsDictionaryController(data) {
                         let miny = 1000;
                         let maxy = -1000;
                         for (let k = 0; k < note.Pitches.length; k++) {
-                            let pitch = note.Pitches[k];
-                            let currentOctave = pitch.Octave > min ? 1 : 0;
-                            let step = getLine(pitch.Step);
-                            let y = $scope.margin + (13 - (step.line + 7 * currentOctave)) * $scope.verticalInterval;
+                            const pitch = note.Pitches[k];
+                            const currentOctave = pitch.Octave > min ? 1 : 0;
+                            const step = getLine(pitch.Step);
+                            const y = $scope.margin + (13 - (step.line + 7 * currentOctave)) * $scope.verticalInterval;
                             if (currentOctave === 0 && pitch.Step < 10) {
                                 lineUp = true;
                             }
@@ -425,7 +427,8 @@ export default function FmotifsDictionaryController(data) {
                             maxy = y < maxy ? maxy : y;
                             drawNote(chord, note, currentOctave, k, x, y);
                         }
-                        let flagx, flagy;
+                        let flagx;
+                        let flagy;
                         if (!lineUp && note.Duration.Denominator > 1) {
                             flagx = x - 6;
                             flagy = maxy + 48;
@@ -477,7 +480,7 @@ export default function FmotifsDictionaryController(data) {
                                         .style("stroke", "black")
                                         .style("stroke-width", 3);
                                 }
-                                else if (!lineUp) {
+                                else {
                                     chord.append("line")
                                         .attr("x1", flagx)
                                         .attr("y1", flagy - k * 4 - 1)
