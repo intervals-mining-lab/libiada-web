@@ -413,8 +413,8 @@ export default function MusicScoreController(data) {
                         }
                         else {
                             let lineUp = false;
-                            let miny = 1000;
-                            let maxy = -1000;
+                            let minY = 1000;
+                            let maxY = -1000;
                             for (let k = 0; k < note.Pitches.length; k++) {
                                 const pitch = note.Pitches[k];
                                 const currentOctave = pitch.Octave > min ? 1 : 0;
@@ -423,35 +423,38 @@ export default function MusicScoreController(data) {
                                 if (currentOctave === 0 && pitch.Step < 10) {
                                     lineUp = true;
                                 }
-                                miny = y < miny ? y : miny;
-                                maxy = y < maxy ? maxy : y;
+                                minY = y < minY ? y : minY;
+                                maxY = y < maxY ? maxY : y;
                                 if (k == 0) {
-                                    miny = y;
-                                    maxy = y;
+                                    minY = y;
+                                    maxY = y;
                                 }
                                 drawNote(chord, note, currentOctave, k, x, y);
                             }
-                            let flagx;
-                            let flagy;
-                            if (!lineUp && note.Duration.Denominator > 1) {
-                                flagx = x - 6;
-                                flagy = maxy + 48;
+                            if (note.Duration.Denominator == 1) {
+                                continue;
+                            }
+                            let flagX;
+                            let flagY;
+                            if (lineUp) {
+                                flagX = x + 6;
+                                flagY = minY - 48;
                                 chord.append("line")
-                                    .attr("x1", flagx)
-                                    .attr("y1", miny + 1)
-                                    .attr("x2", flagx)
-                                    .attr("y2", flagy)
+                                    .attr("x1", flagX)
+                                    .attr("y1", maxY - 1)
+                                    .attr("x2", flagX)
+                                    .attr("y2", flagY)
                                     .style("stroke", "black")
                                     .style("stroke-width", 2);
                             }
-                            else if (lineUp && note.Duration.Denominator > 1) {
-                                flagx = x + 6;
-                                flagy = miny - 48;
+                            else {
+                                flagX = x - 6;
+                                flagY = maxY + 48;
                                 chord.append("line")
-                                    .attr("x1", flagx)
-                                    .attr("y1", maxy - 1)
-                                    .attr("x2", flagx)
-                                    .attr("y2", flagy)
+                                    .attr("x1", flagX)
+                                    .attr("y1", minY + 1)
+                                    .attr("x2", flagX)
+                                    .attr("y2", flagY)
                                     .style("stroke", "black")
                                     .style("stroke-width", 2);
                             }
@@ -472,27 +475,37 @@ export default function MusicScoreController(data) {
                                 case 128:
                                     flags = 5;
                                     break;
+                                case 256:
+                                    flags = 6;
+                                    break;
+                                case 512:
+                                    flags = 7;
+                                    break;
+                                case 1024:
+                                    flags = 8;
+                                    break;
+                                case 2048:
+                                    flags = 9;
+                                    break;
                             }
-                            if (flags > 0) {
-                                for (let k = 0; k < flags; k++) {
-                                    if (lineUp) {
-                                        chord.append("line")
-                                            .attr("x1", flagx)
-                                            .attr("y1", flagy + k * 4 + 1)
-                                            .attr("x2", flagx + 16)
-                                            .attr("y2", flagy + k * 4 + 2)
-                                            .style("stroke", "black")
-                                            .style("stroke-width", 3);
-                                    }
-                                    else {
-                                        chord.append("line")
-                                            .attr("x1", flagx)
-                                            .attr("y1", flagy - k * 4 - 1)
-                                            .attr("x2", flagx - 16)
-                                            .attr("y2", flagy - k * 4 - 2)
-                                            .style("stroke", "black")
-                                            .style("stroke-width", 3);
-                                    }
+                            for (let k = 0; k < flags; k++) {
+                                if (lineUp) {
+                                    chord.append("line")
+                                        .attr("x1", flagX)
+                                        .attr("y1", flagY + k * 4 + 1)
+                                        .attr("x2", flagX + 16)
+                                        .attr("y2", flagY + k * 4 + 2)
+                                        .style("stroke", "black")
+                                        .style("stroke-width", 3);
+                                }
+                                else {
+                                    chord.append("line")
+                                        .attr("x1", flagX)
+                                        .attr("y1", flagY - k * 4 - 1)
+                                        .attr("x2", flagX - 16)
+                                        .attr("y2", flagY - k * 4 - 2)
+                                        .style("stroke", "black")
+                                        .style("stroke-width", 3);
                                 }
                             }
                         }
@@ -517,8 +530,8 @@ export default function MusicScoreController(data) {
                 //        drawPause(chord, note, x);
                 //    } else {
                 //        let lineUp: boolean = false;
-                //        let miny: number = 1000;
-                //        let maxy: number = -1000;
+                //        let minY: number = 1000;
+                //        let maxY: number = -1000;
                 //        for (let k = 0; k < note.Pitches.length; k++) {
                 //            let pitch = note.Pitches[k];
                 //            let currentOctave = pitch.Octave > min ? 1 : 0;
@@ -527,33 +540,33 @@ export default function MusicScoreController(data) {
                 //            if (currentOctave === 0 && pitch.Step < 10) {
                 //                lineUp = true;
                 //            }
-                //            miny = y < miny ? y : miny;
-                //            maxy = y < maxy ? maxy : y;
+                //            minY = y < minY ? y : minY;
+                //            maxY = y < maxY ? maxY : y;
                 //            if (k == 0) {
-                //                miny = y;
-                //                maxy = y;
+                //                minY = y;
+                //                maxY = y;
                 //            }
                 //            drawNote(chord, note, currentOctave, k, x, y);
                 //        }
-                //        let flagx, flagy;
+                //        let flagX, flagY;
                 //        if (!lineUp && note.Duration.Denominator > 1) {
-                //            flagx = x - 6;
-                //            flagy = maxy + 48;
+                //            flagX = x - 6;
+                //            flagY = maxY + 48;
                 //            chord.append("line")
-                //                .attr("x1", flagx)
-                //                .attr("y1", miny + 1)
-                //                .attr("x2", flagx)
-                //                .attr("y2", flagy)
+                //                .attr("x1", flagX)
+                //                .attr("y1", minY + 1)
+                //                .attr("x2", flagX)
+                //                .attr("y2", flagY)
                 //                .style("stroke", "black")
                 //                .style("stroke-width", 2);
                 //        } else if (lineUp && note.Duration.Denominator > 1) {
-                //            flagx = x + 6;
-                //            flagy = miny - 48;
+                //            flagX = x + 6;
+                //            flagY = minY - 48;
                 //            chord.append("line")
-                //                .attr("x1", flagx)
-                //                .attr("y1", maxy - 1)
-                //                .attr("x2", flagx)
-                //                .attr("y2", flagy)
+                //                .attr("x1", flagX)
+                //                .attr("y1", maxY - 1)
+                //                .attr("x2", flagX)
+                //                .attr("y2", flagY)
                 //                .style("stroke", "black")
                 //                .style("stroke-width", 2);
                 //        }
@@ -569,18 +582,18 @@ export default function MusicScoreController(data) {
                 //            for (let k = 0; k < flags; k++) {
                 //                if (lineUp) {
                 //                    chord.append("line")
-                //                        .attr("x1", flagx)
-                //                        .attr("y1", flagy + k * 4 + 1)
-                //                        .attr("x2", flagx + 16)
-                //                        .attr("y2", flagy + k * 4 + 2)
+                //                        .attr("x1", flagX)
+                //                        .attr("y1", flagY + k * 4 + 1)
+                //                        .attr("x2", flagX + 16)
+                //                        .attr("y2", flagY + k * 4 + 2)
                 //                        .style("stroke", "black")
                 //                        .style("stroke-width", 3);
                 //                } else {
                 //                    chord.append("line")
-                //                        .attr("x1", flagx)
-                //                        .attr("y1", flagy - k * 4 - 1)
-                //                        .attr("x2", flagx - 16)
-                //                        .attr("y2", flagy - k * 4 - 2)
+                //                        .attr("x1", flagX)
+                //                        .attr("y1", flagY - k * 4 - 1)
+                //                        .attr("x2", flagX - 16)
+                //                        .attr("y2", flagY - k * 4 - 2)
                 //                        .style("stroke", "black")
                 //                        .style("stroke-width", 3);
                 //                }

@@ -85,7 +85,7 @@ class MultisequenceGroupingHandler {
             try {
                 const response = await $http.get<MultisequenceGroupingData>(`/Multisequence/GroupResearchObjectsIntoMultisequences/`);
                 MapModelFromJson($scope, response.data);
-            } catch(error) {
+            } catch(error: any) {
                 //TODO: change it to alertify
                 alert("Failed loading grouping results");
             } finally {

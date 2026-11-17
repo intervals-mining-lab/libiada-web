@@ -86,7 +86,7 @@ class TaskManagerControllerHandler {
                 $scope.loading = false;
                 try {
                     $scope.$apply();
-                } catch (e) { console.error(e instanceof Error ? e.message : String(e)); }
+                } catch (e: any) { console.error(e instanceof Error ? e.message : String(e)); }
             }
 
             function taskEvent(event: string, taskData: Task): void {
@@ -122,7 +122,7 @@ class TaskManagerControllerHandler {
                 }
                 try {
                     $scope.$apply();
-                } catch (e) { console.error(e instanceof Error ? e.message : String(e)); }
+                } catch (e: any) { console.error(e instanceof Error ? e.message : String(e)); }
             }
 
             // TODO: convert to switches

@@ -238,7 +238,7 @@ export default function SubsequencesComparerResultController() {
                         $scope.equalElementsToShow = equalElements;
                         $scope.loading = false;
                     })
-                    .catch(error => {
+                    .catch((error: any) => {
                         alert("Failed to load subsequences data");
                         console.error(error);
                         $scope.loading = false;

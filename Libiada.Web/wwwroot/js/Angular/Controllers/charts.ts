@@ -100,7 +100,7 @@ class ChartsControllerHandler {
                         }
                     });
                 }
-                catch (err) {
+                catch (err: any) {
                     console.log("error parsing as tabular data");
                     console.log(err);
                     return null;

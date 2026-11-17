@@ -135,7 +135,7 @@ const main = async (): Promise<void> => {
     try {
         const swRegistration: ServiceWorkerRegistration = await navigator.serviceWorker.register("/sw-push-notification.js");
         await initPush();
-    } catch (exception) {
+    } catch (exception: any) {
         console.error("Service Worker Error");
         console.error(exception instanceof Error ? exception.message : String(exception));
     }

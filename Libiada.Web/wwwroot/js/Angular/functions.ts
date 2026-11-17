@@ -79,7 +79,7 @@ export async function initScopeFromServer<ResponseType extends DataObject>(
 
         MapModelFromJson($scope, result.data);
 
-    } catch (error) {
+    } catch (error: any) {
         //TODO: change it to alertify
         alert(errorMessage);
 
