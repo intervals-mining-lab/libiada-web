@@ -4,9 +4,8 @@
 
 <h2>@ViewBag.Title</h2>
 
-@using (Html.BeginForm("Index", "SequenceCheck", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    @Html.ValidationSummary(true)
+<form asp-action="Index" asp-controller="SequenceCheck" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly"></div>
     <div ng-controller="SequenceCheckCtrl">
         <div class="row mb-3">
             <label class="col-form-label col-md-2" for="file">Sequence file:</label>
@@ -27,11 +26,9 @@
             </div>
         </div>
     </div>
-}
+</form>
 
 @section Scripts {
     <script type="module" src="~/js/Angular/Components/researchObjectsTable.js" asp-append-version="true"></script>
-    @{
-        await Html.RenderPartialAsync("_AngularControllerInitializer", "SequenceCheck");
-    }
+    <partial name="_AngularControllerInitializer" model='@("SequenceCheck")' />
 }

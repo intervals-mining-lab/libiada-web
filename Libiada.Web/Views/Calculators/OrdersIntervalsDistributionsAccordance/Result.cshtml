@@ -52,8 +52,6 @@
     </div>
 
     @section Scripts {
-        @{
-            await Html.RenderPartialAsync("_AngularControllerInitializer", "OrdersIntervalsDistributionsAccordanceResult");
-        }
+        <partial name="_AngularControllerInitializer" model='@("OrdersIntervalsDistributionsAccordanceResult")' />
     }
 }

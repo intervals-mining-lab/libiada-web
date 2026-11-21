@@ -2,14 +2,9 @@
     ViewBag.Title = "GenBank accessions update checker";
 }
 
-@{
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "GenBankAccessionVersionUpdateChecker");
-}
-
 <h2>@ViewBag.Title</h2>
 
-@using (Html.BeginForm())
-{
+<form method="post" asp-antiforgery="true">
     <div ng-controller="GenBankAccessionVersionUpdateCheckerCtrl">
         <div class="form-check mb-2">
             <input type="checkbox"
@@ -28,4 +23,8 @@
             </div>
         </div>
     </div>
+</form>
+
+@section Scripts{
+    <partial name="_AngularControllerInitializer" model='@("GenBankAccessionVersionUpdateChecker")' />
 }

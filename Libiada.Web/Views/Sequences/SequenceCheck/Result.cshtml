@@ -10,13 +10,11 @@
         <h3>Comparing local sequence sequence: {{::dbSequenceName}} with external sequence {{::fileSequenceName}}</h3>
         <h4 ng-class="calculateStatusClass(status)" ng-bind="::message"></h4>
         <h6 class="mb-2">
-            @Html.ActionLink("Check another sequence", "Index")
+            <a asp-action="Index">Check another sequence</a>
         </h6>
     </div>
 
     @section Scripts {
-        @{
-            await Html.RenderPartialAsync("_AngularControllerInitializer", "SequenceCheckResult");
-        }
+        <partial name="_AngularControllerInitializer" model='@("SequenceCheckResult")' />
     }
 }

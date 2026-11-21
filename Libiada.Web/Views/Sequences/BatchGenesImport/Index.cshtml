@@ -2,14 +2,9 @@
     ViewBag.Title = "Libiada - Batch genes (annotations) import";
 }
 
-@{
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchGenesImport");
-}
-
 <h2>@ViewBag.Title</h2>
 
-@using (Html.BeginForm())
-{
+<form method="post" asp-antiforgery="true">
     <div ng-controller="BatchGenesImportCtrl">
         <research-objects-table research-objects-endpoint="GetResearchObjectsForGenesImport"
                                 nature="nature"
@@ -24,9 +19,10 @@
                                  minimum-selected-research-objects="{{::minimumSelectedResearchObjects}}">
         </research-objects-submit>
     </div>
-}
+</form>
 
 @section Scripts {
     <script type="module" src="~/js/Angular/Components/researchObjectsTable.js" asp-append-version="true"></script>
     <script type="module" src="~/js/Angular/Components/researchObjectsSubmit.js" asp-append-version="true"></script>
+    <partial name="_AngularControllerInitializer" model='@("BatchGenesImport")' />
 }

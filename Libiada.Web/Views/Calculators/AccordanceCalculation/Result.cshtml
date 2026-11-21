@@ -54,8 +54,6 @@
     </div>
 
     @section Scripts {
-        @{
-            await Html.RenderPartialAsync("_AngularControllerInitializer", "AccordanceCalculationResult");
-        }
+        <partial name="_AngularControllerInitializer" model='@("AccordanceCalculationResult")' />
     }
 }

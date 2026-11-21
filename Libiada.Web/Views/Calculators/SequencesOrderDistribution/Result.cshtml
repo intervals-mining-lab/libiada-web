@@ -45,8 +45,6 @@
     </div>
 
     @section Scripts {
-        @{
-            await Html.RenderPartialAsync("_AngularControllerInitializer", "SequencesOrderDistributionResult");
-        }
+        <partial name="_AngularControllerInitializer" model='@("SequencesOrderDistributionResult")' />
     }
 }

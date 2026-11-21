@@ -38,8 +38,6 @@
     </div>
 
     @section Scripts {
-        @{
-            await Html.RenderPartialAsync("_AngularControllerInitializer", "IntervalsCharacteristicsDistributionResult");
-        }
+        <partial name="_AngularControllerInitializer" model='@("IntervalsCharacteristicsDistributionResult")' />
     }
 }

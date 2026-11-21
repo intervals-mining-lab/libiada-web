@@ -49,8 +49,6 @@
     </div>
 
     @section Scripts {
-        @{
-            await Html.RenderPartialAsync("_AngularControllerInitializer", "RelationCalculationResult");
-        }
+        <partial name="_AngularControllerInitializer" model='@("RelationCalculationResult")' />
     }
 }

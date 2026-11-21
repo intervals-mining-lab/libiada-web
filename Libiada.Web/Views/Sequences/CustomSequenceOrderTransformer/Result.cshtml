@@ -42,8 +42,6 @@
     </div>
 
     @section Scripts {
-        @{
-            await Html.RenderPartialAsync("_AngularControllerInitializer", "CustomSequenceOrderTransformerResult");
-        }
+        <partial name="_AngularControllerInitializer" model='@("CustomSequenceOrderTransformerResult")' />
     }
 }

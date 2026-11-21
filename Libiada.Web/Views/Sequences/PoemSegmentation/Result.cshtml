@@ -28,8 +28,6 @@
     </div>
 
     @section Scripts {
-        @{
-            await Html.RenderPartialAsync("_AngularControllerInitializer", "PoemSegmentationResult");
-        }
+        <partial name="_AngularControllerInitializer" model='@("PoemSegmentationResult")' />
     }
 }

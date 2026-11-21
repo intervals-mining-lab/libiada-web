@@ -2,14 +2,9 @@
     ViewBag.Title = "Genbank nucleotide database search";
 }
 
-@{
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "NcbiNuccoreSearch");
-}
-
 <h2>@ViewBag.Title</h2>
 
-@using (Html.BeginForm())
-{
+<form method="post" asp-antiforgery="true">
     <div ng-controller="NcbiNuccoreSearchCtrl">
         <div class="row mb-2">
             <div class="col-md-10">
@@ -78,4 +73,8 @@
             </div>
         </div>
     </div>
+</form>
+
+@section Scripts {
+    <partial name="_AngularControllerInitializer" model='@("NcbiNuccoreSearch")' />
 }

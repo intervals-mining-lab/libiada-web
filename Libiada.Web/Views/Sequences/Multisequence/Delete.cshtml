@@ -51,11 +51,10 @@
         </tr>
     }
 </table>
-@using (Html.BeginForm())
-{
+<form method="post" asp-antiforgery="true">
     <div class="mb-3">
         <input type="submit" value="Delete" class="btn btn-secondary" />
-        @Html.ActionLink("Back to List", "Index")
+        <a asp-action="Index">Back to List</a>
     </div>
-}
+</form>
 

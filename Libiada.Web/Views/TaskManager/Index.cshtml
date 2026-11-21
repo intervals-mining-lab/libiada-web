@@ -5,16 +5,6 @@
     int columns = 9;
 }
 
-@section Scripts {
-    <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
-
-    @{
-        await Html.RenderPartialAsync("_AngularControllerInitializer", "TaskManager");
-    }
-
-    <script src="~/js/push-notification.js" asp-append-version="true"></script>
-}
-
 <h2>@ViewBag.Title</h2>
 
 <div ng-controller="TaskManagerCtrl">
@@ -114,3 +104,12 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+
+    <partial name="_AngularControllerInitializer" model="@("TaskManager")" />
+
+    <script src="~/js/push-notification.js" asp-append-version="true"></script>
+}
+

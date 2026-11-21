@@ -1,5 +1,4 @@
-﻿@using Libiada.Web.Extensions
-@using Libiada.Core.Extensions
+﻿@using Libiada.Core.Extensions
 @model IEnumerable<ResearchObject>
 
 @{
@@ -9,7 +8,7 @@
 <h2>@ViewBag.Title</h2>
 
 <p>
-    @Html.ActionLink("Create New sequence", "Create")
+    <a asp-action="Create">Create New sequence</a>
 </p>
 <table class="table table-bordered table-hover">
     <tr>
@@ -44,9 +43,9 @@
             @if (User.IsAdmin())
             {
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
             }
         </tr>

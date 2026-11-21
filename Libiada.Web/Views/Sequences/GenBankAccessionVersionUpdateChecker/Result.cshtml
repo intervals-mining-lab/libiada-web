@@ -41,8 +41,6 @@
     </div>
 
     @section Scripts {
-        @{
-            await Html.RenderPartialAsync("_AngularControllerInitializer", "GenBankAccessionVersionUpdateCheckerResult");
-        }
+        <partial name="_AngularControllerInitializer" model='@("GenBankAccessionVersionUpdateCheckerResult")' />
     }
 }

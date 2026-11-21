@@ -2,14 +2,9 @@
     ViewBag.Title = "Batch sequences import";
 }
 
-@{
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchGeneticImportFromGenBankSearchFile");
-}
-
 <h2>@ViewBag.Title</h2>
 
-@using (Html.BeginForm("Index", "BatchGeneticImportFromGenBankSearchFile", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
+<form asp-action="Index" asp-controller="BatchGeneticImportFromGenBankSearchFile" method="post" enctype="multipart/form-data">
     <div ng-controller="BatchGeneticImportFromGenBankSearchFileCtrl">
         <div class="row mb-1">
             <label class="col-form-label col-md-2" for="file">GenBank search results file:</label>
@@ -86,4 +81,8 @@
             </div>
         </div>
     </div>
+</form>
+
+@section Scripts {
+    <partial name="_AngularControllerInitializer" model='@("BatchGeneticImportFromGenBankSearchFile")' />
 }

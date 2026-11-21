@@ -6,8 +6,7 @@
 
 @if (ViewBag.Error == null)
 {
-    using (Html.BeginForm())
-    {
+    <form method="post" asp-antiforgery="true">
         <div ng-controller="MultisequenceGroupingCtrl">
             <loading-window loading="loading" loading-screen-header="loadingScreenHeader"></loading-window>
             <div ng-disabled="loading">
@@ -76,11 +75,9 @@
                 </table>
             </div>
         </div>
-    }
+    </form>
 
     @section Scripts {
-        @{
-            await Html.RenderPartialAsync("_AngularControllerInitializer", "MultisequenceGrouping");
-        }
+        <partial name="_AngularControllerInitializer" model='@("MultisequenceGrouping")' />
     }
 }

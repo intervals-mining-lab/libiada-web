@@ -37,8 +37,6 @@
     </div>
 
     @section Scripts {
-        @{
-            await Html.RenderPartialAsync("_AngularControllerInitializer", "OrderTransformationCharacteristicsDynamicVisualizationResult");
-        }
+        <partial name="_AngularControllerInitializer" model='@("OrderTransformationCharacteristicsDynamicVisualizationResult")' />
     }
 }

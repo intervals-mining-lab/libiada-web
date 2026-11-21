@@ -38,8 +38,6 @@
     </div>
 
     @section Scripts {
-        @{
-            await Html.RenderPartialAsync("_AngularControllerInitializer", "GenesImportResult");
-        }
+        <partial name="_AngularControllerInitializer" model='@("GenesImportResult")' />
     }
 }

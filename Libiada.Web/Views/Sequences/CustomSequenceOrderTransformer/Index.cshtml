@@ -4,27 +4,24 @@
 
 <h2>@ViewBag.Title</h2>
 
-@using (Html.BeginForm())
-{
+<form method="post" asp-antiforgery="true">
     <div ng-controller="CustomSequenceOrderTransformerCtrl">
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
         <custom-sequences image-transformers="::imageTransformers"></custom-sequences>
-        
+
         <order-transformations transformations="::transformations"></order-transformations>
-        
+
         <div class="row mb-2">
             <div class="col-md-10">
                 <input type="submit" value="Calculate" class="btn btn-secondary" />
             </div>
         </div>
     </div>
-}
+</form>
 
 @section Scripts {
     <script type="module" src="~/js/Angular/Components/orderTransformations.js" asp-append-version="true"></script>
     <script type="module" src="~/js/Angular/Components/customSequences.js" asp-append-version="true"></script>
-    @{
-        await Html.RenderPartialAsync("_AngularControllerInitializer", "CustomSequenceOrderTransformer");
-    }
+    <partial name="_AngularControllerInitializer" model='@("CustomSequenceOrderTransformer")' />
 }

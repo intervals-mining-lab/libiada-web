@@ -86,8 +86,6 @@
         <script type="module" src="~/js/Angular/Components/characteristicsTableExcelExporter.js" asp-append-version="true"></script>
         <script type="module" src="~/js/Angular/Components/characteristicsVisualizations.js" asp-append-version="true"></script>
         <script type="module" src="~/js/Angular/Components/characteristicsTable.js" asp-append-version="true"></script>
-        @{
-            await Html.RenderPartialAsync("_AngularControllerInitializer", "CustomSequenceCalculationResult");
-        }
+        <partial name="_AngularControllerInitializer" model='@("CustomSequenceCalculationResult")' />
     }
 }

@@ -73,7 +73,5 @@
 </div>
  @section Scripts {
     <script type="module" src="~/js/Angular/Components/characteristicsVisualizations.js" asp-append-version="true"></script>
-    @{
-        await Html.RenderPartialAsync("_AngularControllerInitializer", "Charts");
-    }
+    <partial name="_AngularControllerInitializer" model='@("Charts")' />
 }

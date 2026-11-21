@@ -70,8 +70,6 @@
     </div>
 
     @section Scripts {
-        @{
-            await Html.RenderPartialAsync("_AngularControllerInitializer", "SubsequencesSimilarityResult");
-        }
+        <partial name="_AngularControllerInitializer" model='@("SubsequencesSimilarityResult")' />
     }
 }

@@ -30,8 +30,6 @@
     </div>
 
     @section Scripts {
-        @{
-            await Html.RenderPartialAsync("_AngularControllerInitializer", "MusicFilesResult");
-        }
+        <partial name="_AngularControllerInitializer" model='@("MusicFilesResult")' />
     }
 }

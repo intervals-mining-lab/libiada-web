@@ -2,18 +2,13 @@
     ViewBag.Title = "Subsequences characteristics distribution";
 }
 
-@{
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "SubsequencesDistribution");
-}
-
 <h2>@ViewBag.Title</h2>
 
 
-@using (Html.BeginForm())
-{
+<form method="post" asp-antiforgery="true">
     <div ng-controller="SubsequencesDistributionCtrl">
         <h4>Sequences and parameters</h4>
-        @Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <research-objects-table research-objects-endpoint="GetResearchObjectsWithSubsequences"
                                 nature="nature"
                                 groups="groups"
@@ -41,7 +36,7 @@
                                  minimum-selected-research-objects="{{::minimumSelectedResearchObjects}}">
         </research-objects-submit>
     </div>
-}
+</form>
 
 @section Scripts {
     <script type="module" src="~/js/Angular/Components/characteristic.js" asp-append-version="true"></script>
@@ -49,4 +44,5 @@
     <script type="module" src="~/js/Angular/Components/researchObjectsTable.js" asp-append-version="true"></script>
     <script type="module" src="~/js/Angular/Components/researchObjectsSubmit.js" asp-append-version="true"></script>
     <script type="module" src="~/js/Angular/Components/featuresSelect.js" asp-append-version="true"></script>
+    <partial name="_AngularControllerInitializer" model='@("SubsequencesDistribution")' />
 }

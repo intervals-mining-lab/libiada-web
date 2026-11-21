@@ -10,10 +10,10 @@
         @* dirty hack to prevent components from loading before server data *@
         <div ng-if="loading === false">
             <ul id='nav' class="nav nav-tabs d-flex justify-content-evenly pt-1" role="tabList">
-                <li class="nav-item" 
-                    role="presentation" 
-                    title="Local characteristics visualizations" 
-                    data-bs-toggle="tooltip" 
+                <li class="nav-item"
+                    role="presentation"
+                    title="Local characteristics visualizations"
+                    data-bs-toggle="tooltip"
                     data-bs-placement="bottom">
                     <button class="nav-link active"
                             id="charts-tab"
@@ -43,10 +43,10 @@
                         Results
                     </button>
                 </li>
-                <li class="nav-item" 
-                    role="presentation" 
-                    title="Distances calculation" 
-                    data-bs-toggle="tooltip" 
+                <li class="nav-item"
+                    role="presentation"
+                    title="Distances calculation"
+                    data-bs-toggle="tooltip"
                     data-bs-placement="bottom">
                     <button class="nav-link"
                             id="distances-calculation-tab"
@@ -160,8 +160,6 @@
 
     @section Scripts {
         <script type="module" src="~/js/Angular/Components/localCharacteristicsVisualizations.js" asp-append-version="true"></script>
-        @{
-            await Html.RenderPartialAsync("_AngularControllerInitializer", "LocalCalculationResult");
-        }
+        <partial name="_AngularControllerInitializer" model='@("LocalCalculationResult")' />
     }
 }

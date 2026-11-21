@@ -6,10 +6,6 @@
 
 <h2>@ViewBag.Title</h2>
 
-@{
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "MusicScore");
-}
-
 <div ng-controller="MusicScoreCtrl" ng-init="onLoad()">
     <div>
         <h4>Music Details</h4>
@@ -37,4 +33,5 @@
 
 @section Scripts {
     <script src="~/lib/midi.js/lib/midi.js" asp-append-version="true"></script>
+    <partial name="_AngularControllerInitializer" model='@("MusicScore")' />
 }

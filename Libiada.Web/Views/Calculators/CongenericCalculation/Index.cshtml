@@ -4,8 +4,7 @@
 
 <h2>@ViewBag.Title</h2>
 
-@using (Html.BeginForm())
-{
+<form method="post" asp-antiforgery="true">
     <div ng-controller="CongenericCalculationCtrl">
         <h4>Sequences and parameters</h4>
         <hr />
@@ -76,7 +75,7 @@
                                  selected-sequence-groups-count="selectedSequenceGroupsCount">
         </research-objects-submit>
     </div>
-}
+</form>
 
 @section Scripts {
     <script type="module" src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
@@ -84,7 +83,5 @@
     <script type="module" src="~/js/Angular/Components/sequenceGroupsTable.js" asp-append-version="true"></script>
     <script type="module" src="~/js/Angular/Components/natureSelect.js" asp-append-version="true"></script>
     <script type="module" src="~/js/Angular/Components/researchObjectsSubmit.js" asp-append-version="true"></script>
-    @{
-        await Html.RenderPartialAsync("_AngularControllerInitializer", "CongenericCalculation");
-    }
+    <partial name="_AngularControllerInitializer" model='@("CongenericCalculation")' />
 }

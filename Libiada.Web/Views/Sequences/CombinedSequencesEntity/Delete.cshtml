@@ -67,10 +67,10 @@
         </dd>
     </dl>
 
-    @using (Html.BeginForm()) {
+    <form method="post" asp-antiforgery="true">
         <div class="mb-2">
             <input type="submit" value="Delete" class="btn btn-secondary" /> |
-            @Html.ActionLink("Back to List", "Index")
+            <a asp-action="Index">Back to List</a>
         </div>
-    }
+    </form>
 </div>

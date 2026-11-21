@@ -2,14 +2,11 @@
     ViewBag.Title = "Libiada - Batch sequences import from genbank search query";
 }
 
-@{
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchGeneticImportFromGenBankSearchQuery");
-}
+
 
 <h2>@ViewBag.Title</h2>
 
-@using (Html.BeginForm())
-{
+<form method="post" asp-antiforgery="true">
     <div ng-controller="BatchGeneticImportFromGenBankSearchQueryCtrl">
         <div class="row mb-1">
             <label class="col-form-label col-md-2" for="searchQuery">GenBank search query:</label>
@@ -90,4 +87,8 @@
             </div>
         </div>
     </div>
+</form>
+
+@section Scripts {
+    <partial name="_AngularControllerInitializer" model='@("BatchGeneticImportFromGenBankSearchQuery")' />
 }

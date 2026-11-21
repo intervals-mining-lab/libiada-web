@@ -1,8 +1,6 @@
-﻿@using Libiada.Web.Extensions
-@using Libiada.Web.Helpers
-@{
+﻿@{
     ViewBag.Title = "Libiada";
-    var separator = " | ";
+    string separator = " | ";
 }
 
 <h1>Libiada - FOA Research Lab</h1>
@@ -12,113 +10,113 @@
     <div class="row mb-3">
         <div class="col-md-4">
             <h2>Data</h2>
-            
+
             @if (User.IsAdmin())
             {
-                @Html.ActionLink("Research objects", "Index", "ResearchObjects")
+                <a asp-action="Index" asp-controller="ResearchObjects">Research objects</a>
                 @separator
-                @Html.ActionLink("Create research object", "Create", "ResearchObjects")
+                <a asp-action="Create" asp-controller="ResearchObjects">Create research object</a>
                 <br />
-                @Html.ActionLink("Multisequences", "Index", "Multisequence")
+                <a asp-action="Index" asp-controller="Multisequence">Multisequences</a>
                 <br />
-                @Html.ActionLink("Sequences", "Index", "CombinedSequencesEntity")
+                <a asp-action="Index" asp-controller="CombinedSequencesEntity">Sequences</a>
                 @separator
-                @Html.ActionLink("Create sequence", "Create", "CombinedSequencesEntity")
+                <a asp-action="Create" asp-controller="CombinedSequencesEntity">Create sequence</a>
                 <br />
-                @Html.ActionLink("Batch poems import", "Index", "BatchPoemsImport")
+                <a asp-action="Index" asp-controller="BatchPoemsImport">Batch poems import</a>
                 <br />
-                @Html.ActionLink("Batch music import", "Index", "BatchMusicImport")
+                <a asp-action="Index" asp-controller="BatchMusicImport">Batch music import</a>
                 <br />
-                @Html.ActionLink("Batch image import", "Index", "BatchImagesImport")
+                <a asp-action="Index" asp-controller="BatchImagesImport">Batch image import</a>
                 <br />
-                @Html.ActionLink("Batch sequences import", "Index", "BatchSequenceImport")
+                <a asp-action="Index" asp-controller="BatchSequenceImport">Batch sequences import</a>
                 <br />
-                @Html.ActionLink("Genes import", "Index", "GenesImport")
+                <a asp-action="Index" asp-controller="GenesImport">Genes import</a>
                 <br />
-                @Html.ActionLink("Batch genes import", "Index", "BatchGenesImport")
+                <a asp-action="Index" asp-controller="BatchGenesImport">Batch genes import</a>
                 <br />
-                @Html.ActionLink("Batch genetic import from GenBank search file", "Index", "BatchGeneticImportFromGenBankSearchFile")
+                <a asp-action="Index" asp-controller="BatchGeneticImportFromGenBankSearchFile">Batch genetic import from GenBank search file</a>
                 <br />
-                @Html.ActionLink("Batch genetic import from GenBank search query", "Index", "BatchGeneticImportFromGenBankSearchQuery")
+                <a asp-action="Index" asp-controller="BatchGeneticImportFromGenBankSearchQuery">Batch genetic import from GenBank search query</a>
                 <br />
-                @Html.ActionLink("GenBank search", "Index", "NcbiNuccoreSearch")
+                <a asp-action="Index" asp-controller="NcbiNuccoreSearch">GenBank search</a>
                 <br />
-                @Html.ActionLink("GenBank accessions update check", "Index", "GenBankAccessionVersionUpdateChecker")
+                <a asp-action="Index" asp-controller="GenBankAccessionVersionUpdateChecker">GenBank accessions update check</a>
                 <br />
-                @Html.ActionLink("Sequences groups", "Index", "SequenceGroups")
+                <a asp-action="Index" asp-controller="SequenceGroups">Sequences groups</a>
                 <br />
-                @Html.ActionLink("Genetic sequences transformation", "Index", "GeneticSequencesTransformation")
+                <a asp-action="Index" asp-controller="GeneticSequencesTransformation">Genetic sequences transformation</a>
                 <br />
-                @Html.ActionLink("Music fmotifs dictionaries", "Index", "FmotifsDictionary")
+                <a asp-action="Index" asp-controller="FmotifsDictionary">Music fmotifs dictionaries</a>
                 <br />
-                @Html.ActionLink("Custom sequences segmentation", "Index", "CustomSequenceSegmentation")
+                <a asp-action="Index" asp-controller="CustomSequenceSegmentation">Custom sequences segmentation</a>
                 <br />
-                @Html.ActionLink("Poems segmentation", "Index", "PoemSegmentation")
+                <a asp-action="Index" asp-controller="PoemSegmentation">Poems segmentation</a>
             }
             <br />
-            @Html.ActionLink("Order transformation (high order)", "Index", "OrderTransformer")
+            <a asp-action="Index" asp-controller="OrderTransformer">Order transformation (high order)</a>
             <br />
-            @Html.ActionLink("Custom sequences order transformation (high order)", "Index", "CustomSequenceOrderTransformer")
+            <a asp-action="Index" asp-controller="CustomSequenceOrderTransformer">Custom sequences order transformation (high order)</a>
         </div>
         <div class="col-md-4">
             <h2>Calculators</h2>
-            @Html.ActionLink("Calculation of integral characteristics", "Index", "Calculation")
+            <a asp-action="Index" asp-controller="Calculation">Calculation of integral characteristics</a>
             <br />
-            @Html.ActionLink("Calculation of integral characteristics of custom sequences", "Index", "CustomSequenceCalculation")
+            <a asp-action="Index" asp-controller="CustomSequenceCalculation">Calculation of integral characteristics of custom sequences</a>
             <br />
-            @Html.ActionLink("Map of genes", "Index", "SubsequencesDistribution")
+            <a asp-action="Index" asp-controller="SubsequencesDistribution">Map of genes</a>
             <br />
-            @Html.ActionLink("Matrix of similarity", "Index", "SubsequencesComparer")
+            <a asp-action="Index" asp-controller="SubsequencesComparer">Matrix of similarity</a>
             <br />
             @if (User.IsAdmin())
             {
-                @Html.ActionLink("Sliding window calculation (Functions of sequences)", "Index", "LocalCalculation")
+                <a asp-action="Index" asp-controller="LocalCalculation">Sliding window calculation (Functions of sequences)</a>
                 <br />
-                @Html.ActionLink("Cluster analysis", "Index", "Clusterization")
+                <a asp-action="Index" asp-controller="Clusterization">Cluster analysis</a>
                 <br />
-                @Html.ActionLink("Alignment of sequences", "Index", "SequencesAlignment")
+                <a asp-action="Index" asp-controller="SequencesAlignment">Alignment of sequences</a>
                 <br />
-                @Html.ActionLink("Subsequences characteristics calculation", "Index", "SubsequencesCalculation")
+                <a asp-action="Index" asp-controller="SubsequencesCalculation">Subsequences characteristics calculation</a>
                 <br />
-                @Html.ActionLink("Subsequences similarity", "Index", "SubsequencesSimilarity")
+                <a asp-action="Index" asp-controller="SubsequencesSimilarity">Subsequences similarity</a>
                 <br />
-                @Html.ActionLink("Calculation of characteristics of congeneric sequences", "Index", "CongenericCalculation")
+                <a asp-action="Index" asp-controller="CongenericCalculation">Calculation of characteristics of congeneric sequences</a>
                 <br />
-                @Html.ActionLink("Calculation of relation characteristics of congeneric sequences", "Index", "RelationCalculation")
+                <a asp-action="Index" asp-controller="RelationCalculation">Calculation of relation characteristics of congeneric sequences</a>
                 <br />
-                @Html.ActionLink("Calculation of accordance characteristics of congeneric sequences", "Index", "AccordanceCalculation")
+                <a asp-action="Index" asp-controller="AccordanceCalculation">Calculation of accordance characteristics of congeneric sequences</a>
                 <br />
-                @Html.ActionLink("Order transformation (high order) characteristics calculation", "Index", "OrderTransformationCalculation")
+                <a asp-action="Index" asp-controller="OrderTransformationCalculation">Order transformation (high order) characteristics calculation</a>
                 <br />
-                @Html.ActionLink("Custom sequences order transformation (high order) characteristics calculation", "Index", "CustomSequenceOrderTransformationCalculation")
+                <a asp-action="Index" asp-controller="CustomSequenceOrderTransformationCalculation">Custom sequences order transformation (high order) characteristics calculation</a>
             }
         </div>
         <div class="col-md-4">
             <h2>Tasks</h2>
-            @Html.ActionLink("Task manager", "Index", "TaskManager")
+            <a asp-action="Index" asp-controller="TaskManager">Task manager</a>
 
             <h2>FOA Research</h2>
-            @Html.ActionLink("Data visualization", "Index", "Charts")
+            <a asp-action="Index" asp-controller="Charts">Data visualization</a>
             <br />
             @if (User.IsAdmin())
             {
-                @Html.ActionLink("Calculate order transformations convergence", "Index", "OrderTransformationConvergence")
+                <a asp-action="Index" asp-controller="OrderTransformationConvergence">Calculate order transformations convergence</a>
                 <br />
-                @Html.ActionLink("Calculate distribution of sequences by order", "Index", "SequencesOrderDistribution")
+                <a asp-action="Index" asp-controller="SequencesOrderDistribution">Calculate distribution of sequences by order</a>
                 <br />
-                @Html.ActionLink("Calculate accordance of orders by intervals distributions", "Index", "OrdersIntervalsDistributionsAccordance")
+                <a asp-action="Index" asp-controller="OrdersIntervalsDistributionsAccordance">Calculate accordance of orders by intervals distributions</a>
                 <br />
-                @Html.ActionLink("Calculate characteristics of intervals distributions", "Index", "IntervalsCharacteristicsDistribution")
+                <a asp-action="Index" asp-controller="IntervalsCharacteristicsDistribution">Calculate characteristics of intervals distributions</a>
                 <br />
-                @Html.ActionLink("Music files processor", "Index", "MusicFiles")
+                <a asp-action="Index" asp-controller="MusicFiles">Music files processor</a>
                 <br />
-                @Html.ActionLink("Sequence predictions", "Index", "SequencePrediction")
+                <a asp-action="Index" asp-controller="SequencePrediction">Sequence predictions</a>
                 <br />
-                @Html.ActionLink("Calculation of integral characteristics of orders", "Index", "OrderCalculation")
+                <a asp-action="Index" asp-controller="OrderCalculation">Calculation of integral characteristics of orders</a>
                 <br />
-                @Html.ActionLink("Visualization of orders transformations", "Index", "OrderTransformationVisualization")
+                <a asp-action="Index" asp-controller="OrderTransformationVisualization">Visualization of orders transformations</a>
                 <br />
-                @Html.ActionLink("Visualization of orders transformations characteristics dynamic", "Index", "OrderTransformationCharacteristicsDynamicVisualization")
+                <a asp-action="Index" asp-controller="OrderTransformationCharacteristicsDynamicVisualization">Visualization of orders transformations characteristics dynamic</a>
             }
         </div>
     </div>

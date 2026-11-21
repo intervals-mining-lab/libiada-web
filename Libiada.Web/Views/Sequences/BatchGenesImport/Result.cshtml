@@ -12,8 +12,6 @@
 
     @section Scripts {
         <script type="module" src="~/js/Angular/Components/importResultsTable.js" asp-append-version="true"></script>
-        @{
-            await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchGenesImportResult");
-        }
+        <partial name="_AngularControllerInitializer" model='@("BatchGenesImportResult")' />
     }
 }

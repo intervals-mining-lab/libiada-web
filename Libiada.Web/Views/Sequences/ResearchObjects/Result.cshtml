@@ -71,13 +71,11 @@
             </li>
         </ul>
         <div class="mb-2">
-            @Html.ActionLink("Import another sequence", "Create") or go @Html.ActionLink("back to List", "Index").
+            <a asp-action="Create">Import another sequence</a> or go <a asp-action="Index">back to List</a>.
         </div>
     </div>
 
     @section Scripts {
-        @{
-            await Html.RenderPartialAsync("_AngularControllerInitializer", "ResearchObjectCreateResult");
-        }
+        <partial name="_AngularControllerInitializer" model='@("ResearchObjectCreateResult")' />
     }
 }

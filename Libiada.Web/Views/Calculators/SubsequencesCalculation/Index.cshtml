@@ -4,11 +4,10 @@
 
 <h2>@ViewBag.Title</h2>
 
-@using (Html.BeginForm())
-{
+<form method="post" asp-antiforgery="true">
     <div ng-controller="SubsequencesCalculationCtrl">
         <h4>Sequences and parameters</h4>
-        @Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <research-objects-table research-objects-endpoint="GetResearchObjectsWithSubsequences"
                                 nature="nature"
                                 groups="groups"
@@ -37,7 +36,7 @@
                                  selected-sequence-groups-count="selectedSequenceGroupsCount">
         </research-objects-submit>
     </div>
-}
+</form>
 
 @section Scripts {
     <script type="module" src="~/js/Angular/Components/characteristics.js" asp-append-version="true"></script>
@@ -45,7 +44,5 @@
     <script type="module" src="~/js/Angular/Components/researchObjectsSubmit.js" asp-append-version="true"></script>
     <script type="module" src="~/js/Angular/Components/featuresSelect.js" asp-append-version="true"></script>
     <script type="module" src="~/js/Angular/Components/filters.js" asp-append-version="true"></script>
-    @{
-        await Html.RenderPartialAsync("_AngularControllerInitializer", "SubsequencesCalculation");
-    }
+    <partial name="_AngularControllerInitializer" model='@("SubsequencesCalculation")' />
 }

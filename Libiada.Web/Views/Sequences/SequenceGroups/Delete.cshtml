@@ -57,14 +57,13 @@
             </tbody>
         </table>
     }
-    @using (Html.BeginForm())
-    {
+    <form method="post" asp-antiforgery="true">
         <div class="row mb-3">
             <div class="col-md-10">
                 <input type="submit" value="Delete" class="btn btn-danger" />
                 <div class="vr"></div>
-                @Html.ActionLink("Back to List", "Index")
+                <a asp-action="Index">Back to List</a>
             </div>
         </div>
-    }
+    </form>
 </div>

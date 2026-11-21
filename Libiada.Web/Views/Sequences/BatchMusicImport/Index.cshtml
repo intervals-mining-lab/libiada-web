@@ -2,14 +2,9 @@
     ViewBag.Title = "Batch music import";
 }
 
-@{
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchMusicImport");
-}
-
 <h2>@ViewBag.Title</h2>
 
-@using (Html.BeginForm("Index", "BatchMusicImport", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
+<form asp-action="Index" asp-controller="BatchMusicImport" method="post" enctype="multipart/form-data">
     <div ng-controller="BatchMusicImportCtrl">
         <div class="row mb-1">
             <label class="col-form-label col-md-2" for="file">Music xml files:</label>
@@ -23,4 +18,8 @@
             </div>
         </div>
     </div>
+</form>
+
+@section Scripts{
+    <partial name="_AngularControllerInitializer" model='@("BatchMusicImport")' />
 }

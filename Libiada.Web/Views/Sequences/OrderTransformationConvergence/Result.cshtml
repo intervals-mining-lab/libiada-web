@@ -34,8 +34,6 @@
     </div>
 
     @section Scripts {
-        @{
-            await Html.RenderPartialAsync("_AngularControllerInitializer", "OrderTransformationConvergenceResult");
-        }
+        <partial name="_AngularControllerInitializer" model='@("OrderTransformationConvergenceResult")' />
     }
 }

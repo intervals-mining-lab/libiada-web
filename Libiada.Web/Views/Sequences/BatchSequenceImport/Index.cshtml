@@ -2,14 +2,9 @@
     ViewBag.Title = "Batch sequences import";
 }
 
-@{
-    await Html.RenderPartialAsync("_AngularControllerInitializer", "BatchSequenceImport");
-}
-
 <h2>@ViewBag.Title</h2>
 
-@using (Html.BeginForm())
-{
+<form method="post" asp-antiforgery="true">
     <div ng-controller="BatchSequenceImportCtrl">
         <div class="row mb-2">
             <div class="col-md-10">
@@ -59,4 +54,8 @@
             </div>
         </div>
     </div>
+</form>
+
+@section Scripts{
+    <partial name="_AngularControllerInitializer" model='@("BatchSequenceImport")' />
 }

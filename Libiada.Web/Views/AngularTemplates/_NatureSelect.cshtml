@@ -1,11 +1,8 @@
-﻿@using Libiada.Web.Extensions
-
-@if (User.IsAdmin())
+﻿@if (User.IsAdmin())
 {
     <div class="row mb-2">
         <label class="col-form-label col-md-2" for="Nature">Nature:</label>
         <div class="col-md-10">
-            
             <select class="form-select"
                     id="Nature"
                     ng-model="$ctrl.nature"

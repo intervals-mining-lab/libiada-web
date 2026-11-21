@@ -26,8 +26,6 @@
     </div>
 
     @section Scripts {
-        @{
-            await Html.RenderPartialAsync("_AngularControllerInitializer", "CustomSequenceSegmentationResult");
-        }
+        <partial name="_AngularControllerInitializer" model='@("CustomSequenceSegmentationResult")' />
     }
 }

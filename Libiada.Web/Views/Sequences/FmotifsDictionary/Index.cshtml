@@ -6,7 +6,7 @@
 
 <h2>@ViewBag.Title</h2>
 <p>
-    @Html.ActionLink("Add new compositions", "Index", "BatchMusicImport")
+    <a asp-action="Index" asp-controller="BatchMusicImport">Add new compositions</a>
 </p>
 <table class="table table-bordered table-hover table-sm">
     <tr>
@@ -24,9 +24,9 @@
             <td>@Html.DisplayFor(modelItem => item.PauseTreatment)</td>
             <td>@(item.SequentialTransfer ? "Yes" : "No")</td>
             <td>@Html.DisplayFor(modelItem => item.Created)</td>
-            <td>@Html.ActionLink("Details", "Details", new { id = item.Id })</td>
+            <td><a asp-action="Details" asp-route-id="@item.Id">Details</a></td>
             @if(item.PauseTreatment == Libiada.Core.Music.PauseTreatment.SilenceNote && !item.SequentialTransfer) {
-                <td>@Html.ActionLink("Music Score", "MusicScore", new { id = item.ResearchObjectId })</td>
+                <td><a asp-action="MusicScore" asp-route-id="@item.ResearchObjectId">Music Score</a></td>
             }
         </tr>
     }

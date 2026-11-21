@@ -5,7 +5,7 @@
 
     @if(ViewBag.data != null)
     {
-        @:let data = @Html.Raw(ViewBag.data ?? "{}");
+        @:let data = @Html.Raw(ViewBag.data);
         @:controllerConstructor(data);
     }
     else

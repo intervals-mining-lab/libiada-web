@@ -1,5 +1,4 @@
-﻿@using Libiada.Web.Extensions
-@model IEnumerable<Multisequence>
+﻿@model IEnumerable<Multisequence>
 
 @{
     ViewBag.Title = "Multisequences List";
@@ -7,17 +6,16 @@
 
 <h2>@ViewBag.Title</h2>
 <p>
-    @using (Html.BeginForm("Group", "Multisequence"))
-    {
+    <form asp-action="Group" asp-controller="Multisequence" method="post">
         <div class="row mb-1">
             <div class="col-md-10">
                 <input type="submit" value="Group research objects into multisequences" class="btn btn-secondary" />
             </div>
         </div>
-    }
+    </form>
 </p>
 <p>
-    @Html.ActionLink("Create New multisequence", "Create")
+    <a asp-action="Create">Create New multisequence</a>
 </p>
 <table class="table table-bordered table-hover table-sm">
     <tr>
@@ -41,9 +39,9 @@
             @if (User.IsAdmin())
             {
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
             }
         </tr>
